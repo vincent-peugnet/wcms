@@ -12,8 +12,9 @@ session();
 
 // fin de in
 
+$app = new App($config);
 $art = new Art;
-$art->createfrombdd($id, bddconnect($config['host'], $config['dbname'], $config['user'], $config['password']));
+$art->createfrombdd($id, $app->getBdd());
 
 include($root . '/head.php')
 
