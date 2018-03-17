@@ -18,4 +18,9 @@ $art->createfrombdd($id, $app->getBdd());
 
 include($root . '/head.php')
 
+rpout
+CURLOPT_PROXYAUT
+
+
+
 ?>
