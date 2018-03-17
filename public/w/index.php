@@ -2,12 +2,10 @@
 
 //inw
 
-set_include_path('e:/WEB/wcms');
-
-require('fn/fn.php');
-require('class/class.art.php');
-require('class/class.app.php');
-$config = include('config.php');
+require('../../fn/fn.php');
+require('../../class/class.art.php');
+require('../../class/class.app.php');
+$config = include('../../config.php');
 $app = new App($config);
 
 session();
