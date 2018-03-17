@@ -1,6 +1,4 @@
-secure
-
-session
+<h4>functions</h4>
 
 <?php
 function bddconnect($host, $bdname, $user, $password)
@@ -23,6 +21,16 @@ function secure()
 	if (!isset($_SESSION['id'])) {
 		header("location: /");
 	}
+}
+
+function head($title) {
+	?>
+	<head>
+		<meta charset="utf8" />
+		<link href="" rel="stylesheet" />
+		<title><?= $title ?></title>
+	</head>
+	<?php
 }
 ?>
 
