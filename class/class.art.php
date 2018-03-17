@@ -182,14 +182,14 @@ class Art
 	public function setsecure($secure)
 	{
 		if ($secure >= 0 and $secure <= self::$securemax) {
-			$this->secure = $secure;
+			$this->secure = intval($secure);
 		}
 	}
 
 	public function setcouleurtext($couleurtext)
 	{
 		$couleurtext = strval($couleurtext);
-		if (strlen($couleurtext) < self::$lencouleur) {
+		if (strlen($couleurtext) <= self::$lencouleur) {
 			$this->couleurtext = strip_tags(trim($couleurtext));
 		}
 	}
@@ -197,7 +197,7 @@ class Art
 	public function setcouleurbkg($couleurbkg)
 	{
 		$couleurbkg = strval($couleurbkg);
-		if (strlen($couleurbkg) < self::$lencouleur) {
+		if (strlen($couleurbkg) <= self::$lencouleur) {
 			$this->couleurbkg = strip_tags(trim($couleurbkg));
 		}
 	}
@@ -205,7 +205,7 @@ class Art
 	public function setcouleurlien($couleurlien)
 	{
 		$couleurlien = strval($couleurlien);
-		if (strlen($couleurlien) < self::$couleurlien) {
+		if (strlen($couleurlien) <= self::$lencouleur) {
 			$this->couleurlien = strip_tags(trim($couleurlien));
 		}
 	}

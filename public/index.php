@@ -4,22 +4,48 @@
 
 <?php
 
-var_dump(__FILE__);
+try
+{
+	$bdd = new PDO('mysql:host=localhost;dbname=wcms;charset=utf8', 'root', '');
+}
+catch(Exception $e)
+{
+        die('Erreur : '.$e->getMessage());
+}
 
-$htdocs = str_replace(basename(__FILE__), __FILE__, '');
+// $reponse = $bdd->query('SELECT nom, age FROM art2 WHERE nom = \'eddie\'');
 
-var_dump($htdocs);
+// while ($donnees = $reponse->fetch())
+// {
+// 	echo $donnees['nom'] . ' a ' . $donnees['age'] . ' ANS<br />';
+// }
 
-var_dump($_SERVER["DOCUMENT_ROOT"]);
+// $reponse->closeCursor();
 
+// $req = $bdd->prepare('SELECT nom, age FROM art2 WHERE age = 23 ');
+// $req->execute(array($_GET['possesseur'], $_GET['prix_max']));
 
-set_include_path('e:/WEB/wcms');
+// echo '<ul>';
+// while ($donnees = $req->fetch())
+// {
+// 	echo '<li>' . $donnees['nom'] . ' (' . $donnees['prix'] . ' EUR)</li>';
+// }
+// echo '</ul>';
 
-echo get_include_path();
+// $req->closeCursor();
 
+$req = $bdd->prepare('SELECT * FROM art WHERE id = :id ');
+$req->execute(array('id' => 'articlet'));
 
+echo '<ul>';
+while ($donnees = $req->fetch())
+{
+    echo '<li>' . $donnees['titre'] . ' (' . $donnees['id'] . ' ANS)</li>';
+}
+echo '</ul>';
 
-include('fn/fn.php');
+$req->closeCursor();
+
 
 
 ?>

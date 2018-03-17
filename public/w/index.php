@@ -8,7 +8,7 @@ require('fn/fn.php');
 require('class/class.art.php');
 require('class/class.app.php');
 $config = include('config.php');
-$app = new App();
+$app = new App($config);
 
 session();
 
@@ -26,6 +26,25 @@ head('article');
 //     'datemodif' => new DateTimeImmutable(null, timezone_open("Europe/Paris"))
 // ]);
 
+$arraytest = ([
+    'id' => 'articlet2',
+    'titre' => 'titre',
+    'soustitre' => 'soustitre',
+    'intro' => 'intro',
+    'tag' => 'sans tag,',
+    'datecreation' => '2018-03-17 18:31:34',
+    'datemodif' => '2018-03-17 18:31:34',
+    'css' => 'display: inline:',
+    'html' => 'coucou les loulous',
+    'secure' => 0,
+    'couleurtext' => '#000000',
+    'couleurbkg' => '#ffffff',
+    'couleurlien' => '#2a3599'
+]);
+
+// $art = new Art($arreytest);
+
+
 // echo '<pre>';
 // print_r($art);
 // print_r($app);
@@ -37,25 +56,32 @@ head('article');
 // echo '<p>article exist :' . $app->exist('articlet') . '</p>';
 // var_dump($app->exist('articlet'));
 
-// $app->get('articlet');
 
-// echo '<pre>';
-// print_r($art);
-// print_r($app);
-// echo '</pre>';
 
-try {
-    $bdd = new PDO('mysql:host=localhost;dbname=wcms;charset=utf8', 'root', '');
-} catch (Exeption $e) {
-    die('Erreur : ' . $e->getMessage());
-}
+echo '<pre>';
+$art = $app->get('articlet');
 
-$q = $bdd->query('SELECT * FROM art WHERE id = articlet');
-$donnees = $q->fetch();
+var_dump($art);
 
-var_dump($donnees);
+echo 'count : ' . $app->count();
 
-$q = closeCursor();
+ var_dump($app->exist('bouffffe'));
+ var_dump($app->exist('bouffe'));
+
+
+ $art2 = new Art($arraytest);
+
+//  $app->add($art2);
+
+$app->update($art2);
+
+var_dump($app->getlist());
+
+echo '</pre>';
+
+
+
+
 
 
 
