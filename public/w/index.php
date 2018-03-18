@@ -1,95 +1,86 @@
 <?php
 
-//inw
+
+// _____________________________________________________ R E Q U I R E ________________________________________________________________
+
+
+$_SESSION['level'] = 0;
+
+$config = require('../../config.php');
+require('../../vendor/autoload.php');
+use Michelf\Markdown;
 
 require('../../fn/fn.php');
 require('../../class/class.art.php');
 require('../../class/class.app.php');
-$config = include('../../config.php');
-$app = new App($config);
-
+require('../../class/class.aff.php');
 session();
-
-// fin de in
-
-
-head('article');
+$app = new App($config);
+$aff = new Aff($_SESSION['level']);
 
 
-// $art = new Art([
-//     'id' => 'prout',
-//     'titre' => 'Prout',
-//     'soustitre' => 'mega prout !',
-//     'intro' => 'bienvenue dans le mega prout',
-//     'datemodif' => new DateTimeImmutable(null, timezone_open("Europe/Paris"))
-// ]);
+// _____________________________________________________ A C T I O N __________________________________________________________________
 
-// $arraytest = ([
-//     'id' => 'articlet2',
-//     'titre' => 'titre',
-//     'soustitre' => 'soustitre',
-//     'intro' => 'intro',
-//     'tag' => 'sans tag,',
-//     'datecreation' => '2018-03-17 18:31:34',
-//     'datemodif' => '2018-03-17 18:31:34',
-//     'css' => 'display: inline:',
-//     'html' => 'coucou les loulous',
-//     'secure' => 0,
-//     'couleurtext' => '#000000',
-//     'couleurbkg' => '#ffffff',
-//     'couleurlien' => '#2a3599'
-// ]);
-
-// $art = new Art($arreytest);
-
-
-// echo '<pre>';
-// print_r($art);
-// print_r($app);
-// echo '</pre>';
-
-// $app->add($art);
-
-// echo '<p>art count :' . $app->count() . '</p>';
-// echo '<p>article exist :' . $app->exist('articlet') . '</p>';
-// var_dump($app->exist('articlet'));
-
-$session = 2;
-
-
-if (isset($_GET['id'])) {
-    
-    if ($session == 2) {
-        ?>
-        <nav>
-        <a href="?" >home</a>
-        <a href="?id=<?= $_GET['id'] ?>&display=1" target="_blank">display</a>
-        <a href="?id=<?= $_GET['id'] ?>&edit=1" >edit</a>
-        </nav>
-        <?php
-
-
-}
-
-if ($app->exist($_GET['id'])) {
-    
-    if (isset($_POST['action']) and $_POST['action'] == 'update') {
-        $art = new Art($_POST);
-        var_dump($art);
-        $app->update($art);
-        header('Location: ?id=' . $art->id() . '&edit=1');
+if (isset($_POST['action'])) {
+    switch ($_POST['action']) {
         
+        case 'update':
+        if ($app->exist($_GET['id'])) {
+            $art = new Art($_POST);
+            $app->update($art);
+            header('Location: ?id=' . $art->id() . '&edit=1');
+        }
+        break;
+        
+        case 'login' :
+        $app->login($_POST['pass']);
+        header('Location: ?id=' . $_GET['id']);
+        break;
+        
+        case 'logout' :
+        $app->logout();
+        header('Location: ?id=' . $_GET['id']);
+        break;
     }
     
-    $art = $app->get($_GET['id']);
-    
-    
-    
-    if (isset($_GET['display']) and $_GET['display'] == 1) {
-        $art->display($session);
-        }
+}
+
+
+
+
+// _______________________________________________________ H E A D _____________________________________________________________
+$titre = 'home';
+if (isset($_GET['id'])) {
+    $titre = $_GET['id'];
+    if ($app->exist($_GET['id'])) {
+        $art = $app->get($_GET['id']);
+        $titre = $art->titre();
+    }
+}
+$aff->head($titre);
+
+
+
+
+// ______________________________________________________ B O D Y _______________________________________________________________ 
+
+
+echo '<body>';
+$aff->nav($app);
+
+if (isset($_GET['id'])) {
+
+
+    if ($app->exist($_GET['id'])) {
+
+        $art = $app->get($_GET['id']);
+
         if (isset($_GET['edit']) and $_GET['edit'] == 1) {
-            $art->edit($session);
+            $aff->edit($art);
+            $aff->aside($app->list());
+        } else {
+            $aff->lecture($art);
+
         }
     } else {
         if (isset($_POST['action'])) {
@@ -101,20 +92,20 @@ if ($app->exist($_GET['id'])) {
                 header('Location: ?id=' . $_GET['id'] . '&edit=1');
             }
         } else {
-            echo '<h4>Cet article n\'éxiste pas encore</h4>';
+            echo '<span class="alert"><h4>Cet article n\'existe pas encore</h4></span>';
 
-            if ($session >= 2) {
+            if ($_SESSION['level'] >= 2) {
                 echo '<form action="?id=' . $_GET['id'] . '&edit=1" method="post"><input type="hidden" name="action" value="new"><input type="submit" value="créer"></form>';
             }
-            echo '<a href="?info=erreur">retour maison</a>';
 
         }
 
     }
 } else {
     echo "<h4>Bienvenue sur ce site.</h4>";
-    $app->menu($session);
+    $aff->home($app->list());
 }
+echo '</body>';
 
 
 

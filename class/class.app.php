@@ -2,20 +2,19 @@
 class App
 {
 	private $bdd;
+	private $admin;
+	private $secure;
 
 	public function __construct($config)
 	{
+		$this->admin = $config['admin'];
+		$this->secure = $config['secure'];
+
 		try {
 			$this->bdd = new PDO('mysql:host=' . $config['host'] . ';dbname=' . $config['dbname'] . ';charset=utf8', $config['user'], $config['password']);
 		} catch (Exeption $e) {
 			die('Erreur : ' . $e->getMessage());
 		}
-
-		// try {
-		// 	$this->bdd = new PDO('mysql:host=localhost;dbname=wcms;charset=utf8', 'root', '');
-		// } catch (Exeption $e) {
-		// 	die('Erreur : ' . $e->getMessage());
-		// }
 	}
 
 	public function add(Art $art)
@@ -37,7 +36,7 @@ class App
 			$q->bindValue(':datecreation', $now->format('Y-m-d H:i:s'));
 			$q->bindValue(':datemodif', $now->format('Y-m-d H:i:s'));
 			$q->bindValue(':css', $art->css());
-			$q->bindValue(':html', $art->html());
+			$q->bindValue(':html', $art->html('md'));
 			$q->bindValue(':secure', $art->secure());
 			$q->bindValue(':couleurtext', $art->couleurtext());
 			$q->bindValue(':couleurbkg', $art->couleurbkg());
@@ -77,19 +76,13 @@ class App
 		return $list;
 	}
 
-	public function menu($session)
+	public function list()
 	{
 		$req = $this->bdd->query('SELECT * FROM art ORDER BY id');
-		echo '<ul>';
-		while ($donnees = $req->fetch(PDO::FETCH_ASSOC)) {
-			echo '<li><a href="?id=' . $donnees['id'] . '&display=1">' . $donnees['titre'] . '</a> - ' . $donnees['intro'];
-			if ($session >= 2) {
-				echo ' - <a href="?id=' . $donnees['id'] . '&edit=1">modifier</a></li>';
-			} else {
-				echo '</li>';
-			}
-		}
-		echo ' </ul> ';
+		$donnees = $req->fetchAll(PDO::FETCH_ASSOC);
+		return $donnees;
+		
+		$req->closeCursor();
 
 	}
 
@@ -121,13 +114,33 @@ class App
 		$q->bindValue(':datecreation', $art->datecreation('string'));
 		$q->bindValue(':datemodif', $now->format('Y-m-d H:i:s'));
 		$q->bindValue(':css', $art->css());
-		$q->bindValue(':html', $art->html());
+		$q->bindValue(':html', $art->html('md'));
 		$q->bindValue(':secure', $art->secure());
 		$q->bindValue(':couleurtext', $art->couleurtext());
 		$q->bindValue(':couleurbkg', $art->couleurbkg());
 		$q->bindValue(':couleurlien', $art->couleurlien());
 
 		$q->execute();
+	}
+
+	//_________________________________________________________ S E S ________________________________________________________
+
+	public function login($pass)
+	{
+		if(strip_tags($pass) == $this->admin)
+		{
+			var_dump($this->admin);
+			$_SESSION['level'] = 2;
+		}
+		elseif(strip_tags($pass) == $this->secure)
+		{
+			$_SESSION['level'] = 1;			
+		}
+	}
+
+	public function logout()
+	{
+		$_SESSION['level'] = 0;
 	}
 
 }

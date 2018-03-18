@@ -30,5 +30,6 @@ function head($title) {
 	</head>
 	<?php
 }
+
 ?>
 

@@ -1,6 +1,25 @@
-body {background-color: #dcdcdceb;}
+body {
+    background-color: #dcdcdceb;
 
-input, textarea, select {
+}
+
+h1 {    
+    font-size: 3em;
+}
+
+h2 {
+    font-style: italic;
+}
+
+h3 {
+    opacity: 0.7;
+}
+
+p{
+    font-size: 1.1em;
+}
+
+article input, textarea, select {
     width: 90%;
     padding-left: 15px;
     padding-right: 15px;
@@ -10,6 +29,51 @@ input, textarea, select {
     height:  30px;
     border-style: unset;
 }
-textarea {
-    height: 1000px;
+#html{
+    height: 400px;
+}
+
+#css{
+    height: 100px;
+}
+
+input[type="submit"] {
+    background-color: #bfbfbf;
+}
+
+aside {
+    position: fixed;
+    bottom: 0px;
+	right: -300px;
+	padding: 7px;
+	z-index: 5;
+	background: coral;
+	opacity: 0.3;
+	width: 350px;
+}
+
+aside:hover {
+	opacity: 0.9;
+	right: 0px;
+}
+
+nav {
+    position: fixed;
+    top: 0px;
+	right: -50px;
+	padding: 7px;
+	z-index: 10;
+	background: #5085ff;
+	opacity: 0.3;
+	width:100px;
+}
+
+nav:hover {
+	opacity: 0.9;
+	right: 0px;
+}
+
+.alert h4 {
+    background-color:  red;
+    margin: 0px;
 }
