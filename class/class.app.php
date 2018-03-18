@@ -130,17 +130,17 @@ class App
 		if(strip_tags($pass) == $this->admin)
 		{
 			var_dump($this->admin);
-			$_SESSION['level'] = 2;
+			return $level = 2;
 		}
 		elseif(strip_tags($pass) == $this->secure)
 		{
-			$_SESSION['level'] = 1;			
+			return $level = 1;		
 		}
 	}
 
 	public function logout()
-	{
-		$_SESSION['level'] = 0;
+	{		
+		return $level = 0;
 	}
 
 }

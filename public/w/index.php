@@ -4,7 +4,6 @@
 // _____________________________________________________ R E Q U I R E ________________________________________________________________
 
 
-$_SESSION['level'] = 0;
 
 $config = require('../../config.php');
 require('../../vendor/autoload.php');
@@ -15,8 +14,10 @@ require('../../class/class.art.php');
 require('../../class/class.app.php');
 require('../../class/class.aff.php');
 session();
+$level = 0;
+$level = $_SESSION['level'];
 $app = new App($config);
-$aff = new Aff($_SESSION['level']);
+$aff = new Aff($level);
 
 
 // _____________________________________________________ A C T I O N __________________________________________________________________
@@ -33,12 +34,12 @@ if (isset($_POST['action'])) {
         break;
         
         case 'login' :
-        $app->login($_POST['pass']);
+        $_SESSION['level'] = $app->login($_POST['pass']);
         header('Location: ?id=' . $_GET['id']);
         break;
         
         case 'logout' :
-        $app->logout();
+        $_SESSION['level'] = $app->logout();
         header('Location: ?id=' . $_GET['id']);
         break;
     }
@@ -94,7 +95,7 @@ if (isset($_GET['id'])) {
         } else {
             echo '<span class="alert"><h4>Cet article n\'existe pas encore</h4></span>';
 
-            if ($_SESSION['level'] >= 2) {
+            if ($level >= 2) {
                 echo '<form action="?id=' . $_GET['id'] . '&edit=1" method="post"><input type="hidden" name="action" value="new"><input type="submit" value="créer"></form>';
             }
 
