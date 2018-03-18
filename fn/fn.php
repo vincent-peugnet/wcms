@@ -1,5 +1,3 @@
-<h4>functions</h4>
-
 <?php
 function bddconnect($host, $bdname, $user, $password)
 {
@@ -27,7 +25,7 @@ function head($title) {
 	?>
 	<head>
 		<meta charset="utf8" />
-		<link href="" rel="stylesheet" />
+		<link href="/css/style.css" rel="stylesheet" />
 		<title><?= $title ?></title>
 	</head>
 	<?php

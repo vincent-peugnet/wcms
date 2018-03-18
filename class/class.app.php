@@ -1,4 +1,3 @@
-<h4>class.app</h4>
 <?php
 class App
 {
@@ -23,7 +22,7 @@ class App
 	{
 
 		if ($this->exist($art->id())) {
-			echo '<p>cet id existe deja</p>';
+			echo '<h4>cet id existe deja</h4>';
 		} else {
 
 			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
@@ -72,21 +71,36 @@ class App
 		$list = [];
 
 		$req = $this->bdd->query('SELECT * FROM art ORDER BY id');
-		while ($donnees = $req->fetch(PDO::FETCH_ASSOC))
-		{
-		  $list[] = new Art($donnees);
+		while ($donnees = $req->fetch(PDO::FETCH_ASSOC)) {
+			$list[] = new Art($donnees);
 		}
 		return $list;
 	}
 
+	public function menu($session)
+	{
+		$req = $this->bdd->query('SELECT * FROM art ORDER BY id');
+		echo '<ul>';
+		while ($donnees = $req->fetch(PDO::FETCH_ASSOC)) {
+			echo '<li><a href="?id=' . $donnees['id'] . '&display=1">' . $donnees['titre'] . '</a> - ' . $donnees['intro'];
+			if ($session >= 2) {
+				echo ' - <a href="?id=' . $donnees['id'] . '&edit=1">modifier</a></li>';
+			} else {
+				echo '</li>';
+			}
+		}
+		echo ' </ul> ';
+
+	}
+
 	public function count()
 	{
-		return $this->bdd->query('SELECT COUNT(*) FROM art')->fetchColumn();
+		return $this->bdd->query(' SELECT COUNT(*) FROM art ')->fetchColumn();
 	}
 
 	public function exist($id)
 	{
-		$req = $this->bdd->prepare('SELECT COUNT(*) FROM art WHERE id = :id ');
+		$req = $this->bdd->prepare(' SELECT COUNT(*) FROM art WHERE id = :id ');
 		$req->execute(array('id' => $id));
 		$donnees = $req->fetch(PDO::FETCH_ASSOC);
 
@@ -98,24 +112,23 @@ class App
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
 		$q = $this->bdd->prepare('UPDATE art SET titre = :titre, soustitre = :soustitre, intro = :intro, tag = :tag, datecreation = :datecreation, datemodif = :datemodif, css = :css, html = :html, secure = :secure, couleurtext = :couleurtext, couleurbkg = :couleurbkg, couleurlien = :couleurlien WHERE id = :id');
-
+	
 		$q->bindValue(':id', $art->id());
 		$q->bindValue(':titre', $art->titre());
 		$q->bindValue(':soustitre', $art->soustitre());
 		$q->bindValue(':intro', $art->intro());
 		$q->bindValue(':tag', $art->tag());
-		$q->bindValue(':datecreation', $art->datecreation()->format('Y-m-d H:i:s'));
+		$q->bindValue(':datecreation', $art->datecreation('string'));
 		$q->bindValue(':datemodif', $now->format('Y-m-d H:i:s'));
 		$q->bindValue(':css', $art->css());
 		$q->bindValue(':html', $art->html());
-		$q->bindValue(':secure', $art->secure(), PDO::PARAM_INT);
+		$q->bindValue(':secure', $art->secure());
 		$q->bindValue(':couleurtext', $art->couleurtext());
 		$q->bindValue(':couleurbkg', $art->couleurbkg());
 		$q->bindValue(':couleurlien', $art->couleurlien());
 
 		$q->execute();
 	}
-
 
 }
 ?>

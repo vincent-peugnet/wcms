@@ -1,0 +1,15 @@
+body {background-color: #dcdcdceb;}
+
+input, textarea, select {
+    width: 90%;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin:  5px;
+    margin-left:  5%;
+    margin-right:  5%;
+    height:  30px;
+    border-style: unset;
+}
+textarea {
+    height: 1000px;
+}
