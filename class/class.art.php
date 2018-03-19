@@ -1,6 +1,8 @@
 <?php
 
 use Michelf\Markdown;
+use Michelf\MarkdownExtra;
+
 
 class Art
 {
@@ -51,7 +53,7 @@ class Art
 		$this->setintro('resumé');
 		$this->settag('sans tag,');
 		$this->setdatecreation($now);
-		$this->setcss('');
+		$this->setcss('article {}');
 		$this->sethtml('contenu');
 		$this->setsecure(2);
 		$this->setcouleurtext('#000000');
@@ -111,13 +113,14 @@ class Art
 	}
 
 	public function html($option)
-	{		
+	{
 		if ($option == 'md') {
 			return $this->html;
 		} elseif ($option == 'html') {
-			return Markdown::defaultTransform($this->html);
+			$html = MarkdownExtra::defaultTransform($this->html);
+			$htmla = str_replace('class="b"', ' target="_blank" ', $html);
+			return $htmla;
 		}
-		// return $this->html;
 	}
 
 	public function secure()

@@ -8,14 +8,19 @@
 $config = require('../../config.php');
 require('../../vendor/autoload.php');
 use Michelf\Markdown;
+use Michelf\MarkdownExtra;
+
 
 require('../../fn/fn.php');
 require('../../class/class.art.php');
 require('../../class/class.app.php');
 require('../../class/class.aff.php');
 session();
-$level = 0;
-$level = $_SESSION['level'];
+if (!isset($_SESSION['level'])) {
+    $level = 0;
+} else {
+    $level = $_SESSION['level'];
+}
 $app = new App($config);
 $aff = new Aff($level);
 
@@ -24,26 +29,26 @@ $aff = new Aff($level);
 
 if (isset($_POST['action'])) {
     switch ($_POST['action']) {
-        
+
         case 'update':
-        if ($app->exist($_GET['id'])) {
-            $art = new Art($_POST);
-            $app->update($art);
-            header('Location: ?id=' . $art->id() . '&edit=1');
-        }
-        break;
-        
-        case 'login' :
-        $_SESSION['level'] = $app->login($_POST['pass']);
-        header('Location: ?id=' . $_GET['id']);
-        break;
-        
-        case 'logout' :
-        $_SESSION['level'] = $app->logout();
-        header('Location: ?id=' . $_GET['id']);
-        break;
+            if ($app->exist($_GET['id'])) {
+                $art = new Art($_POST);
+                $app->update($art);
+                header('Location: ?id=' . $art->id() . '&edit=1');
+            }
+            break;
+
+        case 'login':
+            $_SESSION['level'] = $app->login($_POST['pass']);
+            header('Location: ?id=' . $_GET['id']);
+            break;
+
+        case 'logout':
+            $_SESSION['level'] = $app->logout();
+            header('Location: ?id=' . $_GET['id']);
+            break;
     }
-    
+
 }
 
 

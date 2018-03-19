@@ -5,7 +5,7 @@ class Aff
 
     private $session;
 
-	private static $edit = 2;
+    private static $edit = 2;
 
 
     // ____________________________________________________ F U N ______________________________________________
@@ -17,14 +17,14 @@ class Aff
 
     public function lecture(Art $art)
     {
-        if($art->secure() == 1) {
+        if ($art->secure() == 1) {
             echo '<span class="alert"><h4>cet article est privé</h4></span>';
         }
-        if($art->secure() == 2) {
+        if ($art->secure() == 2) {
             echo "<span class=\"alert\"><h4>cet article n'est pas publié</h4></span>";
         }
-        
-        if ($this->session() >= $art->secure()) {            
+
+        if ($this->session() >= $art->secure()) {
             ?>
             <style type="text/css">
             article {
@@ -48,10 +48,10 @@ class Aff
     }
 
     public function edit(Art $art)
-	{
-		if ($this->session() >= self::$edit) {
+    {
+        if ($this->session() >= self::$edit) {
 
-			?>
+            ?>
 		<article>
             <form class="edit" action="?id=<?= $art->id() ?>" method="post">
                 <input type="submit" value="modifier">
@@ -88,42 +88,44 @@ class Aff
 
 		<?php
 
-        }
+}
 
-    }
+}
 
-    public function head($title) {
-        ?>
+public function head($title)
+{
+    ?>
         <head>
             <meta charset="utf8" />
             <link href="/css/style.css" rel="stylesheet" />
             <title><?= $title ?></title>
         </head>
         <?php
+
     }
 
     public function home($list)
     {
         echo '<ul>';
-		foreach ($list as $item) {              
+        foreach ($list as $item) {
             echo '<li><a href="?id=' . $item['id'] . '">' . $item['titre'] . '</a> - ' . $item['intro'];
             if ($this->session() >= 2) {
                 echo ' - <a href="?id=' . $item['id'] . '&edit=1">modifier</a></li>';
             } else {
                 echo '</li>';
-            }        
-		}
-		echo ' </ul> ';
+            }
+        }
+        echo ' </ul> ';
     }
 
     public function aside($list)
     {
         if ($this->session() >= 2) {
             echo '<aside><ul>';
-            foreach ($list as $item) {              
-                 echo '<li><a href="?id=' . $item['id'] . '&edit=1">' . $item['titre'] . '</a> - <code>[' . $item['titre'] . '](?id=' . $item['id'].')</code>';
-                    
-                
+            foreach ($list as $item) {
+                echo '<li><a href="?id=' . $item['id'] . '&edit=1">' . $item['titre'] . '</a> - <code>[' . $item['titre'] . '](?id=' . $item['id'] . ')</code>';
+
+
             }
             echo ' </ul></aside> ';
         }
@@ -134,28 +136,30 @@ class Aff
         ?>
         <nav>
         <?= $this->session() ?>
+        </br>
         <a href="?" >home</a>
+        </br>
         <?php
         if ($this->session() >= 1) {
-            if(isset($_GET['id'])){
-            ?>
+            if (isset($_GET['id'])) {
+                ?>
             <form action="?id=<?= $_GET['id'] ?>" method="post">
             <input type="hidden" name="action" value="logout">
             <input type="submit" value="disconnect">
             </form>
             <?php
-            }
-            if(isset($_GET['id']) AND $app->exist($_GET['id']) AND $this->session() == 2)
-            {
-                ?>
-                    <a href="?id=<?= $_GET['id'] ?>&display=1" target="_blank">display</a>
+
+        }
+        if (isset($_GET['id']) and $app->exist($_GET['id']) and $this->session() == 2) {
+            ?>
+                    <a href="?id=<?= $_GET['id'] ?>" target="_blank">display</a>
+        </br>
                     <a href="?id=<?= $_GET['id'] ?>&edit=1" >edit</a>
                 <?php
+
             }
-        }
-        else
-        {            
-            if(isset($_GET['id'])){
+        } else {
+            if (isset($_GET['id'])) {
                 ?>
             <form action="?id=<?= $_GET['id'] ?>" method="post">
             <input type="hidden" name="action" value="login">
@@ -163,11 +167,13 @@ class Aff
             <input type="submit" value="connect">
             </form>
             <?php
-            }
+
         }
-        ?>
+    }
+    ?>
         </nav>
         <?php
+
     }
 
    //______________________________________________________ S E T _________________________________________________
