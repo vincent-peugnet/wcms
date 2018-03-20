@@ -44,7 +44,7 @@ class Art
 		}
 	}
 
-	public function default()
+	public function reset()
 	{
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
@@ -83,9 +83,14 @@ class Art
 		return $this->intro;
 	}
 
-	public function tag()
+	public function tag($option)
 	{
-		return $this->tag;
+		if ($option == 'string') {
+			$tag = implode(", ", $this->tag);
+		} elseif ($option == 'array') {
+			$tag = $this->tag;
+		}
+		return $tag;
 	}
 
 	public function datecreation($option)
@@ -178,7 +183,9 @@ class Art
 	public function settag($tag)
 	{
 		if (strlen($tag) < self::$len and is_string($tag)) {
-			$this->tag = strip_tags(trim(strtolower($tag)));
+			$tag = strip_tags(trim(strtolower($tag)));
+			$taglist = explode(", ", $tag);
+			$this->tag = $taglist;
 		}
 	}
 

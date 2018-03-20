@@ -52,7 +52,7 @@ class Aff
         if ($this->session() >= self::$edit) {
 
             ?>
-		<article>
+		<article class="edit">
             <form class="edit" action="?id=<?= $art->id() ?>" method="post">
                 <input type="submit" value="modifier">
                 <label for="titre">Titre :</label>
@@ -62,10 +62,10 @@ class Aff
                 <label for="intro">Introduction :</label>
                 <input type="text" name="intro" id="intro" value="<?= $art->intro(); ?>">
                 <label for="tag">Tag(s) :</label>
-                <input type="text" name="tag" id="tag" value="<?= $art->tag(); ?>">
+                <input type="text" name="tag" id="tag" value="<?= $art->tag('string'); ?>">
                 <label for="css">Styles CSS :</label>
                 <textarea name="css" id="css"><?= $art->css(); ?></textarea>
-                <label for="secure">Niveau de sécuritée :</label>
+                <label for="secure">Niveau de sécurité :</label>
                 <select name="secure" id="secure">
                     <option value="0" <?= $art->secure() == 0 ? 'selected' : '' ?>>0</option>
                     <option value="1" <?= $art->secure() == 1 ? 'selected' : '' ?>>1</option>
@@ -104,6 +104,9 @@ public function head($title)
 
     }
 
+
+
+
     public function home($list)
     {
         echo '<ul>';
@@ -113,6 +116,22 @@ public function head($title)
                 echo ' - <a href="?id=' . $item['id'] . '&edit=1">modifier</a></li>';
             } else {
                 echo '</li>';
+            }
+        }
+        echo ' </ul> ';
+    }
+
+    public function tag($getlist, $tag)
+    {
+        echo '<ul>';
+        foreach ($getlist as $item) {
+            if (in_array($tag, $item->tag('array'))) {
+                echo '<li><a href="?id=' . $item->id() . '">' . $item->titre() . '</a> - ' . $item->intro();
+                if ($this->session() >= 2) {
+                    echo ' - <a href="?id=' . $item->id() . '&edit=1">modifier</a></li>';
+                } else {
+                    echo '</li>';
+                }
             }
         }
         echo ' </ul> ';

@@ -23,12 +23,23 @@ p{
     font-size: 1em;
 }
 
-article {
-    text-align: justify;
-    padding: 3%;
+em {
+    opacity: 0.8;
 }
 
-article p{
+img {
+    width: 90%;
+    max-width: 1000px;
+}
+
+article {
+    text-align: justify;
+    padding: 3%;    
+    line-height: 1.2em;
+}
+
+article .edit {
+    text-align: left;
 }
 
 article input, textarea, select {
@@ -42,7 +53,7 @@ article input, textarea, select {
     border-style: unset;
 }
 #html{
-    height: 400px;
+    height: 1000px;
 }
 
 #css{

@@ -32,7 +32,7 @@ class App
 			$q->bindValue(':titre', $art->titre());
 			$q->bindValue(':soustitre', $art->soustitre());
 			$q->bindValue(':intro', $art->intro());
-			$q->bindValue(':tag', $art->tag());
+			$q->bindValue(':tag', $art->tag('string'));
 			$q->bindValue(':datecreation', $now->format('Y-m-d H:i:s'));
 			$q->bindValue(':datemodif', $now->format('Y-m-d H:i:s'));
 			$q->bindValue(':css', $art->css());
@@ -65,7 +65,7 @@ class App
 
 	}
 
-	public function getlist()
+	public function getlister()
 	{
 		$list = [];
 
@@ -76,12 +76,12 @@ class App
 		return $list;
 	}
 
-	public function list()
+	public function lister()
 	{
 		$req = $this->bdd->query('SELECT * FROM art ORDER BY id');
 		$donnees = $req->fetchAll(PDO::FETCH_ASSOC);
 		return $donnees;
-		
+
 		$req->closeCursor();
 
 	}
@@ -105,12 +105,12 @@ class App
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
 		$q = $this->bdd->prepare('UPDATE art SET titre = :titre, soustitre = :soustitre, intro = :intro, tag = :tag, datecreation = :datecreation, datemodif = :datemodif, css = :css, html = :html, secure = :secure, couleurtext = :couleurtext, couleurbkg = :couleurbkg, couleurlien = :couleurlien WHERE id = :id');
-	
+
 		$q->bindValue(':id', $art->id());
 		$q->bindValue(':titre', $art->titre());
 		$q->bindValue(':soustitre', $art->soustitre());
 		$q->bindValue(':intro', $art->intro());
-		$q->bindValue(':tag', $art->tag());
+		$q->bindValue(':tag', $art->tag('string'));
 		$q->bindValue(':datecreation', $art->datecreation('string'));
 		$q->bindValue(':datemodif', $now->format('Y-m-d H:i:s'));
 		$q->bindValue(':css', $art->css());
@@ -127,19 +127,16 @@ class App
 
 	public function login($pass)
 	{
-		if(strip_tags($pass) == $this->admin)
-		{
+		if (strip_tags($pass) == $this->admin) {
 			var_dump($this->admin);
 			return $level = 2;
-		}
-		elseif(strip_tags($pass) == $this->secure)
-		{
-			return $level = 1;		
+		} elseif (strip_tags($pass) == $this->secure) {
+			return $level = 1;
 		}
 	}
 
 	public function logout()
-	{		
+	{
 		return $level = 0;
 	}
 

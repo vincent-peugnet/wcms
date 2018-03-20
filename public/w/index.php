@@ -83,7 +83,7 @@ if (isset($_GET['id'])) {
 
         if (isset($_GET['edit']) and $_GET['edit'] == 1) {
             $aff->edit($art);
-            $aff->aside($app->list());
+            $aff->aside($app->lister());
         } else {
             $aff->lecture($art);
 
@@ -92,8 +92,7 @@ if (isset($_GET['id'])) {
         if (isset($_POST['action'])) {
             if ($_POST['action'] == 'new') {
                 $art = new Art($_GET);
-                $art->default();
-                var_dump($art);
+                $art->reset();
                 $app->add($art);
                 header('Location: ?id=' . $_GET['id'] . '&edit=1');
             }
@@ -107,9 +106,13 @@ if (isset($_GET['id'])) {
         }
 
     }
+} elseif (isset($_GET['tag'])) {
+    echo '<h4>' . $_GET['tag'] . '</h4>';
+    $aff->tag($app->getlister(), $_GET['tag']);
+
 } else {
     echo "<h4>Bienvenue sur ce site.</h4>";
-    $aff->home($app->list());
+    $aff->home($app->lister());
 }
 echo '</body>';
 
