@@ -53,7 +53,8 @@ class Art
 		$this->setintro('resumé');
 		$this->settag('sans tag,');
 		$this->setdatecreation($now);
-		$this->setcss('article {}');
+		$this->setcss('article {}
+a:hover {}');
 		$this->sethtml('contenu');
 		$this->setsecure(2);
 		$this->setcouleurtext('#000000');
@@ -123,8 +124,11 @@ class Art
 			return $this->html;
 		} elseif ($option == 'html') {
 			$html = MarkdownExtra::defaultTransform($this->html);
-			$htmla = str_replace('class="b"', ' target="_blank" ', $html);
-			return $htmla;
+			$htmla = str_replace('href="http://', ' class="external" target="_blank" href="http://', $html);
+
+			$htmla = str_replace('class="b"', ' target="_blank" ', $htmla);
+			$htmlmedia = str_replace('src="/', 'src="../media/', $htmla);
+			return $htmlmedia;
 		}
 	}
 
@@ -146,6 +150,11 @@ class Art
 	public function couleurlien()
 	{
 		return $this->couleurlien;
+	}
+
+	public function couleurlienblank()
+	{
+		return $this->couleurlienblank;
 	}
 
 
@@ -249,6 +258,14 @@ class Art
 		$couleurlien = strval($couleurlien);
 		if (strlen($couleurlien) <= self::$lencouleur) {
 			$this->couleurlien = strip_tags(trim($couleurlien));
+		}
+	}
+
+	public function setcouleurlienblank($couleurlienblank)
+	{
+		$couleurlienblank = strval($couleurlienblank);
+		if (strlen($couleurlienblank) <= self::$lencouleur) {
+			$this->couleurlienblank = strip_tags(trim($couleurlienblank));
 		}
 	}
 

@@ -1,2 +1,4 @@
 vendor/*
 config.php
+error_log
+w/img/*

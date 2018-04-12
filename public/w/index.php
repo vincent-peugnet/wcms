@@ -38,15 +38,33 @@ if (isset($_POST['action'])) {
             }
             break;
 
+        case 'delete':
+            if ($app->exist($_GET['id'])) {
+                $art = new Art($_POST);
+                $app->delete($art);
+                header('Location: ?id=' . $art->id());
+            }
+            break;
+
+
         case 'login':
             $_SESSION['level'] = $app->login($_POST['pass']);
-            header('Location: ?id=' . $_GET['id']);
+            if (isset($_GET['id'])) {
+                header('Location: ?id=' . $_GET['id']);
+            } else {
+                header('Location: ?');
+            }
             break;
 
         case 'logout':
             $_SESSION['level'] = $app->logout();
-            header('Location: ?id=' . $_GET['id']);
+            if (isset($_GET['id'])) {
+                header('Location: ?id=' . $_GET['id']);
+            } else {
+                header('Location: ?');
+            }
             break;
+
     }
 
 }
@@ -111,7 +129,6 @@ if (isset($_GET['id'])) {
     $aff->tag($app->getlister(), $_GET['tag']);
 
 } else {
-    echo "<h4>Bienvenue sur ce site.</h4>";
     $aff->home($app->lister());
 }
 echo '</body>';

@@ -35,11 +35,15 @@ class Aff
             a {
                 color: <?= $art->couleurlien() ?>;
             }
+
+            a[target="_blank"] {
+                color: <?= $art->couleurlienblank() ?>;
+            }
             <?= $art->css() ?>
             </style>
             <article>
             <h1><?= $art->titre() ?></h1>
-            <h2><?= $art->soustitre() ?></h2>
+            <h6><?= $art->soustitre() ?></h6>
             <p><?= $art->html('html') ?></p>
             </article>
             <?php
@@ -53,8 +57,7 @@ class Aff
 
             ?>
 		<article class="edit">
-            <form class="edit" action="?id=<?= $art->id() ?>" method="post">
-                <input type="submit" value="modifier">
+            <form action="?id=<?= $art->id() ?>" method="post">
                 <label for="titre">Titre :</label>
                 <input type="text" name="titre" id="titre" value="<?= $art->titre(); ?>">
                 <label for="soustitre">Sous-titre :</label>
@@ -77,12 +80,16 @@ class Aff
                 <input type="color" name="couleurbkg" value="<?= $art->couleurbkg() ?>" id="couleurbkg">
                 <label for="couleurlien">Couleur des liens :</label>
                 <input type="color" name="couleurlien" value="<?= $art->couleurlien() ?>" id="couleurlien">
+                <label for="couleurlienblank">Couleur des liens externes :</label>
+                <input type="color" name="couleurlienblank" value="<?= $art->couleurlienblank() ?>" id="couleurlienblank">
                 <label for="html">Contenu :</label>
                 <textarea name="html" id="html" ><?= $art->html('md'); ?></textarea>
                 <input type="hidden" name="datecreation" value="<?= $art->datecreation('string'); ?>">
                 <input type="hidden" name="id" value="<?= $art->id() ?>">
-                <input type="hidden" name="action" value="update">
-                <input type="submit" value="modifier">
+                <div class="submit">
+                    <input type="submit" name="action" value="update">
+                    <input type="submit" name="action" value="delete">
+        </div>
             </form>
 		</article>
 
@@ -97,6 +104,7 @@ public function head($title)
     ?>
         <head>
             <meta charset="utf8" />
+		    <meta name="viewport" content="width=device-width" />            
             <link href="/css/style.css" rel="stylesheet" />
             <title><?= $title ?></title>
         </head>
@@ -109,16 +117,25 @@ public function head($title)
 
     public function home($list)
     {
-        echo '<ul>';
-        foreach ($list as $item) {
-            echo '<li><a href="?id=' . $item['id'] . '">' . $item['titre'] . '</a> - ' . $item['intro'];
-            if ($this->session() >= 2) {
-                echo ' - <a href="?id=' . $item['id'] . '&edit=1">modifier</a></li>';
-            } else {
-                echo '</li>';
+        ?>
+        <form action="./" method="get">
+        <input type="text" name="id" id="id" placeholder="identifiant article" required>
+        <input type="submit" value="accéder">
+        </form>
+        <?php
+
+        if ($this->session() == 2) {
+            echo '<ul>';
+            foreach ($list as $item) {
+                echo '<li><a href="?id=' . $item['id'] . '">' . $item['titre'] . '</a> - ' . $item['intro'];
+                if ($this->session() >= 2) {
+                    echo ' - <a href="?id=' . $item['id'] . '&edit=1">modifier</a></li>';
+                } else {
+                    echo '</li>';
+                }
             }
+            echo ' </ul> ';
         }
-        echo ' </ul> ';
     }
 
     public function tag($getlist, $tag)
@@ -156,40 +173,62 @@ public function head($title)
         <nav>
         <?= $this->session() ?>
         </br>
-        <a href="?" >home</a>
+        <a href="?">home</a>
+
         </br>
         <?php
-        if ($this->session() >= 1) {
-            if (isset($_GET['id'])) {
-                ?>
-            <form action="?id=<?= $_GET['id'] ?>" method="post">
-            <input type="hidden" name="action" value="logout">
-            <input type="submit" value="disconnect">
-            </form>
-            <?php
 
-        }
-        if (isset($_GET['id']) and $app->exist($_GET['id']) and $this->session() == 2) {
-            ?>
-                    <a href="?id=<?= $_GET['id'] ?>" target="_blank">display</a>
-        </br>
-                    <a href="?id=<?= $_GET['id'] ?>&edit=1" >edit</a>
+        if (isset($_GET['id']) and $app->exist($_GET['id'])) {
+            if ($this->session() == 0) {
+                ?>
+                <form action="?id=<?= $_GET['id'] ?>" method="post">
+                <input type="hidden" name="action" value="login">
+                <input type="password" name="pass" id="pass" placeholder="password">
+                <input type="submit" value="connect">
+                </form>
                 <?php
 
             }
-        } else {
-            if (isset($_GET['id'])) {
+            if ($this->session() >= 1) {
                 ?>
-            <form action="?id=<?= $_GET['id'] ?>" method="post">
-            <input type="hidden" name="action" value="login">
-            <input type="password" name="pass" id="pass" placeholder="password">
-            <input type="submit" value="connect">
-            </form>
-            <?php
+                <form action="?id=<?= $_GET['id'] ?>" method="post">
+                <input type="hidden" name="action" value="logout">
+                <input type="submit" value="disconnect">
+                </form>
+                <?php
 
+                if ($this->session() == 2) {
+                    ?>
+                    <a href="?id=<?= $_GET['id'] ?>" target="_blank">display</a>
+                    </br>
+                    <a href="?id=<?= $_GET['id'] ?>&edit=1" >edit</a>
+                    <?php
+
+                }
+
+            }
+        } else {
+            if ($this->session() == 0) {
+                ?>
+                <form action="?" method="post">
+                <input type="hidden" name="action" value="login">
+                <input type="password" name="pass" id="pass" placeholder="password">
+                <input type="submit" value="connect">
+                </form>
+                <?php
+
+            }
+            if ($this->session() >= 1) {
+                ?>
+                <form action="?" method="post">
+                <input type="hidden" name="action" value="logout">
+                <input type="submit" value="disconnect">
+                </form>
+                <?php
+
+            }
         }
-    }
-    ?>
+        ?>
         </nav>
         <?php
 

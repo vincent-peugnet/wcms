@@ -21,14 +21,17 @@ function secure()
 	}
 }
 
-function head($title) {
+function head($title)
+{
 	?>
 	<head>
 		<meta charset="utf8" />
+		<meta name="viexport" content="width=device-width" />
 		<link href="/css/style.css" rel="stylesheet" />
 		<title><?= $title ?></title>
 	</head>
 	<?php
+
 }
 
 ?>

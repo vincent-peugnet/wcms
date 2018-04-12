@@ -26,7 +26,7 @@ class App
 
 			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
-			$q = $this->bdd->prepare('INSERT INTO art(id, titre, soustitre, intro, tag, datecreation, datemodif, css, html, secure, couleurtext, couleurbkg, couleurlien) VALUES(:id, :titre, :soustitre, :intro, :tag, :datecreation, :datemodif, :css, :html, :secure, :couleurtext, :couleurbkg, :couleurlien)');
+			$q = $this->bdd->prepare('INSERT INTO art(id, titre, soustitre, intro, tag, datecreation, datemodif, css, html, secure, couleurtext, couleurbkg, couleurlien, couleurlienblank) VALUES(:id, :titre, :soustitre, :intro, :tag, :datecreation, :datemodif, :css, :html, :secure, :couleurtext, :couleurbkg, :couleurlien, :couleurlienblank)');
 
 			$q->bindValue(':id', $art->id());
 			$q->bindValue(':titre', $art->titre());
@@ -41,6 +41,7 @@ class App
 			$q->bindValue(':couleurtext', $art->couleurtext());
 			$q->bindValue(':couleurbkg', $art->couleurbkg());
 			$q->bindValue(':couleurlien', $art->couleurlien());
+			$q->bindValue(':couleurlienblank', $art->couleurlienblank());
 
 			$q->execute();
 		}
@@ -104,7 +105,7 @@ class App
 	{
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
-		$q = $this->bdd->prepare('UPDATE art SET titre = :titre, soustitre = :soustitre, intro = :intro, tag = :tag, datecreation = :datecreation, datemodif = :datemodif, css = :css, html = :html, secure = :secure, couleurtext = :couleurtext, couleurbkg = :couleurbkg, couleurlien = :couleurlien WHERE id = :id');
+		$q = $this->bdd->prepare('UPDATE art SET titre = :titre, soustitre = :soustitre, intro = :intro, tag = :tag, datecreation = :datecreation, datemodif = :datemodif, css = :css, html = :html, secure = :secure, couleurtext = :couleurtext, couleurbkg = :couleurbkg, couleurlien = :couleurlien, couleurlienblank = :couleurlienblank WHERE id = :id');
 
 		$q->bindValue(':id', $art->id());
 		$q->bindValue(':titre', $art->titre());
@@ -119,6 +120,7 @@ class App
 		$q->bindValue(':couleurtext', $art->couleurtext());
 		$q->bindValue(':couleurbkg', $art->couleurbkg());
 		$q->bindValue(':couleurlien', $art->couleurlien());
+		$q->bindValue(':couleurlienblank', $art->couleurlienblank());
 
 		$q->execute();
 	}

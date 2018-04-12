@@ -19,12 +19,24 @@ h3 {
     opacity: 0.7;
 }
 
+h6 {
+    font-size: 1em;
+}
+
 p{
     font-size: 1em;
 }
 
 em {
     opacity: 0.8;
+}
+
+a{
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: underline;
 }
 
 img {
@@ -38,9 +50,15 @@ article {
     line-height: 1.2em;
 }
 
-article .edit {
+.edit {
     text-align: left;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    padding-left: 8%;
+    padding-right: 8%;
+    line-height: 1.2em;
 }
+
 
 article input, textarea, select {
     width: 90%;
@@ -52,6 +70,7 @@ article input, textarea, select {
     height:  30px;
     border-style: unset;
 }
+
 #html{
     height: 1000px;
 }
@@ -128,4 +147,11 @@ nav a {
     border-width: 2px;
     border-color: lightgrey;
     border-style: outset;
+}
+
+.submit {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 8%;
 }
