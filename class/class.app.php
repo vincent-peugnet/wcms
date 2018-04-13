@@ -26,7 +26,7 @@ class App
 
 			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
-			$q = $this->bdd->prepare('INSERT INTO art(id, titre, soustitre, intro, tag, datecreation, datemodif, css, html, secure, couleurtext, couleurbkg, couleurlien, couleurlienblank) VALUES(:id, :titre, :soustitre, :intro, :tag, :datecreation, :datemodif, :css, :html, :secure, :couleurtext, :couleurbkg, :couleurlien, :couleurlienblank)');
+			$q = $this->bdd->prepare('INSERT INTO art(id, titre, soustitre, intro, tag, datecreation, datemodif, css, html, secure, couleurtext, couleurbkg, couleurlien, couleurlienblank, lien) VALUES(:id, :titre, :soustitre, :intro, :tag, :datecreation, :datemodif, :css, :html, :secure, :couleurtext, :couleurbkg, :couleurlien, :couleurlienblank, :lien)');
 
 			$q->bindValue(':id', $art->id());
 			$q->bindValue(':titre', $art->titre());
@@ -42,6 +42,7 @@ class App
 			$q->bindValue(':couleurbkg', $art->couleurbkg());
 			$q->bindValue(':couleurlien', $art->couleurlien());
 			$q->bindValue(':couleurlienblank', $art->couleurlienblank());
+			$q->bindValue(':lien', $art->lien('string'));
 
 			$q->execute();
 		}
@@ -104,8 +105,9 @@ class App
 	public function update(Art $art)
 	{
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+		$art->updatelien();
 
-		$q = $this->bdd->prepare('UPDATE art SET titre = :titre, soustitre = :soustitre, intro = :intro, tag = :tag, datecreation = :datecreation, datemodif = :datemodif, css = :css, html = :html, secure = :secure, couleurtext = :couleurtext, couleurbkg = :couleurbkg, couleurlien = :couleurlien, couleurlienblank = :couleurlienblank WHERE id = :id');
+		$q = $this->bdd->prepare('UPDATE art SET titre = :titre, soustitre = :soustitre, intro = :intro, tag = :tag, datecreation = :datecreation, datemodif = :datemodif, css = :css, html = :html, secure = :secure, couleurtext = :couleurtext, couleurbkg = :couleurbkg, couleurlien = :couleurlien, couleurlienblank = :couleurlienblank, lien=:lien WHERE id = :id');
 
 		$q->bindValue(':id', $art->id());
 		$q->bindValue(':titre', $art->titre());
@@ -121,6 +123,7 @@ class App
 		$q->bindValue(':couleurbkg', $art->couleurbkg());
 		$q->bindValue(':couleurlien', $art->couleurlien());
 		$q->bindValue(':couleurlienblank', $art->couleurlienblank());
+		$q->bindValue(':lien', $art->lien('string'));
 
 		$q->execute();
 	}

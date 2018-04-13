@@ -27,8 +27,10 @@ class Aff
         if ($this->session() >= $art->secure()) {
             ?>
             <style type="text/css">
-            article {
+            body{
                 background: <?= $art->couleurbkg() ?>;
+            }
+            section {
                 color: <?= $art->couleurtext() ?>;			
             }
             
@@ -41,11 +43,11 @@ class Aff
             }
             <?= $art->css() ?>
             </style>
-            <article>
+            <section>
             <h1><?= $art->titre() ?></h1>
             <h6><?= $art->soustitre() ?></h6>
-            <p><?= $art->html('html') ?></p>
-            </article>
+            <article><?= $art->html('html') ?></article>
+            </section>
             <?php
 
         }
@@ -56,7 +58,7 @@ class Aff
         if ($this->session() >= self::$edit) {
 
             ?>
-		<article class="edit">
+		<section class="edit">
             <form action="?id=<?= $art->id() ?>" method="post">
                 <label for="titre">Titre :</label>
                 <input type="text" name="titre" id="titre" value="<?= $art->titre(); ?>">
@@ -88,10 +90,10 @@ class Aff
                 <input type="hidden" name="id" value="<?= $art->id() ?>">
                 <div class="submit">
                     <input type="submit" name="action" value="update">
-                    <input type="submit" name="action" value="delete">
+                    <input type="submit" name="action" value="delete" onclick="confirmSubmit(event, 'Suppression de cet article')">
         </div>
             </form>
-		</article>
+		</section>
 
 		<?php
 
@@ -107,6 +109,7 @@ public function head($title)
 		    <meta name="viewport" content="width=device-width" />            
             <link href="/css/style.css" rel="stylesheet" />
             <title><?= $title ?></title>
+            <script src="../rsc/js/app.js"></script>
         </head>
         <?php
 

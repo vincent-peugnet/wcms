@@ -1,7 +1,11 @@
+html {
+}
+
 body {
     background-color: #dcdcdceb;    
     font-family: helvetica, arial, sans-serif;
     margin: 0px;
+
 }
 
 h1 {    
@@ -44,7 +48,7 @@ img {
     max-width: 1000px;
 }
 
-article {
+section {
     text-align: justify;
     padding: 3%;    
     line-height: 1.2em;
@@ -60,7 +64,7 @@ article {
 }
 
 
-article input, textarea, select {
+section input, textarea, select {
     width: 90%;
     padding-left: 15px;
     padding-right: 15px;
@@ -89,9 +93,11 @@ aside {
 	right: -300px;
 	padding: 7px;
 	z-index: 5;
-	background: #6c7d8a;
+	background: #bfbfbf;
 	opacity: 0.3;
-	width: 350px;
+    width: 350px;
+    overflow-y: scroll;
+    max-height: 70%;
 }
 
 aside:hover {
