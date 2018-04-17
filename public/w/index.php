@@ -34,7 +34,7 @@ if (isset($_POST['action'])) {
             if ($app->exist($_GET['id'])) {
                 $art = new Art($_POST);
                 $app->update($art);
-                //header('Location: ?id=' . $art->id() . '&edit=1');
+                header('Location: ?id=' . $art->id() . '&edit=1');
             }
             break;
 
