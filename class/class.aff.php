@@ -15,7 +15,7 @@ class Aff
         $this->setsession($session);
     }
 
-    public function lecture(Art $art)
+    public function lecture(Art $art, App $app)
     {
         if ($art->secure() == 1) {
             echo '<span class="alert"><h4>cet article est privé</h4></span>';
@@ -46,7 +46,7 @@ class Aff
             <section>
             <h1><?= $art->titre() ?></h1>
             <h6><?= $art->soustitre() ?></h6>
-            <article><?= $art->html('html') ?></article>
+            <article><?= $app->introlien($art) ?></article>
             </section>
             <?php
 
@@ -118,7 +118,7 @@ public function head($title)
 
 
 
-    public function home($list)
+    public function search()
     {
         ?>
         <form action="./" method="get">
@@ -127,18 +127,6 @@ public function head($title)
         </form>
         <?php
 
-        if ($this->session() == 2) {
-            echo '<ul>';
-            foreach ($list as $item) {
-                echo '<li><a href="?id=' . $item['id'] . '">' . $item['titre'] . '</a> - ' . $item['intro'];
-                if ($this->session() >= 2) {
-                    echo ' - <a href="?id=' . $item['id'] . '&edit=1">modifier</a></li>';
-                } else {
-                    echo '</li>';
-                }
-            }
-            echo ' </ul> ';
-        }
     }
 
     public function tag($getlist, $tag)
@@ -155,6 +143,92 @@ public function head($title)
             }
         }
         echo ' </ul> ';
+    }
+
+    public function lien($getlist, $lien)
+    {
+        echo '<ul>';
+        foreach ($getlist as $item) {
+            if (in_array($lien, $item->lien('array'))) {
+                echo '<li><a href="?id=' . $item->id() . '">' . $item->titre() . '</a> - ' . $item->intro();
+                if ($this->session() >= 2) {
+                    echo ' - <a href="?id=' . $item->id() . '&edit=1">modifier</a></li>';
+                } else {
+                    echo '</li>';
+                }
+            }
+        }
+        echo ' </ul> ';
+    }
+
+    public function home($getlist)
+    {
+        echo '<ul>';
+        foreach ($getlist as $item) {
+            echo '<li><a href="?id=' . $item->id() . '">' . $item->titre() . '</a> - ' . $item->intro();
+            if ($this->session() >= 2) {
+                echo ' - <a href="?id=' . $item->id() . '&edit=1">modifier</a></li>';
+            } else {
+                echo '</li>';
+            }
+
+        }
+        echo ' </ul> ';
+    }
+
+    public function dump($getlist)
+    {
+        echo '<ul>';
+        foreach ($getlist as $item) {
+            echo '<li>';
+            var_dump($item);
+            echo '</li>';
+        }
+        echo ' </ul> ';
+    }
+
+    public function home2($getlist)
+    {
+        if ($this->session() >= 2) {
+            echo '<ul>';
+            foreach ($getlist as $item) {
+                $count = 0;
+
+                foreach ($getlist as $lien) {
+                    if (in_array($item->id(), $lien->lien('array'))) {
+                        $count++;
+                    }
+                }
+                echo '<li><a href="?id=' . $item->id() . '">' . $item->titre() . '</a> - ' . $item->intro();
+                echo ' - <a href="?lien=' . $item->id() . '">' . $count . '</a> ';
+                echo ' - <a href="?id=' . $item->id() . '&edit=1">modifier</a></li>';
+            }
+            echo ' </ul> ';
+        }
+    }
+
+    public function home2table($getlist)
+    {
+        if ($this->session() >= 2) {
+            echo '<table>';
+            echo '<tr><th>titre</th><th>résumé</th><th>lien</th><th>edit</th></tr>';
+            foreach ($getlist as $item) {
+                $count = 0;
+
+                foreach ($getlist as $lien) {
+                    if (in_array($item->id(), $lien->lien('array'))) {
+                        $count++;
+                    }
+                }
+                echo '<tr>';
+                echo '<td><a href="?id=' . $item->id() . '">' . $item->titre() . '</a></td>';
+                echo '<td>' . $item->intro() . '</td>';
+                echo '<td><a href="?lien=' . $item->id() . '">' . $count . '</a></td>';
+                echo '<td><a href="?id=' . $item->id() . '&edit=1">modifier</a></td>';
+                echo '</tr>';
+            }
+            echo ' <table> ';
+        }
     }
 
     public function aside($list)

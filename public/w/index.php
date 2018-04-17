@@ -34,7 +34,7 @@ if (isset($_POST['action'])) {
             if ($app->exist($_GET['id'])) {
                 $art = new Art($_POST);
                 $app->update($art);
-                header('Location: ?id=' . $art->id() . '&edit=1');
+                //header('Location: ?id=' . $art->id() . '&edit=1');
             }
             break;
 
@@ -94,7 +94,6 @@ $aff->nav($app);
 
 if (isset($_GET['id'])) {
 
-
     if ($app->exist($_GET['id'])) {
 
         $art = $app->get($_GET['id']);
@@ -103,7 +102,7 @@ if (isset($_GET['id'])) {
             $aff->edit($art);
             $aff->aside($app->lister());
         } else {
-            $aff->lecture($art);
+            $aff->lecture($art, $app);
 
         }
     } else {
@@ -126,10 +125,20 @@ if (isset($_GET['id'])) {
     }
 } elseif (isset($_GET['tag'])) {
     echo '<h4>' . $_GET['tag'] . '</h4>';
-    $aff->tag($app->getlister(), $_GET['tag']);
+    $aff->tag($app->getlister(['id', 'titre', 'intro', 'tag'], 'id'), $_GET['tag']);
+
+} elseif (isset($_GET['lien'])) {
+    echo '<h4>' . $_GET['lien'] . '</h4>';
+    $aff->lien($app->getlister(['id', 'titre', 'intro', 'lien'], 'id'), $_GET['lien']);
 
 } else {
-    $aff->home($app->lister());
+    if (isset($_GET['tri'])) {
+        $tri = strip_tags($_GET['tri']);
+    } else {
+        $tri = 'id';
+    }
+    $aff->search();
+    $aff->home2table($app->getlister(['id', 'titre', 'intro', 'lien'], $tri));
 }
 echo '</body>';
 

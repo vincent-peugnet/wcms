@@ -68,24 +68,6 @@ a:hover {}');
 
 	public function updatelien()
 	{
-		function search($haystack, $debut, $fin)
-		{
-			$list = [];
-
-			$indexdebut = strpos($haystack, $debut);
-			if ($indexdebut !== false) {
-				$indexdebut += strlen($debut);
-				$indexfin = strpos($haystack, $fin, $indexdebut);
-				if ($indexfin !== false) {
-					//$indexfin -= strlen($fin);
-					array_push($list, substr($haystack, $indexdebut, $indexfin - $indexdebut));
-					$haystack = substr($haystack, $indexfin);
-					$list = array_merge($list, search($haystack, $debut, $fin));
-				}
-			}
-			return $list;
-
-		}
 		$this->lien = search($this->html('md'), self::DEBUT, self::FIN);
 
 	}
@@ -153,8 +135,6 @@ a:hover {}');
 		} elseif ($option == 'html') {
 			$html = Markdown::defaultTransform($this->html);
 			$htmla = str_replace('href="http', ' class="external" target="_blank" href="http', $html);
-
-			$htmla = str_replace('class="b"', ' target="_blank" ', $htmla);
 			$htmlmedia = str_replace('src="/', 'src="../media/', $htmla);
 			return $htmlmedia;
 		}

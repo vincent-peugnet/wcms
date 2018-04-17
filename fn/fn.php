@@ -34,5 +34,23 @@ function head($title)
 
 }
 
+function search($haystack, $debut, $fin)
+{
+	$list = [];
+
+	$indexdebut = strpos($haystack, $debut);
+	if ($indexdebut !== false) {
+		$indexdebut += strlen($debut);
+		$indexfin = strpos($haystack, $fin, $indexdebut);
+		if ($indexfin !== false) {
+			array_push($list, substr($haystack, $indexdebut, $indexfin - $indexdebut));
+			$haystack = substr($haystack, $indexfin);
+			$list = array_merge($list, search($haystack, $debut, $fin));
+		}
+	}
+	return $list;
+
+}
+
 ?>
 

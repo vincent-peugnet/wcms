@@ -75,6 +75,11 @@ section input, textarea, select {
     border-style: unset;
 }
 
+article {
+    position: relative;
+    z-index: 100;
+}
+
 #html{
     height: 1000px;
 }

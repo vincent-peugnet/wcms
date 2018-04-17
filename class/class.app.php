@@ -67,20 +67,25 @@ class App
 
 	}
 
-	public function getlister()
+	public function getlister(array $selection, $tri)
 	{
 		$list = [];
+		if (is_array($selection) && is_string($tri) && strlen($tri) < 12) {
 
-		$req = $this->bdd->query('SELECT * FROM art ORDER BY id');
-		while ($donnees = $req->fetch(PDO::FETCH_ASSOC)) {
-			$list[] = new Art($donnees);
+			$selection = implode(", ", $selection);
+
+			$select = 'SELECT ' . $selection . ' FROM art ORDER BY ' . $tri;
+			$req = $this->bdd->query($select);
+			while ($donnees = $req->fetch(PDO::FETCH_ASSOC)) {
+				$list[] = new Art($donnees);
+			}
+			return $list;
 		}
-		return $list;
 	}
 
 	public function lister()
 	{
-		$req = $this->bdd->query('SELECT * FROM art ORDER BY id');
+		$req = $this->bdd->query(' SELECT * FROM art ORDER BY id ');
 		$donnees = $req->fetchAll(PDO::FETCH_ASSOC);
 		return $donnees;
 
@@ -102,12 +107,32 @@ class App
 		return (bool)$donnees['COUNT(*)'];
 	}
 
+	public function introlien(Art $art)
+	{
+		$html = $art->html('html');
+		foreach ($art->lien('array') as $id) {
+			$title = '';
+			foreach ($this->getlister(['id', 'intro'], 'id') as $item) {
+				if ($item->id() == $id) {
+					$title = $item->intro();
+				}
+			}
+
+			$lien = 'href="?id=' . $id . '"';
+			$titlelien = ' title="' . $title . '" ' . $lien;
+			$html = str_replace($lien, $titlelien, $html);
+		}
+		return $html;
+	}
+
 	public function update(Art $art)
 	{
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 		$art->updatelien();
 
-		$q = $this->bdd->prepare('UPDATE art SET titre = :titre, soustitre = :soustitre, intro = :intro, tag = :tag, datecreation = :datecreation, datemodif = :datemodif, css = :css, html = :html, secure = :secure, couleurtext = :couleurtext, couleurbkg = :couleurbkg, couleurlien = :couleurlien, couleurlienblank = :couleurlienblank, lien=:lien WHERE id = :id');
+		var_dump($now);
+
+		$q = $this->bdd->prepare('UPDATE art SET titre = :titre, soustitre = :soustitre, intro = :intro, tag = :tag, datecreation = :datecreation, datemodif = :datemodif, css = :css, html = :html, secure = :secure, couleurtext = :couleurtext, couleurbkg = :couleurbkg, couleurlien = :couleurlien, couleurlienblank = :couleurlienblank, lien = :lien WHERE id = :id');
 
 		$q->bindValue(':id', $art->id());
 		$q->bindValue(':titre', $art->titre());
