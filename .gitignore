@@ -2,4 +2,4 @@ vendor/*
 .vscode/*
 config.php
 error_log
-w/img/*
+public/media/*

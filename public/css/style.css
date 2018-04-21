@@ -166,3 +166,12 @@ nav a {
     left: 0px;
     width: 8%;
 }
+
+.thumbnail {
+    max-width: 100px;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+}

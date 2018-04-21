@@ -210,6 +210,7 @@ public function head($title)
     public function home2table($getlist)
     {
         if ($this->session() >= 2) {
+            echo '<h1>Home</h1>';
             echo '<table>';
             echo '<tr><th>titre</th><th>résumé</th><th>lien</th><th>edit</th></tr>';
             foreach ($getlist as $item) {
@@ -311,22 +312,40 @@ public function head($title)
 
     }
 
+    public function addmedia()
+    {
+        if ($this->session() >= 2) {
+
+            ?>
+		<h1>Ajouter un media</h1>
+        <form action="./" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="action" value="addmedia">
+		<input type="file" accept="*" name="media" required>
+        <input type="text" name="id" id="" placeholder="nom du fichier" required>
+		<input type="submit" value="envoi">
+		</form>
+        <?php
+
+    }
+
+}
+
    //______________________________________________________ S E T _________________________________________________
 
-    public function setsession($session)
-    {
-        if ($session <= 2 and $session >= 0) {
-            $session = intval($session);
-            $this->session = $session;
-        }
+public function setsession($session)
+{
+    if ($session <= 2 and $session >= 0) {
+        $session = intval($session);
+        $this->session = $session;
     }
+}
 
    //______________________________________________________ G E T _________________________________________________
 
-    public function session()
-    {
-        return $this->session;
-    }
+public function session()
+{
+    return $this->session;
+}
 
 
 }

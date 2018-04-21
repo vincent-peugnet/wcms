@@ -52,5 +52,30 @@ function search($haystack, $debut, $fin)
 
 }
 
+function readablesize(int $bytes)
+{
+
+	$num = 5;
+	$location = 'tree';
+	$format = ' %d %s';
+
+
+
+	if ($bytes < 2 ** 10) {
+		$num = $bytes;
+		$unit = 'o';
+	} elseif ($bytes < 2 ** 20) {
+		$num = round($bytes / 2 ** 10, 1);
+		$unit = 'Kio';
+	} elseif ($bytes < 2 ** 30) {
+		$num = round($bytes / 2 ** 20, 1);
+		$unit = 'Mio';
+	} elseif ($bytes < 2 ** 40) {
+		$num = round($bytes / 2 ** 30, 1);
+		$unit = 'Gio';
+	}
+
+	return sprintf($format, $num, $unit);
+}
 ?>
 

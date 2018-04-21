@@ -70,7 +70,8 @@ class App
 	public function getlister(array $selection, $tri)
 	{
 		$list = [];
-		if (is_array($selection) && is_string($tri) && strlen($tri) < 12) {
+		$option = ['datecreation', 'titre', 'id', 'intro', 'datemodif'];
+		if (is_array($selection) && is_string($tri) && strlen($tri) < 12 && in_array($tri, $option)) {
 
 			$selection = implode(", ", $selection);
 
@@ -151,6 +152,34 @@ class App
 		$q->bindValue(':lien', $art->lien('string'));
 
 		$q->execute();
+	}
+
+	public function addmedia(array $file, $maxsize, $id)
+	{
+		$maxsize = 2 ** 40;
+		$id = strtolower(strip_tags($id));
+		if (isset($file) and $file['media']['error'] == 0 and $file['media']['size'] < $maxsize) {
+			$infosfichier = pathinfo($file['media']['name']);
+			$extension_upload = $infosfichier['extension'];
+			$extensions_autorisees = array('jpeg', 'jpg', 'JPG', 'png', 'gif', 'mp3', 'mp4', 'mov', 'wav', 'flac');
+			if (in_array($extension_upload, $extensions_autorisees)) {
+				if (!file_exists('../media/' . $id . '.' . $extension_upload)) {
+
+					$uploadok = move_uploaded_file($file['media']['tmp_name'], '../media/' . $id . '.' . $extension_upload);
+					if ($uploadok) {
+						header('Location: ./?message=uploadok');
+					} else {
+						header('Location: ./?message=uploaderror');
+					}
+				} else {
+					header('Location: ./?message=filealreadyexist');
+
+				}
+			}
+		} else {
+			header('Location: ./?message=filetoobig');
+
+		}
 	}
 
 	//_________________________________________________________ S E S ________________________________________________________
