@@ -38,6 +38,16 @@ if (isset($_POST['action'])) {
             }
             break;
 
+        case 'template':
+            if ($app->exist($_GET['id'])) {
+                $template = $app->get($_POST['template']);
+                $art = $app->get($_POST['id']);
+                $art->setcss($template->css());
+                $app->update($art);
+                header('Location: ?id=' . $art->id() . '&edit=1');
+            }
+            break;
+
         case 'delete':
             if ($app->exist($_GET['id'])) {
                 $art = new Art($_POST);
@@ -89,7 +99,6 @@ $aff->head($titre, 'w');
 // ______________________________________________________ B O D Y _______________________________________________________________ 
 
 
-echo '<body>';
 $aff->nav($app);
 
 if (isset($_GET['id'])) {
@@ -100,6 +109,7 @@ if (isset($_GET['id'])) {
 
         if (isset($_GET['edit']) and $_GET['edit'] == 1) {
             $aff->edit($art);
+            $aff->template($art, $app->lister());
             $aff->aside($app->lister());
         } else {
             $aff->lecture($art, $app);
@@ -137,11 +147,8 @@ if (isset($_GET['id'])) {
     } else {
         $tri = 'id';
     }
-    $aff->search();
     $aff->home2table($app->getlister(['id', 'titre', 'intro', 'lien'], $tri));
 }
-echo '</body>';
-
 
 
 ?>

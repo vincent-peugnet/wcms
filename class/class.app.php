@@ -36,7 +36,7 @@ class App
 			$q->bindValue(':datecreation', $now->format('Y-m-d H:i:s'));
 			$q->bindValue(':datemodif', $now->format('Y-m-d H:i:s'));
 			$q->bindValue(':css', $art->css());
-			$q->bindValue(':html', $art->html('md'));
+			$q->bindValue(':html', $art->md());
 			$q->bindValue(':secure', $art->secure());
 			$q->bindValue(':couleurtext', $art->couleurtext());
 			$q->bindValue(':couleurbkg', $art->couleurbkg());
@@ -108,24 +108,6 @@ class App
 		return (bool)$donnees['COUNT(*)'];
 	}
 
-	public function introlien(Art $art)
-	{
-		$html = $art->html('html');
-		foreach ($art->lien('array') as $id) {
-			$title = '';
-			foreach ($this->getlister(['id', 'intro'], 'id') as $item) {
-				if ($item->id() == $id) {
-					$title = $item->intro();
-				}
-			}
-
-			$lien = 'href="?id=' . $id . '"';
-			$titlelien = ' title="' . $title . '" ' . $lien;
-			$html = str_replace($lien, $titlelien, $html);
-		}
-		return $html;
-	}
-
 	public function update(Art $art)
 	{
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
@@ -143,7 +125,7 @@ class App
 		$q->bindValue(':datecreation', $art->datecreation('string'));
 		$q->bindValue(':datemodif', $now->format('Y-m-d H:i:s'));
 		$q->bindValue(':css', $art->css());
-		$q->bindValue(':html', $art->html('md'));
+		$q->bindValue(':html', $art->md());
 		$q->bindValue(':secure', $art->secure());
 		$q->bindValue(':couleurtext', $art->couleurtext());
 		$q->bindValue(':couleurbkg', $art->couleurbkg());

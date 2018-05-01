@@ -17,6 +17,7 @@ class Aff
 
     public function lecture(Art $art, App $app)
     {
+        echo '<body class="lecture">';
         if ($art->secure() == 1) {
             echo '<span class="alert"><h4>cet article est privé</h4></span>';
         }
@@ -38,7 +39,7 @@ class Aff
                 color: <?= $art->couleurlien() ?>;
             }
 
-            a[target="_blank"] {
+            section a[target="_blank"] {
                 color: <?= $art->couleurlienblank() ?>;
             }
             <?= $art->css() ?>
@@ -46,11 +47,12 @@ class Aff
             <section>
             <h1><?= $art->titre() ?></h1>
             <h6><?= $art->soustitre() ?></h6>
-            <article><?= $app->introlien($art) ?></article>
+            <article><?= $art->html($app) ?></article>
             </section>
             <?php
 
         }
+        echo '</body>';
     }
 
     public function edit(Art $art)
@@ -58,56 +60,76 @@ class Aff
         if ($this->session() >= self::$edit) {
 
             ?>
-		<section class="edit">
+    <body class="edit">                
+        <section>
             <form action="?id=<?= $art->id() ?>" method="post">
-            <details close>
+                <details close>
                     <summary>Infos</summary>
-                <label for="titre">Titre :</label>
-                <input type="text" name="titre" id="titre" value="<?= $art->titre(); ?>">
-                <label for="soustitre">Sous-titre :</label>
-                <input type="text" name="soustitre" id="soustitre" value="<?= $art->soustitre(); ?>">
-                <label for="intro">Introduction :</label>
-                <input type="text" name="intro" id="intro" value="<?= $art->intro(); ?>">
-                <label for="tag">Tag(s) :</label>
-                <input type="text" name="tag" id="tag" value="<?= $art->tag('string'); ?>">
-                <label for="secure">Niveau de sécurité :</label>
-                <select name="secure" id="secure">
-                    <option value="0" <?= $art->secure() == 0 ? 'selected' : '' ?>>0</option>
-                    <option value="1" <?= $art->secure() == 1 ? 'selected' : '' ?>>1</option>
-                    <option value="2" <?= $art->secure() == 2 ? 'selected' : '' ?>>2</option>
-                </select>
-        </details>
+                    <label for="titre">Titre :</label>
+                    <input type="text" name="titre" id="titre" value="<?= $art->titre(); ?>">
+                    <label for="soustitre">Sous-titre :</label>
+                    <input type="text" name="soustitre" id="soustitre" value="<?= $art->soustitre(); ?>">
+                    <label for="intro">Introduction :</label>
+                    <input type="text" name="intro" id="intro" value="<?= $art->intro(); ?>">
+                    <label for="tag">Tag(s) :</label>
+                    <input type="text" name="tag" id="tag" value="<?= $art->tag('string'); ?>">
+                    <label for="secure">Niveau de sécurité :</label>
+                    <select name="secure" id="secure">
+                        <option value="0" <?= $art->secure() == 0 ? 'selected' : '' ?>>0</option>
+                        <option value="1" <?= $art->secure() == 1 ? 'selected' : '' ?>>1</option>
+                        <option value="2" <?= $art->secure() == 2 ? 'selected' : '' ?>>2</option>
+                    </select>
+                </details>
                 <details close>
                     <summary>CSS</summary>
-                <label for="css">Styles CSS :</label>
-                <textarea name="css" id="css"><?= $art->css(); ?></textarea>
-                <label for="couleurtext">Couleur du texte :</label>
-                <input type="color" name="couleurtext" value="<?= $art->couleurtext() ?>" id="couleurtext">
-                <label for="couleurbkg">Couleur de l'arrière plan :</label>
-                <input type="color" name="couleurbkg" value="<?= $art->couleurbkg() ?>" id="couleurbkg">
-                <label for="couleurlien">Couleur des liens :</label>
-                <input type="color" name="couleurlien" value="<?= $art->couleurlien() ?>" id="couleurlien">
-                <label for="couleurlienblank">Couleur des liens externes :</label>
-                <input type="color" name="couleurlienblank" value="<?= $art->couleurlienblank() ?>" id="couleurlienblank">
+                    <label for="css">Styles CSS :</label>
+                    <textarea name="css" id="css"><?= $art->css(); ?></textarea>
+                    <label for="couleurtext">Couleur du texte :</label>
+                    <input type="color" name="couleurtext" value="<?= $art->couleurtext() ?>" id="couleurtext">
+                    <label for="couleurbkg">Couleur de l'arrière plan :</label>
+                    <input type="color" name="couleurbkg" value="<?= $art->couleurbkg() ?>" id="couleurbkg">
+                    <label for="couleurlien">Couleur des liens :</label>
+                    <input type="color" name="couleurlien" value="<?= $art->couleurlien() ?>" id="couleurlien">
+                    <label for="couleurlienblank">Couleur des liens externes :</label>
+                    <input type="color" name="couleurlienblank" value="<?= $art->couleurlienblank() ?>" id="couleurlienblank">
                 </details>
                 <details open>
                     <summary>Contenu</summary>
-                <label for="html">Contenu :</label>
-                <textarea name="html" id="html" ><?= $art->html('md'); ?></textarea>
-            </details>
+                    <textarea name="html" id="html" ><?= $art->md(); ?></textarea>
+                </details>
                 <input type="hidden" name="datecreation" value="<?= $art->datecreation('string'); ?>">
                 <input type="hidden" name="id" value="<?= $art->id() ?>">
+            </section>
                 <div class="submit">
                     <input type="submit" name="action" value="update">
                     <input type="submit" name="action" value="delete" onclick="confirmSubmit(event, 'Suppression de cet article')">
+        </form>
                 </div>
-            </form>
-		</section>
+    </body>
 
-		<?php
+    <?php
 
 }
 
+}
+
+public function template(Art $art, $list)
+{
+    echo '<div class="template">';
+    echo '<form action="?id=' . $art->id() . '" method="post">';
+    echo '<input type="hidden" name="action" value="template">';
+    echo '<input type="hidden" name="id" value="' . $art->id() . '">';
+    echo '<select name="template">';
+    foreach ($list as $item) {
+        echo '<option value="' . $item['id'] . '">' . $item['titre'] . '</option>';
+    }
+    echo '</select>';
+    ?>
+    <input type="submit" value="template" onclick="confirmSubmit(event, 'Ecraser le style CSS')">
+    <?php
+//    echo '<input type="submit" value="template">';
+    echo '</form>';
+    echo '</div>';
 }
 
 public function head($title, $tool)
@@ -140,6 +162,7 @@ public function head($title, $tool)
 
     public function tag($getlist, $tag)
     {
+        echo '<body class="tag">';
         echo '<ul>';
         foreach ($getlist as $item) {
             if (in_array($tag, $item->tag('array'))) {
@@ -152,10 +175,12 @@ public function head($title, $tool)
             }
         }
         echo ' </ul> ';
+        echo ' </body> ';
     }
 
     public function lien($getlist, $lien)
     {
+        echo '<body class="lien">';
         echo '<ul>';
         foreach ($getlist as $item) {
             if (in_array($lien, $item->lien('array'))) {
@@ -168,6 +193,7 @@ public function head($title, $tool)
             }
         }
         echo ' </ul> ';
+        echo ' </body> ';
     }
 
     public function home($getlist)
@@ -198,6 +224,7 @@ public function head($title, $tool)
 
     public function home2($getlist)
     {
+        echo '<body class="home">';
         if ($this->session() >= 2) {
             echo '<ul>';
             foreach ($getlist as $item) {
@@ -214,10 +241,15 @@ public function head($title, $tool)
             }
             echo ' </ul> ';
         }
+        echo ' </body> ';
     }
 
     public function home2table($getlist)
     {
+        echo '<body class="home">';
+        echo '<section>';
+        echo '<h1>W</h1>';
+        $this->search();
         if ($this->session() >= 2) {
             echo '<h1>Home</h1>';
             echo '<table>';
@@ -237,8 +269,10 @@ public function head($title, $tool)
                 echo '<td><a href="?id=' . $item->id() . '&edit=1">modifier</a></td>';
                 echo '</tr>';
             }
-            echo ' <table> ';
+            echo ' </table> ';
         }
+        echo '</section>';
+        echo ' </body> ';
     }
 
     public function aside($list)
@@ -260,7 +294,7 @@ public function head($title, $tool)
         <nav>
         <?= $this->session() ?>
         </br>
-        <a href="?">home</a>
+        <a class="button" href="?">home</a>
 
         </br>
         <?php
@@ -271,7 +305,7 @@ public function head($title, $tool)
                 <form action="?id=<?= $_GET['id'] ?>" method="post">
                 <input type="hidden" name="action" value="login">
                 <input type="password" name="pass" id="pass" placeholder="password">
-                <input type="submit" value="connect">
+                <input type="submit" value="login">
                 </form>
                 <?php
 
@@ -280,15 +314,15 @@ public function head($title, $tool)
                 ?>
                 <form action="?id=<?= $_GET['id'] ?>" method="post">
                 <input type="hidden" name="action" value="logout">
-                <input type="submit" value="disconnect">
+                <input type="submit" value="logout">
                 </form>
                 <?php
 
                 if ($this->session() == 2) {
                     ?>
-                    <a href="?id=<?= $_GET['id'] ?>" target="_blank">display</a>
+                    <a class="button" href="?id=<?= $_GET['id'] ?>" target="_blank">display</a>
                     </br>
-                    <a href="?id=<?= $_GET['id'] ?>&edit=1" >edit</a>
+                    <a class="button" href="?id=<?= $_GET['id'] ?>&edit=1" >edit</a>
                     <?php
 
                 }
@@ -300,7 +334,7 @@ public function head($title, $tool)
                 <form action="?" method="post">
                 <input type="hidden" name="action" value="login">
                 <input type="password" name="pass" id="pass" placeholder="password">
-                <input type="submit" value="connect">
+                <input type="submit" value="login">
                 </form>
                 <?php
 
@@ -309,7 +343,7 @@ public function head($title, $tool)
                 ?>
                 <form action="?" method="post">
                 <input type="hidden" name="action" value="logout">
-                <input type="submit" value="disconnect">
+                <input type="submit" value="logout">
                 </form>
                 <?php
 

@@ -68,7 +68,7 @@ a:hover {}');
 
 	public function updatelien()
 	{
-		$this->lien = search($this->html('md'), self::DEBUT, self::FIN);
+		$this->lien = search($this->md(), self::DEBUT, self::FIN);
 
 	}
 
@@ -128,16 +128,32 @@ a:hover {}');
 		return $this->css;
 	}
 
-	public function html($option)
+	public function md()
 	{
-		if ($option == 'md') {
-			return $this->html;
-		} elseif ($option == 'html') {
-			$html = Markdown::defaultTransform($this->html);
-			$htmla = str_replace('href="http', ' class="external" target="_blank" href="http', $html);
-			$htmlmedia = str_replace('src="/', 'src="../media/', $htmla);
-			return $htmlmedia;
+		return $this->html;
+	}
+
+	public function html(App $app)
+	{
+		$html = Markdown::defaultTransform($this->html);
+
+		foreach ($this->lien('array') as $id) {
+			$title = "Cet article n'existe pas encore";
+			foreach ($app->getlister(['id', 'intro'], 'id') as $item) {
+				if ($item->id() == $id) {
+					$title = $item->intro();
+				}
+			}
+			$lien = 'href="?id=' . $id . '"';
+			$titlelien = ' title="' . $title . '" ' . $lien;
+			$html = str_replace($lien, $titlelien, $html);
 		}
+
+		$html = str_replace('href="http', ' class="external" target="_blank" href="http', $html);
+		$html = str_replace('src="/', 'src="../media/', $html);
+		return $html;
+
+
 	}
 
 	public function secure()

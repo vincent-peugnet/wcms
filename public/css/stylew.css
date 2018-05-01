@@ -48,23 +48,31 @@ img {
     max-width: 1000px;
 }
 
+form {
+    margin-bottom: 0px;
+}
+
 section {
     text-align: justify;
     padding: 3%;    
     line-height: 1.2em;
 }
 
-.edit {
+body.edit {
+    overflow-y: scroll;
+}
+
+body.edit section {
     text-align: left;
-    padding-top: 1%;
-    padding-bottom: 1%;
+    padding-top: 0px;
+    padding-bottom: 0px;
     padding-left: 8%;
     padding-right: 8%;
     line-height: 1.2em;
 }
 
-
-section input, textarea, select {
+.button, input, textarea, select {
+    display: inline-block;
     width: 90%;
     padding-left: 15px;
     padding-right: 15px;
@@ -75,17 +83,43 @@ section input, textarea, select {
     border-style: unset;
 }
 
+.button {
+    text-align: center;
+    color: black;
+    font-size: 13px;    
+    padding-top: 7px;
+    background-color: #bfbfbf;
+    box-sizing: border-box;
+    align-items: flex-start;
+    text-align: center;
+    cursor: default;
+    white-space: pre;    
+    -webkit-rtl-ordering: logical;
+    text-rendering: auto;
+    color: initial;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+}
+
+.button:hover {
+    
+    text-decoration: none;
+}
+
 article {
     position: relative;
     z-index: 7;
 }
 
 #html{
-    height: 1000px;
+    height: calc(100% - 95px);
 }
 
 #css{
-    height: 100px;
+    height: 250px;
 }
 
 input[type="submit"] {
@@ -113,19 +147,18 @@ aside:hover {
 nav {
     position: fixed;
     top: 0px;
-	right: -50px;
-	padding: 7px;
+	right: -6%;
 	z-index: 10;
-	background: #6c7d8a;
 	opacity: 0.3;
-    width:100px;    
-    border-width: 4px;
-    border-style: outset;
+    width: 8%;
+    text-align: right;
 }
 
-nav:hover {
+
+
+nav:hover, body.edit nav {
 	opacity: 1;
-	right: -5px;
+	right: 0px;
 }
 
 .alert h4 {
@@ -133,31 +166,9 @@ nav:hover {
     margin: 0px;
 }
 
-nav a {
-    color: black;
-    padding: 1px 4px;
-    font-size: 13px;
-    background-color: #bfbfbf;
-    /* text-rendering: auto; */
-    /* color: initial; */
-    /* letter-spacing: normal; */
-    /* word-spacing: normal; */
-    /* text-transform: none; */
-    text-indent: 0px;
-    text-decoration: none;
-    /* text-shadow: none; */
-    /* display: inline-block; */
-    /* -webkit-appearance: push-button; */
-    align-items: flex-start;
-    text-align: center;
-    cursor: default;
-    /* color: buttontext; */
-    /* background-color: buttonface; */
-    box-sizing: border-box;
-    /* padding: 2px 6px 3px; */
-    border-width: 2px;
-    border-color: lightgrey;
-    border-style: outset;
+table {
+    width: 100%;
+    margin-top: 20px;
 }
 
 .submit {
@@ -199,4 +210,11 @@ summary {
     background-color: #bdbdbd;
     margin-top:  3px;
     margin-bottom:  3px;
+}
+
+.template {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 8%;
 }
