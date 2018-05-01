@@ -81,7 +81,7 @@ if (isset($_GET['id'])) {
         $titre = $art->titre();
     }
 }
-$aff->head($titre);
+$aff->head($titre, 'w');
 
 
 

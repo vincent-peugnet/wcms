@@ -24,7 +24,7 @@ $aff = new Aff($level);
 
 // ______________________________________________________ H E A D _____________________________________________________________
 $titre = 'home';
-$aff->head($titre);
+$aff->head($titre, 'm');
 
 // _____________________________________________________ A L E R T _______________________________________________________________ 
 
@@ -55,9 +55,6 @@ $aff->addmedia();
 
 echo '<h1>Media</h1>';
 
-var_dump(2 ** 29);
-var_dump(readablesize(2 ** 29));
-
 echo '<section class="grid">';
 
 
@@ -74,9 +71,14 @@ if ($handle = opendir($dir)) {
 			list($width, $height, $type, $attr) = getimagesize($filepath);
 			$filesize = filesize($filepath);
 
-			echo '<span>';
-			echo '<h2>' . $entry . '</h2>';
+			echo '<a href="#" class="little">';
+			echo '<h3>' . $entry . '</h3>';
 
+
+
+			echo '<img class="thumbnail" src="' . $filepath . '" alt="' . $fileinfo['filename'] . '">';
+
+			echo '<span class="infobulle">';
 			echo 'width = ' . $width;
 			echo '<br/>';
 			echo 'height = ' . $height;
@@ -84,10 +86,10 @@ if ($handle = opendir($dir)) {
 			echo 'filesize = ' . readablesize($filesize);
 			echo '<br/>';
 
-
-			echo '<img class="thumbnail" src="' . $filepath . '" title="' . $fileinfo['filename'] . '" alt="image">';
-
+			echo '<img src="' . $filepath . '" alt="' . $fileinfo['filename'] . '">';
 			echo '</span>';
+
+			echo '</a>';
 		}
 	}
 	closedir($handle);

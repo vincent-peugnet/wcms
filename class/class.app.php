@@ -187,7 +187,6 @@ class App
 	public function login($pass)
 	{
 		if (strip_tags($pass) == $this->admin) {
-			var_dump($this->admin);
 			return $level = 2;
 		} elseif (strip_tags($pass) == $this->secure) {
 			return $level = 1;

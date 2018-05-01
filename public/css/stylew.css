@@ -77,7 +77,7 @@ section input, textarea, select {
 
 article {
     position: relative;
-    z-index: 100;
+    z-index: 7;
 }
 
 #html{
@@ -168,10 +168,35 @@ nav a {
 }
 
 .thumbnail {
-    max-width: 100px;
+    max-width: 30px;
+}
+
+.infobulle {
+    width: 20%;
+    display: none;
+}
+
+.little:hover .infobulle {
+    display: inline;
+    position: absolute;
+    background-color: white;
+    border: 1px solid black;
+}
+
+span.infobulle img {
+    width: 100%
 }
 
 .grid {
     display: flex;
     flex-wrap: wrap;
+}
+
+summary {
+    height: 24px;
+    outline: none;
+    font-size: 1.4em;
+    background-color: #bdbdbd;
+    margin-top:  3px;
+    margin-bottom:  3px;
 }

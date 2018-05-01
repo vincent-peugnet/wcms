@@ -60,6 +60,8 @@ class Aff
             ?>
 		<section class="edit">
             <form action="?id=<?= $art->id() ?>" method="post">
+            <details close>
+                    <summary>Infos</summary>
                 <label for="titre">Titre :</label>
                 <input type="text" name="titre" id="titre" value="<?= $art->titre(); ?>">
                 <label for="soustitre">Sous-titre :</label>
@@ -68,14 +70,17 @@ class Aff
                 <input type="text" name="intro" id="intro" value="<?= $art->intro(); ?>">
                 <label for="tag">Tag(s) :</label>
                 <input type="text" name="tag" id="tag" value="<?= $art->tag('string'); ?>">
-                <label for="css">Styles CSS :</label>
-                <textarea name="css" id="css"><?= $art->css(); ?></textarea>
                 <label for="secure">Niveau de sécurité :</label>
                 <select name="secure" id="secure">
                     <option value="0" <?= $art->secure() == 0 ? 'selected' : '' ?>>0</option>
                     <option value="1" <?= $art->secure() == 1 ? 'selected' : '' ?>>1</option>
                     <option value="2" <?= $art->secure() == 2 ? 'selected' : '' ?>>2</option>
                 </select>
+        </details>
+                <details close>
+                    <summary>CSS</summary>
+                <label for="css">Styles CSS :</label>
+                <textarea name="css" id="css"><?= $art->css(); ?></textarea>
                 <label for="couleurtext">Couleur du texte :</label>
                 <input type="color" name="couleurtext" value="<?= $art->couleurtext() ?>" id="couleurtext">
                 <label for="couleurbkg">Couleur de l'arrière plan :</label>
@@ -84,14 +89,18 @@ class Aff
                 <input type="color" name="couleurlien" value="<?= $art->couleurlien() ?>" id="couleurlien">
                 <label for="couleurlienblank">Couleur des liens externes :</label>
                 <input type="color" name="couleurlienblank" value="<?= $art->couleurlienblank() ?>" id="couleurlienblank">
+                </details>
+                <details open>
+                    <summary>Contenu</summary>
                 <label for="html">Contenu :</label>
                 <textarea name="html" id="html" ><?= $art->html('md'); ?></textarea>
+            </details>
                 <input type="hidden" name="datecreation" value="<?= $art->datecreation('string'); ?>">
                 <input type="hidden" name="id" value="<?= $art->id() ?>">
                 <div class="submit">
                     <input type="submit" name="action" value="update">
                     <input type="submit" name="action" value="delete" onclick="confirmSubmit(event, 'Suppression de cet article')">
-        </div>
+                </div>
             </form>
 		</section>
 
@@ -101,13 +110,13 @@ class Aff
 
 }
 
-public function head($title)
+public function head($title, $tool)
 {
     ?>
         <head>
             <meta charset="utf8" />
 		    <meta name="viewport" content="width=device-width" />            
-            <link href="/css/style.css" rel="stylesheet" />
+            <link href="/css/style<?= $tool ?>.css" rel="stylesheet" />
             <title><?= $title ?></title>
             <script src="../rsc/js/app.js"></script>
         </head>
