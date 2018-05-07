@@ -26,7 +26,7 @@ class App
 
 			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
-			$q = $this->bdd->prepare('INSERT INTO art(id, titre, soustitre, intro, tag, datecreation, datemodif, css, html, secure, couleurtext, couleurbkg, couleurlien, couleurlienblank, lien) VALUES(:id, :titre, :soustitre, :intro, :tag, :datecreation, :datemodif, :css, :html, :secure, :couleurtext, :couleurbkg, :couleurlien, :couleurlienblank, :lien)');
+			$q = $this->bdd->prepare('INSERT INTO art(id, titre, soustitre, intro, tag, datecreation, datemodif, css, html, secure, couleurtext, couleurbkg, couleurlien, couleurlienblank, lien, template) VALUES(:id, :titre, :soustitre, :intro, :tag, :datecreation, :datemodif, :css, :html, :secure, :couleurtext, :couleurbkg, :couleurlien, :couleurlienblank, :lien, :template)');
 
 			$q->bindValue(':id', $art->id());
 			$q->bindValue(':titre', $art->titre());
@@ -43,6 +43,7 @@ class App
 			$q->bindValue(':couleurlien', $art->couleurlien());
 			$q->bindValue(':couleurlienblank', $art->couleurlienblank());
 			$q->bindValue(':lien', $art->lien('string'));
+			$q->bindValue(':template', $art->template());
 
 			$q->execute();
 		}
@@ -115,7 +116,7 @@ class App
 
 		var_dump($now);
 
-		$q = $this->bdd->prepare('UPDATE art SET titre = :titre, soustitre = :soustitre, intro = :intro, tag = :tag, datecreation = :datecreation, datemodif = :datemodif, css = :css, html = :html, secure = :secure, couleurtext = :couleurtext, couleurbkg = :couleurbkg, couleurlien = :couleurlien, couleurlienblank = :couleurlienblank, lien = :lien WHERE id = :id');
+		$q = $this->bdd->prepare('UPDATE art SET titre = :titre, soustitre = :soustitre, intro = :intro, tag = :tag, datecreation = :datecreation, datemodif = :datemodif, css = :css, html = :html, secure = :secure, couleurtext = :couleurtext, couleurbkg = :couleurbkg, couleurlien = :couleurlien, couleurlienblank = :couleurlienblank, lien = :lien, template = :template WHERE id = :id');
 
 		$q->bindValue(':id', $art->id());
 		$q->bindValue(':titre', $art->titre());
@@ -132,6 +133,7 @@ class App
 		$q->bindValue(':couleurlien', $art->couleurlien());
 		$q->bindValue(':couleurlienblank', $art->couleurlienblank());
 		$q->bindValue(':lien', $art->lien('string'));
+		$q->bindValue(':template', $art->template());
 
 		$q->execute();
 	}

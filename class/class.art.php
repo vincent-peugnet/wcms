@@ -128,6 +128,22 @@ a:hover {}');
 		return $this->css;
 	}
 
+	public function csstemplate(App $app)
+	{
+		$data = [];
+		$temp = '';
+		if (!empty($this->template())) {
+			if ($app->exist($this->template()) and !in_array($this->template(), $data)) {
+				$template = $app->get($this->template());
+				$temp = $temp . $template->css($app);
+				$data[] = $template->id();
+
+			}
+
+		}
+		return $temp . $this->css;
+	}
+
 	public function md()
 	{
 		return $this->html;
@@ -192,6 +208,11 @@ a:hover {}');
 
 	}
 
+	public function template()
+	{
+		return $this->template;
+	}
+
 
 
 
@@ -254,7 +275,7 @@ a:hover {}');
 
 	public function setcss($css)
 	{
-		if (strlen($css) < self::LEN and is_string($css)) {
+		if (strlen($css) < self::LENHTML and is_string($css)) {
 			$this->css = strip_tags(trim(strtolower($css)));
 		}
 	}
@@ -314,6 +335,15 @@ a:hover {}');
 		} else {
 			$this->lien = [];
 		}
+	}
+
+	public function settemplate($template)
+	{
+		$template = strip_tags($template);
+		if (strlen($template) == 0) {
+			$template = 'NULL';
+		}
+		$this->template = $template;
 	}
 
 

@@ -108,7 +108,7 @@ if (isset($_GET['id'])) {
         $art = $app->get($_GET['id']);
 
         if (isset($_GET['edit']) and $_GET['edit'] == 1) {
-            $aff->edit($art);
+            $aff->edit($art, $app->lister());
             $aff->template($art, $app->lister());
             $aff->aside($app->lister());
         } else {

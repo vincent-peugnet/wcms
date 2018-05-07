@@ -42,7 +42,7 @@ class Aff
             section a[target="_blank"] {
                 color: <?= $art->couleurlienblank() ?>;
             }
-            <?= $art->css() ?>
+            <?= $art->csstemplate($app) ?>
             </style>
             <section>
             <h1><?= $art->titre() ?></h1>
@@ -55,7 +55,7 @@ class Aff
         echo '</body>';
     }
 
-    public function edit(Art $art)
+    public function edit(Art $art, $list)
     {
         if ($this->session() >= self::$edit) {
 
@@ -82,6 +82,18 @@ class Aff
                 </details>
                 <details close>
                     <summary>CSS</summary>
+                    <label for="template">Template :</label>
+                    <select name="template" id="template">
+                    <?php
+                    foreach ($list as $item) {
+                        if ($item['id'] == $art->template()) {
+                            echo '<option value="' . $item['id'] . '" selected >' . $item['titre'] . '</option>';
+                        } else {
+                            echo '<option value="' . $item['id'] . '">' . $item['titre'] . '</option>';
+                        }
+                    }
+                    ?>
+                    </select>
                     <label for="css">Styles CSS :</label>
                     <textarea name="css" id="css"><?= $art->css(); ?></textarea>
                     <label for="couleurtext">Couleur du texte :</label>
@@ -299,7 +311,7 @@ public function head($title, $tool)
         </br>
         <?php
 
-        if (isset($_GET['id']) and $app->exist($_GET['id'])) {
+        if (isset($_GET['id'])) {
             if ($this->session() == 0) {
                 ?>
                 <form action="?id=<?= $_GET['id'] ?>" method="post">
@@ -318,7 +330,7 @@ public function head($title, $tool)
                 </form>
                 <?php
 
-                if ($this->session() == 2) {
+                if ($this->session() == 2 and $app->exist($_GET['id'])) {
                     ?>
                     <a class="button" href="?id=<?= $_GET['id'] ?>" target="_blank">display</a>
                     </br>
