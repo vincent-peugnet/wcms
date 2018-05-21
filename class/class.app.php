@@ -68,15 +68,15 @@ class App
 
 	}
 
-	public function getlister(array $selection, $tri)
+	public function getlister(array $selection = ['id', 'titre'], $tri = 'id', $desc = 'ASC')
 	{
 		$list = [];
 		$option = ['datecreation', 'titre', 'id', 'intro', 'datemodif'];
-		if (is_array($selection) && is_string($tri) && strlen($tri) < 12 && in_array($tri, $option)) {
+		if (is_array($selection) && is_string($tri) && strlen($tri) < 16 && is_string($desc) && strlen($desc) < 5 && in_array($tri, $option)) {
 
 			$selection = implode(", ", $selection);
 
-			$select = 'SELECT ' . $selection . ' FROM art ORDER BY ' . $tri;
+			$select = 'SELECT ' . $selection . ' FROM art ORDER BY ' . $tri . ' ' . $desc;
 			$req = $this->bdd->query($select);
 			while ($donnees = $req->fetch(PDO::FETCH_ASSOC)) {
 				$list[] = new Art($donnees);
@@ -114,8 +114,6 @@ class App
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 		$art->updatelien();
 
-		var_dump($now);
-
 		$q = $this->bdd->prepare('UPDATE art SET titre = :titre, soustitre = :soustitre, intro = :intro, tag = :tag, datecreation = :datecreation, datemodif = :datemodif, css = :css, html = :html, secure = :secure, couleurtext = :couleurtext, couleurbkg = :couleurbkg, couleurlien = :couleurlien, couleurlienblank = :couleurlienblank, lien = :lien, template = :template WHERE id = :id');
 
 		$q->bindValue(':id', $art->id());
@@ -138,6 +136,11 @@ class App
 		$q->execute();
 	}
 
+
+
+
+// __________________________________________ M E D ________________________________________________________
+
 	public function addmedia(array $file, $maxsize, $id)
 	{
 		$maxsize = 2 ** 40;
@@ -149,6 +152,7 @@ class App
 			if (in_array($extension_upload, $extensions_autorisees)) {
 				if (!file_exists('../media/' . $id . '.' . $extension_upload)) {
 
+					$extension_upload = strtolower($extension_upload);
 					$uploadok = move_uploaded_file($file['media']['tmp_name'], '../media/' . $id . '.' . $extension_upload);
 					if ($uploadok) {
 						header('Location: ./?message=uploadok');
@@ -165,6 +169,63 @@ class App
 
 		}
 	}
+
+
+	public function getmedia($entry)
+	{
+		$fileinfo = pathinfo($entry);
+
+		$filepath = $fileinfo['dirname'] . '.' . $fileinfo['extension'];
+
+		list($width, $height, $type, $attr) = getimagesize($filepath);
+
+		echo 'filepath : ' . $filepath;
+
+		$donnes = array(
+			'id' => str_replace('.' . $fileinfo['extension'], '', $fileinfo['filename']),
+			'path' => $fileinfo['dirname'],
+			'extension' => $fileinfo['extension']
+		);
+
+
+
+		return new Art($donnees);
+
+	}
+
+	public function getlistermedia($dir)
+	{
+		if ($handle = opendir($dir)) {
+			$list = [];
+			while (false !== ($entry = readdir($handle))) {
+				if ($entry != "." && $entry != "..") {
+					$fileinfo = pathinfo($entry);
+
+					$filepath = $dir . $fileinfo['filename'] . '.' . $fileinfo['extension'];
+
+					list($width, $height, $type, $attr) = getimagesize($filepath);
+					$filesize = filesize($filepath);
+
+					$donnees = array(
+						'id' => str_replace('.' . $fileinfo['extension'], '', $fileinfo['filename']),
+						'path' => $fileinfo['dirname'],
+						'extension' => $fileinfo['extension'],
+						'size' => $filesize,
+						'width' => $width,
+						'height' => $height
+					);
+
+					$list[] = new Media($donnees);
+
+				}
+			}
+			return $list;
+		}
+
+		return $list;
+
+	}
+
 
 	//_________________________________________________________ S E S ________________________________________________________
 

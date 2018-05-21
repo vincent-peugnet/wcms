@@ -17,7 +17,7 @@ class Aff
 
     public function lecture(Art $art, App $app)
     {
-        echo '<body class="lecture">';
+        echo '<div class="lecture">';
         if ($art->secure() == 1) {
             echo '<span class="alert"><h4>cet article est privé</h4></span>';
         }
@@ -28,6 +28,7 @@ class Aff
         if ($this->session() >= $art->secure()) {
             ?>
             <style type="text/css">
+            <?= $art->csstemplate($app) ?>
             body{
                 background: <?= $art->couleurbkg() ?>;
             }
@@ -42,17 +43,18 @@ class Aff
             section a[target="_blank"] {
                 color: <?= $art->couleurlienblank() ?>;
             }
-            <?= $art->csstemplate($app) ?>
             </style>
             <section>
+            <header>
             <h1><?= $art->titre() ?></h1>
             <h6><?= $art->soustitre() ?></h6>
+            </header>
             <article><?= $art->html($app) ?></article>
             </section>
             <?php
 
         }
-        echo '</body>';
+        echo '</div>';
     }
 
     public function edit(Art $art, $list)
@@ -60,7 +62,7 @@ class Aff
         if ($this->session() >= self::$edit) {
 
             ?>
-    <body class="edit">                
+    <div class="edit">                
         <section>
             <form action="?id=<?= $art->id() ?>" method="post">
                 <details close>
@@ -85,11 +87,17 @@ class Aff
                     <label for="template">Template :</label>
                     <select name="template" id="template">
                     <?php
+                    if ($art->template() == 'NULL') {
+                        echo '<option value="" selected >Sans template</option>';
+                    } else {
+                        echo '<option value="" >sans template</option>';
+                    }
                     foreach ($list as $item) {
-                        if ($item['id'] == $art->template()) {
-                            echo '<option value="' . $item['id'] . '" selected >' . $item['titre'] . '</option>';
+
+                        if ($item->id() == $art->template()) {
+                            echo '<option value="' . $item->id() . '" selected >' . $item->titre() . '</option>';
                         } else {
-                            echo '<option value="' . $item['id'] . '">' . $item['titre'] . '</option>';
+                            echo '<option value="' . $item->id() . '">' . $item->titre() . '</option>';
                         }
                     }
                     ?>
@@ -117,7 +125,7 @@ class Aff
                     <input type="submit" name="action" value="delete" onclick="confirmSubmit(event, 'Suppression de cet article')">
         </form>
                 </div>
-    </body>
+        </div>
 
     <?php
 
@@ -125,23 +133,33 @@ class Aff
 
 }
 
-public function template(Art $art, $list)
+public function copy(Art $art, $list)
 {
-    echo '<div class="template">';
-    echo '<form action="?id=' . $art->id() . '" method="post">';
-    echo '<input type="hidden" name="action" value="template">';
-    echo '<input type="hidden" name="id" value="' . $art->id() . '">';
-    echo '<select name="template">';
-    foreach ($list as $item) {
-        echo '<option value="' . $item['id'] . '">' . $item['titre'] . '</option>';
-    }
-    echo '</select>';
     ?>
-    <input type="submit" value="template" onclick="confirmSubmit(event, 'Ecraser le style CSS')">
+    <div class="copy">
+    <form action="?id=<?= $art->id() ?>&edit=1" method="post">
+    <input type="hidden" name="action" value="copy">
+    <input type="hidden" name="id" value="<?= $art->id() ?>">
+    <select name="copy">
+        <?php
+        foreach ($list as $item) {
+            echo '<option value="' . $item->id() . '">' . $item->titre() . '</option>';
+        }
+        echo '</select>';
+        ?>
+    <label for="checkcss">CSS</label>
+    <input type="checkbox" id="checkcss" name="css" value="true">
+    <label for="checkcolor">Color</label>
+    <input type="checkbox" id="checkcolor" name="color" value="true">
+    <label for="checkhtml">HTML</label>
+    <input type="checkbox" id="checkhtml" name="html" value="true">
+    <label for="checktemplate">template</label>
+    <input type="checkbox" id="checktemplate" name="template" value="true">
+    <input type="submit" value="copy" onclick="confirmSubmit(event, 'Ecraser ces valeurs')">
+    </form>
+    </div>
     <?php
-//    echo '<input type="submit" value="template">';
-    echo '</form>';
-    echo '</div>';
+
 }
 
 public function head($title, $tool)
@@ -149,7 +167,8 @@ public function head($title, $tool)
     ?>
         <head>
             <meta charset="utf8" />
-		    <meta name="viewport" content="width=device-width" />            
+		    <meta name="viewport" content="width=device-width" />
+            <link href="/css/stylebase.css" rel="stylesheet" />
             <link href="/css/style<?= $tool ?>.css" rel="stylesheet" />
             <title><?= $title ?></title>
             <script src="../rsc/js/app.js"></script>
@@ -174,7 +193,7 @@ public function head($title, $tool)
 
     public function tag($getlist, $tag)
     {
-        echo '<body class="tag">';
+        echo '<div class="tag">';
         echo '<ul>';
         foreach ($getlist as $item) {
             if (in_array($tag, $item->tag('array'))) {
@@ -187,12 +206,12 @@ public function head($title, $tool)
             }
         }
         echo ' </ul> ';
-        echo ' </body> ';
+        echo ' </div> ';
     }
 
     public function lien($getlist, $lien)
     {
-        echo '<body class="lien">';
+        echo '<div class="lien">';
         echo '<ul>';
         foreach ($getlist as $item) {
             if (in_array($lien, $item->lien('array'))) {
@@ -205,7 +224,7 @@ public function head($title, $tool)
             }
         }
         echo ' </ul> ';
-        echo ' </body> ';
+        echo ' </div> ';
     }
 
     public function home($getlist)
@@ -236,7 +255,7 @@ public function head($title, $tool)
 
     public function home2($getlist)
     {
-        echo '<body class="home">';
+        echo '<div class="home">';
         if ($this->session() >= 2) {
             echo '<ul>';
             foreach ($getlist as $item) {
@@ -253,38 +272,45 @@ public function head($title, $tool)
             }
             echo ' </ul> ';
         }
-        echo ' </body> ';
+        echo ' </div> ';
     }
 
     public function home2table($getlist)
     {
-        echo '<body class="home">';
+        echo '<div class="home">';
         echo '<section>';
         echo '<h1>W</h1>';
         $this->search();
         if ($this->session() >= 2) {
             echo '<h1>Home</h1>';
             echo '<table>';
-            echo '<tr><th>titre</th><th>résumé</th><th>lien</th><th>edit</th></tr>';
+            echo '<tr><th><a href="./?tri=titre">titre</a></th><th>résumé</th><th>lien from</th><th>lien to</th><th><a href="./?tri=datemodif&desc=DESC">dernière modif</a></th><th><a href="./?tri=datecreation&desc=DESC">date de création</a></th><th>edit</th></tr>';
             foreach ($getlist as $item) {
-                $count = 0;
+                $liento = 0;
+                $lienfrom = 0;
 
                 foreach ($getlist as $lien) {
                     if (in_array($item->id(), $lien->lien('array'))) {
-                        $count++;
+                        $liento++;
                     }
+                }
+                foreach ($item->lien('array') as $count) {
+                    $lienfrom++;
                 }
                 echo '<tr>';
                 echo '<td><a href="?id=' . $item->id() . '">' . $item->titre() . '</a></td>';
                 echo '<td>' . $item->intro() . '</td>';
-                echo '<td><a href="?lien=' . $item->id() . '">' . $count . '</a></td>';
+                echo '<td>' . $lienfrom . '</td>';
+                echo '<td><a href="?lien=' . $item->id() . '">' . $liento . '</a></td>';
+                echo '<td>' . $item->datemodif('hrdi') . '</td>';
+                echo '<td>' . $item->datecreation('hrdi') . '</td>';
                 echo '<td><a href="?id=' . $item->id() . '&edit=1">modifier</a></td>';
                 echo '</tr>';
             }
             echo ' </table> ';
         }
         echo '</section>';
-        echo ' </body> ';
+        echo ' </div> ';
     }
 
     public function aside($list)
@@ -314,7 +340,7 @@ public function head($title, $tool)
         if (isset($_GET['id'])) {
             if ($this->session() == 0) {
                 ?>
-                <form action="?id=<?= $_GET['id'] ?>" method="post">
+                <form action="./?id=<?= $_GET['id'] ?>" method="post">
                 <input type="hidden" name="action" value="login">
                 <input type="password" name="pass" id="pass" placeholder="password">
                 <input type="submit" value="login">
@@ -324,7 +350,7 @@ public function head($title, $tool)
             }
             if ($this->session() >= 1) {
                 ?>
-                <form action="?id=<?= $_GET['id'] ?>" method="post">
+                <form action="./?id=<?= $_GET['id'] ?>" method="post">
                 <input type="hidden" name="action" value="logout">
                 <input type="submit" value="logout">
                 </form>
@@ -372,13 +398,16 @@ public function head($title, $tool)
         if ($this->session() >= 2) {
 
             ?>
+         <details close>
+                    <summary>Add Media</summary>
 		<h1>Ajouter un media</h1>
         <form action="./" method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="addmedia">
 		<input type="file" accept="*" name="media" required>
         <input type="text" name="id" id="" placeholder="nom du fichier" required>
 		<input type="submit" value="envoi">
-		</form>
+        </form>
+        </details>
         <?php
 
     }

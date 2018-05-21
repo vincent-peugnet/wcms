@@ -38,11 +38,25 @@ if (isset($_POST['action'])) {
             }
             break;
 
-        case 'template':
+        case 'copy':
             if ($app->exist($_GET['id'])) {
-                $template = $app->get($_POST['template']);
+                $copy = $app->get($_POST['copy']);
                 $art = $app->get($_POST['id']);
-                $art->setcss($template->css());
+                if (!empty($_POST['css'])) {
+                    $art->setcss($copy->css());
+                }
+                if (!empty($_POST['color'])) {
+                    $art->setcouleurtext($copy->couleurtext());
+                    $art->setcouleurbkg($copy->couleurbkg());
+                    $art->setcouleurlien($copy->couleurlien());
+                    $art->setcouleurlienblank($copy->couleurlienblank());
+                }
+                if (!empty($_POST['html'])) {
+                    $art->sethtml($copy->md());
+                }
+                if (!empty($_POST['template'])) {
+                    $art->settemplate($copy->template());
+                }
                 $app->update($art);
                 header('Location: ?id=' . $art->id() . '&edit=1');
             }
@@ -98,7 +112,7 @@ $aff->head($titre, 'w');
 
 // ______________________________________________________ B O D Y _______________________________________________________________ 
 
-
+echo '<body>';
 $aff->nav($app);
 
 if (isset($_GET['id'])) {
@@ -107,9 +121,9 @@ if (isset($_GET['id'])) {
 
         $art = $app->get($_GET['id']);
 
-        if (isset($_GET['edit']) and $_GET['edit'] == 1) {
-            $aff->edit($art, $app->lister());
-            $aff->template($art, $app->lister());
+        if (isset($_GET['edit']) and $_GET['edit'] == 1 and $aff->session() == 2) {
+            $aff->edit($art, $app->getlister(['id', 'titre'], 'id'));
+            $aff->copy($art, $app->getlister(['id', 'titre'], 'id'));
             $aff->aside($app->lister());
         } else {
             $aff->lecture($art, $app);
@@ -147,8 +161,14 @@ if (isset($_GET['id'])) {
     } else {
         $tri = 'id';
     }
-    $aff->home2table($app->getlister(['id', 'titre', 'intro', 'lien'], $tri));
+    if (isset($_GET['desc'])) {
+        $desc = strip_tags($_GET['desc']);
+    } else {
+        $desc = 'ASC';
+    }
+    $aff->home2table($app->getlister(['id', 'titre', 'intro', 'lien', 'datecreation', 'datemodif'], $tri, $desc));
 }
+echo '</body>';
 
 
 ?>

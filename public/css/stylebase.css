@@ -189,48 +189,12 @@ td {
     width: 8%;
 }
 
-.thumbnail {
-    max-width: 30px;
-}
 
-.infobulle {
-    width: 20%;
-    display: none;
+summary {
+    height: 24px;
+    outline: none;
+    font-size: 1.4em;
+    background-color: #a0a0a0;
+    margin-top:  3px;
+    margin-bottom:  3px;
 }
-
-.little:hover .infobulle {
-    display: inline;
-    position: absolute;
-    background-color: white;
-    border: 1px solid black;
-}
-
-span.infobulle img {
-    width: 100%
-}
-
-.grid {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.copy {
-    position: fixed;
-    bottom: 0px;
-    left: 0px;
-    width: 8%;
-}
-
-.container {
-    position: relative;
-     width: 100%;
-     height: 0;
-     padding-bottom: 56.25%;
- }
- .video {
-     position: absolute;
-     top: 0;
-     left: 0;
-     width: 100%;
-     height: 100%;
- }

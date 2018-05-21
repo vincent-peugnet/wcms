@@ -20,6 +20,7 @@ class Art
 	private $couleurlien;
 	private $couleurlienblank;
 	private $lien;
+	private $template;
 
 	const LEN = 255;
 	const LENHTML = 20000;
@@ -64,6 +65,7 @@ a:hover {}');
 		$this->setcouleurlien('#000000');
 		$this->setcouleurlienblank('#000000');
 		$this->setlien('');
+		$this->settemplate('');
 	}
 
 	public function updatelien()
@@ -110,6 +112,9 @@ a:hover {}');
 			return $this->datecreation->format('Y-m-d H:i:s');
 		} elseif ($option == 'date') {
 			return $this->datecreation;
+		} elseif ($option == 'hrdi') {
+			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+			return hrdi($this->datecreation->diff($now));
 		}
 	}
 
@@ -120,6 +125,9 @@ a:hover {}');
 			return $this->datemodif->format('Y-m-d H:i:s');
 		} elseif ($option == 'date') {
 			return $this->datemodif;
+		} elseif ($option == 'hrdi') {
+			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+			return hrdi($this->datemodif->diff($now));
 		}
 	}
 
@@ -167,6 +175,8 @@ a:hover {}');
 
 		$html = str_replace('href="http', ' class="external" target="_blank" href="http', $html);
 		$html = str_replace('src="/', 'src="../media/', $html);
+		$html = str_replace('<iframe', '<div class="iframe"><div class="container"><iframe class="video" ', $html);
+		$html = str_replace('</iframe>', '</iframe></div></div>', $html);
 		return $html;
 
 

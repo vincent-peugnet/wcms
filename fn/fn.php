@@ -77,5 +77,27 @@ function readablesize(int $bytes)
 
 	return sprintf($format, $num, $unit);
 }
+
+/* human readable date interval
+ * @param DateInterval $diff - l'interval de temps
+ * @return string
+ */
+function hrdi(DateInterval $diff)
+{
+	$str = "";
+	if ($diff->y > 1) return $str . $diff->y . ' ans';
+	if ($diff->y == 1) return $str . ' 1 an et ' . $diff->m . ' mois';
+	if ($diff->m > 1) return $str . $diff->m . ' mois';
+	if ($diff->m == 1) return $str . ' 1 mois et ' . $diff->d . ($diff->d > 1 ? ' jours' : ' jour');
+	if ($diff->d > 1) return $str . $diff->d . ' jours';
+	if ($diff->d == 1) return $str . ' 1 jour et ' . $diff->h . ($diff->h > 1 ? ' heures' : ' heure');
+	if ($diff->h > 1) return $str . $diff->h . ' heures';
+	if ($diff->h == 1) return $str . ' 1 heure et ' . $diff->i . ($diff->i > 1 ? ' minutes' : ' minute');
+	if ($diff->i > 1) return $str . $diff->i . ' minutes';
+	if ($diff->i == 1) return $str . ' 1 minute';
+	return $str . ' quelques secondes';
+}
+
+
 ?>
 
