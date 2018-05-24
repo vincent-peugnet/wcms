@@ -36,6 +36,7 @@ There is 3 levels of privacy :
 
 ## W
 
+- 2.2 : all tools are now under the same folder **/W**, class are named **class.w.** to prevent name problems, edit symbol, new menu, better media display.
 - 2.1 : dynamic template : you can link a article to another to use the CSS parameters of the this one.
 
 ## M

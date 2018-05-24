@@ -160,20 +160,38 @@ public function copy(Art $art, $list)
     </div>
     <?php
 
-}
+    }
 
-public function head($title, $tool)
-{
+    public function head($title, $tool)
+    {
     ?>
-        <head>
-            <meta charset="utf8" />
-		    <meta name="viewport" content="width=device-width" />
-            <link href="/css/stylebase.css" rel="stylesheet" />
-            <link href="/css/style<?= $tool ?>.css" rel="stylesheet" />
-            <title><?= $title ?></title>
-            <script src="../rsc/js/app.js"></script>
-        </head>
-        <?php
+    <head>
+        <meta charset="utf8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="shortcut icon" href="../media/logo.png" type="image/x-icon">
+        <link href="/css/stylebase.css" rel="stylesheet" />
+        <link href="/css/style<?= $tool ?>.css" rel="stylesheet" />
+        <title><?= $title ?></title>
+        <script src="../rsc/js/app.js"></script>
+    </head>
+    <?php
+
+    }
+
+    public function arthead(Art $art, $pre = '')
+    {
+    ?>
+    <head>
+        <meta charset="utf8" />
+        <meta name="description" content="<?= $art->intro() ?>" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="shortcut icon" href="../media/logo.png" type="image/x-icon">
+        <link href="/css/stylebase.css" rel="stylesheet" />
+        <link href="/css/stylew.css" rel="stylesheet" />
+        <title><?= $pre ?> <?= $art->titre() ?></title>
+        <script src="../rsc/js/app.js"></script>
+    </head>
+    <?php
 
     }
 
@@ -328,68 +346,70 @@ public function head($title, $tool)
 
     public function nav($app)
     {
-        ?>
-        <nav>
-        <?= $this->session() ?>
-        </br>
-        <a class="button" href="?">home</a>
+        echo '<nav>';
+        echo $this->session();
+        echo '</br>';
 
-        </br>
-        <?php
+        echo '<a class="button" href="?">home</a>';
 
-        if (isset($_GET['id'])) {
-            if ($this->session() == 0) {
-                ?>
-                <form action="./?id=<?= $_GET['id'] ?>" method="post">
-                <input type="hidden" name="action" value="login">
-                <input type="password" name="pass" id="pass" placeholder="password">
-                <input type="submit" value="login">
-                </form>
-                <?php
-
+        if ($this->session() == 0) {
+            if(isset($_GET['id'])) {
+                echo '<form action="./?id='. $_GET['id'].'" method="post">';
+            } else {
+                echo '<form action="." method="post">';
             }
-            if ($this->session() >= 1) {
-                ?>
-                <form action="./?id=<?= $_GET['id'] ?>" method="post">
-                <input type="hidden" name="action" value="logout">
-                <input type="submit" value="logout">
-                </form>
-                <?php
+            ?>
+            <input type="hidden" name="action" value="login">
+            <input type="password" name="pass" id="pass" placeholder="password">
+            <input type="submit" value="login">
+            </form>
+            <?php
 
-                if ($this->session() == 2 and $app->exist($_GET['id'])) {
-                    ?>
-                    <a class="button" href="?id=<?= $_GET['id'] ?>" target="_blank">display</a>
-                    </br>
-                    <a class="button" href="?id=<?= $_GET['id'] ?>&edit=1" >edit</a>
-                    <?php
-
-                }
-
+        }
+        if ($this->session() > 0) {
+            if(isset($_GET['id'])) {
+                echo '<form action="./?id='. $_GET['id'].'" method="post">';
+            } else {
+                echo '<form action="." method="post">';
             }
-        } else {
-            if ($this->session() == 0) {
-                ?>
-                <form action="?" method="post">
-                <input type="hidden" name="action" value="login">
-                <input type="password" name="pass" id="pass" placeholder="password">
-                <input type="submit" value="login">
-                </form>
-                <?php
+            ?>
+            <input type="hidden" name="action" value="logout">
+            <input type="submit" value="logout">
+            </form>
+            <?php
 
-            }
-            if ($this->session() >= 1) {
-                ?>
-                <form action="?" method="post">
-                <input type="hidden" name="action" value="logout">
-                <input type="submit" value="logout">
-                </form>
-                <?php
-
+        }
+        if ($this->session() == 2 && isset($_GET['id']) && $app->exist($_GET['id'])) {
+            if (isset($_GET['edit']) && $_GET['edit'] == 1) {
+                echo '<a class="button" href="?id=' . $_GET['id'] . '" target="_blank">display</a>';
+            } else {
+                echo '<a class="button" href="?id=' . $_GET['id'] . '&edit=1" >edit</a>';
             }
         }
+        if ($this->session() == 2 && !isset($_GET['id'])) {
+            echo '<a class="button" href="?aff=media" >Media</a>';
+            echo '<a class="button" href="?aff=record" >Record</a>';
+            echo '<a class="button" href="?aff=admin" >Admin</a>';
+        }
+
         ?>
         </nav>
         <?php
+
+    }
+
+    // ____________________________________________________ M E D ________________________________________________
+
+    public function media()
+    {
+        echo '<body>';
+        echo '<section>';
+
+        $this->addmedia();
+        $this->medialist();
+
+        echo '</section>';
+        echo '</body>';
 
     }
 
@@ -398,38 +418,103 @@ public function head($title, $tool)
         if ($this->session() >= 2) {
 
             ?>
-         <details close>
-                    <summary>Add Media</summary>
-		<h1>Ajouter un media</h1>
-        <form action="./" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="action" value="addmedia">
-		<input type="file" accept="*" name="media" required>
-        <input type="text" name="id" id="" placeholder="nom du fichier" required>
-		<input type="submit" value="envoi">
+            <details close>
+                        <summary>Add Media</summary>
+            <form action="./" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="addmedia">
+            <input type="file" accept="*" name="media" required>
+            <input type="text" name="id" id="" placeholder="nom du fichier" required>
+            <input type="submit" value="envoi">
+            </form>
+            </details>
+            <?php
+
+        }
+    }
+
+    public function medialist(App $app, $dir = "../media/")
+    {
+        echo '<details open>';
+        echo '<summary>Media List</summary>';
+
+        echo '<article class="gest">';
+
+        echo '<form action="" method="post">';
+
+        echo '<ul class="grid">';
+
+        foreach ($app->getlistermedia($dir) as $item) {
+            echo '<li class="little">';
+            ?>
+            <input type="checkbox" id="<?= $item->id() ?>" name="<?= $item->id() ?>" value="1">
+            <label for="<?= $item->id() ?>"><?= $item->id() ?></label>
+            <input type="hidden" name="id" value="<?= $item->id() ?>">
+
+            <?php
+
+            $filepath = $dir . DIRECTORY_SEPARATOR . $item->id() . '.' . $item->extension();
+
+            echo '<label for="' . $item->id() . '"><img class="thumbnail" src="' . $filepath . '" alt="' . $item->id() . '"></label>';
+
+            echo '<span class="infobulle">';
+            echo 'width = ' . $item->width() . ' px';
+            echo '<br/>';
+            echo 'height = ' . $item->height() . ' px';
+            echo '<br/>';
+            echo 'filesize = ' . readablesize($item->size());
+            echo '<br/>';
+
+            echo '<input type="text" value="![' . $item->id() . '](/' . $item->id() . '.' . $item->extension() . ')">';
+            echo '<br/>';
+
+
+            echo '<a href="' . $filepath . '" target="_blank" ><img  src="' . $filepath . '" alt="' . $item->id() . '"></a>';
+            echo '</span>';
+
+            echo '</li>';
+        }
+
+        echo '</ul>';
+
+        ?>
+        <select name="action" id="">
+            <option value="">compress /2</option>
+            <option value="">downscale /2</option>
+            <option value="">upscale *2</option>
+        </select>
+        <input type="submit" value="edit">
+        <input type="submit" value="delete">
         </form>
-        </details>
+        </div>
+
+
         <?php
+
+
+        echo '</article>';
+        echo '</details>';
+
 
     }
 
-}
+
 
    //______________________________________________________ S E T _________________________________________________
 
-public function setsession($session)
-{
-    if ($session <= 2 and $session >= 0) {
-        $session = intval($session);
-        $this->session = $session;
+    public function setsession($session)
+    {
+        if ($session <= 2 and $session >= 0) {
+            $session = intval($session);
+            $this->session = $session;
+        }
     }
-}
 
    //______________________________________________________ G E T _________________________________________________
 
-public function session()
-{
-    return $this->session;
-}
+    public function session()
+    {
+        return $this->session;
+    }
 
 
 }

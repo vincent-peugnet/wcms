@@ -40,17 +40,11 @@ a:hover{
     text-decoration: underline;
 }
 
-img {
-    width: 90%;
-    max-width: 1000px;
-}
-
 form {
     margin-bottom: 0px;
 }
 
 section {
-    text-align: justify;
     padding: 3%;    
     line-height: 1.2em;
 }

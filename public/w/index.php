@@ -12,9 +12,10 @@ use Michelf\MarkdownExtra;
 
 
 require('../../fn/fn.php');
-require('../../class/class.art.php');
-require('../../class/class.app.php');
-require('../../class/class.aff.php');
+require('../../class/class.w.art.php');
+require('../../class/class.w.app.php');
+require('../../class/class.w.aff.php');
+require('../../class/class.w.media.php');
 session();
 if (!isset($_SESSION['level'])) {
     $level = 0;
@@ -76,7 +77,7 @@ if (isset($_POST['action'])) {
             if (isset($_GET['id'])) {
                 header('Location: ?id=' . $_GET['id']);
             } else {
-                header('Location: ?');
+                header('Location: ./');
             }
             break;
 
@@ -85,8 +86,13 @@ if (isset($_POST['action'])) {
             if (isset($_GET['id'])) {
                 header('Location: ?id=' . $_GET['id']);
             } else {
-                header('Location: ?');
+                header('Location: ./');
             }
+            break;
+
+        case 'addmedia':
+            $message = $app->addmedia($_FILES, 2 ** 10, $_POST['id']);
+            header('Location: ./?aff=media&message='.$message);
             break;
 
     }
@@ -97,15 +103,39 @@ if (isset($_POST['action'])) {
 
 
 // _______________________________________________________ H E A D _____________________________________________________________
-$titre = 'home';
+
 if (isset($_GET['id'])) {
-    $titre = $_GET['id'];
     if ($app->exist($_GET['id'])) {
         $art = $app->get($_GET['id']);
-        $titre = $art->titre();
+        if (isset($_GET['edit']) && $_GET['edit'] == 1) {
+            $aff->arthead($art, '✏');
+        }
+        $aff->arthead($art, '');
+    } else {
+        $aff->head($_GET['id'], 'w');
+
     }
+} elseif (isset($_GET['aff'])) {
+    $aff->head($_GET['aff'], $_GET['aff']);
+} else {
+    $aff->head('home', 'w');
 }
-$aff->head($titre, 'w');
+
+
+
+
+
+
+
+// _____________________________________________________ A L E R T _______________________________________________________________ 
+
+if (isset($_GET['message'])) {
+    echo '<span class="alert"><h4>' . $_GET['message'] . '</h4></span>';
+}
+
+
+
+
 
 
 
@@ -155,6 +185,23 @@ if (isset($_GET['id'])) {
     echo '<h4>' . $_GET['lien'] . '</h4>';
     $aff->lien($app->getlister(['id', 'titre', 'intro', 'lien'], 'id'), $_GET['lien']);
 
+} elseif (isset($_GET['aff'])) {
+    if ($_GET['aff'] == 'admin') {
+        echo '<h1>Admin</h1>';
+    } elseif ($_GET['aff'] == 'media') {
+        echo '<section>';
+
+        $aff->addmedia();
+        $aff->medialist($app);
+
+        echo '</section>';
+
+    } elseif ($_GET['aff'] == 'record') {
+        echo '<h1>Record</h1>';
+    } else {
+        header('Location: ./');
+    }
+
 } else {
     if (isset($_GET['tri'])) {
         $tri = strip_tags($_GET['tri']);
@@ -167,7 +214,9 @@ if (isset($_GET['id'])) {
         $desc = 'ASC';
     }
     $aff->home2table($app->getlister(['id', 'titre', 'intro', 'lien', 'datecreation', 'datemodif'], $tri, $desc));
+
 }
+
 echo '</body>';
 
 

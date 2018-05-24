@@ -17,7 +17,7 @@ function session()
 function secure()
 {
 	if (!isset($_SESSION['id'])) {
-		header("location: /");
+		header("location: ./");
 	}
 }
 

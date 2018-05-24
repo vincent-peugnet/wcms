@@ -143,8 +143,10 @@ class App
 
 	public function addmedia(array $file, $maxsize, $id)
 	{
+		$message = 'runing';
 		$maxsize = 2 ** 40;
 		$id = strtolower(strip_tags($id));
+		$id = str_replace(' ', '_', $id);
 		if (isset($file) and $file['media']['error'] == 0 and $file['media']['size'] < $maxsize) {
 			$infosfichier = pathinfo($file['media']['name']);
 			$extension_upload = $infosfichier['extension'];
@@ -155,19 +157,21 @@ class App
 					$extension_upload = strtolower($extension_upload);
 					$uploadok = move_uploaded_file($file['media']['tmp_name'], '../media/' . $id . '.' . $extension_upload);
 					if ($uploadok) {
-						header('Location: ./?message=uploadok');
+						$message = 'uploadok';
 					} else {
-						header('Location: ./?message=uploaderror');
+						$message = 'uploadokerror';
 					}
 				} else {
-					header('Location: ./?message=filealreadyexist');
+					$message = 'filealreadyexist';
 
 				}
 			}
 		} else {
-			header('Location: ./?message=filetoobig');
+			$message = 'filetoobig';
 
 		}
+
+		return $message;
 	}
 
 
