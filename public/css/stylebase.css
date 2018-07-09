@@ -46,10 +46,9 @@ form {
 
 section {
     padding: 3%;    
-    line-height: 1.2em;
 }
 
-.edit {
+.edit body {
     overflow-y: scroll;
 }
 

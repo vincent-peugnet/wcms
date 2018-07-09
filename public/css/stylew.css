@@ -2,6 +2,7 @@ body {
     background-color: #dcdcdceb;    
     font-family: helvetica, arial, sans-serif;
     margin: 0px;
+    overflow: hidden;
 
 }
 
@@ -52,11 +53,23 @@ form {
 section {
     text-align: justify;
     padding: 3%;    
-    line-height: 1.2em;
 }
 
 .edit {
     overflow-y: scroll;
+    height: 100%;
+
+}
+
+.lecture {
+    overflow-wrap: break-word;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.home {
+    overflow-y: scroll;
+    height: 100%;
 }
 
 .edit section {

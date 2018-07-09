@@ -1,0 +1,158 @@
+<?php
+
+
+
+class Config
+{
+	private $host;
+	private $dbname;
+	private $user;
+	private $password;
+	private $domain;
+	private $admin;
+	private $editor;
+	private $invite;
+	private $read;
+	private $cssread;
+
+
+// _______________________________________ F U N _______________________________________
+
+	public function __construct(array $donnees)
+	{
+		$this->hydrate($donnees);
+	}
+
+	public function hydrate(array $donnees)
+	{
+		foreach ($donnees as $key => $value) {
+			$method = 'set' . $key;
+
+			if (method_exists($this, $method)) {
+				$this->$method($value);
+			}
+		}
+	}
+
+	public function tojson()
+	{
+		$arr = get_object_vars($this);
+		$json = json_encode($arr, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT);
+		return $json;
+	}
+
+// ________________________________________ G E T _______________________________________
+
+	public function host()
+	{
+		return $this->host;
+	}
+
+	public function dbname()
+	{
+		return $this->dbname;
+	}
+
+	public function user()
+	{
+		return $this->user;
+	}
+
+	public function password()
+	{
+		return $this->password;
+	}
+
+	public function domain()
+	{
+		return $this->domain;
+	}
+
+	public function admin()
+	{
+		return $this->admin;
+	}
+
+	public function editor()
+	{
+		return $this->editor;
+	}
+
+	public function invite()
+	{
+		return $this->invite;
+	}
+
+	public function read()
+	{
+		return $this->read;
+	}
+
+	public function cssread()
+	{
+		return $this->cssread;
+	}
+
+// __________________________________________ S E T ______________________________________
+
+	public function sethost($host)
+	{
+		$this->host = strip_tags($host);
+	}
+
+	public function setdbname($dbname)
+	{
+		$this->dbname = strip_tags($dbname);
+	}
+
+	public function setuser($user)
+	{
+		$this->user = strip_tags($user);
+	}
+
+	public function setpassword($password)
+	{
+		$this->password = strip_tags($password);
+	}
+
+	public function setdomain($domain)
+	{
+		$this->domain = strip_tags($domain);
+	}
+
+	public function setadmin($admin)
+	{
+		$this->admin = strip_tags($admin);
+	}
+
+	public function seteditor($editor)
+	{
+		$this->editor = strip_tags($editor);
+	}
+
+	public function setinvite($invite)
+	{
+		$this->invite = strip_tags($invite);
+	}
+
+	public function setread($read)
+	{
+		$this->read = strip_tags($read);
+	}
+
+	public function setcssread($cssread)
+	{
+		$this->cssread = strip_tags($cssread);
+	}
+
+}
+
+
+
+
+
+
+
+
+
+?>

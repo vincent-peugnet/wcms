@@ -8,12 +8,53 @@ class Aff
     private static $edit = 2;
 
 
-    // ____________________________________________________ F U N ______________________________________________
+    // ________________________________________________ C O N S T R U C T ______________________________________________
 
-    public function __construct($session)
+
+    public function __construct($session = 0)
     {
         $this->setsession($session);
     }
+
+
+
+    // ____________________________________________________ C O N F I G ______________________________________________
+
+
+    public function configform()
+    {
+        ?>
+        <p>Config file does not exist yet, or maybe you deleted it ? Anyway, it is time to set it :</p>
+        <form action="" method="post">
+        <input type="hidden" name="config" value="create">
+        Database settings</br>
+        <input type="text" name="host" id="" placeholder="host"></br>
+        <input type="text" name="dbname" id="" placeholder="dbname"></br>
+        <input type="text" name="user" id="" placeholder="user"></br>
+        <input type="text" name="password" id="" placeholder="password"></br>
+        Domain name settings</br>
+        <input type="text" name="domain" id="" placeholder="domain"></br>
+        W_cms settings</br>
+        <input type="text" name="admin" id="" placeholder="W admin password" required></br>
+        <input type="hidden" name="editor" id="" value="editor">
+        <input type="hidden" name="invite" id="" value="invite">
+        <input type="hidden" name="read" id="" value="read">
+        <input type="hidden" name="cssread" id="" value="">
+        (You can change everything later, set at least your admin password, and don't forget it !)</br>
+        <input type="submit" value="create config file">
+        </form>
+        <?php
+
+    }
+
+
+
+
+
+
+
+    // ____________________________________________________ F U N ______________________________________________
+
 
     public function lecture(Art $art, App $app)
     {
@@ -25,10 +66,9 @@ class Aff
             echo "<span class=\"alert\"><h4>cet article n'est pas publié</h4></span>";
         }
 
-        if ($this->session() >= $art->secure()) {
+        if ($app->session() >= $art->secure()) {
             ?>
             <style type="text/css">
-            <?= $art->csstemplate($app) ?>
             body{
                 background: <?= $art->couleurbkg() ?>;
             }
@@ -39,10 +79,11 @@ class Aff
             a {
                 color: <?= $art->couleurlien() ?>;
             }
-
+            
             section a[target="_blank"] {
                 color: <?= $art->couleurlienblank() ?>;
             }
+            <?= $art->csstemplate($app) ?>
             </style>
             <section>
             <header>
@@ -57,9 +98,9 @@ class Aff
         echo '</div>';
     }
 
-    public function edit(Art $art, $list)
+    public function edit(Art $art, App $app, $list)
     {
-        if ($this->session() >= self::$edit) {
+        if ($app->session() >= self::$edit) {
 
             ?>
     <div class="edit">                
@@ -160,10 +201,10 @@ public function copy(Art $art, $list)
     </div>
     <?php
 
-    }
+}
 
-    public function head($title, $tool)
-    {
+public function head($title, $tool)
+{
     ?>
     <head>
         <meta charset="utf8" />
@@ -176,10 +217,10 @@ public function copy(Art $art, $list)
     </head>
     <?php
 
-    }
+}
 
-    public function arthead(Art $art, $pre = '')
-    {
+public function arthead(Art $art, $cssread = '', $edit = 0)
+{
     ?>
     <head>
         <meta charset="utf8" />
@@ -188,19 +229,20 @@ public function copy(Art $art, $list)
         <link rel="shortcut icon" href="../media/logo.png" type="image/x-icon">
         <link href="/css/stylebase.css" rel="stylesheet" />
         <link href="/css/stylew.css" rel="stylesheet" />
-        <title><?= $pre ?> <?= $art->titre() ?></title>
+        <?= $edit == 0 ? '<link href="/css/lecture/' . $cssread . '" rel="stylesheet" />' : '' ?>
+        <title><?= $edit == 1 ? '✏' : '' ?> <?= $art->titre() ?></title>
         <script src="../rsc/js/app.js"></script>
     </head>
     <?php
 
-    }
+}
 
 
 
 
-    public function search()
-    {
-        ?>
+public function search()
+{
+    ?>
         <form action="./" method="get">
         <input type="text" name="id" id="id" placeholder="identifiant article" required>
         <input type="submit" value="accéder">
@@ -293,13 +335,13 @@ public function copy(Art $art, $list)
         echo ' </div> ';
     }
 
-    public function home2table($getlist)
+    public function home2table(App $app, $getlist)
     {
         echo '<div class="home">';
         echo '<section>';
         echo '<h1>W</h1>';
         $this->search();
-        if ($this->session() >= 2) {
+        if ($app->session() >= $app::EDITOR) {
             echo '<h1>Home</h1>';
             echo '<table>';
             echo '<tr><th><a href="./?tri=titre">titre</a></th><th>résumé</th><th>lien from</th><th>lien to</th><th><a href="./?tri=datemodif&desc=DESC">dernière modif</a></th><th><a href="./?tri=datecreation&desc=DESC">date de création</a></th><th>edit</th></tr>';
@@ -331,11 +373,11 @@ public function copy(Art $art, $list)
         echo ' </div> ';
     }
 
-    public function aside($list)
+    public function aside(App $app)
     {
-        if ($this->session() >= 2) {
+        if ($app->session() >= $app::EDITOR) {
             echo '<aside><ul>';
-            foreach ($list as $item) {
+            foreach ($app->lister() as $item) {
                 echo '<li><a href="?id=' . $item['id'] . '&edit=1">' . $item['titre'] . '</a> - <code>[' . $item['titre'] . '](?id=' . $item['id'] . ')</code>';
 
 
@@ -347,14 +389,14 @@ public function copy(Art $art, $list)
     public function nav($app)
     {
         echo '<nav>';
-        echo $this->session();
+        //echo $this->session();
         echo '</br>';
 
         echo '<a class="button" href="?">home</a>';
 
-        if ($this->session() == 0) {
-            if(isset($_GET['id'])) {
-                echo '<form action="./?id='. $_GET['id'].'" method="post">';
+        if ($app->session() == $app::FREE) {
+            if (isset($_GET['id'])) {
+                echo '<form action="./?id=' . $_GET['id'] . '" method="post">';
             } else {
                 echo '<form action="." method="post">';
             }
@@ -366,9 +408,9 @@ public function copy(Art $art, $list)
             <?php
 
         }
-        if ($this->session() > 0) {
-            if(isset($_GET['id'])) {
-                echo '<form action="./?id='. $_GET['id'].'" method="post">';
+        if ($app->session() > $app::FREE) {
+            if (isset($_GET['id'])) {
+                echo '<form action="./?id=' . $_GET['id'] . '" method="post">';
             } else {
                 echo '<form action="." method="post">';
             }
@@ -379,14 +421,14 @@ public function copy(Art $art, $list)
             <?php
 
         }
-        if ($this->session() == 2 && isset($_GET['id']) && $app->exist($_GET['id'])) {
+        if ($app->session() == $app::ADMIN && isset($_GET['id']) && $app->exist($_GET['id'])) {
             if (isset($_GET['edit']) && $_GET['edit'] == 1) {
                 echo '<a class="button" href="?id=' . $_GET['id'] . '" target="_blank">display</a>';
             } else {
                 echo '<a class="button" href="?id=' . $_GET['id'] . '&edit=1" >edit</a>';
             }
         }
-        if ($this->session() == 2 && !isset($_GET['id'])) {
+        if ($app->session() == $app::ADMIN && !isset($_GET['id'])) {
             echo '<a class="button" href="?aff=media" >Media</a>';
             echo '<a class="button" href="?aff=record" >Record</a>';
             echo '<a class="button" href="?aff=admin" >Admin</a>';
@@ -400,18 +442,6 @@ public function copy(Art $art, $list)
 
     // ____________________________________________________ M E D ________________________________________________
 
-    public function media()
-    {
-        echo '<body>';
-        echo '<section>';
-
-        $this->addmedia();
-        $this->medialist();
-
-        echo '</section>';
-        echo '</body>';
-
-    }
 
     public function addmedia()
     {
@@ -419,7 +449,7 @@ public function copy(Art $art, $list)
 
             ?>
             <details close>
-                        <summary>Add Media</summary>
+            <summary>Add Media</summary>
             <form action="./" method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="addmedia">
             <input type="file" accept="*" name="media" required>
@@ -498,12 +528,185 @@ public function copy(Art $art, $list)
     }
 
 
+    //______________________________________________________ R E C _________________________________________________
 
-   //______________________________________________________ S E T _________________________________________________
+
+    public function recordlist(App $app, $dir = "../ACRRecordings/")
+    {
+        echo '<details open>';
+        echo '<summary>Media List</summary>';
+
+        echo '<article class="gest">';
+
+        echo '<form action="" method="post">';
+
+        echo '<ul>';
+
+        foreach ($app->getlisterrecord($dir) as $item) {
+            echo '<li>';
+
+            ?>
+            <input type="checkbox" id="<?= $item->id() ?>" name="<?= $item->id() ?>" value="1">
+            <label for="<?= $item->id() ?>"><?= $item->id() ?></label>
+            <input type="hidden" name="id" value="<?= $item->id() ?>">
+
+            <?php
+
+            $filepathurl = $dir . urlencode($item->id()) . '.' . $item->extension();
+
+            echo '<br/>';
+            var_dump($item->size());
+            var_dump(intval($item->size()));
+            echo 'filesize = ' . readablesize(intval($item->size()));
+            echo '<br/>';
+            echo 'extension = ' . $item->extension();
+            echo '<br/>';
+
+            ?>
+
+            <audio controls>
+            <source src="<?= $filepathurl ?>" type="audio/mpeg">
+            </audio>
+
+
+
+            <?php
+
+
+
+
+            echo '</li>';
+        }
+
+        echo '</ul>';
+
+        ?>
+        <select name="action" id="">
+            <option value="">compress /2</option>
+            <option value="">downscale /2</option>
+            <option value="">upscale *2</option>
+        </select>
+        <input type="submit" value="edit">
+        <input type="submit" value="delete">
+        </form>
+        </div>
+
+
+        <?php
+
+
+        echo '</article>';
+        echo '</details>';
+
+
+    }
+
+
+    //______________________________________________________ A D M _________________________________________________
+
+
+
+    public function admincss(Config $config, array $list)
+    {
+        echo '<article>';
+        echo '<h2>Default CSS for articles</h2>';
+
+        echo '<form action="?aff=admin" method="post" >';
+        echo '<input type="hidden" name="action" value="changecss">';
+        echo '<select name="lecturecss" required>';
+        foreach ($list as $item) {
+            if ($item == $config->cssread()) {
+                echo '<option value="' . $item . '" " selected >' . $item . '</option>';
+            } else {
+                echo '<option value="' . $item . '">' . $item . '</option>';
+            }
+        }
+        echo '</select>';
+        echo '<input type="submit" value="choose">';
+        echo '</form>';
+
+
+        $cssfile = '..' . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'lecture' . DIRECTORY_SEPARATOR . $config->cssread();
+        if (is_file($cssfile)) {
+            $cssread = file_get_contents($cssfile);
+            echo '<details>';
+            echo '<summary>Edit current CSS</summary>';
+            echo '<form>';
+            echo '<textarea>' . $cssread . '</textarea>';
+            echo '<input type="submit" value="edit">';
+            echo '</form>';
+            echo '</details>';
+        }
+
+        ?>
+        <details close>
+        <summary>Add CSS file</summary>
+        <form action="./" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="action" value="addcss">
+        <input type="file" accept=".css" name="css" required>
+        <input type="text" name="id" id="" placeholder="filename" required>
+        <input type="submit" value="submit">
+        </form>
+        </details>
+
+        <?php
+
+    }
+
+    public function admindb($config)
+    {
+        ?>
+
+        </article>
+        <article>
+
+
+        <h2>Database</h2>
+
+        <p>Status : ok</p>
+
+        <details>
+        <summary>Database credentials</summary>
+
+        <form action="./" method="post">
+        <input type="hidden" name="action" value="editconfig">
+        <input title="host" type="text" name="host" id="host" value="<?= $config->host() ?>" placeholder="host">
+        <input title="dbname" type="text" name="dbname" id="dbname" value="<?= $config->dbname() ?>" placeholder="dbname">
+        <input title="user" type="text" name="user" id="user" value="<?= $config->user() ?>" placeholder="user">
+        <input title="password" type="text" name="password" id="user" value="<?= $config->password() ?>" placeholder="password">
+        <input type="submit" name="edit" id="">
+        </form>
+
+        </details>
+
+        <details>
+        <summary>Actions</summary>
+
+        <p>Create new table on your database</p>
+
+        <form action="">
+        <input type="submit" value="reset">
+        <input type="submit" value="download">
+        </form>
+
+        </details>
+
+
+
+        </article>
+
+        <?php
+
+    }
+
+
+
+
+//______________________________________________________ S E T _________________________________________________
 
     public function setsession($session)
     {
-        if ($session <= 2 and $session >= 0) {
+        if ($session <= 100 and $session >= 0) {
             $session = intval($session);
             $this->session = $session;
         }

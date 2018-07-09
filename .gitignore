@@ -1,5 +1,6 @@
 vendor/*
 .vscode/*
-config.php
+config.json
 error_log
 public/media/*
+public/ACRRecordings/*

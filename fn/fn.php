@@ -52,7 +52,7 @@ function search($haystack, $debut, $fin)
 
 }
 
-function readablesize(int $bytes)
+function readablesize($bytes)
 {
 
 	$num = 5;

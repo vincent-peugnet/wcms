@@ -174,7 +174,7 @@ a:hover {}');
 		}
 
 		$html = str_replace('href="http', ' class="external" target="_blank" href="http', $html);
-		$html = str_replace('src="/', 'src="../media/', $html);
+		$html = str_replace('<img src="/', '<img src="../media/', $html);
 		$html = str_replace('<iframe', '<div class="iframe"><div class="container"><iframe class="video" ', $html);
 		$html = str_replace('</iframe>', '</iframe></div></div>', $html);
 		return $html;

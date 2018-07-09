@@ -2,20 +2,71 @@
 class App
 {
 	private $bdd;
-	private $admin;
-	private $secure;
+	private $session;
 
-	public function __construct($config)
+
+	const CONFIG_FILE = '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config.json';
+	const CSS_READ_DIR = '..' . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'lecture' . DIRECTORY_SEPARATOR;
+
+
+	const ADMIN = 10;
+	const EDITOR = 3;
+	const INVITE = 2;
+	const READ = 1;
+	const FREE = 0;
+
+
+// _____________________________________ C O N S T R U C T _________________________________
+
+
+
+	public function __construct()
 	{
-		$this->admin = $config['admin'];
-		$this->secure = $config['secure'];
+		$this->setsession($this::FREE);
+	}
+
+	public function setbdd(Config $config)
+	{
 
 		try {
-			$this->bdd = new PDO('mysql:host=' . $config['host'] . ';dbname=' . $config['dbname'] . ';charset=utf8', $config['user'], $config['password']);
+			$this->bdd = new PDO('mysql:host=' . $config->host() . ';dbname=' . $config->dbname() . ';charset=utf8', $config->user(), $config->password());
 		} catch (Exeption $e) {
 			die('Erreur : ' . $e->getMessage());
 		}
 	}
+
+
+// _________________________________________ C O N F I G ____________________________________
+
+	public function readconfig()
+	{
+		if (file_exists(self::CONFIG_FILE)) {
+			$current = file_get_contents(self::CONFIG_FILE);
+			$donnees = json_decode($current, true);
+			return new Config($donnees);
+		} else {
+			return 0;
+		}
+
+	}
+
+	public function createconfig(array $donnees)
+	{
+		return new Config($donnees);
+	}
+
+
+	public function savejson(string $json)
+	{
+		file_put_contents(self::CONFIG_FILE, $json);
+	}
+
+
+
+
+
+
+// ___________________________________________ A R T ____________________________________
 
 	public function add(Art $art)
 	{
@@ -141,10 +192,9 @@ class App
 
 // __________________________________________ M E D ________________________________________________________
 
-	public function addmedia(array $file, $maxsize, $id)
+	public function addmedia(array $file, $maxsize = 2 ** 24, $id)
 	{
 		$message = 'runing';
-		$maxsize = 2 ** 40;
 		$id = strtolower(strip_tags($id));
 		$id = str_replace(' ', '_', $id);
 		if (isset($file) and $file['media']['error'] == 0 and $file['media']['size'] < $maxsize) {
@@ -152,14 +202,14 @@ class App
 			$extension_upload = $infosfichier['extension'];
 			$extensions_autorisees = array('jpeg', 'jpg', 'JPG', 'png', 'gif', 'mp3', 'mp4', 'mov', 'wav', 'flac');
 			if (in_array($extension_upload, $extensions_autorisees)) {
-				if (!file_exists('../media/' . $id . '.' . $extension_upload)) {
+				if (!file_exists('..' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . $id . '.' . $extension_upload)) {
 
 					$extension_upload = strtolower($extension_upload);
-					$uploadok = move_uploaded_file($file['media']['tmp_name'], '../media/' . $id . '.' . $extension_upload);
+					$uploadok = move_uploaded_file($file['media']['tmp_name'], '..' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . $id . '.' . $extension_upload);
 					if ($uploadok) {
 						$message = 'uploadok';
 					} else {
-						$message = 'uploadokerror';
+						$message = 'uploaderror';
 					}
 				} else {
 					$message = 'filealreadyexist';
@@ -231,13 +281,116 @@ class App
 	}
 
 
+
+
+	//_________________________________________________________ R E C ________________________________________________________
+
+
+	public function getlisterrecord($dir)
+	{
+		if ($handle = opendir($dir)) {
+			$list = [];
+			while (false !== ($entry = readdir($handle))) {
+				if ($entry != "." && $entry != "..") {
+					$fileinfo = pathinfo($entry);
+
+					$filepath = $dir . $fileinfo['filename'] . '.' . $fileinfo['extension'];
+
+					list($width, $height, $type, $attr) = getimagesize($filepath);
+					$filesize = filesize($filepath);
+
+					$donnees = array(
+						'id' => str_replace('.' . $fileinfo['extension'], '', $fileinfo['filename']),
+						'path' => $fileinfo['dirname'],
+						'extension' => $fileinfo['extension'],
+						'size' => $filesize
+					);
+
+					$list[] = new Record($donnees);
+
+				}
+			}
+		}
+
+		return $list;
+
+
+
+	}
+
+
+
+	//_________________________________________________________ A D M ________________________________________________________
+
+	public function changecss($lecturecss)
+	{
+		if (file_exists(self::CONFIG_FILE)) {
+			$current = file_get_contents(self::CONFIG_FILE);
+			$current = str_replace($this->lecturecss(), $lecturecss, $current);
+			file_put_contents(self::CONFIG_FILE, $current);
+			return 'ccss_change_ok';
+		} else {
+			return 'ccss_change_error';
+		}
+	}
+
+	public function addcss(array $file, $maxsize = 2 ** 24, $id)
+	{
+		$message = 'runing';
+		$id = strtolower(strip_tags($id));
+		$id = str_replace(' ', '_', $id);
+		if (isset($file) and $file['css']['error'] == 0 and $file['css']['size'] < $maxsize) {
+			$infosfichier = pathinfo($file['css']['name']);
+			$extension_upload = $infosfichier['extension'];
+			$extensions_autorisees = array('css');
+			if (in_array($extension_upload, $extensions_autorisees)) {
+				if (!file_exists('..' . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'lecture' . DIRECTORY_SEPARATOR . $id . '.' . $extension_upload)) {
+
+					$extension_upload = strtolower($extension_upload);
+					$uploadok = move_uploaded_file($file['css']['tmp_name'], '..' . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'lecture' . DIRECTORY_SEPARATOR . $id . '.' . $extension_upload);
+					if ($uploadok) {
+						$message = 'uploadok';
+					} else {
+						$message = 'uploaderror';
+					}
+				} else {
+					$message = 'filealreadyexist';
+
+				}
+			}
+		} else {
+			$message = 'filetoobig';
+
+		}
+
+		return $message;
+	}
+
+	public function csslist()
+	{
+		if ($handle = opendir(self::CSS_READ_DIR)) {
+			$list = [];
+			while (false !== ($entry = readdir($handle))) {
+				if ($entry != "." && $entry != ".." && pathinfo($entry)['extension'] == 'css') {
+
+					$list[] = $entry;
+
+				}
+			}
+			return $list;
+		}
+	}
+
+
+
+
 	//_________________________________________________________ S E S ________________________________________________________
 
-	public function login($pass)
+	public function login($pass, $config)
 	{
-		if (strip_tags($pass) == $this->admin) {
-			return $level = 2;
-		} elseif (strip_tags($pass) == $this->secure) {
+		if (strip_tags($pass) == $config->admin()) {
+			return $level = 10;
+		} elseif (strip_tags($pass) == $config->read()) {
 			return $level = 1;
 		}
 	}
@@ -246,6 +399,25 @@ class App
 	{
 		return $level = 0;
 	}
+
+	// ________________________________________________________ S E T ___________________________________________________
+
+
+	public function setsession($session)
+	{
+		$this->session = $session;
+	}
+
+
+
+	
+	//_________________________________________________________ G E T ________________________________________________________
+
+	public function session()
+	{
+		return $this->session;
+	}
+
 
 }
 ?>

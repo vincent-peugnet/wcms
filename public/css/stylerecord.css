@@ -1,0 +1,66 @@
+section {
+    padding: 0;
+}
+
+.infobulle {
+    display: none;
+}
+
+.little:hover .infobulle {
+    display: inline-block;
+    position: relative;
+    background-color: white;
+    z-index: 5;
+    top: 5px;
+    width: 300px;
+    font-family: monospace;
+    font-size: 0.9em;
+    line-height: 1.1em;
+}
+
+span.infobulle img {
+    width: 100%;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 4%;
+    margin-right: 120px;
+    list-style: none;
+
+}
+
+.little {
+    width: 100px;
+    height: 150px;
+    margin: 10px;
+    background-color: white;
+
+}
+
+.infobulle input[type="text"] {
+    font-family:  monospace;
+    font-size:  0.9em;
+    margin: 3px;
+}
+
+img.thumbnail {
+    max-width: 100%;
+    max-height: 100px;
+}
+
+section.gest {
+    padding-bottom: 300px;
+}
+
+input[type="file"] {
+    font-size: 1.3em;
+}
+
+input[type="checkbox"] {
+    width: unset;
+    padding:  unset;
+    margin: unset;
+    height:  unset;
+}
