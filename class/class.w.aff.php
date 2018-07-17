@@ -251,14 +251,14 @@ public function search()
 
     }
 
-    public function tag($getlist, $tag)
+    public function tag($getlist, $tag, $app)
     {
         echo '<div class="tag">';
         echo '<ul>';
         foreach ($getlist as $item) {
             if (in_array($tag, $item->tag('array'))) {
                 echo '<li><a href="?id=' . $item->id() . '">' . $item->titre() . '</a> - ' . $item->intro();
-                if ($this->session() >= 2) {
+                if ($app->session() >= $app::EDITOR) {
                     echo ' - <a href="?id=' . $item->id() . '&edit=1">modifier</a></li>';
                 } else {
                     echo '</li>';
@@ -269,15 +269,15 @@ public function search()
         echo ' </div> ';
     }
 
-    public function lien($getlist, $lien)
+    public function lien($getlist, $lien, App $app)
     {
         echo '<div class="lien">';
         echo '<ul>';
         foreach ($getlist as $item) {
             if (in_array($lien, $item->lien('array'))) {
                 echo '<li><a href="?id=' . $item->id() . '">' . $item->titre() . '</a> - ' . $item->intro();
-                if ($this->session() >= 2) {
-                    echo ' - <a href="?id=' . $item->id() . '&edit=1">modifier</a></li>';
+                if ($app->session() >= $app::EDITOR) {
+                    echo ' - <a href="?id=' . $item->id() . '&edit=1">modifier</a> - <a href="?lien=' . $item->id() . '">liens</a></li>';
                 } else {
                     echo '</li>';
                 }
@@ -287,20 +287,7 @@ public function search()
         echo ' </div> ';
     }
 
-    public function home($getlist)
-    {
-        echo '<ul>';
-        foreach ($getlist as $item) {
-            echo '<li><a href="?id=' . $item->id() . '">' . $item->titre() . '</a> - ' . $item->intro();
-            if ($this->session() >= 2) {
-                echo ' - <a href="?id=' . $item->id() . '&edit=1">modifier</a></li>';
-            } else {
-                echo '</li>';
-            }
 
-        }
-        echo ' </ul> ';
-    }
 
     public function dump($getlist)
     {
@@ -313,27 +300,6 @@ public function search()
         echo ' </ul> ';
     }
 
-    public function home2($getlist)
-    {
-        echo '<div class="home">';
-        if ($this->session() >= 2) {
-            echo '<ul>';
-            foreach ($getlist as $item) {
-                $count = 0;
-
-                foreach ($getlist as $lien) {
-                    if (in_array($item->id(), $lien->lien('array'))) {
-                        $count++;
-                    }
-                }
-                echo '<li><a href="?id=' . $item->id() . '">' . $item->titre() . '</a> - ' . $item->intro();
-                echo ' - <a href="?lien=' . $item->id() . '">' . $count . '</a> ';
-                echo ' - <a href="?id=' . $item->id() . '&edit=1">modifier</a></li>';
-            }
-            echo ' </ul> ';
-        }
-        echo ' </div> ';
-    }
 
     public function home2table(App $app, $getlist)
     {
@@ -389,7 +355,7 @@ public function search()
     public function nav($app)
     {
         echo '<nav>';
-        //echo $this->session();
+        echo $app->session();
         echo '</br>';
 
         echo '<a class="button" href="?">home</a>';
@@ -421,17 +387,19 @@ public function search()
             <?php
 
         }
-        if ($app->session() == $app::ADMIN && isset($_GET['id']) && $app->exist($_GET['id'])) {
+        if ($app->session() >= $app::EDITOR && isset($_GET['id']) && $app->exist($_GET['id'])) {
             if (isset($_GET['edit']) && $_GET['edit'] == 1) {
                 echo '<a class="button" href="?id=' . $_GET['id'] . '" target="_blank">display</a>';
             } else {
                 echo '<a class="button" href="?id=' . $_GET['id'] . '&edit=1" >edit</a>';
             }
         }
-        if ($app->session() == $app::ADMIN && !isset($_GET['id'])) {
+        if ($app->session() >= $app::EDITOR && !isset($_GET['id'])) {
             echo '<a class="button" href="?aff=media" >Media</a>';
             echo '<a class="button" href="?aff=record" >Record</a>';
-            echo '<a class="button" href="?aff=admin" >Admin</a>';
+            if ($app->session() >= $app::ADMIN) {
+                echo '<a class="button" href="?aff=admin" >Admin</a>';
+            }
         }
 
         ?>
@@ -443,9 +411,9 @@ public function search()
     // ____________________________________________________ M E D ________________________________________________
 
 
-    public function addmedia()
+    public function addmedia($app)
     {
-        if ($this->session() >= 2) {
+        if ($app->session() >= $app::EDITOR) {
 
             ?>
             <details close>
@@ -606,33 +574,42 @@ public function search()
 
 
 
-    public function admincss(Config $config, array $list)
+    public function admincss(Config $config, $app)
     {
-        echo '<article>';
-        echo '<h2>Default CSS for articles</h2>';
+        ?>
+        <article>
+        <h2>CSS</h2>
+        <p>Current global css : <strong><?= $config->cssread() ?></strong></p>
+        <details colse>
+        <summary>Default CSS</summary>
 
-        echo '<form action="?aff=admin" method="post" >';
-        echo '<input type="hidden" name="action" value="changecss">';
-        echo '<select name="lecturecss" required>';
-        foreach ($list as $item) {
+        <form action="?aff=admin" method="post" >
+        <input type="hidden" name="action" value="editconfig">
+        <select name="cssread" required>
+
+        <?php
+        foreach ($app->dirlist($app::CSS_READ_DIR, 'css') as $item) {
             if ($item == $config->cssread()) {
                 echo '<option value="' . $item . '" " selected >' . $item . '</option>';
             } else {
                 echo '<option value="' . $item . '">' . $item . '</option>';
             }
         }
-        echo '</select>';
-        echo '<input type="submit" value="choose">';
-        echo '</form>';
+        ?>
+        </select>
+        <input type="submit" value="choose">
+        </form>
+        </details>
 
 
-        $cssfile = '..' . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'lecture' . DIRECTORY_SEPARATOR . $config->cssread();
+        <?php 
+        $cssfile = $app::CSS_READ_DIR . $config->cssread();
         if (is_file($cssfile)) {
             $cssread = file_get_contents($cssfile);
             echo '<details>';
             echo '<summary>Edit current CSS</summary>';
             echo '<form>';
-            echo '<textarea>' . $cssread . '</textarea>';
+            echo '<textarea style="height:400px;">' . $cssread . '</textarea>';
             echo '<input type="submit" value="edit">';
             echo '</form>';
             echo '</details>';
@@ -649,6 +626,7 @@ public function search()
         </form>
         </details>
 
+        </article>
         <?php
 
     }
@@ -657,13 +635,10 @@ public function search()
     {
         ?>
 
-        </article>
         <article>
 
 
         <h2>Database</h2>
-
-        <p>Status : ok</p>
 
         <details>
         <summary>Database credentials</summary>
@@ -674,27 +649,98 @@ public function search()
         <input title="dbname" type="text" name="dbname" id="dbname" value="<?= $config->dbname() ?>" placeholder="dbname">
         <input title="user" type="text" name="user" id="user" value="<?= $config->user() ?>" placeholder="user">
         <input title="password" type="text" name="password" id="user" value="<?= $config->password() ?>" placeholder="password">
-        <input type="submit" name="edit" id="">
+        <input type="submit" value="edit" id="">
+        </form>
+
+        </details>
+
+
+        
+
+
+        </article>
+
+        <?php
+
+    }
+
+    public function adminpassword(Config $config)
+    {
+        ?>
+        <article>
+
+        <h2>Passwords</h2>
+
+        <details>
+        <summary>Admin</summary>
+
+        <form action="./" method="post">
+        <input type="hidden" name="action" value="editconfig">
+        <input title="admin password" type="password" name="admin" id="admin" value="<?= $config->admin() ?>" placeholder="admin">
+        <input type="submit" value="edit" id="">
+        </form>
+
+        </details>
+        <details>
+        <summary>Others</summary>
+
+        <form action="./" method="post">
+        <input type="hidden" name="action" value="editconfig">
+        <input title="editor" type="text" name="editor" id="editor" value="<?= $config->editor() ?>" placeholder="editor">
+        <input title="invite" type="text" name="invite" id="invite" value="<?= $config->invite() ?>" placeholder="invite">
+        <input title="read" type="text" name="read" id="read" value="<?= $config->read() ?>" placeholder="read">
+        <input type="submit" value="edit" id="">
+        </form>
+
+        </details>
+        </article>
+
+
+
+
+        <?php
+
+    }
+
+    public function admintable(Config $config, array $arttables)
+    {
+        ?>
+        <p>Current Table : <strong><?= $config->arttable(); ?></strong></p>
+        <details>
+        <summary>Select Table</summary>
+        <p>The table is where all your articles are stored, select the one you want to use.</p>
+
+        <form action="./" method="post">
+        <select name="arttable" required>
+
+        <?php
+        foreach ($arttables as $arttable) {
+            if ($arttable == $config->arttable()) {
+                echo '<option value="' . $arttable . '" " selected >' . $arttable . '</option>';
+            } else {
+                echo '<option value="' . $arttable . '">' . $arttable . '</option>';
+            }
+        }
+        ?>
+        </select>
+        <input type="hidden" name="action" value="editconfig">
+        <input type="submit" value="choose">
         </form>
 
         </details>
 
         <details>
-        <summary>Actions</summary>
+        <summary>Add table</summary>
 
-        <p>Create new table on your database</p>
+        <p>Create new table in your database. You need at least one to use W_cms</p>
 
-        <form action="">
-        <input type="submit" value="reset">
-        <input type="submit" value="download">
+        <form action="./" method="post">
+        <input type="hidden" name="actiondb" value="addtable">
+        <input type="text" name="tablename" maxlength="30" required>
+        <input type="submit" value="create">
         </form>
 
         </details>
-
-
-
-        </article>
-
         <?php
 
     }

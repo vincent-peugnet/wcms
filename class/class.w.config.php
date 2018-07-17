@@ -8,6 +8,7 @@ class Config
 	private $dbname;
 	private $user;
 	private $password;
+	private $arttable;
 	private $domain;
 	private $admin;
 	private $editor;
@@ -63,6 +64,11 @@ class Config
 		return $this->password;
 	}
 
+	public function arttable()
+	{
+		return $this->arttable;
+	}
+
 	public function domain()
 	{
 		return $this->domain;
@@ -113,6 +119,11 @@ class Config
 	public function setpassword($password)
 	{
 		$this->password = strip_tags($password);
+	}
+
+	public function setarttable($arttable)
+	{
+		$this->arttable = strip_tags($arttable);
 	}
 
 	public function setdomain($domain)

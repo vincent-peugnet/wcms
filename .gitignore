@@ -4,3 +4,4 @@ config.json
 error_log
 public/media/*
 public/ACRRecordings/*
+public/css/lecture/*

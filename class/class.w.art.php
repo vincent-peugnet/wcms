@@ -29,6 +29,9 @@ class Art
 	const DEBUT = '(?id=';
 	const FIN = ')';
 
+	  
+	  
+
 // _____________________________________________________ F U N ____________________________________________________
 
 	public function __construct(array $donnees)

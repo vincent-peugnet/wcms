@@ -3,10 +3,12 @@ class App
 {
 	private $bdd;
 	private $session;
+	private $arttable;
 
 
 	const CONFIG_FILE = '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config.json';
 	const CSS_READ_DIR = '..' . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'lecture' . DIRECTORY_SEPARATOR;
+	const SQL_READ_DIR = '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'sql' . DIRECTORY_SEPARATOR;
 
 
 	const ADMIN = 10;
@@ -27,12 +29,31 @@ class App
 
 	public function setbdd(Config $config)
 	{
+		$caught = true;
 
 		try {
-			$this->bdd = new PDO('mysql:host=' . $config->host() . ';dbname=' . $config->dbname() . ';charset=utf8', $config->user(), $config->password());
-		} catch (Exeption $e) {
-			die('Erreur : ' . $e->getMessage());
+			$this->bdd = new PDO('mysql:host=' . $config->host() . ';dbname=' . $config->dbname() . ';charset=utf8', $config->user(), $config->password(), array(PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT));
+			//$this->bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		} catch (PDOException $e) {
+			$caught = false;
+			echo '<h1>Error 500, database offline</h1>';
+			echo '<p><a href=".">Homepage for admin login</a> (connect on the top right side)</p>';
+			if ($this->session() >= 3) {
+				echo '<p>Error : ' . $e->getMessage() . '</p>';
+				if ($this->session() == 10) {
+					echo '<p>Go to the <a href="?aff=admin">Admin Panel</a> to edit your database credentials</p>';
+				} else {
+					echo '<p>Logout and and come back with an <strong>admin password</strong> to edit the database connexions settings.</p>';
+				}
+			}
+			exit;
 		}
+		if ($caught) {
+			$this->arttable = $config->arttable();
+		}
+
+		return $caught;
+
 	}
 
 
@@ -77,7 +98,9 @@ class App
 
 			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
-			$q = $this->bdd->prepare('INSERT INTO art(id, titre, soustitre, intro, tag, datecreation, datemodif, css, html, secure, couleurtext, couleurbkg, couleurlien, couleurlienblank, lien, template) VALUES(:id, :titre, :soustitre, :intro, :tag, :datecreation, :datemodif, :css, :html, :secure, :couleurtext, :couleurbkg, :couleurlien, :couleurlienblank, :lien, :template)');
+			$request = 'INSERT INTO ' . $this->arttable . '(id, titre, soustitre, intro, tag, datecreation, datemodif, css, html, secure, couleurtext, couleurbkg, couleurlien, couleurlienblank, lien, template) VALUES(:id, :titre, :soustitre, :intro, :tag, :datecreation, :datemodif, :css, :html, :secure, :couleurtext, :couleurbkg, :couleurlien, :couleurlienblank, :lien, :template)';
+
+			$q = $this->bdd->prepare($request);
 
 			$q->bindValue(':id', $art->id());
 			$q->bindValue(':titre', $art->titre());
@@ -102,14 +125,14 @@ class App
 
 	public function delete(Art $art)
 	{
-		$req = $this->bdd->prepare('DELETE FROM art WHERE id = :id ');
+		$req = $this->bdd->prepare('DELETE FROM ' . $this->arttable . ' WHERE id = :id ');
 		$req->execute(array('id' => $art->id()));
 		$req->closeCursor();
 	}
 
 	public function get($id)
 	{
-		$req = $this->bdd->prepare('SELECT * FROM art WHERE id = :id ');
+		$req = $this->bdd->prepare('SELECT * FROM ' . $this->arttable . ' WHERE id = :id ');
 		$req->execute(array('id' => $id));
 		$donnees = $req->fetch(PDO::FETCH_ASSOC);
 
@@ -127,7 +150,7 @@ class App
 
 			$selection = implode(", ", $selection);
 
-			$select = 'SELECT ' . $selection . ' FROM art ORDER BY ' . $tri . ' ' . $desc;
+			$select = 'SELECT ' . $selection . ' FROM ' . $this->arttable . ' ORDER BY ' . $tri . ' ' . $desc;
 			$req = $this->bdd->query($select);
 			while ($donnees = $req->fetch(PDO::FETCH_ASSOC)) {
 				$list[] = new Art($donnees);
@@ -138,7 +161,7 @@ class App
 
 	public function lister()
 	{
-		$req = $this->bdd->query(' SELECT * FROM art ORDER BY id ');
+		$req = $this->bdd->query(' SELECT * FROM ' . $this->arttable . ' ORDER BY id ');
 		$donnees = $req->fetchAll(PDO::FETCH_ASSOC);
 		return $donnees;
 
@@ -148,12 +171,12 @@ class App
 
 	public function count()
 	{
-		return $this->bdd->query(' SELECT COUNT(*) FROM art ')->fetchColumn();
+		return $this->bdd->query(' SELECT COUNT(*) FROM ' . $this->arttable . ' ')->fetchColumn();
 	}
 
 	public function exist($id)
 	{
-		$req = $this->bdd->prepare(' SELECT COUNT(*) FROM art WHERE id = :id ');
+		$req = $this->bdd->prepare(' SELECT COUNT(*) FROM ' . $this->arttable . ' WHERE id = :id ');
 		$req->execute(array('id' => $id));
 		$donnees = $req->fetch(PDO::FETCH_ASSOC);
 
@@ -165,7 +188,7 @@ class App
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 		$art->updatelien();
 
-		$q = $this->bdd->prepare('UPDATE art SET titre = :titre, soustitre = :soustitre, intro = :intro, tag = :tag, datecreation = :datecreation, datemodif = :datemodif, css = :css, html = :html, secure = :secure, couleurtext = :couleurtext, couleurbkg = :couleurbkg, couleurlien = :couleurlien, couleurlienblank = :couleurlienblank, lien = :lien, template = :template WHERE id = :id');
+		$q = $this->bdd->prepare('UPDATE ' . $this->arttable . ' SET titre = :titre, soustitre = :soustitre, intro = :intro, tag = :tag, datecreation = :datecreation, datemodif = :datemodif, css = :css, html = :html, secure = :secure, couleurtext = :couleurtext, couleurbkg = :couleurbkg, couleurlien = :couleurlien, couleurlienblank = :couleurlienblank, lien = :lien, template = :template WHERE id = :id');
 
 		$q->bindValue(':id', $art->id());
 		$q->bindValue(':titre', $art->titre());
@@ -185,6 +208,83 @@ class App
 		$q->bindValue(':template', $art->template());
 
 		$q->execute();
+	}
+
+	public function tableexist($dbname, $tablename)
+	{
+
+		var_dump($dbname);
+		var_dump($tablename);
+
+		$req = $this->bdd->prepare('SELECT COUNT(*)
+		FROM information_schema.tables
+		WHERE table_schema = :dbname AND
+			  table_name like :tablename');
+		$req->execute(array(
+			'dbname' => $dbname,
+			'tablename' => $tablename
+		));
+		$donnees = $req->fetch(PDO::FETCH_ASSOC);
+		$req->closeCursor();
+		$exist = intval($donnees['COUNT(*)']);
+		return $exist;
+
+
+
+
+	}
+
+	public function tablelist($dbname)
+	{
+		$request = 'SHOW TABLES IN ' . $dbname;
+		$req = $this->bdd->query($request);
+		$donnees = $req->fetchAll(PDO::FETCH_ASSOC);
+		$req->closeCursor();
+
+		$arttables = [];
+		foreach ($donnees as $table) {
+			$arttables[] = $table['Tables_in_wcms'];
+		}
+		return $arttables;
+
+
+	}
+
+
+	public function addtable($dbname, $tablename)
+	{
+
+		if (!$this->tableexist($dbname, $tablename)) {
+
+			$table = "CREATE TABLE `$tablename` (
+			`id` varchar(255) NOT NULL DEFAULT 'art',
+			`titre` varchar(255) NOT NULL DEFAULT 'titre',
+			`soustitre` varchar(255) NOT NULL DEFAULT 'soustitre',
+			`intro` varchar(255) NOT NULL DEFAULT 'intro',
+			`tag` varchar(255) NOT NULL DEFAULT 'sans tag,',
+			`datecreation` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			`datemodif` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			`css` text,
+			`html` text,
+			`secure` int(1) NOT NULL DEFAULT '0',
+			`couleurtext` varchar(7) NOT NULL DEFAULT '#000000',
+			`couleurbkg` varchar(7) NOT NULL DEFAULT '#ffffff',
+			`couleurlien` varchar(7) NOT NULL DEFAULT '#2a3599',
+			`couleurlienblank` varchar(7) NOT NULL DEFAULT '#2a8e99',
+			`lien` varchar(255) DEFAULT NULL,
+			`template` varchar(255) DEFAULT NULL
+		  )";
+
+			$alter = "ALTER TABLE `'.$tablename.'`
+			ADD PRIMARY KEY (`id`)";
+
+			$req = $this->bdd->query($table);
+			$req->closeCursor();
+
+			return 'tablecreated';
+		} else {
+			return 'tablealreadyexist';
+		}
 	}
 
 
@@ -366,12 +466,12 @@ class App
 		return $message;
 	}
 
-	public function csslist()
+	public function dirlist($dir, $extension)
 	{
-		if ($handle = opendir(self::CSS_READ_DIR)) {
+		if ($handle = opendir($dir)) {
 			$list = [];
 			while (false !== ($entry = readdir($handle))) {
-				if ($entry != "." && $entry != ".." && pathinfo($entry)['extension'] == 'css') {
+				if ($entry != "." && $entry != ".." && pathinfo($entry)['extension'] == $extension) {
 
 					$list[] = $entry;
 
@@ -379,6 +479,11 @@ class App
 			}
 			return $list;
 		}
+	}
+
+	public function downloadtable()
+	{
+
 	}
 
 
@@ -389,9 +494,13 @@ class App
 	public function login($pass, $config)
 	{
 		if (strip_tags($pass) == $config->admin()) {
-			return $level = 10;
+			return $level = self::ADMIN;
 		} elseif (strip_tags($pass) == $config->read()) {
-			return $level = 1;
+			return $level = self::READ;
+		} elseif (strip_tags($pass) == $config->editor()) {
+			return $level = self::EDITOR;
+		} elseif (strip_tags($pass) == $config->invite()) {
+			return $level = self::INVITE;
 		}
 	}
 

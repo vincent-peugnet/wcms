@@ -48,19 +48,15 @@ if (!isset($_SESSION['level'])) {
 
 $app->setsession($session);
 
-//var_dump($config);
-//var_dump($app);
 
-
-
-// _________________________________________________________ N A V _______________________________________________
+// __________________________________________________________ I D _______________________________________________
 
 if (isset($_GET['id'])) {
     $app->setbdd($config);
 }
 
 
-// _____________________________________________________ A C T I O N __________________________________________________________________
+// _______________________________________________________ A C T I O N __________________________________________________________________
 
 
 if (isset($_POST['action'])) {
@@ -92,12 +88,6 @@ if (isset($_POST['action'])) {
         case 'addcss':
             $message = $app->addcss($_FILES, 2 ** 24, $_POST['id']);
             header('Location: ./?aff=admin&message=' . $message);
-            break;
-
-        case 'changecss':
-            $config->setcssread($_POST['lecturecss']);
-            $app->savejson($config->tojson());
-            header('Location: ./?aff=admin');
             break;
 
         case 'editconfig':
@@ -163,7 +153,20 @@ if (isset($_POST['action'])) {
 
 }
 
+if (isset($_POST['actiondb'])) {
+    $app->setbdd($config);
 
+    switch ($_POST['actiondb']) {
+
+        case 'addtable':
+            if (isset($_POST['tablename'])) {
+                $message = $app->addtable($config->dbname(), $_POST['tablename']);
+                header('Location: ./?aff=admin&message=' . $message);
+            }
+            break;
+
+    }
+}
 // _______________________________________________________ H E A D _____________________________________________________________
 
 if (isset($_GET['id'])) {
@@ -234,36 +237,49 @@ if (isset($_GET['id'])) {
                 header('Location: ?id=' . $_GET['id'] . '&edit=1');
             }
         } else {
-            echo '<span class="alert"><h4>Cet article n\'existe pas encore</h4></span>';
+            echo '<span class="alert"><h4>This article does not exist yet</h4></span>';
 
-            if ($aff->session() >= 2) {
-                echo '<form action="?id=' . $_GET['id'] . '&edit=1" method="post"><input type="hidden" name="action" value="new"><input type="submit" value="créer"></form>';
+            if ($app->session() >= $app::EDITOR) {
+                echo '<form action="?id=' . $_GET['id'] . '&edit=1" method="post"><input type="hidden" name="action" value="new"><input type="submit" value="Create"></form>';
             }
 
         }
 
     }
 } elseif (isset($_GET['tag'])) {
+    $app->setbdd($config);
     echo '<h4>' . $_GET['tag'] . '</h4>';
-    $aff->tag($app->getlister(['id', 'titre', 'intro', 'tag'], 'id'), $_GET['tag']);
+    $aff->tag($app->getlister(['id', 'titre', 'intro', 'tag'], 'id'), $_GET['tag'], $app);
 
 } elseif (isset($_GET['lien'])) {
-    echo '<h4>' . $_GET['lien'] . '</h4>';
-    $aff->lien($app->getlister(['id', 'titre', 'intro', 'lien'], 'id'), $_GET['lien']);
-} elseif (isset($_GET['aff']) && $app->session() == $app::ADMIN) {
-    if ($_GET['aff'] == 'admin') {
+    $app->setbdd($config);
+    echo '<h4><a href="?id=' . $_GET['lien'] . '">' . $_GET['lien'] . '</a></h4>';
+    $aff->lien($app->getlister(['id', 'titre', 'intro', 'lien'], 'id'), $_GET['lien'], $app);
+
+} elseif (isset($_GET['aff']) && $app->session() >= $app::EDITOR) {
+    if ($_GET['aff'] == 'admin' && $app->session() >= $app::ADMIN) {
         echo '<section>';
         echo '<h1>Admin</h1>';
+        
+        
+        
+        //       $app->tableexist($config->dbname(), 'guigui');
 
-        $aff->admincss($config, $app->csslist());
+        $aff->admincss($config, $app);
+        $aff->adminpassword($config);
         $aff->admindb($config);
+        if ($app->setbdd($config)) {
+            //var_dump($app->tablelist($config->dbname()));
+            echo '<p>database status : OK</p>';
+        }
+        $aff->admintable($config, $app->tablelist($config->dbname()));
 
         echo '</section>';
     } elseif ($_GET['aff'] == 'media') {
         echo '<h1>Media</h1>';
         echo '<section>';
 
-        $aff->addmedia();
+        $aff->addmedia($app);
         $aff->medialist($app);
 
         echo '</section>';
@@ -293,7 +309,10 @@ if (isset($_GET['id'])) {
     } else {
         $desc = 'ASC';
     }
+
     $aff->home2table($app, $app->getlister(['id', 'titre', 'intro', 'lien', 'datecreation', 'datemodif'], $tri, $desc));
+
+    //var_dump($app->getlister(['id', 'lien']));
 
 }
 
