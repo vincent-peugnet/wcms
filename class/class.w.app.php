@@ -142,46 +142,7 @@ class App
 
 	}
 
-	public function getlister(array $selection = ['id', 'titre'], $tri = 'id', $desc = 'ASC')
-	{
-		$list = [];
-		$option = ['datecreation', 'titre', 'id', 'intro', 'datemodif'];
-		if (is_array($selection) && is_string($tri) && strlen($tri) < 16 && is_string($desc) && strlen($desc) < 5 && in_array($tri, $option)) {
 
-			$selection = implode(", ", $selection);
-
-			$select = 'SELECT ' . $selection . ' FROM ' . $this->arttable . ' ORDER BY ' . $tri . ' ' . $desc;
-			$req = $this->bdd->query($select);
-			while ($donnees = $req->fetch(PDO::FETCH_ASSOC)) {
-				$list[] = new Art($donnees);
-			}
-			return $list;
-		}
-	}
-
-	public function lister()
-	{
-		$req = $this->bdd->query(' SELECT * FROM ' . $this->arttable . ' ORDER BY id ');
-		$donnees = $req->fetchAll(PDO::FETCH_ASSOC);
-		return $donnees;
-
-		$req->closeCursor();
-
-	}
-
-	public function count()
-	{
-		return $this->bdd->query(' SELECT COUNT(*) FROM ' . $this->arttable . ' ')->fetchColumn();
-	}
-
-	public function exist($id)
-	{
-		$req = $this->bdd->prepare(' SELECT COUNT(*) FROM ' . $this->arttable . ' WHERE id = :id ');
-		$req->execute(array('id' => $id));
-		$donnees = $req->fetch(PDO::FETCH_ASSOC);
-
-		return (bool)$donnees['COUNT(*)'];
-	}
 
 	public function update(Art $art)
 	{
@@ -209,6 +170,143 @@ class App
 
 		$q->execute();
 	}
+
+
+
+
+	//____________________________________________ L S T ______________________________
+
+
+
+	public function getlister(array $selection = ['id'], array $opt = [])
+	{
+		$default = ['tri' => 'id', 'desc' => 'DESC'];
+		$opt = array_update($default, $opt);
+
+		$list = [];
+		$option = ['datecreation', 'titre', 'id', 'intro', 'datemodif', 'tag', 'secure'];
+		if (is_array($selection) && is_string($opt['tri']) && strlen($opt['tri']) < 16 && is_string($opt['desc']) && strlen($opt['desc']) < 5 && in_array($opt['tri'], $option)) {
+
+			$selection = implode(", ", $selection);
+
+			$select = 'SELECT ' . $selection . ' FROM ' . $this->arttable . ' ORDER BY ' . $opt['tri'] . ' ' . $opt['desc'];
+			$req = $this->bdd->query($select);
+			while ($donnees = $req->fetch(PDO::FETCH_ASSOC)) {
+				$list[] = new Art($donnees);
+			}
+			return $list;
+		}
+	}
+
+
+
+
+
+
+	public function getlisteropt(Opt $opt)
+	{
+
+
+		$artlist = [];
+
+		$select = 'SELECT ' . $opt->col('string') . ' FROM ' . $this->arttable;
+		$req = $this->bdd->query($select);
+		while ($donnees = $req->fetch(PDO::FETCH_ASSOC)) {
+			$artlist[] = new Art($donnees);
+		}
+		return $artlist;
+
+	}
+
+	public function listcalclien(&$artlist)
+	{
+		foreach ($artlist as $art) {
+			$art->calcliento($artlist);
+		}
+	}
+
+	public function artcompare($art1, $art2, $method = 'id', $order = 1)
+	{
+		$result = ($art1->$method('sort') <=> $art2->$method('sort'));
+		return $result * $order;
+
+	}
+
+	public function buildsorter($sortby, $order)
+	{
+		return function ($art1, $art2) use ($sortby, $order) {
+			$result = $this->artcompare($art1, $art2, $sortby, $order);
+			return $result;
+		};
+	}
+
+
+
+	public function artlistsort(&$artlist, $sortby, $order = 1)
+	{
+		return usort($artlist, $this->buildsorter($sortby, $order));
+	}
+
+
+
+
+
+
+	public function filtertagor(array $artlist, array $tagchecked)
+	{
+
+		$filteredlist = [];
+		foreach ($artlist as $art) {
+			if (!empty(array_intersect($art->tag('array'), $tagchecked))) {
+				$filteredlist[] = $art->id();
+			} elseif (empty($tagchecked)) {
+				$filteredlist[] = $art->id();
+			}
+		}
+		return $filteredlist;
+	}
+
+	public function filtersecure(array $artlist, $secure)
+	{
+		$filteredlist = [];
+		foreach ($artlist as $art) {
+			if ($art->secure() == intval($secure)) {
+				$filteredlist[] = $art->id();
+			} elseif (intval($secure) >= 4) {
+				$filteredlist[] = $art->id();
+			}
+		}
+		return $filteredlist;
+	}
+
+
+	public function lister()
+	{
+		$req = $this->bdd->query(' SELECT * FROM ' . $this->arttable . ' ORDER BY id ');
+		$donnees = $req->fetchAll(PDO::FETCH_ASSOC);
+		$req->closeCursor();
+		return $donnees;
+
+
+	}
+
+	public function count()
+	{
+		return $this->bdd->query(' SELECT COUNT(*) FROM ' . $this->arttable . ' ')->fetchColumn();
+	}
+
+	public function exist($id)
+	{
+		$req = $this->bdd->prepare(' SELECT COUNT(*) FROM ' . $this->arttable . ' WHERE id = :id ');
+		$req->execute(array('id' => $id));
+		$donnees = $req->fetch(PDO::FETCH_ASSOC);
+
+		return (bool)$donnees['COUNT(*)'];
+	}
+
+	
+	// __________________________________________ T A B L E ________________________________________________________
+
 
 	public function tableexist($dbname, $tablename)
 	{

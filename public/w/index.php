@@ -4,16 +4,14 @@
 // _____________________________________________________ R E Q U I R E ________________________________________________________________
 
 require('../../vendor/autoload.php');
-use Michelf\Markdown;
-use Michelf\MarkdownExtra;
-
 require('../../fn/fn.php');
-require('../../class/class.w.config.php');
-require('../../class/class.w.art.php');
-require('../../class/class.w.app.php');
-require('../../class/class.w.aff.php');
-require('../../class/class.w.media.php');
-require('../../class/class.w.record.php');
+
+function my_autoloader($class)
+{
+    require('../../class/class.w.' . strtolower($class) . '.php');
+}
+spl_autoload_register('my_autoloader');
+
 
 // ________________________________________________________ I N S T A L _________________________________________________
 
@@ -173,19 +171,18 @@ if (isset($_GET['id'])) {
     $app->setbdd($config);
     if ($app->exist($_GET['id'])) {
         $art = $app->get($_GET['id']);
-        if (isset($_GET['edit']) && $_GET['edit'] == 1) {
-            $aff->arthead($art, $config->cssread(), 1);
-        } else {
-            $aff->arthead($art, $config->cssread(), 0);
+        if (!isset($_GET['edit'])) {
+            $_GET['edit'] = 0;
         }
+        $aff->arthead($art, $config->cssread(), $_GET['edit']);
     } else {
-        $aff->head($_GET['id'], 'w');
+        $aff->head($_GET['id'], '');
 
     }
 } elseif (isset($_GET['aff'])) {
     $aff->head($_GET['aff'], $_GET['aff']);
 } else {
-    $aff->head('home', 'w');
+    $aff->head('home', 'home');
 }
 
 
@@ -197,7 +194,7 @@ if (isset($_GET['id'])) {
 // _____________________________________________________ A L E R T _______________________________________________________________ 
 
 if (isset($_GET['message'])) {
-    echo '<span class="alert"><h4>' . $_GET['message'] . '</h4></span>';
+    echo '<span class="alert">' . $_GET['message'] . '</span>';
 }
 
 
@@ -221,11 +218,15 @@ if (isset($_GET['id'])) {
         $art = $app->get($_GET['id']);
 
         if (isset($_GET['edit']) and $_GET['edit'] == 1 and $app->session() >= $app::EDITOR) {
-            $aff->edit($art, $app, $app->getlister(['id', 'titre'], 'id'));
-            $aff->copy($art, $app->getlister(['id', 'titre'], 'id'));
+            echo '<section class=edit>';
+            $aff->edit($art, $app, $app->getlister(['id', 'titre']));
+            $aff->copy($art, $app->getlister(['id', 'titre']));
             $aff->aside($app);
+            echo '</section>';
         } else {
+            echo '<section class="lecture">';
             $aff->lecture($art, $app);
+            echo '</section>';
 
         }
     } else {
@@ -237,7 +238,7 @@ if (isset($_GET['id'])) {
                 header('Location: ?id=' . $_GET['id'] . '&edit=1');
             }
         } else {
-            echo '<span class="alert"><h4>This article does not exist yet</h4></span>';
+            echo '<span class="alert">This article does not exist yet</span>';
 
             if ($app->session() >= $app::EDITOR) {
                 echo '<form action="?id=' . $_GET['id'] . '&edit=1" method="post"><input type="hidden" name="action" value="new"><input type="submit" value="Create"></form>';
@@ -254,7 +255,7 @@ if (isset($_GET['id'])) {
 } elseif (isset($_GET['lien'])) {
     $app->setbdd($config);
     echo '<h4><a href="?id=' . $_GET['lien'] . '">' . $_GET['lien'] . '</a></h4>';
-    $aff->lien($app->getlister(['id', 'titre', 'intro', 'lien'], 'id'), $_GET['lien'], $app);
+    $aff->lien($app->getlister(['id', 'titre', 'intro', 'lien']), $_GET['lien'], $app);
 
 } elseif (isset($_GET['aff']) && $app->session() >= $app::EDITOR) {
     if ($_GET['aff'] == 'admin' && $app->session() >= $app::ADMIN) {
@@ -292,27 +293,49 @@ if (isset($_GET['id'])) {
 
         echo '</section>';
 
+    } elseif ($_GET['aff'] == 'map') {
+        $app->setbdd($config);
+        $aff->map($app, $config->domain());
     } else {
         header('Location: ./');
     }
 
 } else {
+
+    $aff->header();
+
+    echo '<section class="home">';
+
+
     $app->setbdd($config);
+    $opt = new Opt(Art::classvarlist());
+    $opt->hydrate($_GET);
+    $opt->setcol(['id', 'tag', 'lien', 'contenu', 'intro', 'titre', 'datemodif', 'datecreation', 'secure']);
+    $table = $app->getlisteropt($opt);
+    $app->listcalclien($table);
+    $opt->settaglist($table);
+    $opt->setcol(['id', 'tag', 'lien', 'contenu', 'intro', 'titre', 'datemodif', 'datecreation', 'secure', 'liento']);
 
-    if (isset($_GET['tri'])) {
-        $tri = strip_tags($_GET['tri']);
-    } else {
-        $tri = 'id';
+    $aff->option($app, $opt);
+
+    $filtertagor = $app->filtertagor($table, $opt->tagor());
+    $filtersecure = $app->filtersecure($table, $opt->secure());
+
+    $filter = array_intersect($filtertagor, $filtersecure);
+    $table2 = [];
+    foreach ($table as $art) {
+        if (in_array($art->id(), $filter)) {
+            $table2[] = $art;
+        }
     }
-    if (isset($_GET['desc'])) {
-        $desc = strip_tags($_GET['desc']);
-    } else {
-        $desc = 'ASC';
-    }
 
-    $aff->home2table($app, $app->getlister(['id', 'titre', 'intro', 'lien', 'datecreation', 'datemodif'], $tri, $desc));
+    $app->artlistsort($table2, $opt->sortby(), $opt->order());
 
-    //var_dump($app->getlister(['id', 'lien']));
+
+
+    $aff->home2table($app, $table2);
+
+    echo '</section>';
 
 }
 

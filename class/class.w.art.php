@@ -20,6 +20,7 @@ class Art
 	private $couleurlien;
 	private $couleurlienblank;
 	private $lien;
+	private $liento;
 	private $template;
 
 	const LEN = 255;
@@ -59,8 +60,7 @@ class Art
 		$this->setintro('resumé');
 		$this->settag('sans tag,');
 		$this->setdatecreation($now);
-		$this->setcss('section {}
-a:hover {}');
+		$this->setcss('');
 		$this->sethtml('contenu');
 		$this->setsecure(2);
 		$this->setcouleurtext('#000000');
@@ -74,27 +74,50 @@ a:hover {}');
 	public function updatelien()
 	{
 		$this->lien = search($this->md(), self::DEBUT, self::FIN);
-
 	}
+
+	public static function classvarlist()
+	{
+		$classvarlist = [];
+		foreach (get_class_vars(__class__) as $var => $default) {
+			$classvarlist[] = $var;
+		}
+		return ['artvarlist' => $classvarlist];
+	}
+
+
+
+
+	public function calcliento($getlist)
+	{
+		$liento = [];
+		foreach ($getlist as $lien) {
+			if (in_array($this->id(), $lien->lien('array'))) {
+				$liento[] = $lien->id();
+			}
+		}
+		$this->setliento($liento);
+	}
+
 
 		// _____________________________________________________ G E T ____________________________________________________
 
-	public function id()
+	public function id($type = 'string')
 	{
 		return $this->id;
 	}
 
-	public function titre()
+	public function titre($type = 'string')
 	{
 		return $this->titre;
 	}
 
-	public function soustitre()
+	public function soustitre($type = 'string')
 	{
 		return $this->soustitre;
 	}
 
-	public function intro()
+	public function intro($type = 'string')
 	{
 		return $this->intro;
 	}
@@ -102,18 +125,19 @@ a:hover {}');
 	public function tag($option)
 	{
 		if ($option == 'string') {
-			$tag = implode(", ", $this->tag);
+			return implode(", ", $this->tag);
 		} elseif ($option == 'array') {
-			$tag = $this->tag;
+			return $this->tag;
+		} elseif ($option == 'sort') {
+			return count($this->tag);
 		}
-		return $tag;
 	}
 
 	public function datecreation($option)
 	{
 		if ($option == 'string') {
 			return $this->datecreation->format('Y-m-d H:i:s');
-		} elseif ($option == 'date') {
+		} elseif ($option == 'date' || $option == 'sort') {
 			return $this->datecreation;
 		} elseif ($option == 'hrdi') {
 			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
@@ -126,7 +150,7 @@ a:hover {}');
 	{
 		if ($option == 'string') {
 			return $this->datemodif->format('Y-m-d H:i:s');
-		} elseif ($option == 'date') {
+		} elseif ($option == 'date' || $option == 'sort') {
 			return $this->datemodif;
 		} elseif ($option == 'hrdi') {
 			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
@@ -134,7 +158,7 @@ a:hover {}');
 		}
 	}
 
-	public function css()
+	public function css($type = 'string')
 	{
 		return $this->css;
 	}
@@ -166,7 +190,7 @@ a:hover {}');
 
 		foreach ($this->lien('array') as $id) {
 			$title = "Cet article n'existe pas encore";
-			foreach ($app->getlister(['id', 'intro'], 'id') as $item) {
+			foreach ($app->getlister(['id', 'intro']) as $item) {
 				if ($item->id() == $id) {
 					$title = $item->intro();
 				}
@@ -185,9 +209,16 @@ a:hover {}');
 
 	}
 
-	public function secure()
+	public function secure($type = 'int')
 	{
-		return $this->secure;
+		if ($type == 'string') {
+			if ($this->secure == 0) $secure = 'public';
+			if ($this->secure == 1) $secure = 'private';
+			if ($this->secure == 2) $secure = 'not published';
+			return $secure;
+		} else {
+			return $this->secure;
+		}
 	}
 
 	public function couleurtext()
@@ -216,15 +247,31 @@ a:hover {}');
 			$lien = implode(", ", $this->lien);
 		} elseif ($option == 'array') {
 			$lien = $this->lien;
+		} elseif ($option == 'sort') {
+			return count($this->lien);
 		}
 		return $lien;
 
 	}
 
-	public function template()
+	public function liento($option)
+	{
+		if ($option == 'string') {
+			$liento = implode(", ", $this->liento);
+		} elseif ($option == 'array') {
+			$liento = $this->liento;
+		} elseif ($option == 'sort') {
+			return count($this->liento);
+		}
+		return $liento;
+
+	}
+
+	public function template($type = 'string')
 	{
 		return $this->template;
 	}
+
 
 
 
@@ -263,7 +310,11 @@ a:hover {}');
 	{
 		if (strlen($tag) < self::LEN and is_string($tag)) {
 			$tag = strip_tags(trim(strtolower($tag)));
-			$taglist = explode(", ", $tag);
+			$tag = str_replace('*', '', $tag);
+			$tag = str_replace(' ', '', $tag);
+
+			$taglist = explode(",", $tag);
+			$taglist = array_filter($taglist);
 			$this->tag = $taglist;
 		}
 	}
@@ -348,6 +399,15 @@ a:hover {}');
 		} else {
 			$this->lien = [];
 		}
+	}
+
+	public function setliento($liento)
+	{
+		if (is_array($liento)) {
+			$this->liento = $liento;
+		}
+
+
 	}
 
 	public function settemplate($template)

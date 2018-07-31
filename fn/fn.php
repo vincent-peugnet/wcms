@@ -99,5 +99,40 @@ function hrdi(DateInterval $diff)
 }
 
 
+
+function arrayclean($input)
+{
+	$output = [];
+	foreach ($input as $key => $value) {
+		if (is_array($value)) {
+			$output[$key] = array_filter($value);
+		} else {
+			$output[$key] = $value;
+		}
+	}
+	return $output;
+}
+
+
+
+
+function array_update($base, $new)
+{
+	foreach ($base as $key => $value) {
+		if (array_key_exists($key, $new)) {
+			if (gettype($base[$key]) == gettype($new[$key])) {
+				$base[$key] = $new[$key];
+			}
+		}
+	}
+	return $base;
+}
+
+
+
+
+
+
+
 ?>
 
