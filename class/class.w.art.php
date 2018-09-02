@@ -73,7 +73,7 @@ class Art
 
 	public function updatelien()
 	{
-		$this->lien = search($this->md(), self::DEBUT, self::FIN);
+		$this->lien = search($this->md(true), self::DEBUT, self::FIN);
 	}
 
 	public static function classvarlist()
@@ -179,9 +179,14 @@ class Art
 		return $temp . $this->css;
 	}
 
-	public function md()
+	public function md($expand = false)
 	{
-		return $this->html;
+		if($expand == true) {
+			$md = str_replace('](=', '](?id=', $this->html);
+		} else {
+			$md = $this->html;
+		}
+		return $md;
 	}
 
 	public function html(App $app)
@@ -200,6 +205,7 @@ class Art
 			$html = str_replace($lien, $titlelien, $html);
 		}
 
+		$html = str_replace('href="=', 'href="?id=', $html);
 		$html = str_replace('href="http', ' class="external" target="_blank" href="http', $html);
 		$html = str_replace('<img src="/', '<img src="../media/', $html);
 		$html = str_replace('<iframe', '<div class="iframe"><div class="container"><iframe class="video" ', $html);

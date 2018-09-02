@@ -37,23 +37,50 @@ class App
 		} catch (PDOException $e) {
 			$caught = false;
 			echo '<h1>Error 500, database offline</h1>';
-			echo '<p><a href=".">Homepage for admin login</a> (connect on the top right side)</p>';
-			if ($this->session() >= 3) {
+			if ($this->session() >= self::EDITOR) {
 				echo '<p>Error : ' . $e->getMessage() . '</p>';
-				if ($this->session() == 10) {
+				if ($this->session() == self::ADMIN) {
 					echo '<p>Go to the <a href="?aff=admin">Admin Panel</a> to edit your database credentials</p>';
 				} else {
 					echo '<p>Logout and and come back with an <strong>admin password</strong> to edit the database connexions settings.</p>';
 				}
+			} else {
+				echo '<p><a href=".">Homepage for admin login</a> (connect on the top right side)</p>';
 			}
 			exit;
-		}
-		if ($caught) {
-			$this->arttable = $config->arttable();
 		}
 
 		return $caught;
 
+	}
+
+	public function settable(Config $config)
+	{
+		if (!empty($config->arttable())) {
+			$this->arttable = $config->arttable();
+		} else {
+			echo '<h1>Table Error</h1>';
+
+			if ($this->session() >= self::EDITOR) {
+				if ($this->session() == self::ADMIN) {
+					echo '<p>Go to the <a href="?aff=admin">Admin Panel</a> to select or add an Article table</p>';
+				} else {
+					echo '<p>Logout and and come back with an <strong>admin password</strong> to edit table settings.</p>';
+				}
+			} else {
+				echo '<p><a href=".">Homepage for admin login</a> (connect on the top right side)</p>';
+			}
+			$caught = false;
+			exit;
+		}
+	}
+
+	public function bddinit(Config $config)
+	{
+		$test = $this->setbdd($config);
+		if ($test) {
+			$this->settable($config);
+		}
 	}
 
 
@@ -206,7 +233,6 @@ class App
 	public function getlisteropt(Opt $opt)
 	{
 
-
 		$artlist = [];
 
 		$select = 'SELECT ' . $opt->col('string') . ' FROM ' . $this->arttable;
@@ -252,15 +278,24 @@ class App
 
 
 
-	public function filtertagor(array $artlist, array $tagchecked)
+	public function filtertagfilter(array $artlist, array $tagchecked, $tagcompare = 'OR')
 	{
 
 		$filteredlist = [];
 		foreach ($artlist as $art) {
-			if (!empty(array_intersect($art->tag('array'), $tagchecked))) {
+			if(empty($tagchecked)) {
 				$filteredlist[] = $art->id();
-			} elseif (empty($tagchecked)) {
-				$filteredlist[] = $art->id();
+			} else {
+				$inter = (array_intersect($art->tag('array'), $tagchecked));
+				if($tagcompare == 'OR') {
+					if (!empty($inter)) {
+						$filteredlist[] = $art->id();
+					}
+				} elseif($tagcompare == 'AND') {
+					if (!array_diff($tagchecked, $art->tag('array'))) {
+						$filteredlist[] = $art->id();
+					}
+				}
 			}
 		}
 		return $filteredlist;
@@ -311,9 +346,6 @@ class App
 	public function tableexist($dbname, $tablename)
 	{
 
-		var_dump($dbname);
-		var_dump($tablename);
-
 		$req = $this->bdd->prepare('SELECT COUNT(*)
 		FROM information_schema.tables
 		WHERE table_schema = :dbname AND
@@ -341,7 +373,7 @@ class App
 
 		$arttables = [];
 		foreach ($donnees as $table) {
-			$arttables[] = $table['Tables_in_wcms'];
+			$arttables[] = $table['Tables_in_' . $dbname];
 		}
 		return $arttables;
 

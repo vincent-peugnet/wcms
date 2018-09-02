@@ -11,10 +11,6 @@ body {
 }
 
 
-section {
-}
-
-
 
 
 
@@ -30,8 +26,6 @@ nav {
     right: 0;
     z-index: 10;
     background-color: var(--color1);
-    /* width: calc(10% - 20px); */
-    width: 10%;
     border: ridge 1px grey;
 }
 
@@ -56,3 +50,17 @@ nav #loginpass {
 }
 
 
+@media (max-width: 600px) {
+    body {
+        font-size: 1.3em;
+    }
+
+    input, textarea, select, button {
+        font-size: 0.8em;
+    }
+
+    nav {
+        display: none;
+    }
+    
+}

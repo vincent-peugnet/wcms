@@ -1,0 +1,12 @@
+
+@media (max-width: 600px) {
+    nav {
+        width:  unset;
+        position:  relative;
+        display: block;
+    }
+
+    div#menu {
+        display:  block;
+    }
+}

@@ -56,7 +56,8 @@ textarea#html {
 	padding-bottom: 40px;
     font-family: serif;
     padding-left:  2%;
-    padding-right: calc(50% - 500px);
+	padding-right: calc(50% - 500px);
+	resize: none;
 	
 }
 
@@ -116,5 +117,42 @@ fieldset {
 
 summary, div#linklist, div#copy, div#submit {
     border: ridge 1px grey;
+
+}
+
+
+@media (max-width: 600px) {
+    details#editinfo, details#editcss, div#copy, div#linklist {
+        display: none;
+    }
+
+
+    nav {
+        position: absolute;
+        display:  inline-flex;
+    }
+    
+    div#menu {
+        display:  block;
+    }
+    
+    div#submit {
+        position:  absolute;
+        display:  block;
+		width:  unset;
+		top: unset;
+		bottom: 0;
+	}
+
+	nav form, nav a {
+		display: inline-flex;
+		margin: 1%;
+	}
+
+	textarea#html {
+		padding-top: 60px;
+	}
+	
+
 
 }

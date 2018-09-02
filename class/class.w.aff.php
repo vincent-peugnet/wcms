@@ -162,7 +162,7 @@ class Aff
             </form>
             <div id="submit">
                     <input type="submit" name="action" value="update" accesskey="s" onclick="document.getElementById('artedit').submit();" form="artedit">
-                    <input type="submit" name="action" value="delete" onclick="confirmSubmit(event, 'Suppression de cet article', 'artedit')" form="artedit">
+                    <input type="submit" name="action" value="delete" onclick="confirmSubmit(event, 'Delete this article', 'artedit')" form="artedit">
                 </div>
 
 
@@ -197,7 +197,7 @@ public function copy(Art $art, $list)
                 <input type="checkbox" id="checkhtml" name="html" value="true">
                 <label for="checktemplate">template</label>
                 <input type="checkbox" id="checktemplate" name="template" value="true">
-                <input type="submit" value="copy" onclick="confirmSubmit(event, 'Ecraser ces valeurs')">
+                <input type="submit" value="copy" onclick="confirmSubmit(event, 'Erase values')">
             </fieldset>
         </form>
     </div>
@@ -313,13 +313,27 @@ public function header()
 
 public function home2table(App $app, $getlist)
 {
+    echo '<form action="./" method="post">';
 
+    ?>
+    <div id="massedit">
+    <select name="massedit" required>
+        <option value="delete">delete</option>
+        <option value="0">set as public</option>
+        <option value="1">set as private</option>
+        <option value="2">set as not published</option>
+    </select>
+    <input type="submit" value="submit" onclick="confirmSubmit(event, 'Are you sure')" >
+    <input type="hidden" name="action" value="massedit">
+    </div>
 
+    <?php
     if ($app->session() >= $app::EDITOR) {
         echo '<table id="home2table">';
-        echo '<tr><th>title</th><th>tag</th><th>summary</th><th>↘ to</th><th>↗ from</th><th>last modification</th><th>date of creation</th><th>privacy</th><th>⚙ edit</th></tr>';
+        echo '<tr><th>x</th><th>title</th><th>tag</th><th>summary</th><th>↘ to</th><th>↗ from</th><th>last modification</th><th>date of creation</th><th>privacy</th><th>⚙ edit</th></tr>';
         foreach ($getlist as $item) {
             echo '<tr>';
+            echo '<td><input type="checkbox" name="id[]" value='.$item->id().'></td>';
             echo '<td><a href="?id=' . $item->id() . '">' . $item->titre() . '</a></td>';
             echo '<td>' . $item->tag('sort') . '</td>';
             echo '<td>' . $item->intro() . '</td>';
@@ -332,6 +346,7 @@ public function home2table(App $app, $getlist)
             echo '</tr>';
         }
         echo ' </table> ';
+        echo ' </form> ';
     }
 }
 
@@ -340,15 +355,19 @@ public function option(App $app, Opt $opt)
     if ($app->session() >= $app::EDITOR) {
         echo '<div id="options"><form action="./" method="get" >';
 
+        echo '<input type="submit" name="submit" value="filter">';
+        echo '⬅<input type="submit" name="submit" value="reset">';
 
-        $this->optiontag($opt);
-        $this->optionprivacy($opt);
+
         $this->optionsort($opt);
+        $this->optionprivacy($opt);
+        $this->optiontag($opt);
 
 
 
 
-        echo '<input type=submit value="show">';
+        echo '<input type="submit" name="submit" value="filter">';
+        echo '⬅<input type="submit" name="submit" value="reset">';
 
         echo '</form></div>';
 
@@ -360,12 +379,33 @@ public function optiontag(Opt $opt)
 {
 
     echo '<fieldset><legend>Tag</legend><ul>';
-    foreach ($opt->taglist() as $tagor => $count) {
-        if (in_array($tagor, $opt->tagor())) {
-            echo '<li><input type="checkbox" name="tagor[]" id="' . $tagor . '" value="' . $tagor . '" checked /><label for="' . $tagor . '">' . $tagor . ' (' . $count . ')</label></li>';
-        } else {
-            echo '<li><input type="checkbox" name="tagor[]" id="' . $tagor . '" value="' . $tagor . '" /><label for="' . $tagor . '">' . $tagor . ' (' . $count . ')</label></li>';
+
+    echo '<input type="radio" id="OR" name="tagcompare" value="OR" ' . ($opt->tagcompare() == "OR" ? "checked" : "") . ' ><label for="OR">OR</label>';
+    echo '<input type="radio" id="AND" name="tagcompare" value="AND" ' . ($opt->tagcompare() == "AND" ? "checked" : "") . '><label for="AND">AND</label>';
+
+    $in = false;
+    $out = false;
+    $limit = 1;
+    foreach ($opt->taglist() as $tagfilter => $count) {
+
+        if ($count > $limit && $in == false) {
+            echo '<details open><summary>>'.$limit.'</summary>';
+            $in = true;
         }
+        if ($count == $limit && $in == true && $out == false) {
+            echo '</details><details><summary>'.$limit.'</summary>';
+            $out = true;
+        }
+
+        if (in_array($tagfilter, $opt->tagfilter())) {
+
+            echo '<li><input type="checkbox" name="tagfilter[]" id="' . $tagfilter . '" value="' . $tagfilter . '" checked /><label for="' . $tagfilter . '">' . $tagfilter . ' (' . $count . ')</label></li>';
+        } else {
+            echo '<li><input type="checkbox" name="tagfilter[]" id="' . $tagfilter . '" value="' . $tagfilter . '" /><label for="' . $tagfilter . '">' . $tagfilter . ' (' . $count . ')</label></li>';
+        }
+    }
+    if($in = true || $out = true) {
+        echo '</details>';
     }
     echo '</ul></fieldset>';
 
@@ -389,7 +429,9 @@ public function optionsort(Opt $opt)
         echo '<option value="' . $col . '" ' . ($opt->sortby() == $col ? "selected" : "") . '>' . $col . '</option>';
     }
     echo '</select>';
+    echo '</br>';
     echo '<input type="radio" id="asc" name="order" value="1" ' . ($opt->order() == '1' ? "checked" : "") . ' /><label for="asc">ascending</label>';
+    echo '</br>';
     echo '<input type="radio" id="desc" name="order" value="-1" ' . ($opt->order() == '-1' ? "checked" : "") . ' /><label for="desc">descending</label>';
 
     echo '</fieldset>';
@@ -469,7 +511,7 @@ public function nav($app)
                 echo '<a class="button" href="?id=' . $_GET['id'] . '&edit=1" >edit</a>';
             }
         }
-        if ($app->session() >= $app::EDITOR && !isset($_GET['id'])) {
+        if ($app->session() >= $app::EDITOR) {
             echo '<a class="button" href="?aff=media" >Media</a>';
             echo '<a class="button" href="?aff=record" >Record</a>';
             if ($app->session() >= $app::ADMIN) {
@@ -823,6 +865,7 @@ public function nav($app)
         <?php
 
     }
+
 
 
 

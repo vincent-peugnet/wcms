@@ -9,9 +9,9 @@ function bddconnect($host, $bdname, $user, $password)
 	return $bdd;
 }
 
-function session()
+function my_autoloader($class)
 {
-	session_start();
+    require('../../class/class.w.' . strtolower($class) . '.php');
 }
 
 function secure()
@@ -135,4 +135,3 @@ function array_update($base, $new)
 
 
 ?>
-

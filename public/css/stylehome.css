@@ -54,3 +54,41 @@ div#options {
 
 
 
+@media (max-width: 600px) {
+
+    section.home {
+        position:  relative;
+        display:  block;
+        margin: unset;
+    }
+
+    div#options {
+        position:  relative;
+        width:  unset;
+    }
+
+    header {
+        position:  relative;
+        border: none;
+    }
+
+    table#home2table {
+        display:  block;
+        position: relative;
+        width: 100%;
+        overflow-x: scroll;
+        font-size: 1em;
+    }
+    
+    nav {
+        width:  unset;
+        position:  relative;
+        display: block;
+    }
+
+    div#menu {
+        display:  block;
+    }
+
+
+}

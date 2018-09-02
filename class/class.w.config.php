@@ -99,6 +99,8 @@ class Config
 		return $this->cssread;
 	}
 
+
+
 // __________________________________________ S E T ______________________________________
 
 	public function sethost($host)
@@ -155,6 +157,7 @@ class Config
 	{
 		$this->cssread = strip_tags($cssread);
 	}
+
 
 }
 

@@ -2,8 +2,9 @@
 class Opt
 {
 	private $sortby = 'id';
-	private $order = '1';
-	private $tagor = [];
+	private $order = 1;
+	private $tagfilter = [];
+	private $tagcompare = 'OR';
 	private $secure = 4;
 	private $liento = ['min' => '0', 'max' => '0'];
 	private $lienfrom = ['min' => '0', 'max' => '0'];
@@ -65,9 +66,14 @@ class Opt
 		return $this->secure;
 	}
 
-	public function tagor($type = 'array')
+	public function tagfilter($type = 'array')
 	{
-		return $this->tagor;
+		return $this->tagfilter;
+	}
+
+	public function tagcompare()
+	{
+		return $this->tagcompare;
 	}
 
 	public function liento($type = 'array')
@@ -117,16 +123,23 @@ class Opt
 		}
 	}
 
-	public function settagor($tagor)
+	public function settagfilter($tagfilter)
 	{
-		if (is_array($tagor)) {
-			// $tagorlist = [];
-			// foreach ($tagor as $tag) {
+		if (is_array($tagfilter)) {
+			// $tagfilterlist = [];
+			// foreach ($tagfilter as $tag) {
 			// 	if (array_key_exists($tag, $this->taglist())) {
-			// 		$tagorlist[] = $tag;
+			// 		$tagfilterlist[] = $tag;
 			// 	}
 			// }
-			$this->tagor = $tagor;
+			$this->tagfilter = $tagfilter;
+		}
+	}
+
+	public function settagcompare($tagcompare)
+	{
+		if(in_array($tagcompare, ['OR', 'AND'])) {
+			$this->tagcompare = $tagcompare;
 		}
 	}
 
@@ -137,18 +150,14 @@ class Opt
 		}
 	}
 
-	public function setliento($n0, $n1)
+	public function setliento($range)
 	{
-		$stock = [intval($n1), intval($n2)];
-		$sorted = asort($stock);
-		$this->liento = ['min' => $stock[0], 'max' => $stock[1]];
+		$this->liento = $range;
 	}
 
-	public function setlienfrom($n0, $n1)
+	public function setlienfrom($range)
 	{
-		$stock = [intval($n1), intval($n2)];
-		$sorted = asort($stock);
-		$this->lienfrom = ['min' => $stock[0], 'max' => $stock[1]];
+		$this->lienfrom = $range;
 	}
 
 	public function setlientomin($min)
