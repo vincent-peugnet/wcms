@@ -7,8 +7,10 @@ class App
 
 
 	const CONFIG_FILE = '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config.json';
-	const CSS_READ_DIR = '..' . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'lecture' . DIRECTORY_SEPARATOR;
+	const CSS_READ_DIR = '..' . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'read' . DIRECTORY_SEPARATOR;
 	const SQL_READ_DIR = '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'sql' . DIRECTORY_SEPARATOR;
+	const MEDIA_DIR = '..' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR;
+	const MEDIA_EXTENSIONS = array('jpeg', 'jpg', 'JPG', 'png', 'gif', 'mp3', 'mp4', 'mov', 'wav', 'flac', 'pdf');
 
 
 	const ADMIN = 10;
@@ -207,6 +209,8 @@ class App
 
 	public function getlister(array $selection = ['id'], array $opt = [])
 	{
+		// give an array using SELECTION columns and sort and desc OPTIONS 
+
 		$default = ['tri' => 'id', 'desc' => 'DESC'];
 		$opt = array_update($default, $opt);
 
@@ -283,15 +287,15 @@ class App
 
 		$filteredlist = [];
 		foreach ($artlist as $art) {
-			if(empty($tagchecked)) {
+			if (empty($tagchecked)) {
 				$filteredlist[] = $art->id();
 			} else {
 				$inter = (array_intersect($art->tag('array'), $tagchecked));
-				if($tagcompare == 'OR') {
+				if ($tagcompare == 'OR') {
 					if (!empty($inter)) {
 						$filteredlist[] = $art->id();
 					}
-				} elseif($tagcompare == 'AND') {
+				} elseif ($tagcompare == 'AND') {
 					if (!array_diff($tagchecked, $art->tag('array'))) {
 						$filteredlist[] = $art->id();
 					}
@@ -430,12 +434,12 @@ class App
 		if (isset($file) and $file['media']['error'] == 0 and $file['media']['size'] < $maxsize) {
 			$infosfichier = pathinfo($file['media']['name']);
 			$extension_upload = $infosfichier['extension'];
-			$extensions_autorisees = array('jpeg', 'jpg', 'JPG', 'png', 'gif', 'mp3', 'mp4', 'mov', 'wav', 'flac');
+			$extensions_autorisees = $this::MEDIA_EXTENSIONS;
 			if (in_array($extension_upload, $extensions_autorisees)) {
-				if (!file_exists('..' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . $id . '.' . $extension_upload)) {
+				if (!file_exists($this::MEDIA_DIR . $id . '.' . $extension_upload)) {
 
 					$extension_upload = strtolower($extension_upload);
-					$uploadok = move_uploaded_file($file['media']['tmp_name'], '..' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . $id . '.' . $extension_upload);
+					$uploadok = move_uploaded_file($file['media']['tmp_name'], $this::MEDIA_DIR . $id . '.' . $extension_upload);
 					if ($uploadok) {
 						$message = 'uploadok';
 					} else {
@@ -455,25 +459,21 @@ class App
 	}
 
 
-	public function getmedia($entry)
+	public function getmedia($entry, $dir)
 	{
 		$fileinfo = pathinfo($entry);
 
 		$filepath = $fileinfo['dirname'] . '.' . $fileinfo['extension'];
 
-		list($width, $height, $type, $attr) = getimagesize($filepath);
-
-		echo 'filepath : ' . $filepath;
-
-		$donnes = array(
+		$donnees = array(
 			'id' => str_replace('.' . $fileinfo['extension'], '', $fileinfo['filename']),
-			'path' => $fileinfo['dirname'],
+			'path' => $dir,
 			'extension' => $fileinfo['extension']
 		);
 
 
 
-		return new Art($donnees);
+		return new Media($donnees);
 
 	}
 
@@ -483,23 +483,33 @@ class App
 			$list = [];
 			while (false !== ($entry = readdir($handle))) {
 				if ($entry != "." && $entry != "..") {
-					$fileinfo = pathinfo($entry);
 
-					$filepath = $dir . $fileinfo['filename'] . '.' . $fileinfo['extension'];
 
-					list($width, $height, $type, $attr) = getimagesize($filepath);
-					$filesize = filesize($filepath);
+					// var_dump($entry);
 
-					$donnees = array(
-						'id' => str_replace('.' . $fileinfo['extension'], '', $fileinfo['filename']),
-						'path' => $fileinfo['dirname'],
-						'extension' => $fileinfo['extension'],
-						'size' => $filesize,
-						'width' => $width,
-						'height' => $height
-					);
+					// $fileinfo = pathinfo($entry);
 
-					$list[] = new Media($donnees);
+					// var_dump($fileinfo);
+
+
+					// $filepath = $dir . $fileinfo['filename'] . '.' . $fileinfo['extension'];
+
+					// list($width, $height, $type, $attr) = getimagesize($filepath);
+					// $filesize = filesize($filepath);
+
+					// $donnees = array(
+					// 	'id' => str_replace('.' . $fileinfo['extension'], '', $fileinfo['filename']),
+					// 	'path' => dirname($entry),
+					// 	'extension' => $fileinfo['extension']
+					// );
+
+					// $media = new Media($donnees);
+
+					$media = $this->getmedia($entry, $dir);
+
+					
+					$media->analyse();
+					$list[] = $media;
 
 				}
 			}
@@ -552,17 +562,17 @@ class App
 
 	//_________________________________________________________ A D M ________________________________________________________
 
-	public function changecss($lecturecss)
-	{
-		if (file_exists(self::CONFIG_FILE)) {
-			$current = file_get_contents(self::CONFIG_FILE);
-			$current = str_replace($this->lecturecss(), $lecturecss, $current);
-			file_put_contents(self::CONFIG_FILE, $current);
-			return 'ccss_change_ok';
-		} else {
-			return 'ccss_change_error';
-		}
-	}
+	// public function changecss($lecturecss)
+	// {
+	// 	if (file_exists(self::CONFIG_FILE)) {
+	// 		$current = file_get_contents(self::CONFIG_FILE);
+	// 		$current = str_replace($this->lecturecss(), $lecturecss, $current);
+	// 		file_put_contents(self::CONFIG_FILE, $current);
+	// 		return 'css_change_ok';
+	// 	} else {
+	// 		return 'css_change_error';
+	// 	}
+	// }
 
 	public function addcss(array $file, $maxsize = 2 ** 24, $id)
 	{
@@ -574,10 +584,10 @@ class App
 			$extension_upload = $infosfichier['extension'];
 			$extensions_autorisees = array('css');
 			if (in_array($extension_upload, $extensions_autorisees)) {
-				if (!file_exists('..' . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'lecture' . DIRECTORY_SEPARATOR . $id . '.' . $extension_upload)) {
+				if (!file_exists($this::CSS_READ_DIR . $id . '.' . $extension_upload)) {
 
 					$extension_upload = strtolower($extension_upload);
-					$uploadok = move_uploaded_file($file['css']['tmp_name'], '..' . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'lecture' . DIRECTORY_SEPARATOR . $id . '.' . $extension_upload);
+					$uploadok = move_uploaded_file($file['css']['tmp_name'], $this::CSS_READ_DIR . $id . '.' . $extension_upload);
 					if ($uploadok) {
 						$message = 'uploadok';
 					} else {
@@ -594,6 +604,7 @@ class App
 		}
 
 		return $message;
+
 	}
 
 	public function dirlist($dir, $extension)

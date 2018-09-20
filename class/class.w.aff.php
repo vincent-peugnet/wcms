@@ -79,7 +79,7 @@ class Aff
                 color: <?= $art->couleurlien() ?>;
             }
             
-            section a[target="_blank"] {
+            section a.external {
                 color: <?= $art->couleurlienblank() ?>;
             }
             <?= $art->csstemplate($app) ?>
@@ -161,8 +161,10 @@ class Aff
                 <input type="hidden" name="id" value="<?= $art->id() ?>">
             </form>
             <div id="submit">
+                <a href="./">↖</a>
                     <input type="submit" name="action" value="update" accesskey="s" onclick="document.getElementById('artedit').submit();" form="artedit">
                     <input type="submit" name="action" value="delete" onclick="confirmSubmit(event, 'Delete this article', 'artedit')" form="artedit">
+                    <a href="?id=<?= $art->id() ?>" target="_blank">👁</a>
                 </div>
 
 
@@ -221,7 +223,7 @@ public function head($title, $tool)
 
 }
 
-public function arthead(Art $art, $cssread = '', $edit = 0)
+public function arthead(Art $art, $cssdir, $cssread = '', $edit = 0)
 {
     ?>
     <head>
@@ -230,7 +232,7 @@ public function arthead(Art $art, $cssread = '', $edit = 0)
         <meta name="viewport" content="width=device-width" />
         <link rel="shortcut icon" href="../media/logo.png" type="image/x-icon">
         <link href="/css/stylebase.css" rel="stylesheet" />
-        <?= $edit == 0 ? '<link href="/css/lecture/' . $cssread . '" rel="stylesheet" />' : '<link href="/css/styleedit.css" rel="stylesheet" />' ?>
+        <?= $edit == 0 ? '<link href="' . $cssdir . $cssread . '" rel="stylesheet" />' : '<link href="/css/styleedit.css" rel="stylesheet" />' ?>
         <title><?= $edit == 1 ? '✏' : '' ?> <?= $art->titre() ?></title>
         <script src="../rsc/js/app.js"></script>
     </head>
@@ -311,30 +313,50 @@ public function header()
 }
 
 
-public function home2table(App $app, $getlist)
+public function home2table(App $app, $getlist, $masslist)
 {
+    echo '<div id="main">';
+    echo '<h2>Articles</h2>';
     echo '<form action="./" method="post">';
 
     ?>
     <div id="massedit">
+        <h3>Mass Edit</h3>
     <select name="massedit" required>
+        <option value="public">set as public</option>
+        <option value="private">set as private</option>
+        <option value="not published">set as not published</option>
+        <option value="erasetag">erase all tags</option>
+        <option value="erasetemplate">erase template</option>
         <option value="delete">delete</option>
-        <option value="0">set as public</option>
-        <option value="1">set as private</option>
-        <option value="2">set as not published</option>
     </select>
-    <input type="submit" value="submit" onclick="confirmSubmit(event, 'Are you sure')" >
+
+    <input type="submit" name="massaction" value="do" onclick="confirmSubmit(event, 'Are you sure')" >
+
+    <input type="text" name="targettag" placeholder="add tag">
+    <input type="submit" name="massaction" value="add tag" onclick="confirmSubmit(event, 'Are you sure')" >
+
+    <select name="masstemplate">
+        <?php
+        foreach ($masslist as $art) {
+            echo '<option value="' . $art->id() . '">' . $art->id() . '</option>';
+        }
+        ?>
+    </select>
+
+    <input type="submit" name="massaction" value="set template" onclick="confirmSubmit(event, 'Are you sure')" >
+
     <input type="hidden" name="action" value="massedit">
     </div>
 
     <?php
     if ($app->session() >= $app::EDITOR) {
         echo '<table id="home2table">';
-        echo '<tr><th>x</th><th>title</th><th>tag</th><th>summary</th><th>↘ to</th><th>↗ from</th><th>last modification</th><th>date of creation</th><th>privacy</th><th>⚙ edit</th></tr>';
+        echo '<tr><th>x</th><th>title</th><th>tag</th><th>summary</th><th>↘ to</th><th>↗ from</th><th>last modification</th><th>date of creation</th><th>privacy</th><th>display</th></tr>';
         foreach ($getlist as $item) {
             echo '<tr>';
-            echo '<td><input type="checkbox" name="id[]" value='.$item->id().'></td>';
-            echo '<td><a href="?id=' . $item->id() . '">' . $item->titre() . '</a></td>';
+            echo '<td><input type="checkbox" name="id[]" value=' . $item->id() . '></td>';
+            echo '<td><a href="?id=' . $item->id() . '&edit=1">' . $item->titre() . '</a></td>';
             echo '<td>' . $item->tag('sort') . '</td>';
             echo '<td>' . $item->intro() . '</td>';
             echo '<td><a href="?lien=' . $item->id() . '">' . $item->liento('sort') . '</a></td>';
@@ -342,19 +364,21 @@ public function home2table(App $app, $getlist)
             echo '<td>' . $item->datemodif('hrdi') . '</td>';
             echo '<td>' . $item->datecreation('hrdi') . '</td>';
             echo '<td>' . $item->secure('string') . '</td>';
-            echo '<td><a href="?id=' . $item->id() . '&edit=1">edit</a></td>';
+            echo '<td><a href="?id=' . $item->id() . '" target="_blank">👁</a></td>';
             echo '</tr>';
         }
         echo ' </table> ';
         echo ' </form> ';
+        echo '</div>';
     }
 }
 
 public function option(App $app, Opt $opt)
 {
     if ($app->session() >= $app::EDITOR) {
-        echo '<div id="options"><form action="./" method="get" >';
-
+        echo '<div id="options">';
+        echo '<h2>Options</h2>';
+        echo '<form action="./" method="get" >';
         echo '<input type="submit" name="submit" value="filter">';
         echo '⬅<input type="submit" name="submit" value="reset">';
 
@@ -363,7 +387,12 @@ public function option(App $app, Opt $opt)
         $this->optionprivacy($opt);
         $this->optiontag($opt);
 
-
+        if ($opt->invert() == 1) {
+            echo '<input type="checkbox" name="invert" value="1" id="invert" checked>';
+        } else {
+            echo '<input type="checkbox" name="invert" value="1" id="invert">';
+        }
+        echo '<label for="invert">invert</></br>';
 
 
         echo '<input type="submit" name="submit" value="filter">';
@@ -389,11 +418,11 @@ public function optiontag(Opt $opt)
     foreach ($opt->taglist() as $tagfilter => $count) {
 
         if ($count > $limit && $in == false) {
-            echo '<details open><summary>>'.$limit.'</summary>';
+            echo '<details open><summary>>' . $limit . '</summary>';
             $in = true;
         }
         if ($count == $limit && $in == true && $out == false) {
-            echo '</details><details><summary>'.$limit.'</summary>';
+            echo '</details><details><summary>' . $limit . '</summary>';
             $out = true;
         }
 
@@ -404,7 +433,7 @@ public function optiontag(Opt $opt)
             echo '<li><input type="checkbox" name="tagfilter[]" id="' . $tagfilter . '" value="' . $tagfilter . '" /><label for="' . $tagfilter . '">' . $tagfilter . ' (' . $count . ')</label></li>';
         }
     }
-    if($in = true || $out = true) {
+    if ($in = true || $out = true) {
         echo '</details>';
     }
     echo '</ul></fieldset>';
@@ -551,51 +580,49 @@ public function nav($app)
         }
     }
 
-    public function medialist(App $app, $dir = "../media/")
+    public function medialist(array $getlistermedia, $dir)
     {
-        echo '<details open>';
-        echo '<summary>Media List</summary>';
+        ?>
+        <details open>
+        <summary>Media List</summary>
 
-        echo '<article class="gest">';
+        <form action="" method="post">
 
-        echo '<form action="" method="post">';
-
-        echo '<ul class="grid">';
-
-        foreach ($app->getlistermedia($dir) as $item) {
-            echo '<li class="little">';
-            ?>
-            <input type="checkbox" id="<?= $item->id() ?>" name="<?= $item->id() ?>" value="1">
-            <label for="<?= $item->id() ?>"><?= $item->id() ?></label>
-            <input type="hidden" name="id" value="<?= $item->id() ?>">
-
-            <?php
-
-            $filepath = $dir . DIRECTORY_SEPARATOR . $item->id() . '.' . $item->extension();
-
-            echo '<label for="' . $item->id() . '"><img class="thumbnail" src="' . $filepath . '" alt="' . $item->id() . '"></label>';
-
-            echo '<span class="infobulle">';
-            echo 'width = ' . $item->width() . ' px';
-            echo '<br/>';
-            echo 'height = ' . $item->height() . ' px';
-            echo '<br/>';
-            echo 'filesize = ' . readablesize($item->size());
-            echo '<br/>';
-
-            echo '<input type="text" value="![' . $item->id() . '](/' . $item->id() . '.' . $item->extension() . ')">';
-            echo '<br/>';
+        <table id=mediatable>
+            <tr><th>x</th><th>Name</th><th>extension</th><th>width</th><th>height</th><th>size</th><th>code</th><th>thumbnail</th></tr>
+        <?php
 
 
-            echo '<a href="' . $filepath . '" target="_blank" ><img  src="' . $filepath . '" alt="' . $item->id() . '"></a>';
-            echo '</span>';
+        foreach ($getlistermedia as $item) {
+            $filepath = $dir . $item->id() . '.' . $item->extension();
+            echo '<tr>';
+            echo '<td><input type="checkbox" name="id[]" value=' . $item->id() . ' id="' . $item->id() . '"></td>';
+            echo '<td><label for="' . $item->id() . '">' . $item->id() . '</label></td>';
+            echo '<td>' . $item->extension() . '</td>';
+            echo '<td>' . $item->width() . '</td>';
+            echo '<td>' . $item->height() . '</td>';
+            echo '<td>' . readablesize($item->size()) . '</td>';
+            if ($item->type() == 'image') {
+                echo '<td><input type="text" value="![' . $item->id() . '](/' . $item->id() . '.' . $item->extension() . ')"></td>';
+                echo '<td class="tooltip">👁<span class="infobulle"><a href="' . $filepath . '" target="_blank" ><img class="thumbnail" src="' . $filepath . '" alt="' . $item->id() . '"></a></span></td>';
+            } elseif ($item->type() == 'sound') {
+                echo '<td><input type="text" value="[' . $item->id() . '](' . $filepath . ')"></td>';
+                echo '<td><a href="' . $filepath . '" target="_blank" >♪</a></td>';
+            } else {
+                echo '<td><input type="text" value="[' . $item->id() . '](' . $filepath . ')"></td>';
+                echo '<td><a href="' . $filepath . '" target="_blank" >∞</a></td>';
+            }
+            echo '</tr>';
+            echo '';
 
-            echo '</li>';
         }
 
-        echo '</ul>';
 
         ?>
+        
+        
+        </table>
+
         <select name="action" id="">
             <option value="">compress /2</option>
             <option value="">downscale /2</option>
@@ -606,13 +633,10 @@ public function nav($app)
         </form>
         </div>
 
+        </details>
+
 
         <?php
-
-
-        echo '</article>';
-        echo '</details>';
-
 
     }
 
@@ -704,6 +728,8 @@ public function nav($app)
         <details colse>
         <summary>Default CSS</summary>
 
+        <p>This CSS will apply to all your articles.</p>
+
         <form action="?aff=admin" method="post" >
         <input type="hidden" name="action" value="editconfig">
         <select name="cssread" required>
@@ -730,7 +756,7 @@ public function nav($app)
             echo '<details>';
             echo '<summary>Edit current CSS</summary>';
             echo '<form>';
-            echo '<textarea style="height:400px;">' . $cssread . '</textarea>';
+            echo '<textarea id="cssarea">' . $cssread . '</textarea>';
             echo '<input type="submit" value="edit">';
             echo '</form>';
             echo '</details>';
@@ -764,19 +790,22 @@ public function nav($app)
         <details>
         <summary>Database credentials</summary>
 
+        <p>Fill this sections with the database settings you want to connect to</p>
+
         <form action="./" method="post">
         <input type="hidden" name="action" value="editconfig">
-        <input title="host" type="text" name="host" id="host" value="<?= $config->host() ?>" placeholder="host">
-        <input title="dbname" type="text" name="dbname" id="dbname" value="<?= $config->dbname() ?>" placeholder="dbname">
-        <input title="user" type="text" name="user" id="user" value="<?= $config->user() ?>" placeholder="user">
-        <input title="password" type="text" name="password" id="user" value="<?= $config->password() ?>" placeholder="password">
+        <label for="host">Host</label>
+        <input title="host" type="text" name="host" id="host" value="<?= $config->host() ?>">
+        <label for="dbname">DataBase name</label>
+        <input title="dbname" type="text" name="dbname" id="dbname" value="<?= $config->dbname() ?>">
+        <label for="user">User name</label>
+        <input title="user" type="text" name="user" id="user" value="<?= $config->user() ?>">
+        <label for="password">Password</label>
+        <input title="password" type="text" name="password" id="password" value="<?= $config->password() ?>">
         <input type="submit" value="edit" id="">
         </form>
 
         </details>
-
-
-        
 
 
         </article>
@@ -795,9 +824,12 @@ public function nav($app)
         <details>
         <summary>Admin</summary>
 
+        <p>Edit your own admin password. You can find it in the config.json file, in the root of your website folder.</p>
+
         <form action="./" method="post">
         <input type="hidden" name="action" value="editconfig">
-        <input title="admin password" type="password" name="admin" id="admin" value="<?= $config->admin() ?>" placeholder="admin">
+        <label for="admin">Administrator password (10)</label>
+        <input title="admin password" type="password" name="admin" id="admin" value="<?= $config->admin() ?>" >
         <input type="submit" value="edit" id="">
         </form>
 
@@ -805,11 +837,16 @@ public function nav($app)
         <details>
         <summary>Others</summary>
 
+        <p>Use this section to set all the others users passwords. They cant access this page, so they cant change it by themselves.</p>
+
         <form action="./" method="post">
         <input type="hidden" name="action" value="editconfig">
-        <input title="editor" type="text" name="editor" id="editor" value="<?= $config->editor() ?>" placeholder="editor">
-        <input title="invite" type="text" name="invite" id="invite" value="<?= $config->invite() ?>" placeholder="invite">
-        <input title="read" type="text" name="read" id="read" value="<?= $config->read() ?>" placeholder="read">
+        <label for="editor">Editor password (3)</label>
+        <input title="editor" type="text" name="editor" id="editor" value="<?= $config->editor() ?>">
+        <label for="invite">Invite password (2)</label>
+        <input title="invite" type="text" name="invite" id="invite" value="<?= $config->invite() ?>" >
+        <label for="read">Reader password (1)</label>
+        <input title="read" type="text" name="read" id="read" value="<?= $config->read() ?>">
         <input type="submit" value="edit" id="">
         </form>
 
@@ -823,9 +860,19 @@ public function nav($app)
 
     }
 
-    public function admintable(Config $config, array $arttables)
+    public function admintable(Config $config, string $status, array $arttables)
     {
         ?>
+
+        <article>
+
+            <h2>Table</h2>
+
+        
+
+        <p>Database status : <strong><?= $status ?></strong></p>
+
+
         <p>Current Table : <strong><?= $config->arttable(); ?></strong></p>
         <details>
         <summary>Select Table</summary>
@@ -857,11 +904,14 @@ public function nav($app)
 
         <form action="./" method="post">
         <input type="hidden" name="actiondb" value="addtable">
-        <input type="text" name="tablename" maxlength="30" required>
+        <input type="text" name="tablename" placeholder="table name" maxlength="30" required>
         <input type="submit" value="create">
         </form>
 
         </details>
+
+        </article>
+
         <?php
 
     }

@@ -1,61 +1,84 @@
-section {
-    padding: 0;
+article {
+    border: 1px var(--color4) solid;
+    margin: 2px;
+    padding:  2px;
+    border: ridge;
+    max-width:  700px;
+    background-color: var(--color3);
 }
 
-.infobulle {
+h1 {
+    border: ridge;
+    background-color: var(--color1);
+}
+
+h2 {
+    margin-top:  0;
+    margin-bottom: 5px;
+}
+
+
+form {
+    display: inline-grid;
+    width: 98%;
+    margin: 1%;
+}
+
+
+label {
+    font-weight: bold;
+    font-style: italic;
+}
+
+summary {
+    background-color: var(--color1);
+    border: outset;
+    font-weight: bold;
+}
+
+summary:focus {
+    outline: none;
+}
+
+details {
+    background-color: var(--color1);
+    border: 1px var(--color4) solid;
+}
+
+
+#mediatable {
+    background-color: var(--color3);
+}
+
+#mediatable tr:hover {
+    background-color: var(--color1);
+}
+
+#mediatable th {
+    background-color: var(--color1);
+    border: ridge 1px grey;
+}
+
+.tooltip span {
     display: none;
+    color: #000;
+    text-decoration: none;
+    padding: 3px;
 }
 
-.little:hover .infobulle {
-    display: inline-block;
-    position: relative;
-    background-color: white;
-    z-index: 5;
-    top: 5px;
-    width: 300px;
-    font-family: monospace;
-    font-size: 0.9em;
-    line-height: 1.1em;
+.tooltip:hover span {
+    display: block;
+    position: absolute;
+    background-color: var(--color3);
+    border: ridge;
+    margin-left: 30px;
+    margin-top: 0px;
 }
 
-span.infobulle img {
-    width: 100%;
-}
-
-.grid {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 4%;
-    margin-right: 120px;
-    list-style: none;
-
-}
-
-.little {
-    width: 100px;
-    height: 150px;
-    margin: 10px;
-    background-color: white;
-
-}
-
-.infobulle input[type="text"] {
-    font-family:  monospace;
-    font-size:  0.9em;
-    margin: 3px;
-}
 
 img.thumbnail {
     max-width: 100%;
-    max-height: 100px;
-}
-
-section.gest {
-    padding-bottom: 300px;
-}
-
-input[type="file"] {
-    font-size: 1.3em;
+    max-height: 150px;
 }
 
 input[type="checkbox"] {

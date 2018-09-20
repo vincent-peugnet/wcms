@@ -19,7 +19,7 @@ if ($app->session() >= $app::EDITOR) {
     }
     if(isset($_GET['submit']) && $_GET['submit'] == 'reset') {
         $opt = new Opt(Art::classvarlist());
-    } else {
+    } elseif(isset($_SESSION['opt'])) {
         $opt->hydrate($_SESSION['opt']);
 
     }
@@ -37,17 +37,26 @@ if ($app->session() >= $app::EDITOR) {
 
     $filter = array_intersect($filtertagfilter, $filtersecure);
     $table2 = [];
+    $table2invert = [];
     foreach ($table as $art) {
-        if (in_array($art->id(), $filter)) {
-            $table2[] = $art;
-        }
+            if (in_array($art->id(), $filter)) {
+                $table2[] = $art;
+            } else {
+                $table2invert[] = $art;
+            }
+
+        
+    }
+
+    if(!empty($opt->invert())) {
+        $table2 = $table2invert;
     }
 
     $app->artlistsort($table2, $opt->sortby(), $opt->order());
 
 
 
-    $aff->home2table($app, $table2);
+    $aff->home2table($app, $table2, $app->getlister());
 }
 
 

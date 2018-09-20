@@ -10,6 +10,7 @@ class Opt
 	private $lienfrom = ['min' => '0', 'max' => '0'];
 	private $col = ['id'];
 	private $taglist = [];
+	private $invert = 0;
 
 	private $artvarlist;
 
@@ -39,15 +40,6 @@ class Opt
 			$this->$method($default);
 		}
 	}
-
-	public function dump()
-	{
-		var_dump($this);
-	}
-
-
-
-
 
 	// _______________________________________________ G E T _______________________________________________
 
@@ -95,14 +87,19 @@ class Opt
 		}
 	}
 
-	public function artvarlist()
-	{
-		return $this->artvarlist;
-	}
-
 	public function taglist()
 	{
 		return $this->taglist;
+	}
+
+	public function invert()
+	{
+		return $this->invert;
+	}
+
+	public function artvarlist()
+	{
+		return $this->artvarlist;
 	}
 
 
@@ -126,19 +123,13 @@ class Opt
 	public function settagfilter($tagfilter)
 	{
 		if (is_array($tagfilter)) {
-			// $tagfilterlist = [];
-			// foreach ($tagfilter as $tag) {
-			// 	if (array_key_exists($tag, $this->taglist())) {
-			// 		$tagfilterlist[] = $tag;
-			// 	}
-			// }
 			$this->tagfilter = $tagfilter;
 		}
 	}
 
 	public function settagcompare($tagcompare)
 	{
-		if(in_array($tagcompare, ['OR', 'AND'])) {
+		if (in_array($tagcompare, ['OR', 'AND'])) {
 			$this->tagcompare = $tagcompare;
 		}
 	}
@@ -187,10 +178,6 @@ class Opt
 		}
 	}
 
-	public function setartvarlist(array $artvarlist)
-	{
-		$this->artvarlist = $artvarlist;
-	}
 
 	public function settaglist(array $artlist)
 	{
@@ -207,6 +194,20 @@ class Opt
 		$taglistsorted = arsort($taglist);
 		$this->taglist = $taglist;
 	}
+
+	public function setinvert(int $invert)
+	{
+		if ($invert == 0 || $invert == 1) {
+			$this->invert = $invert;
+		}
+	}
+
+
+	public function setartvarlist(array $artvarlist)
+	{
+		$this->artvarlist = $artvarlist;
+	}
+
 
 }
 

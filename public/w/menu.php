@@ -11,19 +11,22 @@ if ($app->session() >= $app::EDITOR) {
         $aff->adminpassword($config);
         $aff->admindb($config);
         if ($app->setbdd($config)) {
-        //var_dump($app->tablelist($config->dbname()));
-            echo '<p>database status : OK</p>';
+            $status = "OK";
+        } else {
+            $status = "Not Connected";
         }
-        $aff->admintable($config, $app->tablelist($config->dbname()));
+        $aff->admintable($config, $status, $app->tablelist($config->dbname()));
 
         echo '</section>';
     } elseif ($_GET['aff'] == 'media') {
         echo '<h1>Media</h1>';
         echo '<section>';
+        echo '<article>';
 
         $aff->addmedia($app);
-        $aff->medialist($app);
+        $aff->medialist($app->getlistermedia($app::MEDIA_DIR), $app::MEDIA_DIR);
 
+        echo '</article>';
         echo '</section>';
 
     } elseif ($_GET['aff'] == 'record') {
@@ -34,7 +37,11 @@ if ($app->session() >= $app::EDITOR) {
 
         echo '</section>';
 
-    } elseif ($_GET['aff'] == 'map') {
+    } elseif ($_GET['aff'] == 'info') {
+
+
+
+    } elseif ($_GET['aff'] == 'map' && $app->session() >= $app::INVITE) {
         $app->bddinit($config);
         $aff->map($app, $config->domain());
     } else {

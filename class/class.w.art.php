@@ -56,12 +56,12 @@ class Art
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
 		$this->settitre($this->id());
-		$this->setsoustitre($this->id());
-		$this->setintro('resumé');
-		$this->settag('sans tag,');
+		$this->setsoustitre('');
+		$this->setintro('');
+		$this->settag('');
 		$this->setdatecreation($now);
 		$this->setcss('');
-		$this->sethtml('contenu');
+		$this->sethtml('');
 		$this->setsecure(2);
 		$this->setcouleurtext('#000000');
 		$this->setcouleurbkg('#FFFFFF');
@@ -206,6 +206,7 @@ class Art
 		}
 
 		$html = str_replace('href="=', 'href="?id=', $html);
+		$html = str_replace('href="../media/', ' class="file" target="_blank" href="../media/', $html);
 		$html = str_replace('href="http', ' class="external" target="_blank" href="http', $html);
 		$html = str_replace('<img src="/', '<img src="../media/', $html);
 		$html = str_replace('<iframe', '<div class="iframe"><div class="container"><iframe class="video" ', $html);
@@ -314,14 +315,19 @@ class Art
 
 	public function settag($tag)
 	{
-		if (strlen($tag) < self::LEN and is_string($tag)) {
-			$tag = strip_tags(trim(strtolower($tag)));
-			$tag = str_replace('*', '', $tag);
-			$tag = str_replace(' ', '', $tag);
+		if(is_string($tag)) {
 
-			$taglist = explode(",", $tag);
-			$taglist = array_filter($taglist);
-			$this->tag = $taglist;
+			if (strlen($tag) < self::LEN and is_string($tag)) {
+				$tag = strip_tags(trim(strtolower($tag)));
+				$tag = str_replace('*', '', $tag);
+				$tag = str_replace(' ', '', $tag);
+				
+				$taglist = explode(",", $tag);
+				$taglist = array_filter($taglist);
+				$this->tag = $taglist;
+			}
+		} elseif (is_array($tag)) {
+			$this->tag = $tag;
 		}
 	}
 

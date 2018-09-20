@@ -1,39 +1,51 @@
-div#options {
-    background-color: var(--color1);
+section.home {
+    margin-top: 27px;
+    display: inline-flex;
+    width: 100%;
 }
 
-#home2table {
+div#main {
+    border:  ridge;
+    height: fit-content;
+    margin: 5px;
     background-color: var(--color3);
 }
 
-header {
-    background-color: var(--color1);
+div#options {
+    border: ridge;
+    margin:  5px;
+    background-color:  var(--color3);
+    width: 15%;
+    list-style:  none;
+    max-width:  200px;
+
 }
 
+fieldset {
+    background-color:  var(--color1);
+    border: outset;
+}
 
+legend {
+    font-weight: bold;
+}
 
-
-section.home {
-    margin-top: 20px;
-    display: inline-flex;
-    width: 100%;
+div#massedit {
+    background-color:  var(--color1);
 }
 
 header {
     position:  fixed;
     width:  100%;
-    border: ridge 1px grey;
+    border: ridge;
+    background-color:  var(--color1);
 }
 
-
-div#options {
-    width: 15%;
-    list-style:  none;
-}
-
-
-#home2table {
-    width: 85%;
+h2 {
+    font-size:  large;
+    margin: 0;
+    border:  outset;
+    background-color:  var(--color1);
 }
 
 #options ul {
@@ -42,6 +54,9 @@ div#options {
     padding:  0;
 }
 
+#home2table {
+    background-color: var(--color3);
+}
 
 #home2table tr:hover {
     background-color: var(--color1);

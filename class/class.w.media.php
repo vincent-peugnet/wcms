@@ -9,6 +9,11 @@ class Media
 	private $size;
 	private $width;
 	private $height;
+	private $length;
+
+	const IMAGE = array('jpg', 'jpeg', 'gif', 'png');
+	const SOUND = array('mp3', 'flac');
+	const VIDEO = array('mp4', 'mov', 'avi');
 
 
 
@@ -28,6 +33,24 @@ class Media
 				$this->$method($value);
 			}
 		}
+	}
+
+
+	public function analyse()
+	{
+		$this->settype();
+
+		$filepath = $this->path . $this->id . '.' . $this->extension;
+
+		$this->size = filesize($filepath);
+
+		if ($this->type == 'image') {
+			list($width, $height, $type, $attr) = getimagesize($filepath);
+			$this->width = $width;
+			$this->height = $height;
+		}
+
+
 	}
 
 
@@ -69,6 +92,11 @@ class Media
 		return $this->height;
 	}
 
+	public function length()
+	{
+		return $this->length;
+	}
+
 // ___________________________________________________ S E T __________________________________________________
 
 	public function setid($id)
@@ -92,6 +120,21 @@ class Media
 		}
 	}
 
+	public function settype()
+	{
+		if (isset($this->extension)) {
+			if (in_array($this->extension, $this::IMAGE)) {
+				$this->type = "image";
+			} elseif (in_array($this->extension, $this::SOUND)) {
+				$this->type = "sound";
+			} elseif (in_array($this->extension, $this::VIDEO)) {
+				$this->type = "video";
+			} else {
+				$this->type = "other";
+			}
+		}
+	}
+
 	public function setsize($size)
 	{
 		if (40 and is_int($size)) {
@@ -112,6 +155,14 @@ class Media
 			$this->height = strip_tags(strtolower($height));
 		}
 	}
+
+	public function setlength($length)
+	{
+		if ($this->type == 'sound') {
+			$this->length = $length;
+		}
+	}
+
 
 
 

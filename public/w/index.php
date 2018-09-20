@@ -154,24 +154,83 @@ if (isset($_POST['action'])) {
         case 'massedit':
             if (isset($_POST['id'])) {
                 foreach ($_POST['id'] as $id) {
-                    $art = new Art(['id' => $id]);
-                    if ($_POST['massedit'] == 'delete' && $app->exist($id)) {
-                        $app->delete($art);
-                    }
-                    if ($_POST['massedit'] >= 0 && $app->exist($id)) {
+                    if ($app->exist($id)) {
                         $art = $app->get($id);
-                        $art->setsecure($_POST['massedit']);
-                        $app->update($art);
+
+                        switch ($_POST['massaction']) {
+                            case 'do':
+                                switch ($_POST['massedit']) {
+                                    case 'delete':
+                                        $app->delete($art);
+                                        break;
+
+                                    case 'erasetag':
+                                        $art->settag('');
+                                        $app->update($art);
+                                        break;
+
+                                    case 'erasetemplate':
+                                        $art->settemplate('');
+                                        $app->update($art);
+                                        break;
+
+                                    case 'not published':
+                                        $art->setsecure(2);
+                                        $app->update($art);
+                                        break;
+
+                                    case 'private':
+                                        $art->setsecure(1);
+                                        $app->update($art);
+                                        break;
+
+                                    case 'public':
+                                        $art->setsecure(0);
+                                        $app->update($art);
+                                        break;
+                                }
+                                break;
+
+                            case 'set template':
+                                if (isset($_POST['masstemplate'])) {
+                                    $art->settemplate($_POST['masstemplate']);
+                                    $app->update($art);
+                                }
+                                break;
+
+                            case 'add tag':
+                                if (isset($_POST['targettag'])) {
+                                    $art = $app->get($id);
+                                    $tagstring = strip_tags(trim(strtolower($_POST['targettag'])));
+                                    $taglist = str_replace(' ', '', $tagstring);
+                                    $taglist = explode(",", $taglist);
+                                    foreach ($taglist as $tag) {
+                                        if (!in_array($tag, $art->tag('array'))) {
+                                            $newtaglist = $art->tag('array');
+                                            array_push($newtaglist, $tag);
+                                            $art->settag($newtaglist);
+                                        }
+                                    }
+                                    $app->update($art);
+                                }
+                                break;
+
+                        }
+
+                       
+
+
                     }
                     header('Location: ./');
                 }
-
+                break;
             }
-            break;
-
     }
-
 }
+
+
+
+
 
 if (isset($_POST['actiondb'])) {
     $app->setbdd($config);
@@ -200,7 +259,7 @@ if (isset($_GET['id'])) {
         if (!isset($_GET['edit'])) {
             $_GET['edit'] = 0;
         }
-        $aff->arthead($art, $config->cssread(), $_GET['edit']);
+        $aff->arthead($art, $app::CSS_READ_DIR, $config->cssread(), $_GET['edit']);
     } else {
         $aff->head($_GET['id'], '');
 
@@ -235,15 +294,13 @@ if (isset($_GET['message'])) {
 
 $aff->nav($app);
 
-
-
 if (array_key_exists('id', $_GET)) {
     $app->bddinit($config);
     include('article.php');
 } elseif (array_key_exists('tag', $_GET)) {
     $app->bddinit($config);
     echo '<h4>' . $_GET['tag'] . '</h4>';
-    $aff->tag($app->getlister(['id', 'titre', 'intro', 'tag'], 'id'), $_GET['tag'], $app);
+    $aff->tag($app->getlister(['id', 'titre', 'intro', 'tag']), $_GET['tag'], $app);
 } elseif (array_key_exists('lien', $_GET)) {
     $app->bddinit($config);
     echo '<h4><a href="?id=' . $_GET['lien'] . '">' . $_GET['lien'] . '</a></h4>';

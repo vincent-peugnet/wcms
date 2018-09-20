@@ -17,8 +17,15 @@ The project is ispired by the *web publishing function* in *google docs* that cr
 There is 3 levels of privacy :
 
 0. public
-1. resctricted by reader code (read only)
-2. non published : admin only
+1. reader : resctricted by reader code (read only)
+2. non published : editor and admin only
+
+And 4 levels of users :
+
+1. Reader
+2. Invite
+3. Editor
+4. Administrator
 
 [Webpage of the project (in french)](http://vincent.club1.fr/w/?id=w)
 

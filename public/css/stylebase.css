@@ -1,13 +1,14 @@
 :root {
     --color1: lightgrey;
     --color2: lightslategrey;
-    --color3: white;
+    --color3: #ececec;
     --color4: grey;
 }
 
 body {
     margin: 0;
     font-family: monospace;
+    background-color: var(--color4);
 }
 
 
@@ -26,7 +27,7 @@ nav {
     right: 0;
     z-index: 10;
     background-color: var(--color1);
-    border: ridge 1px grey;
+    border: ridge;
 }
 
 div#menu {
@@ -42,7 +43,7 @@ nav a {
 }
 
 nav a:hover {
-    background-color: var(--color2);
+    background-color: var(--color3);
 }
 
 nav #loginpass {
