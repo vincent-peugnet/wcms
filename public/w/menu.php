@@ -16,6 +16,7 @@ if ($app->session() >= $app::EDITOR) {
             $status = "Not Connected";
         }
         $aff->admintable($config, $status, $app->tablelist($config->dbname()));
+        $aff->admindisplay($config->color4());
 
         echo '</section>';
     } elseif ($_GET['aff'] == 'media') {

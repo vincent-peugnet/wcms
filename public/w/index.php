@@ -82,11 +82,15 @@ if (isset($_POST['action'])) {
             header('Location: ./?aff=admin&message=' . $message);
             break;
 
+        case 'editcss':
+            file_put_contents($app::CSS_READ_DIR . $config->cssread(), $_POST['editcss']);
+            header('Location: ./?aff=admin');
+            break;
+
         case 'editconfig':
             $config->hydrate($_POST);
             $app->savejson($config->tojson());
             header('Location: ./?aff=admin');
-
             break;
 
 
@@ -244,6 +248,11 @@ if (isset($_POST['actiondb'])) {
             }
             break;
 
+        case 'duplicatetable':
+            $message = $app->tableduplicate($config->dbname(), $_POST['arttable'], $_POST['tablename']);
+            header('Location: ./?aff=admin&message=' . $message);            
+            break;
+
     }
 }
 
@@ -261,13 +270,14 @@ if (isset($_GET['id'])) {
         }
         $aff->arthead($art, $app::CSS_READ_DIR, $config->cssread(), $_GET['edit']);
     } else {
-        $aff->head($_GET['id'], '');
+        // $aff->head($_GET['id'], '', 'white');
+        $aff->noarthead($_GET['id'], $app::CSS_READ_DIR, $config->cssread());
 
     }
 } elseif (isset($_GET['aff'])) {
-    $aff->head($_GET['aff'], $_GET['aff']);
+    $aff->head($_GET['aff'], $_GET['aff'], $config->color4());
 } else {
-    $aff->head('home', 'home');
+    $aff->head('home', 'home', $config->color4());
 }
 
 

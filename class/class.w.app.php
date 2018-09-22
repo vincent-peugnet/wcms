@@ -409,13 +409,33 @@ class App
 			`template` varchar(255) DEFAULT NULL
 		  )";
 
-			$alter = "ALTER TABLE `'.$tablename.'`
+			$alter = "ALTER TABLE `$tablename`
 			ADD PRIMARY KEY (`id`)";
 
 			$req = $this->bdd->query($table);
-			$req->closeCursor();
+			$req = $this->bdd->query($alter);
 
 			return 'tablecreated';
+		} else {
+			return 'tablealreadyexist';
+		}
+	}
+
+
+
+	public function tableduplicate($dbname, $arttable, $tablename)
+	{
+		$arttable = strip_tags($arttable);
+		$tablename = str_clean($tablename);
+		if($this->tableexist($dbname, $arttable) && !$this->tableexist($dbname, $tablename)) {
+			$duplicate = " CREATE TABLE `$tablename` LIKE `$arttable`;";
+			$alter = "ALTER TABLE `$tablename` ADD PRIMARY KEY (`id`);";
+			$insert = "INSERT `$tablename` SELECT * FROM `$arttable`;";
+
+			
+			$req = $this->bdd->query($duplicate . $alter . $insert);
+
+			return 'tableduplicated';
 		} else {
 			return 'tablealreadyexist';
 		}

@@ -15,6 +15,7 @@ class Config
 	private $invite;
 	private $read;
 	private $cssread;
+	private $color4;
 
 
 // _______________________________________ F U N _______________________________________
@@ -99,6 +100,11 @@ class Config
 		return $this->cssread;
 	}
 
+	public function color4()
+	{
+		return $this->color4;
+	}
+
 
 
 // __________________________________________ S E T ______________________________________
@@ -156,6 +162,13 @@ class Config
 	public function setcssread($cssread)
 	{
 		$this->cssread = strip_tags($cssread);
+	}
+
+	public function setcolor4($color4)
+	{
+		if(strlen($color4) <= 8) {
+			$this->color4 = $color4;
+		}
 	}
 
 

@@ -207,7 +207,7 @@ public function copy(Art $art, $list)
 
 }
 
-public function head($title, $tool)
+public function head($title, $tool, $color4)
 {
     ?>
     <head>
@@ -216,6 +216,11 @@ public function head($title, $tool)
         <link rel="shortcut icon" href="../media/logo.png" type="image/x-icon">
         <link href="/css/stylebase.css" rel="stylesheet" />
         <link href="/css/style<?= $tool ?>.css" rel="stylesheet" />
+        <style>
+            :root {
+                --color4: <?= $color4 ?>;
+            }
+        </style>
         <title><?= $title ?></title>
         <script src="../rsc/js/app.js"></script>
     </head>
@@ -234,6 +239,23 @@ public function arthead(Art $art, $cssdir, $cssread = '', $edit = 0)
         <link href="/css/stylebase.css" rel="stylesheet" />
         <?= $edit == 0 ? '<link href="' . $cssdir . $cssread . '" rel="stylesheet" />' : '<link href="/css/styleedit.css" rel="stylesheet" />' ?>
         <title><?= $edit == 1 ? '✏' : '' ?> <?= $art->titre() ?></title>
+        <script src="../rsc/js/app.js"></script>
+    </head>
+    <?php
+
+}
+
+public function noarthead($id, $cssdir, $cssread = '')
+{
+    ?>
+    <head>
+        <meta charset="utf8" />
+        <meta name="description" content="This article does not exist yet." />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="shortcut icon" href="../media/logo.png" type="image/x-icon">
+        <link href="/css/stylebase.css" rel="stylesheet" />
+        <link href="<?= $cssdir . $cssread ?>" rel="stylesheet" />
+        <title>❓ <?= $id ?></title>
         <script src="../rsc/js/app.js"></script>
     </head>
     <?php
@@ -755,8 +777,9 @@ public function nav($app)
             $cssread = file_get_contents($cssfile);
             echo '<details>';
             echo '<summary>Edit current CSS</summary>';
-            echo '<form>';
-            echo '<textarea id="cssarea">' . $cssread . '</textarea>';
+            echo '<form action="./" method="post">';
+            echo '<textarea name="editcss" id="cssarea">' . $cssread . '</textarea>';
+            echo '<input type="hidden" name="action" value="editcss">';
             echo '<input type="submit" value="edit">';
             echo '</form>';
             echo '</details>';
@@ -910,8 +933,60 @@ public function nav($app)
 
         </details>
 
+        <details>
+            <summary>Duplicate Table</summary>
+        <p>If you want to save versions of your work.</p>
+
+        <form action="./" method="post">
+        <label for="arttable">Select the table you want to copy.</label>
+        <select name="arttable" id="arttable" required>
+
+        <?php
+        foreach ($arttables as $arttable) {
+            if ($arttable == $config->arttable()) {
+                echo '<option value="' . $arttable . '" " selected >' . $arttable . '</option>';
+            } else {
+                echo '<option value="' . $arttable . '">' . $arttable . '</option>';
+            }
+        }
+        ?>
+        </select>
+        <label for="tablename">Choose a name for the copy</label>
+        <input type="text" name="tablename" id="tablename" required>
+        <input type="hidden" name="actiondb" value="duplicatetable">
+        <input type="submit" value="Duplicate">
+        </form>
+
+        </details>
+
         </article>
 
+        <?php
+
+    }
+
+    public function admindisplay($color4)
+    {
+        ?>
+        <article>
+        <h2>Display</h2>
+        <details>
+            <summary>Update favicon</summary>
+        <form action="./" method="post"  enctype="multipart/form-data">
+            <input type="file" name="favicon" id="favicon">
+            <input type="submit" value="update">
+        </form>
+        </details>
+        <details>
+            <summary>Change desktop background color</summary>
+            <form action="./" method="post">
+            <label for="color4">Background color</label>
+            <input type="color" name="color4" id="color4" value="<?= $color4 ?>">
+            <input type="hidden" name="action" value="editconfig">
+            <input type="submit" value="color my life">
+            </form>
+        </details>
+        </article>
         <?php
 
     }
