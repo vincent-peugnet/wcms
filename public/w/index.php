@@ -118,8 +118,42 @@ if (isset($_POST['action'])) {
         case 'update':
             if ($app->exist($_GET['id'])) {
                 $art = new Art($_POST);
+                $art->updatelien();
+                $art->autotaglistcalc($app->taglist($app->getlister(['id', 'titre', 'tag']), $art->autotaglist()));
                 $app->update($art);
-                header('Location: ?id=' . $art->id() . '&edit=1');
+                if($config->fontsize() != $_POST['fontsize']) {
+                    $config->setfontsize($_POST['fontsize']);
+                    $app->savejson($config->tojson());
+                }
+                header('Location: ?id=' . $art->id() . '&edit=1&message='.$art->id().'_saved');
+            }
+            break;
+
+        case 'display':
+            if ($app->exist($_GET['id'])) {
+                $art = new Art($_POST);
+                $art->updatelien();
+                $art->autotaglistcalc($app->taglist($app->getlister(['id', 'titre', 'tag']), $art->autotaglist()));
+                $app->update($art);
+                if($config->fontsize() != $_POST['fontsize']) {
+                    $config->setfontsize($_POST['fontsize']);
+                    $app->savejson($config->tojson());
+                }
+                header('Location: ?id=' . $art->id().'&message='.$art->id().'_saved');
+            }
+            break;
+
+        case 'home':
+            if ($app->exist($_GET['id'])) {
+                $art = new Art($_POST);
+                $art->updatelien();
+                $art->autotaglistcalc($app->taglist($app->getlister(['id', 'titre', 'tag']), $art->autotaglist()));
+                $app->update($art);
+                if($config->fontsize() != $_POST['fontsize']) {
+                    $config->setfontsize($_POST['fontsize']);
+                    $app->savejson($config->tojson());
+                }
+                header('Location: ./?message='.$art->id().'_saved');
             }
             break;
 

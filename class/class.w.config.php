@@ -16,6 +16,7 @@ class Config
 	private $read;
 	private $cssread;
 	private $color4;
+	private $fontsize = 6;
 
 
 // _______________________________________ F U N _______________________________________
@@ -105,6 +106,11 @@ class Config
 		return $this->color4;
 	}
 
+	public function fontsize()
+	{
+		return $this->fontsize;
+	}
+
 
 
 // __________________________________________ S E T ______________________________________
@@ -168,6 +174,14 @@ class Config
 	{
 		if(strlen($color4) <= 8) {
 			$this->color4 = $color4;
+		}
+	}
+
+	public function setfontsize($fontsize)
+	{
+		$fontsize = intval($fontsize);
+		if($fontsize > 1) {
+			$this->fontsize = $fontsize;
 		}
 	}
 

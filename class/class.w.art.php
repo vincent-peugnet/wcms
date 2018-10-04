@@ -73,7 +73,9 @@ class Art
 
 	public function updatelien()
 	{
-		$this->lien = search($this->md(true), self::DEBUT, self::FIN);
+		$this->lien = [];
+		$this->lien = array_unique(search($this->md(true), self::DEBUT, self::FIN));
+
 	}
 
 	public static function classvarlist()
@@ -97,6 +99,38 @@ class Art
 			}
 		}
 		$this->setliento($liento);
+	}
+
+
+	public function autotaglist()
+	{
+		$pattern = "/%%(\w*)%%/";
+		preg_match_all($pattern, $this->md(), $out);
+		return $out[1];
+
+	}
+
+	public function autotaglistupdate($taglist)
+	{
+		foreach ($taglist as $tag => $artlist) {
+			$replace = '<ul>';
+			foreach ($artlist as $art) {
+				$replace .= '<li><a href="?id=' . $art->id() . '" title="' . $art->intro() . '">' . $art->titre() . '</a></li>';
+			}
+			$replace .= '</ul>';
+			$this->html = str_replace('%%' . $tag . '%%', $replace, $this->html);
+		}
+	}
+
+	public function autotaglistcalc($taglist)
+	{
+		foreach ($taglist as $tag => $artlist) {
+			foreach ($artlist as $art) {
+				if(!in_array($art->id(), $this->lien('array')) && $art->id() != $this->id()) {
+					$this->lien[] = $art->id();
+				}
+			}
+		}
 	}
 
 
@@ -181,7 +215,7 @@ class Art
 
 	public function md($expand = false)
 	{
-		if($expand == true) {
+		if ($expand == true) {
 			$md = str_replace('](=', '](?id=', $this->html);
 		} else {
 			$md = $this->html;
@@ -192,6 +226,7 @@ class Art
 	public function html(App $app)
 	{
 		$html = Markdown::defaultTransform($this->html);
+		$html = str_replace('href="=', 'href="?id=', $html);
 
 		foreach ($this->lien('array') as $id) {
 			$title = "Cet article n'existe pas encore";
@@ -205,7 +240,10 @@ class Art
 			$html = str_replace($lien, $titlelien, $html);
 		}
 
-		$html = str_replace('href="=', 'href="?id=', $html);
+
+
+		$html = str_replace('%TITLE%', $this->titre(), $html);
+		$html = str_replace('%DESCRIPTION%', $this->intro(), $html);
 		$html = str_replace('href="../media/', ' class="file" target="_blank" href="../media/', $html);
 		$html = str_replace('href="http', ' class="external" target="_blank" href="http', $html);
 		$html = str_replace('<img src="/', '<img src="../media/', $html);
@@ -315,13 +353,13 @@ class Art
 
 	public function settag($tag)
 	{
-		if(is_string($tag)) {
+		if (is_string($tag)) {
 
 			if (strlen($tag) < self::LEN and is_string($tag)) {
 				$tag = strip_tags(trim(strtolower($tag)));
 				$tag = str_replace('*', '', $tag);
 				$tag = str_replace(' ', '', $tag);
-				
+
 				$taglist = explode(",", $tag);
 				$taglist = array_filter($taglist);
 				$this->tag = $taglist;

@@ -94,84 +94,196 @@ class Aff
         }
     }
 
-    public function edit(Art $art, App $app, $list)
+    public function edit(Art $art, App $app, $list, $fontsize, $imagelist)
     {
+
         if ($app->session() >= self::$edit) {
 
             ?>
                    
             <form action="?id=<?= $art->id() ?>" method="post" id="artedit">
-            <textarea style="background-color: <?= $art->couleurbkg() ?>; color: <?= $art->couleurtext() ?>;" name="html" id="html" spellcheck="true" autofocus><?= $art->md(); ?></textarea>
 
+            <?php
+            echo '<style>textarea{font-size: ' . $fontsize . '}</style>';
+            $tablist = ['html' => $art->md(), 'css' => $art->css(), 'aside' => 'NOT WORKING', 'footer' => 'NOT WORKING'];
 
-                <details id="editinfo" close>
-                    <summary>Infos</summary>
-                    <fieldset>                        
-                        <label for="titre">Titre :</label>
-                        <input type="text" name="titre" id="titre" value="<?= $art->titre(); ?>">
-                        <label for="soustitre">Sous-titre :</label>
-                        <input type="text" name="soustitre" id="soustitre" value="<?= $art->soustitre(); ?>">
-                        <label for="intro">Introduction :</label>
-                        <input type="text" name="intro" id="intro" value="<?= $art->intro(); ?>">
-                        <label for="tag">Tag(s) :</label>
-                        <input type="text" name="tag" id="tag" value="<?= $art->tag('string'); ?>">
-                        <label for="secure">Niveau de sécurité :</label>
-                        <select name="secure" id="secure">
-                            <option value="0" <?= $art->secure() == 0 ? 'selected' : '' ?>>0</option>
-                            <option value="1" <?= $art->secure() == 1 ? 'selected' : '' ?>>1</option>
-                            <option value="2" <?= $art->secure() == 2 ? 'selected' : '' ?>>2</option>
-                        </select>
-                    </fieldset>
-                </details>
-                <details id="editcss" close>
-                    <summary>CSS</summary>
-                    <fieldset>
-                    <label for="template">Template :</label>
-                        <select name="template" id="template">
-                            <?php
-                            if ($art->template() == 'NULL') {
-                                echo '<option value="" selected >Sans template</option>';
-                            } else {
-                                echo '<option value="" >sans template</option>';
-                            }
-                            foreach ($list as $item) {
+            $this->tabs($tablist, 'html');
 
-                                if ($item->id() == $art->template()) {
-                                    echo '<option value="' . $item->id() . '" selected >' . $item->titre() . '</option>';
+            ?>
+
+                <div id="submit">
+                        <input type="submit" name="action" value="home" accesskey="w" onclick="document.getElementById('artedit').submit();" form="artedit">
+                        <input type="submit" name="action" value="update" accesskey="x" onclick="document.getElementById('artedit').submit();" form="artedit">
+                        <input type="submit" name="action" value="display" accesskey="c" onclick="document.getElementById('artedit').submit();" form="artedit">
+                        <input type="submit" name="action" value="delete" onclick="confirmSubmit(event, 'Delete this article', 'artedit')" form="artedit">
+                        <a href="?id=<?= $art->id() ?>" target="_blank">👁</a>
+
+                        <span id="headid"><?= $art->id() ?></span>
+
+                        <label for="fontsize">Font-size</label>
+                        <input type="number" name="fontsize" value="<?= $fontsize ?>" id="fontsize">
+                    </div>
+                <div class="sidebar">
+                    <details id="editinfo" open>
+                        <summary>Infos</summary>
+                        <fieldset>                        
+                            <label for="titre">Titre :</label>
+                            <input type="text" name="titre" id="titre" value="<?= $art->titre(); ?>">
+                            <label for="soustitre">Sous-titre :</label>
+                            <input type="text" name="soustitre" id="soustitre" value="<?= $art->soustitre(); ?>">
+                            <label for="intro">Introduction :</label>
+                            <input type="text" name="intro" id="intro" value="<?= $art->intro(); ?>">
+                            <label for="tag">Tag(s) :</label>
+                            <input type="text" name="tag" id="tag" value="<?= $art->tag('string'); ?>">
+                            <label for="secure">Niveau de sécurité :</label>
+                            <select name="secure" id="secure">
+                                <option value="0" <?= $art->secure() == 0 ? 'selected' : '' ?>>0</option>
+                                <option value="1" <?= $art->secure() == 1 ? 'selected' : '' ?>>1</option>
+                                <option value="2" <?= $art->secure() == 2 ? 'selected' : '' ?>>2</option>
+                            </select>
+                            <label for="template">Template :</label>
+                            <select name="template" id="template">
+                                <?php
+                                if ($art->template() == 'NULL') {
+                                    echo '<option value="" selected >No template</option>';
                                 } else {
-                                    echo '<option value="' . $item->id() . '">' . $item->titre() . '</option>';
+                                    echo '<option value="" >No template</option>';
+                                }
+                                foreach ($list as $item) {
+
+                                    if ($item->id() == $art->template()) {
+                                        echo '<option value="' . $item->id() . '" selected >' . $item->titre() . '</option>';
+                                    } else {
+                                        echo '<option value="' . $item->id() . '">' . $item->titre() . '</option>';
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </fieldset>
+                    </details>
+                    <details>
+                        <summary>Advanced</summary>
+                            <fieldset>
+                            <h3>Template options</h3>
+                            <p>NOT WORKING</p>
+                            <ul>
+                            <?php
+
+                            $templatelist = ['header' => 0, 'section' => 0, 'nav' => 0, 'aside' => 0, 'footer' => 0, 'quickcss' => 1, 'css' => 1];
+
+                            foreach ($templatelist as $template => $check) {
+                                if($check == 1) {
+                                    echo '<li><input type="checkbox" name="template'.$template.'" id="template'.$template.'" checked><label for="template'.$template.'">'.$template.'</label></li>';
+                                } else {
+                                    echo '<li><input type="checkbox" name="template'.$template.'" id="template'.$template.'"><label for="template'.$template.'">'.$template.'</label></li>';
                                 }
                             }
-                            ?>
-                    </select>
-                    <label for="css">Styles CSS :</label>
-                    <textarea name="css" id="css"><?= $art->css(); ?></textarea>
-                    <label for="couleurtext">Couleur du texte :</label>
-                    <input type="color" name="couleurtext" value="<?= $art->couleurtext() ?>" id="couleurtext">
-                    <label for="couleurbkg">Couleur de l'arrière plan :</label>
-                    <input type="color" name="couleurbkg" value="<?= $art->couleurbkg() ?>" id="couleurbkg">
-                    <label for="couleurlien">Couleur des liens :</label>
-                    <input type="color" name="couleurlien" value="<?= $art->couleurlien() ?>" id="couleurlien">
-                    <label for="couleurlienblank">Couleur des liens externes :</label>
-                    <input type="color" name="couleurlienblank" value="<?= $art->couleurlienblank() ?>" id="couleurlienblank">
-                </fieldset>
-                </details>
+                            ?>                    
+                            </ul>
+                            </fieldset>
+                    </details>
+                    <details id="editcss" open>
+                        <summary>Quick CSS</summary>
+                        <fieldset>
 
-                <input type="hidden" name="datecreation" value="<?= $art->datecreation('string'); ?>">
-                <input type="hidden" name="id" value="<?= $art->id() ?>">
-            </form>
-            <div id="submit">
-                <a href="./">↖</a>
-                    <input type="submit" name="action" value="update" accesskey="s" onclick="document.getElementById('artedit').submit();" form="artedit">
-                    <input type="submit" name="action" value="delete" onclick="confirmSubmit(event, 'Delete this article', 'artedit')" form="artedit">
-                    <a href="?id=<?= $art->id() ?>" target="_blank">👁</a>
+                        <?php
+                        $colorlist = ['text' => $art->couleurtext(), 'lien' => $art->couleurlien(), 'lienblank' => $art->couleurlienblank(), 'bkg' => $art->couleurbkg()];
+                        foreach ($colorlist as $element => $color) {
+                            echo '<label for="couleur'.$element.'">Couleur du '.$element.' :</label><input type="color" name="couleur'.$element.'" value="'.$color.'" id="couleur'.$element.'">';
+                        }
+
+                        
+
+                        ?>
+
+                        <label for="bkgimage">NOT WORKING</label>
+                        <select name="bkgimage" id="bkgimage">
+                        <?php
+
+                        $artbkgimage = "NULL";
+
+                        if ($artbkgimage == 'NULL') {
+                            echo '<option value="" selected >No background image</option>';
+                        } else {
+                            echo '<option value="" >No background image</option>';
+                        }
+                        foreach ($imagelist as $image) {
+                            if ($image->id() == $artbkgimage) {
+                                echo '<option value="' . $image->id() . '.'.$image->extension().'" selected >' . $image->id() . '.'.$image->extension().'</option>';
+                            } else {
+                                echo '<option value="' . $image->id() . '.'.$image->extension().'">' . $image->id() . '.'.$image->extension().'</option>';
+                            }
+                        }
+                        ?>
+                        </select>
+
+                        </fieldset>
+                    </details>
+                    <details>
+                        <summary>Help</summary>
+                        <div id="help">
+                            <h2>Help !</h2>
+                            <p>To save your article, clic on the HOME, UPDATE, or DISPLAY buttons. You can use the keyboard shortcuts as well.</p>
+                            <pre><span class="i">ALT + W</span> : home</pre>
+                            <pre><span class="i">ALT + X</span> : update</pre>
+                            <pre><span class="i">ALT + C</span> : display</pre>
+                            <h3>Markdown</h3>
+                            <p>The html section use Markdown encoding : <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">synthax</a>. But the following strategies are specific to W.</p>
+                            <h3>Links</h3>
+                            <pre>[text](=<span class="i">article_id</span>)</pre>
+                            <p>where article_id is the article's id you want to point to.</p>
+                            <h3>Images</h3>
+                            <pre>[altimage](/<span class="i">img_id.extension</span>)</pre>
+                            <p>Where img_id is the id of your image and its extension.</p>
+                            <h3>Tricks</h3>
+                            <pre>%TITLE%</pre>
+                            <p>Show the title of your article.</p>
+                            <pre>%DESCRIPTION%</pre>
+                            <p>Show the description (intro) of your article.</p>
+                            <pre>%%<span class="i">tag_name</span>%%</pre>
+                            <p>Generate a list of links to all articles under this tag.</p>
+                            <p>vv</p>
+                            <p>vv</p>
+                            <p>vv</p>
+                            <p></p>
+                        </div>
+                    </details>
+
+
                 </div>
+
+
+                    <input type="hidden" name="datecreation" value="<?= $art->datecreation('string'); ?>">
+                    <input type="hidden" name="id" value="<?= $art->id() ?>">
+
+            </form>
 
 
     <?php
 
 }
 
+}
+
+
+public function tabs($tablist, $opentab)
+{
+    echo '<div class="tabs">';
+    foreach ($tablist as $key => $value) {
+        echo '<div class="tab">';
+        if ($key == $opentab) {
+            echo '<input name="checkbox-tabs-group" type="radio" id="tab' . $key . '" class="checkboxtab" checked>';
+        } else {
+            echo '<input name="checkbox-tabs-group" type="radio" id="tab' . $key . '" class="checkboxtab">';
+        }
+        echo '<label for="tab' . $key . '">' . $key . '</label>';
+        echo '<div class="content">';
+        echo '<textarea name="' . $key . '" id="' . $key . '" >' . $value . '</textarea>';
+        echo '</div>';
+        echo '</div>';
+    }
+
+    echo '</div>';
 }
 
 

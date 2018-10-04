@@ -5,14 +5,32 @@
     --color4: grey;
 }
 
+
+@keyframes alert {
+    from {top: 30px;}
+    to {top: -50px;}
+}
+
 body {
     margin: 0;
-    font-family: monospace;
+    font-family: sans-serif;
     background-color: var(--color4);
 }
 
 
-
+span.alert {
+    position: fixed;
+    background-color: var(--color1);
+    z-index: 100;
+    border: ridge red;
+    width: 200px;
+    text-align: center;
+    padding: 5px;
+    top: 30px;
+    font-weight: bold;
+    left: calc(50% - 100px);
+    animation: alert 1s linear 2s forwards;
+}
 
 
 form{

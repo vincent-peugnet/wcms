@@ -11,6 +11,7 @@ class App
 	const SQL_READ_DIR = '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'sql' . DIRECTORY_SEPARATOR;
 	const MEDIA_DIR = '..' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR;
 	const MEDIA_EXTENSIONS = array('jpeg', 'jpg', 'JPG', 'png', 'gif', 'mp3', 'mp4', 'mov', 'wav', 'flac', 'pdf');
+	const MEDIA_TYPES = ['image', 'video', 'sound', 'other'];
 
 
 	const ADMIN = 10;
@@ -176,7 +177,6 @@ class App
 	public function update(Art $art)
 	{
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
-		$art->updatelien();
 
 		$q = $this->bdd->prepare('UPDATE ' . $this->arttable . ' SET titre = :titre, soustitre = :soustitre, intro = :intro, tag = :tag, datecreation = :datecreation, datemodif = :datemodif, css = :css, html = :html, secure = :secure, couleurtext = :couleurtext, couleurbkg = :couleurbkg, couleurlien = :couleurlien, couleurlienblank = :couleurlienblank, lien = :lien, template = :template WHERE id = :id');
 
@@ -326,7 +326,26 @@ class App
 		$req->closeCursor();
 		return $donnees;
 
+	}
 
+	public function tag(array $artlist, $tagchecked)
+	{
+		$artcheckedlist = [];
+		foreach($artlist as $art) {
+			if (in_array($tagchecked, $art->tag('array'))) {
+				$artcheckedlist[] = $art;
+			}
+		}
+		return $artcheckedlist;
+	}
+
+	public function taglist(array $artlist, array $tagcheckedlist)
+	{
+		$taglist = [];
+		foreach ($tagcheckedlist as $tag) {
+            $taglist[$tag] = $this->tag($artlist, $tag);
+		}
+		return $taglist;
 	}
 
 	public function count()
@@ -497,39 +516,26 @@ class App
 
 	}
 
-	public function getlistermedia($dir)
+	public function getlistermedia($dir, $type="all")
 	{
 		if ($handle = opendir($dir)) {
 			$list = [];
 			while (false !== ($entry = readdir($handle))) {
 				if ($entry != "." && $entry != "..") {
 
-
-					// var_dump($entry);
-
-					// $fileinfo = pathinfo($entry);
-
-					// var_dump($fileinfo);
-
-
-					// $filepath = $dir . $fileinfo['filename'] . '.' . $fileinfo['extension'];
-
-					// list($width, $height, $type, $attr) = getimagesize($filepath);
-					// $filesize = filesize($filepath);
-
-					// $donnees = array(
-					// 	'id' => str_replace('.' . $fileinfo['extension'], '', $fileinfo['filename']),
-					// 	'path' => dirname($entry),
-					// 	'extension' => $fileinfo['extension']
-					// );
-
-					// $media = new Media($donnees);
-
 					$media = $this->getmedia($entry, $dir);
 
 					
 					$media->analyse();
-					$list[] = $media;
+
+					if(in_array($type, self::MEDIA_TYPES)) {
+						if($media->type() == $type) {
+							$list[] = $media;							
+						}
+					} else {
+						$list[] = $media;
+					}
+
 
 				}
 			}
