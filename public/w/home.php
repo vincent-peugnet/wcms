@@ -9,26 +9,26 @@ echo '<section class="home">';
 if ($app->session() >= $app::EDITOR) {
 
     $app->bddinit($config);
+
     $opt = new Opt(Art::classvarlist());
-
-    if(!empty($_GET)) {
-    
-            $_SESSION['opt'] = $_GET;
-            $opt->hydrate($_GET);
-
-    }
-    if(isset($_GET['submit']) && $_GET['submit'] == 'reset') {
-        $opt = new Opt(Art::classvarlist());
-    } elseif(isset($_SESSION['opt'])) {
-        $opt->hydrate($_SESSION['opt']);
-
-    }
-
     $opt->setcol(['id', 'tag', 'lien', 'contenu', 'intro', 'titre', 'datemodif', 'datecreation', 'secure']);
     $table = $app->getlisteropt($opt);
     $app->listcalclien($table);
     $opt->settaglist($table);
+    $opt->submit();
+    
+    
+    
+
+   
+
+   
+
+ 
+
+
     $opt->setcol(['id', 'tag', 'lien', 'contenu', 'intro', 'titre', 'datemodif', 'datecreation', 'secure', 'liento']);
+
 
     $aff->option($app, $opt);
 
@@ -55,8 +55,27 @@ if ($app->session() >= $app::EDITOR) {
     $app->artlistsort($table2, $opt->sortby(), $opt->order());
 
 
+    echo '<div id="flex">';
+    
+    
+    $aff->home2table($app, $table2, $app->getlister());   
 
-    $aff->home2table($app, $table2, $app->getlister());
+
+
+
+    echo '<div id="map">';
+    $aff->mapheader();    
+    if(isset($_GET['map'])) {
+        $aff->mermaid($app->map($table2));
+    }
+    echo '</div>';
+
+
+
+
+
+    echo '</div>';
+
 }
 
 

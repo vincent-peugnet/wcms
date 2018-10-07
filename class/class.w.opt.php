@@ -31,7 +31,7 @@ class Opt
 	}
 
 
-	public function reset()
+	public function resetall()
 	{
 		$varlist = get_class_vars(__class__);
 
@@ -40,6 +40,53 @@ class Opt
 			$this->$method($default);
 		}
 	}
+
+	public function reset($var)
+	{		
+		$varlist = get_class_vars(__class__);
+		if(in_array($var, $varlist)) {
+			$this->$var = $varlist[$var];
+		}		
+	}
+
+	public function submit()
+	{
+		if(isset($_GET['submit'])) {
+			if ($_GET['submit'] == 'reset') {
+				$_SESSION['opt'] = [];
+			} elseif ($_GET['submit'] == 'filter') {
+				$this->getall();
+			}
+		} else {
+			$this->sessionall();
+		}
+	}
+
+	public function getall()
+	{
+		$optlist = ['sortby', 'order', 'secure', 'tagcompare', 'tagfilter', 'invert'];
+
+        foreach ($optlist as $method) {    
+            if (method_exists($this, $method)) {
+                if(isset($_GET[$method])) {
+                    $setmethod = 'set'. $method;
+                    $this->$setmethod($_GET[$method]);
+                } else {
+                    $this->reset($method);
+                }
+                $_SESSION['opt'][$method] = $this->$method();
+            }
+        }
+	}
+
+	public function sessionall()
+	{
+        if(isset($_SESSION['opt'])) {
+            $this->hydrate($_SESSION['opt']);
+        }
+	}
+
+
 
 	// _______________________________________________ G E T _______________________________________________
 
@@ -122,8 +169,14 @@ class Opt
 
 	public function settagfilter($tagfilter)
 	{
-		if (is_array($tagfilter)) {
-			$this->tagfilter = $tagfilter;
+		if (!empty($tagfilter) && is_array($tagfilter)) {
+			$tagfilterverif = [];
+			foreach ($tagfilter as $tag) {
+				if(array_key_exists($tag, $this->taglist)) {
+					$tagfilterverif[] = $tag;
+				}
+			}
+			$this->tagfilter = $tagfilterverif;
 		}
 	}
 
@@ -181,24 +234,26 @@ class Opt
 
 	public function settaglist(array $artlist)
 	{
-		$taglist = [];
-		foreach ($artlist as $art) {
-			foreach ($art->tag('array') as $tag) {
-				if (!array_key_exists($tag, $taglist)) {
-					$taglist[$tag] = 1;
-				} else {
-					$taglist[$tag]++;
+			$taglist = [];
+			foreach ($artlist as $art) {
+				foreach ($art->tag('array') as $tag) {
+					if (!array_key_exists($tag, $taglist)) {
+						$taglist[$tag] = 1;
+					} else {
+						$taglist[$tag]++;
+					}
 				}
 			}
-		}
-		$taglistsorted = arsort($taglist);
-		$this->taglist = $taglist;
+			$taglistsorted = arsort($taglist);
+			$this->taglist = $taglist;
 	}
 
 	public function setinvert(int $invert)
 	{
 		if ($invert == 0 || $invert == 1) {
 			$this->invert = $invert;
+		} else {
+			$this->invert = 0;
 		}
 	}
 

@@ -11,6 +11,13 @@ div#main {
     background-color: var(--color3);
 }
 
+div#map {
+    border:  ridge;
+    height: fit-content;
+    margin: 5px;
+    background-color: var(--color3);
+}
+
 div#options {
     border: ridge;
     margin:  5px;
@@ -18,6 +25,7 @@ div#options {
     width: 15%;
     list-style:  none;
     max-width:  200px;
+    height: fit-content;
 
 }
 

@@ -172,10 +172,10 @@ class Aff
                             $templatelist = ['header' => 0, 'section' => 0, 'nav' => 0, 'aside' => 0, 'footer' => 0, 'quickcss' => 1, 'css' => 1];
 
                             foreach ($templatelist as $template => $check) {
-                                if($check == 1) {
-                                    echo '<li><input type="checkbox" name="template'.$template.'" id="template'.$template.'" checked><label for="template'.$template.'">'.$template.'</label></li>';
+                                if ($check == 1) {
+                                    echo '<li><input type="checkbox" name="template' . $template . '" id="template' . $template . '" checked><label for="template' . $template . '">' . $template . '</label></li>';
                                 } else {
-                                    echo '<li><input type="checkbox" name="template'.$template.'" id="template'.$template.'"><label for="template'.$template.'">'.$template.'</label></li>';
+                                    echo '<li><input type="checkbox" name="template' . $template . '" id="template' . $template . '"><label for="template' . $template . '">' . $template . '</label></li>';
                                 }
                             }
                             ?>                    
@@ -189,10 +189,10 @@ class Aff
                         <?php
                         $colorlist = ['text' => $art->couleurtext(), 'lien' => $art->couleurlien(), 'lienblank' => $art->couleurlienblank(), 'bkg' => $art->couleurbkg()];
                         foreach ($colorlist as $element => $color) {
-                            echo '<label for="couleur'.$element.'">Couleur du '.$element.' :</label><input type="color" name="couleur'.$element.'" value="'.$color.'" id="couleur'.$element.'">';
+                            echo '<label for="couleur' . $element . '">Couleur du ' . $element . ' :</label><input type="color" name="couleur' . $element . '" value="' . $color . '" id="couleur' . $element . '">';
                         }
 
-                        
+
 
                         ?>
 
@@ -209,9 +209,9 @@ class Aff
                         }
                         foreach ($imagelist as $image) {
                             if ($image->id() == $artbkgimage) {
-                                echo '<option value="' . $image->id() . '.'.$image->extension().'" selected >' . $image->id() . '.'.$image->extension().'</option>';
+                                echo '<option value="' . $image->id() . '.' . $image->extension() . '" selected >' . $image->id() . '.' . $image->extension() . '</option>';
                             } else {
-                                echo '<option value="' . $image->id() . '.'.$image->extension().'">' . $image->id() . '.'.$image->extension().'</option>';
+                                echo '<option value="' . $image->id() . '.' . $image->extension() . '">' . $image->id() . '.' . $image->extension() . '</option>';
                             }
                         }
                         ?>
@@ -543,8 +543,11 @@ public function optiontag(Opt $opt)
 
     echo '<fieldset><legend>Tag</legend><ul>';
 
+
     echo '<input type="radio" id="OR" name="tagcompare" value="OR" ' . ($opt->tagcompare() == "OR" ? "checked" : "") . ' ><label for="OR">OR</label>';
     echo '<input type="radio" id="AND" name="tagcompare" value="AND" ' . ($opt->tagcompare() == "AND" ? "checked" : "") . '><label for="AND">AND</label>';
+
+    //echo '<input type="hidden" name="tagfilter[]" value="">';
 
     $in = false;
     $out = false;
@@ -601,22 +604,73 @@ public function optionsort(Opt $opt)
 
 }
 
-public function map(App $app, $url)
+public function mapheader()
 {
-    echo '<div class="home"><section>';
+    $selectcurve = isset($_GET['curve']) ? $_GET['curve'] : 'basis';
+    $selectorient = isset($_GET['orient']) ? $_GET['orient'] : 'TD';
+    $curves = ['linear', 'basis', 'natural', 'step', 'stepAfter', 'stepBefore', 'monotoneX', 'monotoneY'];
+    $orients = ['TD', 'LR', 'BT', 'RL'];
+    ?>
+    <h2>Map</h2>
 
-    $map = "";
-    $link = "";
-    foreach ($app->getlister(['id', 'lien']) as $item) {
-        foreach ($item->lien('array') as $lien) {
-            $map = $map . ' </br> ' . $item->id() . ' --> ' . $lien;
-        }
-        $link = $link . '</br>click ' . $item->id() . ' "' . $url . '/w/?id=' . $item->id() . '"';
+    <form action="./" method="get">
+    <label for="curve">Curve style</label>
+    <select name="curve" id="curve">
+    <?php
+    foreach ($curves as $curve) {
+        ?>
+        <option value="<?= $curve ?>" <?= $selectcurve == $curve ? 'selected' : ''?>><?= $curve ?></option>
+        <?php
     }
-    echo $map;
-    echo $link;
+    ?>
+    </select>
+    <label for="orient">Orientation</label>
+    <select name="orient" id="orient">
+    <?php
+    foreach ($orients as $orient) {
+        ?>
+        <option value="<?= $orient ?>" <?= $selectorient == $orient ? 'selected' : ''?>><?= $orient ?></option>
+        <?php
+    }
+    ?>
+    </select>
+    <input type="submit" value="draw" name="map">
+    </form>
+    <?php
 
-    echo '</div></section>';
+}
+
+public function mermaid(string $map)
+{
+    $curve = isset($_GET['curve']) ? $_GET['curve'] : 'basis';
+    $orient = isset($_GET['orient']) ? $_GET['orient'] : 'TD';
+
+
+    ?>  
+
+    <script src="../rsc/js/mermaid.min.js"></script>
+
+    <script>
+    mermaid.initialize({
+        startOnLoad:true,
+        themeCSS: ".node circle, .node rect , .node polygon { fill: var(--color1); stroke: var(--color4);} ",
+        flowchart: { 
+            curve: '<?= $curve ?>'
+        } 
+    });   
+    
+    </script>
+
+
+    <div class="mermaid">
+    
+    graph <?= $orient ?>
+    <?= $map ?>
+    </div>
+    
+
+    <?php
+
 }
 
 public function aside(App $app)

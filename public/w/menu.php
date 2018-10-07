@@ -42,10 +42,8 @@ if ($app->session() >= $app::EDITOR) {
 
 
 
-    } elseif ($_GET['aff'] == 'map' && $app->session() >= $app::INVITE) {
-        $app->bddinit($config);
-        $aff->map($app, $config->domain());
     } else {
+        
     echo '<h1>Private</h1><p>You dont have the permission to access this page.</p>';
 
     }

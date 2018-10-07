@@ -1,6 +1,6 @@
 <?php
 
-use Michelf\Markdown;
+use Michelf\MarkdownExtra;
 
 
 class Art
@@ -225,7 +225,15 @@ class Art
 
 	public function html(App $app)
 	{
-		$html = Markdown::defaultTransform($this->html);
+
+		$html = str_replace('%TITLE%', $this->titre(), $this->html);
+		$html = str_replace('%DESCRIPTION%', $this->intro(), $html);
+		
+		$parser = new MarkdownExtra;
+		$parser->header_id_func = function ($header) {
+			return preg_replace('/[^a-z0-9]/', '', strtolower($header));
+		};
+		$html = $parser->transform($html);
 		$html = str_replace('href="=', 'href="?id=', $html);
 
 		foreach ($this->lien('array') as $id) {
@@ -241,9 +249,6 @@ class Art
 		}
 
 
-
-		$html = str_replace('%TITLE%', $this->titre(), $html);
-		$html = str_replace('%DESCRIPTION%', $this->intro(), $html);
 		$html = str_replace('href="../media/', ' class="file" target="_blank" href="../media/', $html);
 		$html = str_replace('href="http', ' class="external" target="_blank" href="http', $html);
 		$html = str_replace('<img src="/', '<img src="../media/', $html);

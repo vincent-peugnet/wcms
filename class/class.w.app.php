@@ -331,7 +331,7 @@ class App
 	public function tag(array $artlist, $tagchecked)
 	{
 		$artcheckedlist = [];
-		foreach($artlist as $art) {
+		foreach ($artlist as $art) {
 			if (in_array($tagchecked, $art->tag('array'))) {
 				$artcheckedlist[] = $art;
 			}
@@ -343,7 +343,7 @@ class App
 	{
 		$taglist = [];
 		foreach ($tagcheckedlist as $tag) {
-            $taglist[$tag] = $this->tag($artlist, $tag);
+			$taglist[$tag] = $this->tag($artlist, $tag);
 		}
 		return $taglist;
 	}
@@ -446,12 +446,12 @@ class App
 	{
 		$arttable = strip_tags($arttable);
 		$tablename = str_clean($tablename);
-		if($this->tableexist($dbname, $arttable) && !$this->tableexist($dbname, $tablename)) {
+		if ($this->tableexist($dbname, $arttable) && !$this->tableexist($dbname, $tablename)) {
 			$duplicate = " CREATE TABLE `$tablename` LIKE `$arttable`;";
 			$alter = "ALTER TABLE `$tablename` ADD PRIMARY KEY (`id`);";
 			$insert = "INSERT `$tablename` SELECT * FROM `$arttable`;";
 
-			
+
 			$req = $this->bdd->query($duplicate . $alter . $insert);
 
 			return 'tableduplicated';
@@ -516,7 +516,7 @@ class App
 
 	}
 
-	public function getlistermedia($dir, $type="all")
+	public function getlistermedia($dir, $type = "all")
 	{
 		if ($handle = opendir($dir)) {
 			$list = [];
@@ -525,12 +525,12 @@ class App
 
 					$media = $this->getmedia($entry, $dir);
 
-					
+
 					$media->analyse();
 
-					if(in_array($type, self::MEDIA_TYPES)) {
-						if($media->type() == $type) {
-							$list[] = $media;							
+					if (in_array($type, self::MEDIA_TYPES)) {
+						if ($media->type() == $type) {
+							$list[] = $media;
 						}
 					} else {
 						$list[] = $media;
@@ -652,6 +652,39 @@ class App
 	{
 
 	}
+
+
+
+
+	// ________________________________________________________ M A P ________________________________________________________
+
+
+	public function map(array $getlister, $lb = PHP_EOL)
+	{
+
+		$map = "";
+		$link = "";
+		$style = "";
+		foreach ($getlister as $item) {
+			if($item->secure() == 2) {
+				$style = $style . $lb . $item->id() . '{' . $item->titre() . '}';
+			} elseif ($item->secure() == 1) {
+				$style = $style . $lb . $item->id() . '(' . $item->titre() . ')';
+				
+			} else {
+				$style = $style . $lb . $item->id() . '((' . $item->titre() . '))';
+			}
+			foreach ($item->lien('array') as $lien) {
+				$map = $map . $lb . $item->id() . ' --> ' . $lien;
+				$link = $link . $lb . 'click ' . $lien . ' "./?id=' . $lien . '"';
+				
+			}
+			$link = $link . $lb . 'click ' . $item->id() . ' "./?id=' . $item->id() . '"';
+		}
+		return $map . $link . $style;
+
+	}
+
 
 
 
