@@ -7,7 +7,7 @@ session_start();
 
 
 require('../../vendor/autoload.php');
-require('../../fn/fn.php');
+require('../../fn/fn.w.php');
 
 spl_autoload_register('my_autoloader');
 

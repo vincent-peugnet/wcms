@@ -197,6 +197,11 @@ class Art
 		return $this->css;
 	}
 
+	public function cssprint()
+	{
+		return $cssprint;
+	}
+
 	public function csstemplate(App $app)
 	{
 		$data = [];
@@ -210,7 +215,8 @@ class Art
 			}
 
 		}
-		return $temp . $this->css;
+		$cssprint = str_replace('url(/', 'url('.$app::MEDIA_DIR , $temp . $this->css);
+		return $cssprint;
 	}
 
 	public function md($expand = false)
@@ -226,16 +232,23 @@ class Art
 	public function html(App $app)
 	{
 
+		// %%%% TITLE & DESCIPTION
 		$html = str_replace('%TITLE%', $this->titre(), $this->html);
 		$html = str_replace('%DESCRIPTION%', $this->intro(), $html);
 		
 		$parser = new MarkdownExtra;
+
+		// id in headers
 		$parser->header_id_func = function ($header) {
-			return preg_replace('/[^a-z0-9]/', '', strtolower($header));
+			return preg_replace('/[^\w]/', '', strtolower($header));
 		};
 		$html = $parser->transform($html);
+
+		// replace = > ?id=
 		$html = str_replace('href="=', 'href="?id=', $html);
 
+
+		// infobulles tooltip
 		foreach ($this->lien('array') as $id) {
 			$title = "Cet article n'existe pas encore";
 			foreach ($app->getlister(['id', 'intro']) as $item) {
@@ -248,10 +261,17 @@ class Art
 			$html = str_replace($lien, $titlelien, $html);
 		}
 
+		if(!empty(strstr($html, '%SUMMARY%'))) {
 
-		$html = str_replace('href="../media/', ' class="file" target="_blank" href="../media/', $html);
+	
+			
+			$html = str_replace('%SUMMARY%', sumparser($html), $html);
+		}
+
+
+		$html = str_replace('href="./media/', ' class="file" target="_blank" href="./media/', $html);
 		$html = str_replace('href="http', ' class="external" target="_blank" href="http', $html);
-		$html = str_replace('<img src="/', '<img src="../media/', $html);
+		$html = str_replace('<img src="/', '<img src="./media/', $html);
 		$html = str_replace('<iframe', '<div class="iframe"><div class="container"><iframe class="video" ', $html);
 		$html = str_replace('</iframe>', '</iframe></div></div>', $html);
 		return $html;

@@ -325,16 +325,16 @@ public function head($title, $tool, $color4)
     <head>
         <meta charset="utf8" />
         <meta name="viewport" content="width=device-width" />
-        <link rel="shortcut icon" href="../media/logo.png" type="image/x-icon">
-        <link href="/css/stylebase.css" rel="stylesheet" />
-        <link href="/css/style<?= $tool ?>.css" rel="stylesheet" />
+        <link rel="shortcut icon" href="./media/logo.png" type="image/x-icon">
+        <link href="./css/stylebase.css" rel="stylesheet" />
+        <link href="./css/style<?= $tool ?>.css" rel="stylesheet" />
         <style>
             :root {
                 --color4: <?= $color4 ?>;
             }
         </style>
         <title><?= $title ?></title>
-        <script src="../rsc/js/app.js"></script>
+        <script src="./rsc/js/app.js"></script>
     </head>
     <?php
 
@@ -347,11 +347,11 @@ public function arthead(Art $art, $cssdir, $cssread = '', $edit = 0)
         <meta charset="utf8" />
         <meta name="description" content="<?= $art->intro() ?>" />
         <meta name="viewport" content="width=device-width" />
-        <link rel="shortcut icon" href="../media/logo.png" type="image/x-icon">
-        <link href="/css/stylebase.css" rel="stylesheet" />
-        <?= $edit == 0 ? '<link href="' . $cssdir . $cssread . '" rel="stylesheet" />' : '<link href="/css/styleedit.css" rel="stylesheet" />' ?>
+        <link rel="shortcut icon" href="./media/logo.png" type="image/x-icon">
+        <link href="./css/stylebase.css" rel="stylesheet" />
+        <?= $edit == 0 ? '<link href="' . $cssdir . $cssread . '" rel="stylesheet" />' : '<link href="./css/styleedit.css" rel="stylesheet" />' ?>
         <title><?= $edit == 1 ? '✏' : '' ?> <?= $art->titre() ?></title>
-        <script src="../rsc/js/app.js"></script>
+        <script src="./rsc/js/app.js"></script>
     </head>
     <?php
 
@@ -364,11 +364,11 @@ public function noarthead($id, $cssdir, $cssread = '')
         <meta charset="utf8" />
         <meta name="description" content="This article does not exist yet." />
         <meta name="viewport" content="width=device-width" />
-        <link rel="shortcut icon" href="../media/logo.png" type="image/x-icon">
-        <link href="/css/stylebase.css" rel="stylesheet" />
+        <link rel="shortcut icon" href="./media/logo.png" type="image/x-icon">
+        <link href="./css/stylebase.css" rel="stylesheet" />
         <link href="<?= $cssdir . $cssread ?>" rel="stylesheet" />
         <title>❓ <?= $id ?></title>
-        <script src="../rsc/js/app.js"></script>
+        <script src="./rsc/js/app.js"></script>
     </head>
     <?php
 
@@ -648,7 +648,7 @@ public function mermaid(string $map)
 
     ?>  
 
-    <script src="../rsc/js/mermaid.min.js"></script>
+    <script src="./rsc/js/mermaid.min.js"></script>
 
     <script>
     mermaid.initialize({
@@ -1013,7 +1013,7 @@ public function nav($app)
         <details>
         <summary>Admin</summary>
 
-        <p>Edit your own admin password. You can find it in the config.json file, in the root of your website folder.</p>
+        <p>Edit your own admin password. You can find it in the config.w.json file, in the root of your website folder.</p>
 
         <form action="./" method="post">
         <input type="hidden" name="action" value="editconfig">
