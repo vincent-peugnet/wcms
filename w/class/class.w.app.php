@@ -6,9 +6,8 @@ class App
 	private $arttable;
 
 
-	const CONFIG_FILE = '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config.w.json';
-	const CSS_READ_DIR = '.' . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'read' . DIRECTORY_SEPARATOR;
-	const SQL_READ_DIR = '.' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'sql' . DIRECTORY_SEPARATOR;
+	const CONFIG_FILE = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'w.config.json';
+	const GLOBAL_CSS_DIR = '.' . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'global' . DIRECTORY_SEPARATOR . 'global.css';
 	const MEDIA_DIR = '.' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR;
 	const MEDIA_EXTENSIONS = array('jpeg', 'jpg', 'JPG', 'png', 'gif', 'mp3', 'mp4', 'mov', 'wav', 'flac', 'pdf');
 	const MEDIA_TYPES = ['image', 'video', 'sound', 'other'];
@@ -153,6 +152,50 @@ class App
 		}
 	}
 
+	public function add2(Art2 $art)
+	{
+
+		if ($this->exist($art->id())) {
+			echo '<span class="alert">idalreadyexist</span>';
+		} else {
+
+			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+
+			$request = 'INSERT INTO ' . $this->arttable . '(id, title, description, tag, date, datecreation, datemodif, daterender, css, quickcss, javascript, html, header, section, nav, aside, footer, render, secure, invitepassword, interface, linkfrom, template, affcount, editcount)
+						VALUES(:id, :title, :description, :tag, :date, :datecreation, :datemodif, :daterender, :css, :quickcss, :javascript, :html, :header, :section, :nav, :aside, :footer, :render, :secure, :invitepassword, :interface, :linkfrom, :template, :affcount, :editcount)';
+
+			$q = $this->bdd->prepare($request);
+
+			$q->bindValue(':id', $art->id());
+			$q->bindValue(':title', $art->title());
+			$q->bindValue(':description', $art->description());
+			$q->bindValue(':tag', $art->tag('string'));
+			$q->bindValue(':date', $now->format('Y-m-d H:i:s'));
+			$q->bindValue(':datecreation', $now->format('Y-m-d H:i:s'));
+			$q->bindValue(':datemodif', $now->format('Y-m-d H:i:s'));
+			$q->bindValue(':daterender', $now->format('Y-m-d H:i:s'));
+			$q->bindValue(':css', $art->css());
+			$q->bindValue(':quickcss', $art->quickcss('string'));
+			$q->bindValue(':javascript', $art->javascript());
+			$q->bindValue(':html', $art->html());
+			$q->bindValue(':header', $art->header());
+			$q->bindValue(':section', $art->section());
+			$q->bindValue(':nav', $art->nav());
+			$q->bindValue(':aside', $art->aside());
+			$q->bindValue(':footer', $art->footer());
+			$q->bindValue(':render', $art->render());
+			$q->bindValue(':secure', $art->secure());
+			$q->bindValue(':invitepassword', $art->invitepassword());
+			$q->bindValue(':interface', $art->interface());
+			$q->bindValue(':linkfrom', $art->linkfrom('string'));
+			$q->bindValue(':template', $art->template('string'));
+			$q->bindValue(':affcount', $art->affcount());
+			$q->bindValue(':editcount', $art->editcount());
+
+			$q->execute();
+		}
+	}
+
 	public function delete(Art $art)
 	{
 		$req = $this->bdd->prepare('DELETE FROM ' . $this->arttable . ' WHERE id = :id ');
@@ -196,6 +239,44 @@ class App
 		$q->bindValue(':couleurlienblank', $art->couleurlienblank());
 		$q->bindValue(':lien', $art->lien('string'));
 		$q->bindValue(':template', $art->template());
+
+		$q->execute();
+	}
+
+	public function update2(Art2 $art)
+	{
+		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+
+		$request = 'UPDATE ' . $this->arttable . '(id, title, description, tag, date, datecreation, datemodif, daterender, css, quickcss, javascript, html, header, section, nav, aside, footer, render, secure, invitepassword, interface, linkfrom, template, affcount, editcount)
+					VALUES(:id, :title, :description, :tag, :date, :datecreation, :datemodif, :daterender, :css, :quickcss, :javascript, :html, :header, :section, :nav, :aside, :footer, :render, :secure, :invitepassword, :interface, :linkfrom, :template, :affcount, :editcount) WHERE id = :id';
+
+		$q = $this->bdd->prepare($request);
+
+		$q->bindValue(':id', $art->id());
+		$q->bindValue(':title', $art->title());
+		$q->bindValue(':description', $art->description());
+		$q->bindValue(':tag', $art->tag('string'));
+		$q->bindValue(':date', $now->format('Y-m-d H:i:s'));
+		$q->bindValue(':datecreation', $now->format('Y-m-d H:i:s'));
+		$q->bindValue(':datemodif', $now->format('Y-m-d H:i:s'));
+		$q->bindValue(':daterender', $now->format('Y-m-d H:i:s'));
+		$q->bindValue(':css', $art->css());
+		$q->bindValue(':quickcss', $art->quickcss('string'));
+		$q->bindValue(':javascript', $art->javascript());
+		$q->bindValue(':html', $art->html());
+		$q->bindValue(':header', $art->header());
+		$q->bindValue(':section', $art->section());
+		$q->bindValue(':nav', $art->nav());
+		$q->bindValue(':aside', $art->aside());
+		$q->bindValue(':footer', $art->footer());
+		$q->bindValue(':render', $art->render());
+		$q->bindValue(':secure', $art->secure());
+		$q->bindValue(':invitepassword', $art->invitepassword());
+		$q->bindValue(':interface', $art->interface());
+		$q->bindValue(':linkfrom', $art->linkfrom('string'));
+		$q->bindValue(':template', $art->template('string'));
+		$q->bindValue(':affcount', $art->affcount());
+		$q->bindValue(':editcount', $art->editcount());
 
 		$q->execute();
 	}
@@ -588,50 +669,7 @@ class App
 
 	//_________________________________________________________ A D M ________________________________________________________
 
-	// public function changecss($lecturecss)
-	// {
-	// 	if (file_exists(self::CONFIG_FILE)) {
-	// 		$current = file_get_contents(self::CONFIG_FILE);
-	// 		$current = str_replace($this->lecturecss(), $lecturecss, $current);
-	// 		file_put_contents(self::CONFIG_FILE, $current);
-	// 		return 'css_change_ok';
-	// 	} else {
-	// 		return 'css_change_error';
-	// 	}
-	// }
 
-	public function addcss(array $file, $maxsize = 2 ** 24, $id)
-	{
-		$message = 'runing';
-		$id = strtolower(strip_tags($id));
-		$id = str_replace(' ', '_', $id);
-		if (isset($file) and $file['css']['error'] == 0 and $file['css']['size'] < $maxsize) {
-			$infosfichier = pathinfo($file['css']['name']);
-			$extension_upload = $infosfichier['extension'];
-			$extensions_autorisees = array('css');
-			if (in_array($extension_upload, $extensions_autorisees)) {
-				if (!file_exists($this::CSS_READ_DIR . $id . '.' . $extension_upload)) {
-
-					$extension_upload = strtolower($extension_upload);
-					$uploadok = move_uploaded_file($file['css']['tmp_name'], $this::CSS_READ_DIR . $id . '.' . $extension_upload);
-					if ($uploadok) {
-						$message = 'uploadok';
-					} else {
-						$message = 'uploaderror';
-					}
-				} else {
-					$message = 'filealreadyexist';
-
-				}
-			}
-		} else {
-			$message = 'filetoobig';
-
-		}
-
-		return $message;
-
-	}
 
 	public function dirlist($dir, $extension)
 	{

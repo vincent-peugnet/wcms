@@ -223,25 +223,27 @@ class Aff
                         <summary>Help</summary>
                         <div id="help">
                             <h2>Help !</h2>
-                            <p>To save your article, clic on the HOME, UPDATE, or DISPLAY buttons. You can use the keyboard shortcuts as well.</p>
+                            <p>To save your article, press the HOME, UPDATE, or DISPLAY buttons. You can use the keyboard shortcuts as well.</p>
                             <pre><span class="i">ALT + W</span> : home</pre>
                             <pre><span class="i">ALT + X</span> : update</pre>
                             <pre><span class="i">ALT + C</span> : display</pre>
                             <h3>Markdown</h3>
-                            <p>The html section use Markdown encoding : <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">synthax</a>. But the following strategies are specific to W.</p>
+                            <p>The html section use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown encoding</a>. Actualy, W is using Michel Fortin's <a href="https://michelf.ca/projects/php-markdown/extra/" target="_blank">Markdown Extra</a>.</p>
                             <h3>Links</h3>
                             <pre>[text](=<span class="i">article_id</span>)</pre>
                             <p>where article_id is the article's id you want to point to.</p>
                             <h3>Images</h3>
                             <pre>[altimage](/<span class="i">img_id.extension</span>)</pre>
                             <p>Where img_id is the id of your image and its extension.</p>
-                            <h3>Tricks</h3>
+                            <h3>Shortcuts</h3>
                             <pre>%TITLE%</pre>
                             <p>Show the title of your article.</p>
                             <pre>%DESCRIPTION%</pre>
                             <p>Show the description (intro) of your article.</p>
+                            <pre>%SUMMARY%</pre>
+                            <p>Generate a <strong>summary</strong>, the list of all your head titles using #, ##, ###...</p>
                             <pre>%%<span class="i">tag_name</span>%%</pre>
-                            <p>Generate a list of links to all articles under this tag.</p>
+                            <p>Generate a <strong>menu</strong>, a list of links to all articles under this tag.</p>
                             <p>vv</p>
                             <p>vv</p>
                             <p>vv</p>
@@ -326,8 +328,8 @@ public function head($title, $tool, $color4)
         <meta charset="utf8" />
         <meta name="viewport" content="width=device-width" />
         <link rel="shortcut icon" href="./media/logo.png" type="image/x-icon">
-        <link href="./css/stylebase.css" rel="stylesheet" />
-        <link href="./css/style<?= $tool ?>.css" rel="stylesheet" />
+        <link href="./rsc/css/stylebase.css" rel="stylesheet" />
+        <link href="./rsc/css/style<?= $tool ?>.css" rel="stylesheet" />
         <style>
             :root {
                 --color4: <?= $color4 ?>;
@@ -340,7 +342,7 @@ public function head($title, $tool, $color4)
 
 }
 
-public function arthead(Art $art, $cssdir, $cssread = '', $edit = 0)
+public function arthead(Art $art, $globalcss, $edit = 0)
 {
     ?>
     <head>
@@ -348,8 +350,8 @@ public function arthead(Art $art, $cssdir, $cssread = '', $edit = 0)
         <meta name="description" content="<?= $art->intro() ?>" />
         <meta name="viewport" content="width=device-width" />
         <link rel="shortcut icon" href="./media/logo.png" type="image/x-icon">
-        <link href="./css/stylebase.css" rel="stylesheet" />
-        <?= $edit == 0 ? '<link href="' . $cssdir . $cssread . '" rel="stylesheet" />' : '<link href="./css/styleedit.css" rel="stylesheet" />' ?>
+        <link href="./rsc/css/stylebase.css" rel="stylesheet" />
+        <?= $edit == 0 ? '<link href="' . $globalcss . '" rel="stylesheet" />' : '<link href="./rsc/css/styleedit.css" rel="stylesheet" />' ?>
         <title><?= $edit == 1 ? '✏' : '' ?> <?= $art->titre() ?></title>
         <script src="./rsc/js/app.js"></script>
     </head>
@@ -357,7 +359,7 @@ public function arthead(Art $art, $cssdir, $cssread = '', $edit = 0)
 
 }
 
-public function noarthead($id, $cssdir, $cssread = '')
+public function noarthead($id, $globalcss)
 {
     ?>
     <head>
@@ -365,8 +367,8 @@ public function noarthead($id, $cssdir, $cssread = '')
         <meta name="description" content="This article does not exist yet." />
         <meta name="viewport" content="width=device-width" />
         <link rel="shortcut icon" href="./media/logo.png" type="image/x-icon">
-        <link href="./css/stylebase.css" rel="stylesheet" />
-        <link href="<?= $cssdir . $cssread ?>" rel="stylesheet" />
+        <link href="./rsc/css/stylebase.css" rel="stylesheet" />
+        <link href="<?= $globalcss ?>" rel="stylesheet" />
         <title>❓ <?= $id ?></title>
         <script src="./rsc/js/app.js"></script>
     </head>
@@ -619,8 +621,9 @@ public function mapheader()
     <?php
     foreach ($curves as $curve) {
         ?>
-        <option value="<?= $curve ?>" <?= $selectcurve == $curve ? 'selected' : ''?>><?= $curve ?></option>
+        <option value="<?= $curve ?>" <?= $selectcurve == $curve ? 'selected' : '' ?>><?= $curve ?></option>
         <?php
+
     }
     ?>
     </select>
@@ -629,8 +632,9 @@ public function mapheader()
     <?php
     foreach ($orients as $orient) {
         ?>
-        <option value="<?= $orient ?>" <?= $selectorient == $orient ? 'selected' : ''?>><?= $orient ?></option>
+        <option value="<?= $orient ?>" <?= $selectorient == $orient ? 'selected' : '' ?>><?= $orient ?></option>
         <?php
+
     }
     ?>
     </select>
@@ -912,33 +916,13 @@ public function nav($app)
         ?>
         <article>
         <h2>CSS</h2>
-        <p>Current global css : <strong><?= $config->cssread() ?></strong></p>
-        <details colse>
-        <summary>Default CSS</summary>
 
-        <p>This CSS will apply to all your articles.</p>
+        <p>CSS file :</p>
 
-        <form action="?aff=admin" method="post" >
-        <input type="hidden" name="action" value="editconfig">
-        <select name="cssread" required>
-
-        <?php
-        foreach ($app->dirlist($app::CSS_READ_DIR, 'css') as $item) {
-            if ($item == $config->cssread()) {
-                echo '<option value="' . $item . '" " selected >' . $item . '</option>';
-            } else {
-                echo '<option value="' . $item . '">' . $item . '</option>';
-            }
-        }
-        ?>
-        </select>
-        <input type="submit" value="choose">
-        </form>
-        </details>
-
+        <p><code> <?= $app::GLOBAL_CSS_DIR ?></code></p>
 
         <?php 
-        $cssfile = $app::CSS_READ_DIR . $config->cssread();
+        $cssfile = $app::GLOBAL_CSS_DIR;
         if (is_file($cssfile)) {
             $cssread = file_get_contents($cssfile);
             echo '<details>';
@@ -952,15 +936,6 @@ public function nav($app)
         }
 
         ?>
-        <details close>
-        <summary>Add CSS file</summary>
-        <form action="./" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="action" value="addcss">
-        <input type="file" accept=".css" name="css" required>
-        <input type="text" name="id" id="" placeholder="filename" required>
-        <input type="submit" value="submit">
-        </form>
-        </details>
 
         </article>
         <?php

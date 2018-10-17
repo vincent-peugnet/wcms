@@ -1,6 +1,8 @@
 vendor/*
 .vscode/*
-config.w.json
+w/w.config.json
 error_log
 public/w/media/*
-public/w/css/read/*
+public/w/css/*
+public/w/js/*
+public/index.html

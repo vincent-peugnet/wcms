@@ -14,7 +14,6 @@ class Config
 	private $editor;
 	private $invite;
 	private $read;
-	private $cssread;
 	private $color4;
 	private $fontsize = 6;
 
@@ -96,11 +95,6 @@ class Config
 		return $this->read;
 	}
 
-	public function cssread()
-	{
-		return $this->cssread;
-	}
-
 	public function color4()
 	{
 		return $this->color4;
@@ -163,11 +157,6 @@ class Config
 	public function setread($read)
 	{
 		$this->read = strip_tags($read);
-	}
-
-	public function setcssread($cssread)
-	{
-		$this->cssread = strip_tags($cssread);
 	}
 
 	public function setcolor4($color4)

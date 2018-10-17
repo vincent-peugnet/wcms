@@ -11,7 +11,7 @@ function bddconnect($host, $bdname, $user, $password)
 
 function my_autoloader($class)
 {
-    require('../../class/class.w.' . strtolower($class) . '.php');
+    require(__DIR__.'/../class/class.w.' . strtolower($class) . '.php');
 }
 
 function secure()
