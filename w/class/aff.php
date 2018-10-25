@@ -3,20 +3,6 @@
 class Aff
 {
 
-    private $session;
-
-    private static $edit = 2;
-
-
-    // ________________________________________________ C O N S T R U C T ______________________________________________
-
-
-    public function __construct($session = 0)
-    {
-        $this->setsession($session);
-    }
-
-
 
     // ____________________________________________________ C O N F I G ______________________________________________
 
@@ -56,58 +42,25 @@ class Aff
     // ____________________________________________________ F U N ______________________________________________
 
 
-    public function lecture(Art $art, App $app)
-    {
-        if ($art->secure() == 1) {
-            echo '<span class="alert">This article is private</span>';
-        }
-        if ($art->secure() == 2) {
-            echo "<span class=\"alert\">This article is not published yet</span>";
-        }
 
-        if ($app->session() >= $art->secure()) {
-            ?>
-            <style type="text/css">
-            body{
-                background: <?= $art->couleurbkg() ?>;
-            }
-            section {
-                color: <?= $art->couleurtext() ?>;			
-            }
-            
-            a {
-                color: <?= $art->couleurlien() ?>;
-            }
-            
-            section a.external {
-                color: <?= $art->couleurlienblank() ?>;
-            }
-            <?= $art->csstemplate($app) ?>
-            </style>
-            <header>
-            <h1><?= $art->titre() ?></h1>
-            <h6><?= $art->soustitre() ?></h6>
-            </header>
-            <article><?= $art->html($app) ?></article>
-            <?php
+    
 
-        }
-    }
 
-    public function edit(Art $art, App $app, $list, $fontsize, $imagelist)
+
+    public function edit(Art2 $art, App $app, $list, $fontsize, $imagelist)
     {
 
-        if ($app->session() >= self::$edit) {
+        if ($app->session() >= $app::EDITOR) {
 
             ?>
                    
             <form action="?id=<?= $art->id() ?>" method="post" id="artedit">
-
+            
             <?php
             echo '<style>textarea{font-size: ' . $fontsize . '}</style>';
-            $tablist = ['html' => $art->md(), 'css' => $art->css(), 'aside' => 'NOT WORKING', 'footer' => 'NOT WORKING'];
+            $tablist = ['section' => $art->md(), 'css' => $art->css(), 'aside' => $art->aside(), 'footer' => $art->footer()];
 
-            $this->tabs($tablist, 'html');
+            $this->tabs($tablist, 'section');
 
             ?>
 
@@ -127,12 +80,10 @@ class Aff
                     <details id="editinfo" open>
                         <summary>Infos</summary>
                         <fieldset>                        
-                            <label for="titre">Titre :</label>
-                            <input type="text" name="titre" id="titre" value="<?= $art->titre(); ?>">
-                            <label for="soustitre">Sous-titre :</label>
-                            <input type="text" name="soustitre" id="soustitre" value="<?= $art->soustitre(); ?>">
-                            <label for="intro">Introduction :</label>
-                            <input type="text" name="intro" id="intro" value="<?= $art->intro(); ?>">
+                            <label for="title">title :</label>
+                            <input type="text" name="title" id="title" value="<?= $art->title(); ?>">
+                            <label for="description">Description :</label>
+                            <input type="text" name="description" id="description" value="<?= $art->description(); ?>">
                             <label for="tag">Tag(s) :</label>
                             <input type="text" name="tag" id="tag" value="<?= $art->tag('string'); ?>">
                             <label for="secure">Niveau de sécurité :</label>
@@ -152,9 +103,9 @@ class Aff
                                 foreach ($list as $item) {
 
                                     if ($item->id() == $art->template()) {
-                                        echo '<option value="' . $item->id() . '" selected >' . $item->titre() . '</option>';
+                                        echo '<option value="' . $item->id() . '" selected >' . $item->title() . '</option>';
                                     } else {
-                                        echo '<option value="' . $item->id() . '">' . $item->titre() . '</option>';
+                                        echo '<option value="' . $item->id() . '">' . $item->title() . '</option>';
                                     }
                                 }
                                 ?>
@@ -166,88 +117,16 @@ class Aff
                             <fieldset>
                             <h3>Template options</h3>
                             <p>NOT WORKING</p>
-                            <ul>
-                            <?php
-
-                            $templatelist = ['header' => 0, 'section' => 0, 'nav' => 0, 'aside' => 0, 'footer' => 0, 'quickcss' => 1, 'css' => 1];
-
-                            foreach ($templatelist as $template => $check) {
-                                if ($check == 1) {
-                                    echo '<li><input type="checkbox" name="template' . $template . '" id="template' . $template . '" checked><label for="template' . $template . '">' . $template . '</label></li>';
-                                } else {
-                                    echo '<li><input type="checkbox" name="template' . $template . '" id="template' . $template . '"><label for="template' . $template . '">' . $template . '</label></li>';
-                                }
-                            }
-                            ?>                    
-                            </ul>
                             </fieldset>
                     </details>
                     <details id="editcss" open>
                         <summary>Quick CSS</summary>
-                        <fieldset>
-
-                        <?php
-                        $colorlist = ['text' => $art->couleurtext(), 'lien' => $art->couleurlien(), 'lienblank' => $art->couleurlienblank(), 'bkg' => $art->couleurbkg()];
-                        foreach ($colorlist as $element => $color) {
-                            echo '<label for="couleur' . $element . '">Couleur du ' . $element . ' :</label><input type="color" name="couleur' . $element . '" value="' . $color . '" id="couleur' . $element . '">';
-                        }
-
-
-
-                        ?>
-
-                        <label for="bkgimage">NOT WORKING</label>
-                        <select name="bkgimage" id="bkgimage">
-                        <?php
-
-                        $artbkgimage = "NULL";
-
-                        if ($artbkgimage == 'NULL') {
-                            echo '<option value="" selected >No background image</option>';
-                        } else {
-                            echo '<option value="" >No background image</option>';
-                        }
-                        foreach ($imagelist as $image) {
-                            if ($image->id() == $artbkgimage) {
-                                echo '<option value="' . $image->id() . '.' . $image->extension() . '" selected >' . $image->id() . '.' . $image->extension() . '</option>';
-                            } else {
-                                echo '<option value="' . $image->id() . '.' . $image->extension() . '">' . $image->id() . '.' . $image->extension() . '</option>';
-                            }
-                        }
-                        ?>
-                        </select>
-
-                        </fieldset>
+                        
                     </details>
                     <details>
                         <summary>Help</summary>
                         <div id="help">
-                            <h2>Help !</h2>
-                            <p>To save your article, press the HOME, UPDATE, or DISPLAY buttons. You can use the keyboard shortcuts as well.</p>
-                            <pre><span class="i">ALT + W</span> : home</pre>
-                            <pre><span class="i">ALT + X</span> : update</pre>
-                            <pre><span class="i">ALT + C</span> : display</pre>
-                            <h3>Markdown</h3>
-                            <p>The html section use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown encoding</a>. Actualy, W is using Michel Fortin's <a href="https://michelf.ca/projects/php-markdown/extra/" target="_blank">Markdown Extra</a>.</p>
-                            <h3>Links</h3>
-                            <pre>[text](=<span class="i">article_id</span>)</pre>
-                            <p>where article_id is the article's id you want to point to.</p>
-                            <h3>Images</h3>
-                            <pre>[altimage](/<span class="i">img_id.extension</span>)</pre>
-                            <p>Where img_id is the id of your image and its extension.</p>
-                            <h3>Shortcuts</h3>
-                            <pre>%TITLE%</pre>
-                            <p>Show the title of your article.</p>
-                            <pre>%DESCRIPTION%</pre>
-                            <p>Show the description (intro) of your article.</p>
-                            <pre>%SUMMARY%</pre>
-                            <p>Generate a <strong>summary</strong>, the list of all your head titles using #, ##, ###...</p>
-                            <pre>%%<span class="i">tag_name</span>%%</pre>
-                            <p>Generate a <strong>menu</strong>, a list of links to all articles under this tag.</p>
-                            <p>vv</p>
-                            <p>vv</p>
-                            <p>vv</p>
-                            <p></p>
+                            <?= $this->editorhelp() ?>
                         </div>
                     </details>
 
@@ -288,38 +167,39 @@ public function tabs($tablist, $opentab)
     echo '</div>';
 }
 
-
-
-public function copy(Art $art, $list)
+public function editorhelp()
 {
     ?>
-    <div id="copy">
-        <form action="?id=<?= $art->id() ?>&edit=1" method="post">
-            <fieldset>
-            <input type="hidden" name="action" value="copy">
-                <input type="hidden" name="id" value="<?= $art->id() ?>">
-                <select name="copy" required>
-                    <?php
-                    foreach ($list as $item) {
-                        echo '<option value="' . $item->id() . '">' . $item->id() . '</option>';
-                    }
-                    echo '</select>';
-                    ?>
-                <label for="checkcss">CSS</label>
-                <input type="checkbox" id="checkcss" name="css" value="true">
-                <label for="checkcolor">Color</label>
-                <input type="checkbox" id="checkcolor" name="color" value="true">
-                <label for="checkhtml">HTML</label>
-                <input type="checkbox" id="checkhtml" name="html" value="true">
-                <label for="checktemplate">template</label>
-                <input type="checkbox" id="checktemplate" name="template" value="true">
-                <input type="submit" value="copy" onclick="confirmSubmit(event, 'Erase values')">
-            </fieldset>
-        </form>
-    </div>
+    <h2>Help !</h2>
+    <p>To save your article, press the HOME, UPDATE, or DISPLAY buttons. You can use the keyboard shortcuts as well.</p>
+    <pre><span class="i">ALT + W</span> : home</pre>
+    <pre><span class="i">ALT + X</span> : update</pre>
+    <pre><span class="i">ALT + C</span> : display</pre>
+    <h3>Markdown</h3>
+    <p>The html section use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown encoding</a>. Actualy, W is using Michel Fortin's <a href="https://michelf.ca/projects/php-markdown/extra/" target="_blank">Markdown Extra</a>.</p>
+    <h3>Links</h3>
+    <pre>[text](=<span class="i">article_id</span>)</pre>
+    <p>where article_id is the article's id you want to point to.</p>
+    <h3>Images</h3>
+    <pre>[altimage](/<span class="i">img_id.extension</span>)</pre>
+    <p>Where img_id is the id of your image and its extension.</p>
+    <h3>Shortcuts</h3>
+    <pre>%TITLE%</pre>
+    <p>Show the title of your article.</p>
+    <pre>%DESCRIPTION%</pre>
+    <p>Show the description of your article.</p>
+    <pre>%SUMMARY%</pre>
+    <p>Generate a <strong>summary</strong>, the list of all your head titles using #, ##, ###...</p>
+    <pre>%%<span class="i">tag_name</span>%%</pre>
+    <p>Generate a <strong>menu</strong>, a list of links to all articles under this tag.</p>
+    <p>vv</p>
+    <p>vv</p>
+    <p>vv</p>
+    <p></p>
     <?php
-
 }
+
+
 
 public function head($title, $tool, $color4)
 {
@@ -342,17 +222,17 @@ public function head($title, $tool, $color4)
 
 }
 
-public function arthead(Art $art, $globalcss, $edit = 0)
+public function arthead(Art2 $art, $globalcss, $edit = 0)
 {
     ?>
     <head>
         <meta charset="utf8" />
-        <meta name="description" content="<?= $art->intro() ?>" />
+        <meta name="description" content="<?= $art->description() ?>" />
         <meta name="viewport" content="width=device-width" />
         <link rel="shortcut icon" href="./media/logo.png" type="image/x-icon">
         <link href="./rsc/css/stylebase.css" rel="stylesheet" />
         <?= $edit == 0 ? '<link href="' . $globalcss . '" rel="stylesheet" />' : '<link href="./rsc/css/styleedit.css" rel="stylesheet" />' ?>
-        <title><?= $edit == 1 ? '✏' : '' ?> <?= $art->titre() ?></title>
+        <title><?= $edit == 1 ? '✏' : '' ?> <?= $art->title() ?></title>
         <script src="./rsc/js/app.js"></script>
     </head>
     <?php
@@ -398,7 +278,7 @@ public function tag($getlist, $tag, $app)
     echo '<ul>';
     foreach ($getlist as $item) {
         if (in_array($tag, $item->tag('array'))) {
-            echo '<li><a href="?id=' . $item->id() . '">' . $item->titre() . '</a> - ' . $item->intro();
+            echo '<li><a href="?id=' . $item->id() . '">' . $item->title() . '</a> - ' . $item->description();
             if ($app->session() >= $app::EDITOR) {
                 echo ' - <a href="?id=' . $item->id() . '&edit=1">modifier</a></li>';
             } else {
@@ -410,15 +290,15 @@ public function tag($getlist, $tag, $app)
     echo ' </div> ';
 }
 
-public function lien($getlist, $lien, App $app)
+public function linkfrom($getlist, $linkfrom, App $app)
 {
-    echo '<div class="lien">';
+    echo '<div class="linkfrom">';
     echo '<ul>';
     foreach ($getlist as $item) {
-        if (in_array($lien, $item->lien('array'))) {
-            echo '<li><a href="?id=' . $item->id() . '">' . $item->titre() . '</a> - ' . $item->intro();
+        if (in_array($linkfrom, $item->linkfrom('array'))) {
+            echo '<li><a href="?id=' . $item->id() . '">' . $item->title() . '</a> - ' . $item->description();
             if ($app->session() >= $app::EDITOR) {
-                echo ' - <a href="?id=' . $item->id() . '&edit=1">modifier</a> - <a href="?lien=' . $item->id() . '">liens</a></li>';
+                echo ' - <a href="?id=' . $item->id() . '&edit=1">modifier</a> - <a href="?linkfrom=' . $item->id() . '">linkfroms</a></li>';
             } else {
                 echo '</li>';
             }
@@ -427,8 +307,6 @@ public function lien($getlist, $lien, App $app)
     echo ' </ul> ';
     echo ' </div> ';
 }
-
-
 
 public function dump($getlist)
 {
@@ -492,11 +370,11 @@ public function home2table(App $app, $getlist, $masslist)
         foreach ($getlist as $item) {
             echo '<tr>';
             echo '<td><input type="checkbox" name="id[]" value=' . $item->id() . '></td>';
-            echo '<td><a href="?id=' . $item->id() . '&edit=1">' . $item->titre() . '</a></td>';
+            echo '<td><a href="?id=' . $item->id() . '&edit=1">' . $item->title() . '</a></td>';
             echo '<td>' . $item->tag('sort') . '</td>';
-            echo '<td>' . $item->intro() . '</td>';
-            echo '<td><a href="?lien=' . $item->id() . '">' . $item->liento('sort') . '</a></td>';
-            echo '<td>' . $item->lien('sort') . '</td>';
+            echo '<td>' . $item->description() . '</td>';
+            echo '<td><a href="?linkfrom=' . $item->id() . '">' . $item->linkto('sort') . '</a></td>';
+            echo '<td>' . $item->linkfrom('sort') . '</td>';
             echo '<td>' . $item->datemodif('hrdi') . '</td>';
             echo '<td>' . $item->datecreation('hrdi') . '</td>';
             echo '<td>' . $item->secure('string') . '</td>';
@@ -682,7 +560,7 @@ public function aside(App $app)
     if ($app->session() >= $app::EDITOR) {
         echo '<div id="linklist">Links<div id="roll"><ul>';
         foreach ($app->lister() as $item) {
-            echo '<li><a href="?id=' . $item['id'] . '&edit=1">' . $item['titre'] . '</a> - <input type="text" value="[' . $item['titre'] . '](?id=' . $item['id'] . ')">';
+            echo '<li><a href="?id=' . $item['id'] . '&edit=1">' . $item['title'] . '</a> - <input type="text" value="[' . $item['title'] . '](?id=' . $item['id'] . ')">';
 
 
         }
@@ -1130,27 +1008,6 @@ public function nav($app)
         </article>
         <?php
 
-    }
-
-
-
-
-
-//______________________________________________________ S E T _________________________________________________
-
-    public function setsession($session)
-    {
-        if ($session <= 100 and $session >= 0) {
-            $session = intval($session);
-            $this->session = $session;
-        }
-    }
-
-   //______________________________________________________ G E T _________________________________________________
-
-    public function session()
-    {
-        return $this->session;
     }
 
 

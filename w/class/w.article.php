@@ -6,15 +6,14 @@ if ($app->exist($_GET['id'])) {
 
     if (isset($_GET['edit']) and $_GET['edit'] == 1 and $app->session() >= $app::EDITOR) {
         echo '<section class=edit>';
-        $aff->edit($art, $app, $app->getlister(['id', 'titre']), $config->fontsize(), $app->getlistermedia($app::MEDIA_DIR, 'image'));
-        //$aff->copy($art, $app->getlister(['id', 'titre']));
+        $aff->edit($art, $app, $app->getlister(['id', 'title']), $config->fontsize(), $app->getlistermedia($app::MEDIA_DIR, 'image'));
         $aff->aside($app);
         echo '</section>';
     } else {
         echo '<section class="lecture">';
 
 
-        $art->autotaglistupdate($app->taglist($app->getlister(['id', 'titre', 'intro', 'tag']), $art->autotaglist()));
+        $art->autotaglistupdate($app->taglist($app->getlister(['id', 'title', 'description', 'tag']), $art->autotaglist()));
 
 
         $aff->lecture($art, $app);

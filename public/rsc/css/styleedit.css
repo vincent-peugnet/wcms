@@ -10,11 +10,6 @@
 	background-color: var(--color1);
 }
 
-#copy {
-	background-color: var(--color1);
-}
-
-
 #artedit {
 	background-color: var(--color1);
 }
@@ -50,10 +45,6 @@ textarea {
 }
 
 
-div#copy {
-    position:  fixed;
-	bottom:  0;
-}
 
 div#linklist {
     position:  fixed;
@@ -109,7 +100,7 @@ fieldset {
     border:  none;
 }
 
-summary, div#linklist, div#copy, div#submit {
+summary, div#linklist, div#submit {
     border: ridge 1px grey;
 
 }
@@ -214,7 +205,7 @@ span.i {
 
 
 @media (max-width: 600px) {
-    details#editinfo, details#editcss, div#copy, div#linklist {
+    details#editinfo, details#editcss, div#linklist {
         display: none;
     }
 

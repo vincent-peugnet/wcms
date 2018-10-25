@@ -4,5 +4,6 @@ w/w.config.json
 error_log
 public/w/media/*
 public/w/css/*
+public/w/css/*/*
 public/w/js/*
 public/index.html

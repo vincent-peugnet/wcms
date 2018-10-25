@@ -3,7 +3,7 @@
 use Michelf\MarkdownExtra;
 
 
-class Art
+class Art2
 {
 	private $id;
 	private $title;
@@ -27,18 +27,19 @@ class Art
 	private $invitepassword;
 	private $interface;
 	private $linkfrom;
+	private $linkto;
 	private $template;
 	private $affcount;
 	private $editcount;
 
-	private $linkto;
 
 	const LEN = 255;
-	const LENHTML = 20000;
+	const LENTEXT = 20000;
 	const SECUREMAX = 2;
 	const LENCOULEUR = 7;
 	const DEBUT = '(?id=';
 	const FIN = ')';
+	const TABS = ['section', 'css', 'header', 'html', 'nav', 'aside', 'footer', 'javascript'];
 
 	  
 	  
@@ -82,7 +83,9 @@ class Art
 		$this->setnav('');
 		$this->setaside('');
 		$this->setfooter('');
+		$this->setrender('');
 		$this->setsecure(2);
+		$this->setinvitepassword('invitepassword');
 		$this->setinterface('section');
 		$this->setlinkfrom([]);
 		$this->settemplate([]);
@@ -90,7 +93,7 @@ class Art
 		$this->seteditcount(0);
 	}
 
-	public function updatelien()
+	public function updatelinkfrom()
 	{
 		$this->linkfrom = [];
 		$this->linkfrom = array_unique(search($this->md(true), self::DEBUT, self::FIN));
@@ -109,15 +112,17 @@ class Art
 
 
 
-	public function calcliento($getlist)
+	public function calclinkto($getlist)
 	{
-		$liento = [];
-		foreach ($getlist as $lien) {
-			if (in_array($this->id(), $lien->lien('array'))) {
-				$liento[] = $lien->id();
+		$linkto = [];
+		if(!empty($getlist)) {
+			foreach ($getlist as $link) {
+				if (in_array($this->id(), $link->linkfrom('array'))) {
+					$linkto[] = $link->id();
+				}
 			}
+			$this->setlinkto($linkto);
 		}
-		$this->setliento($liento);
 	}
 
 
@@ -134,10 +139,10 @@ class Art
 		foreach ($taglist as $tag => $artlist) {
 			$replace = '<ul>';
 			foreach ($artlist as $art) {
-				$replace .= '<li><a href="?id=' . $art->id() . '" title="' . $art->intro() . '">' . $art->titre() . '</a></li>';
+				$replace .= '<li><a href="?id=' . $art->id() . '" title="' . $art->description() . '">' . $art->title() . '</a></li>';
 			}
 			$replace .= '</ul>';
-			$this->html = str_replace('%%' . $tag . '%%', $replace, $this->html);
+			$this->section = str_replace('%%' . $tag . '%%', $replace, $this->section);
 		}
 	}
 
@@ -145,11 +150,21 @@ class Art
 	{
 		foreach ($taglist as $tag => $artlist) {
 			foreach ($artlist as $art) {
-				if (!in_array($art->id(), $this->lien('array')) && $art->id() != $this->id()) {
-					$this->lien[] = $art->id();
+				if (!in_array($art->id(), $this->linkfrom('array')) && $art->id() != $this->id()) {
+					$this->linkfrom[] = $art->id();
 				}
 			}
 		}
+	}
+
+	public function templaterender(array $vars)
+	{
+		$datas = [];
+		foreach($vars as $var) {
+			if (method_exists($this, $var))
+			$datas[$var] = $this->$var();
+		}
+		return $datas;
 	}
 
 
@@ -235,34 +250,16 @@ class Art
 		return $this->css;
 	}
 
-	public function quickcss($option = 'json')
+	public function quickcss($type = 'json')
 	{
-		if ($option == 'json') {
+		if ($type == 'json') {
 			return json_encode($this->quickcss);
-		} elseif ($option == 'array') {
+		} elseif ($type == 'array') {
 			return $this->quickcss;
-		} elseif ($option == 'string') {
-			$string = '';
-			foreach ($this->quickcss as $key => $css) {
-				$string .= PHP_EOL . $key . ' {';
-				foreach ($css as $param => $value) {
-					if(is_int($value)) {
-						$string .= PHP_EOL . '    ' . $param . ': ' . $value . 'px;';
-					} else {
-						$string .= PHP_EOL . '    ' . $param . ': ' . $value . ';';
-					}
-				}
-				$string .= PHP_EOL . '}' . PHP_EOL;
-			}
-			return $string;
 		}
 	}
 
-	public function cssprint()
-	{
-		return $cssprint;
-	}
-
+	
 	public function csstemplate(App $app)
 	{
 		$data = [];
@@ -280,22 +277,43 @@ class Art
 		return $cssprint;
 	}
 
+
+	public function javascript($type = 'string')
+	{
+		return $this->javascript;
+	}
+
+	public function html($type = 'string')
+	{
+		return $this->html;
+	}
+
+	public function header($type = 'string')
+	{
+		return $this->header;
+	}
+
 	public function md($expand = false)
 	{
 		if ($expand == true) {
-			$md = str_replace('](=', '](?id=', $this->html);
+			$md = str_replace('](=', '](?id=', $this->section);
 		} else {
-			$md = $this->html;
+			$md = $this->section;
 		}
 		return $md;
 	}
 
-	public function html(App $app)
+	public function section()
+	{
+		return $this->section;
+	}
+
+	public function section888(App $app)
 	{
 
 		// %%%% TITLE & DESCIPTION
-		$html = str_replace('%TITLE%', $this->titre(), $this->html);
-		$html = str_replace('%DESCRIPTION%', $this->intro(), $html);
+		$section = str_replace('%TITLE%', $this->title(), $this->section);
+		$section = str_replace('%DESCRIPTION%', $this->description(), $section);
 
 		$parser = new MarkdownExtra;
 
@@ -303,41 +321,61 @@ class Art
 		$parser->header_id_func = function ($header) {
 			return preg_replace('/[^\w]/', '', strtolower($header));
 		};
-		$html = $parser->transform($html);
+		$section = $parser->transform($section);
 
 		// replace = > ?id=
-		$html = str_replace('href="=', 'href="?id=', $html);
+		$section = str_replace('href="=', 'href="?id=', $section);
 
 
 		// infobulles tooltip
-		foreach ($this->lien('array') as $id) {
+		foreach ($this->linkfrom('array') as $id) {
 			$title = "Cet article n'existe pas encore";
-			foreach ($app->getlister(['id', 'intro']) as $item) {
+			foreach ($app->getlister(['id', 'description']) as $item) {
 				if ($item->id() == $id) {
-					$title = $item->intro();
+					$title = $item->description();
 				}
 			}
-			$lien = 'href="?id=' . $id . '"';
-			$titlelien = ' title="' . $title . '" ' . $lien;
-			$html = str_replace($lien, $titlelien, $html);
+			$linkfrom = 'href="?id=' . $id . '"';
+			$titlelinkfrom = ' title="' . $title . '" ' . $linkfrom;
+			$section = str_replace($linkfrom, $titlelinkfrom, $section);
 		}
 
-		if (!empty(strstr($html, '%SUMMARY%'))) {
+		if (!empty(strstr($section, '%SUMMARY%'))) {
 
 
 
-			$html = str_replace('%SUMMARY%', sumparser($html), $html);
+			$section = str_replace('%SUMMARY%', sumparser($section), $section);
 		}
 
 
-		$html = str_replace('href="./media/', ' class="file" target="_blank" href="./media/', $html);
-		$html = str_replace('href="http', ' class="external" target="_blank" href="http', $html);
-		$html = str_replace('<img src="/', '<img src="./media/', $html);
-		$html = str_replace('<iframe', '<div class="iframe"><div class="container"><iframe class="video" ', $html);
-		$html = str_replace('</iframe>', '</iframe></div></div>', $html);
-		return $html;
+		$section = str_replace('href="./media/', ' class="file" target="_blank" href="./media/', $section);
+		$section = str_replace('href="http', ' class="external" target="_blank" href="http', $section);
+		$section = str_replace('<img src="/', '<img src="./media/', $section);
+		$section = str_replace('<iframe', '<div class="iframe"><div class="container"><iframe class="video" ', $section);
+		$section = str_replace('</iframe>', '</iframe></div></div>', $section);
+		return $section;
 
 
+	}
+
+	public function nav($type="string")
+	{
+		return $this->nav;
+	}
+
+	public function aside($type="string")
+	{
+		return $this->aside;
+	}
+
+	public function footer($type="string")
+	{
+		return $this->footer;
+	}
+
+	public function render($type = 'string')
+	{
+		return $this->render;
 	}
 
 	public function secure($type = 'int')
@@ -352,55 +390,59 @@ class Art
 		}
 	}
 
-	public function couleurtext()
+	public function invitepassword($type = 'int')
 	{
-		return $this->couleurtext;
+		return $this->invitepassword;
 	}
 
-	public function couleurbkg()
+	public function interface($type = 'secton')
 	{
-		return $this->couleurbkg;
+		return $this->interface;
 	}
 
-	public function couleurlien()
+	public function linkfrom($option = 'json')
 	{
-		return $this->couleurlien;
+		if ($option == 'json') {
+			$linkfrom = json_encode($this->linkfrom);
+		} elseif ($option == 'array') {
+			$linkfrom = $this->linkfrom;
+		} elseif ($option == 'sort') {
+			return count($this->linkfrom);
+		}
+		return $linkfrom;
+
 	}
 
-	public function couleurlienblank()
-	{
-		return $this->couleurlienblank;
-	}
-
-	public function lien($option)
+	public function linkto($option)
 	{
 		if ($option == 'string') {
-			$lien = implode(", ", $this->lien);
+			$linkto = implode(", ", $this->linkto);
 		} elseif ($option == 'array') {
-			$lien = $this->lien;
+			$linkto = $this->linkto;
 		} elseif ($option == 'sort') {
-			return count($this->lien);
+			return count($this->linkto);
 		}
-		return $lien;
+		return $linkto;
 
 	}
 
-	public function liento($option)
+	public function template($type = 'json')
 	{
-		if ($option == 'string') {
-			$liento = implode(", ", $this->liento);
-		} elseif ($option == 'array') {
-			$liento = $this->liento;
-		} elseif ($option == 'sort') {
-			return count($this->liento);
+		if($type == 'json') {
+			return json_encode($this->template);
+		} elseif ($type = 'array') {
+			return $this->template;
 		}
-		return $liento;
-
 	}
 
-	public function template($type = 'string')
+	public function affcount($type = 'int')
 	{
-		return $this->template;
+		return $this->affcount;
+	}
+
+	public function editcount($type = 'int')
+	{
+		return $this->editcount;
 	}
 
 
@@ -416,24 +458,17 @@ class Art
 		}
 	}
 
-	public function settitre($titre)
+	public function settitle($title)
 	{
-		if (strlen($titre) < self::LEN and is_string($titre)) {
-			$this->titre = strip_tags(trim($titre));
+		if (strlen($title) < self::LEN and is_string($title)) {
+			$this->title = strip_tags(trim($title));
 		}
 	}
 
-	public function setsoustitre($soustitre)
+	public function setdescription($description)
 	{
-		if (strlen($soustitre) < self::LEN and is_string($soustitre)) {
-			$this->soustitre = strip_tags(trim($soustitre));
-		}
-	}
-
-	public function setintro($intro)
-	{
-		if (strlen($intro) < self::LEN and is_string($intro)) {
-			$this->intro = strip_tags(trim($intro));
+		if (strlen($description) < self::LEN and is_string($description)) {
+			$this->description = strip_tags(trim($description));
 		}
 	}
 
@@ -491,25 +526,80 @@ class Art
 		}
 	}
 
-	public function setquickcss($quickcss)
-	{
-		
-	}
 
 	public function setcss($css)
 	{
-		if (strlen($css) < self::LENHTML and is_string($css)) {
+		if (strlen($css) < self::LENTEXT and is_string($css)) {
 			$this->css = strip_tags(trim(strtolower($css)));
 		}
 	}
 
+	
+	public function setquickcss($quickcss)
+	{
+		if(is_string($quickcss))		{
+			$quickcss = json_decode($quickcss, true);
+		}
+		if(is_array($quickcss)) {
+			$this->quickcss = $quickcss;
+		}
+	}
+
+	public function setjavascript($javascript)
+	{
+		if(strlen($javascript < self::LENTEXT && is_string($javascript))) {
+			$this->javascript = $javascript;
+		}
+	}
+	
+
 	public function sethtml($html)
 	{
-		if (strlen($html) < self::LENHTML and is_string($html)) {
+		if(strlen($html < self::LENTEXT && is_string($html))) {
 			$this->html = $html;
 		}
 	}
 
+	public function setheader($header)
+	{
+		if(strlen($header < self::LENTEXT && is_string($header))) {
+			$this->header = $header;
+		}
+	}
+	
+	public function setsection($section)
+	{
+		if (strlen($section) < self::LENTEXT and is_string($section)) {
+			$this->section = $section;
+		}
+	}
+	
+	public function setnav($nav)
+	{
+		if (strlen($nav) < self::LENTEXT and is_string($nav)) {
+			$this->nav = $nav;
+		}
+	}
+	
+	public function setaside($aside)
+	{
+		if (strlen($aside) < self::LENTEXT and is_string($aside)) {
+			$this->aside = $aside;
+		}
+	}
+
+	public function setfooter($footer)
+	{
+		if (strlen($footer) < self::LENTEXT and is_string($footer)) {
+			$this->footer = $footer;
+		}
+	}
+
+	public function setrender($render)
+	{
+		$this->render = $render;
+	}
+	
 	public function setsecure($secure)
 	{
 		if ($secure >= 0 and $secure <= self::SECUREMAX) {
@@ -517,53 +607,36 @@ class Art
 		}
 	}
 
-	public function setcouleurtext($couleurtext)
+	public function setinvitepassword($invitepassword)
 	{
-		$couleurtext = strval($couleurtext);
-		if (strlen($couleurtext) <= self::LENCOULEUR) {
-			$this->couleurtext = strip_tags(trim($couleurtext));
+		if(is_string($invitepassword) && strlen($invitepassword) < self::LEN) {
+			$this->invitepassword = $invitepassword;
 		}
 	}
 
-	public function setcouleurbkg($couleurbkg)
+	public function setinterface($interface)
 	{
-		$couleurbkg = strval($couleurbkg);
-		if (strlen($couleurbkg) <= self::LENCOULEUR) {
-			$this->couleurbkg = strip_tags(trim($couleurbkg));
+		if(in_array($interface, self::TABS))
+		{
+			$this->interface = $interface;
 		}
 	}
 
-	public function setcouleurlien($couleurlien)
+	public function setlinkfrom($linkfrom)
 	{
-		$couleurlien = strval($couleurlien);
-		if (strlen($couleurlien) <= self::LENCOULEUR) {
-			$this->couleurlien = strip_tags(trim($couleurlien));
-		}
-	}
-
-	public function setcouleurlienblank($couleurlienblank)
-	{
-		$couleurlienblank = strval($couleurlienblank);
-		if (strlen($couleurlienblank) <= self::LENCOULEUR) {
-			$this->couleurlienblank = strip_tags(trim($couleurlienblank));
-		}
-	}
-
-	public function setlien($lien)
-	{
-		if (!empty($lien) && strlen($lien) < self::LEN && is_string($lien)) {
-			$lien = strip_tags(trim(strtolower($lien)));
-			$lienlist = explode(", ", $lien);
-			$this->lien = $lienlist;
+		if (!empty($linkfrom) && strlen($linkfrom) < self::LEN && is_string($linkfrom)) {
+			$linkfrom = strip_tags(trim(strtolower($linkfrom)));
+			$linkfromlist = explode(", ", $linkfrom);
+			$this->linkfrom = $linkfromlist;
 		} else {
-			$this->lien = [];
+			$this->linkfrom = [];
 		}
 	}
 
-	public function setliento($liento)
+	public function setlinkto($linkto)
 	{
-		if (is_array($liento)) {
-			$this->liento = $liento;
+		if (is_array($linkto)) {
+			$this->linkto = $linkto;
 		}
 
 
@@ -571,11 +644,30 @@ class Art
 
 	public function settemplate($template)
 	{
-		$template = strip_tags($template);
-		if (strlen($template) == 0) {
-			$template = 'NULL';
+		if(is_string($template)) {
+			$template = json_decode($template, true);
 		}
-		$this->template = $template;
+		if(is_array($template)) {
+			$this->template = $template;
+		}
+	}
+
+	public function setaffcount($affcount)
+	{
+		if(is_int($affcount)) {
+			$this->affcount = $affcount;
+		} elseif(is_numeric($affcount)) {
+			$this->affcount = intval($affcount);
+		} 
+	}
+
+	public function seteditcount($editcount)
+	{
+		if(is_int($editcount)) {
+			$this->editcount = $editcount;
+		} elseif(is_numeric($editcount)) {
+			$this->editcount = intval($editcount);
+		} 
 	}
 
 

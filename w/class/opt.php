@@ -6,8 +6,8 @@ class Opt
 	private $tagfilter = [];
 	private $tagcompare = 'OR';
 	private $secure = 4;
-	private $liento = ['min' => '0', 'max' => '0'];
-	private $lienfrom = ['min' => '0', 'max' => '0'];
+	private $linkto = ['min' => '0', 'max' => '0'];
+	private $linkfrom = ['min' => '0', 'max' => '0'];
 	private $col = ['id'];
 	private $taglist = [];
 	private $invert = 0;
@@ -115,14 +115,14 @@ class Opt
 		return $this->tagcompare;
 	}
 
-	public function liento($type = 'array')
+	public function linkto($type = 'array')
 	{
-		return $this->liento;
+		return $this->linkto;
 	}
 
-	public function lienfrom($type = 'array')
+	public function linkfrom($type = 'array')
 	{
-		return $this->lienfrom;
+		return $this->linkfrom;
 	}
 
 	public function col($type = 'array')
@@ -194,34 +194,34 @@ class Opt
 		}
 	}
 
-	public function setliento($range)
+	public function setlinkto($range)
 	{
-		$this->liento = $range;
+		$this->linkto = $range;
 	}
 
-	public function setlienfrom($range)
+	public function setlinkfrom($range)
 	{
-		$this->lienfrom = $range;
+		$this->linkfrom = $range;
 	}
 
-	public function setlientomin($min)
+	public function setlinktomin($min)
 	{
-		$this->liento['min'] = intval($min);
+		$this->linkto['min'] = intval($min);
 	}
 
-	public function setlientomax($max)
+	public function setlinktomax($max)
 	{
-		$this->liento['max'] = intval($max);
+		$this->linkto['max'] = intval($max);
 	}
 
-	public function setlienfrommin($min)
+	public function setlinkfrommin($min)
 	{
-		$this->lienfrom['min'] = intval($min);
+		$this->linkfrom['min'] = intval($min);
 	}
 
-	public function setlienfrommax($max)
+	public function setlinkfrommax($max)
 	{
-		$this->lienfrom['max'] = intval($max);
+		$this->linkfrom['max'] = intval($max);
 	}
 
 	public function setcol($col)

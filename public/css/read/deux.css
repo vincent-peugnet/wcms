@@ -1,0 +1,8 @@
+body {
+    font-family:  serif;
+}
+
+span.alert {
+    background-color: #d00000;
+    color: white;
+}

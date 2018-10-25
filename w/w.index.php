@@ -2,17 +2,42 @@
 
 // _____________________________________________________ R E Q U I R E ________________________________________________________________
 
+
+
 session_start();
 
 
 
 require(__DIR__.'/fn/w.fn.php');
+
+function class_autoloader($class)
+{
+    require(__DIR__. DIRECTORY_SEPARATOR . 'class'. DIRECTORY_SEPARATOR  . strtolower($class) . '.php');
+}
+
+
+
+
+
 require(__DIR__.'/../vendor/autoload.php');
 
-spl_autoload_register('my_autoloader');
+spl_autoload_register('class_autoloader');
+
+$_SESSION['user'] = ['level' => 10];
+
+
+$router = new Router;
 
 
 
+
+
+
+
+
+
+
+exit;
 
 // ________________________________________________________ I N S T A L _________________________________________________
 
@@ -51,6 +76,12 @@ $app->setsession($session);
 
 
 // _______________________________________________________ A C T I O N __________________________________________________________________
+
+
+$router = new Router;
+
+
+
 
 
 if (isset($_POST['action'])) {
@@ -107,7 +138,7 @@ if (isset($_POST['action'])) {
 
         case 'new':
             if (isset($_GET['id'])) {
-                $art = new Art($_GET);
+                $art = new Art2($_GET);
                 $art->reset();
                 $app->add($art);
                 header('Location: ?id=' . $_GET['id'] . '&edit=1');
@@ -116,9 +147,9 @@ if (isset($_POST['action'])) {
 
         case 'update':
             if ($app->exist($_GET['id'])) {
-                $art = new Art($_POST);
-                $art->updatelien();
-                $art->autotaglistcalc($app->taglist($app->getlister(['id', 'titre', 'tag']), $art->autotaglist()));
+                $art = new Art2($_POST);
+                $art->updatelinkfrom();
+                $art->autotaglistcalc($app->taglist($app->getlister(['id', 'title', 'tag']), $art->autotaglist()));
                 $app->update($art);
                 if($config->fontsize() != $_POST['fontsize']) {
                     $config->setfontsize($_POST['fontsize']);
@@ -130,9 +161,9 @@ if (isset($_POST['action'])) {
 
         case 'display':
             if ($app->exist($_GET['id'])) {
-                $art = new Art($_POST);
-                $art->updatelien();
-                $art->autotaglistcalc($app->taglist($app->getlister(['id', 'titre', 'tag']), $art->autotaglist()));
+                $art = new Art2($_POST);
+                $art->updatelinkfrom();
+                $art->autotaglistcalc($app->taglist($app->getlister(['id', 'title', 'tag']), $art->autotaglist()));
                 $app->update($art);
                 if($config->fontsize() != $_POST['fontsize']) {
                     $config->setfontsize($_POST['fontsize']);
@@ -144,9 +175,9 @@ if (isset($_POST['action'])) {
 
         case 'home':
             if ($app->exist($_GET['id'])) {
-                $art = new Art($_POST);
-                $art->updatelien();
-                $art->autotaglistcalc($app->taglist($app->getlister(['id', 'titre', 'tag']), $art->autotaglist()));
+                $art = new Art2($_POST);
+                $art->updatelinkfrom();
+                $art->autotaglistcalc($app->taglist($app->getlister(['id', 'title', 'tag']), $art->autotaglist()));
                 $app->update($art);
                 if($config->fontsize() != $_POST['fontsize']) {
                     $config->setfontsize($_POST['fontsize']);
@@ -156,33 +187,9 @@ if (isset($_POST['action'])) {
             }
             break;
 
-        case 'copy':
-            if ($app->exist($_GET['id'])) {
-                $copy = $app->get($_POST['copy']);
-                $art = $app->get($_POST['id']);
-                if (!empty($_POST['css'])) {
-                    $art->setcss($copy->css());
-                }
-                if (!empty($_POST['color'])) {
-                    $art->setcouleurtext($copy->couleurtext());
-                    $art->setcouleurbkg($copy->couleurbkg());
-                    $art->setcouleurlien($copy->couleurlien());
-                    $art->setcouleurlienblank($copy->couleurlienblank());
-                }
-                if (!empty($_POST['html'])) {
-                    $art->sethtml($copy->md());
-                }
-                if (!empty($_POST['template'])) {
-                    $art->settemplate($copy->template());
-                }
-                $app->update($art);
-                header('Location: ?id=' . $art->id() . '&edit=1');
-            }
-            break;
-
         case 'delete':
             if ($app->exist($_GET['id'])) {
-                $art = new Art($_POST);
+                $art = new Art2($_POST);
                 $app->delete($art);
                 header('Location: ?id=' . $art->id());
             }
@@ -343,11 +350,11 @@ if (array_key_exists('id', $_GET)) {
 } elseif (array_key_exists('tag', $_GET)) {
     $app->bddinit($config);
     echo '<h4>' . $_GET['tag'] . '</h4>';
-    $aff->tag($app->getlister(['id', 'titre', 'intro', 'tag']), $_GET['tag'], $app);
-} elseif (array_key_exists('lien', $_GET)) {
+    $aff->tag($app->getlister(['id', 'title', 'description', 'tag']), $_GET['tag'], $app);
+} elseif (array_key_exists('linkfrom', $_GET)) {
     $app->bddinit($config);
-    echo '<h4><a href="?id=' . $_GET['lien'] . '">' . $_GET['lien'] . '</a></h4>';
-    $aff->lien($app->getlister(['id', 'titre', 'intro', 'lien']), $_GET['lien'], $app);
+    echo '<h4><a href="?id=' . $_GET['linkfrom'] . '">' . $_GET['linkfrom'] . '</a></h4>';
+    $aff->linkfrom($app->getlister(['id', 'title', 'description', 'linkfrom']), $_GET['linkfrom'], $app);
 } elseif (array_key_exists('aff', $_GET)) {
     include(__DIR__.'/controller/w.menu.php');
 } else {

@@ -9,10 +9,6 @@ function bddconnect($host, $bdname, $user, $password)
 	return $bdd;
 }
 
-function my_autoloader($class)
-{
-    require(__DIR__.'/../class/class.w.' . strtolower($class) . '.php');
-}
 
 function secure()
 {

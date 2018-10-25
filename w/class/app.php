@@ -118,46 +118,15 @@ class App
 
 // ___________________________________________ A R T ____________________________________
 
-	public function add(Art $art)
-	{
 
-		if ($this->exist($art->id())) {
-			echo '<h4>cet id existe deja</h4>';
-		} else {
-
-			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
-
-			$request = 'INSERT INTO ' . $this->arttable . '(id, titre, soustitre, intro, tag, datecreation, datemodif, css, html, secure, couleurtext, couleurbkg, couleurlien, couleurlienblank, lien, template) VALUES(:id, :titre, :soustitre, :intro, :tag, :datecreation, :datemodif, :css, :html, :secure, :couleurtext, :couleurbkg, :couleurlien, :couleurlienblank, :lien, :template)';
-
-			$q = $this->bdd->prepare($request);
-
-			$q->bindValue(':id', $art->id());
-			$q->bindValue(':titre', $art->titre());
-			$q->bindValue(':soustitre', $art->soustitre());
-			$q->bindValue(':intro', $art->intro());
-			$q->bindValue(':tag', $art->tag('string'));
-			$q->bindValue(':datecreation', $now->format('Y-m-d H:i:s'));
-			$q->bindValue(':datemodif', $now->format('Y-m-d H:i:s'));
-			$q->bindValue(':css', $art->css());
-			$q->bindValue(':html', $art->md());
-			$q->bindValue(':secure', $art->secure());
-			$q->bindValue(':couleurtext', $art->couleurtext());
-			$q->bindValue(':couleurbkg', $art->couleurbkg());
-			$q->bindValue(':couleurlien', $art->couleurlien());
-			$q->bindValue(':couleurlienblank', $art->couleurlienblank());
-			$q->bindValue(':lien', $art->lien('string'));
-			$q->bindValue(':template', $art->template());
-
-			$q->execute();
-		}
-	}
-
-	public function add2(Art2 $art)
+	public function add(Art2 $art)
 	{
 
 		if ($this->exist($art->id())) {
 			echo '<span class="alert">idalreadyexist</span>';
 		} else {
+
+			var_dump($art);
 
 			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
@@ -175,11 +144,11 @@ class App
 			$q->bindValue(':datemodif', $now->format('Y-m-d H:i:s'));
 			$q->bindValue(':daterender', $now->format('Y-m-d H:i:s'));
 			$q->bindValue(':css', $art->css());
-			$q->bindValue(':quickcss', $art->quickcss('string'));
+			$q->bindValue(':quickcss', $art->quickcss('json'));
 			$q->bindValue(':javascript', $art->javascript());
 			$q->bindValue(':html', $art->html());
 			$q->bindValue(':header', $art->header());
-			$q->bindValue(':section', $art->section());
+			$q->bindValue(':section', $art->md());
 			$q->bindValue(':nav', $art->nav());
 			$q->bindValue(':aside', $art->aside());
 			$q->bindValue(':footer', $art->footer());
@@ -187,8 +156,8 @@ class App
 			$q->bindValue(':secure', $art->secure());
 			$q->bindValue(':invitepassword', $art->invitepassword());
 			$q->bindValue(':interface', $art->interface());
-			$q->bindValue(':linkfrom', $art->linkfrom('string'));
-			$q->bindValue(':template', $art->template('string'));
+			$q->bindValue(':linkfrom', $art->linkfrom('json'));
+			$q->bindValue(':template', $art->template('json'));
 			$q->bindValue(':affcount', $art->affcount());
 			$q->bindValue(':editcount', $art->editcount());
 
@@ -196,7 +165,7 @@ class App
 		}
 	}
 
-	public function delete(Art $art)
+	public function delete(Art2 $art)
 	{
 		$req = $this->bdd->prepare('DELETE FROM ' . $this->arttable . ' WHERE id = :id ');
 		$req->execute(array('id' => $art->id()));
@@ -209,7 +178,7 @@ class App
 		$req->execute(array('id' => $id));
 		$donnees = $req->fetch(PDO::FETCH_ASSOC);
 
-		return new Art($donnees);
+		return new Art2($donnees);
 
 		$req->closeCursor();
 
@@ -217,38 +186,15 @@ class App
 
 
 
-	public function update(Art $art)
+
+
+	public function update(Art2 $art)
 	{
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
-		$q = $this->bdd->prepare('UPDATE ' . $this->arttable . ' SET titre = :titre, soustitre = :soustitre, intro = :intro, tag = :tag, datecreation = :datecreation, datemodif = :datemodif, css = :css, html = :html, secure = :secure, couleurtext = :couleurtext, couleurbkg = :couleurbkg, couleurlien = :couleurlien, couleurlienblank = :couleurlienblank, lien = :lien, template = :template WHERE id = :id');
+		//$request = 'UPDATE ' . $this->arttable . '(id, title, description, tag, date, datecreation, datemodif, daterender, css, quickcss, javascript, html, header, section, nav, aside, footer, render, secure, invitepassword, interface, linkfrom, template, affcount, editcount)	VALUES(:id, :title, :description, :tag, :date, :datecreation, :datemodif, :daterender, :css, :quickcss, :javascript, :html, :header, :section, :nav, :aside, :footer, :render, :secure, :invitepassword, :interface, :linkfrom, :template, :affcount, :editcount) WHERE id = :id';
 
-		$q->bindValue(':id', $art->id());
-		$q->bindValue(':titre', $art->titre());
-		$q->bindValue(':soustitre', $art->soustitre());
-		$q->bindValue(':intro', $art->intro());
-		$q->bindValue(':tag', $art->tag('string'));
-		$q->bindValue(':datecreation', $art->datecreation('string'));
-		$q->bindValue(':datemodif', $now->format('Y-m-d H:i:s'));
-		$q->bindValue(':css', $art->css());
-		$q->bindValue(':html', $art->md());
-		$q->bindValue(':secure', $art->secure());
-		$q->bindValue(':couleurtext', $art->couleurtext());
-		$q->bindValue(':couleurbkg', $art->couleurbkg());
-		$q->bindValue(':couleurlien', $art->couleurlien());
-		$q->bindValue(':couleurlienblank', $art->couleurlienblank());
-		$q->bindValue(':lien', $art->lien('string'));
-		$q->bindValue(':template', $art->template());
-
-		$q->execute();
-	}
-
-	public function update2(Art2 $art)
-	{
-		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
-
-		$request = 'UPDATE ' . $this->arttable . '(id, title, description, tag, date, datecreation, datemodif, daterender, css, quickcss, javascript, html, header, section, nav, aside, footer, render, secure, invitepassword, interface, linkfrom, template, affcount, editcount)
-					VALUES(:id, :title, :description, :tag, :date, :datecreation, :datemodif, :daterender, :css, :quickcss, :javascript, :html, :header, :section, :nav, :aside, :footer, :render, :secure, :invitepassword, :interface, :linkfrom, :template, :affcount, :editcount) WHERE id = :id';
+		$request = 'UPDATE ' . $this->arttable . ' SET id = :id, title = :title, description = :description, tag = :tag, date = :date, datecreation = :datecreation, datemodif = :datemodif, daterender = :daterender, css = :css, quickcss = :quickcss, javascript = :javascript, html = :html, header = :header, section = :section, nav = :nav, aside = :aside, footer = :footer, render = :footer, secure = :secure, invitepassword = :invitepassword, interface = :interface, linkfrom = :linkfrom, template = :template, affcount = :affcount, editcount = :editcount WHERE id = :id';
 
 		$q = $this->bdd->prepare($request);
 
@@ -261,11 +207,11 @@ class App
 		$q->bindValue(':datemodif', $now->format('Y-m-d H:i:s'));
 		$q->bindValue(':daterender', $now->format('Y-m-d H:i:s'));
 		$q->bindValue(':css', $art->css());
-		$q->bindValue(':quickcss', $art->quickcss('string'));
+		$q->bindValue(':quickcss', $art->quickcss('json'));
 		$q->bindValue(':javascript', $art->javascript());
 		$q->bindValue(':html', $art->html());
 		$q->bindValue(':header', $art->header());
-		$q->bindValue(':section', $art->section());
+		$q->bindValue(':section', $art->md());
 		$q->bindValue(':nav', $art->nav());
 		$q->bindValue(':aside', $art->aside());
 		$q->bindValue(':footer', $art->footer());
@@ -273,13 +219,23 @@ class App
 		$q->bindValue(':secure', $art->secure());
 		$q->bindValue(':invitepassword', $art->invitepassword());
 		$q->bindValue(':interface', $art->interface());
-		$q->bindValue(':linkfrom', $art->linkfrom('string'));
-		$q->bindValue(':template', $art->template('string'));
+		$q->bindValue(':linkfrom', $art->linkfrom('json'));
+		$q->bindValue(':template', $art->template('json'));
 		$q->bindValue(':affcount', $art->affcount());
 		$q->bindValue(':editcount', $art->editcount());
 
 		$q->execute();
 	}
+
+	public function exist($id)
+	{
+		$req = $this->bdd->prepare(' SELECT COUNT(*) FROM ' . $this->arttable . ' WHERE id = :id ');
+		$req->execute(array('id' => $id));
+		$donnees = $req->fetch(PDO::FETCH_ASSOC);
+
+		return (bool)$donnees['COUNT(*)'];
+	}
+
 
 
 
@@ -296,7 +252,7 @@ class App
 		$opt = array_update($default, $opt);
 
 		$list = [];
-		$option = ['datecreation', 'titre', 'id', 'intro', 'datemodif', 'tag', 'secure'];
+		$option = ['datecreation', 'title', 'id', 'description', 'datemodif', 'tag', 'secure'];
 		if (is_array($selection) && is_string($opt['tri']) && strlen($opt['tri']) < 16 && is_string($opt['desc']) && strlen($opt['desc']) < 5 && in_array($opt['tri'], $option)) {
 
 			$selection = implode(", ", $selection);
@@ -304,7 +260,7 @@ class App
 			$select = 'SELECT ' . $selection . ' FROM ' . $this->arttable . ' ORDER BY ' . $opt['tri'] . ' ' . $opt['desc'];
 			$req = $this->bdd->query($select);
 			while ($donnees = $req->fetch(PDO::FETCH_ASSOC)) {
-				$list[] = new Art($donnees);
+				$list[] = new Art2($donnees);
 			}
 			return $list;
 		}
@@ -323,16 +279,16 @@ class App
 		$select = 'SELECT ' . $opt->col('string') . ' FROM ' . $this->arttable;
 		$req = $this->bdd->query($select);
 		while ($donnees = $req->fetch(PDO::FETCH_ASSOC)) {
-			$artlist[] = new Art($donnees);
+			$artlist[] = new Art2($donnees);
 		}
 		return $artlist;
 
 	}
 
-	public function listcalclien(&$artlist)
+	public function listcalclinkfrom(&$artlist)
 	{
 		foreach ($artlist as $art) {
-			$art->calcliento($artlist);
+			$art->calclinkto($artlist);
 		}
 	}
 
@@ -434,14 +390,6 @@ class App
 		return $this->bdd->query(' SELECT COUNT(*) FROM ' . $this->arttable . ' ')->fetchColumn();
 	}
 
-	public function exist($id)
-	{
-		$req = $this->bdd->prepare(' SELECT COUNT(*) FROM ' . $this->arttable . ' WHERE id = :id ');
-		$req->execute(array('id' => $id));
-		$donnees = $req->fetch(PDO::FETCH_ASSOC);
-
-		return (bool)$donnees['COUNT(*)'];
-	}
 
 	
 	// __________________________________________ T A B L E ________________________________________________________
@@ -485,41 +433,6 @@ class App
 	}
 
 
-	public function addtable($dbname, $tablename)
-	{
-
-		if (!$this->tableexist($dbname, $tablename)) {
-
-			$table = "CREATE TABLE `$tablename` (
-			`id` varchar(255) NOT NULL DEFAULT 'art',
-			`titre` varchar(255) NOT NULL DEFAULT 'titre',
-			`soustitre` varchar(255) NOT NULL DEFAULT 'soustitre',
-			`intro` varchar(255) NOT NULL DEFAULT 'intro',
-			`tag` varchar(255) NOT NULL DEFAULT 'sans tag,',
-			`datecreation` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			`datemodif` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			`css` text,
-			`html` text,
-			`secure` int(1) NOT NULL DEFAULT '0',
-			`couleurtext` varchar(7) NOT NULL DEFAULT '#000000',
-			`couleurbkg` varchar(7) NOT NULL DEFAULT '#ffffff',
-			`couleurlien` varchar(7) NOT NULL DEFAULT '#2a3599',
-			`couleurlienblank` varchar(7) NOT NULL DEFAULT '#2a8e99',
-			`lien` varchar(255) DEFAULT NULL,
-			`template` varchar(255) DEFAULT NULL
-		  )";
-
-			$alter = "ALTER TABLE `$tablename`
-			ADD PRIMARY KEY (`id`)";
-
-			$req = $this->bdd->query($table);
-			$req = $this->bdd->query($alter);
-
-			return 'tablecreated';
-		} else {
-			return 'tablealreadyexist';
-		}
-	}
 
 
 
@@ -667,32 +580,6 @@ class App
 
 
 
-	//_________________________________________________________ A D M ________________________________________________________
-
-
-
-	public function dirlist($dir, $extension)
-	{
-		if ($handle = opendir($dir)) {
-			$list = [];
-			while (false !== ($entry = readdir($handle))) {
-				if ($entry != "." && $entry != ".." && pathinfo($entry)['extension'] == $extension) {
-
-					$list[] = $entry;
-
-				}
-			}
-			return $list;
-		}
-	}
-
-	public function downloadtable()
-	{
-
-	}
-
-
-
 
 	// ________________________________________________________ M A P ________________________________________________________
 
@@ -705,16 +592,16 @@ class App
 		$style = "";
 		foreach ($getlister as $item) {
 			if($item->secure() == 2) {
-				$style = $style . $lb . $item->id() . '{' . $item->titre() . '}';
+				$style = $style . $lb . $item->id() . '{' . $item->title() . '}';
 			} elseif ($item->secure() == 1) {
-				$style = $style . $lb . $item->id() . '(' . $item->titre() . ')';
+				$style = $style . $lb . $item->id() . '(' . $item->title() . ')';
 				
 			} else {
-				$style = $style . $lb . $item->id() . '((' . $item->titre() . '))';
+				$style = $style . $lb . $item->id() . '((' . $item->title() . '))';
 			}
-			foreach ($item->lien('array') as $lien) {
-				$map = $map . $lb . $item->id() . ' --> ' . $lien;
-				$link = $link . $lb . 'click ' . $lien . ' "./?id=' . $lien . '"';
+			foreach ($item->linkfrom('array') as $linkfrom) {
+				$map = $map . $lb . $item->id() . ' --> ' . $linkfrom;
+				$link = $link . $lb . 'click ' . $linkfrom . ' "./?id=' . $linkfrom . '"';
 				
 			}
 			$link = $link . $lb . 'click ' . $item->id() . ' "./?id=' . $item->id() . '"';

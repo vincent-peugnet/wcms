@@ -10,10 +10,10 @@ if ($app->session() >= $app::EDITOR) {
 
     $app->bddinit($config);
 
-    $opt = new Opt(Art::classvarlist());
-    $opt->setcol(['id', 'tag', 'lien', 'contenu', 'intro', 'titre', 'datemodif', 'datecreation', 'secure']);
+    $opt = new Opt(Art2::classvarlist());
+    $opt->setcol(['id', 'tag', 'linkfrom', 'contenu', 'description', 'title', 'datemodif', 'datecreation', 'secure']);
     $table = $app->getlisteropt($opt);
-    $app->listcalclien($table);
+    $app->listcalclinkfrom($table);
     $opt->settaglist($table);
     $opt->submit();
     
@@ -27,7 +27,7 @@ if ($app->session() >= $app::EDITOR) {
  
 
 
-    $opt->setcol(['id', 'tag', 'lien', 'contenu', 'intro', 'titre', 'datemodif', 'datecreation', 'secure', 'liento']);
+    $opt->setcol(['id', 'tag', 'linkfrom', 'contenu', 'description', 'title', 'datemodif', 'datecreation', 'secure', 'linkto']);
 
 
     $aff->option($app, $opt);
