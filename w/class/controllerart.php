@@ -9,9 +9,6 @@ class Controllerart extends Controllerdb
     public function __construct($id) {
         parent::__construct();
     
-        
-        //echo '<h1>Article</h1>';
-        //echo $id;
 
         $this->art = new Art2(['id' => $id]);
     }
@@ -20,12 +17,10 @@ class Controllerart extends Controllerdb
     {
         if($this->artmanager->exist($this->art->id())) {
             $this->art = $this->artmanager->get($this->art);
-            //var_dump($this->art);            
             $this->art->autotaglistupdate($this->artmanager->taglist($this->artmanager->getlister(['id', 'title', 'description', 'tag']), $this->art->autotaglist()));
 
             return true;
         } else {
-            echo '<h3>Article does not exist yet.</h3>';
             return false;
         }
     }
@@ -33,26 +28,30 @@ class Controllerart extends Controllerdb
     public function read()
     {
 
-        if($this->importart()) {
-            if($this->user->level() >= $this->art->secure()) {
-                $datas = $this->art->templaterender(['id', 'title', 'description', 'javascript', 'html', 'header', 'nav', 'aside', 'section', 'footer']);
-                echo $this->templates->render('reader', $datas);
-            } else {
-                echo '<h3>Not enought right to see the article</h3>';
-            }
+        $artexist = $this->importart();
+        $display = $this->user->level() >= $this->art->secure();
+        $cancreate = $this->user->cancreate();
 
-        }
+        $this->showtemplate('read', ['art' => $this->art, 'artexist' => $artexist, 'display' => $display,  'cancreate' => $cancreate]);                
+ 
 
 
     }
 
     public function edit()
     {
-        echo '<h2>Edit</h2>';
-        if($this->importart()) {
-            // vue edit art
+        if($this->importart() && $this->user->canedit()) {
+            $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true]);
+        } else {
+            $this->redirect('?id=' . $this->art->id());
         }
         
+    }
+
+    public function log()
+    {
+        $this->importart();
+        var_dump($this->art);
     }
 
     public function add()
@@ -70,14 +69,19 @@ class Controllerart extends Controllerdb
         $this->artmanager->delete($this->art);
     }
 
-    public function update($id, $redir= "home")
+    public function update()
     {
-        echo '<h2>Update</h2>';        
 
-        $this->art = new Art2($_POST);
-        $this->art->updatelinkfrom();
-        $this->art->autotaglistcalc($this->artmanager->taglist($this->artmanagergetlister(['id', 'title', 'tag']), $this->art->autotaglist()));
+
+        if($this->importart()) {
+            $this->art->hydrate($_POST);
+        }
+
+        // $this->art->updatelinkfrom();
+        // $this->art->autotaglistcalc($this->artmanager->taglist($this->artmanager->getlister(['id', 'title', 'tag']), $this->art->autotaglist()));
         $this->artmanager->update($this->art);
+
+        $this->redirect('?id=' . $this->art->id() . '&aff=edit');
 
         
 

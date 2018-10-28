@@ -2,17 +2,22 @@
 class Modelart extends Modeldb
 {
 
-	
-	public function __construct() {
+	const SELECT = ['title', 'id', 'description', 'tag', 'date', 'datecreation', 'datemodif', 'daterender', 'css', 'quickcss', 'javascript', 'html', 'header', 'section', 'nav', 'aside', 'footer', 'render', 'secure', 'invitepassword', 'interface', 'linkfrom', 'linkto', 'template', 'affcount', 'editcount'];
+	const BY = ['datecreation', 'title', 'id', 'description', 'datemodif', 'secure'];
+	const ORDER = ['DESC', 'ASC'];
+
+
+	public function __construct()
+	{
 		parent::__construct();
 	}
 
 
-    
+
 	public function exist($id)
 	{
 
-		$req = $this->bdd->prepare(' SELECT COUNT(*) FROM ' . $this->config->arttable() . ' WHERE id = :id ');
+		$req = $this->bdd->prepare(' SELECT COUNT(*) FROM ' . Config::arttable() . ' WHERE id = :id ');
 		$req->execute(array('id' => $id));
 		$donnees = $req->fetch(PDO::FETCH_ASSOC);
 
@@ -23,19 +28,18 @@ class Modelart extends Modeldb
 
 
 
-    public function add(Art2 $art)
+	public function add(Art2 $art)
 	{
 
 		if ($this->exist($art->id())) {
 			echo '<span class="alert">idalreadyexist</span>';
 		} else {
 
-			var_dump($art);
-
 			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
-			$request = 'INSERT INTO ' . $this->config->arttable() . '(id, title, description, tag, date, datecreation, datemodif, daterender, css, quickcss, javascript, html, header, section, nav, aside, footer, render, secure, invitepassword, interface, linkfrom, template, affcount, editcount)
-						VALUES(:id, :title, :description, :tag, :date, :datecreation, :datemodif, :daterender, :css, :quickcss, :javascript, :html, :header, :section, :nav, :aside, :footer, :render, :secure, :invitepassword, :interface, :linkfrom, :template, :affcount, :editcount)';
+			$table = Config::arttable();
+			$request = "INSERT INTO  $table (id, title, description, tag, date, datecreation, datemodif, daterender, css, quickcss, javascript, html, header, section, nav, aside, footer, render, secure, invitepassword, interface, linkfrom, linkto, template, affcount, editcount)
+						VALUES(:id, :title, :description, :tag, :date, :datecreation, :datemodif, :daterender, :css, :quickcss, :javascript, :html, :header, :section, :nav, :aside, :footer, :render, :secure, :invitepassword, :interface, :linkfrom, :linkto, :template, :affcount, :editcount)";
 
 			$q = $this->bdd->prepare($request);
 
@@ -61,18 +65,19 @@ class Modelart extends Modeldb
 			$q->bindValue(':invitepassword', $art->invitepassword());
 			$q->bindValue(':interface', $art->interface());
 			$q->bindValue(':linkfrom', $art->linkfrom('json'));
+			$q->bindValue(':linkto', $art->linkto('json'));
 			$q->bindValue(':template', $art->template('json'));
 			$q->bindValue(':affcount', $art->affcount());
 			$q->bindValue(':editcount', $art->editcount());
 
 			$q->execute();
 		}
-    }
-    
+	}
 
-    public function delete(Art2 $art)
+
+	public function delete(Art2 $art)
 	{
-		$req = $this->bdd->prepare('DELETE FROM ' . $this->config->arttable() . ' WHERE id = :id ');
+		$req = $this->bdd->prepare('DELETE FROM ' . Config::arttable() . ' WHERE id = :id ');
 		$req->execute(array('id' => $art->id()));
 		$req->closeCursor();
 	}
@@ -80,7 +85,7 @@ class Modelart extends Modeldb
 	public function get(Art2 $art)
 	{
 
-		$req = $this->bdd->prepare('SELECT * FROM ' . $this->config->arttable() . ' WHERE id = :id ');
+		$req = $this->bdd->prepare('SELECT * FROM ' . Config::arttable() . ' WHERE id = :id ');
 		$req->execute(array('id' => $art->id()));
 		$donnees = $req->fetch(PDO::FETCH_ASSOC);
 
@@ -93,14 +98,13 @@ class Modelart extends Modeldb
 
 
 
-
 	public function update(Art2 $art)
 	{
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
 		//$request = 'UPDATE ' . $this->arttable . '(id, title, description, tag, date, datecreation, datemodif, daterender, css, quickcss, javascript, html, header, section, nav, aside, footer, render, secure, invitepassword, interface, linkfrom, template, affcount, editcount)	VALUES(:id, :title, :description, :tag, :date, :datecreation, :datemodif, :daterender, :css, :quickcss, :javascript, :html, :header, :section, :nav, :aside, :footer, :render, :secure, :invitepassword, :interface, :linkfrom, :template, :affcount, :editcount) WHERE id = :id';
-
-		$request = 'UPDATE ' . $this->arttable . ' SET id = :id, title = :title, description = :description, tag = :tag, date = :date, datecreation = :datecreation, datemodif = :datemodif, daterender = :daterender, css = :css, quickcss = :quickcss, javascript = :javascript, html = :html, header = :header, section = :section, nav = :nav, aside = :aside, footer = :footer, render = :footer, secure = :secure, invitepassword = :invitepassword, interface = :interface, linkfrom = :linkfrom, template = :template, affcount = :affcount, editcount = :editcount WHERE id = :id';
+		$table = Config::arttable();
+		$request = "UPDATE $table SET id = :id, title = :title, description = :description, tag = :tag, date = :date, datecreation = :datecreation, datemodif = :datemodif, daterender = :daterender, css = :css, quickcss = :quickcss, javascript = :javascript, html = :html, header = :header, section = :section, nav = :nav, aside = :aside, footer = :footer, render = :footer, secure = :secure, invitepassword = :invitepassword, interface = :interface, linkfrom = :linkfrom, linkto = :linkto, template = :template, affcount = :affcount, editcount = :editcount WHERE id = :id";
 
 		$q = $this->bdd->prepare($request);
 
@@ -108,10 +112,10 @@ class Modelart extends Modeldb
 		$q->bindValue(':title', $art->title());
 		$q->bindValue(':description', $art->description());
 		$q->bindValue(':tag', $art->tag('string'));
-		$q->bindValue(':date', $now->format('Y-m-d H:i:s'));
-		$q->bindValue(':datecreation', $now->format('Y-m-d H:i:s'));
+		$q->bindValue(':date', $art->date('string'));
+		$q->bindValue(':datecreation', $art->datecreation('string'));
 		$q->bindValue(':datemodif', $now->format('Y-m-d H:i:s'));
-		$q->bindValue(':daterender', $now->format('Y-m-d H:i:s'));
+		$q->bindValue(':daterender', $art->daterender('string'));
 		$q->bindValue(':css', $art->css());
 		$q->bindValue(':quickcss', $art->quickcss('json'));
 		$q->bindValue(':javascript', $art->javascript());
@@ -126,6 +130,7 @@ class Modelart extends Modeldb
 		$q->bindValue(':invitepassword', $art->invitepassword());
 		$q->bindValue(':interface', $art->interface());
 		$q->bindValue(':linkfrom', $art->linkfrom('json'));
+		$q->bindValue(':linkto', $art->linkto('json'));
 		$q->bindValue(':template', $art->template('json'));
 		$q->bindValue(':affcount', $art->affcount());
 		$q->bindValue(':editcount', $art->editcount());
@@ -147,13 +152,59 @@ class Modelart extends Modeldb
 
 			$selection = implode(", ", $selection);
 
-			$select = 'SELECT ' . $selection . ' FROM ' . $this->config->arttable() . ' ORDER BY ' . $opt['tri'] . ' ' . $opt['desc'];
+
+			$select = 'SELECT ' . $selection . ' FROM ' . Config::arttable() . ' ORDER BY ' . $opt['tri'] . ' ' . $opt['desc'];
 			$req = $this->bdd->query($select);
 			while ($donnees = $req->fetch(PDO::FETCH_ASSOC)) {
 				$list[] = new Art2($donnees);
 			}
 			return $list;
 		}
+	}
+
+	public function getlisterwhere(array $select = ['id'], array $whereid = [], $by = 'id', $order = 'DESC')
+	{
+		// give an array using SELECTION columns and sort and desc OPTIONS 
+
+
+		$select = array_intersect(array_unique($select), self::SELECT);
+		if (empty($select)) {
+			$select = ' * ';
+		} else {
+			$select = implode(", ", $select);
+		}
+
+
+		$whereid = array_unique($whereid);
+
+		$list = [];
+
+		if (!in_array($by, self::BY)) {
+			$by = 'id';
+		}
+		if (!in_array($order, self::ORDER)) {
+			$order = 'DESC';
+		}
+
+
+		if (!empty($whereid)) {
+			$wherestatements = array_map(function ($element) {
+				return ' id= ?';
+			}, $whereid);
+			$where = 'WHERE ' . implode(' OR ', $wherestatements);
+		} else {
+			$where = '';
+		}
+
+		$table = Config::arttable();
+		$prepare = "SELECT $select FROM $table $where ORDER BY $by $order";
+		$req = $this->bdd->prepare($prepare);
+		$req->execute($whereid);
+		while ($donnees = $req->fetch(PDO::FETCH_ASSOC)) {
+			$list[] = new Art2($donnees);
+		}
+
+		return $list;
 	}
 
 
@@ -166,7 +217,7 @@ class Modelart extends Modeldb
 
 		$artlist = [];
 
-		$select = 'SELECT ' . $opt->col('string') . ' FROM ' . $this->config->arttable();
+		$select = 'SELECT ' . $opt->col('string') . ' FROM ' . Config::arttable();
 		$req = $this->bdd->query($select);
 		while ($donnees = $req->fetch(PDO::FETCH_ASSOC)) {
 			$artlist[] = new Art2($donnees);
@@ -248,7 +299,7 @@ class Modelart extends Modeldb
 
 	public function lister()
 	{
-		$req = $this->bdd->query(' SELECT * FROM ' . $this->arttable . ' ORDER BY id ');
+		$req = $this->bdd->query(' SELECT * FROM ' . Config::arttable() . ' ORDER BY id ');
 		$donnees = $req->fetchAll(PDO::FETCH_ASSOC);
 		$req->closeCursor();
 		return $donnees;

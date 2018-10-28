@@ -2,28 +2,39 @@
 
 class Modelhome extends Modeldb
 {
-    public function table2()
+ 	
+	public function __construct() {
+		parent::__construct();
+	}
+
+    public function optinit($table)
     {
-        $artmanager = new Modelart;
 
         $opt = new Opt(Art2::classvarlist());
-        $opt->setcol(['id', 'tag', 'linkfrom', 'contenu', 'description', 'title', 'datemodif', 'datecreation', 'secure']);
-        $table = $artmanager->getlisteropt($opt);
-        $artmanager->listcalclinkfrom($table);
+        $opt->setcol(['id', 'tag', 'linkfrom', 'linkto', 'description', 'title', 'datemodif', 'datecreation', 'secure']);
+        //$table = $listmanager->getlisteropt($opt);
+        //$listmanager->listcalclinkfrom($table);
         $opt->settaglist($table);
         $opt->submit();
 
 
-        $opt->setcol(['id', 'tag', 'linkfrom', 'contenu', 'description', 'title', 'datemodif', 'datecreation', 'secure', 'linkto']);
+
+        return $opt;
+    }
+
+    public function optupdate()
+    {
+        
+    }
 
 
-        //$aff->option($app, $opt);
+    public function table2($table, $opt)
+    {
+        $listmanager = new Modelart;
 
-        echo '<h3>Options</h3>';
 
-
-        $filtertagfilter = $artmanager->filtertagfilter($table, $opt->tagfilter(), $opt->tagcompare());
-        $filtersecure = $artmanager->filtersecure($table, $opt->secure());
+        $filtertagfilter = $listmanager->filtertagfilter($table, $opt->tagfilter(), $opt->tagcompare());
+        $filtersecure = $listmanager->filtersecure($table, $opt->secure());
 
         $filter = array_intersect($filtertagfilter, $filtersecure);
         $table2 = [];
@@ -42,7 +53,7 @@ class Modelhome extends Modeldb
             $table2 = $table2invert;
         }
 
-        $artmanager->artlistsort($table2, $opt->sortby(), $opt->order());
+        $listmanager->artlistsort($table2, $opt->sortby(), $opt->order());
 
 
         return $table2;

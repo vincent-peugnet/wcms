@@ -135,42 +135,7 @@ function str_clean(string $string)
 	return str_replace(' ', '_', strtolower(strip_tags($string)));
 }
 
-function sumparser($text)
-{
-    preg_match_all('#<h([1-6]) id="(\w+)">(.+)</h[1-6]>#iU', $text, $out);
 
-
-    $sum = [];
-    foreach ($out[2] as $key => $value) {
-        $sum[$value][$out[1][$key]] = $out[3][$key];
-    }
-
-
-    $sumstring = '';
-    $last = 0;
-    foreach ($sum as $title => $list) {
-        foreach ($list as $h => $link) {
-            if($h > $last) {
-                for ($i = 1; $i <= ($h - $last); $i++) {
-                    $sumstring .= '<ul>';
-                }            
-                $sumstring .= '<li><a href="#'.$title.'">'.$link.'</a></li>' ;
-            } elseif ($h < $last) {
-                for ($i = 1; $i <= ($last - $h); $i++) {
-                    $sumstring .= '</ul>';
-                }
-                $sumstring .= '<li><a href="#'.$title.'">'.$link.'</a></li>' ;            
-            } elseif ($h = $last) {
-                $sumstring .= '<li><a href="#'.$title.'">'.$link.'</a></li>' ;
-            }
-            $last = $h;
-        }
-    }
-    for ($i = 1; $i <= ($last); $i++) {
-        $sumstring .= '</ul>';
-    }
-    return $sumstring;
-}
 
 
 ?>

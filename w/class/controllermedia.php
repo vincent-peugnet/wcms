@@ -18,7 +18,6 @@ class Controllermedia extends Controller
         if($this->useriseditor()) {
 
 
-            echo $this->templates->render('media', ['interface' => 'desktop']);
 
         }
     }

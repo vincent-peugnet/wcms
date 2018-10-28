@@ -1,14 +1,18 @@
 <?php
 class Modeldb extends Model
 {
+	/** @var PDO */
     protected $bdd;
-    protected $arttable;
+	protected $arttable;
+	
+	protected static $db;
 
     public function __construct() {
-		parent::__construct();
-        $this->setbdd();
-    }
+		$this->setbdd();
 
+		//self::setdb();
+	}
+	
 
 
     public function setbdd()
@@ -16,7 +20,35 @@ class Modeldb extends Model
 		$caught = true;
 
 		try {
-			$this->bdd = new PDO('mysql:host=' . $this->config->host() . ';dbname=' . $this->config->dbname() . ';charset=utf8', $this->config->user(), $this->config->password(), array(PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT));
+			$this->bdd = new PDO('mysql:host=' . Config::host() . ';dbname=' . Config::dbname() . ';charset=utf8', Config::user(), Config::password(), array(PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT));
+			//$this->bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		} catch (PDOException $e) {
+			$caught = false;
+			echo '<h1>Error 500, database offline</h1>';
+			if ($this->session() >= self::EDITOR) {
+				echo '<p>Error : ' . $e->getMessage() . '</p>';
+				if ($this->session() == self::ADMIN) {
+					echo '<p>Go to the <a href="?aff=admin">Admin Panel</a> to edit your database credentials</p>';
+				} else {
+					echo '<p>Logout and and come back with an <strong>admin password</strong> to edit the database connexions settings.</p>';
+				}
+			} else {
+				echo '<p><a href=".">Homepage for admin login</a> (connect on the top right side)</p>';
+			}
+			exit;
+		}
+
+		return $caught;
+
+	}
+
+
+	public static function setdb()
+	{
+		$caught = true;
+
+		try {
+			self::$db = new PDO('mysql:host=' . Config::host() . ';dbname=' . Config::dbname() . ';charset=utf8', Config::user(), Config::password(), array(PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT));
 			//$this->bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		} catch (PDOException $e) {
 			$caught = false;
@@ -40,8 +72,8 @@ class Modeldb extends Model
 
 	public function settable(Config $config)
 	{
-		if (!empty($config->arttable())) {
-			$this->arttable = $config->arttable();
+		if (!empty(Config::arttable())) {
+			$this->arttable = Config::arttable();
 		} else {
 			echo '<h1>Table Error</h1>';
 
@@ -84,7 +116,6 @@ class Modeldb extends Model
 		$req->closeCursor();
 		$exist = intval($donnees['COUNT(*)']);
 		return $exist;
-
 
 
 

@@ -2,41 +2,60 @@
 
 
 
-class Config
+abstract class Config
 {
-	private $host;
-	private $dbname;
-	private $user;
-	private $password;
-	private $arttable;
-	private $domain;
-	private $admin;
-	private $editor;
-	private $invite;
-	private $read;
-	private $color4;
-	private $fontsize = 6;
+	protected static $host;
+	protected static $dbname;
+	protected static $user;
+	protected static $password;
+	protected static $arttable;
+	protected static $domain;
+	protected static $admin;
+	protected static $editor;
+	protected static $invite;
+	protected static $read;
+	protected static $color4;
+	protected static $fontsize = 6;
 
 
 // _______________________________________ F U N _______________________________________
 
-	public function __construct(array $donnees)
-	{
-		$this->hydrate($donnees);
-	}
 
-	public function hydrate(array $donnees)
+
+	public static function hydrate(array $donnees)
 	{
 		foreach ($donnees as $key => $value) {
 			$method = 'set' . $key;
 
-			if (method_exists($this, $method)) {
-				$this->$method($value);
+			if (method_exists(get_called_class(), $method)) {
+				self::$method($value);
 			}
 		}
 	}
 
-	public function tojson()
+	public static function readconfig()
+	{
+		if (file_exists(Model::CONFIG_FILE)) {
+			$current = file_get_contents(Model::CONFIG_FILE);
+			$datas = json_decode($current, true);
+			self::hydrate($datas);
+		}
+	}
+
+	public static function createconfig(array $datas)
+	{
+		self::hydrate($datas);
+	}
+
+
+	public static function savejson()
+	{
+		$json = self::tojson();
+		file_put_contents(self::CONFIG_FILE, $json);
+	}
+
+
+	public static function tojson()
 	{
 		$arr = get_object_vars($this);
 		$json = json_encode($arr, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT);
@@ -45,132 +64,132 @@ class Config
 
 // ________________________________________ G E T _______________________________________
 
-	public function host()
+	public static function host()
 	{
-		return $this->host;
+		return self::$host;
 	}
 
-	public function dbname()
+	public static function dbname()
 	{
-		return $this->dbname;
+		return self::$dbname;
 	}
 
-	public function user()
+	public static function user()
 	{
-		return $this->user;
+		return self::$user;
 	}
 
-	public function password()
+	public static function password()
 	{
-		return $this->password;
+		return self::$password;
 	}
 
-	public function arttable()
+	public static function arttable()
 	{
-		return $this->arttable;
+		return self::$arttable;
 	}
 
-	public function domain()
+	public static function domain()
 	{
-		return $this->domain;
+		return self::$domain;
 	}
 
-	public function admin()
+	public static function admin()
 	{
-		return $this->admin;
+		return self::$admin;
 	}
 
-	public function editor()
+	public static function editor()
 	{
-		return $this->editor;
+		return self::$editor;
 	}
 
-	public function invite()
+	public static function invite()
 	{
-		return $this->invite;
+		return self::$invite;
 	}
 
-	public function read()
+	public static function read()
 	{
-		return $this->read;
+		return self::$read;
 	}
 
-	public function color4()
+	public static function color4()
 	{
-		return $this->color4;
+		return self::$color4;
 	}
 
-	public function fontsize()
+	public static function fontsize()
 	{
-		return $this->fontsize;
+		return self::$fontsize;
 	}
 
 
 
 // __________________________________________ S E T ______________________________________
 
-	public function sethost($host)
+	public static function sethost($host)
 	{
-		$this->host = strip_tags($host);
+		self::$host = strip_tags($host);
 	}
 
-	public function setdbname($dbname)
+	public static function setdbname($dbname)
 	{
-		$this->dbname = strip_tags($dbname);
+		self::$dbname = strip_tags($dbname);
 	}
 
-	public function setuser($user)
+	public static function setuser($user)
 	{
-		$this->user = strip_tags($user);
+		self::$user = strip_tags($user);
 	}
 
-	public function setpassword($password)
+	public static function setpassword($password)
 	{
-		$this->password = strip_tags($password);
+		self::$password = strip_tags($password);
 	}
 
-	public function setarttable($arttable)
+	public static function setarttable($arttable)
 	{
-		$this->arttable = strip_tags($arttable);
+		self::$arttable = strip_tags($arttable);
 	}
 
-	public function setdomain($domain)
+	public static function setdomain($domain)
 	{
-		$this->domain = strip_tags($domain);
+		self::$domain = strip_tags($domain);
 	}
 
-	public function setadmin($admin)
+	public static function setadmin($admin)
 	{
-		$this->admin = strip_tags($admin);
+		self::$admin = strip_tags($admin);
 	}
 
-	public function seteditor($editor)
+	public static function seteditor($editor)
 	{
-		$this->editor = strip_tags($editor);
+		self::$editor = strip_tags($editor);
 	}
 
-	public function setinvite($invite)
+	public static function setinvite($invite)
 	{
-		$this->invite = strip_tags($invite);
+		self::$invite = strip_tags($invite);
 	}
 
-	public function setread($read)
+	public static function setread($read)
 	{
-		$this->read = strip_tags($read);
+		self::$read = strip_tags($read);
 	}
 
-	public function setcolor4($color4)
+	public static function setcolor4($color4)
 	{
 		if(strlen($color4) <= 8) {
-			$this->color4 = $color4;
+			self::$color4 = $color4;
 		}
 	}
 
-	public function setfontsize($fontsize)
+	public static function setfontsize($fontsize)
 	{
 		$fontsize = intval($fontsize);
 		if($fontsize > 1) {
-			$this->fontsize = $fontsize;
+			self::$fontsize = $fontsize;
 		}
 	}
 

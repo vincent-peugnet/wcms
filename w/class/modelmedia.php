@@ -2,9 +2,6 @@
 
 class Modelmedia extends Model
 {
-    public function __construct() {
-        
-    }
 
 	public function addmedia(array $file, $maxsize = 2 ** 24, $id)
 	{

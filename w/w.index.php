@@ -23,7 +23,17 @@ require(__DIR__.'/../vendor/autoload.php');
 
 spl_autoload_register('class_autoloader');
 
-$_SESSION['user'] = ['level' => 10];
+
+
+
+//$text = 'blabla il fait un temps vraiment [dégeu](=degeulasse) parce quil pleut [baucoup](?id=orthographe), en amazonie la [vie](?id=prout) et la [mort](?id=prout) sont des notions très proches.';
+
+//$artmanager = new Modelart;
+
+// var_dump($artmanager->getlisterwhere(['id', 'description'], ['55', '44', 'lol']));
+
+
+Configtest::setinfo('coucou');
 
 
 $router = new Router;

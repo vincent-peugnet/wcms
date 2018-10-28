@@ -9,14 +9,10 @@ class Modeluser extends Model
 	const READ = 1;
     const FREE = 0;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     public function writesession(User $user)
     {
-        $_SESSION['user'] = (array) $user;
+        $_SESSION['user'] = ['level' => $user->level()];
     }
 
     public function readsession()
@@ -37,20 +33,22 @@ class Modeluser extends Model
     
     public function passlevel($pass)
     {
-        if (strip_tags($pass) == $this->config->admin()) {
+        if (strip_tags($pass) == Config::admin()) {
 			return $level = self::ADMIN;
-		} elseif (strip_tags($pass) == $this->config->read()) {
+		} elseif (strip_tags($pass) == Config::read()) {
 			return $level = self::READ;
-		} elseif (strip_tags($pass) == $this->config->editor()) {
+		} elseif (strip_tags($pass) == Config::editor()) {
 			return $level = self::EDITOR;
-		} elseif (strip_tags($pass) == $this->config->invite()) {
+		} elseif (strip_tags($pass) == Config::invite()) {
 			return $level = self::INVITE;
+        } else {
+			return $level = self::FREE;
         }
     }
 
 	public function logout()
 	{
-        $user = new User(['level' => 0]);
+        $user = new User(['level' => self::FREE]);
         return $user;
 	}
 }

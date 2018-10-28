@@ -9,6 +9,8 @@ class Router
         'art' => ['art', 'read'],
         'art aff=read' => ['art', 'read'],
         'art aff=edit' => ['art', 'edit'],
+        'art aff=log' => ['art', 'log'],
+        'art action=update' => ['art', 'update'],
         'art action=update home' => ['art', 'update', 'home'],
         'art action=add' => ['art', 'add'],
         'art action=delete' => ['art', 'delete'],
@@ -17,11 +19,17 @@ class Router
         '' => ['home', 'desktop'],
         'aff=home action=massedit' => ['home', 'massedit'],
         'action=massedit' => ['home', 'massedit'],
-        'art action=login' => ['art', 'login'],
-        'home action=login' => ['home', 'login'],
+        'action=analyseall' => ['home', 'analyseall'],
+        'aff=home action=analyseall' => ['home', 'analyseall'],
+        'art action=login' => ['art', 'login', 'art'],
+        'home action=login' => ['home', 'login', 'home'],
         'action=login' => ['home', 'login'],
+        'art action=logout' => ['art', 'logout', 'art'],
+        'home action=logout' => ['home', 'logout', 'home'],
+        'action=logout' => ['home', 'logout'],
         'aff=media' => ['media', 'desktop'],
         'aff=media action=addmedia' => ['media', 'addmedia'],
+        'aff=admin' => ['admin', 'desktop'],
     ];
 
     public function __construct() {
@@ -46,7 +54,7 @@ class Router
 
         $class = 'controller' . $method[0];
         $function = $method[1];
-        $controller = new $class($this->route->artid());
+        $controller = new $class($this->route->id());
         $params = array_slice($method, 2);
         $controller->$function(...$params);
     }

@@ -1,8 +1,5 @@
 <?php
 
-use Michelf\MarkdownExtra;
-
-
 class Art2
 {
 	private $id;
@@ -88,6 +85,7 @@ class Art2
 		$this->setinvitepassword('invitepassword');
 		$this->setinterface('section');
 		$this->setlinkfrom([]);
+		$this->setlinkto([]);
 		$this->settemplate([]);
 		$this->setaffcount(0);
 		$this->seteditcount(0);
@@ -115,7 +113,7 @@ class Art2
 	public function calclinkto($getlist)
 	{
 		$linkto = [];
-		if(!empty($getlist)) {
+		if (!empty($getlist)) {
 			foreach ($getlist as $link) {
 				if (in_array($this->id(), $link->linkfrom('array'))) {
 					$linkto[] = $link->id();
@@ -160,9 +158,9 @@ class Art2
 	public function templaterender(array $vars)
 	{
 		$datas = [];
-		foreach($vars as $var) {
+		foreach ($vars as $var) {
 			if (method_exists($this, $var))
-			$datas[$var] = $this->$var();
+				$datas[$var] = $this->$var();
 		}
 		return $datas;
 	}
@@ -185,7 +183,7 @@ class Art2
 		return $this->description;
 	}
 
-	public function tag($option)
+	public function tag($option = 'array')
 	{
 		if ($option == 'string') {
 			return implode(", ", $this->tag);
@@ -196,7 +194,7 @@ class Art2
 		}
 	}
 
-	public function date($option)
+	public function date($option = 'date')
 	{
 		if ($option == 'string') {
 			return $this->date->format('Y-m-d H:i:s');
@@ -206,9 +204,11 @@ class Art2
 			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 			return hrdi($this->date->diff($now));
 		}
+
+
 	}
 
-	public function datecreation($option)
+	public function datecreation($option = 'date')
 	{
 		if ($option == 'string') {
 			return $this->datecreation->format('Y-m-d H:i:s');
@@ -221,7 +221,7 @@ class Art2
 	}
 
 
-	public function datemodif($option)
+	public function datemodif($option = 'date')
 	{
 		if ($option == 'string') {
 			return $this->datemodif->format('Y-m-d H:i:s');
@@ -233,7 +233,7 @@ class Art2
 		}
 	}
 
-	public function daterender($option)
+	public function daterender($option = 'date')
 	{
 		if ($option == 'string') {
 			return $this->daterender->format('Y-m-d H:i:s');
@@ -259,7 +259,7 @@ class Art2
 		}
 	}
 
-	
+
 	public function csstemplate(App $app)
 	{
 		$data = [];
@@ -303,7 +303,7 @@ class Art2
 		return $md;
 	}
 
-	public function section()
+	public function section($type = 'string')
 	{
 		return $this->section;
 	}
@@ -358,17 +358,17 @@ class Art2
 
 	}
 
-	public function nav($type="string")
+	public function nav($type = "string")
 	{
 		return $this->nav;
 	}
 
-	public function aside($type="string")
+	public function aside($type = "string")
 	{
 		return $this->aside;
 	}
 
-	public function footer($type="string")
+	public function footer($type = "string")
 	{
 		return $this->footer;
 	}
@@ -390,12 +390,12 @@ class Art2
 		}
 	}
 
-	public function invitepassword($type = 'int')
+	public function invitepassword($type = 'string')
 	{
 		return $this->invitepassword;
 	}
 
-	public function interface($type = 'secton')
+	public function interface($type = 'string')
 	{
 		return $this->interface;
 	}
@@ -413,10 +413,10 @@ class Art2
 
 	}
 
-	public function linkto($option)
+	public function linkto($option = 'json')
 	{
-		if ($option == 'string') {
-			$linkto = implode(", ", $this->linkto);
+		if ($option == 'json') {
+			$linkto = json_encode($this->linkto);
 		} elseif ($option == 'array') {
 			$linkto = $this->linkto;
 		} elseif ($option == 'sort') {
@@ -428,7 +428,7 @@ class Art2
 
 	public function template($type = 'json')
 	{
-		if($type == 'json') {
+		if ($type == 'json') {
 			return json_encode($this->template);
 		} elseif ($type = 'array') {
 			return $this->template;
@@ -534,53 +534,53 @@ class Art2
 		}
 	}
 
-	
+
 	public function setquickcss($quickcss)
 	{
-		if(is_string($quickcss))		{
+		if (is_string($quickcss)) {
 			$quickcss = json_decode($quickcss, true);
 		}
-		if(is_array($quickcss)) {
+		if (is_array($quickcss)) {
 			$this->quickcss = $quickcss;
 		}
 	}
 
 	public function setjavascript($javascript)
 	{
-		if(strlen($javascript < self::LENTEXT && is_string($javascript))) {
+		if (strlen($javascript < self::LENTEXT && is_string($javascript))) {
 			$this->javascript = $javascript;
 		}
 	}
-	
+
 
 	public function sethtml($html)
 	{
-		if(strlen($html < self::LENTEXT && is_string($html))) {
+		if (strlen($html < self::LENTEXT && is_string($html))) {
 			$this->html = $html;
 		}
 	}
 
 	public function setheader($header)
 	{
-		if(strlen($header < self::LENTEXT && is_string($header))) {
+		if (strlen($header < self::LENTEXT && is_string($header))) {
 			$this->header = $header;
 		}
 	}
-	
+
 	public function setsection($section)
 	{
 		if (strlen($section) < self::LENTEXT and is_string($section)) {
 			$this->section = $section;
 		}
 	}
-	
+
 	public function setnav($nav)
 	{
 		if (strlen($nav) < self::LENTEXT and is_string($nav)) {
 			$this->nav = $nav;
 		}
 	}
-	
+
 	public function setaside($aside)
 	{
 		if (strlen($aside) < self::LENTEXT and is_string($aside)) {
@@ -599,7 +599,7 @@ class Art2
 	{
 		$this->render = $render;
 	}
-	
+
 	public function setsecure($secure)
 	{
 		if ($secure >= 0 and $secure <= self::SECUREMAX) {
@@ -609,65 +609,72 @@ class Art2
 
 	public function setinvitepassword($invitepassword)
 	{
-		if(is_string($invitepassword) && strlen($invitepassword) < self::LEN) {
+		if (is_string($invitepassword) && strlen($invitepassword) < self::LEN) {
 			$this->invitepassword = $invitepassword;
 		}
 	}
 
 	public function setinterface($interface)
 	{
-		if(in_array($interface, self::TABS))
-		{
+		if (in_array($interface, self::TABS)) {
 			$this->interface = $interface;
 		}
 	}
 
 	public function setlinkfrom($linkfrom)
 	{
-		if (!empty($linkfrom) && strlen($linkfrom) < self::LEN && is_string($linkfrom)) {
-			$linkfrom = strip_tags(trim(strtolower($linkfrom)));
-			$linkfromlist = explode(", ", $linkfrom);
-			$this->linkfrom = $linkfromlist;
-		} else {
+		if(is_array($linkfrom)) {
+			$this->linkfrom = $linkfrom;
+		} elseif(is_string($linkfrom)) {
+			$linkfromjson = json_decode($linkfrom);
+			if(is_array($linkfromjson)) {
+				$this->linkfrom = $linkfromjson;
+			}
+		} elseif ($linkfrom === null) {
 			$this->linkfrom = [];
 		}
 	}
 
 	public function setlinkto($linkto)
 	{
-		if (is_array($linkto)) {
+		if(is_array($linkto)) {
 			$this->linkto = $linkto;
+		} elseif(is_string($linkto)) {
+			$linktojson = json_decode($linkto);
+			if(is_array($linktojson)) {
+				$this->linkto = $linktojson;
+			}
+		} elseif ($linkto === null) {
+			$this->linkto = [];
 		}
-
-
 	}
 
 	public function settemplate($template)
 	{
-		if(is_string($template)) {
+		if (is_string($template)) {
 			$template = json_decode($template, true);
 		}
-		if(is_array($template)) {
+		if (is_array($template)) {
 			$this->template = $template;
 		}
 	}
 
 	public function setaffcount($affcount)
 	{
-		if(is_int($affcount)) {
+		if (is_int($affcount)) {
 			$this->affcount = $affcount;
-		} elseif(is_numeric($affcount)) {
+		} elseif (is_numeric($affcount)) {
 			$this->affcount = intval($affcount);
-		} 
+		}
 	}
 
 	public function seteditcount($editcount)
 	{
-		if(is_int($editcount)) {
+		if (is_int($editcount)) {
 			$this->editcount = $editcount;
-		} elseif(is_numeric($editcount)) {
+		} elseif (is_numeric($editcount)) {
 			$this->editcount = intval($editcount);
-		} 
+		}
 	}
 
 

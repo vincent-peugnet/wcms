@@ -1,20 +1,47 @@
-<html>
+<?php $this->layout('layout', ['title' => $art->title()]) ?>
 
 
 
-<head>
-    <meta charset="utf8" />
-    <meta name="description" content="<?= $art->description() ?>" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="shortcut icon" href="./media/logo.png" type="image/x-icon">
-    <link href="<?= $globalcss ?>" rel="stylesheet" />
-    <?= $edit == 0 ? '<link href="' . $globalcss . '" rel="stylesheet" />' : '<link href="./rsc/css/styleedit.css" rel="stylesheet" />' ?>
-    <title><?= $edit == 1 ? '✏' : '' ?> <?= $art->title() ?></title>
-    <script src="./rsc/js/app.js"></script>
-</head>
-
-<?= $html ?>
 
     
 
-</html>
+
+
+
+
+
+<?php $this->start('page') ?>
+
+    <body>
+        
+
+
+        <?php $this->insert('navart', ['user' => $user, 'art' => $art, 'artexist' => $artexist]) ?>
+        
+
+
+        <?php
+
+        if($artexist) {
+
+            if($display) { 
+                $this->insert('readart', ['art' => $art]);
+            } else {
+                echo '<h1>You dont have enought rights to see this article</h1>';
+            }
+
+        } else {
+            echo '<h1>This article does not exist yet</h1>';
+            if ($cancreate) {
+                $this->insert('readcreate', ['id' => $art->id()]);
+            }
+        }
+
+
+
+        ?>
+
+        
+    </body>
+
+<?php $this->stop() ?>

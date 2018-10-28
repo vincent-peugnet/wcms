@@ -1,0 +1,13 @@
+div#options {
+    display: inline-block;
+    float: left;
+}
+
+div#main {
+    display: inline-block;
+}
+
+.menu {
+    position: fixed;
+    right: 0;
+}

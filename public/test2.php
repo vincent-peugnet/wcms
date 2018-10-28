@@ -13,7 +13,7 @@ session_start();
 
 <?php
 
-require('../w/class/class.w.quickcss.php');
+require('../w/class/quickcss.php');
 
 $quick = new Quickcss($_POST);
 

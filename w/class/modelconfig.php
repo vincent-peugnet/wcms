@@ -1,8 +1,8 @@
 <?php
 
-class Modelconfig extends Model
+abstract class Modelconfig extends Model
 {
-    public function readconfig()
+    public static function readconfig()
 	{
 		if (file_exists(self::CONFIG_FILE)) {
 			$current = file_get_contents(self::CONFIG_FILE);
@@ -14,13 +14,13 @@ class Modelconfig extends Model
 
 	}
 
-	public function createconfig(array $donnees)
+	public static function createconfig(array $donnees)
 	{
 		return new Config($donnees);
 	}
 
 
-	public function savejson(string $json)
+	public static function savejson(string $json)
 	{
 		file_put_contents(self::CONFIG_FILE, $json);
 	}

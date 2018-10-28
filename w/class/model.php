@@ -1,5 +1,5 @@
 <?php
-class Model extends Application
+class Model
 {
 
     const CONFIG_FILE = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'w.config.json';
@@ -9,9 +9,8 @@ class Model extends Application
 	const MEDIA_EXTENSIONS = array('jpeg', 'jpg', 'JPG', 'png', 'gif', 'mp3', 'mp4', 'mov', 'wav', 'flac', 'pdf');
 	const MEDIA_TYPES = ['image', 'video', 'sound', 'other'];
 
-	public function __construct() {
-		parent::__construct();
-	}
+	const TEXT_ELEMENTS = ['section', 'header', 'nav', 'aside', 'footer'];
+
 
 
 }
