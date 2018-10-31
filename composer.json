@@ -1,6 +1,7 @@
 {
     "require": {
         "michelf/php-markdown": "^1.8",
-        "league/plates": "3.*"
+        "league/plates": "3.*",
+        "rakibtg/sleekdb": "^1.0"
     }
 }

@@ -13,8 +13,6 @@ class Controller
         $this->initconfig(); 
 	}
 
-
-
     public function setuser()
     {
         $this->usermanager = new Modeluser;        

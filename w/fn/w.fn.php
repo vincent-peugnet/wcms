@@ -138,4 +138,18 @@ function str_clean(string $string)
 
 
 
+function changekey($array, $oldkey, $newkey)
+{
+	if (!array_key_exists($oldkey, $array))
+		return $array;
+
+	$keys = array_keys($array);
+	$keys[array_search($oldkey, $keys)] = $newkey;
+
+	return array_combine($keys, $array);
+}
+
+
+
+
 ?>

@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => $art->title()]) ?>
+<?php $this->layout('layout', ['title' => $art->title(), 'description' => $art->description()]) ?>
 
 
 

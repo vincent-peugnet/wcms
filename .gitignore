@@ -1,6 +1,7 @@
 vendor/*
 .vscode/*
 w/w.config.json
+w_database/*
 error_log
 public/w/media/*
 public/w/css/*

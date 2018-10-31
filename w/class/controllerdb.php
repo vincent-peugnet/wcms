@@ -4,14 +4,44 @@ class Controllerdb extends Controller
 {
 
     protected $artmanager;
+    protected $database;
+    protected $artstore;
 
-    public function __construct() {
+
+    public function __construct()
+    {
         parent::__construct();
-
-        
-        $this->artmanager = new Modelart();    
+        $this->artmanager = new Modelart();
 
     }
+
+    public function dbinit()
+    {
+        $this->database = new SleekDBw(__DIR__ . '/../../w_database', [
+            'auto_cache' => false
+        ]);
+        $this->artstore = $this->database->store(Config::arttable());
+
+    }
+
+
+
+    public function fetch()
+    {
+        $datas = $this->artstore->fetch();
+        return $datas;
+    }
+
+    public function desktop()
+    {
+        
+
+        $this->dbinit();
+        var_dump( $this->fetch());
+
+
+    }
+
 
 
 

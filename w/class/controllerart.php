@@ -15,10 +15,10 @@ class Controllerart extends Controllerdb
 
     public function importart()
     {
-        if($this->artmanager->exist($this->art->id())) {
-            $this->art = $this->artmanager->get($this->art);
-            $this->art->autotaglistupdate($this->artmanager->taglist($this->artmanager->getlister(['id', 'title', 'description', 'tag']), $this->art->autotaglist()));
-
+        $art = $this->artmanager->get($this->art);
+        if($art !== false) {
+            $this->art = $art;
+            //$this->art->autotaglistupdate($this->artmanager->taglist($this->artmanager->getlister(['id', 'title', 'description', 'tag']), $this->art->autotaglist()));
             return true;
         } else {
             return false;
@@ -56,11 +56,9 @@ class Controllerart extends Controllerdb
 
     public function add()
     {
-        echo '<h2>Add</h2>';
-
-
         $this->art->reset();
         $this->artmanager->add($this->art);
+        $this->redirect('?id=' . $this->art->id() . '&aff=edit');
     }
 
     public function delete()

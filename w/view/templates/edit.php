@@ -21,11 +21,10 @@
 
 
 <form action="?id=<?= $art->id() ?>&action=update" method="post" id="artedit">
-            
-    
 
-    <?php $this->insert('edittopbar', ['config' => $config, 'art' => $art]) ?>
-    <?php $this->insert('editsidebar', ['config' => $config, 'art' => $art]) ?>
+
+    <?php $this->insert('edittopbar', ['art' => $art]) ?>
+    <?php $this->insert('editsidebar', ['art' => $art]) ?>
        
 
 <style>textarea{font-size: <?= Config::fontsize() ?>px}</style>

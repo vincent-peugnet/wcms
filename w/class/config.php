@@ -8,7 +8,7 @@ abstract class Config
 	protected static $dbname;
 	protected static $user;
 	protected static $password;
-	protected static $arttable;
+	protected static $arttable = 'artstore';
 	protected static $domain;
 	protected static $admin;
 	protected static $editor;

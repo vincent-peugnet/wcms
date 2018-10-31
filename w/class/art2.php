@@ -2,32 +2,32 @@
 
 class Art2
 {
-	private $id;
-	private $title;
-	private $description;
-	private $tag;
-	private $date;
-	private $datecreation;
-	private $datemodif;
-	private $daterender;
-	private $css;
-	private $quickcss;
-	private $javascript;
-	private $html;
-	private $header;
-	private $section;
-	private $nav;
-	private $aside;
-	private $footer;
-	private $render;
-	private $secure;
-	private $invitepassword;
-	private $interface;
-	private $linkfrom;
-	private $linkto;
-	private $template;
-	private $affcount;
-	private $editcount;
+	protected $id;
+	protected $title;
+	protected $description;
+	protected $tag;
+	protected $date;
+	protected $datecreation;
+	protected $datemodif;
+	protected $daterender;
+	protected $css;
+	protected $quickcss;
+	protected $javascript;
+	protected $html;
+	protected $header;
+	protected $section;
+	protected $nav;
+	protected $aside;
+	protected $footer;
+	protected $render;
+	protected $secure;
+	protected $invitepassword;
+	protected $interface;
+	protected $linkfrom;
+	protected $linkto;
+	protected $template;
+	protected $affcount;
+	protected $editcount;
 
 
 	const LEN = 255;
@@ -37,6 +37,7 @@ class Art2
 	const DEBUT = '(?id=';
 	const FIN = ')';
 	const TABS = ['section', 'css', 'header', 'html', 'nav', 'aside', 'footer', 'javascript'];
+	const VAR_DATE = ['date', 'datecreation', 'datemodif', 'daterender'];
 
 	  
 	  
@@ -165,6 +166,19 @@ class Art2
 		return $datas;
 	}
 
+	public function dry()
+	{
+		$array = [];
+		foreach (get_class_vars(__class__) as $var => $value) {
+			if(in_array($var, self::VAR_DATE)) {
+				$array[$var] = $this->$var('string');
+			} else {
+				$array[$var] = $this->$var();
+			}
+		}
+		return $array;
+	}
+
 
 		// _____________________________________________________ G E T ____________________________________________________
 
@@ -250,7 +264,7 @@ class Art2
 		return $this->css;
 	}
 
-	public function quickcss($type = 'json')
+	public function quickcss($type = 'array')
 	{
 		if ($type == 'json') {
 			return json_encode($this->quickcss);
@@ -318,7 +332,7 @@ class Art2
 		$parser = new MarkdownExtra;
 
 		// id in headers
-		$parser->header_id_func = function ($header) {
+		$parser->headerid_func = function ($header) {
 			return preg_replace('/[^\w]/', '', strtolower($header));
 		};
 		$section = $parser->transform($section);
@@ -400,7 +414,7 @@ class Art2
 		return $this->interface;
 	}
 
-	public function linkfrom($option = 'json')
+	public function linkfrom($option = 'array')
 	{
 		if ($option == 'json') {
 			$linkfrom = json_encode($this->linkfrom);
@@ -413,7 +427,7 @@ class Art2
 
 	}
 
-	public function linkto($option = 'json')
+	public function linkto($option = 'array')
 	{
 		if ($option == 'json') {
 			$linkto = json_encode($this->linkto);
@@ -426,7 +440,7 @@ class Art2
 
 	}
 
-	public function template($type = 'json')
+	public function template($type = 'array')
 	{
 		if ($type == 'json') {
 			return json_encode($this->template);
@@ -675,6 +689,27 @@ class Art2
 		} elseif (is_numeric($editcount)) {
 			$this->editcount = intval($editcount);
 		}
+	}
+
+
+	// __________________________________ C O U N T E R S ______________________________
+
+
+	public function addeditcount()
+	{
+		$this->editcount ++;
+	}
+
+	public function addaffcount()
+	{
+		$this->affcount ++;
+	}
+
+	public function updateedited()
+	{
+		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+		$this->setdatemodif($now);
+		$this->addeditcount();
 	}
 
 

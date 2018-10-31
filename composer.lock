@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "43442b947acbb3ce39a2fdb5e9173c7b",
+    "content-hash": "32b0a4f1101de417365ae3e8c472be11",
     "packages": [
         {
             "name": "league/plates",
@@ -106,6 +106,53 @@
                 "markdown"
             ],
             "time": "2018-01-15T00:49:33+00:00"
+        },
+        {
+            "name": "rakibtg/sleekdb",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rakibtg/SleekDB.git",
+                "reference": "a8a536e9efd9bd34b2bea0961475778be19b0371"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rakibtg/SleekDB/zipball/a8a536e9efd9bd34b2bea0961475778be19b0371",
+                "reference": "a8a536e9efd9bd34b2bea0961475778be19b0371",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SleekDB\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "rakibtg",
+                    "email": "rakibtg@gmail.com"
+                }
+            ],
+            "description": "SleekDB - A 30Kb NoSQL Database made using PHP",
+            "keywords": [
+                "SleekDB",
+                "api",
+                "database",
+                "flatfile",
+                "framework",
+                "micro",
+                "nosql",
+                "php",
+                "rest"
+            ],
+            "time": "2018-08-19T10:25:39+00:00"
         }
     ],
     "packages-dev": [],

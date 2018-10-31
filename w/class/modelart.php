@@ -14,7 +14,42 @@ class Modelart extends Modeldb
 
 
 
-	public function exist($id)
+	public function exist(Art2 $art)
+	{
+		$artdata = $this->artstore->get($art->id());
+		if($artdata === false) {
+			return false;
+		} else {
+			return true;
+		}
+		
+	}
+
+
+	public function add(Art2 $art)
+	{
+			$this->artstore->insert($art);
+	}
+
+	public function get(Art2 $art)
+	{
+		$artdata = $this->artstore->get($art->id());
+		if($artdata !== false) {
+			$art = new Art2($artdata);
+			return $art;
+		} else {
+			return false;
+		}
+	}
+
+	public function update(Art2 $art)
+	{
+		$art->updateedited();
+		$this->artstore->update($art->id(), $art->dry());
+	}
+
+
+	public function exist3($id)
 	{
 
 		$req = $this->bdd->prepare(' SELECT COUNT(*) FROM ' . Config::arttable() . ' WHERE id = :id ');
@@ -24,11 +59,7 @@ class Modelart extends Modeldb
 		return (bool)$donnees['COUNT(*)'];
 	}
 
-
-
-
-
-	public function add(Art2 $art)
+	public function add3(Art2 $art)
 	{
 
 		if ($this->exist($art->id())) {
@@ -82,7 +113,7 @@ class Modelart extends Modeldb
 		$req->closeCursor();
 	}
 
-	public function get(Art2 $art)
+	public function get3(Art2 $art)
 	{
 
 		$req = $this->bdd->prepare('SELECT * FROM ' . Config::arttable() . ' WHERE id = :id ');
@@ -98,7 +129,7 @@ class Modelart extends Modeldb
 
 
 
-	public function update(Art2 $art)
+	public function update3(Art2 $art)
 	{
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
@@ -139,7 +170,9 @@ class Modelart extends Modeldb
 	}
 
 
-	public function getlister(array $selection = ['id'], array $opt = [])
+
+
+	public function getlister3(array $selection = ['id'], array $opt = [])
 	{
 		// give an array using SELECTION columns and sort and desc OPTIONS 
 
@@ -162,7 +195,7 @@ class Modelart extends Modeldb
 		}
 	}
 
-	public function getlisterwhere(array $select = ['id'], array $whereid = [], $by = 'id', $order = 'DESC')
+	public function getlisterwhere3(array $select = ['id'], array $whereid = [], $by = 'id', $order = 'DESC')
 	{
 		// give an array using SELECTION columns and sort and desc OPTIONS 
 

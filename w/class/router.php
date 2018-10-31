@@ -27,6 +27,8 @@ class Router
         'art action=logout' => ['art', 'logout', 'art'],
         'home action=logout' => ['home', 'logout', 'home'],
         'action=logout' => ['home', 'logout'],
+        'aff=db' => ['db', 'desktop'],
+        'aff=db action=add' => ['db', 'add'],
         'aff=media' => ['media', 'desktop'],
         'aff=media action=addmedia' => ['media', 'addmedia'],
         'aff=admin' => ['admin', 'desktop'],

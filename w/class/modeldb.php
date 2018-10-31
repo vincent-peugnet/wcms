@@ -4,14 +4,25 @@ class Modeldb extends Model
 	/** @var PDO */
     protected $bdd;
 	protected $arttable;
+	protected $database;
+	protected $artstore;
 	
-	protected static $db;
 
     public function __construct() {
-		$this->setbdd();
-
+		//$this->setbdd();
 		//self::setdb();
+
+		$this->dbinit();
 	}
+
+	
+    public function dbinit()
+    {
+        $this->database = new Dbengine(__DIR__ . '/../../w_database');
+        $this->artstore = $this->database->store(Config::arttable());
+
+    }
+
 	
 
 

@@ -2,7 +2,7 @@
 
 
 
-class Config
+class Config1
 {
 	private $host;
 	private $dbname;
