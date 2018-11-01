@@ -22,7 +22,7 @@ class Controllerhome extends Controllerdb
 
     public function table2()
     {
-        $table = $this->artmanager->getlister(['id', 'tag', 'linkfrom', 'linkto', 'description', 'title', 'datemodif', 'datecreation', 'secure']);
+        $table = $this->artmanager->getlister();
         $this->opt = $this->modelhome->optinit($table);
 
         $table2 = $this->modelhome->table2($table, $this->opt);

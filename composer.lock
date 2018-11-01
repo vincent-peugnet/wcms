@@ -4,8 +4,64 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "32b0a4f1101de417365ae3e8c472be11",
+    "content-hash": "c2f25e98ade7ac743c73388d3eb3c10e",
     "packages": [
+        {
+            "name": "jamesmoss/flywheel",
+            "version": "0.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jamesmoss/flywheel.git",
+                "reference": "869eced5f6b7b11599aa96b753e3540054ca85de"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jamesmoss/flywheel/zipball/869eced5f6b7b11599aa96b753e3540054ca85de",
+                "reference": "869eced5f6b7b11599aa96b753e3540054ca85de",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "1.2.0",
+                "mockery/mockery": "dev-master@dev",
+                "mustangostang/spyc": "0.5.*@dev",
+                "phpunit/phpunit": "3.7.*"
+            },
+            "suggest": {
+                "mustangostang/spyc": "You must install this if you're using the YAML or Markdown formatters."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JamesMoss\\Flywheel\\": [
+                        "src/",
+                        "test/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "James Moss",
+                    "email": "james@moss.io",
+                    "homepage": "http://moss.io"
+                }
+            ],
+            "description": "A lightweight, flat-file, document database",
+            "homepage": "http://github.com/jamesmoss/flywheel",
+            "keywords": [
+                "db",
+                "document",
+                "file",
+                "flat"
+            ],
+            "time": "2017-01-31T09:48:58+00:00"
+        },
         {
             "name": "league/plates",
             "version": "3.3.0",
@@ -106,53 +162,6 @@
                 "markdown"
             ],
             "time": "2018-01-15T00:49:33+00:00"
-        },
-        {
-            "name": "rakibtg/sleekdb",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/rakibtg/SleekDB.git",
-                "reference": "a8a536e9efd9bd34b2bea0961475778be19b0371"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/rakibtg/SleekDB/zipball/a8a536e9efd9bd34b2bea0961475778be19b0371",
-                "reference": "a8a536e9efd9bd34b2bea0961475778be19b0371",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "SleekDB\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "rakibtg",
-                    "email": "rakibtg@gmail.com"
-                }
-            ],
-            "description": "SleekDB - A 30Kb NoSQL Database made using PHP",
-            "keywords": [
-                "SleekDB",
-                "api",
-                "database",
-                "flatfile",
-                "framework",
-                "micro",
-                "nosql",
-                "php",
-                "rest"
-            ],
-            "time": "2018-08-19T10:25:39+00:00"
         }
     ],
     "packages-dev": [],

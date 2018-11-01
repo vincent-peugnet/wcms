@@ -28,15 +28,17 @@ class Modelart extends Modeldb
 
 	public function add(Art2 $art)
 	{
-			$this->artstore->insert($art);
+
+		$artdata = new \JamesMoss\Flywheel\Document($art->dry());
+		$artdata->setId($art->id());
+		$this->artstore->store($artdata);
 	}
 
 	public function get(Art2 $art)
 	{
-		$artdata = $this->artstore->get($art->id());
+		$artdata = $this->artstore->findById($art->id());
 		if($artdata !== false) {
-			$art = new Art2($artdata);
-			return $art;
+			return new Art2($artdata);
 		} else {
 			return false;
 		}
@@ -45,7 +47,19 @@ class Modelart extends Modeldb
 	public function update(Art2 $art)
 	{
 		$art->updateedited();
-		$this->artstore->update($art->id(), $art->dry());
+		$artdata = new \JamesMoss\Flywheel\Document($art->dry());
+		$artdata->setId($art->id());
+		$this->artstore->store($artdata);
+	}
+
+	public function getlister()
+	{
+		$artlist = [];
+		$list = $this->artstore->findAll();
+		foreach ($list as $artdata) {
+			$artlist[] = new Art2($artdata);
+		}
+		return $artlist;
 	}
 
 
@@ -106,7 +120,7 @@ class Modelart extends Modeldb
 	}
 
 
-	public function delete(Art2 $art)
+	public function delete3(Art2 $art)
 	{
 		$req = $this->bdd->prepare('DELETE FROM ' . Config::arttable() . ' WHERE id = :id ');
 		$req->execute(array('id' => $art->id()));
@@ -194,6 +208,8 @@ class Modelart extends Modeldb
 			return $list;
 		}
 	}
+
+
 
 	public function getlisterwhere3(array $select = ['id'], array $whereid = [], $by = 'id', $order = 'DESC')
 	{

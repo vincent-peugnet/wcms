@@ -33,12 +33,11 @@ spl_autoload_register('class_autoloader');
 // var_dump($artmanager->getlisterwhere(['id', 'description'], ['55', '44', 'lol']));
 
 try {
-    $router = new Router;
+  $router = new Router;
 
 } catch(Exception $e) {
     echo 'Exception reçue : ',  $e->getMessage(), "\n";
 }
-
 
 
 

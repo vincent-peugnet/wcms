@@ -15,15 +15,6 @@ class Controllerdb extends Controller
 
     }
 
-    public function dbinit()
-    {
-        $this->database = new SleekDBw(__DIR__ . '/../../w_database', [
-            'auto_cache' => false
-        ]);
-        $this->artstore = $this->database->store(Config::arttable());
-
-    }
-
 
 
     public function fetch()
@@ -40,6 +31,11 @@ class Controllerdb extends Controller
         var_dump( $this->fetch());
 
 
+    }
+
+    public function add()
+    {
+        $user = $usersDB->where( 'name', '=', 'Joshua Edwards' )->fetch();
     }
 
 

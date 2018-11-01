@@ -2,6 +2,6 @@
     "require": {
         "michelf/php-markdown": "^1.8",
         "league/plates": "3.*",
-        "rakibtg/sleekdb": "^1.0"
+        "jamesmoss/flywheel": "^0.5.2"
     }
 }

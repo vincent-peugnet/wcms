@@ -44,12 +44,12 @@ class Art2
 
 // _____________________________________________________ F U N ____________________________________________________
 
-	public function __construct(array $donnees)
+	public function __construct($donnees)
 	{
 		$this->hydrate($donnees);
 	}
 
-	public function hydrate(array $donnees)
+	public function hydrate($donnees)
 	{
 		foreach ($donnees as $key => $value) {
 			$method = 'set' . $key;
