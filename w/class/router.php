@@ -32,6 +32,7 @@ class Router
         'aff=media' => ['media', 'desktop'],
         'aff=media action=addmedia' => ['media', 'addmedia'],
         'aff=admin' => ['admin', 'desktop'],
+        'aff=co' => ['connect', 'desktop'],
     ];
 
     public function __construct() {

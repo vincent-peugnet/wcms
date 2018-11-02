@@ -92,12 +92,7 @@ class Art2
 		$this->seteditcount(0);
 	}
 
-	public function updatelinkfrom()
-	{
-		$this->linkfrom = [];
-		$this->linkfrom = array_unique(search($this->md(true), self::DEBUT, self::FIN));
 
-	}
 
 	public static function classvarlist()
 	{
@@ -106,64 +101,6 @@ class Art2
 			$classvarlist[] = $var;
 		}
 		return ['artvarlist' => $classvarlist];
-	}
-
-
-
-
-	public function calclinkto($getlist)
-	{
-		$linkto = [];
-		if (!empty($getlist)) {
-			foreach ($getlist as $link) {
-				if (in_array($this->id(), $link->linkfrom('array'))) {
-					$linkto[] = $link->id();
-				}
-			}
-			$this->setlinkto($linkto);
-		}
-	}
-
-
-	public function autotaglist()
-	{
-		$pattern = "/%%(\w*)%%/";
-		preg_match_all($pattern, $this->md(), $out);
-		return $out[1];
-
-	}
-
-	public function autotaglistupdate($taglist)
-	{
-		foreach ($taglist as $tag => $artlist) {
-			$replace = '<ul>';
-			foreach ($artlist as $art) {
-				$replace .= '<li><a href="?id=' . $art->id() . '" title="' . $art->description() . '">' . $art->title() . '</a></li>';
-			}
-			$replace .= '</ul>';
-			$this->section = str_replace('%%' . $tag . '%%', $replace, $this->section);
-		}
-	}
-
-	public function autotaglistcalc($taglist)
-	{
-		foreach ($taglist as $tag => $artlist) {
-			foreach ($artlist as $art) {
-				if (!in_array($art->id(), $this->linkfrom('array')) && $art->id() != $this->id()) {
-					$this->linkfrom[] = $art->id();
-				}
-			}
-		}
-	}
-
-	public function templaterender(array $vars)
-	{
-		$datas = [];
-		foreach ($vars as $var) {
-			if (method_exists($this, $var))
-				$datas[$var] = $this->$var();
-		}
-		return $datas;
 	}
 
 	public function dry()
@@ -211,7 +148,7 @@ class Art2
 	public function date($option = 'date')
 	{
 		if ($option == 'string') {
-			return $this->date->format('Y-m-d H:i:s');
+			return $this->date->format(DateTime::ISO8601);
 		} elseif ($option == 'date' || $option == 'sort') {
 			return $this->date;
 		} elseif ($option == 'hrdi') {
@@ -225,7 +162,7 @@ class Art2
 	public function datecreation($option = 'date')
 	{
 		if ($option == 'string') {
-			return $this->datecreation->format('Y-m-d H:i:s');
+			return $this->datecreation->format(DateTime::ISO8601);
 		} elseif ($option == 'date' || $option == 'sort') {
 			return $this->datecreation;
 		} elseif ($option == 'hrdi') {
@@ -238,7 +175,7 @@ class Art2
 	public function datemodif($option = 'date')
 	{
 		if ($option == 'string') {
-			return $this->datemodif->format('Y-m-d H:i:s');
+			return $this->datemodif->format(DateTime::ISO8601);
 		} elseif ($option == 'date' || $option == 'sort') {
 			return $this->datemodif;
 		} elseif ($option == 'hrdi') {
@@ -250,7 +187,7 @@ class Art2
 	public function daterender($option = 'date')
 	{
 		if ($option == 'string') {
-			return $this->daterender->format('Y-m-d H:i:s');
+			return $this->daterender->format(DateTime::ISO8601);
 		} elseif ($option == 'date' || $option == 'sort') {
 			return $this->daterender;
 		} elseif ($option == 'hrdi') {
@@ -320,56 +257,6 @@ class Art2
 	public function section($type = 'string')
 	{
 		return $this->section;
-	}
-
-	public function section888(App $app)
-	{
-
-		// %%%% TITLE & DESCIPTION
-		$section = str_replace('%TITLE%', $this->title(), $this->section);
-		$section = str_replace('%DESCRIPTION%', $this->description(), $section);
-
-		$parser = new MarkdownExtra;
-
-		// id in headers
-		$parser->headerid_func = function ($header) {
-			return preg_replace('/[^\w]/', '', strtolower($header));
-		};
-		$section = $parser->transform($section);
-
-		// replace = > ?id=
-		$section = str_replace('href="=', 'href="?id=', $section);
-
-
-		// infobulles tooltip
-		foreach ($this->linkfrom('array') as $id) {
-			$title = "Cet article n'existe pas encore";
-			foreach ($app->getlister(['id', 'description']) as $item) {
-				if ($item->id() == $id) {
-					$title = $item->description();
-				}
-			}
-			$linkfrom = 'href="?id=' . $id . '"';
-			$titlelinkfrom = ' title="' . $title . '" ' . $linkfrom;
-			$section = str_replace($linkfrom, $titlelinkfrom, $section);
-		}
-
-		if (!empty(strstr($section, '%SUMMARY%'))) {
-
-
-
-			$section = str_replace('%SUMMARY%', sumparser($section), $section);
-		}
-
-
-		$section = str_replace('href="./media/', ' class="file" target="_blank" href="./media/', $section);
-		$section = str_replace('href="http', ' class="external" target="_blank" href="http', $section);
-		$section = str_replace('<img src="/', '<img src="./media/', $section);
-		$section = str_replace('<iframe', '<div class="iframe"><div class="container"><iframe class="video" ', $section);
-		$section = str_replace('</iframe>', '</iframe></div></div>', $section);
-		return $section;
-
-
 	}
 
 	public function nav($type = "string")
@@ -509,7 +396,7 @@ class Art2
 		if ($date instanceof DateTimeImmutable) {
 			$this->date = $date;
 		} else {
-			$this->date = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $date, new DateTimeZone('Europe/Paris'));
+			$this->date = DateTimeImmutable::createFromFormat(DateTime::ISO8601, $date, new DateTimeZone('Europe/Paris'));
 		}
 	}
 
@@ -518,7 +405,7 @@ class Art2
 		if ($datecreation instanceof DateTimeImmutable) {
 			$this->datecreation = $datecreation;
 		} else {
-			$this->datecreation = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $datecreation, new DateTimeZone('Europe/Paris'));
+			$this->datecreation = DateTimeImmutable::createFromFormat(DateTime::ISO8601, $datecreation, new DateTimeZone('Europe/Paris'));
 		}
 	}
 
@@ -527,7 +414,7 @@ class Art2
 		if ($datemodif instanceof DateTimeImmutable) {
 			$this->datemodif = $datemodif;
 		} else {
-			$this->datemodif = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $datemodif, new DateTimeZone('Europe/Paris'));
+			$this->datemodif = DateTimeImmutable::createFromFormat(DateTime::ISO8601, $datemodif, new DateTimeZone('Europe/Paris'));
 		}
 	}
 
@@ -536,7 +423,7 @@ class Art2
 		if ($daterender instanceof DateTimeImmutable) {
 			$this->daterender = $daterender;
 		} else {
-			$this->daterender = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $daterender, new DateTimeZone('Europe/Paris'));
+			$this->daterender = DateTimeImmutable::createFromFormat(DateTime::ISO8601, $daterender, new DateTimeZone('Europe/Paris'));
 		}
 	}
 

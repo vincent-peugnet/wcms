@@ -9,7 +9,7 @@ class Model
 	const MEDIA_EXTENSIONS = array('jpeg', 'jpg', 'JPG', 'png', 'gif', 'mp3', 'mp4', 'mov', 'wav', 'flac', 'pdf');
 	const MEDIA_TYPES = ['image', 'video', 'sound', 'other'];
 
-	const TEXT_ELEMENTS = ['section', 'header', 'nav', 'aside', 'footer'];
+	const TEXT_ELEMENTS = ['header', 'nav', 'section', 'aside', 'footer'];
 
 
 

@@ -22,7 +22,7 @@ class Controllerhome extends Controllerdb
 
     public function table2()
     {
-        $table = $this->artmanager->getlister();
+        $table = $this->modelhome->getlister();
         $this->opt = $this->modelhome->optinit($table);
 
         $table2 = $this->modelhome->table2($table, $this->opt);
@@ -37,8 +37,8 @@ class Controllerhome extends Controllerdb
         if($this->user->level() >= Modeluser::EDITOR) {
             $scan = new Modelanalyse;
             $scan->analyseall();
-    
-            $this->table2();
+            $this->redirect('./');
+
         }
     }
 

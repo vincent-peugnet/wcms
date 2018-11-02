@@ -11,31 +11,8 @@ class Controllerdb extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->artmanager = new Modelart();
-
-    }
 
 
-
-    public function fetch()
-    {
-        $datas = $this->artstore->fetch();
-        return $datas;
-    }
-
-    public function desktop()
-    {
-        
-
-        $this->dbinit();
-        var_dump( $this->fetch());
-
-
-    }
-
-    public function add()
-    {
-        $user = $usersDB->where( 'name', '=', 'Joshua Edwards' )->fetch();
     }
 
 

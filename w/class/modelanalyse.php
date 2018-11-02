@@ -12,7 +12,7 @@ class Modelanalyse extends Modelart
     
     public function analyseall()
     {
-        $artlist = $this->getlister(['*']);
+        $artlist = $this->getlister();
 
         $artlist2 = [];
         foreach ($artlist as $art) {
@@ -30,7 +30,7 @@ class Modelanalyse extends Modelart
 	{        
         $art->setlinkfrom($this->analyselinkfrom($art));
 
-        $artlist = $this->getlister(['id', 'linkfrom']);
+        $artlist = $this->getlister();
         $art->setlinkto($this->analyselinkto($art->id(), $artlist));
 
         return $art;

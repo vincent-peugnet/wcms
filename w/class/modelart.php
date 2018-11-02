@@ -34,9 +34,12 @@ class Modelart extends Modeldb
 		$this->artstore->store($artdata);
 	}
 
-	public function get(Art2 $art)
+	public function get($art)
 	{
-		$artdata = $this->artstore->findById($art->id());
+		if($art instanceof Art2) {
+			$id = $art->id();
+		}
+		$artdata = $this->artstore->findById($id);
 		if($artdata !== false) {
 			return new Art2($artdata);
 		} else {
@@ -44,22 +47,16 @@ class Modelart extends Modeldb
 		}
 	}
 
+	public function delete(Art2 $art)
+	{
+		$this->artstore->delete($art->id());
+	}
+
 	public function update(Art2 $art)
 	{
-		$art->updateedited();
 		$artdata = new \JamesMoss\Flywheel\Document($art->dry());
 		$artdata->setId($art->id());
 		$this->artstore->store($artdata);
-	}
-
-	public function getlister()
-	{
-		$artlist = [];
-		$list = $this->artstore->findAll();
-		foreach ($list as $artdata) {
-			$artlist[] = new Art2($artdata);
-		}
-		return $artlist;
 	}
 
 

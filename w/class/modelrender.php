@@ -4,64 +4,80 @@ class Modelrender extends Modelart
 {
 	const SUMMARY = '%SUMMARY%';
 
-	
-	public function __construct() {
+
+	public function __construct()
+	{
 		parent::__construct();
 	}
 
 
-
-	public function getelements(Art2 $art)
+	public function render(Art2 $art)
 	{
-		$templates = [];
-		foreach ($art->template('array') as $element => $tempalteid) {
-			if(isset($tempalteid) && $tempalteid != $art->id()) {				
-				$templateart = new Art2(['id' => $templateid]);
-				$templateart = $this->get($templateart);
-				$templates[$element] = $templateart->$element();
-			}
-		}
+		$body = $this->getbody($art);
+		
+		var_dump($body);
+		
+		$parsebody = $this->parser($art, $body);
+		
+		echo $parsebody;
 
-		$elements = [];
-		foreach ($art->template('array') as $element) {
-			if(array_key_exists($element, $templates)) {
-				$elements[$element] = $templates[$element] . PHP_EOL . $art->$element();
-			} else {
-				$elements[$element] = $art->$element();
-			}
-		}
-		return $elements;		
+		return $parsebody;
 	}
 
-	public function elementsrender(array $elements)
+
+
+	public function getbody(Art2 $art)
 	{
-		foreach ($elements as $element => $text) {
-			if(in_array($element, self::TEXT_ELEMENTS)) {
-				$elements[$element] = $this->textrender($text);
+		$body = '';
+		foreach (self::TEXT_ELEMENTS as $element) {
+			if (array_key_exists($element, $art->template('array'))) {
+				$tempalteart = $this->get($art->template('array')[$element]);
+				$text = $tempalteart->$element() . PHP_EOL . $art->$element();
+			} else {
+				$text = $art->$element();
+			}
+			$body .= PHP_EOL . '<' . $element . '>' . PHP_EOL . $this->markdown($text) . PHP_EOL . '</' . $element . '>' . PHP_EOL;
+		}
+
+		return $body;
+	}
+
+	public function elementsrender(Art2 $art)
+	{
+		foreach ($this->getelements($art) as $element => $text) {
+			if (in_array($element, self::TEXT_ELEMENTS)) {
+				$elements[$element] = $this->markdown($text);
 			}
 		}
 		return $elements;
 	}
 
 
-	
-	public function textrender($text)
+
+	public function parser(Art2 $art, string $text)
 	{
+		$text = str_replace('%TITLE%', $art->title(), $text);
+		$text = str_replace('%DESCRIPTION%', $art->description(), $text);
+
+
+		$text = str_replace(self::SUMMARY, $this->sumparser($text), $text);
+
+		$text = str_replace('href="=', 'href="?id=', $text);
 		
+		$text = $this->tooltip($art->linkfrom('array'), $text);
+		
+		$text = str_replace('href="http', ' class="external" target="_blank" href="http', $text);
+		$text = str_replace('<img src="/', '<img src="./media/', $text);
+
+		$text = $this->autourl($text);
+
+		return $text;
 	}
 
 
-	public function parser($text)
+	public function autourl($text)
 	{
-		$text = str_replace('%TITLE%', $this->title(), $this->text);
-		$text = str_replace('%DESCRIPTION%', $this->description(), $text);
-		
-		$text = $this->markdown($text);
-		
-		$text = str_replace('%SUMMARY%', sumparser($text), $text);
-		
-		$text = str_replace('href="=', 'href="?id=', $text);
-		
+		$text = preg_replace('#( |\R|>)(https?:\/\/((\S+)\.([^< ]+)))#', '$1<a href="$2" class="external" target="_blank">$3</a>', $text);
 		return $text;
 	}
 
@@ -81,64 +97,27 @@ class Modelrender extends Modelart
 
 
 
-	public function tooltip($linkfrom, $text)
+	public function tooltip(array $linkfrom, string $text)
 	{
 		$descriptions = [];
-		$artlist = $app->getlisterwhere(['id', 'description'], $linkfrom);
+		$artlist = $this->getlisterid($linkfrom);
 		foreach ($artlist as $art) {
 			$descriptions[$art->id()] = $art->description();
 		}
 
-
-
 		foreach ($linkfrom as $id) {
-			if(isset($descriptions[$id])) {
+			if (isset($descriptions[$id])) {
 				$title = $descriptions[$id];
-			} else {
-				$title = "This page does not exist yet";
 			}
 			$linkfrom = 'href="?id=' . $id . '"';
 			$titlelinkfrom = ' title="' . $title . '" ' . $linkfrom;
 			$text = str_replace($linkfrom, $titlelinkfrom, $text);
 		}
+		return $text;
 	}
-
-    public function parserff($text)
-    {
-        $section = str_replace('%TITLE%', $this->title(), $this->section);
-		$section = str_replace('%DESCRIPTION%', $this->description(), $section);
 
 	
 
-		// replace = > ?id=
-		$section = str_replace('href="=', 'href="?id=', $section);
-
-
-		// infobulles tooltip
-
-
-
-
-		if (!empty(strstr($section, '%SUMMARY%'))) {
-
-
-
-			
-		}
-
-
-		$section = str_replace('href="./media/', ' class="file" target="_blank" href="./media/', $section);
-		$section = str_replace('href="http', ' class="external" target="_blank" href="http', $section);
-		$section = str_replace('<img src="/', '<img src="./media/', $section);
-		$section = str_replace('<iframe', '<div class="iframe"><div class="container"><iframe class="video" ', $section);
-		$section = str_replace('</iframe>', '</iframe></div></div>', $section);
-		return $section;
-
-	}
-
-
-
-	
 	function sumparser($text)
 	{
 		preg_match_all('#<h([1-6]) id="(\w+)">(.+)</h[1-6]>#iU', $text, $out);
@@ -154,18 +133,18 @@ class Modelrender extends Modelart
 		$last = 0;
 		foreach ($sum as $title => $list) {
 			foreach ($list as $h => $link) {
-				if($h > $last) {
+				if ($h > $last) {
 					for ($i = 1; $i <= ($h - $last); $i++) {
 						$sumstring .= '<ul>';
-					}            
-					$sumstring .= '<li><a href="#'.$title.'">'.$link.'</a></li>' ;
+					}
+					$sumstring .= '<li><a href="#' . $title . '">' . $link . '</a></li>';
 				} elseif ($h < $last) {
 					for ($i = 1; $i <= ($last - $h); $i++) {
 						$sumstring .= '</ul>';
 					}
-					$sumstring .= '<li><a href="#'.$title.'">'.$link.'</a></li>' ;            
+					$sumstring .= '<li><a href="#' . $title . '">' . $link . '</a></li>';
 				} elseif ($h = $last) {
-					$sumstring .= '<li><a href="#'.$title.'">'.$link.'</a></li>' ;
+					$sumstring .= '<li><a href="#' . $title . '">' . $link . '</a></li>';
 				}
 				$last = $h;
 			}
@@ -177,6 +156,40 @@ class Modelrender extends Modelart
 	}
 
 
+
+	//tag auto menu
+
+
+	public function autotaglist()
+	{
+		$pattern = "/%%(\w*)%%/";
+		preg_match_all($pattern, $this->md(), $out);
+		return $out[1];
+
+	}
+
+	public function autotaglistupdate($taglist)
+	{
+		foreach ($taglist as $tag => $artlist) {
+			$replace = '<ul>';
+			foreach ($artlist as $art) {
+				$replace .= '<li><a href="?id=' . $art->id() . '" title="' . $art->description() . '">' . $art->title() . '</a></li>';
+			}
+			$replace .= '</ul>';
+			$text = str_replace('%%' . $tag . '%%', $replace, $text);
+		}
+	}
+
+	public function autotaglistcalc($taglist)
+	{
+		foreach ($taglist as $tag => $artlist) {
+			foreach ($artlist as $art) {
+				if (!in_array($art->id(), $this->linkfrom('array')) && $art->id() != $this->id()) {
+					$this->linkfrom[] = $art->id();
+				}
+			}
+		}
+	}
 
 
 

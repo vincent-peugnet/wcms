@@ -20,8 +20,6 @@
     <?php $this->insert('navart', ['user' => $user, 'art' => $art, 'artexist' => $artexist]) ?>
 
 
-<form action="?id=<?= $art->id() ?>&action=update" method="post" id="artedit">
-
 
     <?php $this->insert('edittopbar', ['art' => $art]) ?>
     <?php $this->insert('editsidebar', ['art' => $art]) ?>
