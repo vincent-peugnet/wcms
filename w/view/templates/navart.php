@@ -1,4 +1,4 @@
-<div class="menu">
+<div class="menu" style="all: initial; position: fixed; top: 0; right: 0;">
     <?= $user->level() ?>
     <div id="dropmenu">
 

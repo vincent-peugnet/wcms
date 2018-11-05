@@ -30,6 +30,7 @@ class Modelart extends Modeldb
 	{
 
 		$artdata = new \JamesMoss\Flywheel\Document($art->dry());
+		var_dump($artdata);
 		$artdata->setId($art->id());
 		$this->artstore->store($artdata);
 	}

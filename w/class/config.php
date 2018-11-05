@@ -16,6 +16,7 @@ abstract class Config
 	protected static $read;
 	protected static $color4;
 	protected static $fontsize = 6;
+	protected static $renderpath = './render/';
 
 
 // _______________________________________ F U N _______________________________________
@@ -122,6 +123,11 @@ abstract class Config
 	public static function fontsize()
 	{
 		return self::$fontsize;
+	}
+
+	public static function renderpath()
+	{
+		return self::$renderpath;
 	}
 
 

@@ -82,7 +82,7 @@ class Art2
 		$this->setaside('');
 		$this->setfooter('');
 		$this->setrender('');
-		$this->setsecure(2);
+		$this->setsecure(3);
 		$this->setinvitepassword('invitepassword');
 		$this->setinterface('section');
 		$this->setlinkfrom([]);
@@ -276,7 +276,9 @@ class Art2
 
 	public function render($type = 'string')
 	{
-		return $this->render;
+		if($type == 'string') {
+			return $this->render;
+		}
 	}
 
 	public function secure($type = 'int')
@@ -496,7 +498,7 @@ class Art2
 		}
 	}
 
-	public function setrender($render)
+	public function setrender(string $render)
 	{
 		$this->render = $render;
 	}

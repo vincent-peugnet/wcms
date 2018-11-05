@@ -5,16 +5,17 @@ class Controllerart extends Controllerdb
     /** @var Art2 */
     protected $art;
     protected $artmanager;
-    protected $renderengine;    
-    
+    protected $renderengine;
+
     public function __construct($id)
     {
         parent::__construct();
-        
-        
+
+
         $this->art = new Art2(['id' => $id]);
         $this->artmanager = new Modelart();
         $this->renderengine = new Modelrender();
+
     }
 
     public function importart()
@@ -31,14 +32,40 @@ class Controllerart extends Controllerdb
 
     public function read()
     {
+        $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+
 
         $artexist = $this->importart();
-        $display = $this->user->level() >= $this->art->secure();
+        $canread = $this->user->level() >= $this->art->secure();
         $cancreate = $this->user->cancreate();
+        $alerts = ['alertnotexist' => 'This page does not exist yet', 'alertprivate' => 'You cannot see this page'];
+        $body = '';
+        $head = '';
 
-        $renderbody = $this->renderengine->render($this->art);
 
-        //$this->showtemplate('read', ['art' => $this->art, 'artexist' => $artexist, 'display' => $display, 'cancreate' => $cancreate]);
+        if ($artexist) {
+
+            if ($this->art->daterender() < $this->art->datemodif()) {
+                $body = $this->renderengine->renderbody($this->art);
+                $this->art->setrender($body);
+                $this->art->setdaterender($now);
+                $this->artmanager->update($this->art);
+            } else {
+                $body = $this->art->render();
+            }
+
+            $head = $this->renderengine->renderhead($this->art);
+
+            $this->art->addaffcount();
+            $this->artmanager->update($this->art);
+
+        }
+
+
+        $data = array_merge($alerts, ['art' => $this->art, 'artexist' => $artexist, 'canread' => $canread, 'cancreate' => $cancreate, 'readernav' => true, 'body' => $body, 'head' => $head]);
+
+
+        $this->showtemplate('read', $data);
 
 
 
