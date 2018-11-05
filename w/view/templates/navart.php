@@ -1,4 +1,25 @@
-<div class="menu" style="all: initial; position: fixed; top: 0; right: 0;">
+<style>
+.menu {
+    all:initial;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    background-color: var(--color1);
+}
+
+div#dropmenu {
+    display: none;
+}
+
+.menu:hover div#dropmenu {
+    display: block;
+}
+
+</style>
+
+
+<div class="menu" >
     <?= $user->level() ?>
     <div id="dropmenu">
 

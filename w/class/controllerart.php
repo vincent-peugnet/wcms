@@ -43,6 +43,7 @@ class Controllerart extends Controllerdb
         $head = '';
 
 
+
         if ($artexist) {
 
             if ($this->art->daterender() < $this->art->datemodif()) {
