@@ -1,4 +1,7 @@
-<div class="sidebar">
+<div id="leftbar">
+    <input id="showleftpanel" name="workspace[showleftpanel]" value="1" class="toggle" type="checkbox" <?= $showleftpanel == true ? 'checked' : '' ?>>
+    <label for="showleftpanel" class="toogle">◧</label>
+    <div id="leftbarpanel" class="panel">
     <details id="editinfo" open>
         <summary>Infos</summary>
         <fieldset>                        
@@ -21,7 +24,33 @@
         <summary>Advanced</summary>
             <fieldset>
             <h3>Template options</h3>
-            <p>NOT WORKING</p>
+            <ul>
+            <?php
+            foreach ($tablist as $element => $value) {
+                if(isset($art->template()[$element])) {
+                    $template = $art->template()[$element];
+                } else {
+                    $template = '';
+                }
+                echo '<li>';
+                echo '<label for="'.$element.'template">'.$element.'</label>';
+                echo '<select name="template['.$element.']" id="'.$element.'template">';
+                ?>
+                <option value="" <?= $template === '' ? 'selected' : '' ?>>--no template--</option>
+                <?php
+                foreach ($artlist as $artid ) {
+
+                    ?>
+                    <option value="<?= $artid ?>" <?= $template === $artid ? 'selected' : '' ?>><?= $artid ?></option>
+                    <?php
+                }
+                echo '</select>';
+                echo '</li>';
+            }
+
+
+            ?>
+            </ul>
             </fieldset>
     </details>
     <details id="editcss" open>
@@ -36,5 +65,6 @@
         </div>
     </details>
 
+    </div>
 
 </div>

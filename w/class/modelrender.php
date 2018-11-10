@@ -20,31 +20,49 @@ class Modelrender extends Modelart
 
 	public function renderbody(Art2 $art)
 	{
-		$body = $this->getbody($art);
+		$body = $this->getbody($this->gethtml($art), $this->getelements($art));
 		$parsebody = $this->parser($art, $body);
 		return $parsebody;
 	}
 
 
 
-	public function getbody(Art2 $art)
+	public function getelements(Art2 $art)
 	{
-		$body = '';
+		$elements = [];
 		foreach (self::TEXT_ELEMENTS as $element) {
-			if (array_key_exists($element, $art->template('array'))) {
-				$tempalteart = $this->get($art->template('array')[$element]);
+			if (isset($art->template('array')[$element])) {
+				$templateid = $art->template('array')[$element];
+				$tempalteart = $this->get($templateid);
 				$text = $tempalteart->$element() . PHP_EOL . $art->$element();
 			} else {
 				$text = $art->$element();
 			}
-			if ($element == 'section') {
-				$body .= PHP_EOL . '<' . $element . '><article>' . PHP_EOL . $this->markdown($text) . PHP_EOL . '</article></' . $element . '>' . PHP_EOL;
-			} else {
-				$body .= PHP_EOL . '<' . $element . '>' . PHP_EOL . $this->markdown($text) . PHP_EOL . '</' . $element . '>' . PHP_EOL;
-			}
+			$elements[$element] = PHP_EOL . '<' . $element . '>' . PHP_EOL . $this->markdown($text) . PHP_EOL . '</' . $element . '>' . PHP_EOL;
+			
 		}
 
-		return $body;
+		return $elements;
+	}
+
+	public function gethtml(Art2 $art)
+	{
+		if (isset($art->template('array')['html'])) {
+			$templateid = $art->template('array')['html'];
+			$tempalteart = $this->get($templateid);
+			$html = $tempalteart->html() . PHP_EOL . $art->html();
+		} else {
+			$html = $art->html();
+		}
+		return $html;
+	}
+
+	public function getbody(string $html, array $elements)
+	{
+		$html =  preg_replace_callback('~\%(SECTION|ASIDE|NAV|HEADER|FOOTER)\%~', function ($match) use ($elements) {
+			return $elements[strtolower($match[1])];
+		}, $html);
+		return $html;
 	}
 
 	public function write(Art2 $art)
@@ -81,22 +99,22 @@ class Modelrender extends Modelart
 		$head .= '<meta name="description" content="'.$art->description() .'" />' . PHP_EOL;
 		$head .= '<meta name="viewport" content="width=device-width" />' . PHP_EOL;
 
-
-		if (array_key_exists('css', $art->template('array'))) {
-			$tempaltecssart = $art->template('array')['css'];
-			$head .= '<link href="' . Config::renderpath() . $tempaltecssart . '.css" rel="stylesheet" />' . PHP_EOL;
-		}
-		$head .= '<link href="' . Config::renderpath() . $art->id() . '.css" rel="stylesheet" />' . PHP_EOL;
-		if (array_key_exists('quickcss', $art->template('array'))) {
+		if (isset($art->template('array')['quickcss'])) {
 			$tempaltequickcssart = $art->template('array')['quickcss'];
 			$head .= '<link href="' . Config::renderpath() . $tempaltequickcssart . '.quick.css" rel="stylesheet" />' . PHP_EOL;
 		}
 		$head .= '<link href="' . Config::renderpath() . $art->id() . '.quick.css" rel="stylesheet" />' . PHP_EOL;
-		if (array_key_exists('javascript', $art->template('array'))) {
-			$templatejsart = $art->template('array')['javascript'];
-			$head .= '<script src="' . Config::renderpath() . $templatejsart . '.js" /></script>' . PHP_EOL;
+		if (isset($art->template('array')['css'])) {
+			$tempaltecssart = $art->template('array')['css'];
+			$head .= '<link href="' . Config::renderpath() . $tempaltecssart . '.css" rel="stylesheet" />' . PHP_EOL;
 		}
-		$head .= '<script src="' . Config::renderpath() . $art->id() . '.js" /></script>' . PHP_EOL;
+		$head .= '<link href="' . Config::renderpath() . $art->id() . '.css" rel="stylesheet" />' . PHP_EOL;
+		
+		if (isset($art->template('array')['javascript'])) {
+			$templatejsart = $art->template('array')['javascript'];
+			$head .= '<script src="' . Config::renderpath() . $templatejsart . '.js" async/></script>' . PHP_EOL;
+		}
+		$head .= '<script src="' . Config::renderpath() . $art->id() . '.js" async/></script>' . PHP_EOL;
 
 		return $head;
 }
@@ -167,11 +185,10 @@ public function tooltip(array $linkfrom, string $text)
 
 	foreach ($linkfrom as $id) {
 		if (isset($descriptions[$id])) {
-			$title = $descriptions[$id];
+			$linkfrom = 'href="?id=' . $id . '"';
+			$titlelinkfrom = ' title="' . $descriptions[$id] . '" ' . $linkfrom;
+			$text = str_replace($linkfrom, $titlelinkfrom, $text);
 		}
-		$linkfrom = 'href="?id=' . $id . '"';
-		$titlelinkfrom = ' title="' . $title . '" ' . $linkfrom;
-		$text = str_replace($linkfrom, $titlelinkfrom, $text);
 	}
 	return $text;
 }

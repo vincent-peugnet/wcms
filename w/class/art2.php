@@ -555,11 +555,21 @@ class Art2
 	public function settemplate($template)
 	{
 		if (is_string($template)) {
-			$template = json_decode($template, true);
+			$templatearray = json_decode($template, true);
 		}
 		if (is_array($template)) {
-			$this->template = $template;
+			$templatearray = $template;
 		}
+		if(is_object($template)) {
+			$templatearray = (array) $template;
+		}
+		$this->template = array_map(function ($value) {
+			if(empty($value)) {
+				return null;
+			} else {
+				return $value;
+			}
+		}, $templatearray);
 	}
 
 	public function setaffcount($affcount)

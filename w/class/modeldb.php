@@ -31,6 +31,11 @@ class Modeldb extends Model
 		return $artlist;
 	}
 
+	public function list()
+	{
+		return $this->artstore->getAllIds();
+	}
+
 	public function getlisterid(array $idlist = [])
 	{
 		$artdatalist = $this->artstore->query()

@@ -75,7 +75,20 @@ class Controllerart extends Controllerdb
     public function edit()
     {
         if ($this->importart() && $this->user->canedit()) {
-            $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true]);
+            $tablist = ['section' => $this->art->md(), 'css' => $this->art->css(), 'header' => $this->art->header(), 'nav' => $this->art->nav(), 'aside' => $this->art->aside(), 'footer' => $this->art->footer(), 'html' => $this->art->html(), 'javascript' => $this->art->javascript()];
+
+            $artlist = $this->artmanager->list();
+
+            if(isset($_SESSION['workspace'])) {
+                $showleftpanel = $_SESSION['workspace']['showleftpanel'];
+                $showrightpanel = $_SESSION['workspace']['showrightpanel'];
+            } else {
+                $showleftpanel = false;
+                $showrightpanel = false;
+            }
+
+
+            $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true, 'tablist' => $tablist, 'artlist' => $artlist, 'showleftpanel' => $showleftpanel, 'showrightpanel' => $showrightpanel]);
         } else {
             $this->redirect('?id=' . $this->art->id());
         }
@@ -112,7 +125,8 @@ class Controllerart extends Controllerdb
 
     public function update()
     {
-
+        $_SESSION['workspace']['showrightpanel'] = isset($_POST['workspace']['showrightpanel']);
+        $_SESSION['workspace']['showleftpanel'] = isset($_POST['workspace']['showleftpanel']);
 
         if ($this->importart() && $this->user->canedit()) {
             $this->art->hydrate($_POST);

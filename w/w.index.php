@@ -24,14 +24,6 @@ require(__DIR__.'/../vendor/autoload.php');
 spl_autoload_register('class_autoloader');
 
 
-
-
-//$text = 'blabla il fait un temps vraiment [dégeu](=degeulasse) parce quil pleut [baucoup](?id=orthographe), en amazonie la [vie](?id=prout) et la [mort](?id=prout) sont des notions très proches.';
-
-//$artmanager = new Modelart;
-
-// var_dump($artmanager->getlisterwhere(['id', 'description'], ['55', '44', 'lol']));
-
 try {
   $router = new Router;
 
