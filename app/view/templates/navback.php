@@ -12,7 +12,7 @@
 <?php if($user->isvisitor()) { ?>
 
     <li>
-    <form action="./?action=login" method="post">
+    <form action="?action=login" method="post">
     <input type="password" name="pass" id="loginpass" placeholder="password">
     <input type="submit" value="login">
     </form>
@@ -21,7 +21,7 @@
 <?php } else { ?>    
 
     <li>
-    <form action="./?action=logout" method="post">
+    <form action="?action=logout" method="post">
     <input type="submit" value="logout">
     </form>
     </li>

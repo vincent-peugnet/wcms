@@ -1,41 +1,5 @@
 <?php
 
-// _____________________________________________________ R E Q U I R E ________________________________________________________________
-
-
-
-session_start();
-
-
-
-require(__DIR__.'/fn/w.fn.php');
-
-function class_autoloader($class)
-{
-    require(__DIR__. DIRECTORY_SEPARATOR . 'class'. DIRECTORY_SEPARATOR  . strtolower($class) . '.php');
-}
-
-
-
-
-
-require(__DIR__.'/../vendor/autoload.php');
-
-spl_autoload_register('class_autoloader');
-
-
-try {
-  $router = new Router;
-
-} catch(Exception $e) {
-    echo 'Exception reçue : ',  $e->getMessage(), "\n";
-}
-
-
-
-
-
-
 exit;
 
 // ________________________________________________________ I N S T A L _________________________________________________
@@ -150,11 +114,11 @@ if (isset($_POST['action'])) {
                 $art->updatelinkfrom();
                 $art->autotaglistcalc($app->taglist($app->getlister(['id', 'title', 'tag']), $art->autotaglist()));
                 $app->update($art);
-                if($config->fontsize() != $_POST['fontsize']) {
+                if ($config->fontsize() != $_POST['fontsize']) {
                     $config->setfontsize($_POST['fontsize']);
                     $app->savejson($config->tojson());
                 }
-                header('Location: ?id=' . $art->id() . '&edit=1&message='.$art->id().'_saved');
+                header('Location: ?id=' . $art->id() . '&edit=1&message=' . $art->id() . '_saved');
             }
             break;
 
@@ -164,11 +128,11 @@ if (isset($_POST['action'])) {
                 $art->updatelinkfrom();
                 $art->autotaglistcalc($app->taglist($app->getlister(['id', 'title', 'tag']), $art->autotaglist()));
                 $app->update($art);
-                if($config->fontsize() != $_POST['fontsize']) {
+                if ($config->fontsize() != $_POST['fontsize']) {
                     $config->setfontsize($_POST['fontsize']);
                     $app->savejson($config->tojson());
                 }
-                header('Location: ?id=' . $art->id().'&message='.$art->id().'_saved');
+                header('Location: ?id=' . $art->id() . '&message=' . $art->id() . '_saved');
             }
             break;
 
@@ -178,11 +142,11 @@ if (isset($_POST['action'])) {
                 $art->updatelinkfrom();
                 $art->autotaglistcalc($app->taglist($app->getlister(['id', 'title', 'tag']), $art->autotaglist()));
                 $app->update($art);
-                if($config->fontsize() != $_POST['fontsize']) {
+                if ($config->fontsize() != $_POST['fontsize']) {
                     $config->setfontsize($_POST['fontsize']);
                     $app->savejson($config->tojson());
                 }
-                header('Location: ./?message='.$art->id().'_saved');
+                header('Location: ./?message=' . $art->id() . '_saved');
             }
             break;
 
@@ -260,7 +224,7 @@ if (isset($_POST['action'])) {
 
                         }
 
-                       
+
 
 
                     }
@@ -289,7 +253,7 @@ if (isset($_POST['actiondb'])) {
 
         case 'duplicatetable':
             $message = $app->tableduplicate($config->dbname(), $_POST['arttable'], $_POST['tablename']);
-            header('Location: ./?aff=admin&message=' . $message);            
+            header('Location: ./?aff=admin&message=' . $message);
             break;
 
     }
@@ -345,7 +309,7 @@ $aff->nav($app);
 
 if (array_key_exists('id', $_GET)) {
     $app->bddinit($config);
-    include(__DIR__.'/controller/w.article.php');
+    include(__DIR__ . '/controller/w.article.php');
 } elseif (array_key_exists('tag', $_GET)) {
     $app->bddinit($config);
     echo '<h4>' . $_GET['tag'] . '</h4>';
@@ -355,11 +319,9 @@ if (array_key_exists('id', $_GET)) {
     echo '<h4><a href="?id=' . $_GET['linkfrom'] . '">' . $_GET['linkfrom'] . '</a></h4>';
     $aff->linkfrom($app->getlister(['id', 'title', 'description', 'linkfrom']), $_GET['linkfrom'], $app);
 } elseif (array_key_exists('aff', $_GET)) {
-    include(__DIR__.'/controller/w.menu.php');
+    include(__DIR__ . '/controller/w.menu.php');
 } else {
-    include(__DIR__.'/controller/w.home.php');
+    include(__DIR__ . '/controller/w.home.php');
 }
-
-
 
 ?>

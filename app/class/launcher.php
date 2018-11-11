@@ -1,13 +1,12 @@
 <?php
 
-
-class Application
+class Launcher
 {
-
-
-
-
+    
 }
+
+
+
 
 
 

@@ -1,7 +1,7 @@
 <?php
 
 
-class Router
+class Backrouter
 {
     protected $route;
 
@@ -35,7 +35,7 @@ class Router
         'aff=co' => ['connect', 'desktop'],
     ];
 
-    public function __construct() {
+    public function run() {
         if($this->matchroute()) {
             $this->callmethod();
         } else {

@@ -67,24 +67,24 @@ class Modelrender extends Modelart
 
 	public function write(Art2 $art)
 	{
-		file_put_contents(Config::renderpath() . $art->id() . '.css', $art->css());
-		file_put_contents(Config::renderpath() . $art->id() . '.quick.css', $art->quickcss());
-		file_put_contents(Config::renderpath() . $art->id() . '.js', $art->javascript());
+		file_put_contents(Model::RENDER_DIR . $art->id() . '.css', $art->css());
+		file_put_contents(Model::RENDER_DIR . $art->id() . '.quick.css', $art->quickcss());
+		file_put_contents(Model::RENDER_DIR . $art->id() . '.js', $art->javascript());
 	}
 
 	public function writetemplates(Art2 $art)
 	{
 		if (array_key_exists('css', $art->template('array'))) {
 			$tempaltecssart = $this->get($art->template('array')['css']);
-			file_put_contents(Config::renderpath() . $tempaltecssart->id() . '.css', $tempaltecssart->css());
+			file_put_contents(Model::RENDER_DIR . $tempaltecssart->id() . '.css', $tempaltecssart->css());
 		}
 		if (array_key_exists('quickcss', $art->template('array'))) {
 			$tempaltequickcssart = $this->get($art->template('array')['quickcss']);
-			file_put_contents(Config::renderpath() . $tempaltequickcssart->id() . '.quick.css', $tempaltequickcssart->quickcss());
+			file_put_contents(Model::RENDER_DIR . $tempaltequickcssart->id() . '.quick.css', $tempaltequickcssart->quickcss());
 		}
 		if (array_key_exists('javascript', $art->template('array'))) {
 			$templatejsart = $this->get($art->template('array')['javascript']);
-			file_put_contents(Config::renderpath() . $templatejsart->id() . '.js', $templatejsart->javascript());
+			file_put_contents(Model::RENDER_DIR . $templatejsart->id() . '.js', $templatejsart->javascript());
 		}
 	}
 

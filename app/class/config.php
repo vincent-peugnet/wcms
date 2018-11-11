@@ -4,10 +4,6 @@
 
 abstract class Config
 {
-	protected static $host;
-	protected static $dbname;
-	protected static $user;
-	protected static $password;
 	protected static $arttable = 'artstore';
 	protected static $domain;
 	protected static $admin;
@@ -16,18 +12,17 @@ abstract class Config
 	protected static $read;
 	protected static $color4;
 	protected static $fontsize = 6;
-	protected static $renderpath = './render/';
+	protected static $cmspath = '';
 
 
 // _______________________________________ F U N _______________________________________
 
 
 
-	public static function hydrate(array $donnees)
+	public static function hydrate(array $datas)
 	{
-		foreach ($donnees as $key => $value) {
+		foreach ($datas as $key => $value) {
 			$method = 'set' . $key;
-
 			if (method_exists(get_called_class(), $method)) {
 				self::$method($value);
 			}
@@ -40,6 +35,9 @@ abstract class Config
 			$current = file_get_contents(Model::CONFIG_FILE);
 			$datas = json_decode($current, true);
 			self::hydrate($datas);
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -52,38 +50,24 @@ abstract class Config
 	public static function savejson()
 	{
 		$json = self::tojson();
-		file_put_contents(self::CONFIG_FILE, $json);
+		return file_put_contents(Model::CONFIG_FILE, $json);
 	}
 
 
 	public static function tojson()
 	{
-		$arr = get_object_vars($this);
+		$arr = get_class_vars(__class__);
 		$json = json_encode($arr, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT);
 		return $json;
 	}
 
+	public static function checkcmspath()
+	{
+		$path = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . self::cmspath() . 'w' . DIRECTORY_SEPARATOR . 'w.config.json';
+		return (file_exists($path));
+	}
+
 // ________________________________________ G E T _______________________________________
-
-	public static function host()
-	{
-		return self::$host;
-	}
-
-	public static function dbname()
-	{
-		return self::$dbname;
-	}
-
-	public static function user()
-	{
-		return self::$user;
-	}
-
-	public static function password()
-	{
-		return self::$password;
-	}
 
 	public static function arttable()
 	{
@@ -125,34 +109,14 @@ abstract class Config
 		return self::$fontsize;
 	}
 
-	public static function renderpath()
+	public static function cmspath()
 	{
-		return self::$renderpath;
+		return self::$cmspath;
 	}
 
 
 
 // __________________________________________ S E T ______________________________________
-
-	public static function sethost($host)
-	{
-		self::$host = strip_tags($host);
-	}
-
-	public static function setdbname($dbname)
-	{
-		self::$dbname = strip_tags($dbname);
-	}
-
-	public static function setuser($user)
-	{
-		self::$user = strip_tags($user);
-	}
-
-	public static function setpassword($password)
-	{
-		self::$password = strip_tags($password);
-	}
 
 	public static function setarttable($arttable)
 	{
@@ -166,7 +130,9 @@ abstract class Config
 
 	public static function setadmin($admin)
 	{
-		self::$admin = strip_tags($admin);
+		if(is_string($admin) && strlen($admin) >= 4 && strlen($admin) <= 64) {
+			self::$admin = strip_tags($admin);
+		}
 	}
 
 	public static function seteditor($editor)
@@ -186,7 +152,7 @@ abstract class Config
 
 	public static function setcolor4($color4)
 	{
-		if(strlen($color4) <= 8) {
+		if (strlen($color4) <= 8) {
 			self::$color4 = $color4;
 		}
 	}
@@ -194,10 +160,17 @@ abstract class Config
 	public static function setfontsize($fontsize)
 	{
 		$fontsize = intval($fontsize);
-		if($fontsize > 1) {
+		if ($fontsize > 1) {
 			self::$fontsize = $fontsize;
 		}
 	}
+
+	public static function setcmspath($cmspath)
+	{
+		self::$cmspath = strip_tags($cmspath);
+	}
+
+
 
 
 }

@@ -2,6 +2,8 @@
     "require": {
         "michelf/php-markdown": "^1.8",
         "league/plates": "3.*",
-        "jamesmoss/flywheel": "^0.5.2"
+        "jamesmoss/flywheel": "^0.5.2",
+        "php": "^7.2",
+        "altorouter/altorouter": "^1.2"
     }
 }

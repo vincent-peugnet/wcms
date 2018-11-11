@@ -7,15 +7,18 @@ class Controllerart extends Controllerdb
     protected $artmanager;
     protected $renderengine;
 
-    public function __construct($id)
+    public function __construct()
     {
         parent::__construct();
 
-
-        $this->art = new Art2(['id' => $id]);
         $this->artmanager = new Modelart();
         $this->renderengine = new Modelrender();
 
+    }
+
+    public function setart($id)
+    {
+        $this->art = new Art2(['id' => $id]);
     }
 
     public function importart()
@@ -30,8 +33,9 @@ class Controllerart extends Controllerdb
         }
     }
 
-    public function read()
+    public function read($id)
     {
+        $this->setart($id);
         $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
 
@@ -72,8 +76,11 @@ class Controllerart extends Controllerdb
 
     }
 
-    public function edit()
+    public function edit($id)
     {
+        $this->setart($id);
+
+
         if ($this->importart() && $this->user->canedit()) {
             $tablist = ['section' => $this->art->md(), 'css' => $this->art->css(), 'header' => $this->art->header(), 'nav' => $this->art->nav(), 'aside' => $this->art->aside(), 'footer' => $this->art->footer(), 'html' => $this->art->html(), 'javascript' => $this->art->javascript()];
 
@@ -95,21 +102,24 @@ class Controllerart extends Controllerdb
 
     }
 
-    public function log()
+    public function log($id)
     {
+        $this->setart($id);
         $this->importart();
         var_dump($this->art);
     }
 
-    public function add()
+    public function add($id)
     {
+        $this->setart($id);
         $this->art->reset();
         $this->artmanager->add($this->art);
         $this->redirect('?id=' . $this->art->id() . '&aff=edit');
     }
 
-    public function delete()
+    public function delete($id)
     {
+        $this->setart($id);
         if ($this->user->canedit() && $this->importart()) {
 
             if (isset($_POST['deleteconfirm']) && $_POST['deleteconfirm'] == true) {
@@ -123,8 +133,9 @@ class Controllerart extends Controllerdb
         }
     }
 
-    public function update()
+    public function update($id)
     {
+        $this->setart($id);
         $_SESSION['workspace']['showrightpanel'] = isset($_POST['workspace']['showrightpanel']);
         $_SESSION['workspace']['showleftpanel'] = isset($_POST['workspace']['showleftpanel']);
 

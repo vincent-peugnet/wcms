@@ -1,11 +1,7 @@
-vendor/*
 .vscode/*
-w/w.config.json
-w_database/*
+assets/render/*
+database/*
+media/*
+vendor/*
+config.json
 error_log
-public/w/media/*
-public/w/css/*
-public/w/css/*/*
-public/w/js/*
-public/index.html
-public/render/*
