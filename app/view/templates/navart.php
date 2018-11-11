@@ -26,7 +26,7 @@ div#dropmenu {
     <ul>
 
     <li>
-    <a class="button" href="./">home</a>
+    <a class="button" href="<?= $this->url('backrouter') ?>">home</a>
     </li>
 
 
@@ -53,10 +53,10 @@ div#dropmenu {
 <?php if($user->canedit()  && $artexist) { ?>
 
     <li>
-    <a class="button" href="<?= $router->generate('artread/', ['art' => $art->id()]) ?>" target="_blank">display</a>
+    <a class="button" href="<?= $this->url('artread/', ['art' => $art->id()]) ?>" target="_blank">display</a>
     </li>
     <li>
-    <a class="button" href="<?= $router->generate('artedit/', ['art' => $art->id()]) ?>" >edit</a>
+    <a class="button" href="<?= $this->url('artedit/', ['art' => $art->id()]) ?>" >edit</a>
     </li>            
 
 <?php } ?>    

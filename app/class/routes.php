@@ -9,7 +9,7 @@ class Routes
     public function match()
     {
         $router = new AltoRouter();
-        $router->setBasePath(Config::basepath());
+        $router->setBasePath('/' . Config::basepath());
         $router->addRoutes([
             ['GET|POST', '/', 'Backrouter#run', 'backrouter'],
             ['GET', '/[a:art]/', 'Controllerart#read', 'artread/'],

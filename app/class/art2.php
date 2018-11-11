@@ -44,14 +44,14 @@ class Art2
 
 // _____________________________________________________ F U N ____________________________________________________
 
-	public function __construct($donnees)
+	public function __construct($datas = [])
 	{
-		$this->hydrate($donnees);
+		$this->hydrate($datas);
 	}
 
-	public function hydrate($donnees)
+	public function hydrate($datas)
 	{
-		foreach ($donnees as $key => $value) {
+		foreach ($datas as $key => $value) {
 			$method = 'set' . $key;
 
 			if (method_exists($this, $method)) {

@@ -63,7 +63,7 @@ abstract class Config
 
 	public static function checkbasepath()
 	{
-		$path = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . self::basepath() . Model::CONFIG_FILE;
+		$path = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . self::basepath() . DIRECTORY_SEPARATOR .  Model::CONFIG_FILE;
 		return (file_exists($path));
 	}
 

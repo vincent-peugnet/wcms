@@ -23,7 +23,11 @@ class Controller
 
     public function initplates()
     {
+        $router = $this->router;
         $this->plates = new League\Plates\Engine(Model::TEMPLATES_DIR);
+        $this->plates->registerFunction('url', function (string $string, array $vars = []) use ($router) {
+            return $router->generate($string, $vars);
+        });
     }
     
     public function useriseditor()
