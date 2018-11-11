@@ -5,15 +5,10 @@ session_start();
 
 
 
-require(__DIR__ . '/fn/w.fn.php');
-
-function class_autoloader($class)
-{
-    require(__DIR__ . DIRECTORY_SEPARATOR . 'class' . DIRECTORY_SEPARATOR . strtolower($class) . '.php');
-}
+require('app/fn/fn.php');
 
 
-require(__DIR__ . '/../vendor/autoload.php');
+require('./vendor/autoload.php');
 
 spl_autoload_register('class_autoloader');
 

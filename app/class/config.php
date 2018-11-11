@@ -11,8 +11,8 @@ abstract class Config
 	protected static $invite;
 	protected static $read;
 	protected static $color4;
-	protected static $fontsize = 6;
-	protected static $cmspath = '';
+	protected static $fontsize = 15;
+	protected static $basepath = '';
 
 
 // _______________________________________ F U N _______________________________________
@@ -61,9 +61,9 @@ abstract class Config
 		return $json;
 	}
 
-	public static function checkcmspath()
+	public static function checkbasepath()
 	{
-		$path = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . self::cmspath() . 'w' . DIRECTORY_SEPARATOR . 'w.config.json';
+		$path = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . self::basepath() . Model::CONFIG_FILE;
 		return (file_exists($path));
 	}
 
@@ -109,9 +109,9 @@ abstract class Config
 		return self::$fontsize;
 	}
 
-	public static function cmspath()
+	public static function basepath()
 	{
-		return self::$cmspath;
+		return self::$basepath;
 	}
 
 
@@ -165,9 +165,9 @@ abstract class Config
 		}
 	}
 
-	public static function setcmspath($cmspath)
+	public static function setbasepath($basepath)
 	{
-		self::$cmspath = strip_tags($cmspath);
+		self::$basepath = strip_tags($basepath);
 	}
 
 

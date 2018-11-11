@@ -1,6 +1,6 @@
 <?php
 
-class Controlleradmin extends Controllerdb
+class Controlleradmin extends Controller
 {
 
     public function desktop()
@@ -13,12 +13,7 @@ class Controlleradmin extends Controllerdb
 
     }
 
-    
 
-    public function duplicatetable()
-    {
-
-    }
 
 }
 

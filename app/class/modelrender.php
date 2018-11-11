@@ -101,20 +101,20 @@ class Modelrender extends Modelart
 
 		if (isset($art->template('array')['quickcss'])) {
 			$tempaltequickcssart = $art->template('array')['quickcss'];
-			$head .= '<link href="' . Config::renderpath() . $tempaltequickcssart . '.quick.css" rel="stylesheet" />' . PHP_EOL;
+			$head .= '<link href=".' . Model::RENDER_DIR . $tempaltequickcssart . '.quick.css" rel="stylesheet" />' . PHP_EOL;
 		}
-		$head .= '<link href="' . Config::renderpath() . $art->id() . '.quick.css" rel="stylesheet" />' . PHP_EOL;
+		$head .= '<link href=".' . Model::RENDER_DIR . $art->id() . '.quick.css" rel="stylesheet" />' . PHP_EOL;
 		if (isset($art->template('array')['css'])) {
 			$tempaltecssart = $art->template('array')['css'];
-			$head .= '<link href="' . Config::renderpath() . $tempaltecssart . '.css" rel="stylesheet" />' . PHP_EOL;
+			$head .= '<link href=".' . Model::RENDER_DIR . $tempaltecssart . '.css" rel="stylesheet" />' . PHP_EOL;
 		}
-		$head .= '<link href="' . Config::renderpath() . $art->id() . '.css" rel="stylesheet" />' . PHP_EOL;
+		$head .= '<link href=".' . Model::RENDER_DIR . $art->id() . '.css" rel="stylesheet" />' . PHP_EOL;
 		
 		if (isset($art->template('array')['javascript'])) {
 			$templatejsart = $art->template('array')['javascript'];
-			$head .= '<script src="' . Config::renderpath() . $templatejsart . '.js" async/></script>' . PHP_EOL;
+			$head .= '<script src=".' . Model::RENDER_DIR . $templatejsart . '.js" async/></script>' . PHP_EOL;
 		}
-		$head .= '<script src="' . Config::renderpath() . $art->id() . '.js" async/></script>' . PHP_EOL;
+		$head .= '<script src=".' . Model::RENDER_DIR . $art->id() . '.js" async/></script>' . PHP_EOL;
 
 		return $head;
 }

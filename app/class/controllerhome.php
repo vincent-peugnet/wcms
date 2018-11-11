@@ -1,13 +1,13 @@
 <?php
 
-class Controllerhome extends Controllerdb
+class Controllerhome extends Controller
 {
 
     protected $modelhome;
     protected $opt;
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct($render) {
+        parent::__construct($render);
         $this->modelhome = new Modelhome;
     }
 

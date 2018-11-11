@@ -1,5 +1,6 @@
 <?php
 
+
 class Routes
 {
     /**
@@ -8,11 +9,10 @@ class Routes
     public function match()
     {
         $router = new AltoRouter();
+        $router->setBasePath(Config::basepath());
         $router->addRoutes([
             ['GET|POST', '/', 'Backrouter#run', 'backrouter'],
             ['GET', '/[a:art]/', 'Controllerart#read', 'artread/'],
-            ['GET', '/[a:art]', 'Controllerart#read', 'artread'],
-            ['GET', '/[a:art]/edit', 'Controllerart#edit', 'artedit'],
             ['GET', '/[a:art]/edit/', 'Controllerart#edit', 'artedit/'],
         ]);
 
@@ -22,7 +22,7 @@ class Routes
             $controllerName = $callableParts[0];
             $methodName = $callableParts[1];
 
-            $controller = new $controllerName();
+            $controller = new $controllerName($router);
 			
             call_user_func_array(array($controller, $methodName), $match['params']);
         }

@@ -4,11 +4,13 @@ class Controller
 {
 
     protected $user;
+    protected $router;
     protected $usermanager;
     protected $plates;
 
-	public function __construct() {
-        $this->setuser();        
+	public function __construct($router) {
+        $this->setuser();
+        $this->router = $router;        
         $this->initplates();       
         $this->initconfig(); 
 	}
@@ -49,6 +51,7 @@ class Controller
     public function commonsparams()
     {
         $commonsparams = [];
+        $commonsparams['router'] = $this->router;
         $commonsparams['user'] = $this->user;
         return $commonsparams;
     }

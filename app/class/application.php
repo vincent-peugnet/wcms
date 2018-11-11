@@ -19,9 +19,9 @@ class Application
             }
         } else {
             if(Config::readconfig()) {
-                if(!Config::checkcmspath() || empty(Config::admin()) || empty(Config::arttable())) {
+                if(!Config::checkbasepath() || empty(Config::admin()) || empty(Config::arttable())) {
                     echo '<ul>';
-                    if(!Config::checkcmspath()) {
+                    if(!Config::checkbasepath()) {
                         echo '<li>Wrong path</li>';
                     } 
                     if(empty(Config::admin())) {
@@ -49,9 +49,9 @@ class Application
         <form action="" method="post">
         <div>
         <h2>
-        <label for="cmspath">Path to W-CMS</label>
+        <label for="basepath">Path to W-CMS</label>
         </h2>
-        <input type="text" name="configinit[cmspath]"  value="<?= Config::cmspath() ?>" id="cmspath">
+        <input type="text" name="configinit[basepath]"  value="<?= Config::basepath() ?>" id="basepath">
         <p><i>Leave it empty if W-CMS is in your root folder, otherwise, indicate the subfolder(s) in witch you installed the CMS</i></p>
         </div>
         <div>

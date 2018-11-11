@@ -1,15 +1,15 @@
 <?php
 
-class Controllerart extends Controllerdb
+class Controllerart extends Controller
 {
     /** @var Art2 */
     protected $art;
     protected $artmanager;
     protected $renderengine;
 
-    public function __construct()
+    public function __construct($router)
     {
-        parent::__construct();
+        parent::__construct($router);
 
         $this->artmanager = new Modelart();
         $this->renderengine = new Modelrender();

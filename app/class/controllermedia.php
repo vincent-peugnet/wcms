@@ -5,8 +5,8 @@ class Controllermedia extends Controller
     protected $medialist;
     protected $mediamanager;
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct($render) {
+        parent::__construct($render);
         
         $this->mediamanager = new Modelmedia;
 

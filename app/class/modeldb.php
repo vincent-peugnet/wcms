@@ -16,7 +16,7 @@ class Modeldb extends Model
 
 	public function dbinit()
 	{
-		$this->database = new \JamesMoss\Flywheel\Config(__DIR__ .'/../../w_database');
+		$this->database = new \JamesMoss\Flywheel\Config(Model::DATABASE_DIR);
 		$this->artstore = new \JamesMoss\Flywheel\Repository(Config::arttable(), $this->database);
 	}
 
