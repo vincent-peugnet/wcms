@@ -53,10 +53,10 @@ div#dropmenu {
 <?php if($user->canedit()  && $artexist) { ?>
 
     <li>
-    <a class="button" href="<?= $this->url('artread/', ['art' => $art->id()]) ?>" target="_blank">display</a>
+    <a class="button" href="<?= $this->uart('artread/', $art->id()) ?>" target="_blank">display</a>
     </li>
     <li>
-    <a class="button" href="<?= $this->url('artedit/', ['art' => $art->id()]) ?>" >edit</a>
+    <a class="button" href="<?= $this->uart('artedit', $art->id()) ?>" >edit</a>
     </li>            
 
 <?php } ?>    

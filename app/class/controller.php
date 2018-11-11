@@ -28,6 +28,9 @@ class Controller
         $this->plates->registerFunction('url', function (string $string, array $vars = []) use ($router) {
             return $router->generate($string, $vars);
         });
+        $this->plates->registerFunction('uart', function (string $string, string $id) use ($router) {
+            return $router->generate($string, ['art' => $id]);
+        });
     }
     
     public function useriseditor()
@@ -57,6 +60,7 @@ class Controller
         $commonsparams = [];
         $commonsparams['router'] = $this->router;
         $commonsparams['user'] = $this->user;
+        $commonsparams['css'] = Model::csspath();
         return $commonsparams;
     }
 
@@ -90,6 +94,11 @@ class Controller
     public function redirect($url)
     {
         header('Location: ' . $url);
+    }
+
+    public function routedirect(string $route, array $vars = [])
+    {
+        $this->redirect($this->router->generate($route, $vars));
     }
 
 

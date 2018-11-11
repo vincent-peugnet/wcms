@@ -4,6 +4,7 @@
 class Backrouter
 {
     protected $route;
+    protected $altorouter;
 
     const ROUTES = [
         'art' => ['art', 'read'],
@@ -35,6 +36,11 @@ class Backrouter
         'aff=co' => ['connect', 'desktop'],
     ];
 
+    public function __construct($router)
+    {
+        $this->altorouter = $router;
+    }
+
     public function run() {
         if($this->matchroute()) {
             $this->callmethod();
@@ -57,7 +63,7 @@ class Backrouter
 
         $class = 'controller' . $method[0];
         $function = $method[1];
-        $controller = new $class($this->route->id());
+        $controller = new $class($this->altorouter);
         $params = array_slice($method, 2);
         $controller->$function(...$params);
     }

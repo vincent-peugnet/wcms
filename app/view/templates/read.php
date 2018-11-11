@@ -53,8 +53,10 @@ $this->stop();
         } else {
             echo '<h1>' . $alertnotexist . '</h1>';
             if ($cancreate) {
-                $this->insert('readcreate', ['id' => $art->id()]);
-            }
+                ?>
+                <a href="<?= $this->uart('artadd', $art->id()) ?>">⭐ Create</a>            
+                <?php
+                }
         }
 
 

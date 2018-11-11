@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => '✏ '.$art->title()]) ?>
+<?php $this->layout('layout', ['title' => '✏ '.$art->title(), 'css' => $css . 'edit.css']) ?>
 
 
 
@@ -23,9 +23,6 @@
     <?php $this->insert('editrightbar', ['art' => $art, 'artlist' => $artlist, 'showrightpanel' => $showrightpanel]) ?>
 
     </div>
-
-
-<input type="hidden" name="id" value="<?= $art->id() ?>">
 
 </form>
 

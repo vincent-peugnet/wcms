@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => 'Connect', 'description' => 'connect']) ?>
+<?php $this->layout('layout', ['title' => 'Connect', 'description' => 'connect', 'css' => $css . 'connect.css']) ?>
 
 
 

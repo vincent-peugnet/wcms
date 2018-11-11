@@ -7,7 +7,7 @@
         <?php
         foreach ($artlist as $item ) {
             ?>
-            <a href="?id=<?= $item ?>&aff=edit"><?= $item ?></a>
+            <a href="<?= $this->uart('artedit', $item) ?>"><?= $item ?></a>
             <input type="text" value="[<?= $item ?>](=<?= $item ?>)">
             <?php
         }

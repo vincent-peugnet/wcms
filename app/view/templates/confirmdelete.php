@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => 'delete', 'description' => 'delete']) ?>
+<?php $this->layout('layout', ['title' => 'delete', 'description' => 'delete', 'css' => $css . 'delete.css']) ?>
 
 
 <?php $this->start('page') ?>
@@ -34,7 +34,7 @@
 </div>
 
 
-<form action="./?id=<?= $art->id() ?>&action=delete" method="post">
+<form action="<?= $this->uart('artdelete', $art->id()) ?>" method="post">
 <input type="hidden" name="deleteconfirm" value="true">
 <input type="submit" value="confirm delete">
 </form>

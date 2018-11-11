@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => 'home']) ?>
+<?php $this->layout('layout', ['title' => 'home', 'css' => $css . 'home.css']) ?>
 
 
 
@@ -80,10 +80,10 @@
             <tr>
             <td><input type="checkbox" name="id[]"  value="<?= $item->id() ?>" id="<?= $item->id() ?>"></td>
             <td><label title="<?= $item->title() ?>" for="<?= $item->id() ?>"><?= $item->id() ?></label></td>
-            <td><a href="?id=<?= $item->id() ?>&aff=edit">✏</a></td>
-            <td><a href="?id=<?= $item->id() ?>" target="_blank">👁</a></td>
-            <td><a href="?id=<?= $item->id() ?>&action=delete" >🗑</a></td>
-            <td><a href="?id=<?= $item->id() ?>&aff=log" target="_blank">¶</a></td>
+            <td><a href="<?= $this->uart('artedit', $item->id()) ?>">✏</a></td>
+            <td><a href="<?= $this->uart('artread/', $item->id()) ?>" target="_blank">👁</a></td>
+            <td><a href="<?= $this->uart('artdelete', $item->id()) ?>" >🗑</a></td>
+            <td><a href="<?= $this->uart('artlog', $item->id()) ?>" target="_blank">¶</a></td>
             <td><?= $item->tag('sort') ?></td>
             <td><?= $item->description() ?></td>
             <td><?= $item->linkto('sort') ?></td>

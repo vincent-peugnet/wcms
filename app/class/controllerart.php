@@ -86,7 +86,7 @@ class Controllerart extends Controller
 
             $artlist = $this->artmanager->list();
 
-            if(isset($_SESSION['workspace'])) {
+            if (isset($_SESSION['workspace'])) {
                 $showleftpanel = $_SESSION['workspace']['showleftpanel'];
                 $showrightpanel = $_SESSION['workspace']['showrightpanel'];
             } else {
@@ -97,7 +97,7 @@ class Controllerart extends Controller
 
             $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true, 'tablist' => $tablist, 'artlist' => $artlist, 'showleftpanel' => $showleftpanel, 'showrightpanel' => $showrightpanel]);
         } else {
-            $this->redirect('?id=' . $this->art->id());
+            $this->routedirect('artread/', ['art' => $this->art->id()]);
         }
 
     }
@@ -112,9 +112,25 @@ class Controllerart extends Controller
     public function add($id)
     {
         $this->setart($id);
-        $this->art->reset();
-        $this->artmanager->add($this->art);
-        $this->redirect('?id=' . $this->art->id() . '&aff=edit');
+        if ($this->user->canedit() && !$this->importart()) {
+            $this->art->reset();
+            $this->artmanager->add($this->art);
+            $this->routedirect('artedit', ['art' => $this->art->id()]);
+        } else {
+            $this->routedirect('artread/', ['art' => $this->art->id()]);
+        }
+    }
+
+    public function confirmdelete($id)
+    {
+        $this->setart($id);
+        if ($this->user->canedit() && $this->importart()) {
+
+            $this->showtemplate('confirmdelete', ['art' => $this->art, 'artexist' => true]);
+
+        } else {
+            $this->routedirect('artread/', ['art' => $this->art->id()]);
+        }
     }
 
     public function delete($id)
@@ -122,15 +138,9 @@ class Controllerart extends Controller
         $this->setart($id);
         if ($this->user->canedit() && $this->importart()) {
 
-            if (isset($_POST['deleteconfirm']) && $_POST['deleteconfirm'] == true) {
-                $this->artmanager->delete($this->art);
-                $this->redirect('?id=' . $this->art->id());
-            } else {
-                $this->showtemplate('delete', ['art' => $this->art, 'artexist' => true]);
-            }
-        } else {
-            $this->redirect('?id=' . $this->art->id());
+            $this->artmanager->delete($this->art);
         }
+        $this->routedirect('backrouter');
     }
 
     public function update($id)
@@ -146,7 +156,7 @@ class Controllerart extends Controller
 
         }
 
-        $this->redirect('?id=' . $this->art->id() . '&aff=edit');
+        $this->routedirect('artupdate', ['art' => $this->art->id()]);
 
 
 

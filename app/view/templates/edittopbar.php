@@ -1,23 +1,22 @@
 <div id="topbar">
-        <form id="delete" action="./" method="get">
-        <input type="hidden" name="id" value="<?= $art->id() ?>">
-        </form>
 
-    <form action="?id=<?= $art->id() ?>&action=update" method="post" id="update">
+
+    <form action="<?= $this->uart('artupdate', $art->id()) ?>" method="post" id="update">
 
     <span>
-    <input type="submit" name="action" value="update" accesskey="x" form="update">
+    <input type="submit" value="update" accesskey="x" form="update">
     </span>
 
 
     <span>
-        <input type="submit" name="action" value="delete" form="delete">
+        <a href="<?= $this->uart('artconfirmdelete', $art->id()) ?>">✖ delete</a>
     </span>
 
 
     <span>
-    <a href="?id=<?= $art->id() ?>" target="_blank">👁</a>
-    <a href="?id=<?= $art->id() ?>&aff=log" target="_blank">¶</a>
+    <a href="<?= $this->url('backrouter') ?>" >🏠</a>
+    <a href="<?= $this->uart('artread/', $art->id()) ?>" target="_blank">👁</a>
+    <a href="<?= $this->uart('artlog', $art->id()) ?>" target="_blank">¶</a>
     </span>
     <span id="headid"><?= $art->id() ?></span>
 

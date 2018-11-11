@@ -9,11 +9,19 @@ class Routes
     public function match()
     {
         $router = new AltoRouter();
-        $router->setBasePath('/' . Config::basepath());
+        if(!empty(Config::basepath())) {
+            $router->setBasePath(DIRECTORY_SEPARATOR . Config::basepath());
+        }
         $router->addRoutes([
             ['GET|POST', '/', 'Backrouter#run', 'backrouter'],
             ['GET', '/[a:art]/', 'Controllerart#read', 'artread/'],
-            ['GET', '/[a:art]/edit/', 'Controllerart#edit', 'artedit/'],
+            ['GET', '/[a:art]', 'Controllerart#read', 'artread'],
+            ['GET', '/[a:art]/add', 'Controllerart#add', 'artadd'],
+            ['GET', '/[a:art]/edit', 'Controllerart#edit', 'artedit'],
+            ['GET', '/[a:art]/log', 'Controllerart#log', 'artlog'],
+            ['POST', '/[a:art]/edit', 'Controllerart#update', 'artupdate'],
+            ['GET', '/[a:art]/delete', 'Controllerart#confirmdelete', 'artconfirmdelete'],
+            ['POST', '/[a:art]/delete', 'Controllerart#delete', 'artdelete'],
         ]);
 
         $match = $router->match();
