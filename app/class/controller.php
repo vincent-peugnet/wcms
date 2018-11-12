@@ -96,7 +96,10 @@ class Controller
         $this->redirect($this->router->generate($route, $vars));
     }
 
-
+    public function uart($id)
+    {
+        return $this->router->generate('artread/', ['art' => $id]);
+    }
 
 }
 

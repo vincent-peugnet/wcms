@@ -177,9 +177,11 @@ abstract class Config
 		self::$basepath = strip_tags($basepath);
 	}
 
-	public static function setroute404(string $id)
+	public static function setroute404($id)
 	{
-		self::$route404 = idclean($id);
+		if(is_string($id)) {
+			self::$route404 = idclean($id);
+		}
 	}
 
 

@@ -12,7 +12,7 @@ class Controllerart extends Controller
         parent::__construct($router);
 
         $this->artmanager = new Modelart();
-        $this->renderengine = new Modelrender();
+        $this->renderengine = new Modelrender($router);
 
     }
 

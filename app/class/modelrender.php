@@ -2,12 +2,21 @@
 
 class Modelrender extends Modelart
 {
+	protected $router;
+
 	const SUMMARY = '%SUMMARY%';
 
 
-	public function __construct()
+	public function __construct($router)
 	{
 		parent::__construct();
+
+		$this->router = $router;
+	}
+
+	public function uart($id)
+	{
+		return $this->router->generate('artread/', ['art' => $id]);
 	}
 
 	public function renderhead(Art2 $art)
@@ -142,7 +151,7 @@ class Modelrender extends Modelart
 
 		$text = str_replace(self::SUMMARY, $this->sumparser($text), $text);
 
-		$text = str_replace('href="=', 'href="?id=', $text);
+		$text = $this->wikiurl($text);
 
 		$text = $this->tooltip($art->linkfrom('array'), $text);
 
@@ -158,6 +167,25 @@ class Modelrender extends Modelart
 	public function autourl($text)
 	{
 		$text = preg_replace('#( |\R|>)(https?:\/\/((\S+)\.([^< ]+)))#', '$1<a href="$2" class="external" target="_blank">$3</a>', $text);
+		return $text;
+	}
+
+	public function wikiurl(string $text)
+	{
+		$rend = $this;
+		$artlist = [];
+		$text = preg_replace_callback(
+			'%\[([\w-]+)\]%',
+			function ($matches) use ($rend) {
+				$matchart = $rend->get($matches[1]);
+				if (!$matchart) {
+					return '<a href="' . $rend->uart($matches[1]) . '">' . $matches[1] . '</a>';
+				} else {
+					return '<a href="' . $rend->uart($matches[1]) . '" title="' . $matchart->description() . '">' . $matchart->title() . '</a>';
+				}
+			},
+			$text
+		);
 		return $text;
 	}
 
