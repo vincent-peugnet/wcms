@@ -11,8 +11,7 @@ class Controller
 	public function __construct($router) {
         $this->setuser();
         $this->router = $router;        
-        $this->initplates();       
-        $this->initconfig(); 
+        $this->initplates();
 	}
 
     public function setuser()
@@ -44,10 +43,6 @@ class Controller
         }
     }
 
-    public function initconfig()
-    {
-        Config::readconfig();
-    }
 
     public function showtemplate($template, $params)
     {

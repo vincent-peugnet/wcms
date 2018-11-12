@@ -9,7 +9,8 @@ div#main {
 body {
     margin: 0;
     height: 100%;
-    background-color: #b1b1b1;
+    font-family: monospace;
+    font-size: 15px;
 }
 
 .menu {
@@ -26,6 +27,7 @@ body {
     flex: 2;
     position: relative;
     height: 100%;
+    background-color: lightgrey;
 }
 
 
@@ -119,13 +121,13 @@ body {
 .tab label
 {
 	margin-right: 10px;
-	border: outset;
-	background-color: var(--color1);
+    border: solid rgba(0, 0, 0, 0);
+    padding: 0px 2px;
 }
 
 .checkboxtab:checked ~ label
 {
-	border: inset;
+    border: solid 1px;
 }
 
 .checkboxtab:checked ~ .content
@@ -146,7 +148,7 @@ html {
     height: 100%;
 }
 
-.tabs textarea {height: 100%;width: 100%;border: none;resize: none;}
+.tabs textarea {height: 100%;width: 100%;border: none;resize: none;padding: 1%;}
 
 * {
     box-sizing: border-box;
@@ -157,6 +159,8 @@ html {
 }
 
 .editor #topbar {
+    height: 30px;
+    background-color: #7b97b9;
     line-height: 30px;
 }
 
@@ -165,7 +169,7 @@ html {
     padding: 0;
 }
 
-.editor #leftbar select {
+.editor .bar select {
     width: 100%;
 }
 
@@ -174,8 +178,29 @@ html {
 }
 
 
-.editor a {color: black;text-decoration: none;}
 
-.editor a:hover {
-    color: white;
+
+details {
+    background-color: darkgrey;
+}
+
+.bar {
+    background-color: lightgrey;
+}
+
+input#fontsize {
+    width: 36px;
+}
+
+span#headid {
+    border: solid 1px;
+    padding: 2px 4px;
+}
+
+a {
+    color: black;
+}
+
+#fonts select {
+	height: 150px;
 }

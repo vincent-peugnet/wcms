@@ -20,7 +20,7 @@
 
     <?php $this->insert('editleftbar', ['art' => $art, 'tablist' => $tablist, 'artlist' => $artlist, 'showleftpanel' => $showleftpanel]) ?>
     <?php $this->insert('edittabs', ['tablist' => $tablist, 'opentab' => $art->interface()]) ?>
-    <?php $this->insert('editrightbar', ['art' => $art, 'artlist' => $artlist, 'showrightpanel' => $showrightpanel]) ?>
+    <?php $this->insert('editrightbar', ['art' => $art, 'artlist' => $artlist, 'showrightpanel' => $showrightpanel, 'fonts' => $fonts]) ?>
 
     </div>
 

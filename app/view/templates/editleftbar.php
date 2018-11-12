@@ -1,4 +1,4 @@
-<div id="leftbar">
+<div id="leftbar" class="bar">
     <input id="showleftpanel" name="workspace[showleftpanel]" value="1" class="toggle" type="checkbox" <?= $showleftpanel == true ? 'checked' : '' ?>>
     <label for="showleftpanel" class="toogle">◧</label>
     <div id="leftbarpanel" class="panel">

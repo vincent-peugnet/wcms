@@ -70,6 +70,16 @@ function arrayclean($input)
 	return $output;
 }
 
+function idclean(string $input)
+{	
+	$input = urldecode($input);
+	$search = ['é', 'à', 'è', 'ç', ' '];
+	$replace = ['e', 'a', 'e', 'c', '-'];
+	$input = str_replace($search, $replace, $input);
+
+	return preg_replace('%[^a-z0-9-_+]%', '', strtolower(trim($input)));
+}
+
 
 
 

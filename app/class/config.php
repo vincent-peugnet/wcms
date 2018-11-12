@@ -13,6 +13,8 @@ abstract class Config
 	protected static $color4;
 	protected static $fontsize = 15;
 	protected static $basepath = '';
+	protected static $route404 = '';
+
 
 
 // _______________________________________ F U N _______________________________________
@@ -114,6 +116,11 @@ abstract class Config
 		return self::$basepath;
 	}
 
+	public static function route404()
+	{
+		return self::$route404;
+	}
+
 
 
 // __________________________________________ S E T ______________________________________
@@ -168,6 +175,11 @@ abstract class Config
 	public static function setbasepath($basepath)
 	{
 		self::$basepath = strip_tags($basepath);
+	}
+
+	public static function setroute404(string $id)
+	{
+		self::$route404 = idclean($id);
 	}
 
 

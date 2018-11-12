@@ -12,16 +12,17 @@ class Routes
         if(!empty(Config::basepath())) {
             $router->setBasePath(DIRECTORY_SEPARATOR . Config::basepath());
         }
+        $router->addMatchTypes(array('cid' => '[a-zA-Z0-9-_+,\'!%@&.$€=\(\|\)]+'));
         $router->addRoutes([
             ['GET|POST', '/', 'Backrouter#run', 'backrouter'],
-            ['GET', '/[a:art]/', 'Controllerart#read', 'artread/'],
-            ['GET', '/[a:art]', 'Controllerart#read', 'artread'],
-            ['GET', '/[a:art]/add', 'Controllerart#add', 'artadd'],
-            ['GET', '/[a:art]/edit', 'Controllerart#edit', 'artedit'],
-            ['GET', '/[a:art]/log', 'Controllerart#log', 'artlog'],
-            ['POST', '/[a:art]/edit', 'Controllerart#update', 'artupdate'],
-            ['GET', '/[a:art]/delete', 'Controllerart#confirmdelete', 'artconfirmdelete'],
-            ['POST', '/[a:art]/delete', 'Controllerart#delete', 'artdelete'],
+            ['GET', '/[cid:art]/', 'Controllerart#read', 'artread/'],
+            ['GET', '/[cid:art]', 'Controllerart#read', 'artread'],
+            ['GET', '/[cid:art]/add', 'Controllerart#add', 'artadd'],
+            ['GET', '/[cid:art]/edit', 'Controllerart#edit', 'artedit'],
+            ['GET', '/[cid:art]/log', 'Controllerart#log', 'artlog'],
+            ['POST', '/[cid:art]/edit', 'Controllerart#update', 'artupdate'],
+            ['GET', '/[cid:art]/delete', 'Controllerart#confirmdelete', 'artconfirmdelete'],
+            ['POST', '/[cid:art]/delete', 'Controllerart#delete', 'artdelete'],
         ]);
 
         $match = $router->match();
@@ -36,7 +37,12 @@ class Routes
         }
 		//404
         else {
-            header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+            if(!empty(Config::route404())) {
+                $controller = new Controller($router);
+                $controller->routedirect('artread/', ['art' => Config::route404()]);
+            } else {
+                header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ class Model
 
     const CONFIG_FILE = 'config.json';
 	const CSS_DIR = 'assets' . DIRECTORY_SEPARATOR .'css' . DIRECTORY_SEPARATOR;
+	const FONT_DIR = 'fonts' . DIRECTORY_SEPARATOR;
 	const MEDIA_DIR = '.' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR;
 	const TEMPLATES_DIR = '.'. DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR;
 	const RENDER_DIR = 'assets'. DIRECTORY_SEPARATOR . 'render' . DIRECTORY_SEPARATOR;
@@ -29,6 +30,15 @@ class Model
 			$basepath = Config::basepath() . DIRECTORY_SEPARATOR ;
 		}
 		return DIRECTORY_SEPARATOR . $basepath . Model::CSS_DIR;
+	}
+
+	public function fontpath()
+	{
+		$basepath = '';
+		if(!empty(Config::basepath())) {
+			$basepath = Config::basepath() . DIRECTORY_SEPARATOR ;
+		}
+		return $basepath . Model::FONT_DIR;
 	}
 
 

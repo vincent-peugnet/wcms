@@ -1,6 +1,7 @@
 .vscode/*
 assets/render/*
 database/*
+fonts/*
 media/*
 vendor/*
 config.json

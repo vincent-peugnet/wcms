@@ -9,10 +9,15 @@ div#main {
 body {
     margin: 0;
     height: 100%;
-    background-color: #b1b1b1;
+    background-color: lightgrey;
+    font-family: monospace;
+    font-size: 15px;
 }
 
 .menu {
     position: fixed;
     right: 0;
 }
+
+
+

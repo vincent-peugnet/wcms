@@ -16,9 +16,13 @@ class Controllerart extends Controller
 
     }
 
-    public function setart($id)
+    public function setart(string $id, string $route)
     {
-        $this->art = new Art2(['id' => $id]);
+        $cleanid = idclean($id);
+        if($cleanid !== $id) {
+            $this->routedirect($route, ['art' => $cleanid]);
+        }
+        $this->art = new Art2(['id' => $cleanid]);
     }
 
     public function importart()
@@ -35,7 +39,7 @@ class Controllerart extends Controller
 
     public function read($id)
     {
-        $this->setart($id);
+        $this->setart($id, 'artread/');
         $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
 
@@ -78,7 +82,7 @@ class Controllerart extends Controller
 
     public function edit($id)
     {
-        $this->setart($id);
+        $this->setart($id, 'artedit');
 
 
         if ($this->importart() && $this->user->canedit()) {
@@ -93,9 +97,10 @@ class Controllerart extends Controller
                 $showleftpanel = false;
                 $showrightpanel = false;
             }
+            $fontmanager = new Modelfont;
+            $fonts = $fontmanager->list();
 
-
-            $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true, 'tablist' => $tablist, 'artlist' => $artlist, 'showleftpanel' => $showleftpanel, 'showrightpanel' => $showrightpanel]);
+            $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true, 'tablist' => $tablist, 'artlist' => $artlist, 'showleftpanel' => $showleftpanel, 'showrightpanel' => $showrightpanel, 'fonts' => $fonts]);
         } else {
             $this->routedirect('artread/', ['art' => $this->art->id()]);
         }
@@ -104,14 +109,14 @@ class Controllerart extends Controller
 
     public function log($id)
     {
-        $this->setart($id);
+        $this->setart($id, 'artlog');
         $this->importart();
         var_dump($this->art);
     }
 
     public function add($id)
     {
-        $this->setart($id);
+        $this->setart($id, 'artadd');
         if ($this->user->canedit() && !$this->importart()) {
             $this->art->reset();
             $this->artmanager->add($this->art);
@@ -123,7 +128,7 @@ class Controllerart extends Controller
 
     public function confirmdelete($id)
     {
-        $this->setart($id);
+        $this->setart($id, 'artconfirmdelete');
         if ($this->user->canedit() && $this->importart()) {
 
             $this->showtemplate('confirmdelete', ['art' => $this->art, 'artexist' => true]);
@@ -135,7 +140,7 @@ class Controllerart extends Controller
 
     public function delete($id)
     {
-        $this->setart($id);
+        $this->setart($id, 'artdelete');
         if ($this->user->canedit() && $this->importart()) {
 
             $this->artmanager->delete($this->art);
@@ -145,7 +150,7 @@ class Controllerart extends Controller
 
     public function update($id)
     {
-        $this->setart($id);
+        $this->setart($id, 'artupdate');
         $_SESSION['workspace']['showrightpanel'] = isset($_POST['workspace']['showrightpanel']);
         $_SESSION['workspace']['showleftpanel'] = isset($_POST['workspace']['showleftpanel']);
 
