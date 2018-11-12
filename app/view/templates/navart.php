@@ -33,17 +33,19 @@ div#dropmenu {
 <?php if($user->isvisitor()) { ?>
 
     <li>
-    <form action="./?action=login<?= $art->id() !== null ? '&id=' . $art->id()  : '' ?>" method="post">
+    <form action="<?= $this->url('log') ?>" method="post">
     <input type="password" name="pass" id="loginpass" placeholder="password">
-    <input type="submit" value="login">
+    <input type="hidden" name="id" value="<?= $art->id() ?>">
+    <input type="submit" name="log" value="login">
     </form>
     </li>
 
 <?php } else { ?>    
 
     <li>
-    <form action="./?action=logout<?= $art->id()  !== null ? '&id=' . $art->id()  : '' ?>" method="post">
-    <input type="submit" value="logout">
+    <form action="<?= $this->url('log') ?>" method="post">
+    <input type="hidden" name="id" value="<?= $art->id() ?>">
+    <input type="submit" name="log" value="logout">
     </form>
     </li>
 

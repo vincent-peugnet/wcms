@@ -11,16 +11,16 @@
 
 <?php if($user->isvisitor()) { ?>
 
-<form action="./?action=login" method="post">
+<form action="<?= $this->url('log') ?>" method="post">
 <input type="password" name="pass" id="loginpass" placeholder="password">
-<input type="submit" value="login">
+<input name="log" type="submit" value="login">
 </form>
 
 
 <?php } else { ?>    
 
-<form action="./?action=logout" method="post">
-<input type="submit" value="logout">
+<form action="<?= $this->url('log') ?>" method="post">
+<input name="log" type="submit" value="logout">
 </form>
 
 

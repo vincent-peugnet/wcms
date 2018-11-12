@@ -13,7 +13,8 @@ abstract class Config
 	protected static $color4;
 	protected static $fontsize = 15;
 	protected static $basepath = '';
-	protected static $route404 = '';
+	protected static $route404;
+	protected static $existnot = 'This page does not exist yet';
 
 
 
@@ -121,6 +122,11 @@ abstract class Config
 		return self::$route404;
 	}
 
+	public static function existnot()
+	{
+		return self::$existnot;
+	}
+
 
 
 // __________________________________________ S E T ______________________________________
@@ -181,6 +187,13 @@ abstract class Config
 	{
 		if(is_string($id)) {
 			self::$route404 = idclean($id);
+		}
+	}
+
+	public static function setexistnot($description)
+	{
+		if(is_string($description)) {
+			self::$existnot = strip_tags($description);
 		}
 	}
 

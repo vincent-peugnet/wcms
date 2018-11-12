@@ -59,30 +59,6 @@ class Controller
         return $commonsparams;
     }
 
-    public function login($redirect = 'home')
-    {
-        if(isset($_POST['pass'])) {
-            $this->user = $this->usermanager->login($_POST['pass']);
-            $this->usermanager->writesession($this->user);
-        }
-        if($redirect == 'art') {
-            $this->redirect('?id=' . $this->art->id());
-        } else {
-            $this->redirect('?aff=' . $redirect);
-        }
-    }
-
-    public function logout($redirect = 'home')
-    {
-        $this->user = $this->usermanager->logout();
-        $this->usermanager->writesession($this->user);
-        if($redirect == 'art') {
-            $this->redirect('?id=' . $this->art->id());
-        } else {
-            $this->redirect('?aff=' . $redirect);
-        }
-    }
-
 
 
 
@@ -94,11 +70,6 @@ class Controller
     public function routedirect(string $route, array $vars = [])
     {
         $this->redirect($this->router->generate($route, $vars));
-    }
-
-    public function uart($id)
-    {
-        return $this->router->generate('artread/', ['art' => $id]);
     }
 
 }

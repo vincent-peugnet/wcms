@@ -43,7 +43,11 @@ class Modelrender extends Modelart
 			if (isset($art->template('array')[$element])) {
 				$templateid = $art->template('array')[$element];
 				$tempalteart = $this->get($templateid);
-				$text = $tempalteart->$element() . PHP_EOL . $art->$element();
+				if($tempalteart) {
+					$text = $tempalteart->$element() . PHP_EOL . $art->$element();
+				} else {
+					$text = $art->$element();
+				}
 			} else {
 				$text = $art->$element();
 			}
@@ -151,6 +155,7 @@ class Modelrender extends Modelart
 
 		$text = str_replace(self::SUMMARY, $this->sumparser($text), $text);
 
+		$text = $this->wurl($text);
 		$text = $this->wikiurl($text);
 
 		$text = $this->tooltip($art->linkfrom('array'), $text);
@@ -170,18 +175,17 @@ class Modelrender extends Modelart
 		return $text;
 	}
 
-	public function wikiurl(string $text)
+	public function wurl(string $text)
 	{
 		$rend = $this;
-		$artlist = [];
 		$text = preg_replace_callback(
-			'%\[([\w-]+)\]%',
+			'%href="([\w-]+)"%',
 			function ($matches) use ($rend) {
 				$matchart = $rend->get($matches[1]);
 				if (!$matchart) {
-					return '<a href="' . $rend->uart($matches[1]) . '">' . $matches[1] . '</a>';
+					return 'href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal"';
 				} else {
-					return '<a href="' . $rend->uart($matches[1]) . '" title="' . $matchart->description() . '">' . $matchart->title() . '</a>';
+					return 'href="' . $rend->uart($matches[1]) . '" title="' . $matchart->description() . '" class="internal"';
 				}
 			},
 			$text
@@ -189,6 +193,23 @@ class Modelrender extends Modelart
 		return $text;
 	}
 
+	public function wikiurl(string $text)
+	{
+		$rend = $this;
+		$text = preg_replace_callback(
+			'%\[([\w-]+)\]%',
+			function ($matches) use ($rend) {
+				$matchart = $rend->get($matches[1]);
+				if (!$matchart) {
+					return '<a href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal">' . $matches[1] . '</a>';
+				} else {
+					return '<a href="' . $rend->uart($matches[1]) . '" title="' . $matchart->description() . '" class="internal">' . $matchart->title() . '</a>';
+				}
+			},
+			$text
+		);
+		return $text;
+	}
 
 	public function markdown($text)
 	{		

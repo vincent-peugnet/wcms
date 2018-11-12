@@ -15,6 +15,8 @@ class Routes
         $router->addMatchTypes(array('cid' => '[a-zA-Z0-9-_+,\'!%@&.$€=\(\|\)]+'));
         $router->addRoutes([
             ['GET|POST', '/', 'Backrouter#run', 'backrouter'],
+            ['POST', '/!co', 'Controllerconnect#log', 'log'],
+            ['GET', '/!co', 'Controllerconnect#connect', 'connect'],
             ['GET', '/[cid:art]/', 'Controllerart#read', 'artread/'],
             ['GET', '/[cid:art]', 'Controllerart#read', 'artread'],
             ['GET', '/[cid:art]/add', 'Controllerart#add', 'artadd'],
