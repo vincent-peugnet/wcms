@@ -192,15 +192,28 @@ input#fontsize {
     width: 36px;
 }
 
-span#headid {
-    border: solid 1px;
-    padding: 2px 4px;
-}
+span#headid {color: white;}
 
 a {
     color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
 }
 
 #fonts select {
 	height: 150px;
 }
+
+a.icon {
+    font-size: 25px;
+}
+
+form#update {
+    display: flex;
+    height: 30px;
+}
+
+#update span {margin-right: 1%;}

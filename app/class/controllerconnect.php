@@ -37,7 +37,7 @@ class Controllerconnect extends Controller
             $this->usermanager->writesession($this->user);
         }
         if (!empty($id)) {
-            $this->routedirect('artedit', ['art' => $id]);
+            $this->routedirect('artread/', ['art' => $id]);
         } else {
             $this->routedirect('backrouter');
         }

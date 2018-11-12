@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 div#options {
     float: left;
 }
@@ -21,3 +25,37 @@ body {
 
 
 
+
+
+tr:hover {
+    background-color: grey;
+    color: white;
+}
+
+#topbar {
+    height: 30px;
+    background-color: #7b97b9;
+    line-height: 30px;
+}
+
+#topbar form {
+    display: inline;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
+}
+
+div#massedit {
+    display: none;
+}
+
+#options ul {
+    list-style: none;
+    padding-inline-start: 0;
+}

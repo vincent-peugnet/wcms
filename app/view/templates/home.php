@@ -8,25 +8,12 @@
 
 <body>
 
-    <?php $this->insert('navback', ['user' => $user]) ?>
+    <?php $this->insert('hometopbar', ['user' => $user]) ?>
 
 <?php if($user->canedit()) { ?>
 
 <section>
 
-<div>
-
-<form id="goto" action="./" method="get">
-<input type="text" name="id" placeholder="id" required>
-<input type="submit" name="aff" value="read">
-<input type="submit" name="aff" value="edit">
-<input type="submit" name="action" value="add">
-</form>
-
-
-<form action="./" method="get">
-<input type="submit" name="action" value="analyseall">
-</form>
 
 
 </div>
@@ -82,9 +69,9 @@
             <td><label title="<?= $item->title() ?>" for="<?= $item->id() ?>"><?= $item->id() ?></label></td>
             <td><a href="<?= $this->uart('artedit', $item->id()) ?>">✏</a></td>
             <td><a href="<?= $this->uart('artread/', $item->id()) ?>" target="_blank">👁</a></td>
-            <td><a href="<?= $this->uart('artdelete', $item->id()) ?>" >🗑</a></td>
-            <td><a href="<?= $this->uart('artlog', $item->id()) ?>" target="_blank">¶</a></td>
-            <td><?= $item->tag('sort') ?></td>
+            <td><a href="<?= $this->uart('artdelete', $item->id()) ?>" >✖</a></td>
+            <td><a href="<?= $this->uart('artlog', $item->id()) ?>" target="_blank">⁋</a></td>
+            <td><a title="<?= $item->tag('string') ?>"><?= $item->tag('sort') ?></a></td>
             <td><?= $item->description() ?></td>
             <td><?= $item->linkto('sort') ?></td>
             <td><?= $item->linkfrom('sort') ?></td>

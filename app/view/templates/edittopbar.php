@@ -2,7 +2,9 @@
 
 
     <form action="<?= $this->uart('artupdate', $art->id()) ?>" method="post" id="update">
-
+    <span>
+    <a href="<?= $this->url('backrouter') ?>" class="icon" >⏏</a>
+    </span>
     <span>
     <input type="submit" value="update" accesskey="x" form="update">
     </span>
@@ -13,10 +15,10 @@
     </span>
 
 
+
     <span>
-    <a href="<?= $this->url('backrouter') ?>" >🏠</a>
-    <a href="<?= $this->uart('artread/', $art->id()) ?>" target="_blank">👁</a>
-    <a href="<?= $this->uart('artlog', $art->id()) ?>" target="_blank">¶</a>
+    <a href="<?= $this->uart('artread/', $art->id()) ?>" target="_blank" class="icon" >👁</a>
+    <a href="<?= $this->uart('artlog', $art->id()) ?>" target="_blank" class="icon" >⁋</a>
     </span>
     <span id="headid"><?= $art->id() ?></span>
 
