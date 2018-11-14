@@ -10,7 +10,11 @@ foreach ($tablist as $key => $value) {
     }
     echo '<label for="tab' . $key . '">' . $key . '</label>';
     echo '<div class="content">';
-    echo '<textarea name="' . $key . '" id="' . $key . '"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">' . $value . '</textarea>';
+    if ($key == $opentab) {
+        echo '<textarea name="' . $key . '" id="' . $key . '"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus >' . $value . '</textarea>';
+    } else {
+        echo '<textarea name="' . $key . '" id="' . $key . '"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">' . $value . '</textarea>';
+    }
     echo '</div>';
     echo '</div>';
 }

@@ -6,6 +6,7 @@ class Controllerart extends Controller
     protected $art;
     protected $artmanager;
     protected $renderengine;
+    protected $fontmanager;
 
     public function __construct($router)
     {
@@ -13,6 +14,7 @@ class Controllerart extends Controller
 
         $this->artmanager = new Modelart();
         $this->renderengine = new Modelrender($router);
+        $this->fontmanager = new Modelfont();
 
     }
 
@@ -97,8 +99,7 @@ class Controllerart extends Controller
                 $showleftpanel = false;
                 $showrightpanel = false;
             }
-            $fontmanager = new Modelfont;
-            $fonts = $fontmanager->list();
+            $fonts = [];
 
             $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true, 'tablist' => $tablist, 'artlist' => $artlist, 'showleftpanel' => $showleftpanel, 'showrightpanel' => $showrightpanel, 'fonts' => $fonts]);
         } else {
@@ -165,6 +166,11 @@ class Controllerart extends Controller
 
 
 
+    }
+
+    public function artdirect($id)
+    {
+        $this->routedirect('artread/', ['art' => idclean($id)]);
     }
 }
 

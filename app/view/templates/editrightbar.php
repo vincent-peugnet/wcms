@@ -7,8 +7,7 @@
         <?php
         foreach ($artlist as $item ) {
             ?>
-            <a href="<?= $this->uart('artedit', $item) ?>"><?= $item ?></a>
-            <input type="text" value="[<?= $item ?>](=<?= $item ?>)">
+            <a href="<?= $this->uart('artedit', $item) ?>" target="_blank"><?= $item ?></a>
             <?php
         }
 

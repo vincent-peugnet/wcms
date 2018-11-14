@@ -25,6 +25,7 @@ class Routes
             ['POST', '/[cid:art]/edit', 'Controllerart#update', 'artupdate'],
             ['GET', '/[cid:art]/delete', 'Controllerart#confirmdelete', 'artconfirmdelete'],
             ['POST', '/[cid:art]/delete', 'Controllerart#delete', 'artdelete'],
+            ['GET', '/[cid:art]/[*]', 'Controllerart#artdirect', 'artread/etoile'],
         ]);
 
         $match = $router->match();

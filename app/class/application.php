@@ -9,7 +9,11 @@ class Application
     public function wakeup()
     {
         if(isset($_POST['configinit'])) {
-            Config::createconfig($_POST['configinit']);
+            if(Config::readconfig()) {
+                Config::createconfig($_POST['configinit']);
+            } else {
+                Config::hydrate($_POST['configinit']);
+            }
             if(!Config::savejson()) {
                 echo 'Cant write config file';
                 exit;

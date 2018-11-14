@@ -51,7 +51,9 @@ class Modelrender extends Modelart
 			} else {
 				$text = $art->$element();
 			}
-			$elements[$element] = PHP_EOL . '<' . $element . '>' . PHP_EOL . $this->markdown($text) . PHP_EOL . '</' . $element . '>' . PHP_EOL;
+			$text = $this->article($text);
+			$text = $this->markdown($text);
+			$elements[$element] = PHP_EOL . '<' . $element . '>' . PHP_EOL . $text . PHP_EOL . '</' . $element . '>' . PHP_EOL;
 
 		}
 
@@ -158,8 +160,6 @@ class Modelrender extends Modelart
 		$text = $this->wurl($text);
 		$text = $this->wikiurl($text);
 
-		$text = $this->tooltip($art->linkfrom('array'), $text);
-
 		$text = str_replace('href="http', ' class="external" target="_blank" href="http', $text);
 		$text = str_replace('<img src="/', '<img src="./media/', $text);
 
@@ -226,22 +226,18 @@ class Modelrender extends Modelart
 
 
 
-
-	public function tooltip(array $linkfrom, string $text)
+	public function article($text)
 	{
-		$descriptions = [];
-		$artlist = $this->getlisterid($linkfrom);
-		foreach ($artlist as $art) {
-			$descriptions[$art->id()] = $art->description();
-		}
-
-		foreach ($linkfrom as $id) {
-			if (isset($descriptions[$id])) {
-				$linkfrom = 'href="?id=' . $id . '"';
-				$titlelinkfrom = ' title="' . $descriptions[$id] . '" ' . $linkfrom;
-				$text = str_replace($linkfrom, $titlelinkfrom, $text);
+		$pattern = '/(\R\R|^\R|^)[=]{3,}([\w-]*)\R\R(.*)(?=\R\R[=]{3,}[\w-]*\R)/sUm';
+		$text = preg_replace_callback($pattern, function($matches) {
+			if(!empty($matches[2])) {
+				$id = ' id="'.$matches[2].'" ';
+			} else {
+				$id = ' ';
 			}
-		}
+			return '<article ' . $id . '  markdown="1" >' . PHP_EOL . PHP_EOL . $matches[3] . PHP_EOL . PHP_EOL . '</article>' . PHP_EOL . PHP_EOL;
+		} , $text);
+		$text = preg_replace('/\R\R[=]{3,}([\w-]*)\R/', '', $text);
 		return $text;
 	}
 

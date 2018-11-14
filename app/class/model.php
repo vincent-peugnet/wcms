@@ -1,5 +1,5 @@
 <?php
-class Model
+abstract class Model
 {
 
     const CONFIG_FILE = 'config.json';
@@ -32,13 +32,14 @@ class Model
 		return DIRECTORY_SEPARATOR . $basepath . Model::CSS_DIR;
 	}
 
-	public function fontpath()
+	public static function fontpath()
 	{
 		$basepath = '';
 		if(!empty(Config::basepath())) {
 			$basepath = Config::basepath() . DIRECTORY_SEPARATOR ;
 		}
-		return $basepath . Model::FONT_DIR;
+		$url = DIRECTORY_SEPARATOR . $basepath . Model::FONT_DIR;
+		return $url;
 	}
 
 
