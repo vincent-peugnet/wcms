@@ -155,8 +155,12 @@ class Controllerart extends Controller
         $_SESSION['workspace']['showrightpanel'] = isset($_POST['workspace']['showrightpanel']);
         $_SESSION['workspace']['showleftpanel'] = isset($_POST['workspace']['showleftpanel']);
 
+        $date = new DateTimeImmutable($_POST['pdate'] . $_POST['ptime'], new DateTimeZone('Europe/Paris'));
+        $date = ['date' => $date];
+
         if ($this->importart() && $this->user->canedit()) {
             $this->art->hydrate($_POST);
+            $this->art->hydrate($date);
             $this->art->updateedited();
             $this->artmanager->update($this->art);
 

@@ -154,6 +154,10 @@ class Art2
 		} elseif ($option == 'hrdi') {
 			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 			return hrdi($this->date->diff($now));
+		} elseif ($option == 'pdate') {
+			return $this->date->format('Y-m-d');
+		} elseif ($option == 'ptime') {
+			return $this->date->format('H:i');
 		}
 
 

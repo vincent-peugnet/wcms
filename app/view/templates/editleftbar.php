@@ -18,6 +18,10 @@
                 <option value="2" <?= $art->secure() == 2 ? 'selected' : '' ?>>2</option>
                 <option value="3" <?= $art->secure() == 3 ? 'selected' : '' ?>>3</option>
             </select>
+            <label for="date">Date</label>
+            <input type="date" name="pdate" value="<?= $art->date('pdate') ?>" id="date">
+            <label for="time">Time</label>
+            <input type="time" name="ptime" value="<?= $art->date('ptime') ?>" id="time">
         </fieldset>
     </details>
     <details>

@@ -3,6 +3,7 @@
 class Modelrender extends Modelart
 {
 	protected $router;
+	protected $artlist;
 
 	const SUMMARY = '%SUMMARY%';
 
@@ -12,6 +13,7 @@ class Modelrender extends Modelart
 		parent::__construct();
 
 		$this->router = $router;
+		$this->artlist = $this->getlister();
 	}
 
 	public function uart($id)
@@ -52,7 +54,10 @@ class Modelrender extends Modelart
 				$text = $art->$element();
 			}
 			$text = $this->article($text);
+			$text = $this->autotaglistupdate($text);
+			$text = $this->desctitle($text, $art->description(), $art->title());
 			$text = $this->markdown($text);
+			
 			$elements[$element] = PHP_EOL . '<' . $element . '>' . PHP_EOL . $text . PHP_EOL . '</' . $element . '>' . PHP_EOL;
 
 		}
@@ -148,11 +153,17 @@ class Modelrender extends Modelart
 	}
 
 
+	public function desctitle($text, $desc, $title)
+	{
+		$text = str_replace('%TITLE%', $title, $text);
+		$text = str_replace('%DESCRIPTION%', $desc, $text);
+		return $text;
+	}
+
 
 	public function parser(Art2 $art, string $text)
 	{
-		$text = str_replace('%TITLE%', $art->title(), $text);
-		$text = str_replace('%DESCRIPTION%', $art->description(), $text);
+
 
 
 		$text = str_replace(self::SUMMARY, $this->sumparser($text), $text);
@@ -282,39 +293,38 @@ class Modelrender extends Modelart
 
 
 
-	//tag auto menu
-
-
-	public function autotaglist()
+	public function autotaglist($text)
 	{
 		$pattern = "/%%(\w*)%%/";
-		preg_match_all($pattern, $this->md(), $out);
+		preg_match_all($pattern, $text, $out);
 		return $out[1];
 
 	}
 
-	public function autotaglistupdate($taglist)
+	public function autotaglistupdate($text)
 	{
-		foreach ($taglist as $tag => $artlist) {
-			$replace = '<ul>';
-			foreach ($artlist as $art) {
-				$replace .= '<li><a href="?id=' . $art->id() . '" title="' . $art->description() . '">' . $art->title() . '</a></li>';
+		$taglist = $this->autotaglist($text);
+		foreach ($taglist as $tag ) {
+			$li = [];
+			foreach ($this->artlist as $item ) {
+				if(in_array($tag, $item->tag('array'))) {
+					$li[] = $item;
+				}
+				
 			}
-			$replace .= '</ul>';
-			$text = str_replace('%%' . $tag . '%%', $replace, $text);
+			$ul = '<ul id="'.$tag.'">' . PHP_EOL;
+			$this->artlistsort($li, 'date', -1);
+				foreach ($li as $item ) {
+					$ul .= '<li><a href="'.$this->router->generate('artread/', ['art' => $item->id()]).'" title="'.$item->description().'" class="internal" >'.$item->title().'</a></li>' . PHP_EOL;
+				}
+			$ul .= '</ul>' . PHP_EOL;
+
+			
+			$text = str_replace('%%'.$tag.'%%', $ul, $text);
 		}
+		return $text;
 	}
 
-	public function autotaglistcalc($taglist)
-	{
-		foreach ($taglist as $tag => $artlist) {
-			foreach ($artlist as $art) {
-				if (!in_array($art->id(), $this->linkfrom('array')) && $art->id() != $this->id()) {
-					$this->linkfrom[] = $art->id();
-				}
-			}
-		}
-	}
 
 
 

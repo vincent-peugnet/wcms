@@ -63,25 +63,10 @@ class Modelart extends Modeldb
 		$this->artstore->store($artdata);
 	}
 
-	public function getlisteropt(Opt $opt)
-	{
-
-		$artlist = [];
-
-		$select = 'SELECT ' . $opt->col('string') . ' FROM ' . Config::arttable();
-		$req = $this->bdd->query($select);
-		while ($donnees = $req->fetch(PDO::FETCH_ASSOC)) {
-			$artlist[] = new Art2($donnees);
-		}
-		return $artlist;
-
-	}
-
 	public function artcompare($art1, $art2, $method = 'id', $order = 1)
 	{
 		$result = ($art1->$method('sort') <=> $art2->$method('sort'));
 		return $result * $order;
-
 	}
 
 	public function buildsorter($sortby, $order)
@@ -140,15 +125,6 @@ class Modelart extends Modeldb
 		return $filteredlist;
 	}
 
-
-	public function lister()
-	{
-		$req = $this->bdd->query(' SELECT * FROM ' . Config::arttable() . ' ORDER BY id ');
-		$donnees = $req->fetchAll(PDO::FETCH_ASSOC);
-		$req->closeCursor();
-		return $donnees;
-
-	}
 
 	public function tag(array $artlist, $tagchecked)
 	{
