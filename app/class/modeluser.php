@@ -39,10 +39,20 @@ class Modeluser extends Model
 			return $level = self::READ;
 		} elseif (strip_tags($pass) == Config::editor()) {
 			return $level = self::EDITOR;
-		} elseif (strip_tags($pass) == Config::invite()) {
+		} elseif ($this->invitetest(strip_tags($pass))) {
 			return $level = self::INVITE;
         } else {
 			return $level = self::FREE;
+        }
+    }
+
+    public function invitetest()
+    {
+        $invitepasslist = [];
+        if(in_array($pass, $invitepasslist)) {
+            return true;
+        } else {
+            return false;
         }
     }
 

@@ -39,6 +39,23 @@ class Controllerart extends Controller
         }
     }
 
+
+    public function canedit()
+    {
+        if($this->user->iseditor()) {
+            return true;
+        } elseif($this->user->isinvite()) {
+            if($this->user->password() === $this->art->invitepassword()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+
     public function read($id)
     {
         $this->setart($id, 'artread/');
@@ -47,7 +64,6 @@ class Controllerart extends Controller
 
         $artexist = $this->importart();
         $canread = $this->user->level() >= $this->art->secure();
-        $cancreate = $this->user->cancreate();
         $alerts = ['alertnotexist' => 'This page does not exist yet', 'alertprivate' => 'You cannot see this page'];
         $body = '';
         $head = '';
@@ -60,7 +76,7 @@ class Controllerart extends Controller
                 $body = $this->renderengine->renderbody($this->art);
                 $this->art->setrender($body);
                 $this->art->setdaterender($now);
-                $this->artmanager->update($this->art);
+                $this->art->setlinkfrom($this->renderengine->linkfrom());
             } else {
                 $body = $this->art->render();
             }
@@ -73,7 +89,7 @@ class Controllerart extends Controller
         }
 
 
-        $data = array_merge($alerts, ['art' => $this->art, 'artexist' => $artexist, 'canread' => $canread, 'cancreate' => $cancreate, 'readernav' => true, 'body' => $body, 'head' => $head]);
+        $data = array_merge($alerts, ['art' => $this->art, 'artexist' => $artexist, 'canread' => $canread, 'readernav' => true, 'body' => $body, 'head' => $head]);
 
 
         $this->showtemplate('read', $data);
@@ -87,7 +103,7 @@ class Controllerart extends Controller
         $this->setart($id, 'artedit');
 
 
-        if ($this->importart() && $this->user->canedit()) {
+        if ($this->importart() && $this->canedit()) {
             $tablist = ['section' => $this->art->md(), 'css' => $this->art->css(), 'header' => $this->art->header(), 'nav' => $this->art->nav(), 'aside' => $this->art->aside(), 'footer' => $this->art->footer(), 'html' => $this->art->html(), 'javascript' => $this->art->javascript()];
 
             $artlist = $this->artmanager->list();
@@ -118,7 +134,7 @@ class Controllerart extends Controller
     public function add($id)
     {
         $this->setart($id, 'artadd');
-        if ($this->user->canedit() && !$this->importart()) {
+        if ($this->user->iseditor() && !$this->importart()) {
             $this->art->reset();
             $this->artmanager->add($this->art);
             $this->routedirect('artedit', ['art' => $this->art->id()]);
@@ -130,7 +146,7 @@ class Controllerart extends Controller
     public function confirmdelete($id)
     {
         $this->setart($id, 'artconfirmdelete');
-        if ($this->user->canedit() && $this->importart()) {
+        if ($this->user->iseditor() && $this->importart()) {
 
             $this->showtemplate('confirmdelete', ['art' => $this->art, 'artexist' => true]);
 
@@ -142,7 +158,7 @@ class Controllerart extends Controller
     public function delete($id)
     {
         $this->setart($id, 'artdelete');
-        if ($this->user->canedit() && $this->importart()) {
+        if ($this->user->iseditor() && $this->importart()) {
 
             $this->artmanager->delete($this->art);
         }
@@ -158,7 +174,7 @@ class Controllerart extends Controller
         $date = new DateTimeImmutable($_POST['pdate'] . $_POST['ptime'], new DateTimeZone('Europe/Paris'));
         $date = ['date' => $date];
 
-        if ($this->importart() && $this->user->canedit()) {
+        if ($this->importart() && $this->user->iseditor()) {
             $this->art->hydrate($_POST);
             $this->art->hydrate($date);
             $this->art->updateedited();
@@ -166,7 +182,7 @@ class Controllerart extends Controller
 
         }
 
-        $this->routedirect('artupdate', ['art' => $this->art->id()]);
+        $this->routedirect('artedit', ['art' => $this->art->id()]);
 
 
 

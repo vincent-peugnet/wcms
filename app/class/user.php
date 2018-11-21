@@ -3,6 +3,7 @@
 class User
 {
     protected $level = 0;
+    protected $password;
 
     public function __construct($datas = []) {
         if(!empty($datas)) {
@@ -36,15 +37,14 @@ class User
         return $this->level === Modeluser::FREE;
     }
 
-    public function canedit()
+    public function iseditor()
     {
-        // a modifier en prenant compte du code invitation de l'article
         return $this->level >= Modeluser::EDITOR;
     }
 
-    public function cancreate()
+    public function isinvite()
     {
-        return $this->level >=Modeluser::EDITOR;
+        return $this->level >= Modeluser::INVITE;
     }
 
     public function isadmin()

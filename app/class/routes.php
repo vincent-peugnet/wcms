@@ -17,6 +17,7 @@ class Routes
             ['GET|POST', '/', 'Backrouter#run', 'backrouter'],
             ['POST', '/!co', 'Controllerconnect#log', 'log'],
             ['GET', '/!co', 'Controllerconnect#connect', 'connect'],
+            ['GET', '/!m', 'Controllermedia#desktop', 'media'],
             ['GET', '/[cid:art]/', 'Controllerart#read', 'artread/'],
             ['GET', '/[cid:art]', 'Controllerart#read', 'artread'],
             ['GET', '/[cid:art]/add', 'Controllerart#add', 'artadd'],

@@ -14,12 +14,7 @@ class Controllermedia extends Controller
 
     public function desktop()
     {
-
-        if($this->useriseditor()) {
-
-
-
-        }
+        
     }
 
     public function addmedia()

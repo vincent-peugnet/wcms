@@ -31,18 +31,6 @@ class Controller
             return $router->generate($string, ['art' => $id]);
         });
     }
-    
-    public function useriseditor()
-    {
-        if ($this->user->level() >= $this->usermanager::EDITOR) {
-            echo '<h3>Editor access</h3>';
-            return true;
-        } else {
-            echo '<h3>Not enought rights to see more...</h3>';
-            return false;
-        }
-    }
-
 
     public function showtemplate($template, $params)
     {
@@ -58,6 +46,7 @@ class Controller
         $commonsparams['css'] = Model::csspath();
         return $commonsparams;
     }
+
 
 
 

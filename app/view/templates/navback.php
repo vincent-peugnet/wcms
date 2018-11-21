@@ -31,7 +31,7 @@
 
 
 
-<?php if ($user->canedit()) { ?>
+<?php if ($user->iseditor()) { ?>
 
     <li>
     <a class="button" href="?aff=media" >Media</a>

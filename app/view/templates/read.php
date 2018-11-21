@@ -52,7 +52,7 @@ $this->stop();
 
         } else {
             echo '<h1>' . $alertnotexist . '</h1>';
-            if ($cancreate) {
+            if ($user->iseditor()) {
                 ?>
                 <a href="<?= $this->uart('artadd', $art->id()) ?>">⭐ Create</a>            
                 <?php

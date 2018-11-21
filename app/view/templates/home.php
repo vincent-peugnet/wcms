@@ -10,7 +10,7 @@
 
     <?php $this->insert('hometopbar', ['user' => $user]) ?>
 
-<?php if($user->canedit()) { ?>
+<?php if($user->iseditor()) { ?>
 
 <section>
 

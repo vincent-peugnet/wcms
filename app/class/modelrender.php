@@ -4,6 +4,7 @@ class Modelrender extends Modelart
 {
 	protected $router;
 	protected $artlist;
+	protected $linkfrom = [];
 
 	const SUMMARY = '%SUMMARY%';
 
@@ -172,7 +173,8 @@ class Modelrender extends Modelart
 		$text = $this->wikiurl($text);
 
 		$text = str_replace('href="http', ' class="external" target="_blank" href="http', $text);
-		$text = str_replace('<img src="/', '<img src="./media/', $text);
+		$text = str_replace('<img src="/', '<img src="'. Model::mediapath(), $text);
+		$text = str_replace('<a href="/', '<a href="'. Model::mediapath(), $text);
 
 		$text = $this->autourl($text);
 
@@ -188,37 +190,43 @@ class Modelrender extends Modelart
 
 	public function wurl(string $text)
 	{
+		$linkfrom = [];
 		$rend = $this;
 		$text = preg_replace_callback(
 			'%href="([\w-]+)"%',
-			function ($matches) use ($rend) {
+			function ($matches) use ($rend, &$linkfrom) {
 				$matchart = $rend->get($matches[1]);
 				if (!$matchart) {
 					return 'href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal"';
 				} else {
+					$linkfrom[] = $matchart->id();
 					return 'href="' . $rend->uart($matches[1]) . '" title="' . $matchart->description() . '" class="internal"';
 				}
 			},
 			$text
 		);
+		$this->linkfrom = array_unique(array_merge($this->linkfrom, $linkfrom));
 		return $text;
 	}
 
 	public function wikiurl(string $text)
 	{
+		$linkfrom = [];
 		$rend = $this;
 		$text = preg_replace_callback(
 			'%\[([\w-]+)\]%',
-			function ($matches) use ($rend) {
+			function ($matches) use ($rend, &$linkfrom) {
 				$matchart = $rend->get($matches[1]);
 				if (!$matchart) {
 					return '<a href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal">' . $matches[1] . '</a>';
 				} else {
+					$linkfrom[] = $matchart->id();		
 					return '<a href="' . $rend->uart($matches[1]) . '" title="' . $matchart->description() . '" class="internal">' . $matchart->title() . '</a>';
 				}
 			},
 			$text
 		);
+		$this->linkfrom = array_unique(array_merge($this->linkfrom, $linkfrom));
 		return $text;
 	}
 
@@ -321,8 +329,17 @@ class Modelrender extends Modelart
 
 			
 			$text = str_replace('%%'.$tag.'%%', $ul, $text);
+			$this->linkfrom = array_unique(array_merge($this->linkfrom, $li));
 		}
 		return $text;
+	}
+
+	public function linkfrom()
+	{
+		sort($this->linkfrom);
+		$linkfrom = $this->linkfrom;
+		$this->linkfrom = [];
+		return $linkfrom;
 	}
 
 

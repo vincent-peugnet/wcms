@@ -21,7 +21,7 @@ User level : <?= $user->level() ?>
 
 <?php } ?>
 
-<?php if($user->canedit()) { ?>
+<?php if($user->iseditor()) { ?>
 
 
 <span>
