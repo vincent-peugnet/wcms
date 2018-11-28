@@ -3,6 +3,7 @@
 class Modelrender extends Modelart
 {
 	protected $router;
+	protected $art;
 	protected $artlist;
 	protected $linkfrom = [];
 	protected $sum = [];
@@ -25,35 +26,37 @@ class Modelrender extends Modelart
 
 	public function renderhead(Art2 $art)
 	{
+		$this->art = $art;
 
-		$head = $this->gethead($art);
-		$this->write($art);
+		$head = $this->gethead();
+		$this->write();
 		return $head;
 	}
 
 	public function renderbody(Art2 $art)
 	{
-		$body = $this->getbody($this->gethtml($art), $this->getelements($art));
-		$parsebody = $this->parser($art, $body);
+		$this->art = $art;
+		$body = $this->getbody($this->readbody(), $this->getelements());
+		$parsebody = $this->parser($body);
 		return $parsebody;
 	}
 
 
 
-	public function getelements(Art2 $art)
+	public function getelements()
 	{
 		$elements = [];
 		foreach (self::TEXT_ELEMENTS as $element) {
-			if (isset($art->template('array')[$element])) {
-				$templateid = $art->template('array')[$element];
+			if (isset($this->art->template('array')[$element])) {
+				$templateid = $this->art->template('array')[$element];
 				$tempalteart = $this->get($templateid);
 				if($tempalteart) {
-					$text = $tempalteart->$element() . PHP_EOL . $art->$element();
+					$text = $tempalteart->$element() . PHP_EOL . $this->art->$element();
 				} else {
-					$text = $art->$element();
+					$text = $this->art->$element();
 				}
 			} else {
-				$text = $art->$element();
+				$text = $this->art->$element();
 			}
 			$text = $this->article($text);
 			$text = $this->autotaglistupdate($text);
@@ -66,45 +69,45 @@ class Modelrender extends Modelart
 		return $elements;
 	}
 
-	public function gethtml(Art2 $art)
+	public function readbody()
 	{
-		if (isset($art->template('array')['html'])) {
-			$templateid = $art->template('array')['html'];
+		if (isset($this->art->template('array')['body'])) {
+			$templateid = $this->art->template('array')['body'];
 			$tempalteart = $this->get($templateid);
-			$html = $tempalteart->html() . PHP_EOL . $art->html();
+			$body = $tempalteart->body() . PHP_EOL . $this->art->body();
 		} else {
-			$html = $art->html();
+			$body = $this->art->body();
 		}
-		return $html;
+		return $body;
 	}
 
-	public function getbody(string $html, array $elements)
+	public function getbody(string $body, array $elements)
 	{
-		$html = preg_replace_callback('~\%(SECTION|ASIDE|NAV|HEADER|FOOTER)\%~', function ($match) use ($elements) {
+		$body = preg_replace_callback('~\%(SECTION|ASIDE|NAV|HEADER|FOOTER)\%~', function ($match) use ($elements) {
 			return $elements[strtolower($match[1])];
-		}, $html);
-		return $html;
+		}, $body);
+		return $body;
 	}
 
-	public function write(Art2 $art)
+	public function write()
 	{
-		file_put_contents(Model::RENDER_DIR . $art->id() . '.css', $art->css());
-		file_put_contents(Model::RENDER_DIR . $art->id() . '.quick.css', $art->quickcss());
-		file_put_contents(Model::RENDER_DIR . $art->id() . '.js', $art->javascript());
+		file_put_contents(Model::RENDER_DIR . $this->art->id() . '.css', $this->art->css());
+		file_put_contents(Model::RENDER_DIR . $this->art->id() . '.quick.css', $this->art->quickcss());
+		file_put_contents(Model::RENDER_DIR . $this->art->id() . '.js', $this->art->javascript());
 	}
 
-	public function writetemplates(Art2 $art)
+	public function writetemplates()
 	{
-		if (array_key_exists('css', $art->template('array'))) {
-			$tempaltecssart = $this->get($art->template('array')['css']);
+		if (array_key_exists('css', $this->art->template('array'))) {
+			$tempaltecssart = $this->get($this->art->template('array')['css']);
 			file_put_contents(Model::RENDER_DIR . $tempaltecssart->id() . '.css', $tempaltecssart->css());
 		}
-		if (array_key_exists('quickcss', $art->template('array'))) {
-			$tempaltequickcssart = $this->get($art->template('array')['quickcss']);
+		if (array_key_exists('quickcss', $this->art->template('array'))) {
+			$tempaltequickcssart = $this->get($this->art->template('array')['quickcss']);
 			file_put_contents(Model::RENDER_DIR . $tempaltequickcssart->id() . '.quick.css', $tempaltequickcssart->quickcss());
 		}
-		if (array_key_exists('javascript', $art->template('array'))) {
-			$templatejsart = $this->get($art->template('array')['javascript']);
+		if (array_key_exists('javascript', $this->art->template('array'))) {
+			$templatejsart = $this->get($this->art->template('array')['javascript']);
 			file_put_contents(Model::RENDER_DIR . $templatejsart->id() . '.js', $templatejsart->javascript());
 		}
 	}
@@ -112,47 +115,36 @@ class Modelrender extends Modelart
 
 
 
-	public function gethead(Art2 $art)
+	public function gethead()
 	{
 
 		$head = '';
 
 		$head .= '<meta charset="utf8" />' . PHP_EOL;
-		$head .= '<title>' . $art->title() . '</title>' . PHP_EOL;
-		$head .= '<meta name="description" content="' . $art->description() . '" />' . PHP_EOL;
+		$head .= '<title>' . $this->art->title() . '</title>' . PHP_EOL;
+		$head .= '<meta name="description" content="' . $this->art->description() . '" />' . PHP_EOL;
 		$head .= '<meta name="viewport" content="width=device-width" />' . PHP_EOL;
 
-		if (isset($art->template('array')['quickcss'])) {
-			$tempaltequickcssart = $art->template('array')['quickcss'];
+		if (isset($this->art->template('array')['quickcss'])) {
+			$tempaltequickcssart = $this->art->template('array')['quickcss'];
 			$head .= '<link href="' . Model::renderpath() . $tempaltequickcssart . '.quick.css" rel="stylesheet" />' . PHP_EOL;
 		}
-		$head .= '<link href="' . Model::renderpath() . $art->id() . '.quick.css" rel="stylesheet" />' . PHP_EOL;
+		$head .= '<link href="' . Model::renderpath() . $this->art->id() . '.quick.css" rel="stylesheet" />' . PHP_EOL;
 
-		if (isset($art->template('array')['css'])) {
-			$tempaltecssart = $art->template('array')['css'];
+		if (isset($this->art->template('array')['css'])) {
+			$tempaltecssart = $this->art->template('array')['css'];
 			$head .= '<link href="' . Model::renderpath() . $tempaltecssart . '.css" rel="stylesheet" />' . PHP_EOL;
 		}
-		$head .= '<link href="' . Model::renderpath() . $art->id() . '.css" rel="stylesheet" />' . PHP_EOL;
+		$head .= '<link href="' . Model::renderpath() . $this->art->id() . '.css" rel="stylesheet" />' . PHP_EOL;
 
-		if (isset($art->template('array')['javascript'])) {
-			$templatejsart = $art->template('array')['javascript'];
+		if (isset($this->art->template('array')['javascript'])) {
+			$templatejsart = $this->art->template('array')['javascript'];
 			$head .= '<script src="' . Model::renderpath() . $templatejsart . '.js" async/></script>' . PHP_EOL;
 		}
-		$head .= '<script src="' . Model::renderpath() . $art->id() . '.js" async/></script>' . PHP_EOL;
+		$head .= '<script src="' . Model::renderpath() . $this->art->id() . '.js" async/></script>' . PHP_EOL;
 
 		return $head;
 	}
-
-	public function elementsrender(Art2 $art)
-	{
-		foreach ($this->getelements($art) as $element => $text) {
-			if (in_array($element, self::TEXT_ELEMENTS)) {
-				$elements[$element] = $this->markdown($text);
-			}
-		}
-		return $elements;
-	}
-
 
 	public function desctitle($text, $desc, $title)
 	{
@@ -162,7 +154,7 @@ class Modelrender extends Modelart
 	}
 
 
-	public function parser(Art2 $art, string $text)
+	public function parser(string $text)
 	{
 
 		$text = $this->headerid($text);
@@ -172,7 +164,7 @@ class Modelrender extends Modelart
 		$text = $this->wurl($text);
 		$text = $this->wikiurl($text);
 
-		$text = $this->desctitle($text, $art->description(), $art->title());
+		$text = $this->desctitle($text, $this->art->description(), $this->art->title());
 
 
 		$text = str_replace('href="http', ' class="external" target="_blank" href="http', $text);
@@ -339,12 +331,21 @@ class Modelrender extends Modelart
 			$ul = '<ul id="'.$tag.'">' . PHP_EOL;
 			$this->artlistsort($li, 'date', -1);
 				foreach ($li as $item ) {
-					$ul .= '<li><a href="'.$this->router->generate('artread/', ['art' => $item->id()]).'" title="'.$item->description().'" class="internal" >'.$item->title().'</a></li>' . PHP_EOL;
+					if($item->id() === $this->art->id()) {
+						$actual = ' actual';
+					} else {
+						$actual = '';
+					}
+					$ul .= '<li><a href="'.$this->router->generate('artread/', ['art' => $item->id()]).'" title="'.$item->description().'" class="internal'.$actual.'"  >'.$item->title().'</a></li>' . PHP_EOL;
 				}
 			$ul .= '</ul>' . PHP_EOL;
 
 			
 			$text = str_replace('%%'.$tag.'%%', $ul, $text);
+
+			$li = array_map(function($item) {
+				return $item->id();
+			}, $li);
 			$this->linkfrom = array_unique(array_merge($this->linkfrom, $li));
 		}
 		return $text;

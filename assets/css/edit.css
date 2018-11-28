@@ -125,6 +125,14 @@ body {
     padding: 0px 2px;
 }
 
+.tab label.edited {
+    text-decoration: underline dotted red;
+}
+
+.tab label.template {
+    color: #7b97b9;
+}
+
 .checkboxtab:checked ~ label
 {
     border: solid 1px;

@@ -97,6 +97,9 @@
     <li class="drop">
     <a class="button" href="<?= $this->uart('artedit', $art->id()) ?>" >edit</a>
     </li>            
+    <li class="drop">
+    <a class="button" href="<?= $this->uart('artrender', $art->id()) ?>" >render</a>
+    </li>            
 
 <?php } ?>    
 

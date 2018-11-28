@@ -22,6 +22,7 @@ class Routes
             ['GET', '/[cid:art]', 'Controllerart#read', 'artread'],
             ['GET', '/[cid:art]/add', 'Controllerart#add', 'artadd'],
             ['GET', '/[cid:art]/edit', 'Controllerart#edit', 'artedit'],
+            ['GET', '/[cid:art]/render', 'Controllerart#render', 'artrender'],
             ['GET', '/[cid:art]/log', 'Controllerart#log', 'artlog'],
             ['POST', '/[cid:art]/edit', 'Controllerart#update', 'artupdate'],
             ['GET', '/[cid:art]/delete', 'Controllerart#confirmdelete', 'artconfirmdelete'],

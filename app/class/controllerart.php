@@ -13,7 +13,6 @@ class Controllerart extends Controller
         parent::__construct($router);
 
         $this->artmanager = new Modelart();
-        $this->renderengine = new Modelrender($router);
         $this->fontmanager = new Modelfont();
 
     }
@@ -21,7 +20,7 @@ class Controllerart extends Controller
     public function setart(string $id, string $route)
     {
         $cleanid = idclean($id);
-        if($cleanid !== $id) {
+        if ($cleanid !== $id) {
             $this->routedirect($route, ['art' => $cleanid]);
         }
         $this->art = new Art2(['id' => $cleanid]);
@@ -42,10 +41,10 @@ class Controllerart extends Controller
 
     public function canedit()
     {
-        if($this->user->iseditor()) {
+        if ($this->user->iseditor()) {
             return true;
-        } elseif($this->user->isinvite()) {
-            if($this->user->password() === $this->art->invitepassword()) {
+        } elseif ($this->user->isinvite()) {
+            if ($this->user->password() === $this->art->invitepassword()) {
                 return true;
             } else {
                 return false;
@@ -55,42 +54,54 @@ class Controllerart extends Controller
         }
     }
 
+    function render($id)
+    {
+        $this->setart($id, 'artupdate');
+
+        if ($this->importart() && $this->user->iseditor()) {
+            $this->renderart();
+            $this->artmanager->update($this->art);
+        }
+        $this->routedirect('artread/', ['art' => $this->art->id()]);
+    }
+
+    public function renderart()
+    {
+        $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+
+        $this->renderengine = new Modelrender($this->router);
+
+        $body = $this->renderengine->renderbody($this->art);
+        $head = $this->renderengine->renderhead($this->art);
+        $this->art->setrenderbody($body);
+        $this->art->setrenderhead($head);
+        $this->art->setdaterender($now);
+        $this->art->setlinkfrom($this->renderengine->linkfrom());
+
+        return ['head' => $head, 'body' => $body];
+
+    }
+
 
     public function read($id)
     {
         $this->setart($id, 'artread/');
-        $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
-
 
         $artexist = $this->importart();
         $canread = $this->user->level() >= $this->art->secure();
         $alerts = ['alertnotexist' => 'This page does not exist yet', 'alertprivate' => 'You cannot see this page'];
-        $body = '';
-        $head = '';
-
-
 
         if ($artexist) {
 
             if ($this->art->daterender() < $this->art->datemodif()) {
-                $body = $this->renderengine->renderbody($this->art);
-                $this->art->setrender($body);
-                $this->art->setdaterender($now);
-                $this->art->setlinkfrom($this->renderengine->linkfrom());
+                $page = $this->renderart();
             } else {
-                $body = $this->art->render();
+                $page = ['head' => $this->art->renderhead(), 'body' =>  $this->art->renderbody()];
             }
-
-            $head = $this->renderengine->renderhead($this->art);
-
             $this->art->addaffcount();
             $this->artmanager->update($this->art);
-
         }
-
-
-        $data = array_merge($alerts, ['art' => $this->art, 'artexist' => $artexist, 'canread' => $canread, 'readernav' => true, 'body' => $body, 'head' => $head]);
-
+        $data = array_merge($alerts, $page, ['art' => $this->art, 'artexist' => $artexist, 'canread' => $canread, 'readernav' => true]);
 
         $this->showtemplate('read', $data);
 
@@ -104,7 +115,7 @@ class Controllerart extends Controller
 
 
         if ($this->importart() && $this->canedit()) {
-            $tablist = ['section' => $this->art->md(), 'css' => $this->art->css(), 'header' => $this->art->header(), 'nav' => $this->art->nav(), 'aside' => $this->art->aside(), 'footer' => $this->art->footer(), 'html' => $this->art->html(), 'javascript' => $this->art->javascript()];
+            $tablist = ['section' => $this->art->md(), 'css' => $this->art->css(), 'header' => $this->art->header(), 'nav' => $this->art->nav(), 'aside' => $this->art->aside(), 'footer' => $this->art->footer(), 'body' => $this->art->body(), 'javascript' => $this->art->javascript()];
 
             $artlist = $this->artmanager->list();
 

@@ -13,13 +13,14 @@ class Art2
 	protected $css;
 	protected $quickcss;
 	protected $javascript;
-	protected $html;
+	protected $body;
 	protected $header;
 	protected $section;
 	protected $nav;
 	protected $aside;
 	protected $footer;
-	protected $render;
+	protected $renderhead;
+	protected $renderbody;
 	protected $secure;
 	protected $invitepassword;
 	protected $interface;
@@ -36,7 +37,7 @@ class Art2
 	const LENCOULEUR = 7;
 	const DEBUT = '(?id=';
 	const FIN = ')';
-	const TABS = ['section', 'css', 'header', 'html', 'nav', 'aside', 'footer', 'javascript'];
+	const TABS = ['section', 'css', 'header', 'body', 'nav', 'aside', 'footer', 'javascript'];
 	const VAR_DATE = ['date', 'datecreation', 'datemodif', 'daterender'];
 
 	  
@@ -46,6 +47,7 @@ class Art2
 
 	public function __construct($datas = [])
 	{
+		$this->reset();
 		$this->hydrate($datas);
 	}
 
@@ -75,13 +77,14 @@ class Art2
 		$this->setcss('');
 		$this->setquickcss([]);
 		$this->setjavascript('');
-		$this->sethtml('');
+		$this->setbody('');
 		$this->setheader('');
 		$this->setsection('');
 		$this->setnav('');
 		$this->setaside('');
 		$this->setfooter('');
-		$this->setrender('');
+		$this->setrenderhead('');
+		$this->setrenderbody('');
 		$this->setsecure(3);
 		$this->setinvitepassword('invitepassword');
 		$this->setinterface('section');
@@ -238,9 +241,9 @@ class Art2
 		return $this->javascript;
 	}
 
-	public function html($type = 'string')
+	public function body($type = 'string')
 	{
-		return $this->html;
+		return $this->body;
 	}
 
 	public function header($type = 'string')
@@ -278,10 +281,17 @@ class Art2
 		return $this->footer;
 	}
 
-	public function render($type = 'string')
+	public function renderhead($type = 'string')
 	{
 		if($type == 'string') {
-			return $this->render;
+			return $this->renderhead;
+		}
+	}
+
+	public function renderbody($type = 'string')
+	{
+		if($type == 'string') {
+			return $this->renderbody;
 		}
 	}
 
@@ -462,10 +472,10 @@ class Art2
 	}
 
 
-	public function sethtml($html)
+	public function setbody($body)
 	{
-		if (strlen($html < self::LENTEXT && is_string($html))) {
-			$this->html = $html;
+		if (strlen($body < self::LENTEXT && is_string($body))) {
+			$this->body = $body;
 		}
 	}
 
@@ -504,9 +514,14 @@ class Art2
 		}
 	}
 
-	public function setrender(string $render)
+	public function setrenderhead(string $render)
 	{
-		$this->render = $render;
+		$this->renderhead = $render;
+	}
+
+	public function setrenderbody(string $render)
+	{
+		$this->renderbody = $render;
 	}
 
 	public function setsecure($secure)
