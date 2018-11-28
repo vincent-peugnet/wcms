@@ -7,8 +7,6 @@
     <link rel="shortcut icon" href="./media/logo.png" type="image/x-icon">
     <title><?= $title ?></title>
     <link rel="stylesheet" href="<?= $css ?>">
-    <?=$this->section('customhead')?>
-    <?=$this->section('arthead')?>
 
 </head>
 

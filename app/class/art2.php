@@ -315,6 +315,8 @@ class Art2
 			$linkfrom = $this->linkfrom;
 		} elseif ($option == 'sort') {
 			return count($this->linkfrom);
+		} elseif ($option == 'string') {
+			return implode(', ', $this->linkfrom);
 		}
 		return $linkfrom;
 

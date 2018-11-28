@@ -5,6 +5,7 @@ class Modelrender extends Modelart
 	protected $router;
 	protected $artlist;
 	protected $linkfrom = [];
+	protected $sum = [];
 
 	const SUMMARY = '%SUMMARY%';
 
@@ -56,7 +57,6 @@ class Modelrender extends Modelart
 			}
 			$text = $this->article($text);
 			$text = $this->autotaglistupdate($text);
-			$text = $this->desctitle($text, $art->description(), $art->title());
 			$text = $this->markdown($text);
 			
 			$elements[$element] = PHP_EOL . '<' . $element . '>' . PHP_EOL . $text . PHP_EOL . '</' . $element . '>' . PHP_EOL;
@@ -165,16 +165,19 @@ class Modelrender extends Modelart
 	public function parser(Art2 $art, string $text)
 	{
 
-
+		$text = $this->headerid($text);
 
 		$text = str_replace(self::SUMMARY, $this->sumparser($text), $text);
 
 		$text = $this->wurl($text);
 		$text = $this->wikiurl($text);
 
+		$text = $this->desctitle($text, $art->description(), $art->title());
+
+
 		$text = str_replace('href="http', ' class="external" target="_blank" href="http', $text);
-		$text = str_replace('<img src="/', '<img src="'. Model::mediapath(), $text);
-		$text = str_replace('<a href="/', '<a href="'. Model::mediapath(), $text);
+		$text = str_replace('<img src="/', '<img class="local" src="'. Model::mediapath(), $text);
+		$text = str_replace('<a href="/', '<a class="media" target="_blank" href="'. Model::mediapath(), $text);
 
 		$text = $this->autourl($text);
 
@@ -193,14 +196,14 @@ class Modelrender extends Modelart
 		$linkfrom = [];
 		$rend = $this;
 		$text = preg_replace_callback(
-			'%href="([\w-]+)"%',
+			'%href="([\w-]+)\/?(#?[a-z-_]*)"%',
 			function ($matches) use ($rend, &$linkfrom) {
 				$matchart = $rend->get($matches[1]);
 				if (!$matchart) {
 					return 'href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal"';
 				} else {
 					$linkfrom[] = $matchart->id();
-					return 'href="' . $rend->uart($matches[1]) . '" title="' . $matchart->description() . '" class="internal"';
+					return 'href="' . $rend->uart($matches[1]) . $matches[2]. '" title="' . $matchart->description() . '" class="internal"';
 				}
 			},
 			$text
@@ -214,14 +217,14 @@ class Modelrender extends Modelart
 		$linkfrom = [];
 		$rend = $this;
 		$text = preg_replace_callback(
-			'%\[([\w-]+)\]%',
+			'%\[([\w-]+)\/?#?([a-z-_]*)\]%',
 			function ($matches) use ($rend, &$linkfrom) {
 				$matchart = $rend->get($matches[1]);
 				if (!$matchart) {
 					return '<a href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal">' . $matches[1] . '</a>';
 				} else {
 					$linkfrom[] = $matchart->id();		
-					return '<a href="' . $rend->uart($matches[1]) . '" title="' . $matchart->description() . '" class="internal">' . $matchart->title() . '</a>';
+					return '<a href="' . $rend->uart($matches[1]) . $matches[2].'" title="' . $matchart->description() . '" class="internal">' . $matchart->title() . '</a>';
 				}
 			},
 			$text
@@ -230,14 +233,29 @@ class Modelrender extends Modelart
 		return $text;
 	}
 
+	public function headerid($text)
+	{
+		$sum = [];
+		$text = preg_replace_callback('/<h([1-6])(\s+(\s*\w+="\w+")*)?\s*>(.+)<\/h[1-6]>/mU',
+		function ($matches) use (&$sum) {
+			$cleanid = idclean($matches[4]);
+			$sum[$cleanid][$matches[1]] = $matches[4];
+			return '<h'.$matches[1] . $matches[2] . ' id="'.$cleanid.'">'.$matches[4].'</h'.$matches[1].'>';
+		},
+		$text
+	);
+	$this->sum = $sum;
+	return $text;
+	}
+
 	public function markdown($text)
 	{		
 		//use Michelf\MarkdownExtra;
 		$fortin = new Michelf\MarkdownExtra;
 		// id in headers
-		$fortin->header_id_func = function ($header) {
-			return preg_replace('/[^\w]/', '', strtolower($header));
-		};
+		// $fortin->header_id_func = function ($header) {
+		// 	return preg_replace('/[^\w]/', '', strtolower($header));
+		// };
 		$fortin->hard_wrap = true;
 		$text = $fortin->transform($text);
 		return $text;
@@ -267,10 +285,8 @@ class Modelrender extends Modelart
 		preg_match_all('#<h([1-6]) id="(\w+)">(.+)</h[1-6]>#iU', $text, $out);
 
 
-		$sum = [];
-		foreach ($out[2] as $key => $value) {
-			$sum[$value][$out[1][$key]] = $out[3][$key];
-		}
+		$sum = $this->sum;
+
 
 
 		$sumstring = '';

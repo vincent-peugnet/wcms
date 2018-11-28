@@ -19,7 +19,7 @@
     <div id="workspace">
 
     <?php $this->insert('editleftbar', ['art' => $art, 'tablist' => $tablist, 'artlist' => $artlist, 'showleftpanel' => $showleftpanel]) ?>
-    <?php $this->insert('edittabs', ['tablist' => $tablist, 'opentab' => $art->interface()]) ?>
+    <?php $this->insert('edittabs', ['tablist' => $tablist, 'opentab' => $art->interface(), 'template' => $art->template()]) ?>
     <?php $this->insert('editrightbar', ['art' => $art, 'artlist' => $artlist, 'showrightpanel' => $showrightpanel, 'fonts' => $fonts]) ?>
 
     </div>
@@ -29,4 +29,4 @@
 </section>
 </body>
 
-<?php $this->stop() ?>
+<?php $this->stop('page') ?>

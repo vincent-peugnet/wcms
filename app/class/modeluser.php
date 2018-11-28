@@ -46,7 +46,7 @@ class Modeluser extends Model
         }
     }
 
-    public function invitetest()
+    public function invitetest($pass)
     {
         $invitepasslist = [];
         if(in_array($pass, $invitepasslist)) {

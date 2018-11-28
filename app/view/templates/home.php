@@ -74,7 +74,7 @@
             <td><a title="<?= $item->tag('string') ?>"><?= $item->tag('sort') ?></a></td>
             <td><?= $item->description() ?></td>
             <td><?= $item->linkto('sort') ?></td>
-            <td><?= $item->linkfrom('sort') ?></td>
+            <td><a title="<?= $item->linkfrom('string') ?>" ><?= $item->linkfrom('sort') ?></a></td>
             <td><?= $item->datemodif('hrdi') ?></td>
             <td><?= $item->datecreation('hrdi') ?></td>
             <td><?= $item->secure('string') ?></td>
