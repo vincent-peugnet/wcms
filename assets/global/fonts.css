@@ -1,0 +1,45 @@
+@font-face {
+font-family: droidsans;
+ src: url( /wcms/fonts/droidsans.woff2);
+}
+
+@font-face {
+font-family: hack-italic;
+ src: url( /wcms/fonts/hack-italic.woff2);
+}
+
+@font-face {
+font-family: lato-regular;
+ src: url( /wcms/fonts/lato-regular.woff2);
+}
+
+@font-face {
+font-family: lobster;
+ src: url( /wcms/fonts/lobster.ttf);
+}
+
+@font-face {
+font-family: merriweather-regular;
+ src: url( /wcms/fonts/merriweather-regular.woff2);
+}
+
+@font-face {
+font-family: plex;
+ src: url( /wcms/fonts/plex.ttf);
+}
+
+@font-face {
+font-family: plexl;
+ src: url( /wcms/fonts/plexl.woff2);
+}
+
+@font-face {
+font-family: roboto;
+ src: url( /wcms/fonts/roboto.ttf);
+}
+
+@font-face {
+font-family: spicy;
+ src: url( /wcms/fonts/spicy.ttf);
+}
+

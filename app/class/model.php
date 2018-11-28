@@ -8,6 +8,7 @@ abstract class Model
 	const MEDIA_DIR = 'media' . DIRECTORY_SEPARATOR;
 	const TEMPLATES_DIR = '.'. DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR;
 	const RENDER_DIR = 'assets'. DIRECTORY_SEPARATOR . 'render' . DIRECTORY_SEPARATOR;
+	const GLOBAL_DIR = 'assets'. DIRECTORY_SEPARATOR . 'global' . DIRECTORY_SEPARATOR;
 	const DATABASE_DIR = '.' . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR;
 	const MEDIA_EXTENSIONS = array('jpeg', 'jpg', 'JPG', 'png', 'gif', 'mp3', 'mp4', 'mov', 'wav', 'flac', 'pdf');
 	const MEDIA_TYPES = ['image', 'video', 'sound', 'other'];
@@ -21,6 +22,15 @@ abstract class Model
 			$basepath = Config::basepath() . DIRECTORY_SEPARATOR ;
 		}
 		return DIRECTORY_SEPARATOR . $basepath . Model::RENDER_DIR;
+	}
+
+	public static function globalpath()
+	{
+		$basepath = '';
+		if(!empty(Config::basepath())) {
+			$basepath = Config::basepath() . DIRECTORY_SEPARATOR ;
+		}
+		return DIRECTORY_SEPARATOR . $basepath . Model::GLOBAL_DIR;
 	}
 
 	public static function csspath() 
@@ -45,12 +55,9 @@ abstract class Model
 	{
 		$basepath = '';
 		if(!empty(Config::basepath())) {
-			$basepath = Config::basepath() . DIRECTORY_SEPARATOR ;
+			$basepath = Config::basepath() . '/' ;
 		}
-		$url = DIRECTORY_SEPARATOR . $basepath . Model::FONT_DIR;
-		return $url;
+		return '/' . $basepath . str_replace('\\', '/',Model::FONT_DIR);	
 	}
-
-
 
 }

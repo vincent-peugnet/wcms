@@ -124,6 +124,8 @@ class Modelrender extends Modelart
 		$head .= '<title>' . $this->art->title() . '</title>' . PHP_EOL;
 		$head .= '<meta name="description" content="' . $this->art->description() . '" />' . PHP_EOL;
 		$head .= '<meta name="viewport" content="width=device-width" />' . PHP_EOL;
+		$head .= '<link href="' . Model::globalpath() . 'fonts.css" rel="stylesheet" />' . PHP_EOL;
+		$head .= '<link href="' . Model::globalpath() . 'global.css" rel="stylesheet" />' . PHP_EOL;
 
 		if (isset($this->art->template('array')['quickcss'])) {
 			$tempaltequickcssart = $this->art->template('array')['quickcss'];
@@ -332,7 +334,7 @@ class Modelrender extends Modelart
 			$this->artlistsort($li, 'date', -1);
 				foreach ($li as $item ) {
 					if($item->id() === $this->art->id()) {
-						$actual = ' actual';
+						$actual = ' actualpage';
 					} else {
 						$actual = '';
 					}

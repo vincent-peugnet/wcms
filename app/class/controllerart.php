@@ -90,6 +90,7 @@ class Controllerart extends Controller
         $artexist = $this->importart();
         $canread = $this->user->level() >= $this->art->secure();
         $alerts = ['alertnotexist' => 'This page does not exist yet', 'alertprivate' => 'You cannot see this page'];
+        $page = ['head' => '', 'body' =>  ''];
 
         if ($artexist) {
 
