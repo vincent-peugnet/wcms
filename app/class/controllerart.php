@@ -174,7 +174,7 @@ class Controllerart extends Controller
 
             $this->artmanager->delete($this->art);
         }
-        $this->routedirect('backrouter');
+        $this->routedirect('home');
     }
 
     public function update($id)

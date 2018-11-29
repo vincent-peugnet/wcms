@@ -39,7 +39,7 @@ class Controllerconnect extends Controller
         if (!empty($id)) {
             $this->routedirect('artread/', ['art' => $id]);
         } else {
-            $this->routedirect('backrouter');
+            $this->routedirect('home');
         }
     }
 
@@ -50,7 +50,7 @@ class Controllerconnect extends Controller
         if (!empty($id)) {
             $this->routedirect('artread/', ['art' => $id]);
         } else {
-            $this->routedirect('backrouter');
+            $this->routedirect('home');
         }
     }
 

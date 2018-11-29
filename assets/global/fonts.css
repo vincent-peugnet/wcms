@@ -1,4 +1,9 @@
 @font-face {
+font-family: ace;
+ src: url( /wcms/fonts/ace.woff2);
+}
+
+@font-face {
 font-family: droidsans;
  src: url( /wcms/fonts/droidsans.woff2);
 }
@@ -39,7 +44,17 @@ font-family: roboto;
 }
 
 @font-face {
+font-family: salve;
+ src: url( /wcms/fonts/salve.woff2);
+}
+
+@font-face {
 font-family: spicy;
  src: url( /wcms/fonts/spicy.ttf);
+}
+
+@font-face {
+font-family: weather;
+ src: url( /wcms/fonts/weather.woff2);
 }
 

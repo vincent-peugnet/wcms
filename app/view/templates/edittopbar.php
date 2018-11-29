@@ -3,7 +3,7 @@
 
     <form action="<?= $this->uart('artupdate', $art->id()) ?>" method="post" id="update">
     <span>
-    <a href="<?= $this->url('backrouter') ?>" class="icon" >⏏</a>
+    <a href="<?= $this->url('home') ?>" class="icon" >⏏</a>
     </span>
     <span>
     <input type="submit" value="update" accesskey="x" form="update">

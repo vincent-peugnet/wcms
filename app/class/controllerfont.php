@@ -14,7 +14,14 @@ class Controllerfont extends Controller
 
     public function desktop()
     {
-        var_dump($this->fontmanager->getfontlist());
+        if($this->user->isadmin()) {
+
+            $fontlist = $this->fontmanager->getfontlist();
+            
+            $this->showtemplate('font', ['fontlist' => $fontlist, 'fonttypes' => $this->fontmanager->getfonttypes(), 'fontfile' => Model::globalpath().'fonts.css']);
+        } else {
+            $this->routedirect('home');
+        }
     }
     
     public function render()
@@ -23,9 +30,15 @@ class Controllerfont extends Controller
         $this->routedirect('font');
     }
 
-    public function addfont()
+    public function add()
     {
-        
+        var_dump($_FILES);
+        if(isset($_POST['fontname'])) {
+            $fontname = $_POST['fontname'];
+        } else {
+            $fontname = '';
+        }
+        var_dump($this->fontmanager->upload($_FILES, 2 ** 16, $fontname));
     }
 }
 

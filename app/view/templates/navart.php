@@ -63,7 +63,7 @@
     <span class="button" style="font-family: monospace; background-color: #7b97b9;" >User lvl : <?= $user->level() ?></span>
     </li>
     <li class="drop">
-    <a class="button"  href="<?= $this->url('backrouter') ?>">home</a>
+    <a class="button"  href="<?= $this->url('home') ?>">home</a>
     </li>
 
 
