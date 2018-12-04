@@ -181,9 +181,7 @@ html {
     width: 100%;
 }
 
-.editor .panel input {
-    width: 100%;
-}
+.editor .panel input {width: 100%;}
 
 
 
@@ -229,3 +227,13 @@ form#update {
 }
 
 #update span {margin-right: 1%;}
+
+.editor .panel input[type="checkbox"] {
+    width: auto;
+    vertical-align: middle;
+}
+
+
+.panel .subtemplate {
+    margin-left: 20px;
+}

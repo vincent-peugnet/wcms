@@ -11,7 +11,7 @@
 <h1>Delete</h1>
 
 <ul>
-<li>Id : <?= $art->title() ?></li>
+<li>Id : <?= $art->id() ?></li>
 <li>Title : <?= $art->title() ?></li>
 <li>Article(s) linked to this one : <?= $art->linkto('sort') ?></li>
 <li>Article(s) linked from this one : <?= $art->linkfrom('sort') ?></li>

@@ -116,9 +116,14 @@ class Controllerart extends Controller
 
 
         if ($this->importart() && $this->canedit()) {
-            $tablist = ['section' => $this->art->md(), 'css' => $this->art->css(), 'header' => $this->art->header(), 'nav' => $this->art->nav(), 'aside' => $this->art->aside(), 'footer' => $this->art->footer(), 'body' => $this->art->body(), 'javascript' => $this->art->javascript()];
+            $tablist = ['section' => $this->art->section(), 'css' => $this->art->css(), 'header' => $this->art->header(), 'nav' => $this->art->nav(), 'aside' => $this->art->aside(), 'footer' => $this->art->footer(), 'body' => $this->art->body(), 'javascript' => $this->art->javascript()];
 
-            $artlist = $this->artmanager->list();
+            $idlist = $this->artmanager->list();
+
+            
+		    $artlist = $this->artmanager->getlister();
+            $tagartlist = $this->artmanager->tagartlist($this->art->tag('array'), $artlist);
+            $lasteditedartlist = $this->artmanager->lasteditedartlist(5, $artlist);
 
             if (isset($_SESSION['workspace'])) {
                 $showleftpanel = $_SESSION['workspace']['showleftpanel'];
@@ -129,7 +134,7 @@ class Controllerart extends Controller
             }
             $fonts = [];
 
-            $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true, 'tablist' => $tablist, 'artlist' => $artlist, 'showleftpanel' => $showleftpanel, 'showrightpanel' => $showrightpanel, 'fonts' => $fonts]);
+            $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true, 'tablist' => $tablist, 'artlist' => $idlist, 'showleftpanel' => $showleftpanel, 'showrightpanel' => $showrightpanel, 'fonts' => $fonts, 'tagartlist' => $tagartlist, 'lasteditedartlist' => $lasteditedartlist]);
         } else {
             $this->routedirect('artread/', ['art' => $this->art->id()]);
         }

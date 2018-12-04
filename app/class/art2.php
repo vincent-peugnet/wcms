@@ -26,7 +26,9 @@ class Art2
 	protected $interface;
 	protected $linkfrom;
 	protected $linkto;
-	protected $template;
+	protected $templatebody;
+	protected $templatecss;
+	protected $templatejavascript;
 	protected $affcount;
 	protected $editcount;
 
@@ -90,7 +92,9 @@ class Art2
 		$this->setinterface('section');
 		$this->setlinkfrom([]);
 		$this->setlinkto([]);
-		$this->settemplate([]);
+		$this->settemplatebody('');
+		$this->settemplatecss('');
+		$this->settemplatejavascript('');
 		$this->setaffcount(0);
 		$this->seteditcount(0);
 	}
@@ -217,25 +221,6 @@ class Art2
 		}
 	}
 
-
-	public function csstemplate(App $app)
-	{
-		$data = [];
-		$temp = '';
-		if (!empty($this->template())) {
-			if ($app->exist($this->template()) and !in_array($this->template(), $data)) {
-				$template = $app->get($this->template());
-				$temp = $temp . $template->css($app);
-				$data[] = $template->id();
-
-			}
-
-		}
-		$cssprint = str_replace('url(/', 'url(' . $app::MEDIA_DIR, $temp . $this->css);
-		return $cssprint;
-	}
-
-
 	public function javascript($type = 'string')
 	{
 		return $this->javascript;
@@ -249,16 +234,6 @@ class Art2
 	public function header($type = 'string')
 	{
 		return $this->header;
-	}
-
-	public function md($expand = false)
-	{
-		if ($expand == true) {
-			$md = str_replace('](=', '](?id=', $this->section);
-		} else {
-			$md = $this->section;
-		}
-		return $md;
 	}
 
 	public function section($type = 'string')
@@ -345,13 +320,27 @@ class Art2
 
 	}
 
-	public function template($type = 'array')
+	public function templatebody($type = 'string')
 	{
-		if ($type == 'json') {
-			return json_encode($this->template);
-		} elseif ($type = 'array') {
-			return $this->template;
-		}
+		return $this->templatebody;
+	}
+
+	public function templatecss($type = 'string')
+	{
+		return $this->templatecss;
+	}
+
+	public function templatejavascript($type = 'string')
+	{
+		return $this->templatejavascript;
+	}
+
+	function template()
+	{
+		$template['body'] = $this->templatebody;
+		$template['css'] = $this->templatecss;
+		$template['javascript'] = $this->templatejavascript;
+		return $template;
 	}
 
 	public function affcount($type = 'int')
@@ -573,24 +562,25 @@ class Art2
 		}
 	}
 
-	public function settemplate($template)
+	public function settemplatebody($templatebody)
 	{
-		if (is_string($template)) {
-			$templatearray = json_decode($template, true);
+		if(is_string($templatebody)) {
+			$this->templatebody = $templatebody;
 		}
-		if (is_array($template)) {
-			$templatearray = $template;
+	}
+
+	public function settemplatecss($templatecss)
+	{
+		if(is_string($templatecss)) {
+			$this->templatecss = $templatecss;
 		}
-		if(is_object($template)) {
-			$templatearray = (array) $template;
+	}
+
+	public function settemplatejavascript($templatejavascript)
+	{
+		if(is_string($templatejavascript)) {
+			$this->templatejavascript = $templatejavascript;
 		}
-		$this->template = array_map(function ($value) {
-			if(empty($value)) {
-				return null;
-			} else {
-				return $value;
-			}
-		}, $templatearray);
 	}
 
 	public function setaffcount($affcount)

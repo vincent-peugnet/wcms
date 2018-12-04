@@ -107,9 +107,12 @@ class Modelart extends Modeldb
 	}
 
 
-
-
-
+	/**
+	 * @param array $artlist List of Art2
+	 * @param array $tagchecked list of tags
+	 * @param string $tagcompare string, can be 'OR' or 'AND', set the tag filter method
+	 * @return array $array
+	 */
 
 	public function filtertagfilter(array $artlist, array $tagchecked, $tagcompare = 'OR')
 	{
@@ -168,9 +171,30 @@ class Modelart extends Modeldb
 		return $taglist;
 	}
 
-	public function count()
+	/**
+	 * @param array $taglist list of tags
+	 * @param array $artlist list of Art2
+	 * @return array list of tags each containing list of id
+	 */
+	
+	public function tagartlist(array $taglist, array $artlist)
 	{
-		return $this->bdd->query(' SELECT COUNT(*) FROM ' . $this->arttable . ' ')->fetchColumn();
+		$tagartlist = [];
+		foreach ($taglist as $tag) {
+			$tagartlist[$tag] = $this->filtertagfilter($artlist, [$tag]);
+		}
+		return $tagartlist;
+	}
+
+	public function lasteditedartlist(int $last , array $artlist)
+	{
+		$this->artlistsort($artlist, 'datemodif', -1);
+		$artlist = array_slice($artlist, 0, $last);
+		$idlist = [];
+		foreach ($artlist as $art) {
+			$idlist[] = $art->id();
+		}
+		return $idlist;
 	}
 
 }

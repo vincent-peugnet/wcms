@@ -12,6 +12,9 @@
 
     <form action="<?= $this->url('adminupdate') ?>" method="post">
 
+    <input type="submit" value="Update configuration">
+
+
     <h2>Passwords</h2>
     <label for="admin">Admin password</label>
     <input type="password" name="admin" id="admin" value="<?= Config::admin() ?>">
@@ -19,7 +22,7 @@
     <input type="password" name="editor" id="editor" value="<?= Config::editor() ?>">
 
     <h2>Page creation</h2>
-    <label for="defaultart">Create new page based on an already existing one</label>
+    <label for="defaultart">Create new page BODY based on an already existing one</label>
     <select name="defaultart" id="defaultart">
     <option value="" <?= Config::defaultart() === '' || !$defaultartexist ? 'selected' : '' ?>>--use default BODY element--</option>
     <?php
@@ -33,7 +36,7 @@
     <?php
     if(empty(!$defaultartexist || Config::defaultart())) {
         ?>
-        <label for="defaultbody">Or edit default BODY element</label>
+        <label for="defaultbody">Edit default BODY element</label>
         <textarea name="defaultbody" id="defaultbody" cols="30" rows="10"><?= Config::defaultbody() ?></textarea>
         <?php
     }
@@ -65,7 +68,12 @@
     }
     ?>
 
-    <input type="submit" value="submit">
+    <h2>CSS</h2>
+
+    <label for="globalcss">Edit global css that will apply to every pages</label>
+    <textarea name="globalcss" id="globalcss" cols="30" rows="10"><?= $globalcss ?></textarea>
+
+    <input type="submit" value="Update configuration">
 
     </form>
 

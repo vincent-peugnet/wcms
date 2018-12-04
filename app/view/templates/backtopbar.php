@@ -1,28 +1,37 @@
 <div id="topbar">
 
+<span id="user">
+
 <?php if($user->isvisitor()) { ?>
 
 
-<form action="<?= $this->url('log') ?>" method="post">
+<form action="<?= $this->url('log') ?>" method="post" id="connect">
 <input type="password" name="pass" id="loginpass" placeholder="password">
 <input type="submit" name="log" value="login">
 </form>
 
 
-<?php } else { ?>    
-
-<form action="<?= $this->url('log') ?>" method="post">
-<input type="submit" name="log" value="logout">
-</form>
+<?php } else { ?>  
 
 <span>
 User level : <?= $user->level() ?> 
 </span>
 
+
+<form action="<?= $this->url('log') ?>" method="post" id="connect">
+<input type="submit" name="log" value="logout">
+</form>
+
+
+
+</span>
+
+
+
+
 <?php } ?>
 
 <?php if($user->iseditor()) { ?>
-
 
 <span>
 <a href="<?= $this->url('home') ?>">home</a>
@@ -34,6 +43,7 @@ if($user->isadmin()) {
 <?php
 }
 ?>
+| <i><a href="https://github.com/vincent-peugnet/wcms" target="_blank">github↝</a></i>
 </span>
 
 

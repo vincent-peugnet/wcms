@@ -2,26 +2,66 @@
     <input id="showrightpanel" name="workspace[showrightpanel]" value="1" class="toggle" type="checkbox"  <?= $showrightpanel == true ? 'checked' : '' ?>>
     <label for="showrightpanel" class="toogle">◧</label>
     <div id="rightbarpanel" class="panel">
-    <details id="linkassist" open>
-        <summary>Links</summary>
+    
+
+    <details id="lastedited" open>
+        <summary>Last edited</summary>
+    <ul>
+    <?php
+    foreach ($lasteditedartlist as $id) {
+        ?>
+        <li><a href="<?= $this->uart('artedit', $id) ?>"><?= $id === $art->id() ? '★' : '✎' ?> <?= $id ?></a></li>
         <?php
-        foreach ($artlist as $item ) {
+    }
+
+    ?>
+    </ul>
+
+    </details>
+
+
+    <details id="tags" open>
+        <summary>Tags</summary>
+        <?php
+        foreach ($tagartlist as $tag => $idlist) {
+            if(count($idlist) > 1) {
             ?>
-            <a href="<?= $this->uart('artedit', $item) ?>" target="_blank"><?= $item ?></a>
+            <strong><?= $tag ?></strong>
             <?php
+
+            echo '<ul>';
+            foreach ($idlist as $id) {
+                if($id === $art->id()) {
+                    echo '<li>★ '.$id.'</li>';
+                } else {
+                ?>
+                <li><a href="<?= $this->uart('artedit', $id) ?>">✎ <?= $id ?></a></li>
+                <?php
+                }
+            }
+            }
+            echo '</ul>';
         }
 
         ?>
+
     </details>
-    <details id="fonts" open>
-        <summary>Fonts</summary>
-        <select multiple>
+
+    <details id="tempaltes" open>
+        <summary>Templates</summary>
+        <ul>
         <?php
-        foreach ($fonts as $font ) {
-            echo '<option value="'.$font.'">'.$font.'</option>';
+        foreach ($templates as $template => $id) {
+            if(!empty($id)) {
+                ?>
+                <li><?= $template ?> : <?= $id ?> <a href="<?= $this->uart('artedit', $id) ?>">✎</a></li>
+                <?php
+            }
         }
+        
         ?>
-        </select>
+        </ul>
+        
     </details>
    
     </div>

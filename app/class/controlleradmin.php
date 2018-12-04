@@ -15,7 +15,10 @@ class Controlleradmin extends Controller
             } else {
                 $defaultartexist = true;
             }
-            $admin = ['artlist' => $artlist, 'defaultartexist' => $defaultartexist];
+
+            $globalcss = file_get_contents(Model::GLOBAL_DIR . 'global.css');
+
+            $admin = ['artlist' => $artlist, 'defaultartexist' => $defaultartexist, 'globalcss' => $globalcss];
             $this->showtemplate('admin', $admin);
         }
     }
@@ -25,11 +28,13 @@ class Controlleradmin extends Controller
         if(!isset($_POST['showeditmenu'])) {
             $_POST['showeditmenu'] = false;
         }
+        $globalcss = file_put_contents(Model::GLOBAL_DIR . 'global.css', $_POST['globalcss']);
+
         Config::hydrate($_POST);
-        if(Config::savejson() !== false) {
+        if(Config::savejson() !== false && $globalcss !== false) {
         $this->routedirect('admin');
         } else {
-            echo 'Can\'t write config file';
+            echo 'Can\'t write config file or global css file';
         }
     }
 

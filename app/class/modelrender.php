@@ -9,6 +9,7 @@ class Modelrender extends Modelart
 	protected $sum = [];
 
 	const SUMMARY = '%SUMMARY%';
+	const REMPLACE_SELF_ELEMENT = false;
 
 
 	public function __construct($router)
@@ -45,10 +46,17 @@ class Modelrender extends Modelart
 
 	public function readbody()
 	{
-		if (isset($this->art->template('array')['body'])) {
-			$templateid = $this->art->template('array')['body'];
-			$tempalteart = $this->get($templateid);
-			$body = $tempalteart->body() . PHP_EOL . $this->art->body();
+		if (!empty($this->art->templatebody())) {
+			$templateid = $this->art->templatebody();
+			$templateart = $this->get($templateid);
+			if(self::REMPLACE_SELF_ELEMENT) {
+				$templatebody = preg_replace_callback('~\%(SECTION|ASIDE|NAV|HEADER|FOOTER)!\%~', function ($match) use ($templateid) {
+					return '%'. $match[1] . '.' . $templateid . '%';
+				}, $templateart->body());
+			} else {
+				$templatebody = $templateart->body();
+			}
+			$body = $templatebody . PHP_EOL . $this->art->body();
 		} else {
 			$body = $this->art->body();
 		}
@@ -58,11 +66,11 @@ class Modelrender extends Modelart
 	public function getbody(string $body)
 	{
 		$rend = $this;
-		$body = preg_replace_callback('~\%(SECTION|ASIDE|NAV|HEADER|FOOTER)(:(((\.|)?([\w-_]+|\!))*))?\%~', function ($match) use ($rend) {
+		$body = preg_replace_callback('~\%(SECTION|ASIDE|NAV|HEADER|FOOTER)((\.([a-z0-9-_]+|!))*|!)?\%~', function ($match) use ($rend) {
 			$element = strtolower($match[1]);
 			$getelement = '';
-			if (isset($match[3]) && !empty($match[3])) {
-				$templatelist = str_replace('!', $this->art->id(), explode('.', $match[3]));
+			if (isset($match[2]) && !empty($match[2])) {
+				$templatelist = str_replace('!', $this->art->id(), explode('.', ltrim($match[2], '.')));
 				foreach ($templatelist as $template) {
 					if ($template === $rend->art->id()) {
 						$templateelement = $rend->art->$element();
@@ -96,7 +104,7 @@ class Modelrender extends Modelart
 	public function write()
 	{
 		file_put_contents(Model::RENDER_DIR . $this->art->id() . '.css', $this->art->css());
-		file_put_contents(Model::RENDER_DIR . $this->art->id() . '.quick.css', $this->art->quickcss());
+		//file_put_contents(Model::RENDER_DIR . $this->art->id() . '.quick.css', $this->art->quickcss());
 		file_put_contents(Model::RENDER_DIR . $this->art->id() . '.js', $this->art->javascript());
 	}
 
@@ -133,20 +141,20 @@ class Modelrender extends Modelart
 		$head .= '<link href="' . Model::globalpath() . 'fonts.css" rel="stylesheet" />' . PHP_EOL;
 		$head .= '<link href="' . Model::globalpath() . 'global.css" rel="stylesheet" />' . PHP_EOL;
 
-		if (isset($this->art->template('array')['quickcss'])) {
-			$tempaltequickcssart = $this->art->template('array')['quickcss'];
-			$head .= '<link href="' . Model::renderpath() . $tempaltequickcssart . '.quick.css" rel="stylesheet" />' . PHP_EOL;
-		}
-		$head .= '<link href="' . Model::renderpath() . $this->art->id() . '.quick.css" rel="stylesheet" />' . PHP_EOL;
+		// if (!empty($this->art->templatecss())) {
+		// 	$tempaltequickcssart = $this->art->templatecss();
+		// 	$head .= '<link href="' . Model::renderpath() . $tempaltequickcssart . '.quick.css" rel="stylesheet" />' . PHP_EOL;
+		// }
+		// $head .= '<link href="' . Model::renderpath() . $this->art->id() . '.quick.css" rel="stylesheet" />' . PHP_EOL;
 
-		if (isset($this->art->template('array')['css'])) {
-			$tempaltecssart = $this->art->template('array')['css'];
+		if (!empty($this->art->templatecss())) {
+			$tempaltecssart = $this->art->templatecss();
 			$head .= '<link href="' . Model::renderpath() . $tempaltecssart . '.css" rel="stylesheet" />' . PHP_EOL;
 		}
 		$head .= '<link href="' . Model::renderpath() . $this->art->id() . '.css" rel="stylesheet" />' . PHP_EOL;
 
-		if (isset($this->art->template('array')['javascript'])) {
-			$templatejsart = $this->art->template('array')['javascript'];
+		if (!empty($this->art->templatejavascript())) {
+			$templatejsart = $this->art->templatejavascript;
 			$head .= '<script src="' . Model::renderpath() . $templatejsart . '.js" async/></script>' . PHP_EOL;
 		}
 		$head .= '<script src="' . Model::renderpath() . $this->art->id() . '.js" async/></script>' . PHP_EOL;

@@ -24,37 +24,73 @@
             <input type="time" name="ptime" value="<?= $art->date('ptime') ?>" id="time">
         </fieldset>
     </details>
-    <details>
+    <details open>
         <summary>Advanced</summary>
             <fieldset>
             <h3>Template options</h3>
-            <ul>
+            <label for="templatebody">BODY template</label>
+            <select name="templatebody" id="templatebody">
+            <option value="" <?= empty($art->templatebody()) ? 'selected' : '' ?>>--no template--</option>
             <?php
-            foreach ($tablist as $element => $value) {
-                if(isset($art->template()[$element])) {
-                    $template = $art->template()[$element];
-                } else {
-                    $template = '';
-                }
-                echo '<li>';
-                echo '<label for="'.$element.'template">'.$element.'</label>';
-                echo '<select name="template['.$element.']" id="'.$element.'template">';
-                ?>
-                <option value="" <?= $template === '' ? 'selected' : '' ?>>--no template--</option>
-                <?php
-                foreach ($artlist as $artid ) {
+            foreach ($artlist as $template) {
+            ?>
+                <option value="<?= $template ?>" <?= $art->templatebody() === $template ? 'selected' : '' ?>><?= $template ?></option>
+                <?php 
+            }
+            ?>
+            </select>
 
-                    ?>
-                    <option value="<?= $artid ?>" <?= $template === $artid ? 'selected' : '' ?>><?= $artid ?></option>
-                    <?php
-                }
-                echo '</select>';
-                echo '</li>';
+
+            <label for="templatecss">CSS template</label>
+            <select name="templatecss" id="templatecss">
+            <option value="" <?= empty($art->templatecss()) ? 'selected' : '' ?>>--no template--</option>
+            <?php
+            foreach ($artlist as $template) {
+                ?>
+                <option value="<?= $template ?>" <?= $art->templatecss() === $template ? 'selected' : '' ?>><?= $template ?></option>
+                <?php 
+            }
+            ?>
+            </select>
+            
+            <?php
+            if(!empty($art->templatecss())) {
+                ?>
+                <div class="subtemplate">
+                <input type="checkbox" name="iquickcss" id="iquickcss">
+                <label for="iquickcss">Quickcss</label>
+                </div>
+                <div class="subtemplate">
+                <input type="checkbox" name="iexternalcss" id="iexternalcss">
+                <label for="iexternalcss">External CSS</label>
+                </div>
+                <div class="subtemplate">
+                <input type="checkbox" name="iicon" id="iicon">
+                <label for="iicon">Page Icon</label>
+                </div>
+                <?php
             }
 
-
             ?>
-            </ul>
+
+
+            <label for="templatejavascript">Javascript template</label>
+            <select name="templatejavascript" id="templatejavascript">
+            <option value="" <?= empty($art->templatejavascript()) ? 'selected' : '' ?>>--no template--</option>
+            <?php
+            foreach ($artlist as $template) {
+                ?>
+                <option value="<?= $template ?>" <?= $art->templatejavascript() === $template ? 'selected' : '' ?>><?= $template ?></option>
+                <?php 
+            }
+            ?>
+            </select>
+            <div class="subtemplate">
+            <input type="checkbox" name="iexternaljs" id="iexternaljs">
+            <label for="iexternaljs">external js</label>
+            </div>
+
+
             </fieldset>
     </details>
     <details id="editcss" open>

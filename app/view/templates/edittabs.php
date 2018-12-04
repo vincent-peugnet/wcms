@@ -7,7 +7,7 @@ foreach ($tablist as $key => $value) {
 
     <input name="interface" type="radio" value="<?= $key ?>" id="tab<?= $key ?>" class="checkboxtab" <?= $key == $opentab ? 'checked' : '' ?> >
 
-    <label for="tab<?= $key ?>" <?= empty($template[$key]) ? '' : 'title="template : '.$template[$key].'" ' ?> class="<?= empty($template[$key]) ? '' : 'template' ?> <?= empty($value) ? '' : 'edited' ?>"><?= $key ?> </label>
+    <label for="tab<?= $key ?>" <?= empty($templates[$key]) ? '' : 'title="template : '.$templates[$key].'" ' ?> class="<?= empty($templates[$key]) ? '' : 'template' ?> <?= empty($value) ? '' : 'edited' ?>"><?= $key ?> </label>
 
     <?php
 

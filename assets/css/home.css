@@ -69,8 +69,17 @@ th {
 
 section {
     padding-top: 30px;
+    margin-left: 4px;
 }
 
 section.admin input, select, textarea {
     display: block;
+}
+
+section.font input, select, textarea {
+    display: block;
+}
+
+span#user {
+    float: right;
 }

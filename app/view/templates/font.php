@@ -11,9 +11,17 @@
 <section class="font">
 
 
-<a href="<?= $this->url('fontrender') ?>">⚡ Render</a>
-<a href="<?= $fontfile ?>" target="_blank">👓 View font CSS file</a>
+<h1>Fonts</h1>
 
+
+<div>
+<a href="<?= $this->url('fontrender') ?>">⚡ Render</a>
+</div>
+<div>
+<a href="<?= $fontfile ?>" target="_blank">👓 View font CSS file</a>
+</div>
+
+<h2>Add Font</h2>
 
 <form action="<?= $this->url('fontadd') ?>" method="post" enctype="multipart/form-data">
 <label for="font">Font file <i>(<?= $fonttypes ?>)</i></label>
@@ -23,6 +31,8 @@
 <input type="submit" value="upload font(s)">
 </form>
 
+
+<h2>Font stock</h2>
 
 <table id="fontlist">
 <tr>
