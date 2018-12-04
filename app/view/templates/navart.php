@@ -107,7 +107,7 @@
 <?php if ($user->iseditor()) { ?>
 
     <li class="drop">
-    <a class="button" href="?aff=media" >Media</a>
+    <a class="button" href="<?= $this->url('media') ?>" >Media</a>
     </li>
 
 <?php } ?>  
@@ -115,7 +115,7 @@
 <?php if($user->isadmin()) { ?>
 
     <li class="drop">
-    <a class="button" href="?aff=admin" >Admin</a>
+    <a class="button" href="<?= $this->url('admin') ?>" >Admin</a>
     </li>
 
 <?php } ?>  

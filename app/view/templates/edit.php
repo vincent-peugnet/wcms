@@ -14,7 +14,7 @@
 
 
 
-    <?php $this->insert('edittopbar', ['art' => $art]) ?>
+    <?php $this->insert('edittopbar', ['art' => $art, 'user' => $user]) ?>
 
     <div id="workspace">
 

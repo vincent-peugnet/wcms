@@ -2,3 +2,7 @@ body {
     background-color: white;
     margin: 0;
 }
+
+a.external::before { 
+    content: "⧉ ";
+}

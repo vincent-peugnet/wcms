@@ -102,7 +102,7 @@ class Controllerart extends Controller
             $this->art->addaffcount();
             $this->artmanager->update($this->art);
         }
-        $data = array_merge($alerts, $page, ['art' => $this->art, 'artexist' => $artexist, 'canread' => $canread, 'readernav' => true]);
+        $data = array_merge($alerts, $page, ['art' => $this->art, 'artexist' => $artexist, 'canread' => $canread, 'readernav' => Config::showeditmenu()]);
 
         $this->showtemplate('read', $data);
 

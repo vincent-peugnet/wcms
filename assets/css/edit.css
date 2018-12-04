@@ -175,6 +175,7 @@ html {
 .editor ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .editor .bar select {
@@ -236,4 +237,13 @@ form#update {
 
 .panel .subtemplate {
     margin-left: 20px;
+}
+
+.editor fieldset {
+    border: none;
+}
+
+.panel summary {
+    background-color: grey;
+    color: lightgrey;
 }

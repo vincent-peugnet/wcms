@@ -10,7 +10,7 @@
     <?php
     foreach ($lasteditedartlist as $id) {
         ?>
-        <li><a href="<?= $this->uart('artedit', $id) ?>"><?= $id === $art->id() ? '★' : '✎' ?> <?= $id ?></a></li>
+        <li><a href="<?= $this->uart('artedit', $id) ?>"><?= $id === $art->id() ? '➤' : '✎' ?> <?= $id ?></a></li>
         <?php
     }
 
@@ -32,7 +32,7 @@
             echo '<ul>';
             foreach ($idlist as $id) {
                 if($id === $art->id()) {
-                    echo '<li>★ '.$id.'</li>';
+                    echo '<li>➤ '.$id.'</li>';
                 } else {
                 ?>
                 <li><a href="<?= $this->uart('artedit', $id) ?>">✎ <?= $id ?></a></li>
