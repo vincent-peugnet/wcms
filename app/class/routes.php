@@ -10,7 +10,7 @@ class Routes
     {
         $router = new AltoRouter();
         if(!empty(Config::basepath())) {
-            $router->setBasePath(DIRECTORY_SEPARATOR . Config::basepath());
+            $router->setBasePath('/' . Config::basepath());
         }
         $router->addMatchTypes(array('cid' => '[a-zA-Z0-9-_+,\'!%@&.$€=\(\|\)]+'));
         $router->addRoutes([
@@ -19,6 +19,8 @@ class Routes
             ['GET', '/!co', 'Controllerconnect#connect', 'connect'],
             ['GET', '/!m', 'Controllermedia#desktop', 'media'],
             ['GET', '/!font', 'Controllerfont#desktop', 'font'],
+            ['POST', '/!admin', 'Controlleradmin#update', 'adminupdate'],
+            ['GET', '/!admin', 'Controlleradmin#desktop', 'admin'],
             ['GET', '/!font/render', 'Controllerfont#render', 'fontrender'],
             ['POST', '/!font/add', 'Controllerfont#add', 'fontadd'],
             ['GET', '/[cid:art]/', 'Controllerart#read', 'artread/'],

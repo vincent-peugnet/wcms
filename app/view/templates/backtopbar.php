@@ -25,9 +25,18 @@ User level : <?= $user->level() ?>
 
 
 <span>
-| <a href="">media</a>
-| <a href="">admin</a>
+<a href="<?= $this->url('home') ?>">home</a>
+<?php
+if($user->isadmin()) {
+?>
+<a href="<?= $this->url('font') ?>">font</a>
+<a href="<?= $this->url('admin') ?>">admin</a>
+<?php
+}
+?>
 </span>
+
+
 
 
 

@@ -32,13 +32,17 @@ class Controllerfont extends Controller
 
     public function add()
     {
-        var_dump($_FILES);
         if(isset($_POST['fontname'])) {
             $fontname = $_POST['fontname'];
         } else {
             $fontname = '';
         }
-        var_dump($this->fontmanager->upload($_FILES, 2 ** 16, $fontname));
+        $message = $this->fontmanager->upload($_FILES, 2 ** 16, $fontname);
+        if($message !== true) {
+            echo $message;
+        } else {
+            $this->render();
+        }
     }
 }
 

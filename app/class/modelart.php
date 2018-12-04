@@ -17,12 +17,12 @@ class Modelart extends Modeldb
 	public function exist(Art2 $art)
 	{
 		$artdata = $this->artstore->get($art->id());
-		if($artdata === false) {
+		if ($artdata === false) {
 			return false;
 		} else {
 			return true;
 		}
-		
+
 	}
 
 
@@ -34,14 +34,15 @@ class Modelart extends Modeldb
 		$this->artstore->store($artdata);
 	}
 
+
 	public function get($id)
 	{
-		if($id instanceof Art2) {
+		if ($id instanceof Art2) {
 			$id = $id->id();
 		}
-		if(is_string($id)) {
+		if (is_string($id)) {
 			$artdata = $this->artstore->findById($id);
-			if($artdata !== false) {
+			if ($artdata !== false) {
 				return new Art2($artdata);
 			} else {
 				return false;
@@ -54,6 +55,15 @@ class Modelart extends Modeldb
 	public function delete(Art2 $art)
 	{
 		$this->artstore->delete($art->id());
+		$this->unlink($art->id());
+	}
+
+
+	public function unlink(string $artid)
+	{
+		unlink(Model::RENDER_DIR . $artid . '.css');
+		unlink(Model::RENDER_DIR . $artid . '.quick.css');
+		unlink(Model::RENDER_DIR . $artid . '.js');
 	}
 
 	public function update(Art2 $art)

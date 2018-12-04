@@ -14,41 +14,42 @@ abstract class Model
 	const MEDIA_TYPES = ['image', 'video', 'sound', 'other'];
 
 	const TEXT_ELEMENTS = ['header', 'nav', 'section', 'aside', 'footer'];
+	const EDIT_SYMBOLS = ['pen', 'tool', 'none'];
 
 	public static function renderpath()
 	{
 		$basepath = '';
 		if(!empty(Config::basepath())) {
-			$basepath = Config::basepath() . DIRECTORY_SEPARATOR ;
+			$basepath = Config::basepath() . '/'  ;
 		}
-		return DIRECTORY_SEPARATOR . $basepath . Model::RENDER_DIR;
+		return '/'  . $basepath . Model::RENDER_DIR;
 	}
 
 	public static function globalpath()
 	{
 		$basepath = '';
 		if(!empty(Config::basepath())) {
-			$basepath = Config::basepath() . DIRECTORY_SEPARATOR ;
+			$basepath = Config::basepath() . '/'  ;
 		}
-		return DIRECTORY_SEPARATOR . $basepath . Model::GLOBAL_DIR;
+		return '/'  . $basepath . Model::GLOBAL_DIR;
 	}
 
 	public static function csspath() 
 	{
 		$basepath = '';
 		if(!empty(Config::basepath())) {
-			$basepath = Config::basepath() . DIRECTORY_SEPARATOR ;
+			$basepath = Config::basepath() . '/'  ;
 		}
-		return DIRECTORY_SEPARATOR . $basepath . Model::CSS_DIR;
+		return '/'  . $basepath . Model::CSS_DIR;
 	}
 
 	public static function mediapath()
 	{
 		$basepath = '';
 		if(!empty(Config::basepath())) {
-			$basepath = Config::basepath() . DIRECTORY_SEPARATOR ;
+			$basepath = Config::basepath() . '/'  ;
 		}
-		return DIRECTORY_SEPARATOR . $basepath . Model::MEDIA_DIR;	
+		return '/'  . $basepath . Model::MEDIA_DIR;	
 	}
 
 	public static function fontpath()

@@ -8,7 +8,7 @@
 
 <body>
 
-    <?php $this->insert('hometopbar', ['user' => $user]) ?>
+    <?php $this->insert('backtopbar', ['user' => $user]) ?>
 
 <?php if($user->iseditor()) { ?>
 
@@ -28,7 +28,7 @@
 
 <div id="main">
 <h2>Articles</h2>
-<form action="./" method="post">
+<form action="/massedit" method="post">
 
 
     <div id="massedit">
@@ -40,6 +40,7 @@
         <option value="erasetag">erase all tags</option>
         <option value="erasetemplate">erase template</option>
         <option value="delete">delete</option>
+        <option value="render">render</option>
     </select>
 
     <input type="submit" name="massaction" value="do" onclick="confirmSubmit(event, 'Are you sure')" >

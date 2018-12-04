@@ -95,7 +95,7 @@ class Modelfont extends Model
                     $extension_upload = strtolower($extension_upload);
                     $uploadok = move_uploaded_file($file['font']['tmp_name'], $this::FONT_DIR . $id . '.' . $extension_upload);
                     if ($uploadok) {
-                        $message = 'uploadok';
+                        $message = true;
                     } else {
                         $message = 'uploaderror';
                     }

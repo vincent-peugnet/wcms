@@ -89,12 +89,16 @@ class Modelrender extends Modelart
 		return $body;
 	}
 
+	
+	
 	public function write()
 	{
 		file_put_contents(Model::RENDER_DIR . $this->art->id() . '.css', $this->art->css());
 		file_put_contents(Model::RENDER_DIR . $this->art->id() . '.quick.css', $this->art->quickcss());
 		file_put_contents(Model::RENDER_DIR . $this->art->id() . '.js', $this->art->javascript());
 	}
+
+
 
 	public function writetemplates()
 	{
@@ -158,6 +162,8 @@ class Modelrender extends Modelart
 
 	public function parser(string $text)
 	{
+		$text = str_replace('<a href="/', '<a class="media" target="_blank" href="'. Model::mediapath(), $text);
+		$text = str_replace('<img src="/', '<img class="local" src="'. Model::mediapath(), $text);
 
 		$text = $this->headerid($text);
 
@@ -170,8 +176,6 @@ class Modelrender extends Modelart
 
 
 		$text = str_replace('href="http', ' class="external" target="_blank" href="http', $text);
-		$text = str_replace('<img src="/', '<img class="local" src="'. Model::mediapath(), $text);
-		$text = str_replace('<a href="/', '<a class="media" target="_blank" href="'. Model::mediapath(), $text);
 
 		$text = $this->autourl($text);
 

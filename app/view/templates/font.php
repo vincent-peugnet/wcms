@@ -1,9 +1,13 @@
-<?php $this->layout('layout', ['title' => 'font', 'css' => $css . 'font.css']) ?>
+<?php $this->layout('layout', ['title' => 'font', 'css' => $css . 'home.css']) ?>
 
 
 <?php $this->start('page') ?>
 
 <body>
+
+    <?php $this->insert('backtopbar', ['user' => $user]) ?>
+
+
 <section class="font">
 
 

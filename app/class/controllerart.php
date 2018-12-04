@@ -90,14 +90,14 @@ class Controllerart extends Controller
         $artexist = $this->importart();
         $canread = $this->user->level() >= $this->art->secure();
         $alerts = ['alertnotexist' => 'This page does not exist yet', 'alertprivate' => 'You cannot see this page'];
-        $page = ['head' => '', 'body' =>  ''];
+        $page = ['head' => '', 'body' => ''];
 
         if ($artexist) {
 
             if ($this->art->daterender() < $this->art->datemodif()) {
                 $page = $this->renderart();
             } else {
-                $page = ['head' => $this->art->renderhead(), 'body' =>  $this->art->renderbody()];
+                $page = ['head' => $this->art->renderhead(), 'body' => $this->art->renderbody()];
             }
             $this->art->addaffcount();
             $this->artmanager->update($this->art);
@@ -148,6 +148,16 @@ class Controllerart extends Controller
         $this->setart($id, 'artadd');
         if ($this->user->iseditor() && !$this->importart()) {
             $this->art->reset();
+            if (!empty(Config::defaultart())) {
+                $defaultart = $this->artmanager->get(Config::defaultart());
+                if ($defaultart !== false) {
+                    $defaultbody = $defaultart->body();
+                }
+            }
+            if(empty(Config::defaultart()) || $defaultart === false) {
+                $defaultbody = Config::defaultbody();
+            }
+            $this->art->setbody($defaultbody);
             $this->artmanager->add($this->art);
             $this->routedirect('artedit', ['art' => $this->art->id()]);
         } else {

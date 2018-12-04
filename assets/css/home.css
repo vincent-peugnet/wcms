@@ -36,6 +36,8 @@ tr:hover {
     height: 30px;
     background-color: #7b97b9;
     line-height: 30px;
+    position: fixed;
+    width: 100%;
 }
 
 #topbar form {
@@ -63,4 +65,12 @@ div#massedit {
 th {
     background-color: darkgrey;
     color: black;
+}
+
+section {
+    padding-top: 30px;
+}
+
+section.admin input, select, textarea {
+    display: block;
 }

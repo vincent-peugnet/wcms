@@ -4,6 +4,16 @@ font-family: ace;
 }
 
 @font-face {
+font-family: amatic;
+ src: url( /wcms/fonts/amatic.woff2);
+}
+
+@font-face {
+font-family: amatic_ext;
+ src: url( /wcms/fonts/amatic_ext.woff2);
+}
+
+@font-face {
 font-family: droidsans;
  src: url( /wcms/fonts/droidsans.woff2);
 }
@@ -11,6 +21,11 @@ font-family: droidsans;
 @font-face {
 font-family: hack-italic;
  src: url( /wcms/fonts/hack-italic.woff2);
+}
+
+@font-face {
+font-family: indie;
+ src: url( /wcms/fonts/indie.woff2);
 }
 
 @font-face {
@@ -36,6 +51,11 @@ font-family: plex;
 @font-face {
 font-family: plexl;
  src: url( /wcms/fonts/plexl.woff2);
+}
+
+@font-face {
+font-family: popins;
+ src: url( /wcms/fonts/popins.woff2);
 }
 
 @font-face {

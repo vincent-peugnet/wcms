@@ -15,6 +15,10 @@ abstract class Config
 	protected static $basepath = '';
 	protected static $route404;
 	protected static $existnot = 'This page does not exist yet';
+	protected static $defaultbody = '';
+	protected static $defaultart = 'cul';
+	protected static $showeditmenu = true;
+	protected static $editsymbol = 'pen';
 
 
 
@@ -127,6 +131,26 @@ abstract class Config
 		return self::$existnot;
 	}
 
+	public static function defaultbody()
+	{
+		return self::$defaultbody;
+	}
+
+	public static function defaultart()
+	{
+		return self::$defaultart;
+	}
+
+	public static function showeditmenu()
+	{
+		return self::$showeditmenu;
+	}
+
+	public static function editsymbol()
+	{
+		return self::$editsymbol;
+	}
+
 
 
 // __________________________________________ S E T ______________________________________
@@ -194,6 +218,39 @@ abstract class Config
 	{
 		if(is_string($description)) {
 			self::$existnot = strip_tags($description);
+		}
+	}
+
+	public static function setdefaultbody($defaultbody)
+	{
+		if(is_string($defaultbody)) {
+			self::$defaultbody = $defaultbody;
+		}
+	}
+
+	public static function setdefaultart($defaultart)
+	{
+		if(is_string($defaultart)) {
+			self::$defaultart = idclean($defaultart);
+		}
+	}
+
+	public static function setshoweditmenu($showeditmenu)
+	{
+		if(is_bool($showeditmenu)) {
+			self::$showeditmenu = $showeditmenu;
+		} elseif (is_string($showeditmenu)) {
+			if($showeditmenu === 'on') {
+				self::$showeditmenu = true;
+			}
+		}
+	}
+
+	public static function seteditsymbol($editsymbol)
+	{
+		if(is_string($editsymbol))
+		{
+			self::$editsymbol = $editsymbol;
 		}
 	}
 
