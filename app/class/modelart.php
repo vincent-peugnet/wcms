@@ -52,6 +52,18 @@ class Modelart extends Modeldb
 		}
 	}
 
+	public function getartelement($id, $element)
+	{
+		if(in_array($element, Model::TEXT_ELEMENTS)) {
+			$art = $this->get($id);
+			if($art !== false) {
+				return $art->$element();
+			} else {
+				return '';
+			}
+		}
+	}
+
 	public function delete(Art2 $art)
 	{
 		$this->artstore->delete($art->id());

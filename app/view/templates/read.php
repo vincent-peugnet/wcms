@@ -51,7 +51,9 @@ $this->stop();
             }
 
         } else {
-            echo '<h1>' . $alertnotexist . '</h1>';
+            if(!empty(Config::existnot())) {
+                echo '<h1>' . Config::existnot() . '</h1>';
+            }
             if ($user->iseditor()) {
                 ?>
                 <a href="<?= $this->uart('artadd', $art->id()) ?>">⭐ Create</a>            

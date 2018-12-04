@@ -36,38 +36,12 @@ class Modelrender extends Modelart
 	public function renderbody(Art2 $art)
 	{
 		$this->art = $art;
-		$body = $this->getbody($this->readbody(), $this->getelements());
+		$body = $this->getbody($this->readbody());
 		$parsebody = $this->parser($body);
 		return $parsebody;
 	}
 
 
-
-	public function getelements()
-	{
-		$elements = [];
-		foreach (self::TEXT_ELEMENTS as $element) {
-			if (isset($this->art->template('array')[$element])) {
-				$templateid = $this->art->template('array')[$element];
-				$tempalteart = $this->get($templateid);
-				if($tempalteart) {
-					$text = $tempalteart->$element() . PHP_EOL . $this->art->$element();
-				} else {
-					$text = $this->art->$element();
-				}
-			} else {
-				$text = $this->art->$element();
-			}
-			$text = $this->article($text);
-			$text = $this->autotaglistupdate($text);
-			$text = $this->markdown($text);
-			
-			$elements[$element] = PHP_EOL . '<' . $element . '>' . PHP_EOL . $text . PHP_EOL . '</' . $element . '>' . PHP_EOL;
-
-		}
-
-		return $elements;
-	}
 
 	public function readbody()
 	{
@@ -81,16 +55,44 @@ class Modelrender extends Modelart
 		return $body;
 	}
 
-	public function getbody(string $body, array $elements)
+	public function getbody(string $body)
 	{
-		$body = preg_replace_callback('~\%(SECTION|ASIDE|NAV|HEADER|FOOTER)\%~', function ($match) use ($elements) {
-			return $elements[strtolower($match[1])];
+		$rend = $this;
+		$body = preg_replace_callback('~\%(SECTION|ASIDE|NAV|HEADER|FOOTER)(:(((\.|)?([\w-_]+|\!))*))?\%~', function ($match) use ($rend) {
+			$element = strtolower($match[1]);
+			$getelement = '';
+			if (isset($match[3]) && !empty($match[3])) {
+				$templatelist = str_replace('!', $this->art->id(), explode('.', $match[3]));
+				foreach ($templatelist as $template) {
+					if ($template === $rend->art->id()) {
+						$templateelement = $rend->art->$element();
+					} else {
+						$templateelement = $rend->getartelement($template, $element);
+					}
+					$getelement .= $templateelement;
+				}
+			} else {
+				$templatelist = [$rend->art->id()];
+				$getelement = $rend->art->$element();
+			}
+			$class = implode(' ', $templatelist);
+			$getelement = $rend->elementparser($getelement);
+			$getelement = PHP_EOL . '<' . $element . ' class="' . $class . '">' . $getelement . '</' . $element . '>';
+			return $getelement;
 		}, $body);
 		return $body;
 	}
 
-	
-	
+	public function elementparser($element)
+	{
+		$element = $this->article($element);
+		$element = $this->autotaglistupdate($element);
+		$element = $this->markdown($element);
+
+		return $element;
+	}
+
+
 	public function write()
 	{
 		file_put_contents(Model::RENDER_DIR . $this->art->id() . '.css', $this->art->css());
@@ -162,8 +164,8 @@ class Modelrender extends Modelart
 
 	public function parser(string $text)
 	{
-		$text = str_replace('<a href="/', '<a class="media" target="_blank" href="'. Model::mediapath(), $text);
-		$text = str_replace('<img src="/', '<img class="local" src="'. Model::mediapath(), $text);
+		$text = str_replace('<a href="~', '<a class="media" target="_blank" href="' . Model::mediapath(), $text);
+		$text = str_replace('<img src="~', '<img class="local" src="' . Model::mediapath(), $text);
 
 		$text = $this->headerid($text);
 
@@ -201,7 +203,7 @@ class Modelrender extends Modelart
 					return 'href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal"';
 				} else {
 					$linkfrom[] = $matchart->id();
-					return 'href="' . $rend->uart($matches[1]) . $matches[2]. '" title="' . $matchart->description() . '" class="internal"';
+					return 'href="' . $rend->uart($matches[1]) . $matches[2] . '" title="' . $matchart->description() . '" class="internal"';
 				}
 			},
 			$text
@@ -221,8 +223,8 @@ class Modelrender extends Modelart
 				if (!$matchart) {
 					return '<a href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal">' . $matches[1] . '</a>';
 				} else {
-					$linkfrom[] = $matchart->id();		
-					return '<a href="' . $rend->uart($matches[1]) . $matches[2].'" title="' . $matchart->description() . '" class="internal">' . $matchart->title() . '</a>';
+					$linkfrom[] = $matchart->id();
+					return '<a href="' . $rend->uart($matches[1]) . $matches[2] . '" title="' . $matchart->description() . '" class="internal">' . $matchart->title() . '</a>';
 				}
 			},
 			$text
@@ -234,16 +236,17 @@ class Modelrender extends Modelart
 	public function headerid($text)
 	{
 		$sum = [];
-		$text = preg_replace_callback('/<h([1-6])(\s+(\s*\w+="\w+")*)?\s*>(.+)<\/h[1-6]>/mU',
-		function ($matches) use (&$sum) {
-			$cleanid = idclean($matches[4]);
-			$sum[$cleanid][$matches[1]] = $matches[4];
-			return '<h'.$matches[1] . $matches[2] . ' id="'.$cleanid.'">'.$matches[4].'</h'.$matches[1].'>';
-		},
-		$text
-	);
-	$this->sum = $sum;
-	return $text;
+		$text = preg_replace_callback(
+			'/<h([1-6])(\s+(\s*\w+="\w+")*)?\s*>(.+)<\/h[1-6]>/mU',
+			function ($matches) use (&$sum) {
+				$cleanid = idclean($matches[4]);
+				$sum[$cleanid][$matches[1]] = $matches[4];
+				return '<h' . $matches[1] . $matches[2] . ' id="' . $cleanid . '">' . $matches[4] . '</h' . $matches[1] . '>';
+			},
+			$text
+		);
+		$this->sum = $sum;
+		return $text;
 	}
 
 	public function markdown($text)
@@ -264,14 +267,14 @@ class Modelrender extends Modelart
 	public function article($text)
 	{
 		$pattern = '/(\R\R|^\R|^)[=]{3,}([\w-]*)\R\R(.*)(?=\R\R[=]{3,}[\w-]*\R)/sUm';
-		$text = preg_replace_callback($pattern, function($matches) {
-			if(!empty($matches[2])) {
-				$id = ' id="'.$matches[2].'" ';
+		$text = preg_replace_callback($pattern, function ($matches) {
+			if (!empty($matches[2])) {
+				$id = ' id="' . $matches[2] . '" ';
 			} else {
 				$id = ' ';
 			}
 			return '<article ' . $id . '  markdown="1" >' . PHP_EOL . PHP_EOL . $matches[3] . PHP_EOL . PHP_EOL . '</article>' . PHP_EOL . PHP_EOL;
-		} , $text);
+		}, $text);
 		$text = preg_replace('/\R\R[=]{3,}([\w-]*)\R/', '', $text);
 		return $text;
 	}
@@ -326,30 +329,30 @@ class Modelrender extends Modelart
 	public function autotaglistupdate($text)
 	{
 		$taglist = $this->autotaglist($text);
-		foreach ($taglist as $tag ) {
+		foreach ($taglist as $tag) {
 			$li = [];
-			foreach ($this->artlist as $item ) {
-				if(in_array($tag, $item->tag('array'))) {
+			foreach ($this->artlist as $item) {
+				if (in_array($tag, $item->tag('array'))) {
 					$li[] = $item;
 				}
-				
+
 			}
-			$ul = '<ul id="'.$tag.'">' . PHP_EOL;
+			$ul = '<ul id="' . $tag . '">' . PHP_EOL;
 			$this->artlistsort($li, 'date', -1);
-				foreach ($li as $item ) {
-					if($item->id() === $this->art->id()) {
-						$actual = ' actualpage';
-					} else {
-						$actual = '';
-					}
-					$ul .= '<li><a href="'.$this->router->generate('artread/', ['art' => $item->id()]).'" title="'.$item->description().'" class="internal'.$actual.'"  >'.$item->title().'</a></li>' . PHP_EOL;
+			foreach ($li as $item) {
+				if ($item->id() === $this->art->id()) {
+					$actual = ' actualpage';
+				} else {
+					$actual = '';
 				}
+				$ul .= '<li><a href="' . $this->router->generate('artread/', ['art' => $item->id()]) . '" title="' . $item->description() . '" class="internal' . $actual . '"  >' . $item->title() . '</a></li>' . PHP_EOL;
+			}
 			$ul .= '</ul>' . PHP_EOL;
 
-			
-			$text = str_replace('%%'.$tag.'%%', $ul, $text);
 
-			$li = array_map(function($item) {
+			$text = str_replace('%%' . $tag . '%%', $ul, $text);
+
+			$li = array_map(function ($item) {
 				return $item->id();
 			}, $li);
 			$this->linkfrom = array_unique(array_merge($this->linkfrom, $li));

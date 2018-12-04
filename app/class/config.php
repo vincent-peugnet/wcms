@@ -4,10 +4,10 @@
 
 abstract class Config
 {
-	protected static $arttable = 'artstore';
+	protected static $arttable = 'mystore';
 	protected static $domain;
 	protected static $admin;
-	protected static $editor;
+	protected static $editor = 'editor';
 	protected static $invite;
 	protected static $read;
 	protected static $color4;
@@ -15,8 +15,8 @@ abstract class Config
 	protected static $basepath = '';
 	protected static $route404;
 	protected static $existnot = 'This page does not exist yet';
-	protected static $defaultbody = '';
-	protected static $defaultart = 'cul';
+	protected static $defaultbody = '%HEADER%'. PHP_EOL .PHP_EOL . '%NAV%'. PHP_EOL .PHP_EOL . '%ASIDE%'. PHP_EOL .PHP_EOL . '%SECTION%'. PHP_EOL .PHP_EOL . '%FOOTER%';
+	protected static $defaultart = '';
 	protected static $showeditmenu = true;
 	protected static $editsymbol = 'pen';
 

@@ -42,7 +42,7 @@
 
     <h2>Editing</h2>
 
-    <label for="existnot">Tooltip hover internal link when page does not exist yet</label>
+    <label for="existnot">Text to show when a page does not exist yet</label>
     <input type="text" name="existnot" id="existnot" value="<?= Config::existnot() ?>">
 
     <label for="showeditmenu">Show editor menu in top right corner of pages</label>
