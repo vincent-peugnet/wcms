@@ -52,7 +52,7 @@
         <ul>
         <?php
         foreach ($templates as $template => $id) {
-            if(!empty($id)) {
+            if(!empty($id) && !is_bool($id)) {
                 ?>
                 <li><?= $template ?> : <?= $id ?> <a href="<?= $this->uart('artedit', $id) ?>">✎</a></li>
                 <?php

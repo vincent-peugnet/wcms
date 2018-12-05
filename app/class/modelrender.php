@@ -136,6 +136,11 @@ class Modelrender extends Modelart
 
 		$head .= '<meta charset="utf8" />' . PHP_EOL;
 		$head .= '<title>' . $this->art->title() . '</title>' . PHP_EOL;
+		if(!empty($this->art->favicon())) {
+			$head .= '<link rel="shortcut icon" href="'.Model::faviconpath(). $this->art->favicon(). '" type="image/x-icon">';
+		} elseif(!empty(Config::defaultfavicon())) {
+			$head .= '<link rel="shortcut icon" href="'.Model::faviconpath(). Config::defaultfavicon(). '" type="image/x-icon">';
+		}
 		$head .= '<meta name="description" content="' . $this->art->description() . '" />' . PHP_EOL;
 		$head .= '<meta name="viewport" content="width=device-width" />' . PHP_EOL;
 		$head .= '<link href="' . Model::globalpath() . 'fonts.css" rel="stylesheet" />' . PHP_EOL;
@@ -154,7 +159,7 @@ class Modelrender extends Modelart
 		$head .= '<link href="' . Model::renderpath() . $this->art->id() . '.css" rel="stylesheet" />' . PHP_EOL;
 
 		if (!empty($this->art->templatejavascript())) {
-			$templatejsart = $this->art->templatejavascript;
+			$templatejsart = $this->art->templatejavascript();
 			$head .= '<script src="' . Model::renderpath() . $templatejsart . '.js" async/></script>' . PHP_EOL;
 		}
 		$head .= '<script src="' . Model::renderpath() . $this->art->id() . '.js" async/></script>' . PHP_EOL;

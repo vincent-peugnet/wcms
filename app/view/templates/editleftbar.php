@@ -25,9 +25,8 @@
         </fieldset>
     </details>
     <details open>
-        <summary>Advanced</summary>
+        <summary>Tempalte</summary>
             <fieldset>
-            <h3>Template options</h3>
             <label for="templatebody">BODY template</label>
             <select name="templatebody" id="templatebody">
             <option value="" <?= empty($art->templatebody()) ? 'selected' : '' ?>>--no template--</option>
@@ -57,16 +56,20 @@
             if(!empty($art->templatecss())) {
                 ?>
                 <div class="subtemplate">
-                <input type="checkbox" name="iquickcss" id="iquickcss">
+                <input type="checkbox" name="ireccursivecss" id="ireccursivecss" <?= $art->template()['cssreccursive'] === true ? 'checked' : '' ?>>
+                <label for="ireccursivecss">Reccursive template</label>
+                </div>
+                <div class="subtemplate">
+                <input type="checkbox" name="iquickcss" id="iquickcss" <?= $art->template()['cssquickcss'] === true ? 'checked' : '' ?>>
                 <label for="iquickcss">Quickcss</label>
                 </div>
                 <div class="subtemplate">
-                <input type="checkbox" name="iexternalcss" id="iexternalcss">
+                <input type="checkbox" name="iexternalcss" id="iexternalcss" <?= $art->template()['externalcss'] === true ? 'checked' : '' ?>>
                 <label for="iexternalcss">External CSS</label>
                 </div>
                 <div class="subtemplate">
-                <input type="checkbox" name="iicon" id="iicon">
-                <label for="iicon">Page Icon</label>
+                <input type="checkbox" name="ifavicon" id="ifavicon" <?= $art->template()['cssfavicon'] === true ? 'checked' : '' ?>>
+                <label for="ifavicon">Favicon</label>
                 </div>
                 <?php
             }
@@ -93,9 +96,34 @@
 
             </fieldset>
     </details>
-    <details id="editcss" open>
-        <summary>Quick CSS</summary>
-        
+    <details id="advanced" open>
+        <summary>Advanced</summary>
+                
+        <fieldset>
+
+        <?php
+
+        ?>
+
+        <label for="favicon">Favicon</label>
+        <select name="favicon" id="favicon">
+        <?php
+        if(!empty($art->templatecss()) && $art->template()['cssfavicon']) {
+            ?>
+            <option value="<?= $art->favicon() ?>">--using template favicon--</option>
+            <?php
+        } else {
+            echo '<option value="">--no favicon--</option>';
+        foreach ($faviconlist as $favicon) {
+            ?>
+            <option value="<?= $favicon ?>" <?= $art->favicon() === $favicon ? 'selected' : '' ?>><?= $favicon ?></option>
+            <?php
+            }
+        }
+        ?>
+        </select>
+        </fieldset>
+
     </details>
     <details>
         <summary>Help</summary>

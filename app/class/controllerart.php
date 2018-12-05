@@ -7,6 +7,7 @@ class Controllerart extends Controller
     protected $artmanager;
     protected $renderengine;
     protected $fontmanager;
+    protected $mediamanager;
 
     public function __construct($router)
     {
@@ -14,6 +15,7 @@ class Controllerart extends Controller
 
         $this->artmanager = new Modelart();
         $this->fontmanager = new Modelfont();
+        $this->mediamanager = new Modelmedia();
 
     }
 
@@ -118,6 +120,7 @@ class Controllerart extends Controller
         if ($this->importart() && $this->canedit()) {
             $tablist = ['section' => $this->art->section(), 'css' => $this->art->css(), 'header' => $this->art->header(), 'nav' => $this->art->nav(), 'aside' => $this->art->aside(), 'footer' => $this->art->footer(), 'body' => $this->art->body(), 'javascript' => $this->art->javascript()];
 
+            $faviconlist = $this->mediamanager->listfavicon();
             $idlist = $this->artmanager->list();
 
             
@@ -134,7 +137,7 @@ class Controllerart extends Controller
             }
             $fonts = [];
 
-            $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true, 'tablist' => $tablist, 'artlist' => $idlist, 'showleftpanel' => $showleftpanel, 'showrightpanel' => $showrightpanel, 'fonts' => $fonts, 'tagartlist' => $tagartlist, 'lasteditedartlist' => $lasteditedartlist]);
+            $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true, 'tablist' => $tablist, 'artlist' => $idlist, 'showleftpanel' => $showleftpanel, 'showrightpanel' => $showrightpanel, 'fonts' => $fonts, 'tagartlist' => $tagartlist, 'lasteditedartlist' => $lasteditedartlist, 'faviconlist' => $faviconlist]);
         } else {
             $this->routedirect('artread/', ['art' => $this->art->id()]);
         }

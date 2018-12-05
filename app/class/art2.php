@@ -29,6 +29,8 @@ class Art2
 	protected $templatebody;
 	protected $templatecss;
 	protected $templatejavascript;
+	protected $templateoptions;
+	protected $favicon;
 	protected $affcount;
 	protected $editcount;
 
@@ -95,6 +97,8 @@ class Art2
 		$this->settemplatebody('');
 		$this->settemplatecss('');
 		$this->settemplatejavascript('');
+		$this->settemplateoptions(['externalcss', 'externaljavascript', 'favicon', 'reccursive', 'quickcss']);
+		$this->setfavicon('');
 		$this->setaffcount(0);
 		$this->seteditcount(0);
 	}
@@ -114,7 +118,7 @@ class Art2
 	{
 		$array = [];
 		foreach (get_class_vars(__class__) as $var => $value) {
-			if(in_array($var, self::VAR_DATE)) {
+			if (in_array($var, self::VAR_DATE)) {
 				$array[$var] = $this->$var('string');
 			} else {
 				$array[$var] = $this->$var();
@@ -258,14 +262,14 @@ class Art2
 
 	public function renderhead($type = 'string')
 	{
-		if($type == 'string') {
+		if ($type == 'string') {
 			return $this->renderhead;
 		}
 	}
 
 	public function renderbody($type = 'string')
 	{
-		if($type == 'string') {
+		if ($type == 'string') {
 			return $this->renderbody;
 		}
 	}
@@ -335,12 +339,39 @@ class Art2
 		return $this->templatejavascript;
 	}
 
-	function template()
+	public function template()
 	{
 		$template['body'] = $this->templatebody;
 		$template['css'] = $this->templatecss;
 		$template['javascript'] = $this->templatejavascript;
+
+		$template['cssreccursive'] = $this->checkoption('reccursive');
+		$template['cssquickcss'] = $this->checkoption('quickcss');
+		$template['externalcss'] = $this->checkoption('externalcss');
+		$template['cssfavicon'] = $this->checkoption('favicon');
+
+		$template['externaljavascript'] = $this->checkoption('externaljavascript');
+
 		return $template;
+	}
+
+	public function templateoptions($type = 'array')
+	{
+		return $this->templateoptions;
+	}
+
+	function checkoption($option)
+	{
+		if (in_array('reccursive', $this->templateoptions)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function favicon($type = 'string')
+	{
+		return $this->favicon;
 	}
 
 	public function affcount($type = 'int')
@@ -536,11 +567,11 @@ class Art2
 
 	public function setlinkfrom($linkfrom)
 	{
-		if(is_array($linkfrom)) {
+		if (is_array($linkfrom)) {
 			$this->linkfrom = $linkfrom;
-		} elseif(is_string($linkfrom)) {
+		} elseif (is_string($linkfrom)) {
 			$linkfromjson = json_decode($linkfrom);
-			if(is_array($linkfromjson)) {
+			if (is_array($linkfromjson)) {
 				$this->linkfrom = $linkfromjson;
 			}
 		} elseif ($linkfrom === null) {
@@ -550,11 +581,11 @@ class Art2
 
 	public function setlinkto($linkto)
 	{
-		if(is_array($linkto)) {
+		if (is_array($linkto)) {
 			$this->linkto = $linkto;
-		} elseif(is_string($linkto)) {
+		} elseif (is_string($linkto)) {
 			$linktojson = json_decode($linkto);
-			if(is_array($linktojson)) {
+			if (is_array($linktojson)) {
 				$this->linkto = $linktojson;
 			}
 		} elseif ($linkto === null) {
@@ -564,22 +595,36 @@ class Art2
 
 	public function settemplatebody($templatebody)
 	{
-		if(is_string($templatebody)) {
+		if (is_string($templatebody)) {
 			$this->templatebody = $templatebody;
 		}
 	}
 
 	public function settemplatecss($templatecss)
 	{
-		if(is_string($templatecss)) {
+		if (is_string($templatecss)) {
 			$this->templatecss = $templatecss;
 		}
 	}
 
 	public function settemplatejavascript($templatejavascript)
 	{
-		if(is_string($templatejavascript)) {
+		if (is_string($templatejavascript)) {
 			$this->templatejavascript = $templatejavascript;
+		}
+	}
+
+	public function settemplateoptions($templateoptions)
+	{
+		if(is_array($templateoptions)) {
+			$this->templateoptions = $templateoptions;
+		}
+	}
+
+	public function setfavicon($favicon)
+	{
+		if (is_string($favicon)) {
+			$this->favicon = $favicon;
 		}
 	}
 
@@ -607,12 +652,12 @@ class Art2
 
 	public function addeditcount()
 	{
-		$this->editcount ++;
+		$this->editcount++;
 	}
 
 	public function addaffcount()
 	{
-		$this->affcount ++;
+		$this->affcount++;
 	}
 
 	public function updateedited()

@@ -6,6 +6,7 @@ abstract class Model
 	const CSS_DIR = 'assets' . DIRECTORY_SEPARATOR .'css' . DIRECTORY_SEPARATOR;
 	const FONT_DIR = 'fonts' . DIRECTORY_SEPARATOR;
 	const MEDIA_DIR = 'media' . DIRECTORY_SEPARATOR;
+	const FAVICON_DIR = 'media' . DIRECTORY_SEPARATOR . 'favicon' . DIRECTORY_SEPARATOR;
 	const TEMPLATES_DIR = '.'. DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR;
 	const RENDER_DIR = 'assets'. DIRECTORY_SEPARATOR . 'render' . DIRECTORY_SEPARATOR;
 	const GLOBAL_DIR = 'assets'. DIRECTORY_SEPARATOR . 'global' . DIRECTORY_SEPARATOR;
@@ -16,49 +17,44 @@ abstract class Model
 	const TEXT_ELEMENTS = ['header', 'nav', 'section', 'aside', 'footer'];
 	const EDIT_SYMBOLS = ['pen', 'tool', 'none'];
 
-	public static function renderpath()
+	public static function dirtopath($dir)
 	{
 		$basepath = '';
 		if(!empty(Config::basepath())) {
 			$basepath = Config::basepath() . '/'  ;
 		}
-		return '/'  . $basepath . Model::RENDER_DIR;
+		$dir = str_replace('\\', '/', $dir);
+		return '/' . $basepath . $dir;
+	}
+
+	public static function renderpath()
+	{
+		return self::dirtopath(Model::RENDER_DIR);
 	}
 
 	public static function globalpath()
 	{
-		$basepath = '';
-		if(!empty(Config::basepath())) {
-			$basepath = Config::basepath() . '/'  ;
-		}
-		return '/'  . $basepath . Model::GLOBAL_DIR;
+		return self::dirtopath(Model::GLOBAL_DIR);
 	}
 
 	public static function csspath() 
 	{
-		$basepath = '';
-		if(!empty(Config::basepath())) {
-			$basepath = Config::basepath() . '/'  ;
-		}
-		return '/'  . $basepath . Model::CSS_DIR;
+		return self::dirtopath(Model::CSS_DIR);
 	}
 
 	public static function mediapath()
 	{
-		$basepath = '';
-		if(!empty(Config::basepath())) {
-			$basepath = Config::basepath() . '/'  ;
-		}
-		return '/'  . $basepath . Model::MEDIA_DIR;	
+		return self::dirtopath(Model::MEDIA_DIR);
+	}
+
+	public static function faviconpath()
+	{
+		return self::dirtopath(Model::FAVICON_DIR);
 	}
 
 	public static function fontpath()
 	{
-		$basepath = '';
-		if(!empty(Config::basepath())) {
-			$basepath = Config::basepath() . '/' ;
-		}
-		return '/' . $basepath . str_replace('\\', '/',Model::FONT_DIR);	
+		return self::dirtopath(Model::FONT_DIR);
 	}
 
 }

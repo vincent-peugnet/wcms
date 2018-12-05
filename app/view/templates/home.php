@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => 'home', 'css' => $css . 'home.css']) ?>
+<?php $this->layout('layout', ['title' => 'home', 'css' => $css . 'home.css', 'favicon' => '']) ?>
 
 
 

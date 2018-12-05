@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => '✏ '.$art->title(), 'css' => $css . 'edit.css']) ?>
+<?php $this->layout('layout', ['title' => '✏ '.$art->title(), 'css' => $css . 'edit.css', 'favicon' => $art->favicon()]) ?>
 
 
 
@@ -18,7 +18,7 @@
 
     <div id="workspace">
 
-    <?php $this->insert('editleftbar', ['art' => $art, 'tablist' => $tablist, 'artlist' => $artlist, 'showleftpanel' => $showleftpanel]) ?>
+    <?php $this->insert('editleftbar', ['art' => $art, 'tablist' => $tablist, 'artlist' => $artlist, 'showleftpanel' => $showleftpanel, 'faviconlist' => $faviconlist]) ?>
     <?php $this->insert('edittabs', ['tablist' => $tablist, 'opentab' => $art->interface(), 'templates' => $art->template()]) ?>
     <?php $this->insert('editrightbar', ['art' => $art, 'artlist' => $artlist, 'showrightpanel' => $showrightpanel, 'templates' => $art->template(), 'tagartlist' => $tagartlist, 'lasteditedartlist' => $lasteditedartlist]) ?>
 

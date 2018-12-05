@@ -73,6 +73,18 @@
     <label for="globalcss">Edit global css that will apply to every pages</label>
     <textarea name="globalcss" id="globalcss" cols="30" rows="10"><?= $globalcss ?></textarea>
 
+    <label for="defaultfavicon">Favicon</label>
+    <select name="defaultfavicon" id="defaultfavicon">
+    <option value="">--no favicon--</option>
+    <?php
+    foreach ($faviconlist as $favicon) {
+    ?>
+    <option value="<?= $favicon ?>" <?= Config::defaultfavicon() === $favicon ? 'selected' : '' ?>><?= $favicon ?></option>
+    <?php
+    }
+    ?>
+    </select>
+
     <input type="submit" value="Update configuration">
 
     </form>

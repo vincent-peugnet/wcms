@@ -17,6 +17,7 @@ abstract class Config
 	protected static $existnot = 'This page does not exist yet';
 	protected static $defaultbody = '%HEADER%'. PHP_EOL .PHP_EOL . '%NAV%'. PHP_EOL .PHP_EOL . '%ASIDE%'. PHP_EOL .PHP_EOL . '%SECTION%'. PHP_EOL .PHP_EOL . '%FOOTER%';
 	protected static $defaultart = '';
+	protected static $defaultfavicon = '';
 	protected static $showeditmenu = true;
 	protected static $editsymbol = 'pen';
 
@@ -141,6 +142,11 @@ abstract class Config
 		return self::$defaultart;
 	}
 
+	public static function defaultfavicon()
+	{
+		return self::$defaultfavicon;
+	}
+
 	public static function showeditmenu()
 	{
 		return self::$showeditmenu;
@@ -225,6 +231,13 @@ abstract class Config
 	{
 		if(is_string($defaultbody)) {
 			self::$defaultbody = $defaultbody;
+		}
+	}
+
+	public static function setdefaultfavicon($defaultfavicon)
+	{
+		if(is_string($defaultfavicon)) {
+			self::$defaultfavicon = $defaultfavicon;
 		}
 	}
 

@@ -54,9 +54,9 @@ class Modelart extends Modeldb
 
 	public function getartelement($id, $element)
 	{
-		if(in_array($element, Model::TEXT_ELEMENTS)) {
+		if (in_array($element, Model::TEXT_ELEMENTS)) {
 			$art = $this->get($id);
-			if($art !== false) {
+			if ($art !== false) {
 				return $art->$element();
 			} else {
 				return '';
@@ -73,9 +73,12 @@ class Modelart extends Modeldb
 
 	public function unlink(string $artid)
 	{
-		unlink(Model::RENDER_DIR . $artid . '.css');
-		unlink(Model::RENDER_DIR . $artid . '.quick.css');
-		unlink(Model::RENDER_DIR . $artid . '.js');
+		$files = ['.css', '.quick.css', '.js'];
+		foreach ($files as $file) {
+			if (file_exists(Model::RENDER_DIR . $artid . $file)) {
+				unlink(Model::RENDER_DIR . $artid . $file);
+			}
+		}
 	}
 
 	public function update(Art2 $art)
@@ -176,7 +179,7 @@ class Modelart extends Modeldb
 	 * @param array $artlist list of Art2
 	 * @return array list of tags each containing list of id
 	 */
-	
+
 	public function tagartlist(array $taglist, array $artlist)
 	{
 		$tagartlist = [];
@@ -186,7 +189,7 @@ class Modelart extends Modeldb
 		return $tagartlist;
 	}
 
-	public function lasteditedartlist(int $last , array $artlist)
+	public function lasteditedartlist(int $last, array $artlist)
 	{
 		$this->artlistsort($artlist, 'datemodif', -1);
 		$artlist = array_slice($artlist, 0, $last);

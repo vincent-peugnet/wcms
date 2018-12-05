@@ -86,6 +86,20 @@ class Modelmedia extends Model
 
 
 
+	public function listfavicon()
+	{
+		$glob = Model::FAVICON_DIR . '*.png';
+		$faviconlist = glob($glob);
+		$count = strlen(Model::FAVICON_DIR);
+		$faviconlist = array_map(function($input) use($count) {
+			return substr($input, $count);
+		}, $faviconlist);
+		return $faviconlist;
+		
+	}
+
+
+
 
 }
 
