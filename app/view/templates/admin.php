@@ -73,7 +73,7 @@
     <label for="globalcss">Edit global css that will apply to every pages</label>
     <textarea name="globalcss" id="globalcss" cols="30" rows="10"><?= $globalcss ?></textarea>
 
-    <label for="defaultfavicon">Favicon</label>
+    <label for="defaultfavicon">Default favicon</label>
     <select name="defaultfavicon" id="defaultfavicon">
     <option value="">--no favicon--</option>
     <?php

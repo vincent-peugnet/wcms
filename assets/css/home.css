@@ -97,11 +97,6 @@ span#search {
 input#id {width: 100px;}
 
 
-section.info a {
-    display: block;
-    width: fit-content;
-}
-
 section.font table#fontlist {
     width: 100%;
     max-width: 500px;
@@ -119,4 +114,75 @@ section.media table#medialist {
 section.media table#faviconlist {
     width: 100%;
     max-width: 640px;
+}
+
+section.info ul i {
+    color: grey;
+}
+
+section.info a {
+    text-decoration: underline white;
+}
+
+section.info ul {
+    list-style: none;
+    padding-inline-start: 10px;
+}
+
+section.info code, section.info blockquote {
+    color: white;
+    background-color: #191919;
+    width: fit-content;
+}
+
+section.info article {
+    max-width: 800px;
+    text-align: justify;
+    background-color: #e2e1e1;
+    margin: 1%;
+    padding: 1%;
+}
+
+section.info blockquote i {
+    font-style: normal;
+    color: #7b97b9;
+}
+
+
+section.info article h2#manual {
+    text-align: center;
+    font-size: 40px;
+}
+
+section.info article h3 {
+    border-top: solid 1px grey;
+    margin-top: 60px;
+    padding-top: 15px;
+    font-size: xx-large;
+}
+
+section.info article h4 {
+    background-color: darkgrey;
+}
+
+section.info article h5 {
+    text-transform: uppercase;
+    margin-top: 45px;
+    font-size: large;
+}
+
+section.info code {
+    padding: 0 4px;
+}
+
+section.info blockquote {
+    padding: 6px 12px;
+    text-align: left;
+    word-break: break-all;
+}
+
+section.info nav {
+    position: fixed;
+    right: 0;
+    top: 20%;
 }
