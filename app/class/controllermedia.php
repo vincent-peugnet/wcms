@@ -14,7 +14,11 @@ class Controllermedia extends Controller
 
     public function desktop()
     {
-        
+        if($this->user->iseditor()) {
+            $medialist = $this->mediamanager->getlistermedia(Model::MEDIA_DIR);
+            $faviconlist = $this->mediamanager->getlistermedia(Model::FAVICON_DIR);
+            $this->showtemplate('media', ['medialist' => $medialist, 'faviconlist' => $faviconlist]);
+        }
     }
 
     public function addmedia()

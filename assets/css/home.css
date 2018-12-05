@@ -33,11 +33,10 @@ tr:hover {
 }
 
 #topbar {
-    height: 30px;
     background-color: #7b97b9;
-    line-height: 30px;
     position: fixed;
     width: 100%;
+    padding: 3px 0.5%;
 }
 
 #topbar form {
@@ -69,11 +68,13 @@ th {
 
 section {
     padding-top: 30px;
-    margin-left: 4px;
+    margin: 0 0.5%;
 }
 
 section.admin input, select, textarea {
     display: block;
+    width: 100%;
+    max-width: 400px;
 }
 
 section.font input, select, textarea {
@@ -82,4 +83,40 @@ section.font input, select, textarea {
 
 span#user {
     float: right;
+}
+
+span#search {
+    float: left;
+}
+
+#topbar span#menu {
+    display: inline-block;
+    margin: 0 1%;
+}
+
+input#id {width: 100px;}
+
+
+section.info a {
+    display: block;
+    width: fit-content;
+}
+
+section.font table#fontlist {
+    width: 100%;
+    max-width: 500px;
+}
+
+section.media table#medialist {
+    width: 100%;
+    max-width: 960px;
+}
+
+#topbar a.actualpage {
+    text-decoration: underline;
+}
+
+section.media table#faviconlist {
+    width: 100%;
+    max-width: 640px;
 }

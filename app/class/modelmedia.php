@@ -40,17 +40,20 @@ class Modelmedia extends Model
 	{
 		$fileinfo = pathinfo($entry);
 
-		$filepath = $fileinfo['dirname'] . '.' . $fileinfo['extension'];
+		if(isset($fileinfo['extension'])) {
+			$filepath = $fileinfo['dirname'] . '.' . $fileinfo['extension'];
+	
+			$datas = array(
+				'id' => str_replace('.' . $fileinfo['extension'], '', $fileinfo['filename']),
+				'path' => $dir,
+				'extension' => $fileinfo['extension']
+			);
+			return new Media($datas);
 
-		$donnees = array(
-			'id' => str_replace('.' . $fileinfo['extension'], '', $fileinfo['filename']),
-			'path' => $dir,
-			'extension' => $fileinfo['extension']
-		);
+		} else {
+			return false;
+		}
 
-
-
-		return new Media($donnees);
 
 	}
 
@@ -63,21 +66,24 @@ class Modelmedia extends Model
 
 					$media = $this->getmedia($entry, $dir);
 
-
-					$media->analyse();
-
-					if (in_array($type, self::MEDIA_TYPES)) {
-						if ($media->type() == $type) {
+					if($media != false) {
+	
+						$media->analyse();
+	
+						if (in_array($type, self::MEDIA_TYPES)) {
+							if ($media->type() == $type) {
+								$list[] = $media;
+							}
+						} else {
 							$list[] = $media;
 						}
-					} else {
-						$list[] = $media;
+
 					}
+
 
 
 				}
 			}
-			return $list;
 		}
 
 		return $list;

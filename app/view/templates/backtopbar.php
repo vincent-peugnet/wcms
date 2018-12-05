@@ -1,5 +1,13 @@
 <div id="topbar">
 
+<span id="search">
+<form action="<?= $this->url('search') ?>" method="post">
+<input type="text" name="id" id="id" placeholder="page id" required>
+<input type="submit" value="go">
+</form>
+</span>
+
+
 <span id="user">
 
 <?php if($user->isvisitor()) { ?>
@@ -14,7 +22,7 @@
 <?php } else { ?>  
 
 <span>
-User level : <?= $user->level() ?> 
+<?= $user->level() ?> 
 </span>
 
 
@@ -33,17 +41,18 @@ User level : <?= $user->level() ?>
 
 <?php if($user->iseditor()) { ?>
 
-<span>
-<a href="<?= $this->url('home') ?>">home</a>
+<span id="menu">
+<a href="<?= $this->url('home') ?>" <?= $tab == 'home' ? 'class="actualpage"' : '' ?>>home</a>
+<a href="<?= $this->url('media') ?>" <?= $tab == 'media' ? 'class="actualpage"' : '' ?>>media</a>
+<a href="<?= $this->url('font') ?>" <?= $tab == 'font' ? 'class="actualpage"' : '' ?>>font</a>
 <?php
 if($user->isadmin()) {
 ?>
-<a href="<?= $this->url('font') ?>">font</a>
-<a href="<?= $this->url('admin') ?>">admin</a>
+<a href="<?= $this->url('admin') ?>" <?= $tab == 'admin' ? 'class="actualpage"' : '' ?>>admin</a>
 <?php
 }
 ?>
-| <i><a href="https://github.com/vincent-peugnet/wcms" target="_blank">github↝</a></i>
+<a href="<?= $this->url('info') ?>"  <?= $tab == 'info' ? 'class="actualpage"' : '' ?>>info</a>
 </span>
 
 

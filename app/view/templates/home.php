@@ -8,7 +8,7 @@
 
 <body>
 
-    <?php $this->insert('backtopbar', ['user' => $user]) ?>
+    <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'home']) ?>
 
 <?php if($user->iseditor()) { ?>
 
