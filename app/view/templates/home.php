@@ -63,7 +63,21 @@
 
 
         <table id="home2table">
-        <tr><th>x</th><th>id</th><th>edit</th><th>see</th><th>del</th><th>log</th><th>tag</th><th>summary</th><th>↘ to</th><th>↗ from</th><th>last modification</th><th>date of creation</th><th>privacy</th></tr>
+        <tr>
+        <th>x</th>
+        <th><a href="<?= $opt->getadress('id') ?>">id</a></th>
+        <th>edit</th>
+        <th>see</th>
+        <th>del</th>
+        <th>log</th>
+        <th><a href="<?= $opt->getadress('tag') ?>">tag</a></th>
+        <th>summary</th>
+        <th><a href="<?= $opt->getadress('linkto') ?>">link to</a></th>
+        <th><a href="<?= $opt->getadress('linkfrom') ?>">linkfrom</a></th>
+        <th><a href="<?= $opt->getadress('datemodif') ?>">last modification</a></th>
+        <th><a href="<?= $opt->getadress('datecreation') ?>">date of creation</a></th>
+        <th><a href="<?= $opt->getadress('secure') ?>">privacy</a></th>
+        </tr>
         <?php   foreach ($table2 as $item) { ?>
             <tr>
             <td><input type="checkbox" name="id[]"  value="<?= $item->id() ?>" id="<?= $item->id() ?>"></td>

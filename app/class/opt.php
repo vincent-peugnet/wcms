@@ -86,6 +86,32 @@ class Opt
         }
 	}
 
+	public function getadress($sortby)
+	{
+		if(in_array($sortby, $this->col)) {
+			if($this->sortby() === $sortby) {
+				$order = $this->order * -1;
+			} else {
+				$order = $this->order;
+			}
+			$adress = '?sortby=' . $sortby;
+			$adress .= '&order=' . $order;
+			$adress .= '&secure=' . $this->secure;
+			$adress .= '&tagcompare=' . $this->tagcompare;
+			foreach ($this->tagfilter as $tag) {
+				$adress .= '&tagfilter[]=' . $tag;
+			}
+			if($this->invert == 1) {
+				$adress .= '&invert=1';
+			}
+			$adress .= '&submit=filter';
+
+			return $adress;
+		} else {
+			returnfalse;
+		}
+	}
+
 
 
 	// _______________________________________________ G E T _______________________________________________

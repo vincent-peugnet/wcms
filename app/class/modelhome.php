@@ -12,20 +12,13 @@ class Modelhome extends Modeldb
 
         $opt = new Opt(Art2::classvarlist());
         $opt->setcol(['id', 'tag', 'linkfrom', 'linkto', 'description', 'title', 'datemodif', 'datecreation', 'secure']);
-        //$table = $listmanager->getlisteropt($opt);
-        //$listmanager->listcalclinkfrom($table);
         $opt->settaglist($table);
         $opt->submit();
-
-
 
         return $opt;
     }
 
-    public function optupdate()
-    {
-        
-    }
+
 
 
     public function table2($table, $opt)
