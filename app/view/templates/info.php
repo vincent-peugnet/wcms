@@ -38,7 +38,7 @@
 
 
 <nav>
-SUMMARY
+<h2>Manual Summary</h2>
 <ul>
     <li><a href="#startup">Startup</a></li>
     <ul>

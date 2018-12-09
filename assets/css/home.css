@@ -188,6 +188,7 @@ section.info nav {
     position: fixed;
     right: 3%;
     top: 20%;
+    margin: 7%;
 }
 
 section.info article code i {
@@ -200,6 +201,10 @@ section.info article code i {
 @media (max-width: 600px) {
     section.home .summary, section.home .linkfrom, section.home .linkto, section.home .delete, section.home .datecreation, section.home .date, section.home .log, section.home .secure, section.home .tag {
         display: none;
+    }
+
+    section.info nav {
+        position: relative;
     }
 
 }
