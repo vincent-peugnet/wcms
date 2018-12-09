@@ -38,6 +38,7 @@
 
 
 <nav>
+SUMMARY
 <ul>
     <li><a href="#startup">Startup</a></li>
     <ul>
@@ -50,8 +51,8 @@
     </ul>
     <li><a href="#editor">Editor</a></li>
     <ul>
-        <li><a href="#elementsynthax">Elements synthax</a></li>
-        <li><a href="#bodysynthax">Body synthax</a></li>
+        <li><a href="#elementsyntax">Elements syntax</a></li>
+        <li><a href="#bodysyntax">Body syntax</a></li>
     </ul>
 </ul>
 
@@ -141,13 +142,13 @@
 
 You can use any of them, only one or all at the same time, as you prefer.
 
-<h4 id="elementsynthax">Element synthax</h4>
+<h4 id="elementsyntax">Element syntax</h4>
 
-<p>In any of the five html element you can use to store content, you can use the following synthax, that is specific to W, extending the Markdown syntax :</p>
+<p>In any of the five html element you can use to store content, you can use the following syntax, that is specific to W, extending the Markdown syntax :</p>
 
 <h5>quick internal link</h5>
 
-<p>You can create internal link very quickly, only by using the id of yout page. The link text will be remplaced by the title associated with this page.</p>
+<p>You can create internal link very quickly, only by using the id of your page. The link text will be remplaced by the title associated with this page.</p>
 
 <blockquote>
     [<i>page_id</i>]
@@ -174,7 +175,7 @@ You can use any of them, only one or all at the same time, as you prefer.
     %DESCRIPTION%
 </blockquote>
 
-<p>As for the title, this will output the <code>description</code> attribute od the page</p>
+<p>As for the title, this will output the <code>description</code> attribute of the page</p>
 
 <h5>Date shortcut</h5>
 
@@ -187,13 +188,13 @@ You can use any of them, only one or all at the same time, as you prefer.
 
 <h5>Automatic summary</h5>
 
-<p>You can generate summary automaticly, based on the page <code>&lt;h*&gt;</code> elements</p>
+<p>You can automatically generate summary, based on the page <code>&lt;h*&gt;</code> elements</p>
 
 <blockquote>
     %SUMMARY%
 </blockquote>
 
-<p>This will generate a classic <code>ul</code> html list.</p>
+<p>This will generate a classic <code>&lt;ul&gt;</code> html list.</p>
 
 <h5>Automatic list by tag</h5>
 
@@ -203,7 +204,7 @@ You can use any of them, only one or all at the same time, as you prefer.
     %%<i>tag</i>%%
 </blockquote>
 
-<p>Let's suppose we are in page3 and have page2, page3, page5, using this tag, this will output :</p>
+<p>Let's suppose we are in page3 and we have page2, page3, page5, using this tag, this will output :</p>
 
 <blockquote>
 &lt;ul id="<i>tag</i>"&gt;
@@ -238,7 +239,7 @@ You can use any of them, only one or all at the same time, as you prefer.
 
 
 
-<h4 id="bodysynthax">Body synthax</h4>
+<h4 id="bodysyntax">Body syntax</h4>
 
 
 

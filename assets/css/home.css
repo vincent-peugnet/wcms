@@ -155,14 +155,17 @@ section.info article h2#manual {
 }
 
 section.info article h3 {
-    border-top: solid 1px grey;
-    margin-top: 60px;
+    border-bottom: solid 1px grey;
+    margin-top: 100px;
     padding-top: 15px;
-    font-size: xx-large;
+    font-size: 35px;
 }
 
 section.info article h4 {
     background-color: darkgrey;
+    padding: 10px;
+    font-size: x-large;
+    margin-top: 70px;
 }
 
 section.info article h5 {
@@ -183,6 +186,20 @@ section.info blockquote {
 
 section.info nav {
     position: fixed;
-    right: 0;
+    right: 3%;
     top: 20%;
+}
+
+section.info article code i {
+    font-style: normal;
+    color: #7b97b9;
+}
+
+
+
+@media (max-width: 600px) {
+    section.home .summary, section.home .linkfrom, section.home .linkto, section.home .delete, section.home .datecreation, section.home .date, section.home .log, section.home .secure, section.home .tag {
+        display: none;
+    }
+
 }

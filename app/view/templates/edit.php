@@ -10,7 +10,7 @@
 <body>
 <section class="editor">
 
-    <?php $this->insert('navart', ['user' => $user, 'art' => $art, 'artexist' => $artexist]) ?>
+    <!-- <?php $this->insert('navart', ['user' => $user, 'art' => $art, 'artexist' => $artexist]) ?> -->
 
 
 

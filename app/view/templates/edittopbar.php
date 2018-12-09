@@ -14,18 +14,17 @@
 
 
     <span>
-        <a href="<?= $this->uart('artconfirmdelete', $art->id()) ?>">✖ delete</a>
+        <a href="<?= $this->uart('artconfirmdelete', $art->id()) ?>"><span class="symbol">✖</span><span class="text">delete</span></a>
     </span>
 
 
 
     <span>
     <a href="<?= $this->uart('artread/', $art->id()) ?>" target="_blank" class="icon" >👁</a>
-    <a href="<?= $this->uart('artlog', $art->id()) ?>" target="_blank" class="icon" >⁋</a>
     </span>
     <span id="headid"><?= $art->id() ?></span>
 
-<span>
+<span id="fontsize">
 
     <label for="fontsize">Font-size</label>
     <input type="number" name="fontsize" value="<?= Config::fontsize() ?>" id="fontsize">
@@ -33,14 +32,16 @@
 
 
 
-<span id="test">
+<span id="menu">
     <?php if($user->iseditor()) { ?>
+
+    <a href="<?= $this->url('font') ?>"><span class="symbol">📝</span><span class="text">font</span></a>
+    <a href="<?= $this->url('media') ?>"><span class="symbol">📁</span><span class="text">media</span></a>
 
     <?php
     if($user->isadmin()) {
     ?>
-    <a href="<?= $this->url('font') ?>">font</a>
-    <a href="<?= $this->url('admin') ?>">admin</a>
+    <a href="<?= $this->url('admin') ?>"><span class="symbol">🔑</span><span class="text">admin</span></a>
     <?php
     }
     }

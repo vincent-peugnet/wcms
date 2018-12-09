@@ -56,20 +56,20 @@
             if(!empty($art->templatecss())) {
                 ?>
                 <div class="subtemplate">
-                <input type="checkbox" name="ireccursivecss" id="ireccursivecss" <?= $art->template()['cssreccursive'] === true ? 'checked' : '' ?>>
-                <label for="ireccursivecss">Reccursive template</label>
+                <input type="checkbox" name="templateoptions['reccursivecss']" id="oreccursivecss" <?= $art->template()['cssreccursive'] === true ? 'checked' : '' ?>>
+                <label for="oreccursivecss">Reccursive template</label>
                 </div>
                 <div class="subtemplate">
-                <input type="checkbox" name="iquickcss" id="iquickcss" <?= $art->template()['cssquickcss'] === true ? 'checked' : '' ?>>
-                <label for="iquickcss">Quickcss</label>
+                <input type="checkbox" name="templateoptions['quickcss']" id="oquickcss" <?= $art->template()['cssquickcss'] === true ? 'checked' : '' ?>>
+                <label for="oquickcss">Quickcss</label>
                 </div>
                 <div class="subtemplate">
-                <input type="checkbox" name="iexternalcss" id="iexternalcss" <?= $art->template()['externalcss'] === true ? 'checked' : '' ?>>
-                <label for="iexternalcss">External CSS</label>
+                <input type="checkbox" name="templateoptions['externalcss']" id="oexternalcss" <?= $art->template()['externalcss'] === true ? 'checked' : '' ?>>
+                <label for="pexternalcss">External CSS</label>
                 </div>
                 <div class="subtemplate">
-                <input type="checkbox" name="ifavicon" id="ifavicon" <?= $art->template()['cssfavicon'] === true ? 'checked' : '' ?>>
-                <label for="ifavicon">Favicon</label>
+                <input type="checkbox" name="templateoptions['favicon']" id="ofavicon" <?= $art->template()['cssfavicon'] === true ? 'checked' : '' ?>>
+                <label for="ofavicon">Favicon</label>
                 </div>
                 <?php
             }

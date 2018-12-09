@@ -177,8 +177,8 @@ class Modelrender extends Modelart
 
 	public function parser(string $text)
 	{
-		$text = str_replace('<a href="~', '<a class="media" target="_blank" href="' . Model::mediapath(), $text);
-		$text = str_replace('<img src="~', '<img class="local" src="' . Model::mediapath(), $text);
+
+		$text = $this->media($text);
 
 		$text = $this->headerid($text);
 
@@ -194,6 +194,13 @@ class Modelrender extends Modelart
 
 		$text = $this->autourl($text);
 
+		return $text;
+	}
+
+	public function media(string $text): string
+	{
+		$rend = $this;
+		$text = preg_replace('%(src|target)="((\/?[\w-_]+)+\.[a-z0-9]{1,5})"%', '$1="'.Model::mediapath() . '$2"', $text);
 		return $text;
 	}
 

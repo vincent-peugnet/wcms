@@ -11,7 +11,7 @@ class Modelhome extends Modeldb
     {
 
         $opt = new Opt(Art2::classvarlist());
-        $opt->setcol(['id', 'tag', 'linkfrom', 'linkto', 'description', 'title', 'datemodif', 'datecreation', 'secure']);
+        $opt->setcol(['id', 'tag', 'linkfrom', 'linkto', 'description', 'title', 'datemodif', 'datecreation', 'date', 'secure']);
         $opt->settaglist($table);
         $opt->submit();
 

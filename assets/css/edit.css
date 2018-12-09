@@ -28,6 +28,8 @@ body {
     position: relative;
     height: 100%;
     background-color: lightgrey;
+    display: flex;
+    overflow: hidden;
 }
 
 
@@ -98,10 +100,12 @@ body {
     position: relative;
 }
 
+/* clip the tabs names */
 
 .tabs .tab
 {
-    float: left;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .tabs .tab .content
@@ -121,8 +125,8 @@ body {
 .tab label
 {
 	margin-right: 10px;
-    border: solid rgba(0, 0, 0, 0);
-    padding: 0px 2px;
+	border: solid rgba(0, 0, 0, 0);
+	padding: 0px 2px;
 }
 
 .tab label.edited {
@@ -136,6 +140,7 @@ body {
 .checkboxtab:checked ~ label
 {
     border: solid 1px;
+    background: white;
 }
 
 .checkboxtab:checked ~ .content
@@ -164,6 +169,7 @@ html {
 
 .editor .tabs label {
     line-height: 30px;
+    overflow: hidden;
 }
 
 .editor #topbar {
@@ -227,7 +233,7 @@ form#update {
     height: 30px;
 }
 
-#update span {margin-right: 1%;}
+#update span {margin: 0 0.2%;}
 
 .editor .panel input[type="checkbox"] {
     width: auto;
@@ -246,4 +252,23 @@ form#update {
 .panel summary {
     background-color: grey;
     color: lightgrey;
+}
+
+.panel summary:hover {
+    cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .bar {
+        display: none;
+    }
+
+    span#fontsize {
+        display: none;
+    }
+
+    #topbar .text {
+        display: none;
+    }
+
 }

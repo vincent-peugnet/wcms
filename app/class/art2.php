@@ -169,6 +169,8 @@ class Art2
 			return $this->date->format('Y-m-d');
 		} elseif ($option == 'ptime') {
 			return $this->date->format('H:i');
+		} elseif ($option = 'dmy') {
+			return $this->date->format('d/m/Y');
 		}
 
 
