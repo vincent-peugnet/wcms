@@ -6,3 +6,14 @@ body {
 a.external::before { 
     content: "⧉ ";
 }
+
+ul.medialist {
+    max-width: 400px;
+    width: 100%;
+    list-style: none;
+    padding: 0;
+}
+
+.medialist img {
+    width: 100%;
+}

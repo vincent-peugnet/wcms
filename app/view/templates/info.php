@@ -233,6 +233,42 @@ You can use any of them, only one or all at the same time, as you prefer.
 <p>The list is ordered by the <code>date</code> attribute, that you can set manualy for each page. You may have noticed that the actual page (page 3), has been specified using <code>.actualpage</code> class. This can be usefull to create a menu and highlight the current page.</p>
 
 
+<h5>Article separator</h5>
+
+<p>You can use the <code>article</code> html element, by separating text using at least <code>====</code>. It is of course possible to use Markdown synthax inside those articles separators</p>
+
+<blockquote>
+====</br></br>
+<i>some text</i></br></br>
+======<i>important</i></br></br>
+<i>this is a longer text</i></br></br>
+======</br></br>
+</blockquote>
+
+<p>This will ouptut :</p>
+
+<blockquote>
+&lt;article&gt;</br>
+<i>some text</i></br>
+&lt;/article&gt;</br>
+&lt;article id="<i>important</i>"&gt;</br>
+<i>this is a longer textt</i></br>
+&lt;/article&gt;</br>
+</blockquote>
+
+
+<p>As you may have noticed, there is also the possibility to add a custom <code>id</code> to any of the articles created that way</p>
+
+
+<h5>Media list</h5>
+
+<p>As it is too long adding all media of a folder one by one, you can just print the content of an entire folder using this method.</p>
+
+<blockquote>
+%MEDIA:<i>__repository__</i>
+</blockquote>
+
+<p>Just point to the good directory inside the media folder. This will output html list, creating image elements, audio players, video players, or just basic link, depending on the media type.</p>
 
 
 
@@ -286,19 +322,19 @@ __the content of your section__
 <h5>Advanced includings</h5>
 
 <blockquote>
-    %<i>HTML_ELEMENT</i>.<i>page_id</i>%
+    %<i>HTML_ELEMENT</i>:<i>page_id</i>%
 </blockquote>
 
 <p>By doing this, you can include the <code>HTML_ELEMENT</code> of the page using this <code>page_id</code> id. You can even nest differents pages source by adding <code>page_id</code> separated by a dot, this would be like :</p>
 
 <blockquote>
-    %<i>HTML_ELEMENT</i>.<i>page1_id</i>.<i>page2_id</i>% 
+    %<i>HTML_ELEMENT</i>:<i>page1_id</i>+<i>page2_id</i>% 
 </blockquote>
 
 <p>And you can mix it with the original page content using <code>!</code> identifier</p>
 
 <blockquote>
-    %<i>HTML_ELEMENT</i>%<i>page3_id</i>.<i>!</i>%
+    %<i>HTML_ELEMENT</i>:<i>page3_id</i>+<i>!</i>%
 </blockquote>
 
 <p>This will output :</p>

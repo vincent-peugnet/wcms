@@ -10,6 +10,8 @@
 
 <section class="admin">
 
+    <h1>Administration</h1>
+
     <form action="<?= $this->url('adminupdate') ?>" method="post">
 
     <input type="submit" value="Update configuration">

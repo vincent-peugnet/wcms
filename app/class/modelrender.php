@@ -56,21 +56,24 @@ class Modelrender extends Modelart
 			} else {
 				$templatebody = $templateart->body();
 			}
-			$body = $templatebody . PHP_EOL . $this->art->body();
+			$body = $templatebody;
 		} else {
 			$body = $this->art->body();
 		}
+		$body = $this->article($body);
+		$body = $this->automedialist($body);
+		$body = $this->autotaglistupdate($body);
 		return $body;
 	}
 
 	public function getbody(string $body)
 	{
 		$rend = $this;
-		$body = preg_replace_callback('~\%(SECTION|ASIDE|NAV|HEADER|FOOTER)((\.([a-z0-9-_]+|!))*|!)?\%~', function ($match) use ($rend) {
+		$body = preg_replace_callback('~\%(SECTION|ASIDE|NAV|HEADER|FOOTER)((:[a-z0-9-_]+|!)(\+([a-z0-9-_]+|!))*)?\%~', function ($match) use ($rend) {
 			$element = strtolower($match[1]);
 			$getelement = '';
 			if (isset($match[2]) && !empty($match[2])) {
-				$templatelist = str_replace('!', $this->art->id(), explode('.', ltrim($match[2], '.')));
+				$templatelist = str_replace('!', $this->art->id(), explode('+', ltrim($match[2], ':')));
 				foreach ($templatelist as $template) {
 					if ($template === $rend->art->id()) {
 						$templateelement = $rend->art->$element();
@@ -94,6 +97,7 @@ class Modelrender extends Modelart
 	public function elementparser($element)
 	{
 		$element = $this->article($element);
+		$element = $this->automedialist($element);
 		$element = $this->autotaglistupdate($element);
 		$element = $this->markdown($element);
 
@@ -200,7 +204,7 @@ class Modelrender extends Modelart
 	public function media(string $text): string
 	{
 		$rend = $this;
-		$text = preg_replace('%(src|target)="((\/?[\w-_]+)+\.[a-z0-9]{1,5})"%', '$1="'.Model::mediapath() . '$2"', $text);
+		$text = preg_replace('%(src|href)="((\/?[\w-_]+)+\.[a-z0-9]{1,5})"%', '$1="'.Model::mediapath() . '$2" target="_blank" class="media"', $text);
 		return $text;
 	}
 
@@ -296,6 +300,47 @@ class Modelrender extends Modelart
 			return '<article ' . $id . '  markdown="1" >' . PHP_EOL . PHP_EOL . $matches[3] . PHP_EOL . PHP_EOL . '</article>' . PHP_EOL . PHP_EOL;
 		}, $text);
 		$text = preg_replace('/\R\R[=]{3,}([\w-]*)\R/', '', $text);
+		return $text;
+	}
+
+	public function automedialist(string $text): string
+	{
+		$text = preg_replace_callback('~\%MEDIA:(([a-z0-9-_]+(\/([a-z0-9-_])+)*))\%~',
+		function($matches) {
+			$dir = trim($matches[1], '/');
+			$mediamanager = new Modelmedia();
+
+			
+
+			if(is_dir(Model::MEDIA_DIR . $dir)) {
+				$medialist = $mediamanager->getlistermedia(Model::MEDIA_DIR . $dir . '/');
+				
+				$dirid = str_replace('/', '-', $dir);
+				
+				$ul = '<ul class="medialist" id="'.$dirid.'">' . PHP_EOL;
+				
+				foreach ($medialist as $media) {
+					$ul .= '<li>';
+					if($media->type() == 'image') {
+						$ul .= '<img alt="'.$media->id().'" id="'.$media->id().'" src="'.$media->getfullpath().'" >';
+					} elseif ($media->type() == 'sound') {
+						$ul .= '<audio id="'.$media->id().'" controls src="'.$media->getfullpath().'" </audio>';
+					} elseif ($media->type() == 'video') {
+						$ul .= '<video controls><source src="'.$media->getfullpath().'" type="video/'.$media->extension().'"></video>';
+					} elseif ($media->type() == 'other') {
+						$ul .= '<a href="'.$media->getfullpath().'" target="_blank" class="media" >'.$media->id().'.'.$media->extension().'</a>';
+					}
+					$ul .= '</li>' . PHP_EOL;
+				}
+
+				$ul .= '</ul>' . PHP_EOL;
+
+				return $ul;
+			} else {
+				return 'directory not founded';
+			}
+		}, $text);
+
 		return $text;
 	}
 

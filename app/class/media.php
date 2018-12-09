@@ -54,6 +54,12 @@ class Media
 	}
 
 
+	public function getfullpath()
+	{
+		return '/' . Config::basepath() . '/' . $this->path() . $this->id() . '.' . $this->extension();
+	}
+
+
 
 // _________________________________________________ G E T ____________________________________________________
 

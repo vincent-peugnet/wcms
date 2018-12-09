@@ -94,7 +94,7 @@ span#search {
     margin: 0 1%;
 }
 
-input#id {width: 100px;}
+#topbar input[type="text"], #topbar input[type="password"] {width: 100px;}
 
 
 section.font table#fontlist {
