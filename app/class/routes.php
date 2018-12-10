@@ -19,6 +19,8 @@ class Routes
             ['GET', '/!co', 'Controllerconnect#connect', 'connect'],
             ['POST', '/!search', 'Controllerhome#search', 'search'],
             ['GET', '/!media', 'Controllermedia#desktop', 'media'],
+            ['POST', '/!media', 'Controllermedia#upload', 'mediaupload'],
+            ['POST', '/!media', 'Controllermedia#folder', 'mediafolder'],
             ['GET', '/!font', 'Controllerfont#desktop', 'font'],
             ['POST', '/!admin', 'Controlleradmin#update', 'adminupdate'],
             ['GET', '/!admin', 'Controlleradmin#desktop', 'admin'],

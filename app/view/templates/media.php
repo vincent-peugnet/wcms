@@ -10,47 +10,72 @@
 
 <section class="media">
 
-<h1>Media</h1>
+<h1>Explorer</h1>
+
+
+<table id="dirlsit">
+<tr><th>folder</th><th>files</th></tr>
+
+<?php
+
+function treecount(array $dir, string $dirname, int $deepness, string $path, string $currentdir) {
+    if($path  === $currentdir) {
+        $folder = '├─📂<strong>'. $dirname.'<strong>';
+    } else {
+        $folder = '├─📁'. $dirname;
+    }
+    echo '<tr>';
+    echo '<td><a href="?path='.$path.'">'. str_repeat('⁭⁮ ‎ ‎', $deepness) .$folder.'</a></td>';
+    echo '<td>'.$dir['dirfilecount'].'</td>';
+    echo '</tr>';
+    foreach ($dir as $key => $value) {
+        if(is_array($value)) {
+            treecount($value, $key, $deepness + 1, $path . DIRECTORY_SEPARATOR . $key, $currentdir);
+        }
+    }
+}
+
+treecount($dirlist, 'media', 0, 'media', $dir);
+
+?>
+
+
+
+</table>
+
+<h2><?= $dir ?></h2>
+
+<form id="addfolder" action="<?= $this->url('mediafolder') ?>" method="post">
+    <label for="foldername">📂 New folder</label>
+    <input type="text" name="foldername" id="foldername" placeholder="folder name" >
+    <input type="hidden" name="dir" value="<?= $dir ?>">
+    <input type="submit" value="create folder">
+</form>
+
+<form id=addmedia action="<?= $this->url('mediaupload') ?>" method="post" enctype="multipart/form-data">
+    <label for="file">🚀 Upload files</label>
+    <input type='file' id="file" name='file[]' multiple>
+    <input type="hidden" name="dir" value="<?= $dir ?>">
+    <input type="submit" value="upload">
+</form>
+
+
 
 <table id="medialist">
-<tr><th>id</th><th>extension</th><th>path</th><th>type</th><th>size</th><th>width</th><th>height</th><th>lengh</th></tr>
+<tr><th>id</th><th>ext</th><th>type</th><th>size</th><th>width</th><th>height</th><th>lengh</th></tr>
 
 <?php
 foreach ($medialist as $media) {
     ?>
     <tr>
-    <td><?= $media->id() ?></td>
+    <td><a href="<?= $media->getfullpath() ?>" target="_blank"><?= $media->id() ?></a></td>
     <td><?= $media->extension() ?></td>
-    <td><?= $media->path() ?></td>
-    <td><?= $media->type() ?></td>
+
+    <td><?= $media->type() == 'image' ? 'image <span class="thumbnail">👁<img src="'.$media->getfullpath().'"></span>' : $media->type() ?></td>
     <td><?= readablesize($media->size()) ?></td>
     <td><?= $media->width() ?></td>
     <td><?= $media->height() ?></td>
     <td><?= $media->length() ?></td>
-    </tr>
-    <?php
-}
-
-
-?>
-
-</table>
-
-<h1>Favicon</h1>
-
-<table id="faviconlist">
-<tr><th>id</th><th>extension</th><th>path</th><th>size</th><th>width</th><th>height</th></tr>
-
-<?php
-foreach ($faviconlist as $favicon) {
-    ?>
-    <tr>
-    <td><?= $favicon->id() ?></td>
-    <td><?= $favicon->extension() ?></td>
-    <td><?= $favicon->path() ?></td>
-    <td><?= readablesize($favicon->size()) ?></td>
-    <td><?= $favicon->width() ?></td>
-    <td><?= $favicon->height() ?></td>
     </tr>
     <?php
 }
