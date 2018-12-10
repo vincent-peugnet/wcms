@@ -69,9 +69,11 @@
 
 <p>There is'nt a real start of anything when you're using W.</p>
 
+<p>Just type an adress in your web browser, after your W folder. You should see an empty page, not existing yet. You can login to create one at this adress. If you are already logged in, you can juste type <code><i>page_id</i>/add</code>, this will directly create a page at this adress.</p>
 
+<p>This <code><i>page_id</i></code> is the identifier of each page, you cant change it later, this is like a real solid adress, it cant move. It can only contain lowercase letters, numbers, hyphens or underscore charachters.</p>
 
-
+<p>No visitor can see the full list of pages you've created. The only way to see the whole map of your project, is to be conected at least as an editor, and go to the "homepage", the root adress where W is instaled.</p>
 
 <h3 id="structure">Structure</h3>
 

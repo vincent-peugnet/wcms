@@ -132,6 +132,27 @@ class Modelmedia extends Model
 
 	}
 
+	public function upload(string $target)
+	{
+        if($target[strlen($target)-1] != DIRECTORY_SEPARATOR)
+                $target .= DIRECTORY_SEPARATOR;
+            $count=0;
+            foreach ($_FILES['file']['name'] as $filename) 
+            {
+                $fileinfo = pathinfo($filename);
+                $extension = idclean($fileinfo['extension']);
+                $id = idclean($fileinfo['filename']);
+
+                $temp=$target;
+                $tmp=$_FILES['file']['tmp_name'][$count];
+                $count=$count + 1;
+                $temp .=  $id .'.' .$extension;
+                move_uploaded_file($tmp,$temp);
+                $temp='';
+                $tmp='';
+            }
+	}
+
 }
 
 

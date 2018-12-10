@@ -216,6 +216,17 @@ section.media form {
     margin: 1%;
 }
 
+section.media div#tree, section.media div#explorer {
+    display: inline-grid;
+}
+
+section.media code {
+    color: #9cbfe8;
+    background-color: darkslategrey;
+    font-size: small;
+    padding: 1px;
+}
+
 @media (max-width: 600px) {
     section.home .summary, section.home .linkfrom, section.home .linkto, section.home .delete, section.home .datecreation, section.home .date, section.home .log, section.home .secure, section.home .tag {
         display: none;
@@ -226,3 +237,5 @@ section.media form {
     }
 
 }
+
+

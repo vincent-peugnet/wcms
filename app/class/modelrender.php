@@ -322,13 +322,13 @@ class Modelrender extends Modelart
 				foreach ($medialist as $media) {
 					$ul .= '<li>';
 					if($media->type() == 'image') {
-						$ul .= '<img alt="'.$media->id().'" id="'.$media->id().'" src="'.$media->getfullpath().'" >';
+						$ul .= '<img alt="'.$media->id().'" id="'.$media->id().'" src="'.$media->getincludepath().'" >';
 					} elseif ($media->type() == 'sound') {
-						$ul .= '<audio id="'.$media->id().'" controls src="'.$media->getfullpath().'" </audio>';
+						$ul .= '<audio id="'.$media->id().'" controls src="'.$media->getincludepath().'" </audio>';
 					} elseif ($media->type() == 'video') {
-						$ul .= '<video controls><source src="'.$media->getfullpath().'" type="video/'.$media->extension().'"></video>';
+						$ul .= '<video controls><source src="'.$media->getincludepath().'" type="video/'.$media->extension().'"></video>';
 					} elseif ($media->type() == 'other') {
-						$ul .= '<a href="'.$media->getfullpath().'" target="_blank" class="media" >'.$media->id().'.'.$media->extension().'</a>';
+						$ul .= '<a href="'.$media->getincludepath().'" target="_blank" class="media" >'.$media->id().'.'.$media->extension().'</a>';
 					}
 					$ul .= '</li>' . PHP_EOL;
 				}
@@ -337,7 +337,7 @@ class Modelrender extends Modelart
 
 				return $ul;
 			} else {
-				return 'directory not founded';
+				return 'directory "'.$dir.'" not found';
 			}
 		}, $text);
 
@@ -402,7 +402,7 @@ class Modelrender extends Modelart
 				}
 
 			}
-			$ul = '<ul id="' . $tag . '">' . PHP_EOL;
+			$ul = '<ul class="taglist" id="' . $tag . '">' . PHP_EOL;
 			$this->artlistsort($li, 'date', -1);
 			foreach ($li as $item) {
 				if ($item->id() === $this->art->id()) {

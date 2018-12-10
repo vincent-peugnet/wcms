@@ -56,7 +56,17 @@ class Media
 
 	public function getfullpath()
 	{
-		return '/' . Config::basepath() . '/' . $this->path() . $this->id() . '.' . $this->extension();
+		$fullpath = '/' . Config::basepath() . '/'. $this->path() . $this->id() . '.' . $this->extension();
+		$fullpath = str_replace('\\', '/', $fullpath);
+		return $fullpath;
+	}
+
+	public function getincludepath()
+	{
+		$includepath = $this->path() . $this->id() . '.' . $this->extension();
+		$includepath = str_replace('\\', '/', $includepath);
+		$includepath = substr($includepath, 6);
+		return $includepath;
 	}
 
 

@@ -10,6 +10,8 @@
 
 <section class="media">
 
+
+<div id="tree">
 <h1>Explorer</h1>
 
 
@@ -18,18 +20,19 @@
 
 <?php
 
-function treecount(array $dir, string $dirname, int $deepness, string $path, string $currentdir) {
-    if($path  === $currentdir) {
-        $folder = '├─📂<strong>'. $dirname.'<strong>';
+function treecount(array $dir, string $dirname, int $deepness, string $path, string $currentdir)
+{
+    if ($path === $currentdir) {
+        $folder = '├─📂<strong>' . $dirname . '<strong>';
     } else {
-        $folder = '├─📁'. $dirname;
+        $folder = '├─📁' . $dirname;
     }
     echo '<tr>';
-    echo '<td><a href="?path='.$path.'">'. str_repeat('⁭⁮ ‎ ‎', $deepness) .$folder.'</a></td>';
-    echo '<td>'.$dir['dirfilecount'].'</td>';
+    echo '<td><a href="?path=' . $path . '">' . str_repeat('⁭⁮ ‎ ‎', $deepness) . $folder . '</a></td>';
+    echo '<td>' . $dir['dirfilecount'] . '</td>';
     echo '</tr>';
     foreach ($dir as $key => $value) {
-        if(is_array($value)) {
+        if (is_array($value)) {
             treecount($value, $key, $deepness + 1, $path . DIRECTORY_SEPARATOR . $key, $currentdir);
         }
     }
@@ -42,6 +45,11 @@ treecount($dirlist, 'media', 0, 'media', $dir);
 
 
 </table>
+</div>
+
+
+<div id="explorer">
+
 
 <h2><?= $dir ?></h2>
 
@@ -53,7 +61,7 @@ treecount($dirlist, 'media', 0, 'media', $dir);
 </form>
 
 <form id=addmedia action="<?= $this->url('mediaupload') ?>" method="post" enctype="multipart/form-data">
-    <label for="file">🚀 Upload files</label>
+    <label for="file">🚀 Upload file(s)</label>
     <input type='file' id="file" name='file[]' multiple>
     <input type="hidden" name="dir" value="<?= $dir ?>">
     <input type="submit" value="upload">
@@ -62,7 +70,7 @@ treecount($dirlist, 'media', 0, 'media', $dir);
 
 
 <table id="medialist">
-<tr><th>id</th><th>ext</th><th>type</th><th>size</th><th>width</th><th>height</th><th>lengh</th></tr>
+<tr><th>id</th><th>ext</th><th>type</th><th>size</th><th>width</th><th>height</th><th>lengh</th><th>code</th></tr>
 
 <?php
 foreach ($medialist as $media) {
@@ -70,20 +78,37 @@ foreach ($medialist as $media) {
     <tr>
     <td><a href="<?= $media->getfullpath() ?>" target="_blank"><?= $media->id() ?></a></td>
     <td><?= $media->extension() ?></td>
-
-    <td><?= $media->type() == 'image' ? 'image <span class="thumbnail">👁<img src="'.$media->getfullpath().'"></span>' : $media->type() ?></td>
+    <td><?= $media->type() == 'image' ? 'image <span class="thumbnail">👁<img src="' . $media->getfullpath() . '"></span>' : $media->type() ?></td>
     <td><?= readablesize($media->size()) ?></td>
     <td><?= $media->width() ?></td>
     <td><?= $media->height() ?></td>
     <td><?= $media->length() ?></td>
+    <td><code>
+    <?php
+        if($media->type() == 'image') {
+            ?>
+            ![<?= $media->id() ?>](<?= $media->getincludepath() ?>)
+            <?php
+        } elseif ($media->type() == 'other') {
+            ?>
+            [<?= $media->id() ?>.<?= $media->extension() ?>](<?= $media->getincludepath() ?>)
+            <?php
+        } else {
+            echo $media->getincludepath();
+        }
+        ?>
+    </code></td>
     </tr>
     <?php
+
 }
 
 
 ?>
 
 </table>
+
+</div>
 
 </section>
 </body>
