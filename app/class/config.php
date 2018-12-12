@@ -15,7 +15,7 @@ abstract class Config
 	protected static $basepath = '';
 	protected static $route404;
 	protected static $existnot = 'This page does not exist yet';
-	protected static $defaultbody = '%HEADER%'. PHP_EOL .PHP_EOL . '%NAV%'. PHP_EOL .PHP_EOL . '%ASIDE%'. PHP_EOL .PHP_EOL . '%SECTION%'. PHP_EOL .PHP_EOL . '%FOOTER%';
+	protected static $defaultbody = '%HEADER%'. PHP_EOL .PHP_EOL . '%NAV%'. PHP_EOL .PHP_EOL . '%ASIDE%'. PHP_EOL .PHP_EOL . '%MAIN%'. PHP_EOL .PHP_EOL . '%FOOTER%';
 	protected static $defaultart = '';
 	protected static $defaultfavicon = '';
 	protected static $showeditmenu = true;

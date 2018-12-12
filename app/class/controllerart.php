@@ -118,7 +118,7 @@ class Controllerart extends Controller
 
 
         if ($this->importart() && $this->canedit()) {
-            $tablist = ['section' => $this->art->section(), 'css' => $this->art->css(), 'header' => $this->art->header(), 'nav' => $this->art->nav(), 'aside' => $this->art->aside(), 'footer' => $this->art->footer(), 'body' => $this->art->body(), 'javascript' => $this->art->javascript()];
+            $tablist = ['main' => $this->art->main(), 'css' => $this->art->css(), 'header' => $this->art->header(), 'nav' => $this->art->nav(), 'aside' => $this->art->aside(), 'footer' => $this->art->footer(), 'body' => $this->art->body(), 'javascript' => $this->art->javascript()];
 
             $faviconlist = $this->mediamanager->listfavicon();
             $idlist = $this->artmanager->list();

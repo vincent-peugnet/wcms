@@ -8,7 +8,7 @@
 <style>.tabs textarea{font-size: <?= Config::fontsize() ?>px}</style>
 
 <body>
-<section class="editor">
+<main class="editor">
 
     <!-- <?php $this->insert('navart', ['user' => $user, 'art' => $art, 'artexist' => $artexist]) ?> -->
 
@@ -26,7 +26,7 @@
 
 </form>
 
-</section>
+</main>
 </body>
 
 <?php $this->stop('page') ?>

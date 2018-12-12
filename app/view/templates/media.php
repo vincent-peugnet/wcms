@@ -8,7 +8,7 @@
     <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'media']) ?>
 
 
-<section class="media">
+<main class="media">
 
 
 <div id="tree">
@@ -28,7 +28,7 @@ function treecount(array $dir, string $dirname, int $deepness, string $path, str
         $folder = '├─📁' . $dirname;
     }
     echo '<tr>';
-    echo '<td><a href="?path=' . $path . '">' . str_repeat('⁭⁮ ‎ ‎', $deepness) . $folder . '</a></td>';
+    echo '<td><a href="?path=' . $path . '">' . str_repeat('&nbsp;&nbsp;', $deepness) . $folder . '</a></td>';
     echo '<td>' . $dir['dirfilecount'] . '</td>';
     echo '</tr>';
     foreach ($dir as $key => $value) {
@@ -78,7 +78,7 @@ foreach ($medialist as $media) {
     <tr>
     <td><a href="<?= $media->getfullpath() ?>" target="_blank"><?= $media->id() ?></a></td>
     <td><?= $media->extension() ?></td>
-    <td><?= $media->type() == 'image' ? 'image <span class="thumbnail">👁<img src="' . $media->getfullpath() . '"></span>' : $media->type() ?></td>
+    <td><?= $media->type() == 'image' ? '<span class="thumbnail">image 👁<img src="' . $media->getfullpath() . '"></span>' : $media->type() ?></td>
     <td><?= readablesize($media->size()) ?></td>
     <td><?= $media->width() ?></td>
     <td><?= $media->height() ?></td>
@@ -110,7 +110,7 @@ foreach ($medialist as $media) {
 
 </div>
 
-</section>
+</main>
 </body>
 
 <?php $this->stop('page') ?>

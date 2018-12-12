@@ -66,18 +66,18 @@ th {
     color: black;
 }
 
-section {
+main {
     padding-top: 30px;
     margin: 0 0.5%;
 }
 
-section.admin input, select, textarea {
+main.admin input, select, textarea {
     display: block;
     width: 100%;
     max-width: 400px;
 }
 
-section.font input, select, textarea {
+main.font input, select, textarea {
     display: block;
 }
 
@@ -97,12 +97,12 @@ span#search {
 #topbar input[type="text"], #topbar input[type="password"] {width: 100px;}
 
 
-section.font table#fontlist {
+main.font table#fontlist {
     width: 100%;
     max-width: 500px;
 }
 
-section.media table#medialist {
+main.media table#medialist {
     width: 100%;
     max-width: 960px;
 }
@@ -111,31 +111,31 @@ section.media table#medialist {
     text-decoration: underline;
 }
 
-section.media table#faviconlist {
+main.media table#faviconlist {
     width: 100%;
     max-width: 640px;
 }
 
-section.info ul i {
+main.info ul i {
     color: grey;
 }
 
-section.info a {
+main.info a {
     text-decoration: underline white;
 }
 
-section.info ul {
+main.info ul {
     list-style: none;
     padding-inline-start: 10px;
 }
 
-section.info code, section.info blockquote {
+main.info code, main.info blockquote {
     color: white;
     background-color: #191919;
     width: fit-content;
 }
 
-section.info article {
+main.info article {
     max-width: 800px;
     text-align: justify;
     background-color: #e2e1e1;
@@ -143,61 +143,61 @@ section.info article {
     padding: 1%;
 }
 
-section.info blockquote i {
+main.info blockquote i {
     font-style: normal;
     color: #7b97b9;
 }
 
 
-section.info article h2#manual {
+main.info article h2#manual {
     text-align: center;
     font-size: 40px;
 }
 
-section.info article h3 {
+main.info article h3 {
     border-bottom: solid 1px grey;
     margin-top: 100px;
     padding-top: 15px;
     font-size: 35px;
 }
 
-section.info article h4 {
+main.info article h4 {
     background-color: darkgrey;
     padding: 10px;
     font-size: x-large;
     margin-top: 70px;
 }
 
-section.info article h5 {
+main.info article h5 {
     text-transform: uppercase;
     margin-top: 45px;
     font-size: large;
 }
 
-section.info code {
+main.info code {
     padding: 0 4px;
 }
 
-section.info blockquote {
+main.info blockquote {
     padding: 6px 12px;
     text-align: left;
     word-break: break-all;
 }
 
-section.info nav {
+main.info nav {
     position: fixed;
-    right: 3%;
-    top: 20%;
-    margin: 7%;
+    left: 850px;
+    border-left: solid 2px grey;
+    padding: 0 10px;
 }
 
-section.info article code i {
+main.info article code i {
     font-style: normal;
     color: #7b97b9;
 }
 
 
-section.media table#medialist img {
+main.media table#medialist img {
     display: none;
     position: absolute;
     max-width: 400px;
@@ -207,20 +207,20 @@ section.media table#medialist img {
     padding: 1%;
 }
 
-section.media table#medialist .thumbnail:hover img {
+main.media table#medialist .thumbnail:hover img {
     display: block;
 }
 
 
-section.media form {
+main.media form {
     margin: 1%;
 }
 
-section.media div#tree, section.media div#explorer {
+main.media div#tree, main.media div#explorer {
     display: inline-grid;
 }
 
-section.media code {
+main.media code {
     color: #9cbfe8;
     background-color: darkslategrey;
     font-size: small;
@@ -228,12 +228,13 @@ section.media code {
 }
 
 @media (max-width: 600px) {
-    section.home .summary, section.home .linkfrom, section.home .linkto, section.home .delete, section.home .datecreation, section.home .date, section.home .log, section.home .secure, section.home .tag {
+    main.home .summary, main.home .linkfrom, main.home .linkto, main.home .delete, main.home .datecreation, main.home .date, main.home .log, main.home .secure, main.home .tag {
         display: none;
     }
 
-    section.info nav {
+    main.info nav {
         position: relative;
+        left: 0;
     }
 
 }

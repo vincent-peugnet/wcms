@@ -4,7 +4,7 @@
 if ($app->session() >= $app::EDITOR) {
 
     if ($_GET['aff'] == 'admin' && $app->session() >= $app::ADMIN) {
-        echo '<section>';
+        echo '<main>';
         echo '<h1>Admin</h1>';
 
         $aff->admincss($config, $app);
@@ -18,25 +18,25 @@ if ($app->session() >= $app::EDITOR) {
         $aff->admintable($config, $status, $app->tablelist($config->dbname()));
         $aff->admindisplay($config->color4());
 
-        echo '</section>';
+        echo '</main>';
     } elseif ($_GET['aff'] == 'media') {
         echo '<h1>Media</h1>';
-        echo '<section>';
+        echo '<main>';
         echo '<article>';
 
         $aff->addmedia($app);
         $aff->medialist($app->getlistermedia($app::MEDIA_DIR), $app::MEDIA_DIR);
 
         echo '</article>';
-        echo '</section>';
+        echo '</main>';
 
     } elseif ($_GET['aff'] == 'record') {
         echo '<h1>Record</h1>';
-        echo '<section>';
+        echo '<main>';
 
         $aff->recordlist($app);
 
-        echo '</section>';
+        echo '</main>';
 
     } elseif ($_GET['aff'] == 'info') {
 

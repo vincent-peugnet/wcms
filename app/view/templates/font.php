@@ -8,7 +8,7 @@
     <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'font']) ?>
 
 
-<section class="font">
+<main class="font">
 
 
 <h1>Fonts</h1>
@@ -55,7 +55,7 @@ foreach ($fontlist as $font ) {
 ?>
 </table>
 
-</section>
+</main>
 </body>
 
 <?php $this->stop('page') ?>

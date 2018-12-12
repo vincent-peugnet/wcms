@@ -12,7 +12,7 @@
 
 <?php if($user->iseditor()) { ?>
 
-<section class="home">
+<main class="home">
 
 
 
@@ -102,7 +102,7 @@
 </form>
 </div>
 </div>
-</section>
+</main>
 
 <?php } ?>
 

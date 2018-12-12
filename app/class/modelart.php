@@ -2,7 +2,7 @@
 class Modelart extends Modeldb
 {
 
-	const SELECT = ['title', 'id', 'description', 'tag', 'date', 'datecreation', 'datemodif', 'daterender', 'css', 'quickcss', 'javascript', 'body', 'header', 'section', 'nav', 'aside', 'footer', 'render', 'secure', 'invitepassword', 'interface', 'linkfrom', 'linkto', 'template', 'affcount', 'editcount'];
+	const SELECT = ['title', 'id', 'description', 'tag', 'date', 'datecreation', 'datemodif', 'daterender', 'css', 'quickcss', 'javascript', 'body', 'header', 'main', 'nav', 'aside', 'footer', 'render', 'secure', 'invitepassword', 'interface', 'linkfrom', 'linkto', 'template', 'affcount', 'editcount'];
 	const BY = ['datecreation', 'title', 'id', 'description', 'datemodif', 'secure'];
 	const ORDER = ['DESC', 'ASC'];
 

@@ -8,7 +8,7 @@
     <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'info']) ?>
 
 
-<section class="info">
+<main class="info">
 
 <h1>Info</h1>
 
@@ -138,7 +138,7 @@
 <li>header</li>
 <li>nav</li>
 <li>aside</li>
-<li>section</li>
+<li>main</li>
 <li>footer</li>
 </ul>
 
@@ -267,7 +267,7 @@ You can use any of them, only one or all at the same time, as you prefer.
 <p>As it is too long adding all media of a folder one by one, you can just print the content of an entire folder using this method.</p>
 
 <blockquote>
-%MEDIA:<i>__repository__</i>
+%MEDIA:<i>__directory__</i>
 </blockquote>
 
 <p>Just point to the good directory inside the media folder. This will output html list, creating image elements, audio players, video players, or just basic link, depending on the media type.</p>
@@ -295,7 +295,7 @@ You can use any of them, only one or all at the same time, as you prefer.
 %ASIDE%
 </br>
 </br>
-%SECTION%
+%MAIN%
 </blockquote>
 
 <p>Will output :</p>
@@ -309,12 +309,12 @@ __the content of your aside__
 &lt;/aside&gt;
 </br>
 </br>
-&lt;section class="<i>page_id</i>"&gt;
+&lt;main class="<i>page_id</i>"&gt;
 </br>
-__the content of your section__
+__the content of your main__
 </br>
 
-&lt;/section&gt;
+&lt;/main&gt;
 
 
 </blockquote>
@@ -357,7 +357,7 @@ __content of this page html element__
 
 </article>
 
-</section>
+</main>
 </body>
 
 <?php $this->stop('page') ?>

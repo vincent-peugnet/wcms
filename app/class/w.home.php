@@ -3,7 +3,7 @@
 
 $aff->header();
 
-echo '<section class="home">';
+echo '<main class="home">';
 
 
 if ($app->session() >= $app::EDITOR) {
@@ -80,6 +80,6 @@ if ($app->session() >= $app::EDITOR) {
 
 
 
-echo '</section>';
+echo '</main>';
 
 ?>

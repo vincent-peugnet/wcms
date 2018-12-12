@@ -15,7 +15,7 @@ class Art2
 	protected $javascript;
 	protected $body;
 	protected $header;
-	protected $section;
+	protected $main;
 	protected $nav;
 	protected $aside;
 	protected $footer;
@@ -45,7 +45,7 @@ class Art2
 	const LENCOULEUR = 7;
 	const DEBUT = '(?id=';
 	const FIN = ')';
-	const TABS = ['section', 'css', 'header', 'body', 'nav', 'aside', 'footer', 'javascript'];
+	const TABS = ['main', 'css', 'header', 'body', 'nav', 'aside', 'footer', 'javascript'];
 	const VAR_DATE = ['date', 'datecreation', 'datemodif', 'daterender'];
 
 	  
@@ -87,7 +87,7 @@ class Art2
 		$this->setjavascript('');
 		$this->setbody('');
 		$this->setheader('');
-		$this->setsection('');
+		$this->setmain('');
 		$this->setnav('');
 		$this->setaside('');
 		$this->setfooter('');
@@ -98,13 +98,13 @@ class Art2
 		$this->setsecure(3);
 		$this->setinvitepassword('invitepassword');
 		$this->setinvitepassword('readpassword');
-		$this->setinterface('section');
+		$this->setinterface('main');
 		$this->setlinkfrom([]);
 		$this->setlinkto([]);
 		$this->settemplatebody('');
 		$this->settemplatecss('');
 		$this->settemplatejavascript('');
-		$this->settemplateoptions(['externalcss', 'externaljavascript', 'favicon', 'reccursive', 'quickcss']);
+		$this->settemplateoptions(['externalcss', 'externaljavascript', 'favicon', 'reccursivecss', 'quickcss']);
 		$this->setfavicon('');
 		$this->setthumbnail('');
 		$this->setaffcount(0);
@@ -250,9 +250,9 @@ class Art2
 		return $this->header;
 	}
 
-	public function section($type = 'string')
+	public function main($type = 'string')
 	{
-		return $this->section;
+		return $this->main;
 	}
 
 	public function nav($type = "string")
@@ -536,10 +536,10 @@ class Art2
 		}
 	}
 
-	public function setsection($section)
+	public function setmain($main)
 	{
-		if (strlen($section) < self::LENTEXT and is_string($section)) {
-			$this->section = $section;
+		if (strlen($main) < self::LENTEXT and is_string($main)) {
+			$this->main = $main;
 		}
 	}
 
@@ -557,14 +557,18 @@ class Art2
 		}
 	}
 
-	public function setexternalcss(array $externalcss)
+	public function setexternalcss($externalcss)
 	{
-		$this->externalcss = $externalcss;
+		if(is_array($externalcss)) {
+			$this->externalcss = array_values(array_filter($externalcss));
+		}
 	}
 
 	public function setexternalscript(array $externalscript)
 	{
-		$this->externalscript = $externalscript;
+		if(is_array($externalscript)) {
+			$this->externalscript = array_values(array_filter($externalscript));
+		}
 	}
 
 	public function setfooter($footer)
@@ -664,7 +668,7 @@ class Art2
 	public function settemplateoptions($templateoptions)
 	{
 		if(is_array($templateoptions)) {
-			$this->templateoptions = $templateoptions;
+			$this->templateoptions = array_filter($templateoptions);
 		}
 	}
 

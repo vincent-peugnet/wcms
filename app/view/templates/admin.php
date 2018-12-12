@@ -8,7 +8,7 @@
     <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'admin']) ?>
 
 
-<section class="admin">
+<main class="admin">
 
     <h1>Administration</h1>
 
@@ -94,7 +94,7 @@
 
     
 
-</section>
+</main>
 </body>
 
 <?php $this->stop('page') ?>

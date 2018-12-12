@@ -22,9 +22,38 @@
             <input type="date" name="pdate" value="<?= $art->date('pdate') ?>" id="date">
             <label for="time">Time</label>
             <input type="time" name="ptime" value="<?= $art->date('ptime') ?>" id="time">
+
+            <label for="favicon">Favicon</label>
+            <select name="favicon" id="favicon">
+            <?php
+            if(!empty($art->templatecss()) && $art->template()['cssfavicon']) {
+                ?>
+                <option value="<?= $art->favicon() ?>">--using template favicon--</option>
+                <?php
+            } else {
+                echo '<option value="">--no favicon--</option>';
+            foreach ($faviconlist as $favicon) {
+                ?>
+                <option value="<?= $favicon ?>" <?= $art->favicon() === $favicon ? 'selected' : '' ?>><?= $favicon ?></option>
+                <?php
+                }
+            }
+            ?>
+            </select>
+
+
+
+
         </fieldset>
     </details>
-    <details open>
+
+
+
+
+
+
+
+    <details <?= !empty($art->templatebody()) || !empty($art->templatecss()) || !empty($art->templatejavascript()) ? 'open' : '' ?>>
         <summary>Tempalte</summary>
             <fieldset>
             <label for="templatebody">BODY template</label>
@@ -35,7 +64,7 @@
             ?>
                 <option value="<?= $template ?>" <?= $art->templatebody() === $template ? 'selected' : '' ?>><?= $template ?></option>
                 <?php 
-            }
+            } 
             ?>
             </select>
 
@@ -55,25 +84,32 @@
             <?php
             if(!empty($art->templatecss())) {
                 ?>
+
                 <div class="subtemplate">
-                <input type="checkbox" name="templateoptions['reccursivecss']" id="oreccursivecss" <?= $art->template()['cssreccursive'] === true ? 'checked' : '' ?>>
+                <input type="checkbox" name="templateoptions[]" id="oreccursivecss" value="reccursivecss" <?= in_array('reccursivecss', $art->templateoptions()) ? 'checked' : '' ?>>
                 <label for="oreccursivecss">Reccursive template</label>
                 </div>
                 <div class="subtemplate">
-                <input type="checkbox" name="templateoptions['quickcss']" id="oquickcss" <?= $art->template()['cssquickcss'] === true ? 'checked' : '' ?>>
+                <input type="checkbox" name="templateoptions[]" id="oquickcss" value="quickcss" <?= in_array('quickcss', $art->templateoptions()) ? 'checked' : '' ?>>
                 <label for="oquickcss">Quickcss</label>
                 </div>
                 <div class="subtemplate">
-                <input type="checkbox" name="templateoptions['externalcss']" id="oexternalcss" <?= $art->template()['externalcss'] === true ? 'checked' : '' ?>>
-                <label for="pexternalcss">External CSS</label>
+                <input type="checkbox" name="templateoptions[]" id="oexternalcss" value="externalcss" <?= in_array('externalcss', $art->templateoptions()) ? 'checked' : '' ?>>
+                <label for="oexternalcss">External CSS</label>
                 </div>
                 <div class="subtemplate">
-                <input type="checkbox" name="templateoptions['favicon']" id="ofavicon" <?= $art->template()['cssfavicon'] === true ? 'checked' : '' ?>>
+                <input type="checkbox" name="templateoptions[]" id="ofavicon" value="favicon" <?= in_array('favicon', $art->templateoptions()) ? 'checked' : '' ?>>
                 <label for="ofavicon">Favicon</label>
                 </div>
                 <?php
+            } else {
+                foreach($art->templateoptions() as $option) {
+                    if($option != 'externalsavascript') {
+                        echo '<input type="hidden" name="templateoptions[]" value="'.$option.'">';
+                    }
+                }
             }
-
+            
             ?>
 
 
@@ -88,41 +124,60 @@
             }
             ?>
             </select>
+
+
+            <?php
+            if(!empty($art->templatejavascript())) {
+            ?>
             <div class="subtemplate">
-            <input type="checkbox" name="iexternaljs" id="iexternaljs">
-            <label for="iexternaljs">external js</label>
+            <input type="checkbox" name="templateoptions[]" value="externaljavascript" id="oexternaljs" <?= in_array('externaljavascript', $art->templateoptions()) ? 'checked' : '' ?>>
+            <label for="oexternaljs">external js</label>
             </div>
+
+            <?php } else {
+                if(in_array('externaljavascript', $art->templateoptions())) {
+                    echo '<input type="hidden" name="templateoptions[]" value="externaljavascript">';
+                }
+                
+            } ?>
 
 
             </fieldset>
     </details>
-    <details id="advanced" open>
+    <details id="advanced" <?= !empty($art->externalcss()) || !empty($art->externalscript()) ? 'open' : '' ?>>
         <summary>Advanced</summary>
                 
-        <fieldset>
 
+
+
+
+    <fieldset id="external">
+        <label for="externalcss">External CSS</label>
+        <input type="text" name="externalcss[]" id="externalcss" placeholder="add external adress">
         <?php
-
-        ?>
-
-        <label for="favicon">Favicon</label>
-        <select name="favicon" id="favicon">
-        <?php
-        if(!empty($art->templatecss()) && $art->template()['cssfavicon']) {
-            ?>
-            <option value="<?= $art->favicon() ?>">--using template favicon--</option>
-            <?php
-        } else {
-            echo '<option value="">--no favicon--</option>';
-        foreach ($faviconlist as $favicon) {
-            ?>
-            <option value="<?= $favicon ?>" <?= $art->favicon() === $favicon ? 'selected' : '' ?>><?= $favicon ?></option>
-            <?php
+            foreach ($art->externalcss() as $css) {
+                ?>
+                <div class="checkexternal">
+                <input type="checkbox" name="externalcss[]" id="<?= $css ?>" value="<?= $css ?>" checked>
+                <label for="<?= $css ?>" title="<?= $css ?>"><?= $css ?></label>
+                </div>
+                <?php
             }
-        }
         ?>
-        </select>
-        </fieldset>
+
+        <label for="externalscript">External script</label>
+        <input type="text" name="externalscript[]" id="externalscript" placeholder="add external adress">
+        <?php
+            foreach ($art->externalscript() as $script) {
+                ?>
+                <div class="checkexternal">
+                <input type="checkbox" name="externalscript[]" id="<?= $script ?>" value="<?= $script ?>" checked>
+                <label for="<?= $script ?>" title="<?= $script ?>"><?= $script ?></label>
+                </div>
+                <?php
+            }
+        ?>
+    </fieldset>
 
     </details>
     <details>

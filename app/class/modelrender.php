@@ -50,7 +50,7 @@ class Modelrender extends Modelart
 			$templateid = $this->art->templatebody();
 			$templateart = $this->get($templateid);
 			if(self::REMPLACE_SELF_ELEMENT) {
-				$templatebody = preg_replace_callback('~\%(SECTION|ASIDE|NAV|HEADER|FOOTER)!\%~', function ($match) use ($templateid) {
+				$templatebody = preg_replace_callback('~\%(MAIN|ASIDE|NAV|HEADER|FOOTER)!\%~', function ($match) use ($templateid) {
 					return '%'. $match[1] . '.' . $templateid . '%';
 				}, $templateart->body());
 			} else {
@@ -69,7 +69,7 @@ class Modelrender extends Modelart
 	public function getbody(string $body)
 	{
 		$rend = $this;
-		$body = preg_replace_callback('~\%(SECTION|ASIDE|NAV|HEADER|FOOTER)((:[a-z0-9-_]+|!)(\+([a-z0-9-_]+|!))*)?\%~', function ($match) use ($rend) {
+		$body = preg_replace_callback('~\%(MAIN|ASIDE|NAV|HEADER|FOOTER)((:[a-z0-9-_]+|!)(\+([a-z0-9-_]+|!))*)?\%~', function ($match) use ($rend) {
 			$element = strtolower($match[1]);
 			$getelement = '';
 			if (isset($match[2]) && !empty($match[2])) {
@@ -147,6 +147,15 @@ class Modelrender extends Modelart
 		}
 		$head .= '<meta name="description" content="' . $this->art->description() . '" />' . PHP_EOL;
 		$head .= '<meta name="viewport" content="width=device-width" />' . PHP_EOL;
+
+		foreach ($this->art->externalcss() as $externalcss) {
+			$head .= '<link href="'.$externalcss.'" rel="stylesheet" />' . PHP_EOL;
+		}
+
+		foreach ($this->art->externalscript() as $externalscript) {
+			$head .= '<script src="'.$externalscript.'"></script>' . PHP_EOL;
+		}
+
 		$head .= '<link href="' . Model::globalpath() . 'fonts.css" rel="stylesheet" />' . PHP_EOL;
 		$head .= '<link href="' . Model::globalpath() . 'global.css" rel="stylesheet" />' . PHP_EOL;
 

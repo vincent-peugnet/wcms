@@ -5,7 +5,7 @@
     <pre><span class="i">ALT + X</span> : update</pre>
     <pre><span class="i">ALT + C</span> : display</pre>
     <h3>Markdown</h3>
-    <p>The html section use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown encoding</a>. Actualy, W is using Michel Fortin's <a href="https://michelf.ca/projects/php-markdown/extra/" target="_blank">Markdown Extra</a>.</p>
+    <p>The html main use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown encoding</a>. Actualy, W is using Michel Fortin's <a href="https://michelf.ca/projects/php-markdown/extra/" target="_blank">Markdown Extra</a>.</p>
     <h3>Links</h3>
     <pre>[text](=<span class="i">article_id</span>)</pre>
     <p>where article_id is the article's id you want to point to.</p>
