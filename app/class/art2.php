@@ -19,10 +19,13 @@ class Art2
 	protected $nav;
 	protected $aside;
 	protected $footer;
+	protected $externalcss;
+	protected $externalscript;
 	protected $renderhead;
 	protected $renderbody;
 	protected $secure;
 	protected $invitepassword;
+	protected $readpassword;
 	protected $interface;
 	protected $linkfrom;
 	protected $linkto;
@@ -31,6 +34,7 @@ class Art2
 	protected $templatejavascript;
 	protected $templateoptions;
 	protected $favicon;
+	protected $thumbnail;
 	protected $affcount;
 	protected $editcount;
 
@@ -87,10 +91,13 @@ class Art2
 		$this->setnav('');
 		$this->setaside('');
 		$this->setfooter('');
+		$this->setexternalcss([]);
+		$this->setexternalscript([]);
 		$this->setrenderhead('');
 		$this->setrenderbody('');
 		$this->setsecure(3);
 		$this->setinvitepassword('invitepassword');
+		$this->setinvitepassword('readpassword');
 		$this->setinterface('section');
 		$this->setlinkfrom([]);
 		$this->setlinkto([]);
@@ -99,6 +106,7 @@ class Art2
 		$this->settemplatejavascript('');
 		$this->settemplateoptions(['externalcss', 'externaljavascript', 'favicon', 'reccursive', 'quickcss']);
 		$this->setfavicon('');
+		$this->setthumbnail('');
 		$this->setaffcount(0);
 		$this->seteditcount(0);
 	}
@@ -257,6 +265,16 @@ class Art2
 		return $this->aside;
 	}
 
+	public function externalcss($type = "array")
+	{
+		return $this->externalcss;
+	}
+
+	public function externalscript($type = "array")
+	{
+		return $this->externalscript;
+	}
+
 	public function footer($type = "string")
 	{
 		return $this->footer;
@@ -291,6 +309,11 @@ class Art2
 	public function invitepassword($type = 'string')
 	{
 		return $this->invitepassword;
+	}
+
+	public function readpassword($type = 'string')
+	{
+		return $this->readpassword;
 	}
 
 	public function interface($type = 'string')
@@ -374,6 +397,11 @@ class Art2
 	public function favicon($type = 'string')
 	{
 		return $this->favicon;
+	}
+
+	public function thumbnail($type = 'string')
+	{
+		return $this->thumbnail;
 	}
 
 	public function affcount($type = 'int')
@@ -529,6 +557,16 @@ class Art2
 		}
 	}
 
+	public function setexternalcss(array $externalcss)
+	{
+		$this->externalcss = $externalcss;
+	}
+
+	public function setexternalscript(array $externalscript)
+	{
+		$this->externalscript = $externalscript;
+	}
+
 	public function setfooter($footer)
 	{
 		if (strlen($footer) < self::LENTEXT and is_string($footer)) {
@@ -557,6 +595,13 @@ class Art2
 	{
 		if (is_string($invitepassword) && strlen($invitepassword) < self::LEN) {
 			$this->invitepassword = $invitepassword;
+		}
+	}
+
+	public function setreadpassword($readpassword)
+	{
+		if (is_string($readpassword) && strlen($readpassword) < self::LEN) {
+			$this->readpassword = $readpassword;
 		}
 	}
 
@@ -627,6 +672,13 @@ class Art2
 	{
 		if (is_string($favicon)) {
 			$this->favicon = $favicon;
+		}
+	}
+
+	public function setthumbnail($thumbnail)
+	{
+		if (is_string($thumbnail)) {
+			$this->thumbnail = $thumbnail;
 		}
 	}
 
