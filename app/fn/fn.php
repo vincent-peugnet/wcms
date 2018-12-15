@@ -3,7 +3,7 @@
 
 function class_autoloader($class)
 {
-    require('.'. DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'class' . DIRECTORY_SEPARATOR . strtolower($class) . '.php');
+    require('.'. DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'class' . DIRECTORY_SEPARATOR . strtolower(str_replace('\\', DIRECTORY_SEPARATOR, $class)) . '.php');
 }
 
 
