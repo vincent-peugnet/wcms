@@ -1,10 +1,9 @@
 <?php
 class Modeldb extends Model
 {
-	/** @var PDO */
-	protected $bdd;
 	protected $arttable;
 	protected $database;
+	/** @var \WFlywheel\Repository */
 	protected $artstore;
 
 
@@ -16,8 +15,11 @@ class Modeldb extends Model
 
 	public function dbinit()
 	{
-		$this->database = new \JamesMoss\Flywheel\Config(Model::DATABASE_DIR);
-		$this->artstore = new \JamesMoss\Flywheel\Repository(Config::arttable(), $this->database);
+		$this->database = new \JamesMoss\Flywheel\Config(Model::DATABASE_DIR, [
+			'query_class' => "\WFlywheel\Query",
+			'formatter' => new \WFlywheel\Formatter\JSON,
+		]);
+		$this->artstore = new \WFlywheel\Repository(Config::arttable(), $this->database);
 	}
 
 	
