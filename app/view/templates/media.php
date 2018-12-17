@@ -53,16 +53,18 @@ treecount($dirlist, 'media', 0, 'media', $dir);
 
 <h2><?= $dir ?></h2>
 
+Print the whole content of the folder using this code : <span><code>%MEDIA:<?= str_replace('\\', '/', substr($dir, strlen(Model::MEDIA_DIR))) ?>%</code></span>
+
 <form id="addfolder" action="<?= $this->url('mediafolder') ?>" method="post">
     <label for="foldername">📂 New folder</label>
-    <input type="text" name="foldername" id="foldername" placeholder="folder name" >
+    <input type="text" name="foldername" id="foldername" placeholder="folder name" required>
     <input type="hidden" name="dir" value="<?= $dir ?>">
     <input type="submit" value="create folder">
 </form>
 
 <form id=addmedia action="<?= $this->url('mediaupload') ?>" method="post" enctype="multipart/form-data">
     <label for="file">🚀 Upload file(s)</label>
-    <input type='file' id="file" name='file[]' multiple>
+    <input type='file' id="file" name='file[]' multiple required>
     <input type="hidden" name="dir" value="<?= $dir ?>">
     <input type="submit" value="upload">
 </form>
@@ -91,7 +93,7 @@ foreach ($medialist as $media) {
             <?php
         } elseif ($media->type() == 'other') {
             ?>
-            [<?= $media->id() ?>.<?= $media->extension() ?>](<?= $media->getincludepath() ?>)
+            [<?= $media->id() ?>](<?= $media->getincludepath() ?>)
             <?php
         } else {
             echo $media->getincludepath();

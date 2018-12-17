@@ -12,20 +12,6 @@ class Modelart extends Modeldb
 		parent::__construct();
 	}
 
-
-
-	public function exist(Art2 $art)
-	{
-		$artdata = $this->artstore->get($art->id());
-		if ($artdata === false) {
-			return false;
-		} else {
-			return true;
-		}
-
-	}
-
-
 	public function add(Art2 $art)
 	{
 

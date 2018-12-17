@@ -8,12 +8,7 @@ a.external::before {
 }
 
 ul.medialist {
-    max-width: 400px;
-    width: 100%;
+
     list-style: none;
     padding: 0;
-}
-
-.medialist img {
-    width: 100%;
 }

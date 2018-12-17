@@ -203,7 +203,7 @@ You can use any of them, only one or all at the same time, as you prefer.
 <p>You can create a html list of links pointing to all the pages using this tag.</p>
 
 <blockquote>
-    %%<i>tag</i>%%
+    %TAG:<i>__tag__</i>%
 </blockquote>
 
 <p>Let's suppose we are in page3 and we have page2, page3, page5, using this tag, this will output :</p>

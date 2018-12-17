@@ -3,38 +3,24 @@
 class Modelmedia extends Model
 {
 
-	public function addmedia(array $file, $maxsize = 2 ** 24, $id)
+
+	public function basedircheck()
 	{
-		$message = 'runing';
-		$id = strtolower(strip_tags($id));
-		$id = str_replace(' ', '_', $id);
-		if (isset($file) and $file['media']['error'] == 0 and $file['media']['size'] < $maxsize) {
-			$infosfichier = pathinfo($file['media']['name']);
-			$extension_upload = $infosfichier['extension'];
-			$extensions_autorisees = $this::MEDIA_EXTENSIONS;
-			if (in_array($extension_upload, $extensions_autorisees)) {
-				if (!file_exists($this::MEDIA_DIR . $id . '.' . $extension_upload)) {
-
-					$extension_upload = strtolower($extension_upload);
-					$uploadok = move_uploaded_file($file['media']['tmp_name'], $this::MEDIA_DIR . $id . '.' . $extension_upload);
-					if ($uploadok) {
-						$message = 'uploadok';
-					} else {
-						$message = 'uploaderror';
-					}
-				} else {
-					$message = 'filealreadyexist';
-
-				}
-			}
+		if(!is_dir(Model::MEDIA_DIR)) {
+			return mkdir(Model::MEDIA_DIR);
 		} else {
-			$message = 'filetoobig';
-
+			return true;
 		}
-
-		return $message;
 	}
 
+	public function favicondircheck()
+	{
+		if(!is_dir(Model::FAVICON_DIR)) {
+			return mkdir(Model::FAVICON_DIR);
+		} else {
+			return true;
+		}
+	}
 
 	public function getmedia($entry, $dir)
 	{
@@ -151,6 +137,17 @@ class Modelmedia extends Model
                 $temp='';
                 $tmp='';
             }
+	}
+
+	public function adddir($dir, $name)
+	{
+		$name = idclean($name);
+		$newdir = $dir . DIRECTORY_SEPARATOR . $name;
+		if(!is_dir($newdir)) {
+			return mkdir($newdir);
+		} else {
+			return false;
+		}
 	}
 
 }

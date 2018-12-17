@@ -99,6 +99,7 @@ class Modelrender extends Modelart
 		$element = $this->article($element);
 		$element = $this->automedialist($element);
 		$element = $this->autotaglistupdate($element);
+		$element = $this->date($element);
 		$element = $this->markdown($element);
 
 		return $element;
@@ -150,6 +151,13 @@ class Modelrender extends Modelart
 
 		foreach ($this->art->externalcss() as $externalcss) {
 			$head .= '<link href="'.$externalcss.'" rel="stylesheet" />' . PHP_EOL;
+		}
+
+		if (!empty($this->art->templatecss() && in_array('externalcss', $this->art->templateoptions()))) {
+			$templatecss = $this->get($this->art->templatecss());
+			foreach ($templatecss->externalcss() as $externalcss) {
+				$head .= '<link href="'.$externalcss.'" rel="stylesheet" />' . PHP_EOL;
+			}
 		}
 
 		foreach ($this->art->externalscript() as $externalscript) {
@@ -394,7 +402,7 @@ class Modelrender extends Modelart
 
 	public function autotaglist($text)
 	{
-		$pattern = "/%%(\w*)%%/";
+		$pattern = "/\%TAG:([a-z0-9_-]+)\%/";
 		preg_match_all($pattern, $text, $out);
 		return $out[1];
 
@@ -424,7 +432,7 @@ class Modelrender extends Modelart
 			$ul .= '</ul>' . PHP_EOL;
 
 
-			$text = str_replace('%%' . $tag . '%%', $ul, $text);
+			$text = str_replace('%TAG:' . $tag . '%', $ul, $text);
 
 			$li = array_map(function ($item) {
 				return $item->id();
@@ -433,6 +441,22 @@ class Modelrender extends Modelart
 		}
 		return $text;
 	}
+
+
+	public function date(string $text)
+	{
+		$art = $this->art;
+		$text = preg_replace_callback('~\%DATE\%~', function($matches) use ($art) {
+			return '<time datetime='.$art->date('string').'>'.$art->date('dmy').'</time>';
+		}, $text);
+		$text = preg_replace_callback('~\%TIME\%~', function($matches) use ($art) {
+			return '<time datetime='.$art->date('string').'>'.$art->date('ptime').'</time>';
+		}, $text);
+
+		return $text;
+	}
+
+
 
 	public function linkfrom()
 	{
