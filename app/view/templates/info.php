@@ -12,11 +12,16 @@
 
 <h1>Info</h1>
 
+<h2>Version</h2>
+
+<?= $version ?>
+
+<h2>Links</h2>
 
 <ul>
 <li><a href="https://github.com/vincent-peugnet/wcms" target="_blank">🐱‍👤 Github</a></li>
 <li><a href="#manual">📕 Manual</a></li>
-<li><a href="#">🌵 Website</a></li>
+<li><a href="https://w-cms.top" target="_blank">🌵 Website</a></li>
 </ul>
 
 <h2>About</h2>

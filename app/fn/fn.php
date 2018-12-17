@@ -81,6 +81,17 @@ function idclean(string $input)
 }
 
 
+function getversion()
+{
+	if(file_exists('composer.json')) {
+		$composer = json_decode(file_get_contents('composer.json'), true);
+		$version = $composer['version'];
+	} else {
+		$version = 'unknown';
+	}
+	return $version;
+}
+
 
 
 function array_update($base, $new)

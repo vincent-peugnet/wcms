@@ -12,9 +12,11 @@ class Controllerinfo extends Controller
     public function desktop()
     {
         if($this->user->iseditor()) {
-            $this->showtemplate('info', []);
+            $this->showtemplate('info', ['version' => getversion()]);
         }
     }
+
+
 
   
 
