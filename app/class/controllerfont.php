@@ -2,7 +2,9 @@
 
 class Controllerfont extends Controller
 {
-
+    /**
+     * @var Modelfont
+     */
     protected $fontmanager;
     
     public function __construct($router)
@@ -15,6 +17,8 @@ class Controllerfont extends Controller
     public function desktop()
     {
         if($this->user->iseditor()) {
+
+            $this->fontmanager->fontdircheck();
 
             $fontlist = $this->fontmanager->getfontlist();
             

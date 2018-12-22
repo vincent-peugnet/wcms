@@ -4,7 +4,15 @@ class Modelfont extends Model
 {
 
     const FONT_TYPES = ['woff2', 'woff', 'otf', 'ttf', 'eot', 'svg'];
-
+    
+	public function fontdircheck()
+	{
+		if(!is_dir(Model::FONT_DIR)) {
+			return mkdir(Model::FONT_DIR);
+		} else {
+			return true;
+		}
+	}
 
     public function getfontlist()
     {
