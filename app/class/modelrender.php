@@ -198,7 +198,6 @@ class Modelrender extends Modelart
 
 	public function parser(string $text)
 	{
-
 		$text = $this->media($text);
 
 		$text = $this->headerid($text);
@@ -220,8 +219,10 @@ class Modelrender extends Modelart
 
 	public function media(string $text): string
 	{
-		$rend = $this;
-		$text = preg_replace('%(src|href)="((\/?[\w-_]+)+\.[a-z0-9]{1,5})"%', '$1="'.Model::mediapath() . '$2" target="_blank" class="media"', $text);
+		$text = preg_replace('%(src|href)="((\/?[\w-_]+)\.[a-z0-9]{1,5})"%', '$1="'.Model::mediapath() . '$2" target="_blank" class="media"', $text);
+		if(!is_string($text)) {
+			throw new Exception('Rendering error -> media module');			
+		}
 		return $text;
 	}
 

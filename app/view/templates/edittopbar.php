@@ -24,15 +24,15 @@
     </span>
     <span id="headid"><?= $art->id() ?></span>
 
-<span id="fontsize">
+    <span id="fontsize">
 
     <label for="fontsize">Font-size</label>
-    <input type="number" name="fontsize" value="<?= Config::fontsize() ?>" id="fontsize">
+    <input type="number" name="fontsize" value="<?= Config::fontsize() ?>" id="fontsize" min="5" max="99">
 </span>
 
 
 
-<span id="menu">
+<span id="menu" style="display: none;">
     <?php if($user->iseditor()) { ?>
 
     <a href="<?= $this->url('font') ?>"><span class="symbol">📝</span><span class="text">font</span></a>

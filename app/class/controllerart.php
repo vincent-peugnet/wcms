@@ -202,6 +202,13 @@ class Controllerart extends Controller
         $_SESSION['workspace']['showrightpanel'] = isset($_POST['workspace']['showrightpanel']);
         $_SESSION['workspace']['showleftpanel'] = isset($_POST['workspace']['showleftpanel']);
 
+        if(!empty($_POST['fontsize']) && $_POST['fontsize'] !== Config::fontsize()) {
+            Config::setfontsize($_POST['fontsize']);
+            Config::savejson();
+        }
+
+
+
         $date = new DateTimeImmutable($_POST['pdate'] . $_POST['ptime'], new DateTimeZone('Europe/Paris'));
         $date = ['date' => $date];
 
