@@ -19,9 +19,7 @@ abstract class Config
 	protected static $defaultart = '';
 	protected static $defaultfavicon = '';
 	protected static $showeditmenu = true;
-	protected static $editsymbol = 'pen';
-	protected static $version = '';
-	
+	protected static $editsymbol = 'pen';	
 
 
 

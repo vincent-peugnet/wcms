@@ -5,6 +5,9 @@ class Controller
 
     protected $user;
     protected $router;
+    /**
+     * @var Modeluser
+     */
     protected $usermanager;
     protected $plates;
 

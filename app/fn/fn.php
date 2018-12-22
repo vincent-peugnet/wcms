@@ -73,7 +73,7 @@ function arrayclean($input)
 function idclean(string $input)
 {	
 	$input = urldecode($input);
-	$search = ['é', 'à', 'è', 'ç', 'ù', 'ï', 'î', ' '];
+	$search =  ['é', 'à', 'è', 'ç', 'ù', 'ï', 'î', ' '];
 	$replace = ['e', 'a', 'e', 'c', 'u', 'i', 'i', '-'];
 	$input = str_replace($search, $replace, $input);
 

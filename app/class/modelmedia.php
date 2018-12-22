@@ -141,7 +141,6 @@ class Modelmedia extends Model
 
 	public function adddir($dir, $name)
 	{
-		$name = idclean($name);
 		$newdir = $dir . DIRECTORY_SEPARATOR . $name;
 		if(!is_dir($newdir)) {
 			return mkdir($newdir);

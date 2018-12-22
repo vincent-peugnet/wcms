@@ -50,6 +50,11 @@ class Application
     {
         ?>
         <h1>Configuration</h1>
+
+        <h3>Version :</h3>
+
+        <p><?= getversion() ?></p>
+        
         <form action="" method="post">
         <div>
         <h2>

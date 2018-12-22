@@ -29,12 +29,17 @@ class Controllermedia extends Controller
 
             $dir = rtrim($_GET['path'] ?? Model::MEDIA_DIR, DIRECTORY_SEPARATOR);
 
-            $medialist = $this->mediamanager->getlistermedia($dir . DIRECTORY_SEPARATOR);
-            $faviconlist = $this->mediamanager->getlistermedia(Model::FAVICON_DIR);
+            if(is_dir($dir)) {
+                $medialist = $this->mediamanager->getlistermedia($dir . DIRECTORY_SEPARATOR);
+                $faviconlist = $this->mediamanager->getlistermedia(Model::FAVICON_DIR);
+    
+                $dirlist = $this->mediamanager->listdir(Model::MEDIA_DIR);
+    
+                $this->showtemplate('media', ['medialist' => $medialist, 'faviconlist' => $faviconlist, 'dirlist' => $dirlist, 'dir' => $dir]);
+            } else {
+                $this->routedirect('media');
+            }
 
-            $dirlist = $this->mediamanager->listdir(Model::MEDIA_DIR);
-
-            $this->showtemplate('media', ['medialist' => $medialist, 'faviconlist' => $faviconlist, 'dirlist' => $dirlist, 'dir' => $dir]);
         } else {
             $this->routedirect('home');
         }
@@ -57,7 +62,7 @@ class Controllermedia extends Controller
     {
         if ($this->user->iseditor()) {
             $dir = $_POST['dir'] ?? Model::MEDIA_DIR;
-            $name = $_POST['foldername'] ?? 'new folder';
+            $name = idclean($_POST['foldername']) ?? 'new-folder';
             $this->mediamanager->adddir($dir, $name);
         }
         $this->redirect($this->router->generate('media') . '?path=' . $dir . DIRECTORY_SEPARATOR . $name);
