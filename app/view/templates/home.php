@@ -72,8 +72,8 @@
         <th class="log">log</th>
         <th class="tag"><a href="<?= $opt->getadress('tag') ?>">tag</a></th>
         <th class="summary">summary</th>
-        <th class="linkto"><a href="<?= $opt->getadress('linkto') ?>">link to</a></th>
-        <th class="linkfrom"><a href="<?= $opt->getadress('linkfrom') ?>">linkfrom</a></th>
+        <th class="linkto"><a href="<?= $opt->getadress('linkto') ?>">to</a></th>
+        <th class="linkfrom"><a href="<?= $opt->getadress('linkfrom') ?>">from</a></th>
         <th class="datemodif"><a href="<?= $opt->getadress('datemodif') ?>">last modification</a></th>
         <th class="datecreation"><a href="<?= $opt->getadress('datecreation') ?>">date of creation</a></th>
         <th class="date"><a href="<?= $opt->getadress('date') ?>">date</a></th>
@@ -89,7 +89,7 @@
             <td class="log"><a href="<?= $this->uart('artlog', $item->id()) ?>" target="_blank">⁋</a></td>
             <td class="tag"><a title="<?= $item->tag('string') ?>"><?= $item->tag('sort') ?></a></td>
             <td class="summary"><?= $item->description() ?></td>
-            <td class="linkto"><?= $item->linkto('sort') ?></td>
+            <td class="linkto"><a title="<?= $item->linkto('string') ?>" ><?= $item->linkto('sort') ?></a></td>
             <td class="linkfrom"><a title="<?= $item->linkfrom('string') ?>" ><?= $item->linkfrom('sort') ?></a></td>
             <td class="datemodif"><?= $item->datemodif('hrdi') ?></td>
             <td class="datecreation"><?= $item->datecreation('hrdi') ?></td>

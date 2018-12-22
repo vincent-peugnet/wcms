@@ -466,6 +466,17 @@ class Modelrender extends Modelart
 		return $linkfrom;
 	}
 
+	public function linkto()
+	{
+		$linkto = [];
+		foreach ($this->artlist as $art) {
+			if(in_array($this->art->id(), $art->linkfrom())) {
+				$linkto[] = $art->id();
+			}
+		}
+		return $linkto;
+	}
+
 
 
 

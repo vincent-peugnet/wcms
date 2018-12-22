@@ -79,6 +79,7 @@ class Controllerart extends Controller
         $this->art->setrenderhead($head);
         $this->art->setdaterender($now);
         $this->art->setlinkfrom($this->renderengine->linkfrom());
+        $this->art->setlinkto($this->renderengine->linkto());
 
         return ['head' => $head, 'body' => $body];
 

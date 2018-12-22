@@ -344,6 +344,8 @@ class Art2
 			$linkto = $this->linkto;
 		} elseif ($option == 'sort') {
 			return count($this->linkto);
+		} elseif ($option == 'string') {
+			return implode(', ', $this->linkto);
 		}
 		return $linkto;
 
