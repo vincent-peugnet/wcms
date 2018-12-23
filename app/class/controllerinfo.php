@@ -5,8 +5,6 @@ class Controllerinfo extends Controller
 
     public function __construct($render) {
         parent::__construct($render);
-        
-
     }
 
     public function desktop()

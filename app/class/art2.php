@@ -424,7 +424,7 @@ class Art2
 
 	public function setid($id)
 	{
-		if (strlen($id) < self::LEN and is_string($id)) {
+		if (strlen($id) < Model::MAX_ID_LENGTH and is_string($id)) {
 			$this->id = strip_tags(strtolower(str_replace(" ", "", $id)));
 		}
 	}

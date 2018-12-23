@@ -48,6 +48,7 @@
 <?php
 if($user->isadmin()) {
 ?>
+<a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>>user</a>
 <a href="<?= $this->url('admin') ?>" <?= $tab == 'admin' ? 'class="actualpage"' : '' ?>>admin</a>
 <?php
 }

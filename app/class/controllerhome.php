@@ -2,7 +2,7 @@
 
 class Controllerhome extends Controller
 {
-
+    /** @var Modelhome */
     protected $modelhome;
     protected $opt;
 

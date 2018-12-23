@@ -17,6 +17,8 @@ abstract class Model
 	const TEXT_ELEMENTS = ['header', 'nav', 'main', 'aside', 'footer'];
 	const EDIT_SYMBOLS = ['pen', 'tool', 'none'];
 
+	const MAX_ID_LENGTH = 64;
+
 	public static function dirtopath($dir)
 	{
 		$basepath = '';

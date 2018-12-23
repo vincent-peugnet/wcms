@@ -10,6 +10,31 @@ class Modelart extends Modeldb
 	public function __construct()
 	{
 		parent::__construct();
+		$this->storeinit(Config::arttable());
+	}
+
+	public function getlister()
+	{
+		$artlist = [];
+		$list = $this->repo->findAll();
+		foreach ($list as $artdata) {
+			$artlist[$artdata->id] = new Art2($artdata);
+		}
+		return $artlist;
+	}
+
+
+	public function getlisterid(array $idlist = [])
+	{
+		$artdatalist = $this->repo->query()
+		->where('__id', 'IN', $idlist)
+		->execute();
+
+		$artlist = [];
+		foreach ($artdatalist as $id => $artdata) {
+			$artlist[$id] = new Art2($artdata);
+		}
+		return $artlist;
 	}
 
 	public function add(Art2 $art)
@@ -17,7 +42,7 @@ class Modelart extends Modeldb
 
 		$artdata = new \JamesMoss\Flywheel\Document($art->dry());
 		$artdata->setId($art->id());
-		$this->artstore->store($artdata);
+		$this->repo->store($artdata);
 	}
 
 
@@ -27,7 +52,7 @@ class Modelart extends Modeldb
 			$id = $id->id();
 		}
 		if (is_string($id)) {
-			$artdata = $this->artstore->findById($id);
+			$artdata = $this->repo->findById($id);
 			if ($artdata !== false) {
 				return new Art2($artdata);
 			} else {
@@ -52,7 +77,7 @@ class Modelart extends Modeldb
 
 	public function delete(Art2 $art)
 	{
-		$this->artstore->delete($art->id());
+		$this->repo->delete($art->id());
 		$this->unlink($art->id());
 	}
 
@@ -71,7 +96,7 @@ class Modelart extends Modeldb
 	{
 		$artdata = new \JamesMoss\Flywheel\Document($art->dry());
 		$artdata->setId($art->id());
-		$this->artstore->store($artdata);
+		$this->repo->store($artdata);
 	}
 
 	public function artcompare($art1, $art2, $method = 'id', $order = 1)

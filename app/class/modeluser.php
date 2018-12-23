@@ -1,6 +1,6 @@
 <?php
 
-class Modeluser extends Model
+class Modeluser extends Modeldb
 {
     const ADMIN = 10;
     const EDITOR = 3;
@@ -8,6 +8,13 @@ class Modeluser extends Model
     const READ = 1;
     const FREE = 0;
 
+    const USER_REPO_NAME = 'user';
+
+    public function __construct()
+    {
+        parent::__construct();
+		$this->storeinit(self::USER_REPO_NAME);
+    }
 
     public function writesession(User $user)
     {
@@ -60,6 +67,59 @@ class Modeluser extends Model
         $user = new User(['level' => self::FREE]);
         return $user;
     }
+
+
+
+    public function getlister()
+	{
+		$userlist = [];
+		$list = $this->repo->findAll();
+		foreach ($list as $userdata) {
+			$userlist[$userdata->id] = new User($userdata);
+		}
+		return $userlist;
+	}
+
+
+	public function getlisterid(array $idlist = [])
+	{
+		$userdatalist = $this->repo->query()
+		->where('__id', 'IN', $idlist)
+		->execute();
+
+		$userlist = [];
+		foreach ($userdatalist as $id => $userdata) {
+			$userlist[$id] = new User($userdata);
+		}
+		return $userlist;
+    }
+    
+    public function add(User $user)
+	{
+		$userdata = new \JamesMoss\Flywheel\Document($user->dry());
+		$userdata->setId($user->id());
+		$this->repo->store($userdata);
+	}
+
+
+	public function get($id)
+	{
+		if ($id instanceof User) {
+			$id = $id->id();
+		}
+		if (is_string($id)) {
+			$userdata = $this->repo->findById($id);
+			if ($userdata !== false) {
+				return new User($userdata);
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+
 }
 
 

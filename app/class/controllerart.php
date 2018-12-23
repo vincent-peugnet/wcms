@@ -24,8 +24,9 @@ class Controllerart extends Controller
         $cleanid = idclean($id);
         if ($cleanid !== $id) {
             $this->routedirect($route, ['art' => $cleanid]);
+        } else {
+            $this->art = new Art2(['id' => $cleanid]);
         }
-        $this->art = new Art2(['id' => $cleanid]);
     }
 
     public function importart()
@@ -33,7 +34,6 @@ class Controllerart extends Controller
         $art = $this->artmanager->get($this->art);
         if ($art !== false) {
             $this->art = $art;
-            //$this->art->autotaglistupdate($this->artmanager->taglist($this->artmanager->getlister(['id', 'title', 'description', 'tag']), $this->art->autotaglist()));
             return true;
         } else {
             return false;
@@ -149,7 +149,6 @@ class Controllerart extends Controller
     {
         $this->setart($id, 'artlog');
         $this->importart();
-        var_dump($this->art);
     }
 
     public function add($id)

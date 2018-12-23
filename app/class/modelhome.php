@@ -1,6 +1,6 @@
 <?php
 
-class Modelhome extends Modeldb
+class Modelhome extends Modelart
 {
  	
 	public function __construct() {

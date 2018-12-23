@@ -52,10 +52,6 @@ a:hover {
     color: white;
 }
 
-div#massedit {
-    display: none;
-}
-
 #options ul {
     list-style: none;
     padding-inline-start: 0;
@@ -226,6 +222,15 @@ main.media code {
     font-size: small;
     padding: 1px;
 }
+
+
+
+main.user table form {
+    display: inline-block;
+}
+
+
+
 
 @media (max-width: 600px) {
     main.home .summary, main.home .linkfrom, main.home .linkto, main.home .delete, main.home .datecreation, main.home .date, main.home .log, main.home .secure, main.home .tag {

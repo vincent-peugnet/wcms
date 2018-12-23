@@ -27,12 +27,11 @@
 
 
 <div id="main">
-<h2>Articles</h2>
+<h2>Pages</h2>
 <form action="/massedit" method="post">
 
 
     <div id="massedit">
-        <h3>Mass Edit</h3>
     <select name="massedit" required>
         <option value="public">set as public</option>
         <option value="private">set as private</option>
@@ -44,19 +43,6 @@
     </select>
 
     <input type="submit" name="massaction" value="do" onclick="confirmSubmit(event, 'Are you sure')" >
-
-    <input type="text" name="targettag" placeholder="add tag">
-    <input type="submit" name="massaction" value="add tag" onclick="confirmSubmit(event, 'Are you sure')" >
-
-    <select name="masstemplate">
-        <?php
-        foreach ($table2 as $art) {
-            echo '<option value="' . $art->id() . '">' . $art->id() . '</option>';
-        }
-        ?>
-    </select>
-
-    <input type="submit" name="massaction" value="set template" onclick="confirmSubmit(event, 'Are you sure')" >
 
     <input type="hidden" name="action" value="massedit">
     </div>

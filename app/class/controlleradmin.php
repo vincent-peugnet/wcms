@@ -23,6 +23,8 @@ class Controlleradmin extends Controller
 
             $admin = ['artlist' => $artlist, 'defaultartexist' => $defaultartexist, 'globalcss' => $globalcss, 'faviconlist' => $faviconlist];
             $this->showtemplate('admin', $admin);
+        } else {
+            $this->routedirect('home');
         }
     }
 
