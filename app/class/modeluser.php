@@ -33,22 +33,25 @@ class Modeluser extends Modeldb
 
     public function login($pass)
     {
-        $user = new User(['level' => $this->passlevel($pass)]);
-        return $user;
+        $passlevel = $this->passlevel($pass);
+        if($passlevel != false) {
+            $user = new User($passlevel);
+            return $user;
+        } else {
+            return false;
+        }
     }
 
     public function passlevel($pass)
     {
-        if (strip_tags($pass) == Config::admin()) {
-            return $level = self::ADMIN;
-        } elseif (strip_tags($pass) == Config::read()) {
-            return $level = self::READ;
-        } elseif (strip_tags($pass) == Config::editor()) {
-            return $level = self::EDITOR;
-        } elseif ($this->invitetest(strip_tags($pass))) {
-            return $level = self::INVITE;
+        $userdatalist = $this->repo->query()
+		->where('password', '==', $pass)
+        ->execute();
+        
+        if($userdatalist->total() === 1) {
+            return $userdatalist[0];
         } else {
-            return $level = self::FREE;
+            return 0;
         }
     }
 
@@ -92,6 +95,19 @@ class Modeluser extends Modeldb
 			$userlist[$id] = new User($userdata);
 		}
 		return $userlist;
+    }
+
+    public function adminexist()
+    {
+        $userdatalist = $this->repo->query()
+		->where('level', '==', 10)
+		->execute();
+
+        if($userdatalist->total() === 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
     
     public function add(User $user)

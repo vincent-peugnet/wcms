@@ -32,16 +32,6 @@ class Controllerhome extends Controller
 
     }
 
-    public function analyseall()
-    {
-        if($this->user->level() >= Modeluser::EDITOR) {
-            $scan = new Modelanalyse;
-            $scan->analyseall();
-            $this->redirect('./');
-
-        }
-    }
-
     public function massedit()
     {
         echo '<h2>Mass Edit</h2>';

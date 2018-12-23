@@ -34,7 +34,9 @@ class Controllerconnect extends Controller
     {
         if (isset($_POST['pass'])) {
             $this->user = $this->usermanager->login($_POST['pass']);
-            $this->usermanager->writesession($this->user);
+            if($this->user != false) {
+                $this->usermanager->writesession($this->user);
+            }
         }
         if (!empty($id)) {
             $this->routedirect('artread/', ['art' => $id]);
