@@ -49,7 +49,7 @@ class Application
                     $this->configform();
                     exit;
                 } else {
-                    if(!$this->usermanager->adminexist()) {
+                    if($this->usermanager->admincount() === 0) {
                         echo 'missing admin user';
                         $this->adminform();
                         exit;

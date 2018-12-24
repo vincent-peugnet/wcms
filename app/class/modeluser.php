@@ -97,17 +97,13 @@ class Modeluser extends Modeldb
 		return $userlist;
     }
 
-    public function adminexist()
+    public function admincount()
     {
         $userdatalist = $this->repo->query()
 		->where('level', '==', 10)
 		->execute();
 
-        if($userdatalist->total() === 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return $userdatalist->total();
     }
 
     public function passwordexist(string $pass)

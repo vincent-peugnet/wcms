@@ -36,7 +36,16 @@ class Controlleruser extends Controller
     {
         if($_POST['action'] === 'delete') {
             $user = new User($_POST);
-            $this->showtemplate('userconfirmdelete', ['userdelete' => $user]);
+            $user = $this->usermanager->get($user);
+            if($user !== false) {
+                if($user->isadmin() && $this->usermanager->admincount() === 1) {
+                    $this->showtemplate('userconfirmdelete', ['userdelete' => $user, 'candelete' => false]);
+                } else {
+                    $this->showtemplate('userconfirmdelete', ['userdelete' => $user, 'candelete' => true]);
+                }
+            } else {
+                $this->routedirect('user');
+            }
         } elseif ($_POST['action'] == 'confirmdelete') {
             $user = new User($_POST);
             $this->usermanager->delete($user);
