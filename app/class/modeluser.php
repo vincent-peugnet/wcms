@@ -24,12 +24,12 @@ class Modeluser extends Modeldb
     public function readsession()
     {
         $userdatas = [];
-        if (array_key_exists('user' . Config::basepath(), $_SESSION)) {
+        if (array_key_exists('user' . Config::basepath(), $_SESSION) && isset($_SESSION['user' . Config::basepath()]['id'])) {
             $userdatas = $_SESSION['user' . Config::basepath()];
             $user = new User($userdatas);
             return $user;
         } else {
-            return false;
+            return new User(['id' => '', 'level' => 0]);
         }
     }
 

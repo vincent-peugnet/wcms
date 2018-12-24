@@ -24,7 +24,7 @@ class Controlleruser extends Controller
             if(empty($user->id()) || $this->usermanager->get($user)) {
                 $this->routedirectget('user', ['error' => 'wrong_id']);
             } elseif(empty($user->password()) || $this->usermanager->passwordexist($user->password())) {
-                $this->routedirectget('user', ['error' => 'wrong_password']);
+                $this->routedirectget('user', ['error' => 'change_password']);
             } else {
                 $this->usermanager->add($user);
                 $this->routedirect('user');
@@ -34,24 +34,44 @@ class Controlleruser extends Controller
 
     public function update()
     {
-        if($_POST['action'] === 'delete') {
-            $user = new User($_POST);
-            $user = $this->usermanager->get($user);
-            if($user !== false) {
-                var_dump($user);
-                var_dump($this->user);
-                if($user->id() === $this->user->id()) {
-                    $this->showtemplate('userconfirmdelete', ['userdelete' => $user, 'candelete' => false]);
-                } else {
-                    $this->showtemplate('userconfirmdelete', ['userdelete' => $user, 'candelete' => true]);
-                }
-            } else {
-                $this->routedirect('user');
+        if($this->user->isadmin() && isset($_POST['action'])) {
+            switch ($_POST['action']) {
+                case 'delete':
+                    $user = new User($_POST);
+                    $user = $this->usermanager->get($user);
+                    if($user !== false) {
+                        if($user->id() === $this->user->id()) {
+                            $this->showtemplate('userconfirmdelete', ['userdelete' => $user, 'candelete' => false]);
+                        } else {
+                            $this->showtemplate('userconfirmdelete', ['userdelete' => $user, 'candelete' => true]);
+                        }
+                    } else {
+                        $this->routedirect('user');
+                    }
+                    break;
+                
+                case 'confirmdelete':
+                    $user = new User($_POST);
+                    $this->usermanager->delete($user);
+                    $this->routedirect('user');
+                    break;
+
+                case 'update':
+                    $user = $this->usermanager->get($_POST['id']);
+                    $user->hydrate($_POST);
+                    if(empty($user->id())) {
+                        $this->routedirectget('user', ['error' => 'wrong_id']);
+                    } elseif (empty($user->password())  | $this->usermanager->passwordexist($user->password())) {
+                        $this->routedirectget('user', ['error' => 'change_password']);
+                    } elseif (empty($user->level())) {
+                        $this->routedirectget('user', ['error' => 'wrong_level']);
+                    } else {
+                        $this->usermanager->add($user);
+                        $this->routedirect('user');
+                    }
             }
-        } elseif ($_POST['action'] == 'confirmdelete') {
-            $user = new User($_POST);
-            $this->usermanager->delete($user);
-            $this->routedirect('user');
+        } else {
+            $this->routedirect('home');
         }
     }
 }

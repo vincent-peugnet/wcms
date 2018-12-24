@@ -13,10 +13,9 @@
             <input type="text" name="tag" id="tag" value="<?= $art->tag('string'); ?>">
             <label for="secure">Privacy level :</label>
             <select name="secure" id="secure">
-                <option value="0" <?= $art->secure() == 0 ? 'selected' : '' ?>>0</option>
-                <option value="1" <?= $art->secure() == 1 ? 'selected' : '' ?>>1</option>
-                <option value="2" <?= $art->secure() == 2 ? 'selected' : '' ?>>2</option>
-                <option value="3" <?= $art->secure() == 3 ? 'selected' : '' ?>>3</option>
+                <option value="0" <?= $art->secure() == 0 ? 'selected' : '' ?>>public</option>
+                <option value="1" <?= $art->secure() == 1 ? 'selected' : '' ?>>private</option>
+                <option value="2" <?= $art->secure() == 2 ? 'selected' : '' ?>>not published</option>
             </select>
             <label for="date">Date</label>
             <input type="date" name="pdate" value="<?= $art->date('pdate') ?>" id="date">

@@ -10,6 +10,14 @@
 
 <main class="user">
 
+
+<div>
+<h1>User : <?= $user->id() ?></h1>
+
+</div>
+
+
+
 <table>
 <tr>
 <th>id</th><th>password</th><th>level</th><th>action</th>

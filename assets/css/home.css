@@ -183,6 +183,8 @@ main.info blockquote {
 main.info nav {
     position: fixed;
     left: 850px;
+    top: 0px;
+    margin-top: 50px;
     border-left: solid 2px grey;
     padding: 0 10px;
 }
