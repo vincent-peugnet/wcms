@@ -2,7 +2,9 @@
 
 class Controller
 {
-
+    /**
+     * @var User
+     */
     protected $user;
     protected $router;
     /**

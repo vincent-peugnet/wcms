@@ -18,7 +18,7 @@ class Modeluser extends Modeldb
 
     public function writesession(User $user)
     {
-        $_SESSION['user' . Config::basepath()] = ['level' => $user->level()];
+        $_SESSION['user' . Config::basepath()] = ['level' => $user->level(), 'id' => $user->id()];
     }
 
     public function readsession()
@@ -26,9 +26,11 @@ class Modeluser extends Modeldb
         $userdatas = [];
         if (array_key_exists('user' . Config::basepath(), $_SESSION)) {
             $userdatas = $_SESSION['user' . Config::basepath()];
+            $user = new User($userdatas);
+            return $user;
+        } else {
+            return false;
         }
-        $user = new User($userdatas);
-        return $user;
     }
 
     public function login($pass)

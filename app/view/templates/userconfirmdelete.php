@@ -30,9 +30,9 @@ if($candelete) {
 
     <h1>You can't delete this user</h1>
 
-    <h2>You need at least one admin user to run the system.</h2>
+    <h2>You can't delete yourself</h2>
 
-    <p>To delete this user, create at least another admin user, then retry to delete this one.</p>
+    <p>To delete this user, create at least another admin user, log in as this other admin user, the try to delete this user.</p>
 
     <a href="<?= $this->url('user') ?>">Go back to users</a>
 
