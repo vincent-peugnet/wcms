@@ -59,8 +59,9 @@ class User
 
     public function setid($id)
     {
+        $id = idclean($id);
         if (strlen($id) < Model::MAX_ID_LENGTH and is_string($id)) {
-			$this->id = idclean($id);
+			$this->id = $id;
 		}
     }
         

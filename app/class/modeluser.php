@@ -109,6 +109,19 @@ class Modeluser extends Modeldb
             return true;
         }
     }
+
+    public function passwordexist(string $pass)
+    {
+        $userdatalist = $this->repo->query()
+		->where('password', '==', $pass)
+		->execute();
+
+        if($userdatalist->total() === 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     
     public function add(User $user)
 	{
@@ -133,6 +146,11 @@ class Modeluser extends Modeldb
 		} else {
 			return false;
 		}
+    }
+    
+	public function delete(User $user)
+	{
+		$this->repo->delete($user->id());
 	}
 
 

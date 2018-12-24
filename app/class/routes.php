@@ -27,7 +27,6 @@ class Routes
             ['GET', '/!user', 'Controlleruser#desktop', 'user'],
             ['POST', '/!user/add', 'Controlleruser#add', 'useradd'],
             ['POST', '/!user/update', 'Controlleruser#update', 'userupdate'],
-            ['POST', '/!user/delete', 'Controlleruser#delete', 'userdelete'],
             ['GET', '/!info', 'Controllerinfo#desktop', 'info'],
             ['GET', '/!font/render', 'Controllerfont#render', 'fontrender'],
             ['POST', '/!font/add', 'Controllerfont#add', 'fontadd'],

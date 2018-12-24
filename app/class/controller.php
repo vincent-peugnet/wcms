@@ -64,6 +64,16 @@ class Controller
         $this->redirect($this->router->generate($route, $vars));
     }
 
+    public function routedirectget(string $route, array $vars = [])
+    {
+        $get = '?';
+        foreach ($vars as $key => $value) {
+            $get .= $key .'='. $value. '&';
+        }
+        $get = rtrim($get, '&');
+        $this->redirect($this->router->generate($route, []) . $get);
+    }
+
 }
 
 

@@ -18,10 +18,10 @@
 <tr>
     <form action="<?= $this->url('useradd') ?>" method="post">
     <td>
-            <input type="text" name="id" required>
+            <input type="text" name="id" maxlength="128" required>
     </td>
     <td>
-        <input type="password" name="password" minlength="4" maxlenght="64" required>
+        <input type="password" name="password" minlength="4" maxlength="64" required>
     </td>
     <td>
         <select name="level" id="level">
@@ -29,6 +29,7 @@
             <option value="2">invite</option>
             <option value="3">editor</option>
             <option value="4">super editor</option>
+            <option value="10">admin</option>
         </select>
     </td>
     <td>
@@ -43,14 +44,14 @@ foreach ($userlist as $user ) {
     ?>
     
     <tr>
-    <form action="<?= $this->url('userupdate') ?>">
+    <form action="<?= $this->url('userupdate') ?>" method="post">
 
     <td>
     <?= $user->id() ?>
     </td>
 
     <td>
-    <input type="password" name="password" placeholder="<?= str_repeat('°', $user->password('int')) ?>" min="4" max="64" required>
+    <input type="password" name="password" placeholder="<?= str_repeat('°', $user->password('int')) ?>" minlength="4" maxlength="64" >
     </td>
 
     <td>
@@ -59,16 +60,16 @@ foreach ($userlist as $user ) {
             <option value="2" <?= $user->level() === 2 ? 'selected' : '' ?>>invite</option>
             <option value="3" <?= $user->level() === 3 ? 'selected' : '' ?>>editor</option>
             <option value="4" <?= $user->level() === 4 ? 'selected' : '' ?>>super editor</option>
+            <option value="10" <?= $user->level() === 10 ? 'selected' : '' ?>>admin</option>
     </select>
     </td>
 
     <td>
-    <input type="submit" value="update">
+    <input type="hidden" name="id" value="<?= $user->id() ?>">
+    <input type="submit" name="action" value="update">
+    <input type="submit" name="action" value="delete">
     </form>
 
-    <form action="<?= $this->url('userdelete') ?>" method="post">
-    <input type="submit" value="delete">
-    </form>
     </td>
 
     </tr>
@@ -78,9 +79,6 @@ foreach ($userlist as $user ) {
 ?>
 
 </table>
-
-<?php var_dump($userlist); ?>
-    
 
 </main>
 </body>

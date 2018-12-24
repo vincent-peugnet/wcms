@@ -29,6 +29,7 @@ class Application
         } elseif(isset($_POST['userinit'])) {
             $userdata = $_POST['userinit'];
             $userdata['level'] = 10;
+            //$userdata['id'] = idclean($userdata['id']);
             $user = new User($userdata);
             $this->usermanager->add($user);
             header('Location: ./');
