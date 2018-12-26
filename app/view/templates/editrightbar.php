@@ -63,6 +63,16 @@
         </ul>
         
     </details>
+
+        <h3>Authors</h3>
+    <ul>
+    <?php
+    foreach ($art->authors() as $author) {
+        echo '<li>⬖ ' . $author .'</li>';
+    }
+    
+    ?>
+    </ul>
    
     </div>
 

@@ -149,6 +149,7 @@ class Controllerart extends Controller
     {
         $this->setart($id, 'artlog');
         $this->importart();
+        var_dump($this->art);
     }
 
     public function add($id)
@@ -215,6 +216,7 @@ class Controllerart extends Controller
             $this->art->hydrate($_POST);
             $this->art->hydrate($date);
             $this->art->updateedited();
+            $this->art->addauthor($this->user->id());
             $this->artmanager->update($this->art);
 
         }

@@ -35,6 +35,7 @@ class Art2
 	protected $templateoptions;
 	protected $favicon;
 	protected $thumbnail;
+	protected $authors;
 	protected $affcount;
 	protected $editcount;
 
@@ -107,6 +108,7 @@ class Art2
 		$this->settemplateoptions(['externalcss', 'externaljavascript', 'favicon', 'reccursivecss', 'quickcss']);
 		$this->setfavicon('');
 		$this->setthumbnail('');
+		$this->setauthors([]);
 		$this->setaffcount(0);
 		$this->seteditcount(0);
 	}
@@ -406,6 +408,11 @@ class Art2
 		return $this->thumbnail;
 	}
 
+	public function authors($type = 'array')
+	{
+		return $this->authors;
+	}
+
 	public function affcount($type = 'int')
 	{
 		return $this->affcount;
@@ -688,6 +695,13 @@ class Art2
 		}
 	}
 
+	public function setauthors($authors)
+	{
+		if(is_array($authors)) {
+			$this->authors = $authors;
+		}
+	}
+
 	public function setaffcount($affcount)
 	{
 		if (is_int($affcount)) {
@@ -725,6 +739,13 @@ class Art2
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 		$this->setdatemodif($now);
 		$this->addeditcount();
+	}
+
+	public function addauthor(string $id)
+	{
+		if(!in_array($id, $this->authors)) {
+			$this->authors[] = $id;
+		}
 	}
 
 

@@ -59,7 +59,7 @@ foreach ($userlist as $user ) {
     </td>
 
     <td>
-    <input type="password" name="password" placeholder="<?= str_repeat('°', $user->password('int')) ?>" minlength="4" maxlength="64" >
+    <input type="password" name="password" placeholder="<?= str_repeat('⦁', $user->password('int')) ?>" minlength="4" maxlength="64" >
     </td>
 
     <td>
