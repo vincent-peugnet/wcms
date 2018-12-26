@@ -34,7 +34,7 @@ $this->stop();
 
         <?php 
         if ($readernav) {
-            $this->insert('navart', ['user' => $user, 'art' => $art, 'artexist' => $artexist]);
+            $this->insert('navart', ['user' => $user, 'art' => $art, 'artexist' => $artexist, 'canedit' => $canedit]);
         }
         ?>
         

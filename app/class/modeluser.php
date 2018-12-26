@@ -108,6 +108,20 @@ class Modeluser extends Modeldb
         return $userdatalist->total();
     }
 
+    public function getlisterbylevel(int $level)
+    {
+        $userdatalist = $this->repo->query()
+		->where('level', '==', $level)
+        ->execute();
+        
+        $userlist = [];
+        foreach ($userdatalist as $user) {
+            $userlist[] = $user->id;
+        }
+
+        return $userlist;
+    }
+
     public function passwordexist(string $pass)
     {
         $userdatalist = $this->repo->query()

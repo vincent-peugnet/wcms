@@ -36,6 +36,7 @@ class Art2
 	protected $favicon;
 	protected $thumbnail;
 	protected $authors;
+	protected $invites;
 	protected $affcount;
 	protected $editcount;
 
@@ -109,6 +110,7 @@ class Art2
 		$this->setfavicon('');
 		$this->setthumbnail('');
 		$this->setauthors([]);
+		$this->setinvites([]);
 		$this->setaffcount(0);
 		$this->seteditcount(0);
 	}
@@ -413,6 +415,11 @@ class Art2
 		return $this->authors;
 	}
 
+	public function invites($type = 'array')
+	{
+		return $this->invites;
+	}
+
 	public function affcount($type = 'int')
 	{
 		return $this->affcount;
@@ -699,6 +706,13 @@ class Art2
 	{
 		if(is_array($authors)) {
 			$this->authors = $authors;
+		}
+	}
+
+	public function setinvites($invites)
+	{
+		if(is_array($invites)) {
+			$this->invites = array_values(array_filter($invites));
 		}
 	}
 

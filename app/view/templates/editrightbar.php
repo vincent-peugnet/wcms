@@ -73,7 +73,35 @@
     
     ?>
     </ul>
-   
+
+    <?php if($user->level() >= 4) { ?>
+
+    <h3>Invites editors</h3>
+
+    <label for="invites">Invites editors</label>
+        <select name="invites[]" id="invites">
+        <option value="" selected>--select invite user--</option>
+        <?php
+        $newinviteuserlist = array_diff($inviteuserlist, $art->invites());
+        foreach ($newinviteuserlist as $inviteuser) {
+            echo '<option value="'.$inviteuser.'" >'.$inviteuser.'</option>';
+        }
+        ?>
+        </select>
+        <?php
+            $validateinviteusers = array_intersect($inviteuserlist, $art->invites());
+            foreach ($validateinviteusers as $invite) {
+                ?>
+                <div class="checkexternal">
+                <input type="checkbox" name="invites[]" id="<?= $invite ?>" value="<?= $invite ?>" checked>
+                <label for="<?= $invite ?>" >⬗ <?= $invite ?></label>
+                </div>
+                <?php
+            }
+        ?>
+    
+        <?php } ?>
+
     </div>
 
 </div>

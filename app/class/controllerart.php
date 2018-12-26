@@ -46,7 +46,7 @@ class Controllerart extends Controller
         if ($this->user->iseditor()) {
             return true;
         } elseif ($this->user->isinvite()) {
-            if ($this->user->password() === $this->art->invitepassword()) {
+            if (in_array($this->user->id(), $this->art->invites())) {
                 return true;
             } else {
                 return false;
@@ -105,7 +105,7 @@ class Controllerart extends Controller
             $this->art->addaffcount();
             $this->artmanager->update($this->art);
         }
-        $data = array_merge($alerts, $page, ['art' => $this->art, 'artexist' => $artexist, 'canread' => $canread, 'readernav' => Config::showeditmenu()]);
+        $data = array_merge($alerts, $page, ['art' => $this->art, 'artexist' => $artexist, 'canread' => $canread, 'readernav' => Config::showeditmenu(), 'canedit' => $this->canedit()]);
 
         $this->showtemplate('read', $data);
 
@@ -129,6 +129,8 @@ class Controllerart extends Controller
             $tagartlist = $this->artmanager->tagartlist($this->art->tag('array'), $artlist);
             $lasteditedartlist = $this->artmanager->lasteditedartlist(5, $artlist);
 
+            $inviteuserlist = $this->usermanager->getlisterbylevel(2);
+
             if (isset($_SESSION['workspace'])) {
                 $showleftpanel = $_SESSION['workspace']['showleftpanel'];
                 $showrightpanel = $_SESSION['workspace']['showrightpanel'];
@@ -138,7 +140,7 @@ class Controllerart extends Controller
             }
             $fonts = [];
 
-            $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true, 'tablist' => $tablist, 'artlist' => $idlist, 'showleftpanel' => $showleftpanel, 'showrightpanel' => $showrightpanel, 'fonts' => $fonts, 'tagartlist' => $tagartlist, 'lasteditedartlist' => $lasteditedartlist, 'faviconlist' => $faviconlist]);
+            $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true, 'tablist' => $tablist, 'artlist' => $idlist, 'showleftpanel' => $showleftpanel, 'showrightpanel' => $showrightpanel, 'fonts' => $fonts, 'tagartlist' => $tagartlist, 'lasteditedartlist' => $lasteditedartlist, 'faviconlist' => $faviconlist, 'inviteuserlist' => $inviteuserlist]);
         } else {
             $this->routedirect('artread/', ['art' => $this->art->id()]);
         }
@@ -212,7 +214,7 @@ class Controllerart extends Controller
         $date = new DateTimeImmutable($_POST['pdate'] . $_POST['ptime'], new DateTimeZone('Europe/Paris'));
         $date = ['date' => $date];
 
-        if ($this->importart() && $this->user->iseditor()) {
+        if ($this->importart() && $this->canedit()) {
             $this->art->hydrate($_POST);
             $this->art->hydrate($date);
             $this->art->updateedited();

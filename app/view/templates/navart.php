@@ -89,7 +89,7 @@
 <?php } ?>
 
 
-<?php if($user->iseditor()  && $artexist) { ?>
+<?php if($canedit  && $artexist) { ?>
 
     <li class="drop">
     <a class="button" href="<?= $this->uart('artread/', $art->id()) ?>" target="_blank">display</a>
