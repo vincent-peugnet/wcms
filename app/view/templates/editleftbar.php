@@ -2,6 +2,9 @@
     <input id="showleftpanel" name="workspace[showleftpanel]" value="1" class="toggle" type="checkbox" <?= $showleftpanel == true ? 'checked' : '' ?>>
     <label for="showleftpanel" class="toogle">◧</label>
     <div id="leftbarpanel" class="panel">
+
+    <input type="hidden" name="thisdatemodif" value="<?= $art->datemodif('string') ?>">
+
     <details id="editinfo" open>
         <summary>Infos</summary>
         <fieldset>                        

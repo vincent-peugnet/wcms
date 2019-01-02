@@ -99,6 +99,33 @@ class Modelart extends Modeldb
 		$this->repo->store($artdata);
 	}
 
+	public function combine(Art2 $arta, Art2 $artb)
+	{
+		$mergeart = $arta;
+		$merge = [];
+		$diff = [];
+			foreach ($arta::TABS as $element) {
+				if($arta->$element() !== $artb->$element()) {
+					$merge[$element] = compare($arta->$element(), $artb->$element());
+					$diff[] = $element;
+				}
+			}
+		$mergeart->hydrate($merge);
+
+		return ['diff' => $diff, 'mergeart' => $mergeart];
+	}
+
+	// public function diffartelement(Art2 $arta, Art2 $artb)
+	// {
+	// 	$diff = [];
+	// 	foreach ($arta::TABS as $element) {
+	// 		if($arta->$element() !== $artb->$element()) {
+	// 			$diff[] = $element;
+	// 		}
+	// 	}
+	// 	return $diff;
+	// }
+
 	public function artcompare($art1, $art2, $method = 'id', $order = 1)
 	{
 		$result = ($art1->$method('sort') <=> $art2->$method('sort'));

@@ -133,5 +133,50 @@ function changekey($array, $oldkey, $newkey)
 
 
 
+function compare($stringa, $stringb)
+{
+	$arraya = explode(PHP_EOL, $stringa);
+	$arrayb = explode(PHP_EOL, $stringb);
+
+	$lnb = -1;
+	$commonlines = [];
+	foreach ($arraya as $na => $linea) {
+		$found = false;
+		foreach ($arrayb as $nb => $lineb) {
+			if($linea === $lineb && $nb > $lnb && !$found && !empty($linea)) {
+				$commonlines[$na] = $nb;
+				$merge[] = $arrayb[$nb];
+				$lnb = $nb;
+				$found = true;
+			}
+		}
+	}
+
+
+	$merge = [];
+	$lnb = 0;
+	foreach ($arraya as $na => $linea) {
+		if(array_key_exists($na, $commonlines)) {
+			for ($j=$lnb; $j <= $commonlines[$na]; $j++) { 
+					$merge[] = $arrayb[$j];
+			}
+			$lnb = $j;
+		} else {
+			$merge[] = $arraya[$na];
+		}
+	}
+	for ($k=$lnb; ; $k++) { 
+		if(array_key_exists($k, $arrayb)) {
+			$merge[] = $arrayb[$k];
+		} else {
+			break;
+		}
+	}
+
+	return implode(PHP_EOL, $merge);
+}
+
+
+
 
 ?>

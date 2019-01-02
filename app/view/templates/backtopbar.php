@@ -22,7 +22,7 @@
 <?php } else { ?>  
 
 <span>
-<?= $user->level() ?> 
+<?= $user->id() ?> <i><?= $user->level() ?></i>
 </span>
 
 

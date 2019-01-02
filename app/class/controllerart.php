@@ -9,6 +9,8 @@ class Controllerart extends Controller
     protected $fontmanager;
     protected $mediamanager;
 
+    const COMBINE = true;
+
     public function __construct($router)
     {
         parent::__construct($router);
@@ -124,8 +126,8 @@ class Controllerart extends Controller
             $faviconlist = $this->mediamanager->listfavicon();
             $idlist = $this->artmanager->list();
 
-            
-		    $artlist = $this->artmanager->getlister();
+
+            $artlist = $this->artmanager->getlister();
             $tagartlist = $this->artmanager->tagartlist($this->art->tag('array'), $artlist);
             $lasteditedartlist = $this->artmanager->lasteditedartlist(5, $artlist);
 
@@ -165,7 +167,7 @@ class Controllerart extends Controller
                     $defaultbody = $defaultart->body();
                 }
             }
-            if(empty(Config::defaultart()) || $defaultart === false) {
+            if (empty(Config::defaultart()) || $defaultart === false) {
                 $defaultbody = Config::defaultbody();
             }
             $this->art->setbody($defaultbody);
@@ -204,7 +206,7 @@ class Controllerart extends Controller
         $_SESSION['workspace']['showrightpanel'] = isset($_POST['workspace']['showrightpanel']);
         $_SESSION['workspace']['showleftpanel'] = isset($_POST['workspace']['showleftpanel']);
 
-        if(!empty($_POST['fontsize']) && $_POST['fontsize'] !== Config::fontsize()) {
+        if (!empty($_POST['fontsize']) && $_POST['fontsize'] !== Config::fontsize()) {
             Config::setfontsize($_POST['fontsize']);
             Config::savejson();
         }
@@ -215,18 +217,27 @@ class Controllerart extends Controller
         $date = ['date' => $date];
 
         if ($this->importart() && $this->canedit()) {
+
+            $oldart = clone $this->art;
             $this->art->hydrate($_POST);
+
+            if (self::COMBINE) {
+                if ($_POST['thisdatemodif'] === $oldart->datemodif('string')) {
+                    $compare = $this->artmanager->combine($this->art, $oldart);
+                    if (!empty($compare['diff'])) {
+                        $this->art->hydrate($compare['mergeart']);
+                    }
+                }
+            }
             $this->art->hydrate($date);
             $this->art->updateedited();
             $this->art->addauthor($this->user->id());
             $this->artmanager->update($this->art);
 
+            $this->routedirect('artedit', ['art' => $this->art->id()]);
+            
+            //$this->showtemplate('updatemerge', $compare);
         }
-
-        $this->routedirect('artedit', ['art' => $this->art->id()]);
-
-
-
     }
 
     public function artdirect($id)

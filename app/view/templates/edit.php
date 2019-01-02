@@ -10,10 +10,6 @@
 <body>
 <main class="editor">
 
-    <!-- <?php $this->insert('navart', ['user' => $user, 'art' => $art, 'artexist' => $artexist]) ?> -->
-
-
-
     <?php $this->insert('edittopbar', ['art' => $art, 'user' => $user]) ?>
 
     <div id="workspace">

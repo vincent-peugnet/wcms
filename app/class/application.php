@@ -19,6 +19,9 @@ class Application
             } else {
                 Config::hydrate($_POST['configinit']);
             }
+            if(!is_dir(Model::RENDER_DIR)) {
+                mkdir(Model::RENDER_DIR);
+            }
             if(!Config::savejson()) {
                 echo 'Cant write config file';
                 exit;
@@ -37,13 +40,16 @@ class Application
 
         } else {
             if(Config::readconfig()) {
-                if(!Config::checkbasepath() || empty(Config::arttable())) {
+                if(!Config::checkbasepath() || empty(Config::arttable()) || !is_dir(Model::RENDER_DIR)) {
                     echo '<ul>';
                     if(!Config::checkbasepath()) {
                         echo '<li>Wrong path</li>';
                     }
                     if(empty(Config::arttable())) {
                         echo '<li>Unset table name</li>';
+                    }
+                    if(!is_dir(Model::RENDER_DIR)) {
+                        echo '<li>Render path not existing</li>';
                     }
                     echo '</ul>';
                     $this->configform();
