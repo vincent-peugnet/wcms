@@ -195,6 +195,22 @@ class Modelrender extends Modelart
 		}
 		$head .= '<script src="' . Model::renderpath() . $this->art->id() . '.js" async/></script>' . PHP_EOL;
 
+		if (!empty(Config::analytics())) {
+
+			$head .= PHP_EOL . '
+			<!-- Global site tag (gtag.js) - Google Analytics -->
+			<script async src="https://www.googletagmanager.com/gtag/js?id=' . Config::analytics() . '"></script>
+			<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag(\'js\', new Date());
+
+			gtag(\'config\', \'' . Config::analytics() . '\');
+			</script>
+			' . PHP_EOL;
+		}
+
+
 		return $head;
 	}
 

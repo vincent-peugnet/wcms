@@ -4,10 +4,7 @@
 <input type="submit" name="submit" value="filter">
 ⬅<input type="submit" name="submit" value="reset">
 
-
-        <!-- $this->optionsort($opt);
-        $this->optionprivacy($opt);
-        $this->optiontag($opt); -->
+<div id="optfield">
 
 <fieldset><legend>Sort</legend>
 <select name="sortby" id="sortby">
@@ -75,6 +72,8 @@ if ($in = true || $out = true) {
         }
         echo '<label for="invert">invert</></br>';
         ?>
+
+</div>
 
 
 <input type="submit" name="submit" value="filter">

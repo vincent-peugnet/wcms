@@ -87,6 +87,13 @@
     ?>
     </select>
 
+
+    <h2>Tracking</h2>
+
+    <label for="analytics">Google analytics Tracking ID</label>
+    <input type="text" name="analytics" id="analytics" value="<?= Config::analytics() ?>">
+
+
     <input type="submit" value="Update configuration">
 
     </form>

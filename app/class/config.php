@@ -20,6 +20,7 @@ abstract class Config
 	protected static $defaultfavicon = '';
 	protected static $showeditmenu = true;
 	protected static $editsymbol = 'pen';	
+	protected static $analytics = '';	
 
 
 
@@ -157,6 +158,11 @@ abstract class Config
 		return self::$editsymbol;
 	}
 
+	public static function analytics()
+	{
+		return self::$analytics;
+	}
+
 
 
 // __________________________________________ S E T ______________________________________
@@ -264,6 +270,13 @@ abstract class Config
 		if(is_string($editsymbol))
 		{
 			self::$editsymbol = $editsymbol;
+		}
+	}
+
+	public static function setanalytics($analytics)
+	{
+		if(is_string($analytics) && strlen($analytics) < 25) {
+			self::$analytics = $analytics;
 		}
 	}
 

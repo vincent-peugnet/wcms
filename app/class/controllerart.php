@@ -9,7 +9,7 @@ class Controllerart extends Controller
     protected $fontmanager;
     protected $mediamanager;
 
-    const COMBINE = true;
+    const COMBINE = false;
 
     public function __construct($router)
     {
