@@ -22,7 +22,7 @@
 <?php } else { ?>  
 
 <span>
-<?= $user->id() ?> <i><?= $user->level() ?></i>
+<a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>><?= $user->id() ?></a> <i><?= $user->level() ?></i>
 </span>
 
 
@@ -48,7 +48,6 @@
 <?php
 if($user->isadmin()) {
 ?>
-<a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>>user</a>
 <a href="<?= $this->url('admin') ?>" <?= $tab == 'admin' ? 'class="actualpage"' : '' ?>>admin</a>
 <?php
 }

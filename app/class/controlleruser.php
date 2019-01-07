@@ -61,7 +61,7 @@ class Controlleruser extends Controller
                     $user->hydrate($_POST);
                     if(empty($user->id())) {
                         $this->routedirectget('user', ['error' => 'wrong_id']);
-                    } elseif (empty($user->password())  | $this->usermanager->passwordexist($user->password())) {
+                    } elseif (!empty($_POST['password']) && (empty($user->password())  || $this->usermanager->passwordexist($user->password()))) {
                         $this->routedirectget('user', ['error' => 'change_password']);
                     } elseif (empty($user->level())) {
                         $this->routedirectget('user', ['error' => 'wrong_level']);
