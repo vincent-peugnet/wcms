@@ -2,12 +2,19 @@
     box-sizing: border-box;
 }
 
+
+div#flex {
+    display: flex;
+    height: -webkit-fill-available;
+}
+
 div#options {
-    float: left;
+    min-width: 180px;
+    overflow-y: auto;
 }
 
 div#main {
-    display: inline-block;
+    overflow: auto;
 }
 
 body {
@@ -245,5 +252,4 @@ main.user table form {
     }
 
 }
-
 
