@@ -49,9 +49,9 @@ class Modelrender extends Modelart
 		if (!empty($this->art->templatebody())) {
 			$templateid = $this->art->templatebody();
 			$templateart = $this->get($templateid);
-			if(self::REMPLACE_SELF_ELEMENT) {
+			if (self::REMPLACE_SELF_ELEMENT) {
 				$templatebody = preg_replace_callback('~\%(MAIN|ASIDE|NAV|HEADER|FOOTER)!\%~', function ($match) use ($templateid) {
-					return '%'. $match[1] . '.' . $templateid . '%';
+					return '%' . $match[1] . '.' . $templateid . '%';
 				}, $templateart->body());
 			} else {
 				$templatebody = $templateart->body();
@@ -86,10 +86,20 @@ class Modelrender extends Modelart
 				$templatelist = [$rend->art->id()];
 				$getelement = $rend->art->$element();
 			}
-			$class = implode(' ', $templatelist);
 			$getelement = $rend->elementparser($getelement);
-			$getelement = PHP_EOL . '<' . $element . ' class="' . $class . '">' . $getelement . '</' . $element . '>';
-			return $getelement;
+			$eol = "\n";
+			if ($getelement == $eol && !self::RENDER_EMPTY_ELEMENT) {
+				$getelementblock = '<!-- ' . $element . ' block is empty, check options to render empty elements or not -->';
+			} else {
+				if (self::RENDER_CLASS_ORIGIN) {
+					$class = implode(' ', $templatelist);
+					$getelementblock = PHP_EOL . '<' . $element . ' class="' . $class . '">' . $getelement . '</' . $element . '>';
+				} else {
+					$getelementblock = PHP_EOL . '<' . $element . '>' . $getelement . '</' . $element . '>';
+				}
+			}
+
+			return $getelementblock;
 		}, $body);
 		return $body;
 	}
@@ -141,27 +151,27 @@ class Modelrender extends Modelart
 
 		$head .= '<meta charset="utf8" />' . PHP_EOL;
 		$head .= '<title>' . $this->art->title() . '</title>' . PHP_EOL;
-		if(!empty($this->art->favicon())) {
-			$head .= '<link rel="shortcut icon" href="'.Model::faviconpath(). $this->art->favicon(). '" type="image/x-icon">';
-		} elseif(!empty(Config::defaultfavicon())) {
-			$head .= '<link rel="shortcut icon" href="'.Model::faviconpath(). Config::defaultfavicon(). '" type="image/x-icon">';
+		if (!empty($this->art->favicon())) {
+			$head .= '<link rel="shortcut icon" href="' . Model::faviconpath() . $this->art->favicon() . '" type="image/x-icon">';
+		} elseif (!empty(Config::defaultfavicon())) {
+			$head .= '<link rel="shortcut icon" href="' . Model::faviconpath() . Config::defaultfavicon() . '" type="image/x-icon">';
 		}
 		$head .= '<meta name="description" content="' . $this->art->description() . '" />' . PHP_EOL;
 		$head .= '<meta name="viewport" content="width=device-width" />' . PHP_EOL;
 
 		foreach ($this->art->externalcss() as $externalcss) {
-			$head .= '<link href="'.$externalcss.'" rel="stylesheet" />' . PHP_EOL;
+			$head .= '<link href="' . $externalcss . '" rel="stylesheet" />' . PHP_EOL;
 		}
 
 		if (!empty($this->art->templatecss() && in_array('externalcss', $this->art->templateoptions()))) {
 			$templatecss = $this->get($this->art->templatecss());
 			foreach ($templatecss->externalcss() as $externalcss) {
-				$head .= '<link href="'.$externalcss.'" rel="stylesheet" />' . PHP_EOL;
+				$head .= '<link href="' . $externalcss . '" rel="stylesheet" />' . PHP_EOL;
 			}
 		}
 
 		foreach ($this->art->externalscript() as $externalscript) {
-			$head .= '<script src="'.$externalscript.'"></script>' . PHP_EOL;
+			$head .= '<script src="' . $externalscript . '"></script>' . PHP_EOL;
 		}
 
 		$head .= '<link href="' . Model::globalpath() . 'fonts.css" rel="stylesheet" />' . PHP_EOL;
@@ -217,11 +227,11 @@ class Modelrender extends Modelart
 		return $text;
 	}
 
-	public function media(string $text): string
+	public function media(string $text) : string
 	{
-		$text = preg_replace('%(src|href)="((\/?[\w-_]+)+\.[a-z0-9]{1,5})"%', '$1="'.Model::mediapath() . '$2" target="_blank" class="media"', $text);
-		if(!is_string($text)) {
-			throw new Exception('Rendering error -> media module');			
+		$text = preg_replace('%(src|href)="((\/?[\w-_]+)+\.[a-z0-9]{1,5})"%', '$1="' . Model::mediapath() . '$2" target="_blank" class="media"', $text);
+		if (!is_string($text)) {
+			throw new Exception('Rendering error -> media module');
 		}
 		return $text;
 	}
@@ -321,43 +331,46 @@ class Modelrender extends Modelart
 		return $text;
 	}
 
-	public function automedialist(string $text): string
+	public function automedialist(string $text) : string
 	{
-		$text = preg_replace_callback('~\%MEDIA:(([a-z0-9-_]+(\/([a-z0-9-_])+)*))\%~',
-		function($matches) {
-			$dir = trim($matches[1], '/');
-			$mediamanager = new Modelmedia();
+		$text = preg_replace_callback(
+			'~\%MEDIA:(([a-z0-9-_]+(\/([a-z0-9-_])+)*))\%~',
+			function ($matches) {
+				$dir = trim($matches[1], '/');
+				$mediamanager = new Modelmedia();
 
-			
 
-			if(is_dir(Model::MEDIA_DIR . $dir)) {
-				$medialist = $mediamanager->getlistermedia(Model::MEDIA_DIR . $dir . '/');
-				
-				$dirid = str_replace('/', '-', $dir);
-				
-				$ul = '<ul class="medialist" id="'.$dirid.'">' . PHP_EOL;
-				
-				foreach ($medialist as $media) {
-					$ul .= '<li>';
-					if($media->type() == 'image') {
-						$ul .= '<img alt="'.$media->id().'" id="'.$media->id().'" src="'.$media->getincludepath().'" >';
-					} elseif ($media->type() == 'sound') {
-						$ul .= '<audio id="'.$media->id().'" controls src="'.$media->getincludepath().'" </audio>';
-					} elseif ($media->type() == 'video') {
-						$ul .= '<video controls><source src="'.$media->getincludepath().'" type="video/'.$media->extension().'"></video>';
-					} elseif ($media->type() == 'other') {
-						$ul .= '<a href="'.$media->getincludepath().'" target="_blank" class="media" >'.$media->id().'.'.$media->extension().'</a>';
+
+				if (is_dir(Model::MEDIA_DIR . $dir)) {
+					$medialist = $mediamanager->getlistermedia(Model::MEDIA_DIR . $dir . '/');
+
+					$dirid = str_replace('/', '-', $dir);
+
+					$ul = '<ul class="medialist" id="' . $dirid . '">' . PHP_EOL;
+
+					foreach ($medialist as $media) {
+						$ul .= '<li>';
+						if ($media->type() == 'image') {
+							$ul .= '<img alt="' . $media->id() . '" id="' . $media->id() . '" src="' . $media->getincludepath() . '" >';
+						} elseif ($media->type() == 'sound') {
+							$ul .= '<audio id="' . $media->id() . '" controls src="' . $media->getincludepath() . '" </audio>';
+						} elseif ($media->type() == 'video') {
+							$ul .= '<video controls><source src="' . $media->getincludepath() . '" type="video/' . $media->extension() . '"></video>';
+						} elseif ($media->type() == 'other') {
+							$ul .= '<a href="' . $media->getincludepath() . '" target="_blank" class="media" >' . $media->id() . '.' . $media->extension() . '</a>';
+						}
+						$ul .= '</li>' . PHP_EOL;
 					}
-					$ul .= '</li>' . PHP_EOL;
+
+					$ul .= '</ul>' . PHP_EOL;
+
+					return $ul;
+				} else {
+					return 'directory "' . $dir . '" not found';
 				}
-
-				$ul .= '</ul>' . PHP_EOL;
-
-				return $ul;
-			} else {
-				return 'directory "'.$dir.'" not found';
-			}
-		}, $text);
+			},
+			$text
+		);
 
 		return $text;
 	}
@@ -447,11 +460,11 @@ class Modelrender extends Modelart
 	public function date(string $text)
 	{
 		$art = $this->art;
-		$text = preg_replace_callback('~\%DATE\%~', function($matches) use ($art) {
-			return '<time datetime='.$art->date('string').'>'.$art->date('dmy').'</time>';
+		$text = preg_replace_callback('~\%DATE\%~', function ($matches) use ($art) {
+			return '<time datetime=' . $art->date('string') . '>' . $art->date('dmy') . '</time>';
 		}, $text);
-		$text = preg_replace_callback('~\%TIME\%~', function($matches) use ($art) {
-			return '<time datetime='.$art->date('string').'>'.$art->date('ptime').'</time>';
+		$text = preg_replace_callback('~\%TIME\%~', function ($matches) use ($art) {
+			return '<time datetime=' . $art->date('string') . '>' . $art->date('ptime') . '</time>';
 		}, $text);
 
 		return $text;
@@ -471,7 +484,7 @@ class Modelrender extends Modelart
 	{
 		$linkto = [];
 		foreach ($this->artlist as $art) {
-			if(in_array($this->art->id(), $art->linkfrom())) {
+			if (in_array($this->art->id(), $art->linkfrom())) {
 				$linkto[] = $art->id();
 			}
 		}

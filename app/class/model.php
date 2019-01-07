@@ -11,6 +11,7 @@ abstract class Model
 	const RENDER_DIR = 'assets'. DIRECTORY_SEPARATOR . 'render' . DIRECTORY_SEPARATOR;
 	const GLOBAL_DIR = 'assets'. DIRECTORY_SEPARATOR . 'global' . DIRECTORY_SEPARATOR;
 	const DATABASE_DIR = '.' . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR;
+	
 	const MEDIA_EXTENSIONS = array('jpeg', 'jpg', 'JPG', 'png', 'gif', 'mp3', 'mp4', 'mov', 'wav', 'flac', 'pdf');
 	const MEDIA_TYPES = ['image', 'video', 'sound', 'other'];
 
@@ -18,6 +19,10 @@ abstract class Model
 	const EDIT_SYMBOLS = ['pen', 'tool', 'none'];
 
 	const MAX_ID_LENGTH = 64;
+
+	/** RENDER OPTIONS	 */
+	const RENDER_CLASS_ORIGIN = false;
+	const RENDER_EMPTY_ELEMENT = false;
 
 	public static function dirtopath($dir)
 	{
