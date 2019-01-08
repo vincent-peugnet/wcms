@@ -23,6 +23,8 @@
 </form>
 
 </main>
+
+<script src="<?= Model::jspath() ?>edit.js"></script>
 </body>
 
 <?php $this->stop('page') ?>

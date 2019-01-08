@@ -4,6 +4,7 @@ abstract class Model
 
     const CONFIG_FILE = 'config.json';
 	const CSS_DIR = 'assets' . DIRECTORY_SEPARATOR .'css' . DIRECTORY_SEPARATOR;
+	const JS_DIR = 'assets' . DIRECTORY_SEPARATOR .'js' . DIRECTORY_SEPARATOR;
 	const FONT_DIR = 'fonts' . DIRECTORY_SEPARATOR;
 	const MEDIA_DIR = 'media' . DIRECTORY_SEPARATOR;
 	const FAVICON_DIR = 'media' . DIRECTORY_SEPARATOR . 'favicon' . DIRECTORY_SEPARATOR;
@@ -47,6 +48,11 @@ abstract class Model
 	public static function csspath() 
 	{
 		return self::dirtopath(Model::CSS_DIR);
+	}
+
+	public static function jspath() 
+	{
+		return self::dirtopath(Model::JS_DIR);
 	}
 
 	public static function mediapath()
