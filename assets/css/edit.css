@@ -266,6 +266,33 @@ form#update {
     text-overflow: ellipsis;
 }
 
+#help kbd {
+    border: 1px solid;
+    padding: 3px 6px;
+    background-color: lightgrey;
+    box-shadow: 3px 3px #00000087;
+}
+
+#help div {
+    padding: 2%;
+}
+
+#help code {
+    background-color: #1b1b1b;
+    color: white;
+    padding: 2px;
+    margin-right: 5px;
+}
+
+#help code i {
+    color: #7b97b9;
+}
+
+
+#help li {
+    margin-bottom: 8px;
+}
+
 @media (max-width: 600px) {
     .bar {
         display: none;
@@ -280,3 +307,4 @@ form#update {
     }
 
 }
+

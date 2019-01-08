@@ -182,12 +182,12 @@
     </fieldset>
 
     </details>
-    <details>
+    <details id="help">
         <summary>Help</summary>
-        <div id="help">
-            <?php $this->insert('edithelp') ?>
-
-        </div>
+            <div>
+                <?php $this->insert('edithelp') ?>
+            </div>
+                
     </details>
 
     </div>

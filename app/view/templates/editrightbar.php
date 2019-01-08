@@ -80,7 +80,7 @@
 
     <label for="invites">Invites editors</label>
         <select name="invites[]" id="invites">
-        <option value="" selected>--select invite user--</option>
+        <option value="" selected>--add invite user--</option>
         <?php
         $newinviteuserlist = array_diff($inviteuserlist, $art->invites());
         foreach ($newinviteuserlist as $inviteuser) {

@@ -24,8 +24,6 @@ class Art2
 	protected $renderhead;
 	protected $renderbody;
 	protected $secure;
-	protected $invitepassword;
-	protected $readpassword;
 	protected $interface;
 	protected $linkfrom;
 	protected $linkto;
@@ -37,6 +35,7 @@ class Art2
 	protected $thumbnail;
 	protected $authors;
 	protected $invites;
+	protected $readers;
 	protected $affcount;
 	protected $editcount;
 
@@ -98,8 +97,6 @@ class Art2
 		$this->setrenderhead('');
 		$this->setrenderbody('');
 		$this->setsecure(3);
-		$this->setinvitepassword('invitepassword');
-		$this->setinvitepassword('readpassword');
 		$this->setinterface('main');
 		$this->setlinkfrom([]);
 		$this->setlinkto([]);
@@ -111,6 +108,7 @@ class Art2
 		$this->setthumbnail('');
 		$this->setauthors([]);
 		$this->setinvites([]);
+		$this->setreaders([]);
 		$this->setaffcount(0);
 		$this->seteditcount(0);
 	}
@@ -420,6 +418,11 @@ class Art2
 		return $this->invites;
 	}
 
+	public function readers($type = 'array')
+	{
+		return $this->invites;
+	}
+
 	public function affcount($type = 'int')
 	{
 		return $this->affcount;
@@ -713,6 +716,13 @@ class Art2
 	{
 		if(is_array($invites)) {
 			$this->invites = array_values(array_filter($invites));
+		}
+	}
+
+	public function setreaders($readers)
+	{
+		if(is_array($readers)) {
+			$this->readers = array_values(array_filter($readers));
 		}
 	}
 
