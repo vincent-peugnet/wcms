@@ -58,15 +58,18 @@ class Controlleruser extends Controller
 
                 case 'update':
                     $user = $this->usermanager->get($_POST['id']);
-                    $user->hydrate($_POST);
-                    if(empty($user->id())) {
+                    $userupdate = clone $user;
+                    $userupdate->hydrate($_POST);
+                    if(empty($userupdate->id())) {
                         $this->routedirectget('user', ['error' => 'wrong_id']);
-                    } elseif (!empty($_POST['password']) && (empty($user->password())  || $this->usermanager->passwordexist($user->password()))) {
+                    } elseif (!empty($_POST['password']) && (empty($userupdate->password())  || $this->usermanager->passwordexist($userupdate->password()))) {
                         $this->routedirectget('user', ['error' => 'change_password']);
-                    } elseif (empty($user->level())) {
+                    } elseif (empty($userupdate->level())) {
                         $this->routedirectget('user', ['error' => 'wrong_level']);
+                    } elseif ($user->level() === 10 && $userupdate->level() !== 10) {
+                        $this->routedirectget('user', ['error' => 'cant_edit_yourself']);
                     } else {
-                        $this->usermanager->add($user);
+                        $this->usermanager->add($userupdate);
                         $this->routedirect('user');
                     }
             }

@@ -29,10 +29,9 @@ class Application
                 header('Location: ./');
                 exit;
             }
-        } elseif(isset($_POST['userinit'])) {
+        } elseif(isset($_POST['userinit']) && !empty($_POST['userinit']['id']) && !empty($_POST['userinit']['password'])) {
             $userdata = $_POST['userinit'];
             $userdata['level'] = 10;
-            //$userdata['id'] = idclean($userdata['id']);
             $user = new User($userdata);
             $this->usermanager->add($user);
             header('Location: ./');
@@ -108,14 +107,14 @@ class Application
         <h2>
         <label for="id">Your identifiant</label>
         </h2>
-        <input type="text" name="userinit[id]" value="<?= Config::admin() ?>" id="admin" maxlength="64">
+        <input type="text" name="userinit[id]" id="admin" maxlength="64" required>
         <p><i>Your user id as the first administrator.</i></p>
         </div>
         <div>
         <h2>
         <label for="password">Your password</label>
         </h2>
-        <input type="password" name="userinit[password]" value="<?= Config::admin() ?>" id="admin" minlength="4" maxlength="64">
+        <input type="password" name="userinit[password]" id="password" minlength="4" maxlength="64" required>
         <p><i>Your user passworder as first administrator.</i></p>
         </div>
         <input type="submit" value="set">
