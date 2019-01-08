@@ -85,7 +85,7 @@ foreach ($medialist as $media) {
     <td><?= $media->width() ?></td>
     <td><?= $media->height() ?></td>
     <td><?= $media->length() ?></td>
-    <td><code>
+    <td class="code"><code>
     <?php
         if($media->type() == 'image') {
             ?>

@@ -5,7 +5,7 @@
 
 div#flex {
     display: flex;
-    height: -webkit-fill-available;
+    height: 100%;
 }
 
 div#options {
@@ -23,6 +23,10 @@ body {
     background-color: lightgrey;
     font-family: monospace;
     font-size: 15px;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .menu {
@@ -41,7 +45,6 @@ tr:hover {
 
 #topbar {
     background-color: #7b97b9;
-    position: fixed;
     width: 100%;
     padding: 3px 0.5%;
 }
@@ -70,8 +73,9 @@ th {
 }
 
 main {
-    padding-top: 30px;
     margin: 0 0.5%;
+    flex: 1;
+    overflow-y: auto;
 }
 
 main.admin input, select, textarea {
@@ -230,6 +234,12 @@ main.media code {
     background-color: darkslategrey;
     font-size: small;
     padding: 1px;
+}
+
+
+
+td.code {
+    background-color: darkslategrey;
 }
 
 

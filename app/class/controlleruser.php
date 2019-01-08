@@ -66,7 +66,7 @@ class Controlleruser extends Controller
                         $this->routedirectget('user', ['error' => 'change_password']);
                     } elseif (empty($userupdate->level())) {
                         $this->routedirectget('user', ['error' => 'wrong_level']);
-                    } elseif ($user->level() === 10 && $userupdate->level() !== 10) {
+                    } elseif ($user->level() === 10 && $userupdate->level() !== 10 && $this->user->id() === $user->id()) {
                         $this->routedirectget('user', ['error' => 'cant_edit_yourself']);
                     } else {
                         $this->usermanager->add($userupdate);

@@ -1,6 +1,6 @@
 
     <h4>update shortcut</h4>
-    <kbd>ALT</kbd> + <kbd>X</kbd>
+    <kbd>CTRL</kbd> + <kbd>S</kbd>
     <h4>Synthax</h4>
     <p>
     📏<a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown encoding</a>
