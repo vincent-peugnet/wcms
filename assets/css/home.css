@@ -84,6 +84,13 @@ main.admin input, select, textarea {
     max-width: 400px;
 }
 
+
+div.checkbox [type="checkbox"] {
+    display: inline-block;
+    width: auto;
+}
+
+
 main.font input, select, textarea {
     display: block;
 }

@@ -41,7 +41,7 @@ class Art2
 
 
 	const LEN = 255;
-	const LENTEXT = 20000;
+	const LENTEXT = 2**20;
 	const SECUREMAX = 2;
 	const LENCOULEUR = 7;
 	const DEBUT = '(?id=';

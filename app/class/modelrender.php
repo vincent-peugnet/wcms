@@ -7,6 +7,8 @@ class Modelrender extends Modelart
 	protected $artlist;
 	protected $linkfrom = [];
 	protected $sum = [];
+	protected $internallinkblank = '';
+	protected $externallinkblank = '';
 
 	const SUMMARY = '%SUMMARY%';
 	const REMPLACE_SELF_ELEMENT = false;
@@ -18,6 +20,14 @@ class Modelrender extends Modelart
 
 		$this->router = $router;
 		$this->artlist = $this->getlister();
+
+		if(Config::internallinkblank()) {
+			$this->internallinkblank = ' target="blank" ';
+		}
+
+		if(Config::externallinkblank()) {
+			$this->externallinkblank = ' target="blank" ';
+		}
 	}
 
 	public function uart($id)
@@ -255,7 +265,7 @@ class Modelrender extends Modelart
 
 	public function autourl($text)
 	{
-		$text = preg_replace('#( |\R|>)(https?:\/\/((\S+)\.([^< ]+)))#', '$1<a href="$2" class="external" target="_blank">$3</a>', $text);
+		$text = preg_replace('#( |\R|>)(https?:\/\/((\S+)\.([^< ]+)))#', '$1<a href="$2" class="external" '. $this->externallinkblank .'>$3</a>', $text);
 		return $text;
 	}
 
@@ -268,11 +278,12 @@ class Modelrender extends Modelart
 			function ($matches) use ($rend, &$linkfrom) {
 				$matchart = $rend->get($matches[1]);
 				if (!$matchart) {
-					return 'href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal"';
+					$link = 'href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal"' . $this->internallinkblank;
 				} else {
 					$linkfrom[] = $matchart->id();
-					return 'href="' . $rend->uart($matches[1]) . $matches[2] . '" title="' . $matchart->description() . '" class="internal"';
+					$link =  'href="' . $rend->uart($matches[1]) . $matches[2] . '" title="' . $matchart->description() . '" class="internal"' . $this->internallinkblank;
 				}
+				return $link;
 			},
 			$text
 		);
@@ -289,10 +300,10 @@ class Modelrender extends Modelart
 			function ($matches) use ($rend, &$linkfrom) {
 				$matchart = $rend->get($matches[1]);
 				if (!$matchart) {
-					return '<a href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal">' . $matches[1] . '</a>';
+					return '<a href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal" '. $this->internallinkblank .' >' . $matches[1] . '</a>';
 				} else {
 					$linkfrom[] = $matchart->id();
-					return '<a href="' . $rend->uart($matches[1]) . $matches[2] . '" title="' . $matchart->description() . '" class="internal">' . $matchart->title() . '</a>';
+					return '<a href="' . $rend->uart($matches[1]) . $matches[2] . '" title="' . $matchart->description() . '" class="internal" '. $this->internallinkblank .' >' . $matchart->title() . '</a>';
 				}
 			},
 			$text
@@ -457,7 +468,7 @@ class Modelrender extends Modelart
 				} else {
 					$actual = '';
 				}
-				$ul .= '<li><a href="' . $this->router->generate('artread/', ['art' => $item->id()]) . '" title="' . $item->description() . '" class="internal' . $actual . '"  >' . $item->title() . '</a></li>' . PHP_EOL;
+				$ul .= '<li><a href="' . $this->router->generate('artread/', ['art' => $item->id()]) . '" title="' . $item->description() . '" class="internal' . $actual . '" '. $this->internallinkblank .'  >' . $item->title() . '</a></li>' . PHP_EOL;
 			}
 			$ul .= '</ul>' . PHP_EOL;
 

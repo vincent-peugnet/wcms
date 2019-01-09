@@ -23,8 +23,7 @@ foreach ($opt->col('array') as $key => $col) {
 
 <fieldset><legend>Privacy</legend><ul>
 <li><input type="radio" id="4" name="secure" value="4"<?= $opt->secure() == 4 ? "checked" : "" ?>/><label for="4">all</label></li>
-<li><input type="radio" id="3" name="secure" value="3"<?= $opt->secure() == 3 ? "checked" : "" ?>/><label for="3">editor</label></li>
-<li><input type="radio" id="2" name="secure" value="2"<?= $opt->secure() == 2 ? "checked" : "" ?>/><label for="2">invite only</label></li>
+<li><input type="radio" id="2" name="secure" value="2"<?= $opt->secure() == 2 ? "checked" : "" ?>/><label for="2">not published</label></li>
 <li><input type="radio" id="1" name="secure" value="1"<?= $opt->secure() == 1 ? "checked" : "" ?>/><label for="1">private</label></li>
 <li><input type="radio" id="0" name="secure" value="0"<?= $opt->secure() == 0 ? "checked" : "" ?>/><label for="0">public</label></li>
 </ul></fieldset>

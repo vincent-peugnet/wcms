@@ -5,11 +5,6 @@
 abstract class Config
 {
 	protected static $arttable = 'mystore';
-	protected static $domain;
-	protected static $admin;
-	protected static $editor = 'editor';
-	protected static $invite;
-	protected static $read;
 	protected static $color4;
 	protected static $fontsize = 15;
 	protected static $basepath = '';
@@ -21,6 +16,8 @@ abstract class Config
 	protected static $showeditmenu = true;
 	protected static $editsymbol = 'pen';	
 	protected static $analytics = '';	
+	protected static $externallinkblank = true;
+	protected static $internallinkblank = false;
 
 
 
@@ -83,31 +80,6 @@ abstract class Config
 		return self::$arttable;
 	}
 
-	public static function domain()
-	{
-		return self::$domain;
-	}
-
-	public static function admin()
-	{
-		return self::$admin;
-	}
-
-	public static function editor()
-	{
-		return self::$editor;
-	}
-
-	public static function invite()
-	{
-		return self::$invite;
-	}
-
-	public static function read()
-	{
-		return self::$read;
-	}
-
 	public static function color4()
 	{
 		return self::$color4;
@@ -163,6 +135,16 @@ abstract class Config
 		return self::$analytics;
 	}
 
+	public static function externallinkblank()
+	{
+		return self::$externallinkblank;
+	}
+
+	public static function internallinkblank()
+	{
+		return self::$internallinkblank;
+	}
+
 
 
 // __________________________________________ S E T ______________________________________
@@ -170,33 +152,6 @@ abstract class Config
 	public static function setarttable($arttable)
 	{
 		self::$arttable = strip_tags($arttable);
-	}
-
-	public static function setdomain($domain)
-	{
-		self::$domain = strip_tags($domain);
-	}
-
-	public static function setadmin($admin)
-	{
-		if(is_string($admin) && strlen($admin) >= 4 && strlen($admin) <= 64) {
-			self::$admin = strip_tags($admin);
-		}
-	}
-
-	public static function seteditor($editor)
-	{
-		self::$editor = strip_tags($editor);
-	}
-
-	public static function setinvite($invite)
-	{
-		self::$invite = strip_tags($invite);
-	}
-
-	public static function setread($read)
-	{
-		self::$read = strip_tags($read);
 	}
 
 	public static function setcolor4($color4)
@@ -279,7 +234,17 @@ abstract class Config
 			self::$analytics = $analytics;
 		}
 	}
+	
+	public static function setexternallinkblank($externallinkblank)
+	{
+		self::$externallinkblank = boolval($externallinkblank);
+	}
 
+	public static function setinternallinkblank($internallinkblank)
+	{
+		self::$internallinkblank = boolval($internallinkblank);
+	}
+	
 
 
 

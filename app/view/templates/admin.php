@@ -17,12 +17,6 @@
     <input type="submit" value="Update configuration">
 
 
-    <h2>Passwords</h2>
-    <label for="admin">Admin password</label>
-    <input type="password" name="admin" id="admin" value="<?= Config::admin() ?>">
-    <label for="editor">Editor password</label>
-    <input type="password" name="editor" id="editor" value="<?= Config::editor() ?>">
-
     <h2>Page creation</h2>
     <label for="defaultart">Create new page BODY based on an already existing one</label>
     <select name="defaultart" id="defaultart">
@@ -44,14 +38,28 @@
     }
     ?>
 
+    <div class="checkbox">
+    <input type="hidden" name="externallinkblank" value="0">
+    <input type="checkbox" name="externallinkblank" id="externallinkblank" value="1" <?= Config::externallinkblank() ? 'checked' : '' ?>>
+    <label for="externallinkblank">Open external links in new tab</label>
+    </div>
+
+    <div class="checkbox">
+    <input type="hidden" name="internallinkblank" value="0">
+    <input type="checkbox" name="internallinkblank" id="internallinkblank" value="1" <?= Config::internallinkblank() ? 'checked' : '' ?>>
+    <label for="internallinkblank">Open internal links in new tab</label>
+    </div>
+
 
     <h2>Editing</h2>
 
     <label for="existnot">Text to show when a page does not exist yet</label>
     <input type="text" name="existnot" id="existnot" value="<?= Config::existnot() ?>">
 
-    <label for="showeditmenu">Show editor menu in top right corner of pages</label>
+    <div class="checkbox">
     <input type="checkbox" name="showeditmenu" id="showeditmenu" <?= Config::showeditmenu() === true ? 'checked' : '' ?>>
+    <label for="showeditmenu">Show editor menu in top right corner of pages</label>
+    </div>
 
     <?php
     if(Config::showeditmenu() === true) {

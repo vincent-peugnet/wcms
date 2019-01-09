@@ -9,7 +9,7 @@
     <a href="<?= $this->url('home') ?>" class="icon" >⍇</a>
     </span>
     <span>
-    <input type="submit" value="update" accesskey="x" form="update">
+    <input type="submit" value="update" accesskey="s" form="update">
     </span>
 
 
