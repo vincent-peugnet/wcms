@@ -16,7 +16,7 @@ window.onload = () => {
 
 /**
  * Manage a keyboardEvent
- * @param {KeyboardEvent} e 
+ * @param {KeyboardEvent} e
  */
 function keyboardHandler(e) {
     if (e.composed) {
@@ -24,6 +24,8 @@ function keyboardHandler(e) {
             // console.log(e.key);
             switch (e.key) {
                 case 's':
+                    e.preventDefault();
+                    unsavedChanges = false;
                     form.submit();
                     return false;
             }
@@ -33,7 +35,7 @@ function keyboardHandler(e) {
 
 /**
  * Manage change event
- * @param {Event} e 
+ * @param {Event} e
  */
 function changeHandler(e) {
     unsavedChanges = true;
@@ -42,7 +44,7 @@ function changeHandler(e) {
 
 /**
  * Manage submit event
- * @param {Event} e 
+ * @param {Event} e
  */
 function submitHandler(e) {
     unsavedChanges = false;
@@ -50,11 +52,11 @@ function submitHandler(e) {
 
 /**
  * Manage a beforeUnloadEvent
- * @param {BeforeUnloadEvent} e 
+ * @param {BeforeUnloadEvent} e
  */
 function confirmExit(e) {
     // console.log({unsavedChanges});
     if (unsavedChanges) {
-        return "You have attempted to leave this page. Are you sure?";
+        return "You have unsaved changes, do you really want to leave this page?";
     }
 }
