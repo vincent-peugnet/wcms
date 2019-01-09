@@ -18,6 +18,7 @@ abstract class Config
 	protected static $analytics = '';	
 	protected static $externallinkblank = true;
 	protected static $internallinkblank = false;
+	protected static $defaultprivacy = 0;
 
 
 
@@ -145,6 +146,11 @@ abstract class Config
 		return self::$internallinkblank;
 	}
 
+	public static function defaultprivacy()
+	{
+		return self::$defaultprivacy;
+	}
+
 
 
 // __________________________________________ S E T ______________________________________
@@ -243,6 +249,14 @@ abstract class Config
 	public static function setinternallinkblank($internallinkblank)
 	{
 		self::$internallinkblank = boolval($internallinkblank);
+	}
+
+	public static function setdefaultprivacy($defaultprivacy)
+	{
+		$defaultprivacy = intval($defaultprivacy);
+		if($defaultprivacy >= 0 && $defaultprivacy <= 2) {
+			self::$defaultprivacy = $defaultprivacy;
+		}
 	}
 	
 

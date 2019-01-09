@@ -18,6 +18,18 @@
 
 
     <h2>Page creation</h2>
+
+    <label for="defaultprivacy">Default privacy</label>
+    <select name="defaultprivacy" id="defaultprivacy">
+    <option value="0" <?= Config::defaultprivacy() == 0 ? 'selected' : '' ?>>public</option>
+    <option value="1" <?= Config::defaultprivacy() == 1 ? 'selected' : '' ?>>private</option>
+    <option value="2" <?= Config::defaultprivacy() == 2 ? 'selected' : '' ?>>not published</option>
+    </select>
+
+
+
+
+
     <label for="defaultart">Create new page BODY based on an already existing one</label>
     <select name="defaultart" id="defaultart">
     <option value="" <?= Config::defaultart() === '' || !$defaultartexist ? 'selected' : '' ?>>--use default BODY element--</option>
@@ -38,6 +50,15 @@
     }
     ?>
 
+
+
+    <h2>Editing</h2>
+
+    <label for="existnot">Text to show when a page does not exist yet</label>
+    <input type="text" name="existnot" id="existnot" value="<?= Config::existnot() ?>">
+
+    <h3>Links</h3>
+    
     <div class="checkbox">
     <input type="hidden" name="externallinkblank" value="0">
     <input type="checkbox" name="externallinkblank" id="externallinkblank" value="1" <?= Config::externallinkblank() ? 'checked' : '' ?>>
@@ -51,10 +72,8 @@
     </div>
 
 
-    <h2>Editing</h2>
 
-    <label for="existnot">Text to show when a page does not exist yet</label>
-    <input type="text" name="existnot" id="existnot" value="<?= Config::existnot() ?>">
+    <h3>Edit quick menu</h3>
 
     <div class="checkbox">
     <input type="checkbox" name="showeditmenu" id="showeditmenu" <?= Config::showeditmenu() === true ? 'checked' : '' ?>>

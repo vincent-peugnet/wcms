@@ -13,9 +13,6 @@
     </span>
 
 
-    <span>
-        <a href="<?= $this->uart('artconfirmdelete', $art->id()) ?>"><span class="symbol">✖</span><span class="text">delete</span></a>
-    </span>
 
 
 
@@ -24,15 +21,10 @@
     </span>
     <span id="headid"><?= $art->id() ?></span>
 
-    <span id="fontsize">
-
-    <label for="fontsize">Font-size</label>
-    <input type="number" name="fontsize" value="<?= Config::fontsize() ?>" id="fontsize" min="5" max="99">
-</span>
 
 
 
-<span id="menu" style="display: none;">
+<span id="menu" >
     <?php if($user->iseditor()) { ?>
 
     <a href="<?= $this->url('font') ?>"><span class="symbol">📝</span><span class="text">font</span></a>
@@ -49,6 +41,16 @@
 </span>
 
 
+<span id="delete">
+        <a href="<?= $this->uart('artconfirmdelete', $art->id()) ?>"><span class="symbol">✖</span><span class="text">delete</span></a>
+</span>
+
+
+<span id="fontsize">
+
+<label for="fontsize">Font-size</label>
+<input type="number" name="fontsize" value="<?= Config::fontsize() ?>" id="fontsize" min="5" max="99">
+</span>
 
 
 </div>
