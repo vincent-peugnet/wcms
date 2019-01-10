@@ -106,7 +106,7 @@
                 <?php
             } else {
                 foreach($art->templateoptions() as $option) {
-                    if($option != 'externalsavascript') {
+                    if($option != 'externaljavascript') {
                         echo '<input type="hidden" name="templateoptions[]" value="'.$option.'">';
                     }
                 }

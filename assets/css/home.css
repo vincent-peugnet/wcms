@@ -15,6 +15,7 @@ div#options {
 
 div#main {
     overflow: auto;
+    width: 100%;
 }
 
 body {
@@ -73,7 +74,6 @@ th {
 }
 
 main {
-    margin: 0 0.5%;
     flex: 1;
     overflow-y: auto;
 }

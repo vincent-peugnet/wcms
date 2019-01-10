@@ -77,7 +77,11 @@ function idclean(string $input)
 	$replace = ['e', 'a', 'e', 'c', 'u', 'i', 'i', '-'];
 	$input = str_replace($search, $replace, $input);
 
-	return preg_replace('%[^a-z0-9-_+]%', '', strtolower(trim($input)));
+	$input = preg_replace('%[^a-z0-9-_+]%', '', strtolower(trim($input)));
+
+	$input = substr($input, 0, Model::MAX_ID_LENGTH);
+
+	return $input;
 }
 
 

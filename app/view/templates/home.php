@@ -74,7 +74,7 @@
             <td class="delete"><a href="<?= $this->uart('artdelete', $item->id()) ?>" >✖</a></td>
             <td class="log"><a href="<?= $this->uart('artlog', $item->id()) ?>" target="_blank">⁋</a></td>
             <td class="tag"><a title="<?= $item->tag('string') ?>"><?= $item->tag('sort') ?></a></td>
-            <td class="summary"><?= $item->description() ?></td>
+            <td class="summary" title="<?= $item->description() ?>"><?= $item->description('short') ?></td>
             <td class="linkto"><a title="<?= $item->linkto('string') ?>" ><?= $item->linkto('sort') ?></a></td>
             <td class="linkfrom"><a title="<?= $item->linkfrom('string') ?>" ><?= $item->linkfrom('sort') ?></a></td>
             <td class="datemodif"><?= $item->datemodif('hrdi') ?></td>

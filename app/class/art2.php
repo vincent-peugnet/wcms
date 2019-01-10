@@ -152,7 +152,11 @@ class Art2
 
 	public function description($type = 'string')
 	{
-		return $this->description;
+		if($type == 'short' && strlen($this->description) > 15 ) {
+				return substr($this->description, 0, 15) . '.';
+		} else {
+			return $this->description;
+		}
 	}
 
 	public function tag($option = 'array')
@@ -441,7 +445,7 @@ class Art2
 
 	public function setid($id)
 	{
-		if (strlen($id) < Model::MAX_ID_LENGTH and is_string($id)) {
+		if (strlen($id) <= Model::MAX_ID_LENGTH and is_string($id)) {
 			$this->id = strip_tags(strtolower(str_replace(" ", "", $id)));
 		}
 	}
@@ -687,7 +691,7 @@ class Art2
 	public function settemplateoptions($templateoptions)
 	{
 		if(is_array($templateoptions)) {
-			$this->templateoptions = array_filter($templateoptions);
+			$this->templateoptions = array_values(array_filter($templateoptions));
 		}
 	}
 
