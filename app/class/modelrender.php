@@ -255,7 +255,7 @@ class Modelrender extends Modelart
 
 	public function media(string $text) : string
 	{
-		$text = preg_replace('%(src|href)="((\/?[\w-_]+)+\.[a-z0-9]{1,5})"%', '$1="' . Model::mediapath() . '$2" target="_blank" class="media"', $text);
+		$text = preg_replace('%(src|href)="(\/?[\w-_]+\.[a-z0-9]{1,5})"%', '$1="' . Model::mediapath() . '$2" target="_blank" class="media"', $text);
 		if (!is_string($text)) {
 			throw new Exception('Rendering error -> media module');
 		}
