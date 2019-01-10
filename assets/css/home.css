@@ -268,5 +268,9 @@ main.user table form {
         left: 0;
     }
 
+    main.home div#options {
+        display: none;
+    }
+
 }
 

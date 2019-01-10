@@ -71,7 +71,7 @@
     <label for="internallinkblank">Open internal links in new tab</label>
     </div>
 
-
+    <i>(This modifications need re-rendering)</i>
 
     <h3>Edit quick menu</h3>
 
@@ -119,6 +119,8 @@
 
     <label for="analytics">Google analytics Tracking ID</label>
     <input type="text" name="analytics" id="analytics" value="<?= Config::analytics() ?>">
+
+    <i>(Need rendering to work)</i>
 
 
     <input type="submit" value="Update configuration">

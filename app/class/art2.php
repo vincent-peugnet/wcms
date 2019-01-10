@@ -96,7 +96,7 @@ class Art2
 		$this->setexternalscript([]);
 		$this->setrenderhead('');
 		$this->setrenderbody('');
-		$this->setsecure(3);
+		$this->setsecure(Config::defaultprivacy());
 		$this->setinterface('main');
 		$this->setlinkfrom([]);
 		$this->setlinkto([]);
