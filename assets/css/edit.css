@@ -178,6 +178,16 @@ html {
     line-height: 30px;
 }
 
+
+.editor div#editmenu {
+    height: 30px;
+    line-height: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+
 .editor ul {
     list-style: none;
     padding: 0;
@@ -228,12 +238,6 @@ a.icon {
     font-size: 25px;
 }
 
-form#update {
-    display: flex;
-    height: 30px;
-}
-
-#update span {margin: 0 0.2%;}
 
 .editor .panel input[type="checkbox"] {
     width: auto;
@@ -307,4 +311,5 @@ form#update {
     }
 
 }
+
 
