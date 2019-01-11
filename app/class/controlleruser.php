@@ -23,9 +23,12 @@ class Controlleruser extends Controller
             $user = new User($_POST);
             if(empty($user->id()) || $this->usermanager->get($user)) {
                 $this->routedirectget('user', ['error' => 'wrong_id']);
-            } elseif(empty($user->password()) || $this->usermanager->passwordexist($user->password())) {
+            } elseif(empty($user->password()) || $this->usermanager->passwordexist($user->password()) || !$user->validpassword()) {
                 $this->routedirectget('user', ['error' => 'change_password']);
             } else {
+                if($user->passwordhashed()) {
+                    $user->hashpassword();
+                }
                 $this->usermanager->add($user);
                 $this->routedirect('user');
             }
@@ -62,13 +65,16 @@ class Controlleruser extends Controller
                     $userupdate->hydrate($_POST);
                     if(empty($userupdate->id())) {
                         $this->routedirectget('user', ['error' => 'wrong_id']);
-                    } elseif (!empty($_POST['password']) && (empty($userupdate->password())  || $this->usermanager->passwordexist($userupdate->password()))) {
-                        $this->routedirectget('user', ['error' => 'change_password']);
+                    } elseif (!empty($_POST['password']) && (empty($userupdate->password())  || $this->usermanager->passwordexist($userupdate->password()) || !$userupdate->validpassword())) {
+                        $this->routedirectget('user', ['error' => 'password_unvalid']);
                     } elseif (empty($userupdate->level())) {
                         $this->routedirectget('user', ['error' => 'wrong_level']);
                     } elseif ($user->level() === 10 && $userupdate->level() !== 10 && $this->user->id() === $user->id()) {
                         $this->routedirectget('user', ['error' => 'cant_edit_yourself']);
                     } else {
+                        if($userupdate->passwordhashed() && !$user->passwordhashed()) {
+                            $userupdate->hashpassword();
+                        }
                         $this->usermanager->add($userupdate);
                         $this->routedirect('user');
                     }

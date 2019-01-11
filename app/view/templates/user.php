@@ -20,7 +20,7 @@
 
 <table>
 <tr>
-<th>id</th><th>password</th><th>level</th><th>action</th>
+<th>id</th><th>password</th><th>hash</th><th>level</th><th>action</th>
 </tr>
 
 <tr>
@@ -31,6 +31,12 @@
     <td>
         <input type="password" name="password" minlength="4" maxlength="64" required>
     </td>
+
+    <td>
+    <input type="hidden" name="passwordhashed" value="0">
+    <input type="checkbox" name="passwordhashed" value="1">
+    </td>
+
     <td>
         <select name="level" id="level">
             <option value="1">reader</option>
@@ -59,7 +65,11 @@ foreach ($userlist as $user ) {
     </td>
 
     <td>
-    <input type="password" name="password" placeholder="<?= str_repeat('⦁', $user->password('int')) ?>" minlength="4" maxlength="64" >
+    <input type="password" name="password" minlength="4" maxlength="64" >
+    </td>
+
+    <td>
+    <?= $user->passwordhashed() ? '🔑' : '<input type="hidden" name="passwordhashed" value="0"><input type="checkbox" name="passwordhashed" value="1">' ?>
     </td>
 
     <td>
