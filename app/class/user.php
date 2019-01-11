@@ -82,7 +82,7 @@ class User
 
     public function setpassword(string $password)
     {
-        if (is_string($password)) {
+        if (is_string($password) && !empty($password)) {
             $this->password = $password;
         }
 

@@ -72,6 +72,9 @@ class Controlleruser extends Controller
                     } elseif ($user->level() === 10 && $userupdate->level() !== 10 && $this->user->id() === $user->id()) {
                         $this->routedirectget('user', ['error' => 'cant_edit_yourself']);
                     } else {
+                        if($userupdate->password() !== $user->password() && $user->passwordhashed()) {
+                            $userupdate->setpasswordhashed(false);
+                        }
                         if($userupdate->passwordhashed() && !$user->passwordhashed()) {
                             $userupdate->hashpassword();
                         }
