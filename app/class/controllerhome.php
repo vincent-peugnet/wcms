@@ -17,11 +17,6 @@ class Controllerhome extends Controller
     public function desktop()
     {
 
-        $this->table2();
-    }
-
-    public function table2()
-    {
         $table = $this->modelhome->getlister();
         $this->opt = $this->modelhome->optinit($table);
 

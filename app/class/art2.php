@@ -44,9 +44,6 @@ class Art2
 	const LEN = 255;
 	const LENTEXT = 2**20;
 	const SECUREMAX = 2;
-	const LENCOULEUR = 7;
-	const DEBUT = '(?id=';
-	const FIN = ')';
 	const TABS = ['main', 'css', 'header', 'body', 'nav', 'aside', 'footer', 'javascript'];
 	const VAR_DATE = ['date', 'datecreation', 'datemodif', 'daterender'];
 
