@@ -51,9 +51,9 @@ foreach ($opt->taglist() as $tagfilter => $count) {
 
     if (in_array($tagfilter, $opt->tagfilter())) {
 
-        echo '<li><input type="checkbox" name="tagfilter[]" id="' . $tagfilter . '" value="' . $tagfilter . '" checked /><label for="' . $tagfilter . '">' . $tagfilter . ' (' . $count . ')</label></li>';
+        echo '<li><input type="checkbox" name="tagfilter[]" id="tag_' . $tagfilter . '" value="' . $tagfilter . '" checked /><label for="tag_' . $tagfilter . '">' . $tagfilter . ' (' . $count . ')</label></li>';
     } else {
-        echo '<li><input type="checkbox" name="tagfilter[]" id="' . $tagfilter . '" value="' . $tagfilter . '" /><label for="' . $tagfilter . '">' . $tagfilter . ' (' . $count . ')</label></li>';
+        echo '<li><input type="checkbox" name="tagfilter[]" id="tag_' . $tagfilter . '" value="' . $tagfilter . '" /><label for="tag_' . $tagfilter . '">' . $tagfilter . ' (' . $count . ')</label></li>';
     }
 }
 if ($in = true || $out = true) {
@@ -78,5 +78,33 @@ if ($in = true || $out = true) {
 <input type="submit" name="submit" value="filter">
 ⬅<input type="submit" name="submit" value="reset">
 
+<?php if($user->isadmin()) { ?>
+
 </form>
+
+<h2>Columns</h2>
+
+<form action="" method="post">
+
+<ul>
+
+<?php
+
+foreach ($opt->col() as $col) {
+    ?>
+    <li>
+    <input type="checkbox" name="col[]" id="col_<?= $col ?>">
+    <label for="col_<?= $col ?>"><?= $col ?></label>
+    </li>
+    <?php
+}
+
+?>
+
+</ul>
+
+</form>
+
+<?php } ?>
+
 </div>

@@ -104,7 +104,12 @@ class Controllerart extends Controller
             } else {
                 $page = ['head' => $this->art->renderhead(), 'body' => $this->art->renderbody()];
             }
-            $this->art->addaffcount();
+            if($canread) {
+                $this->art->addaffcount();
+                if($this->user->level() < 2) {
+                    $this->art->addvisitcount();
+                }
+            }
             $this->artmanager->update($this->art);
         }
         $data = array_merge($alerts, $page, ['art' => $this->art, 'artexist' => $artexist, 'canread' => $canread, 'readernav' => Config::showeditmenu(), 'canedit' => $this->canedit()]);

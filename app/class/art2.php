@@ -37,6 +37,7 @@ class Art2
 	protected $invites;
 	protected $readers;
 	protected $affcount;
+	protected $visitcount;
 	protected $editcount;
 
 
@@ -110,6 +111,7 @@ class Art2
 		$this->setinvites([]);
 		$this->setreaders([]);
 		$this->setaffcount(0);
+		$this->setvisitcount(0);
 		$this->seteditcount(0);
 	}
 
@@ -432,6 +434,11 @@ class Art2
 		return $this->affcount;
 	}
 
+	public function visitcount($type = 'int')
+	{
+		return $this->visitcount;
+	}
+
 	public function editcount($type = 'int')
 	{
 		return $this->editcount;
@@ -739,6 +746,15 @@ class Art2
 		}
 	}
 
+	public function setvisitcount($visitcount)
+	{
+		if (is_int($visitcount)) {
+			$this->visitcount = $visitcount;
+		} elseif (is_numeric($visitcount)) {
+			$this->visitcount = intval($visitcount);
+		}
+	}
+
 	public function seteditcount($editcount)
 	{
 		if (is_int($editcount)) {
@@ -760,6 +776,11 @@ class Art2
 	public function addaffcount()
 	{
 		$this->affcount++;
+	}
+
+	public function addvisitcount()
+	{
+		$this->visitcount++;
 	}
 
 	public function updateedited()

@@ -11,12 +11,22 @@
 <main class="user">
 
 
-<div>
 <h1>User : <?= $user->id() ?></h1>
 
-</div>
 
 
+<form action="" method="post">
+
+<h2>Connexion Options</h2>
+
+<input type="number" name="cookie" id="cookie">
+<label for="cookie">Cookie conservation time <i>(In days)</i></label>
+
+<input type="submit" value="submit">
+
+</form>
+
+<h1>Admin panel</h1>
 
 <table>
 <tr>
@@ -87,6 +97,8 @@ foreach ($userlist as $user ) {
 ?>
 
 </table>
+
+
 
 </main>
 </body>

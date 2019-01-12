@@ -21,7 +21,6 @@ abstract class Config
 	protected static $defaultprivacy = 0;
 
 
-
 // _______________________________________ F U N _______________________________________
 
 
