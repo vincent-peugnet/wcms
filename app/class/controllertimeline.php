@@ -2,7 +2,9 @@
 
 class Controllertimeline extends Controller
 {
-    /**@var Modeltimeline */
+    /**
+     * @var Modeltimeline
+     */
     protected $eventmanager;
 
     public function __construct($render) {
@@ -12,7 +14,19 @@ class Controllertimeline extends Controller
 
     public function desktop()
     {
-        var_dump($this->eventmanager->list());
+        $eventlist = $this->eventmanager->getlister();
+
+        $this->showtemplate('timeline', ['eventlist' => $eventlist]);
+
+    }
+
+    public function add()
+    {
+        $event = new Event($_POST);
+        $event->stamp();
+        $event->setid($this->eventmanager->getlastfreeid());
+        $this->eventmanager->add($event);
+        $this->routedirect('timeline');
     }
 }
 

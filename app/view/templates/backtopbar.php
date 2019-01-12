@@ -22,6 +22,7 @@
 <?php } else { ?>  
 
 <span>
+<a href="<?= $this->url('timeline') ?>" <?= $tab == 'timeline' ? 'class="actualpage"' : '' ?>>timeline</a>
 <a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>><?= $user->id() ?></a> <i><?= $user->level() ?></i>
 </span>
 

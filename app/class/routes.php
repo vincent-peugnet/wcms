@@ -31,6 +31,7 @@ class Routes
             ['POST', '/!user/update', 'Controlleruser#update', 'userupdate'],
             ['GET', '/!info', 'Controllerinfo#desktop', 'info'],
             ['GET', '/!timeline', 'Controllertimeline#desktop', 'timeline'],
+            ['POST', '/!timeline/add', 'Controllertimeline#add', 'timelineadd'],
             ['GET', '/[cid:art]/', 'Controllerart#read', 'artread/'],
             ['GET', '/[cid:art]', 'Controllerart#read', 'artread'],
             ['GET', '/[cid:art]/add', 'Controllerart#add', 'artadd'],

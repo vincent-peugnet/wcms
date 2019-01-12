@@ -258,6 +258,16 @@ main.user table form {
 
 
 
+
+
+
+li.self.event {
+    text-align: right;
+}
+
+
+
+
 @media (max-width: 600px) {
     main.home .summary, main.home .linkfrom, main.home .linkto, main.home .delete, main.home .datecreation, main.home .date, main.home .log, main.home .secure, main.home .tag {
         display: none;
@@ -273,4 +283,6 @@ main.user table form {
     }
 
 }
+
+
 

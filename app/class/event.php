@@ -14,17 +14,20 @@ class Event extends Dbitem
     const EVENT_ART = ['art_add', 'art_edit', 'art_delete'];
     const EVENT_MEDIA = ['media_add', 'media_delete'];
     const EVENT_FONT = ['font_add', 'font_delete'];
-    const MESSAGE_MAX_LENGTH = 2**10;
+    const MESSAGE_MAX_LENGTH = 2 ** 10;
 
-    public function __contruct($datas)
+    const VAR_DATE = ['date'];
+
+    public function __construct($datas)
     {
         $this->hydrate($datas);
     }
 
-    public function conform()
+    public function stamp()
     {
+        $this->date = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
         $this->user = idclean($this->user);
-        if(in_array($this->type, self::EVENT_ART)) {
+        if (in_array($this->type, self::EVENT_ART)) {
             $this->target = idclean($this->target);
         }
     }
@@ -42,14 +45,14 @@ class Event extends Dbitem
             case 'datetime':
                 return $this->date;
                 break;
-            
+
             case 'string':
-			    return $this->date->format(DateTime::ISO8601);
+                return $this->date->format(DateTime::ISO8601);
                 break;
-            
+
             case 'hrdi':
                 $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
-			    return hrdi($this->date->diff($now));
+                return hrdi($this->date->diff($now));
                 break;
 
         }
@@ -81,44 +84,44 @@ class Event extends Dbitem
 
     public function setid($id)
     {
-        if(is_int($id)) {
+        if (is_int($id)) {
             $this->id = $id;
         }
     }
 
     public function setdate($date)
-	{
-		if ($date instanceof DateTimeImmutable) {
-			$this->date = $date;
-		} else {
-			$this->date = DateTimeImmutable::createFromFormat(DateTime::ISO8601, $date, new DateTimeZone('Europe/Paris'));
-		}
+    {
+        if ($date instanceof DateTimeImmutable) {
+            $this->date = $date;
+        } elseif (is_string($date)) {
+            $this->date = DateTimeImmutable::createFromFormat(DateTime::ISO8601, $date, new DateTimeZone('Europe/Paris'));
+        }
     }
-    
+
     public function settype($type)
     {
-        if(in_array($type, self::EVENT_TYPES)) {
+        if (in_array($type, self::EVENT_TYPES)) {
             $this->type = $type;
         }
     }
 
     public function setuser($user)
     {
-        if(is_string($user) && strlen($user) < Model::MAX_ID_LENGTH) {
+        if (is_string($user) && strlen($user) < Model::MAX_ID_LENGTH) {
             $this->user = $user;
         }
     }
 
     public function settarget($target)
     {
-        if(is_string($target) && strlen($target) < Model::MAX_ID_LENGTH) {
+        if (is_string($target) && strlen($target) < Model::MAX_ID_LENGTH) {
             $this->target = $target;
         }
     }
 
     public function setmessage($message)
     {
-        if(is_string($message) && strlen($message) < self::MESSAGE_MAX_LENGTH) {
+        if (is_string($message) && strlen($message) < self::MESSAGE_MAX_LENGTH) {
             $this->message = $message;
         }
     }
@@ -126,7 +129,7 @@ class Event extends Dbitem
 
 
 
-    
+
 }
 
 
