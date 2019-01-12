@@ -55,7 +55,6 @@
         <th>edit</th>
         <th>see</th>
         <th class="delete">del</th>
-        <th class="log">log</th>
         <th class="tag"><a href="<?= $opt->getadress('tag') ?>">tag</a></th>
         <th class="summary">summary</th>
         <th class="linkto"><a href="<?= $opt->getadress('linkto') ?>">to</a></th>
@@ -64,6 +63,7 @@
         <th class="datecreation"><a href="<?= $opt->getadress('datecreation') ?>">date of creation</a></th>
         <th class="date"><a href="<?= $opt->getadress('date') ?>">date</a></th>
         <th class="secure"><a href="<?= $opt->getadress('secure') ?>">privacy</a></th>
+        <th class="affcount"><a href="<?= $opt->getadress('affcount') ?>">affcount</a></th>
         </tr>
         <?php   foreach ($table2 as $item) { ?>
             <tr>
@@ -72,7 +72,6 @@
             <td><a href="<?= $this->uart('artedit', $item->id()) ?>">✏</a></td>
             <td><a href="<?= $this->uart('artread/', $item->id()) ?>" target="_blank">👁</a></td>
             <td class="delete"><a href="<?= $this->uart('artdelete', $item->id()) ?>" >✖</a></td>
-            <td class="log"><a href="<?= $this->uart('artlog', $item->id()) ?>" target="_blank">⁋</a></td>
             <td class="tag"><a title="<?= $item->tag('string') ?>"><?= $item->tag('sort') ?></a></td>
             <td class="summary" title="<?= $item->description() ?>"><?= $item->description('short') ?></td>
             <td class="linkto"><a title="<?= $item->linkto('string') ?>" ><?= $item->linkto('sort') ?></a></td>
@@ -81,6 +80,7 @@
             <td class="datecreation"><?= $item->datecreation('hrdi') ?></td>
             <td class="date"><?= $item->date('dmy') ?></td>
             <td class="secure"><?= $item->secure('string') ?></td>
+            <td class="affcount"><?= $item->affcount() ?></td>
             </tr>
 
       <?php  }?>
