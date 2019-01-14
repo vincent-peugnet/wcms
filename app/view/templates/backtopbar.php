@@ -15,6 +15,7 @@
 
 <form action="<?= $this->url('log') ?>" method="post" id="connect">
 <input type="password" name="pass" id="loginpass" placeholder="password">
+<input type="hidden" name="route" value="home">
 <input type="submit" name="log" value="login">
 </form>
 

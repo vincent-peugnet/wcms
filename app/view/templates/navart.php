@@ -72,6 +72,7 @@
     <li class="drop">
     <form action="<?= $this->url('log') ?>" method="post">
     <input type="password" name="pass" id="loginpass" placeholder="password">
+    <input type="hidden" name="route" value="artread/">
     <input type="hidden" name="id" value="<?= $art->id() ?>">
     <input type="submit" name="log" value="login" id="button">
     </form>
@@ -82,6 +83,7 @@
     <li class="drop">
     <form action="<?= $this->url('log') ?>" method="post">
     <input type="hidden" name="id" value="<?= $art->id() ?>">
+    <input type="hidden" name="route" value="artread/">
     <input type="submit" name="log" value="logout" id="button">
     </form>
     </li>

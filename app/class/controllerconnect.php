@@ -6,31 +6,33 @@ class Controllerconnect extends Controller
     public function log()
     {
         if (isset($_POST['log'])) {
-            if (isset($_POST['id'])) {
-                $id = $_POST['id'];
-            } else {
-                $id = null;
-            }
+            $id = $_POST['id'] ?? null;
+            $route = $_POST['route'] ?? 'home';
             if ($_POST['log'] === 'login') {
-                $this->login($id);
+                $this->login($route, $id);
             } elseif ($_POST['log'] === 'logout') {
-                $this->logout($id);
+                $this->logout($route, $id);
             }
         }
-
     }
 
 
     public function connect()
     {
-        $this->showtemplate('connect', []);
+        if(isset($_SESSION['artupdate'])) {
+            $artupdate['route'] = 'artedit';
+            $artupdate['id'] = $_SESSION['artupdate']['id'];
+        } else {
+            $artupdate = [$route = 'home'];
+        }
+        $this->showtemplate('connect', $artupdate);
     }
 
 
 
 
 
-    public function login($id)
+    public function login($route, $id = null)
     {
         if (isset($_POST['pass'])) {
             $this->user = $this->usermanager->login($_POST['pass']);
@@ -41,21 +43,21 @@ class Controllerconnect extends Controller
                 
             }
         }
-        if (!empty($id)) {
-            $this->routedirect('artread/', ['art' => $id]);
+        if ($id !== null) {
+            $this->routedirect($route, ['art' => $id]);
         } else {
-            $this->routedirect('home');
+            $this->routedirect($route);
         }
     }
 
-    public function logout($id)
+    public function logout($route, $id = null)
     {
         $this->user = $this->usermanager->logout();
         $this->usermanager->writesession($this->user);
-        if (!empty($id)) {
-            $this->routedirect('artread/', ['art' => $id]);
+        if ($id !== null && $route !== 'home') {
+            $this->routedirect($route, ['art' => $id]);
         } else {
-            $this->routedirect('home');
+            $this->routedirect($route);
         }
     }
 
