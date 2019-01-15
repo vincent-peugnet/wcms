@@ -13,7 +13,7 @@ class Modeluser extends Modeldb
     public function __construct()
     {
         parent::__construct();
-		$this->storeinit(self::USER_REPO_NAME);
+        $this->storeinit(self::USER_REPO_NAME);
     }
 
     public function writesession(User $user)
@@ -33,39 +33,15 @@ class Modeluser extends Modeldb
         }
     }
 
-    public function login($pass)
-    {
-        $passlevel = $this->passlevel($pass);
-        if($passlevel != false) {
-            $user = new User($passlevel);
-            return $user;
-        } else {
-            return false;
-        }
-    }
-
-    public function passlevel($pass)
-    {
-        $userdatalist = $this->repo->query()
-		->where('password', '==', $pass)
-        ->execute();
-        
-        if($userdatalist->total() === 1) {
-            return $userdatalist[0];
-        } else {
-            return 0;
-        }
-    }
-
-    public function invitetest($pass)
-    {
-        $invitepasslist = [];
-        if (in_array($pass, $invitepasslist)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // public function invitetest($pass)
+    // {
+    //     $invitepasslist = [];
+    //     if (in_array($pass, $invitepasslist)) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
     public function logout()
     {
@@ -76,34 +52,34 @@ class Modeluser extends Modeldb
 
 
     public function getlister()
-	{
-		$userlist = [];
-		$list = $this->repo->findAll();
-		foreach ($list as $userdata) {
-			$userlist[$userdata->id] = new User($userdata);
-		}
-		return $userlist;
-	}
+    {
+        $userlist = [];
+        $list = $this->repo->findAll();
+        foreach ($list as $userdata) {
+            $userlist[$userdata->id] = new User($userdata);
+        }
+        return $userlist;
+    }
 
 
-	public function getlisterid(array $idlist = [])
-	{
-		$userdatalist = $this->repo->query()
-		->where('__id', 'IN', $idlist)
-		->execute();
+    public function getlisterid(array $idlist = [])
+    {
+        $userdatalist = $this->repo->query()
+            ->where('__id', 'IN', $idlist)
+            ->execute();
 
-		$userlist = [];
-		foreach ($userdatalist as $id => $userdata) {
-			$userlist[$id] = new User($userdata);
-		}
-		return $userlist;
+        $userlist = [];
+        foreach ($userdatalist as $id => $userdata) {
+            $userlist[$id] = new User($userdata);
+        }
+        return $userlist;
     }
 
     public function admincount()
     {
         $userdatalist = $this->repo->query()
-		->where('level', '==', 10)
-		->execute();
+            ->where('level', '==', 10)
+            ->execute();
 
         return $userdatalist->total();
     }
@@ -111,9 +87,9 @@ class Modeluser extends Modeldb
     public function getlisterbylevel(int $level)
     {
         $userdatalist = $this->repo->query()
-		->where('level', '==', $level)
-        ->execute();
-        
+            ->where('level', '==', $level)
+            ->execute();
+
         $userlist = [];
         foreach ($userdatalist as $user) {
             $userlist[] = $user->id;
@@ -122,48 +98,75 @@ class Modeluser extends Modeldb
         return $userlist;
     }
 
-    public function passwordexist(string $pass)
+    /**
+     * Check if the password is used, and return by who
+     * 
+     * @param string $pass password clear
+     * 
+     * @return mixed User or false
+     */
+    public function passwordcheck(string $pass)
     {
-        $userdatalist = $this->repo->query()
-		->where('password', '==', $pass)
-		->execute();
+        $userdatalist = $this->getlister();
+        foreach ($userdatalist as $user) {
+            if ($user->passwordhashed()) {
+                if (password_verify($pass, $user->password())) {
+                    return $user;
+                }
+            } else {
+                if ($user->password() === $pass) {
+                    return $user;
+                }
+            }
+        }
+        return false;
+    }
 
-        if($userdatalist->total() === 0) {
-            return false;
-        } else {
+    /**
+     * Return information if the password is already used or not
+     * 
+     * @param string $pass password clear
+     * 
+     * @return bool password exist or not
+     */
+    public function passwordexist(string $pass) : bool
+    {
+        if ($this->passwordcheck($pass) !== false) {
             return true;
+        } else {
+            return false;
         }
     }
-    
+
     public function add(User $user)
-	{
-		$userdata = new \JamesMoss\Flywheel\Document($user->dry());
-		$userdata->setId($user->id());
-		$this->repo->store($userdata);
-	}
-
-
-	public function get($id)
-	{
-		if ($id instanceof User) {
-			$id = $id->id();
-		}
-		if (is_string($id)) {
-			$userdata = $this->repo->findById($id);
-			if ($userdata !== false) {
-				return new User($userdata);
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
+    {
+        $userdata = new \JamesMoss\Flywheel\Document($user->dry());
+        $userdata->setId($user->id());
+        $this->repo->store($userdata);
     }
-    
-	public function delete(User $user)
-	{
-		$this->repo->delete($user->id());
-	}
+
+
+    public function get($id)
+    {
+        if ($id instanceof User) {
+            $id = $id->id();
+        }
+        if (is_string($id)) {
+            $userdata = $this->repo->findById($id);
+            if ($userdata !== false) {
+                return new User($userdata);
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function delete(User $user)
+    {
+        $this->repo->delete($user->id());
+    }
 
 
 }

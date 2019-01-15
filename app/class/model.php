@@ -20,6 +20,9 @@ abstract class Model
 	const EDIT_SYMBOLS = ['pen', 'tool', 'none'];
 
 	const MAX_ID_LENGTH = 64;
+	const PASSWORD_HASH = true;
+	const PASSWORD_MIN_LENGTH = 4;
+	const PASSWORD_MAX_LENGTH = 32;
 
 	/** RENDER OPTIONS	 */
 	const RENDER_CLASS_ORIGIN = false;
