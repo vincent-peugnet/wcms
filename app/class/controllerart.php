@@ -33,13 +33,19 @@ class Controllerart extends Controller
 
     public function importart()
     {
-        $art = $this->artmanager->get($this->art);
+        if (isset($_SESSION['artupdate']) && $_SESSION['artupdate']['id'] == $this->art->id()) {
+            $art = new Art2($_SESSION['artupdate']);
+            unset($_SESSION['artupdate']);
+        } else {
+            $art = $this->artmanager->get($this->art);
+        }
         if ($art !== false) {
             $this->art = $art;
             return true;
         } else {
             return false;
         }
+
     }
 
 
@@ -104,9 +110,9 @@ class Controllerart extends Controller
             } else {
                 $page = ['head' => $this->art->renderhead(), 'body' => $this->art->renderbody()];
             }
-            if($canread) {
+            if ($canread) {
                 $this->art->addaffcount();
-                if($this->user->level() < 2) {
+                if ($this->user->level() < 2) {
                     $this->art->addvisitcount();
                 }
             }
@@ -208,40 +214,56 @@ class Controllerart extends Controller
     public function update($id)
     {
         $this->setart($id, 'artupdate');
-        $_SESSION['workspace']['showrightpanel'] = isset($_POST['workspace']['showrightpanel']);
-        $_SESSION['workspace']['showleftpanel'] = isset($_POST['workspace']['showleftpanel']);
 
-        if (!empty($_POST['fontsize']) && $_POST['fontsize'] !== Config::fontsize()) {
-            Config::setfontsize($_POST['fontsize']);
-            Config::savejson();
-        }
-
-
+        $this->movepanels();
+        $this->fontsize();
 
         $date = new DateTimeImmutable($_POST['pdate'] . $_POST['ptime'], new DateTimeZone('Europe/Paris'));
         $date = ['date' => $date];
 
-        if ($this->importart() && $this->canedit()) {
-
-            $oldart = clone $this->art;
-            $this->art->hydrate($_POST);
-
-            if (self::COMBINE) {
-                if ($_POST['thisdatemodif'] === $oldart->datemodif('string')) {
-                    $compare = $this->artmanager->combine($this->art, $oldart);
-                    if (!empty($compare['diff'])) {
-                        $this->art->hydrate($compare['mergeart']);
-                    }
-                }
-            }
-            $this->art->hydrate($date);
-            $this->art->updateedited();
-            $this->art->addauthor($this->user->id());
-            $this->artmanager->update($this->art);
-
-            $this->routedirect('artedit', ['art' => $this->art->id()]);
+        if ($this->importart()) {
+            if ($this->canedit()) {                
             
+            // Check if someone esle edited the page during the editing.
+                $oldart = clone $this->art;
+                $this->art->hydrate($_POST);
+
+                if (self::COMBINE && $_POST['thisdatemodif'] === $oldart->datemodif('string')) {
+
+                }
+
+                $this->art->hydrate($date);
+                $this->art->updateedited();
+                $this->art->addauthor($this->user->id());
+
+
+                $this->artmanager->update($this->art);
+
+                $this->routedirect('artedit', ['art' => $this->art->id()]);
+                
             //$this->showtemplate('updatemerge', $compare);
+            } else {
+                // If the editor session finished during the editing, let's try to reconnect to save the editing
+                $_SESSION['artupdate'] = $_POST;
+                $_SESSION['artupdate']['id'] = $this->art->id();
+                $this->routedirect('connect');
+            }
+
+        }
+        $this->routedirect('art');
+    }
+
+    public function movepanels()
+    {
+        $_SESSION['workspace']['showrightpanel'] = isset($_POST['workspace']['showrightpanel']);
+        $_SESSION['workspace']['showleftpanel'] = isset($_POST['workspace']['showleftpanel']);
+    }
+
+    public function fontsize()
+    {
+        if (!empty($_POST['fontsize']) && $_POST['fontsize'] !== Config::fontsize()) {
+            Config::setfontsize($_POST['fontsize']);
+            Config::savejson();
         }
     }
 
