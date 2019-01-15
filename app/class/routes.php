@@ -32,6 +32,7 @@ class Routes
             ['GET', '/!info', 'Controllerinfo#desktop', 'info'],
             ['GET', '/!timeline', 'Controllertimeline#desktop', 'timeline'],
             ['POST', '/!timeline/add', 'Controllertimeline#add', 'timelineadd'],
+            ['POST', '/!timeline/clap', 'Controllertimeline#clap', 'timelineclap'],
             ['GET', '/[cid:art]/', 'Controllerart#read', 'artread/'],
             ['GET', '/[cid:art]', 'Controllerart#read', 'artread'],
             ['GET', '/[cid:art]/add', 'Controllerart#add', 'artadd'],

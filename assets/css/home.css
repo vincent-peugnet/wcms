@@ -261,9 +261,56 @@ main.user table form {
 
 
 
-li.self.event {
+
+
+main.timeline ul {
+    list-style: none;
+    padding-inline-start: 0;
+}
+
+
+li.self.user {
     text-align: right;
 }
+
+main.timeline li.event .eline {
+    display: inline-block;
+    margin: 0;
+}
+
+
+
+main.timeline p.eline {
+    background-color: white;
+    border-radius: 10px;
+    padding: 3px 7px;
+    font-family: sans-serif;
+}
+
+
+
+main.timeline textarea#message {
+    width: 100%;
+    max-width: unset;
+}
+
+
+
+li.event:hover span.details {
+    display: inline;
+}
+
+span.details {
+    display: none;
+}
+
+main.timeline li.event {
+    margin: 7px;
+}
+
+
+
+
 
 
 

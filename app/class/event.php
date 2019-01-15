@@ -8,6 +8,7 @@ class Event extends Dbitem
     protected $user;
     protected $target;
     protected $message;
+    protected $clap = 0;
 
     const EVENT_TYPES = ['message', 'art_add', 'art_edit', 'art_delete', 'media_add', 'media_delete', 'font_add'];
     const EVENT_BASE = ['message'];
@@ -29,7 +30,14 @@ class Event extends Dbitem
         $this->user = idclean($this->user);
         if (in_array($this->type, self::EVENT_ART)) {
             $this->target = idclean($this->target);
+        } elseif ($this->type === 'message') {
+            $this->message = htmlspecialchars($this->message);
         }
+    }
+
+    public function addclap()
+    {
+        $this->clap ++;
     }
 
     // _____________________ G E T __________________________
@@ -78,6 +86,11 @@ class Event extends Dbitem
         return $this->message;
     }
 
+    public function clap()
+    {
+        return $this->clap;
+    }
+
 
 
     // ________________________ S E T ____________________
@@ -123,6 +136,13 @@ class Event extends Dbitem
     {
         if (is_string($message) && strlen($message) < self::MESSAGE_MAX_LENGTH) {
             $this->message = $message;
+        }
+    }
+
+    public function setclap($clap)
+    {
+        if(is_int($clap)) {
+            $this->clap = $clap;
         }
     }
 
