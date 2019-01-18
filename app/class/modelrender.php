@@ -120,6 +120,7 @@ class Modelrender extends Modelart
 		$element = $this->automedialist($element);
 		$element = $this->autotaglistupdate($element);
 		$element = $this->date($element);
+		$element = $this->autolink($element);
 		$element = $this->markdown($element);
 
 		return $element;
@@ -494,6 +495,23 @@ class Modelrender extends Modelart
 			return '<time datetime=' . $art->date('string') . '>' . $art->date('ptime') . '</time>';
 		}, $text);
 
+		return $text;
+	}
+
+	public function autolink($text)
+	{
+		$rend = $this;
+		$text = preg_replace_callback('/\%LINK\%(.*)\%LINK\%/msU', function ($matches) use ($rend) {
+			return $rend->everylink($matches[1]);
+		}, $text);
+		return $text;
+	}
+
+	public function everylink($text)
+	{
+		$text = preg_replace_callback("~([\w-_éêèùïüîçà]{2,})~", function ($matches) {
+			return '<a href="' . idclean($matches[1]) . '">' . $matches[1] . '</a>';
+		}, $text);
 		return $text;
 	}
 
