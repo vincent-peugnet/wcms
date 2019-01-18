@@ -286,6 +286,7 @@ a.icon {
     color: white;
     padding: 2px;
     margin-right: 5px;
+    white-space: pre;
 }
 
 #help code i {
