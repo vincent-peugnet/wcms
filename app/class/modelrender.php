@@ -279,10 +279,10 @@ class Modelrender extends Modelart
 			function ($matches) use ($rend, &$linkfrom) {
 				$matchart = $rend->get($matches[1]);
 				if (!$matchart) {
-					$link = 'href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal"' . $this->internallinkblank;
+					$link = 'href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal existnot"' . $this->internallinkblank;
 				} else {
 					$linkfrom[] = $matchart->id();
-					$link =  'href="' . $rend->uart($matches[1]) . $matches[2] . '" title="' . $matchart->description() . '" class="internal"' . $this->internallinkblank;
+					$link =  'href="' . $rend->uart($matches[1]) . $matches[2] . '" title="' . $matchart->description() . '" class="internal exist '. $matchart->secure('string') .'"' . $this->internallinkblank;
 				}
 				return $link;
 			},
@@ -301,10 +301,10 @@ class Modelrender extends Modelart
 			function ($matches) use ($rend, &$linkfrom) {
 				$matchart = $rend->get($matches[1]);
 				if (!$matchart) {
-					return '<a href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal" '. $this->internallinkblank .' >' . $matches[1] . '</a>';
+					return '<a href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal existnot" '. $this->internallinkblank .' >' . $matches[1] . '</a>';
 				} else {
 					$linkfrom[] = $matchart->id();
-					return '<a href="' . $rend->uart($matches[1]) . $matches[2] . '" title="' . $matchart->description() . '" class="internal" '. $this->internallinkblank .' >' . $matchart->title() . '</a>';
+					return '<a href="' . $rend->uart($matches[1]) . $matches[2] . '" title="' . $matchart->description() . '" class="internal exist '. $matchart->secure('string') .'" '. $this->internallinkblank .' >' . $matchart->title() . '</a>';
 				}
 			},
 			$text

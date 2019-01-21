@@ -7,3 +7,4 @@ media/*
 vendor/*
 config.json
 error_log
+!README.md

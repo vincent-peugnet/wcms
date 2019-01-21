@@ -29,6 +29,7 @@ class Routes
             ['GET', '/!user', 'Controlleruser#desktop', 'user'],
             ['POST', '/!user/add', 'Controlleruser#add', 'useradd'],
             ['POST', '/!user/update', 'Controlleruser#update', 'userupdate'],
+            ['POST', '/!user/pref', 'Controlleruser#pref', 'userpref'],
             ['GET', '/!info', 'Controllerinfo#desktop', 'info'],
             ['GET', '/!timeline', 'Controllertimeline#desktop', 'timeline'],
             ['POST', '/!timeline/add', 'Controllertimeline#add', 'timelineadd'],
@@ -42,7 +43,7 @@ class Routes
             ['POST', '/[cid:art]/edit', 'Controllerart#update', 'artupdate'],
             ['GET', '/[cid:art]/delete', 'Controllerart#confirmdelete', 'artconfirmdelete'],
             ['POST', '/[cid:art]/delete', 'Controllerart#delete', 'artdelete'],
-            //['GET', '/[cid:art]/[*]', 'Controllerart#artdirect', 'artread/etoile'],
+            ['GET', '/[cid:art]/[*]', 'Controllerart#artdirect', 'artread/etoile'],
         ]);
 
         $match = $router->match();

@@ -1,3 +1,7 @@
 RewriteEngine on
+# everything that does not contain asssets|media|fonts
+RewriteCond %{REQUEST_URI} !^(.*)/(assets|media|fonts)/ [OR]
+# or that isn't a file
 RewriteCond %{REQUEST_FILENAME} !-f
+# is redirect to index
 RewriteRule . index.php [L]

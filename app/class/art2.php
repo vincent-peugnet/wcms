@@ -304,7 +304,7 @@ class Art2
 		if ($type == 'string') {
 			if ($this->secure == 0) $secure = 'public';
 			if ($this->secure == 1) $secure = 'private';
-			if ($this->secure == 2) $secure = 'not published';
+			if ($this->secure == 2) $secure = 'not_published';
 			return $secure;
 		} else {
 			return $this->secure;
