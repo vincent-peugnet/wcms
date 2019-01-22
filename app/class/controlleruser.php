@@ -3,19 +3,41 @@
 class Controlleruser extends Controller
 {
 
-    public function __construct($render) {
-        parent::__construct($render);
+    public function __construct($router) {
+        parent::__construct($router);
     }
 
     public function desktop()
     {
-        if($this->user->isadmin()) {
-            $userlist = $this->usermanager->getlister();
-            $this->showtemplate('user', ['userlist' => $userlist]);
+        if($this->user->iseditor()) {
+            $getuser = $this->usermanager->get($this->user);
+            if($this->user->isadmin()) {
+                $userlist = $this->usermanager->getlister();
+                $this->showtemplate('user', ['userlist' => $userlist, 'getuser' => $getuser]);
+            } else {
+                $this->showtemplate('user', ['getuser' => $getuser]);
+            }
         } else {
             $this->routedirect('home');
         }
     }
+
+
+    public function pref()
+    {
+        if($this->user->iseditor()) {
+            $user = $this->usermanager->get($this->user);
+            $user->hydrate($_POST);
+            $this->usermanager->add($user);
+            $this->routedirect('user');
+        } else {
+            $this->routedirect('home');
+        }
+    }
+
+
+
+
 
     public function add()
     {

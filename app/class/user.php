@@ -7,6 +7,8 @@ class User
     protected $signature = '';
     protected $password;
     protected $passwordhashed = false;
+    protected $cookie = 0;
+    protected $columns = ['title', 'datemodif', 'datecreation', 'secure', 'visitcount'];
 
     public function __construct($datas = [])
     {
@@ -34,6 +36,9 @@ class User
         }
         return $array;
     }
+
+
+    // _________________________ G E T _______________________
 
     public function id()
     {
@@ -64,6 +69,20 @@ class User
         return $this->passwordhashed;
     }
 
+    public function cookie()
+    {
+        return $this->cookie;
+    }
+
+    public function columns()
+    {
+        return $this->columns;
+    }
+
+
+
+    // _______________________ S E T _______________________
+
     public function setid($id)
     {
         $id = idclean($id);
@@ -80,9 +99,9 @@ class User
         }
     }
 
-    public function setpassword(string $password)
+    public function setpassword($password)
     {
-        if (is_string($password) && !empty($password)) {
+        if (!empty($password) && is_string($password)) {
             $this->password = $password;
         }
 
@@ -99,6 +118,21 @@ class User
     {
         $this->passwordhashed = boolval($passwordhashed);
 
+    }
+
+    public function setcookie($cookie)
+    {
+        $cookie = abs(intval($cookie));
+        if($cookie >= 365) {$cookie = 365;}
+        $this->cookie = $cookie;
+    }
+
+    public function setcolumns($columns)
+    {
+        if(is_array($columns)) {
+            $columns = array_filter(array_intersect(array_unique($columns), Model::COLUMNS));
+            $this->columns = $columns;
+        }
     }
 
 

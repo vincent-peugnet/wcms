@@ -18,7 +18,14 @@ class Modeluser extends Modeldb
 
     public function writesession(User $user)
     {
-        $_SESSION['user' . Config::basepath()] = ['level' => $user->level(), 'id' => $user->id()];
+        $_SESSION['user' . Config::basepath()] = ['level' => $user->level(), 'id' => $user->id(), 'columns' =>$user->columns()];
+    }
+
+    public function writecookie(User $user)
+    {
+        $cookiehash = 
+        $cookie = ['level' => $user->level(), 'id' => $user->id()];
+        setcookie('user ' . Config::basepath(), $cookie, time() + $user->cookie()*24*3600, null, null, false, true);
     }
 
     public function readsession()

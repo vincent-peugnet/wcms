@@ -88,7 +88,7 @@ class Opt
 
 	public function getadress($sortby)
 	{
-		if(in_array($sortby, $this->col)) {
+		if(in_array($sortby, Model::COLUMNS)) {
 			if($this->sortby() === $sortby) {
 				$order = $this->order * -1;
 			} else {
@@ -108,7 +108,7 @@ class Opt
 
 			return $adress;
 		} else {
-			returnfalse;
+			return false;
 		}
 	}
 

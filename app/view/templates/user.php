@@ -15,16 +15,18 @@
 
 
 
-<form action="" method="post">
+<form action="<?= $this->url('userpref') ?>" method="post">
 
-<h2>Connexion Options</h2>
+<h2>Preferences</h2>
 
-<input type="number" name="cookie" id="cookie">
+<input type="number" name="cookie" value="<?= $getuser->cookie() ?>" id="cookie" min="0" max="365">
 <label for="cookie">Cookie conservation time <i>(In days)</i></label>
 
 <input type="submit" value="submit">
 
 </form>
+
+<?php if($user->isadmin()) { ?>
 
 <h1>Admin panel</h1>
 
@@ -108,6 +110,7 @@ foreach ($userlist as $user ) {
 
 </table>
 
+<?php } ?>
 
 
 </main>

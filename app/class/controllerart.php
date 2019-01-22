@@ -201,6 +201,28 @@ class Controllerart extends Controller
         }
     }
 
+    public function download($id)
+    {
+        if($this->user->isadmin()) {
+
+            $file = Model::DATABASE_DIR . Config::arttable() . DIRECTORY_SEPARATOR . $id . '.json';
+            
+            if (file_exists($file)) {
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/json; charset=utf-8');
+                header('Content-Disposition: attachment; filename="'.basename($file).'"');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($file));
+                readfile($file);
+                exit;
+            }
+        } else {
+            $this->routedirect('artread/', ['art' => $id]);
+        }
+    }
+
     public function delete($id)
     {
         $this->setart($id, 'artdelete');

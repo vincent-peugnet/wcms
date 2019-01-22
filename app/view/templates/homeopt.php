@@ -84,16 +84,16 @@ if ($in = true || $out = true) {
 
 <h2>Columns</h2>
 
-<form action="" method="post">
+<form action="<?= $this->url('homecolumns') ?>" method="post">
 
 <ul>
 
 <?php
 
-foreach ($opt->col() as $col) {
+foreach (Model::COLUMNS as $col) {
     ?>
     <li>
-    <input type="checkbox" name="col[]" id="col_<?= $col ?>">
+    <input type="checkbox" name="columns[]" value="<?= $col ?>" id="col_<?= $col ?>" <?= in_array($col, $user->columns()) ? 'checked' : '' ?>>
     <label for="col_<?= $col ?>"><?= $col ?></label>
     </li>
     <?php
@@ -102,6 +102,8 @@ foreach ($opt->col() as $col) {
 ?>
 
 </ul>
+
+<input type="submit" value="update columns">
 
 </form>
 

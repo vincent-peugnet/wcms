@@ -22,15 +22,22 @@ class Controllerhome extends Controller
 
         $table2 = $this->modelhome->table2($table, $this->opt);
 
-        $this->showtemplate('home', ['user' => $this->user, 'table2' => $table2, 'opt' =>$this->opt]);
+        $columns = $this->modelhome->setcolumns($this->user->columns());
+
+        $this->showtemplate('home', ['user' => $this->user, 'table2' => $table2, 'opt' =>$this->opt, 'columns' => $columns]);
 
 
     }
 
-    public function massedit()
+    public function columns()
     {
-        echo '<h2>Mass Edit</h2>';
-
+        if(isset($_POST['columns']) && $this->user->iseditor()) {
+            $user  =$this->usermanager->get($this->user->id());
+            $user->hydrate($_POST);
+            $this->usermanager->add($user);
+            $this->usermanager->writesession($user);
+        }
+        $this->routedirect('home');
     }
 
     public function search()

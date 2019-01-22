@@ -51,6 +51,23 @@ class Modelhome extends Modelart
 
         return $table2;
     }
+
+    /**
+     * @var array array of the columns to show from the user
+     * 
+     * @return array assoc each key columns to a boolean value to show or not
+     */
+    public function setcolumns(array $columns) : array
+    {
+        foreach (Model::COLUMNS as $col) {
+            if(in_array($col, $columns)) {
+                $showcols[$col] = true;
+            } else {
+                $showcols[$col] = false;
+            }
+        }
+        return $showcols;
+    }
 }
 
 

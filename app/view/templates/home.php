@@ -44,6 +44,17 @@
 
     <input type="submit" name="massaction" value="do" onclick="confirmSubmit(event, 'Are you sure')" >
 
+
+    <?php
+
+    $array = ['id' => [ 'getadress' => true,
+                        'label' => 'id',
+                        'show' => true]
+    ]
+
+
+    ?>
+
     <input type="hidden" name="action" value="massedit">
     </div>
 
@@ -55,15 +66,31 @@
         <th>edit</th>
         <th>see</th>
         <th class="delete">del</th>
+        <?php if($user->isadmin()) { ?>
+        <th class="download">dl</th>
+        <?php } if($columns['tag']) { ?>
         <th class="tag"><a href="<?= $opt->getadress('tag') ?>">tag</a></th>
+        <?php } if($columns['description']) { ?>
         <th class="summary">summary</th>
+        <?php } if($columns['linkto']) { ?>
         <th class="linkto"><a href="<?= $opt->getadress('linkto') ?>">to</a></th>
+        <?php } if($columns['linkfrom']) { ?>
         <th class="linkfrom"><a href="<?= $opt->getadress('linkfrom') ?>">from</a></th>
+        <?php } if($columns['datemodif']) { ?>
         <th class="datemodif"><a href="<?= $opt->getadress('datemodif') ?>">last modification</a></th>
+        <?php } if($columns['datecreation']) { ?>
         <th class="datecreation"><a href="<?= $opt->getadress('datecreation') ?>">date of creation</a></th>
+        <?php } if($columns['date']) { ?>
         <th class="date"><a href="<?= $opt->getadress('date') ?>">date</a></th>
+        <?php } if($columns['secure']) { ?>
         <th class="secure"><a href="<?= $opt->getadress('secure') ?>">privacy</a></th>
+        <?php } if($columns['visitcount']) { ?>
         <th class="visitcount"><a href="<?= $opt->getadress('visitcount') ?>">visit</a></th>
+        <?php } if($columns['editcount']) { ?>
+        <th class="editcount"><a href="<?= $opt->getadress('editcount') ?>">edit</a></th>
+        <?php } if($columns['affcount']) { ?>
+        <th class="affcount"><a href="<?= $opt->getadress('affcount') ?>">aff</a></th>
+        <?php } ?>
         </tr>
         <?php   foreach ($table2 as $item) { ?>
             <tr>
@@ -72,15 +99,31 @@
             <td><a href="<?= $this->uart('artedit', $item->id()) ?>">✏</a></td>
             <td><a href="<?= $this->uart('artread/', $item->id()) ?>" target="_blank">👁</a></td>
             <td class="delete"><a href="<?= $this->uart('artdelete', $item->id()) ?>" >✖</a></td>
+            <?php if($user->isadmin()) { ?>
+            <td><a href="<?= $this->uart('artdownload', $item->id()) ?>" download>↓</a></td>
+            <?php } if($columns['tag']) { ?>
             <td class="tag"><a title="<?= $item->tag('string') ?>"><?= $item->tag('sort') ?></a></td>
+            <?php } if($columns['description']) { ?>
             <td class="summary" title="<?= $item->description() ?>"><?= $item->description('short') ?></td>
+            <?php } if($columns['linkto']) { ?>
             <td class="linkto"><a title="<?= $item->linkto('string') ?>" ><?= $item->linkto('sort') ?></a></td>
+            <?php } if($columns['linkfrom']) { ?>
             <td class="linkfrom"><a title="<?= $item->linkfrom('string') ?>" ><?= $item->linkfrom('sort') ?></a></td>
+            <?php } if($columns['datemodif']) { ?>
             <td class="datemodif"><?= $item->datemodif('hrdi') ?></td>
+            <?php } if($columns['datecreation']) { ?>
             <td class="datecreation"><?= $item->datecreation('hrdi') ?></td>
+            <?php } if($columns['date']) { ?>
             <td class="date"><?= $item->date('dmy') ?></td>
+            <?php } if($columns['secure']) { ?>
             <td class="secure"><?= $item->secure('string') ?></td>
+            <?php } if($columns['visitcount']) { ?>
             <td class="visitcount"><?= $item->visitcount() ?></td>
+            <?php } if($columns['editcount']) { ?>
+            <td class="editcount"><?= $item->editcount() ?></td>
+            <?php } if($columns['affcount']) { ?>
+            <td class="affcount"><?= $item->affcount() ?></td>
+            <?php } ?>
             </tr>
 
       <?php  }?>
