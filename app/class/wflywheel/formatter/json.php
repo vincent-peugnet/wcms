@@ -10,6 +10,7 @@ class JSON implements \JamesMoss\Flywheel\Formatter\FormatInterface
     public function encode(array $data)
     {
         $options = defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : null;
+        $options .= JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE;
         return json_encode($data, $options);
     }
     public function decode($data)
