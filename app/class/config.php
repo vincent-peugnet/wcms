@@ -18,6 +18,7 @@ abstract class Config
 	protected static $analytics = '';	
 	protected static $externallinkblank = true;
 	protected static $internallinkblank = false;
+	protected static $reccursiverender = true;
 	protected static $defaultprivacy = 0;
 
 
@@ -145,6 +146,11 @@ abstract class Config
 		return self::$internallinkblank;
 	}
 
+	public static function reccursiverender()
+	{
+		return self::$reccursiverender;
+	}
+
 	public static function defaultprivacy()
 	{
 		return self::$defaultprivacy;
@@ -248,6 +254,11 @@ abstract class Config
 	public static function setinternallinkblank($internallinkblank)
 	{
 		self::$internallinkblank = boolval($internallinkblank);
+	}
+
+	public static function setreccursiverender($reccursiverender)
+	{
+		self::$reccursiverender = boolval($reccursiverender);
 	}
 
 	public static function setdefaultprivacy($defaultprivacy)

@@ -57,6 +57,14 @@
     <label for="existnot">Text to show when a page does not exist yet</label>
     <input type="text" name="existnot" id="existnot" value="<?= Config::existnot() ?>">
 
+    <h2>Render</h2>
+
+    <div class="checkbox">
+    <input type="hidden" name="reccursiverender" value="0">
+    <input type="checkbox" name="reccursiverender" id="reccursiverender" value="1" <?= Config::reccursiverender() ? 'checked' : '' ?>>
+    <label for="reccursiverender">Reccursive render</label>
+    </div>
+
     <h3>Links</h3>
     
     <div class="checkbox">

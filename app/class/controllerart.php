@@ -5,7 +5,6 @@ class Controllerart extends Controller
     /** @var Art2 */
     protected $art;
     protected $artmanager;
-    protected $renderengine;
     protected $fontmanager;
     protected $mediamanager;
 
@@ -69,28 +68,48 @@ class Controllerart extends Controller
         $this->setart($id, 'artupdate');
 
         if ($this->importart() && $this->user->iseditor()) {
-            $this->renderart();
+            $this->art = $this->renderart($this->art);
             $this->artmanager->update($this->art);
         }
         $this->routedirect('artread/', ['art' => $this->art->id()]);
     }
 
-    public function renderart()
+    /**
+     * Render given page
+     * 
+     * @var Art2 $art input
+     * 
+     * @return Art2 rendered $art
+     */
+    public function renderart(Art2 $art) : Art2
     {
         $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
-        $this->renderengine = new Modelrender($this->router);
+        $renderengine = new Modelrender($this->router);
 
-        $body = $this->renderengine->renderbody($this->art);
-        $head = $this->renderengine->renderhead($this->art);
-        $this->art->setrenderbody($body);
-        $this->art->setrenderhead($head);
-        $this->art->setdaterender($now);
-        $this->art->setlinkfrom($this->renderengine->linkfrom());
-        $this->art->setlinkto($this->renderengine->linkto());
+        $body = $renderengine->renderbody($art);
+        $head = $renderengine->renderhead($art);
+        $art->setrenderbody($body);
+        $art->setrenderhead($head);
+        $art->setdaterender($now);
+        $art->setlinkfrom($renderengine->linkfrom());
+        $art->setlinkto($renderengine->linkto());
 
-        return ['head' => $head, 'body' => $body];
+        return $art;
 
+    }
+
+    public function reccursiverender(Art2 $art)
+    {
+        $relatedarts = array_filter(array_unique(array_merge($art->linkto(), $art->linkfrom())));
+        $relatedarts = array_diff($relatedarts, [$art->id()]);
+        foreach ($relatedarts as $artid ) {
+            $art = $this->artmanager->get($artid);
+            if($art !== false) {
+                $art = $this->renderart($art);
+                $this->artmanager->update($art);
+            }
+        }
     }
 
 
@@ -106,10 +125,12 @@ class Controllerart extends Controller
         if ($artexist) {
 
             if ($this->art->daterender() < $this->art->datemodif()) {
-                $page = $this->renderart();
-            } else {
-                $page = ['head' => $this->art->renderhead(), 'body' => $this->art->renderbody()];
+                if(Config::reccursiverender()) {
+                    $this->reccursiverender($this->art);
+                }
+                $this->art = $this->renderart($this->art);
             }
+            $page = ['head' => $this->art->renderhead(), 'body' => $this->art->renderbody()];
             if ($canread) {
                 $this->art->addaffcount();
                 if ($this->user->level() < 2) {
@@ -121,8 +142,6 @@ class Controllerart extends Controller
         $data = array_merge($alerts, $page, ['art' => $this->art, 'artexist' => $artexist, 'canread' => $canread, 'readernav' => Config::showeditmenu(), 'canedit' => $this->canedit()]);
 
         $this->showtemplate('read', $data);
-
-
 
     }
 
