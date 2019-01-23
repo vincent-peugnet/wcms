@@ -101,8 +101,7 @@ class Controllerart extends Controller
 
     public function reccursiverender(Art2 $art)
     {
-        $relatedarts = array_filter(array_unique(array_merge($art->linkto(), $art->linkfrom())));
-        $relatedarts = array_diff($relatedarts, [$art->id()]);
+        $relatedarts = array_diff($art->linkto(), [$art->id()]);
         foreach ($relatedarts as $artid ) {
             $art = $this->artmanager->get($artid);
             if($art !== false) {
