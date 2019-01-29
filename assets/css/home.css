@@ -91,6 +91,11 @@ div.checkbox [type="checkbox"] {
 }
 
 
+div.radio input[type="radio"] {
+    display: inline-block;
+    width: auto;
+}
+
 main.font input, select, textarea {
     display: block;
 }

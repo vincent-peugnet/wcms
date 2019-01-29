@@ -23,7 +23,7 @@ class Controllerconnect extends Controller
             $artupdate['route'] = 'artedit';
             $artupdate['id'] = $_SESSION['artupdate']['id'];
         } else {
-            $artupdate = [$route = 'home'];
+            $artupdate = ['route' => 'home'];
         }
         $this->showtemplate('connect', $artupdate);
     }

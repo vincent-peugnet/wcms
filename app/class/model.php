@@ -30,6 +30,9 @@ abstract class Model
 	const RENDER_CLASS_ORIGIN = false;
 	const RENDER_EMPTY_ELEMENT = false;
 
+	/** CONFIG OPTIONS */
+	const HOMEPAGE = ['default', 'search', 'redirect'];
+
 	public static function dirtopath($dir)
 	{
 		$basepath = '';

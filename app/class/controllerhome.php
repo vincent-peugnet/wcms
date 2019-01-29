@@ -16,17 +16,22 @@ class Controllerhome extends Controller
 
     public function desktop()
     {
+        if($this->user->isvisitor() && Config::homepage() === 'redirect' && Config::homeredirect() !== null) {
+            $this->routedirect('artread/', ['art' => Config::homeredirect()]);
+        } else {
 
-        $table = $this->modelhome->getlister();
-        $this->opt = $this->modelhome->optinit($table);
-
-        $table2 = $this->modelhome->table2($table, $this->opt);
-
-        $columns = $this->modelhome->setcolumns($this->user->columns());
-
-        $this->showtemplate('home', ['user' => $this->user, 'table2' => $table2, 'opt' =>$this->opt, 'columns' => $columns]);
-
-
+            
+            $table = $this->modelhome->getlister();
+            $this->opt = $this->modelhome->optinit($table);
+            
+            $table2 = $this->modelhome->table2($table, $this->opt);
+            
+            $columns = $this->modelhome->setcolumns($this->user->columns());
+            
+            $this->showtemplate('home', ['user' => $this->user, 'table2' => $table2, 'opt' =>$this->opt, 'columns' => $columns]);
+            
+            
+        }
     }
 
     public function columns()

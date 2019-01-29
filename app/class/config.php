@@ -20,6 +20,8 @@ abstract class Config
 	protected static $internallinkblank = false;
 	protected static $reccursiverender = true;
 	protected static $defaultprivacy = 0;
+	protected static $homepage = 'default';
+	protected static $homeredirect = null;
 
 
 // _______________________________________ F U N _______________________________________
@@ -156,6 +158,16 @@ abstract class Config
 		return self::$defaultprivacy;
 	}
 
+	public static function homepage()
+	{
+		return self::$homepage;
+	}
+
+	public static function homeredirect()
+	{
+		return self::$homeredirect;
+	}
+
 
 
 // __________________________________________ S E T ______________________________________
@@ -266,6 +278,22 @@ abstract class Config
 		$defaultprivacy = intval($defaultprivacy);
 		if($defaultprivacy >= 0 && $defaultprivacy <= 2) {
 			self::$defaultprivacy = $defaultprivacy;
+		}
+	}
+
+	public static function sethomepage($homepage)
+	{
+		if(in_array($homepage, Model::HOMEPAGE)) {
+			self::$homepage = $homepage;
+		}
+	}
+
+	public static function sethomeredirect($homeredirect)
+	{
+		if(is_string($homeredirect) && strlen($homeredirect) > 0) {
+			self::$homeredirect = idclean($homeredirect);
+		} else {
+			self::$homeredirect = null;
 		}
 	}
 	

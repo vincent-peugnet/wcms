@@ -16,6 +16,38 @@
 
     <input type="submit" value="Update configuration">
 
+    <h2>Home page</h2>
+
+    <p>Here you can set the home-page view for visitors.</p>
+
+    <div class="radio">
+    <input type="radio" name="homepage" value="default" id="default" <?= Config::homepage() === 'default' ? 'checked' : '' ?>>
+    <label for="default">default</label>
+    </div>
+
+    <div class="radio">
+    <input type="radio" name="homepage" value="search" id="searchbar" <?= Config::homepage() === 'search' ? 'checked' : '' ?>>
+    <label for="searchbar">search bar</label>
+    </div>
+
+    <div class="radio">
+    <input type="radio" name="homepage" value="redirect" id="redirect"  <?= Config::homepage() === 'redirect' ? 'checked' : '' ?>>
+    <label for="redirect">redirect to page</label>
+    </div>
+
+    <select name="homeredirect" id="homeredirect">
+    <option value="" <?= Config::homeredirect() === null ? 'selected' : '' ?>>--select page to redirect--</option>
+
+        <?php
+        foreach ($artlist as $art) {
+            ?>
+            <option value="<?= $art ?>" <?= Config::homeredirect() === $art ? 'selected' : '' ?>><?= $art ?></option>
+            <?php
+        }
+
+
+        ?>
+    </select>
 
     <h2>Page creation</h2>
 
