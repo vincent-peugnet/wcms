@@ -169,6 +169,11 @@ class User
         return $this->level >= Modeluser::EDITOR;
     }
 
+    public function issupereditor()
+    {
+        return $this->level >= Modeluser::SUPEREDITOR;
+    }
+
     public function isinvite()
     {
         return $this->level >= Modeluser::INVITE;

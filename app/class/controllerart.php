@@ -50,10 +50,10 @@ class Controllerart extends Controller
 
     public function canedit()
     {
-        if ($this->user->iseditor()) {
+        if ($this->user->issupereditor()) {
             return true;
-        } elseif ($this->user->isinvite()) {
-            if (in_array($this->user->id(), $this->art->invites())) {
+        } elseif ($this->user->isinvite() || $this->user->iseditor()) {
+            if (in_array($this->user->id(), $this->art->authors())) {
                 return true;
             } else {
                 return false;
@@ -160,7 +160,7 @@ class Controllerart extends Controller
             $tagartlist = $this->artmanager->tagartlist($this->art->tag('array'), $artlist);
             $lasteditedartlist = $this->artmanager->lasteditedartlist(5, $artlist);
 
-            $inviteuserlist = $this->usermanager->getlisterbylevel(2);
+            $editorlist = $this->usermanager->getlisterbylevel(2, '>=');
 
             if (isset($_SESSION['workspace'])) {
                 $showleftpanel = $_SESSION['workspace']['showleftpanel'];
@@ -171,7 +171,7 @@ class Controllerart extends Controller
             }
             $fonts = [];
 
-            $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true, 'tablist' => $tablist, 'artlist' => $idlist, 'showleftpanel' => $showleftpanel, 'showrightpanel' => $showrightpanel, 'fonts' => $fonts, 'tagartlist' => $tagartlist, 'lasteditedartlist' => $lasteditedartlist, 'faviconlist' => $faviconlist, 'inviteuserlist' => $inviteuserlist]);
+            $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true, 'tablist' => $tablist, 'artlist' => $idlist, 'showleftpanel' => $showleftpanel, 'showrightpanel' => $showrightpanel, 'fonts' => $fonts, 'tagartlist' => $tagartlist, 'lasteditedartlist' => $lasteditedartlist, 'faviconlist' => $faviconlist, 'editorlist' => $editorlist]);
         } else {
             $this->routedirect('artread/', ['art' => $this->art->id()]);
         }

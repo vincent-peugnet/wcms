@@ -60,7 +60,7 @@
 
     <ul>
     <li class="drop">
-    <span class="button" style="font-family: monospace; background-color: #7b97b9;" >User lvl : <?= $user->level() ?></span>
+    <span class="button" style="font-family: monospace; background-color: #7b97b9;" ><?= $user->id() ?> (<?= $user->level() ?>)</span>
     </li>
     <li class="drop">
     <a class="button"  href="<?= $this->url('home') ?>">home</a>

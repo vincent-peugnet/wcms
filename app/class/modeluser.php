@@ -3,6 +3,7 @@
 class Modeluser extends Modeldb
 {
     const ADMIN = 10;
+    const SUPEREDITOR = 4;
     const EDITOR = 3;
     const INVITE = 2;
     const READ = 1;
@@ -91,10 +92,10 @@ class Modeluser extends Modeldb
         return $userdatalist->total();
     }
 
-    public function getlisterbylevel(int $level)
+    public function getlisterbylevel(int $level, $comp = '==')
     {
         $userdatalist = $this->repo->query()
-            ->where('level', '==', $level)
+            ->where('level', $comp, $level)
             ->execute();
 
         $userlist = [];

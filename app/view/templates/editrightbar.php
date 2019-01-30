@@ -65,42 +65,37 @@
     </details>
 
         <h3>Authors</h3>
-    <ul>
-    <?php
-    foreach ($art->authors() as $author) {
-        echo '<li>⬖ ' . $author .'</li>';
-    }
-    
-    ?>
-    </ul>
+
 
     <?php if($user->level() >= 4) { ?>
 
-    <h3>Invites editors</h3>
 
-    <label for="invites">Invites editors</label>
-        <select name="invites[]" id="invites">
-        <option value="" selected>--add invite user--</option>
-        <?php
-        $newinviteuserlist = array_diff($inviteuserlist, $art->invites());
-        foreach ($newinviteuserlist as $inviteuser) {
-            echo '<option value="'.$inviteuser.'" >'.$inviteuser.'</option>';
+    <label for="authors">Invites editors</label>
+    <select name="authors[]" id="authors">
+    <option value="" selected>--add author--</option>
+    <?php
+    $notyetauthorlist = array_diff($editorlist, $art->authors());
+        foreach ($notyetauthorlist as $author) {
+            echo '<option value="'.$author.'" >'.$author.'</option>';
+        }
+    }
+    ?>
+
+    </select>
+    <?php
+        $alreadyauthorlist = array_intersect($editorlist, $art->authors());
+        foreach ($alreadyauthorlist as $author) {
+            ?>
+            <div class="checkexternal">
+            <?php if($user->level() >= 4) { ?>
+            <input type="checkbox" name="authors[]" id="<?= $author ?>" value="<?= $author ?>" checked>
+            <?php } ?>
+            <label for="<?= $author ?>" >⬗ <?= $author ?></label>
+            </div>
+            <?php
         }
         ?>
-        </select>
-        <?php
-            $validateinviteusers = array_intersect($inviteuserlist, $art->invites());
-            foreach ($validateinviteusers as $invite) {
-                ?>
-                <div class="checkexternal">
-                <input type="checkbox" name="invites[]" id="<?= $invite ?>" value="<?= $invite ?>" checked>
-                <label for="<?= $invite ?>" >⬗ <?= $invite ?></label>
-                </div>
-                <?php
-            }
-        ?>
     
-        <?php } ?>
 
     </div>
 
