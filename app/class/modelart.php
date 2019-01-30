@@ -178,6 +178,29 @@ class Modelart extends Modeldb
 		return $filteredlist;
 	}
 
+	public function filterauthorfilter(array $artlist, array $authorchecked, $authorcompare = 'OR')
+	{
+
+		$filteredlist = [];
+		foreach ($artlist as $art) {
+			if (empty($authorchecked)) {
+				$filteredlist[] = $art->id();
+			} else {
+				$inter = (array_intersect($art->authors('array'), $authorchecked));
+				if ($authorcompare == 'OR') {
+					if (!empty($inter)) {
+						$filteredlist[] = $art->id();
+					}
+				} elseif ($authorcompare == 'AND') {
+					if (!array_diff($authorchecked, $art->authors('array'))) {
+						$filteredlist[] = $art->id();
+					}
+				}
+			}
+		}
+		return $filteredlist;
+	}
+
 	public function filtersecure(array $artlist, $secure)
 	{
 		$filteredlist = [];

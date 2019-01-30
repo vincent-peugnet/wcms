@@ -28,8 +28,9 @@ foreach ($opt->col('array') as $key => $col) {
 <li><input type="radio" id="0" name="secure" value="0"<?= $opt->secure() == 0 ? "checked" : "" ?>/><label for="0">public</label></li>
 </ul></fieldset>
 
-            <fieldset><legend>Tag</legend><ul>
-
+    <fieldset><legend>Tag</legend>
+            
+<ul>
 
 <input type="radio" id="OR" name="tagcompare" value="OR" ' . <?= $opt->tagcompare() == "OR" ? "checked" : "" ?> ><label for="OR">OR</label>
 <input type="radio" id="AND" name="tagcompare" value="AND" <?= $opt->tagcompare() == "AND" ? "checked" : "" ?>><label for="AND">AND</label>
@@ -61,7 +62,48 @@ if ($in = true || $out = true) {
 }
 ?>
 
-</ul></fieldset>
+</ul>
+
+</fieldset>
+
+<fieldset>
+    <legend>Author(s)</legend>
+            
+    <ul>
+
+<input type="radio" id="OR" name="authorcompare" value="OR" ' . <?= $opt->authorcompare() == "OR" ? "checked" : "" ?> ><label for="OR">OR</label>
+<input type="radio" id="AND" name="authorcompare" value="AND" <?= $opt->authorcompare() == "AND" ? "checked" : "" ?>><label for="AND">AND</label>
+
+<?php
+$in = false;
+$out = false;
+$limit = 1;
+foreach ($opt->authorlist() as $authorfilter => $count) {
+
+    if ($count > $limit && $in == false) {
+        echo '<details open><summary>>' . $limit . '</summary>';
+        $in = true;
+    }
+    if ($count == $limit && $in == true && $out == false) {
+        echo '</details><details><summary>' . $limit . '</summary>';
+        $out = true;
+    }
+
+    if (in_array($authorfilter, $opt->authorfilter())) {
+
+        echo '<li><input type="checkbox" name="authorfilter[]" id="tag_' . $authorfilter . '" value="' . $authorfilter . '" checked /><label for="tag_' . $authorfilter . '">' . $authorfilter . ' (' . $count . ')</label></li>';
+    } else {
+        echo '<li><input type="checkbox" name="authorfilter[]" id="tag_' . $authorfilter . '" value="' . $authorfilter . '" /><label for="tag_' . $authorfilter . '">' . $authorfilter . ' (' . $count . ')</label></li>';
+    }
+}
+if ($in = true || $out = true) {
+    echo '</details>';
+}
+?>
+
+</ul>
+
+</fieldset>
 
         <?php
         if ($opt->invert() == 1) {

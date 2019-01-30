@@ -13,6 +13,7 @@ class Modelhome extends Modelart
         $opt = new Opt(Art2::classvarlist());
         $opt->setcol(['id', 'tag', 'linkfrom', 'linkto', 'description', 'title', 'datemodif', 'datecreation', 'date', 'secure', 'visitcount']);
         $opt->settaglist($table);
+        $opt->setauthorlist($table);
         $opt->submit();
 
         return $opt;
@@ -27,9 +28,10 @@ class Modelhome extends Modelart
 
 
         $filtertagfilter = $listmanager->filtertagfilter($table, $opt->tagfilter(), $opt->tagcompare());
+        $filterauthorfilter = $listmanager->filterauthorfilter($table, $opt->authorfilter(), $opt->authorcompare());
         $filtersecure = $listmanager->filtersecure($table, $opt->secure());
 
-        $filter = array_intersect($filtertagfilter, $filtersecure);
+        $filter = array_intersect($filtertagfilter, $filtersecure, $filterauthorfilter);
         $table2 = [];
         $table2invert = [];
         foreach ($table as $art) {

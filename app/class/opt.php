@@ -5,11 +5,14 @@ class Opt
 	private $order = 1;
 	private $tagfilter = [];
 	private $tagcompare = 'OR';
+	private $authorfilter = [];
+	private $authorcompare = 'OR';
 	private $secure = 4;
 	private $linkto = ['min' => '0', 'max' => '0'];
 	private $linkfrom = ['min' => '0', 'max' => '0'];
 	private $col = ['id'];
 	private $taglist = [];
+	private $authorlist = [];
 	private $invert = 0;
 
 	private $artvarlist;
@@ -64,7 +67,7 @@ class Opt
 
 	public function getall()
 	{
-		$optlist = ['sortby', 'order', 'secure', 'tagcompare', 'tagfilter', 'invert'];
+		$optlist = ['sortby', 'order', 'secure', 'tagcompare', 'tagfilter', 'authorcompare', 'authorfilter', 'invert'];
 
         foreach ($optlist as $method) {    
             if (method_exists($this, $method)) {
@@ -100,6 +103,10 @@ class Opt
 			$adress .= '&tagcompare=' . $this->tagcompare;
 			foreach ($this->tagfilter as $tag) {
 				$adress .= '&tagfilter[]=' . $tag;
+			}
+			$adress .= '&authorcompare=' . $this->authorcompare;
+			foreach ($this->authorfilter as $author) {
+				$adress .= '&authorfilter[]=' . $author;
 			}
 			if($this->invert == 1) {
 				$adress .= '&invert=1';
@@ -141,6 +148,16 @@ class Opt
 		return $this->tagcompare;
 	}
 
+	public function authorfilter($type = 'array')
+	{
+		return $this->authorfilter;
+	}
+
+	public function authorcompare()
+	{
+		return $this->authorcompare;
+	}
+
 	public function linkto($type = 'array')
 	{
 		return $this->linkto;
@@ -163,6 +180,11 @@ class Opt
 	public function taglist()
 	{
 		return $this->taglist;
+	}
+
+	public function authorlist()
+	{
+		return $this->authorlist;
 	}
 
 	public function invert()
@@ -213,6 +235,26 @@ class Opt
 		}
 	}
 
+	public function setauthorfilter($authorfilter)
+	{
+		if (!empty($authorfilter) && is_array($authorfilter)) {
+			$authorfilterverif = [];
+			foreach ($authorfilter as $author) {
+				if(array_key_exists($author, $this->authorlist)) {
+					$authorfilterverif[] = $author;
+				}
+			}
+			$this->authorfilter = $authorfilterverif;
+		}
+	}
+
+	public function setauthorcompare($authorcompare)
+	{
+		if (in_array($authorcompare, ['OR', 'AND'])) {
+			$this->authorcompare = $authorcompare;
+		}
+	}
+
 	public function setsecure($secure)
 	{
 		if ($secure >= 0 && $secure <= 5) {
@@ -257,7 +299,6 @@ class Opt
 		}
 	}
 
-
 	public function settaglist(array $artlist)
 	{
 			$taglist = [];
@@ -272,6 +313,22 @@ class Opt
 			}
 			$taglistsorted = arsort($taglist);
 			$this->taglist = $taglist;
+	}
+
+	public function setauthorlist(array $artlist)
+	{
+			$authorlist = [];
+			foreach ($artlist as $art) {
+				foreach ($art->authors('array') as $author) {
+					if (!array_key_exists($author, $authorlist)) {
+						$authorlist[$author] = 1;
+					} else {
+						$authorlist[$author]++;
+					}
+				}
+			}
+			$authorlistsorted = arsort($authorlist);
+			$this->authorlist = $authorlist;
 	}
 
 	public function setinvert(int $invert)
