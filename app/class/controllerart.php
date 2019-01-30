@@ -275,6 +275,7 @@ class Controllerart extends Controller
                 $this->art->hydrate($date);
                 $this->art->updateedited();
                 $this->art->addauthor($this->user->id());
+                $this->art->removeeditby($this->user->id());
 
 
                 $this->artmanager->update($this->art);
@@ -292,6 +293,41 @@ class Controllerart extends Controller
         }
         $this->routedirect('art');
     }
+
+    /**
+     * This function set the actual editor of the page
+     * 
+     * @param string $artid as the page id
+     */
+    public function editby(string $artid)
+    {
+        $this->art = new Art2(['id' => $artid]);
+        if($this->importart($artid)) {
+            $this->art->addeditby($this->user->id());
+            $this->artmanager->update($this->art);
+            echo json_encode(['success' => true]);
+        } else {
+            $this->error(400);
+        }
+    }
+
+    /**
+     * This function remove the actual editor of the page
+     * 
+     * @param string $artid as the page id
+     */
+    public function removeeditby(string $artid)
+    {
+        $this->art = new Art2(['id' => $artid]);
+        if($this->importart($artid)) {
+            $this->art->removeeditby($this->user->id());
+            $this->artmanager->update($this->art);
+            echo json_encode(['success' => true]);
+        } else {
+            $this->error(400);
+        }
+    }
+
 
     public function movepanels()
     {

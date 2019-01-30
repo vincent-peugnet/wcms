@@ -12,7 +12,11 @@
     <?php } ?>
     <title><?= $title ?></title>
     <link rel="stylesheet" href="<?= $css ?>">
-
+    <script>
+        // global js vars
+        const basepath = '/<?= Config::basepath() ?>/';
+        const jspath = '<?= Model::jspath() ?>';
+    </script>
 </head>
 
 

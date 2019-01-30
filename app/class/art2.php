@@ -39,6 +39,7 @@ class Art2
 	protected $affcount;
 	protected $visitcount;
 	protected $editcount;
+	protected $editby;
 
 
 	const LEN = 255;
@@ -110,6 +111,7 @@ class Art2
 		$this->setaffcount(0);
 		$this->setvisitcount(0);
 		$this->seteditcount(0);
+		$this->seteditby([]);
 	}
 
 
@@ -441,6 +443,10 @@ class Art2
 		return $this->editcount;
 	}
 
+	public function editby($type = 'array')
+	{
+		return $this->editby;
+	}
 
 
 
@@ -761,6 +767,13 @@ class Art2
 		}
 	}
 
+	public function seteditby($editby)
+	{
+		if(is_array($editby)) {
+			$this->editby = $editby;
+		}
+	}
+
 
 	// __________________________________ C O U N T E R S ______________________________
 
@@ -792,6 +805,21 @@ class Art2
 		if(!in_array($id, $this->authors)) {
 			$this->authors[] = $id;
 		}
+	}
+
+	public function addeditby(string $id)
+	{
+		$this->editby[$id] = true;
+	}
+
+	public function removeeditby(string $id)
+	{
+		unset($this->editby[$id]);
+	}
+
+	public function iseditedby()
+	{
+		return count($this->editby) > 0;
 	}
 
 

@@ -1,5 +1,7 @@
 let form;
 let unsavedChanges = false;
+const arturl = basepath + artid;
+const myWorker = new Worker(jspath + 'worker.js');
 
 window.onload = () => {
     form = document.getElementById('update');
@@ -12,6 +14,19 @@ window.onload = () => {
     form.onsubmit = submitHandler;
     window.onkeydown = keyboardHandler;
     window.onbeforeunload = confirmExit;
+    myWorker.onmessage = function (e) {
+        switch (e.data.type) {
+            case 'quitEditing':
+                myWorker.postMessage({ type: 'stillEditing' })
+                break;
+        }
+    }
+
+    myWorker.postMessage({
+        type: 'init',
+        arturl: arturl,
+    });
+    myWorker.postMessage({ type: 'stillEditing' });
 };
 
 /**
@@ -39,7 +54,6 @@ function keyboardHandler(e) {
  */
 function changeHandler(e) {
     unsavedChanges = true;
-    // console.log({unsavedChanges});
 }
 
 /**
@@ -55,8 +69,27 @@ function submitHandler(e) {
  * @param {BeforeUnloadEvent} e
  */
 function confirmExit(e) {
-    // console.log({unsavedChanges});
     if (unsavedChanges) {
-        return "You have unsaved changes, do you really want to leave this page?";
+        const url = arturl + '/removeeditby';
+        console.log('send quit editing')
+        fetch(url, { method: 'POST' })
+            .then(handleErrors)
+            .then((response) => {
+                console.log(response);
+                setTimeout(() => {
+                    myWorker.postMessage({ type: 'stillEditing' });
+                }, 1500);
+            });
+        return 'You have unsaved changes, do you really want to leave this page?';
+    } else {
+        myWorker.postMessage({ type: 'quitEditing' });
     }
+}
+
+async function handleErrors(response) {
+    if (!response.ok) {
+        const data = await response.json();
+        throw Error(`${response.statusText}. ${data.message}`);
+    }
+    return response.json();
 }

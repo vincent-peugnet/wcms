@@ -79,6 +79,12 @@ class Controller
         $this->redirect($this->router->generate($route, []) . $get);
     }
 
+    public function error(int $code)
+    {
+        http_response_code($code);
+        exit;
+    }
+
 }
 
 

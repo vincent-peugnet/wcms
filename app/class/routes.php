@@ -43,6 +43,8 @@ class Routes
             ['GET', '/[cid:art]/log', 'Controllerart#log', 'artlog'],
             ['GET', '/[cid:art]/download', 'Controllerart#download', 'artdownload'],
             ['POST', '/[cid:art]/edit', 'Controllerart#update', 'artupdate'],
+            ['POST', '/[cid:art]/editby', 'Controllerart#editby', 'arteditby'],
+            ['POST', '/[cid:art]/removeeditby', 'Controllerart#removeeditby', 'artremoveeditby'],
             ['GET', '/[cid:art]/delete', 'Controllerart#confirmdelete', 'artconfirmdelete'],
             ['POST', '/[cid:art]/delete', 'Controllerart#delete', 'artdelete'],
             ['GET', '/[cid:art]/[*]', 'Controllerart#artdirect', 'artread/etoile'],

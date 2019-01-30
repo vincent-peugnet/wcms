@@ -24,6 +24,9 @@
 
 </main>
 
+<script>
+    const artid = '<?= $art->id() ?>';
+</script>
 <script src="<?= Model::jspath() ?>edit.js"></script>
 </body>
 
