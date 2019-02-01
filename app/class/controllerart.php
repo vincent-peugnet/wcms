@@ -149,7 +149,7 @@ class Controllerart extends Controller
         $this->setart($id, 'artedit');
 
 
-        if ($this->importart() && $this->canedit()) {
+        if ($this->importart() && $this->canedit() && empty($this->art->editby())) {
             $tablist = ['main' => $this->art->main(), 'css' => $this->art->css(), 'header' => $this->art->header(), 'nav' => $this->art->nav(), 'aside' => $this->art->aside(), 'footer' => $this->art->footer(), 'body' => $this->art->body(), 'javascript' => $this->art->javascript()];
 
             $faviconlist = $this->mediamanager->listfavicon();

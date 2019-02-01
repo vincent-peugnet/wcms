@@ -148,7 +148,11 @@ class Art2
 
 	public function title($type = 'string')
 	{
-		return $this->title;
+		if($type == 'sort') {
+			return strtolower($this->title);
+		} else {
+			return $this->title;
+		}
 	}
 
 	public function description($type = 'string')
@@ -532,7 +536,7 @@ class Art2
 	public function setcss($css)
 	{
 		if (strlen($css) < self::LENTEXT and is_string($css)) {
-			$this->css = strip_tags(trim(strtolower($css)));
+			$this->css = trim(strtolower($css));
 		}
 	}
 
@@ -722,7 +726,7 @@ class Art2
 	public function setauthors($authors)
 	{
 		if(is_array($authors)) {
-			$this->authors = $authors;
+			$this->authors = array_values(array_filter($authors));
 		}
 	}
 

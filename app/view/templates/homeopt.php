@@ -32,8 +32,8 @@ foreach ($opt->col('array') as $key => $col) {
             
 <ul>
 
-<input type="radio" id="OR" name="tagcompare" value="OR" ' . <?= $opt->tagcompare() == "OR" ? "checked" : "" ?> ><label for="OR">OR</label>
-<input type="radio" id="AND" name="tagcompare" value="AND" <?= $opt->tagcompare() == "AND" ? "checked" : "" ?>><label for="AND">AND</label>
+<input type="radio" id="tag_OR" name="tagcompare" value="OR" ' . <?= $opt->tagcompare() == "OR" ? "checked" : "" ?> ><label for="tag_OR">OR</label>
+<input type="radio" id="tag_AND" name="tagcompare" value="AND" <?= $opt->tagcompare() == "AND" ? "checked" : "" ?>><label for="tag_AND">AND</label>
 
 <?php
 $in = false;
@@ -71,8 +71,8 @@ if ($in = true || $out = true) {
             
     <ul>
 
-<input type="radio" id="OR" name="authorcompare" value="OR" ' . <?= $opt->authorcompare() == "OR" ? "checked" : "" ?> ><label for="OR">OR</label>
-<input type="radio" id="AND" name="authorcompare" value="AND" <?= $opt->authorcompare() == "AND" ? "checked" : "" ?>><label for="AND">AND</label>
+<input type="radio" id="author_OR" name="authorcompare" value="OR" ' . <?= $opt->authorcompare() == "OR" ? "checked" : "" ?> ><label for="author_OR">OR</label>
+<input type="radio" id="author_AND" name="authorcompare" value="AND" <?= $opt->authorcompare() == "AND" ? "checked" : "" ?>><label for="author_AND">AND</label>
 
 <?php
 $in = false;
@@ -91,9 +91,9 @@ foreach ($opt->authorlist() as $authorfilter => $count) {
 
     if (in_array($authorfilter, $opt->authorfilter())) {
 
-        echo '<li><input type="checkbox" name="authorfilter[]" id="tag_' . $authorfilter . '" value="' . $authorfilter . '" checked /><label for="tag_' . $authorfilter . '">' . $authorfilter . ' (' . $count . ')</label></li>';
+        echo '<li><input type="checkbox" name="authorfilter[]" id="author_' . $authorfilter . '" value="' . $authorfilter . '" checked /><label for="author_' . $authorfilter . '">' . $authorfilter . ' (' . $count . ')</label></li>';
     } else {
-        echo '<li><input type="checkbox" name="authorfilter[]" id="tag_' . $authorfilter . '" value="' . $authorfilter . '" /><label for="tag_' . $authorfilter . '">' . $authorfilter . ' (' . $count . ')</label></li>';
+        echo '<li><input type="checkbox" name="authorfilter[]" id="author_' . $authorfilter . '" value="' . $authorfilter . '" /><label for="author_' . $authorfilter . '">' . $authorfilter . ' (' . $count . ')</label></li>';
     }
 }
 if ($in = true || $out = true) {

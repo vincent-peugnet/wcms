@@ -28,10 +28,13 @@
 
 <div id="main">
 <h2>Pages</h2>
+
+
+
 <form action="/massedit" method="post">
 
-
-    <div id="massedit">
+<div id="massedit">
+    <!-- 
     <select name="massedit" required>
         <option value="public">set as public</option>
         <option value="private">set as private</option>
@@ -43,17 +46,9 @@
     </select>
 
     <input type="submit" name="massaction" value="do" onclick="confirmSubmit(event, 'Are you sure')" >
+ -->
 
 
-    <?php
-
-    $array = ['id' => [ 'getadress' => true,
-                        'label' => 'id',
-                        'show' => true]
-    ]
-
-
-    ?>
 
     <input type="hidden" name="action" value="massedit">
     </div>
@@ -65,11 +60,13 @@
         <th><a href="<?= $opt->getadress('id') ?>">id</a></th>
         <th>edit</th>
         <th>see</th>
-        <th class="delete">del</th>
-        <?php if($user->isadmin()) { ?>
-        <th class="download">dl</th>
+        <th class="delete" title="delete page">del</th>
+        <?php if($user->issupereditor()) { ?>
+        <th class="download" title="download page as json">dl</th>
         <?php } if($columns['tag']) { ?>
         <th class="tag"><a href="<?= $opt->getadress('tag') ?>">tag</a></th>
+        <?php } if($columns['title']) { ?>
+        <th class="title"><a href="<?= $opt->getadress('title') ?>">title</a></th>
         <?php } if($columns['description']) { ?>
         <th class="summary">summary</th>
         <?php } if($columns['linkto']) { ?>
@@ -99,10 +96,12 @@
             <td><a href="<?= $this->uart('artedit', $item->id()) ?>">✏</a></td>
             <td><a href="<?= $this->uart('artread/', $item->id()) ?>" target="_blank">👁</a></td>
             <td class="delete"><a href="<?= $this->uart('artdelete', $item->id()) ?>" >✖</a></td>
-            <?php if($user->isadmin()) { ?>
+            <?php if($user->issupereditor()) { ?>
             <td><a href="<?= $this->uart('artdownload', $item->id()) ?>" download>↓</a></td>
             <?php } if($columns['tag']) { ?>
             <td class="tag"><a title="<?= $item->tag('string') ?>"><?= $item->tag('sort') ?></a></td>
+            <?php } if($columns['title']) { ?>
+            <td class="title" title="<?= $item->title() ?>"><?= $item->title() ?></td>
             <?php } if($columns['description']) { ?>
             <td class="summary" title="<?= $item->description() ?>"><?= $item->description('short') ?></td>
             <?php } if($columns['linkto']) { ?>
