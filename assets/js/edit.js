@@ -14,13 +14,6 @@ window.onload = () => {
     form.onsubmit = submitHandler;
     window.onkeydown = keyboardHandler;
     window.onbeforeunload = confirmExit;
-    myWorker.onmessage = function (e) {
-        switch (e.data.type) {
-            case 'quitEditing':
-                myWorker.postMessage({ type: 'stillEditing' })
-                break;
-        }
-    }
 
     myWorker.postMessage({
         type: 'init',
