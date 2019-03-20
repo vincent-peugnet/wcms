@@ -19,7 +19,13 @@ class Controlleradmin extends Controller
                 $defaultartexist = true;
             }
 
-            $globalcss = file_get_contents(Model::GLOBAL_DIR . 'global.css');
+            $globalcssfile = Model::GLOBAL_DIR . 'global.css';
+
+            if(is_file($globalcssfile)) {
+                $globalcss = file_get_contents($globalcssfile);
+            } else {
+                $globalcss = "";
+            }
 
             $admin = ['artlist' => $artlist, 'defaultartexist' => $defaultartexist, 'globalcss' => $globalcss, 'faviconlist' => $faviconlist];
             $this->showtemplate('admin', $admin);
