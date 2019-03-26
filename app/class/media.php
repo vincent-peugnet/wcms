@@ -56,7 +56,12 @@ class Media
 
 	public function getfullpath()
 	{
-		$fullpath = '/' . Config::basepath() . '/'. $this->path() . $this->id() . '.' . $this->extension();
+		if(!empty(Config::basepath())) {
+			$base = '/' . Config::basepath();
+		} else {
+			$base = '';
+		}
+		$fullpath = $base . '/'. $this->path() . $this->id() . '.' . $this->extension();
 		$fullpath = str_replace('\\', '/', $fullpath);
 		return $fullpath;
 	}
