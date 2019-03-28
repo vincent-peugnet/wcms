@@ -15,13 +15,12 @@ div#options {
 
 div#main {
     overflow: auto;
-    width: 100%;
 }
 
 body {
     margin: 0;
     height: 100%;
-    background-color: lightgrey;
+    background-color: grey;
     font-family: monospace;
     font-size: 15px;
     position: fixed;
@@ -39,6 +38,24 @@ body {
 
 
 
+h1, h2 {
+    margin: 0;
+    background-color: #7b97b9;
+    color: white;
+    padding: 0.1% 0.5%;
+    font-size: larger;
+}
+
+
+
+main.media div, main.home div#options, main.home div#main, main.info nav, main article {
+    border: ridge 1px dimgrey;
+    margin: 1%;
+    background-color: lightgrey;
+}
+
+
+
 tr:hover {
     background-color: grey;
     color: white;
@@ -48,6 +65,7 @@ tr:hover {
     background-color: #7b97b9;
     width: 100%;
     padding: 3px 0.5%;
+    border-bottom: solid 1px dimgrey;
 }
 
 #topbar form {
@@ -81,7 +99,11 @@ main {
 main.admin input, select, textarea {
     display: block;
     width: 100%;
-    max-width: 400px;
+}
+
+main section {
+    max-width: 800px;
+    margin: 1%;
 }
 
 
@@ -155,11 +177,11 @@ main.info code, main.info blockquote {
 }
 
 main.info article {
-    max-width: 800px;
-    text-align: justify;
-    background-color: #e2e1e1;
-    margin: 1%;
-    padding: 1%;
+    /* max-width: 800px; */
+    /* text-align: justify; */
+    /* background-color: #e2e1e1; */
+    /* margin: 1%; */
+    /* padding: 1%; */
 }
 
 main.info blockquote i {
@@ -173,7 +195,7 @@ main.info article h2#manual {
     font-size: 40px;
 }
 
-main.info article h3 {
+main.info article#manual h3 {
     border-bottom: solid 1px grey;
     margin-top: 100px;
     padding-top: 15px;
@@ -208,8 +230,6 @@ main.info nav {
     left: 850px;
     top: 0px;
     margin-top: 50px;
-    border-left: solid 2px grey;
-    padding: 0 10px;
 }
 
 main.info article code i {
@@ -301,6 +321,24 @@ main.timeline textarea#message {
 
 
 
+main.timeline article#live {
+    overflow-y: scroll;
+}
+
+main.timeline section {
+    display: flex;
+    flex-direction: column;
+}
+
+main.timeline {
+    display: flex;
+    height: 100%;
+    flex-direction: row;
+}
+
+
+
+
 li.event:hover span.details {
     display: inline;
 }
@@ -328,6 +366,7 @@ main.timeline li.event {
     main.info nav {
         position: relative;
         left: 0;
+        margin-top: 1%;
     }
 
     main.home div#options {
@@ -335,6 +374,8 @@ main.timeline li.event {
     }
 
 }
+
+
 
 
 

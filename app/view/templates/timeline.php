@@ -14,6 +14,10 @@
 
 <main class="timeline">
 
+<section>
+
+<article id="live">
+
 <h1>Timeline</h1>
 
 <ul>
@@ -68,6 +72,12 @@ foreach ($groupedeventlist as $eventuser) {
 
 </ul>
 
+</article>
+
+<article id="message">
+
+<h2>Message</h2>
+
 <form action="<?= $this->url('timelineadd') ?>" method="post">
 
 <input type="hidden" name="type" value="message">
@@ -82,6 +92,10 @@ foreach ($groupedeventlist as $eventuser) {
 </main>
 
 <?php } ?>
+
+</article>
+
+</section>
 
 </body>
 

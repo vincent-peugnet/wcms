@@ -10,6 +10,9 @@
 
 <main class="user">
 
+<section>
+
+<article>
 
 <h1>User : <?= $user->id() ?></h1>
 
@@ -26,7 +29,12 @@
 
 </form>
 
+</article>
+
+
 <?php if($user->isadmin()) { ?>
+
+<article>
 
 <h1>Admin panel</h1>
 
@@ -110,7 +118,12 @@ foreach ($userlist as $user ) {
 
 </table>
 
+</article>
+
 <?php } ?>
+
+
+</section>
 
 
 </main>

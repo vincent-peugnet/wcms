@@ -10,11 +10,19 @@
 
 <main class="admin">
 
-    <h1>Administration</h1>
+    <section>
 
     <form action="<?= $this->url('adminupdate') ?>" method="post">
 
+
+    <article>
+
+    <h1>Administration</h1>
+
     <input type="submit" value="Update configuration">
+    </article>
+
+    <article>
 
     <h2>Home page</h2>
 
@@ -49,6 +57,10 @@
         ?>
     </select>
 
+    </article>
+
+    <article>
+
     <h2>Page creation</h2>
 
     <label for="defaultprivacy">Default privacy</label>
@@ -82,6 +94,10 @@
     }
     ?>
 
+    </article>
+
+    <article>
+
 
 
     <h2>Editing</h2>
@@ -89,7 +105,8 @@
     <label for="existnot">Text to show when a page does not exist yet</label>
     <input type="text" name="existnot" id="existnot" value="<?= Config::existnot() ?>">
 
-    <h2>Render</h2>
+
+    <h4>Render</h4>
 
     <div class="checkbox">
     <input type="hidden" name="reccursiverender" value="0">
@@ -97,7 +114,8 @@
     <label for="reccursiverender">Reccursive render</label>
     </div>
 
-    <h3>Links</h3>
+
+    <h4>Links</h4>
     
     <div class="checkbox">
     <input type="hidden" name="externallinkblank" value="0">
@@ -113,7 +131,7 @@
 
     <i>(This modifications need re-rendering)</i>
 
-    <h3>Edit quick menu</h3>
+    <h4>Edit quick menu</h4>
 
     <div class="checkbox">
     <input type="checkbox" name="showeditmenu" id="showeditmenu" <?= Config::showeditmenu() === true ? 'checked' : '' ?>>
@@ -137,6 +155,10 @@
     }
     ?>
 
+    </article>
+
+    <article>
+
     <h2>CSS</h2>
 
     <label for="globalcss">Edit global css that will apply to every pages</label>
@@ -154,6 +176,9 @@
     ?>
     </select>
 
+    </article>
+
+    <article>
 
     <h2>Tracking</h2>
 
@@ -162,13 +187,18 @@
 
     <i>(Need rendering to work)</i>
 
+    </article>
 
+    <article>
     <input type="submit" value="Update configuration">
+    </article>
+
+
 
     </form>
 
 
-    
+    </section>
 
 </main>
 </body>

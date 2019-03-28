@@ -10,6 +10,34 @@
 
 <main class="info">
 
+
+<section>
+
+
+<nav>
+<h2>Manual Summary</h2>
+<ul>
+    <li><a href="#startup">Startup</a></li>
+    <ul>
+
+    </ul>
+    <li><a href="#structure">Structure</a></li>
+    <ul>
+        <li><a href="#attributes">Page attributes</a></li>
+        <li><a href="#database">Database</a></li>
+    </ul>
+    <li><a href="#editor">Editor</a></li>
+    <ul>
+        <li><a href="#elementsyntax">Elements syntax</a></li>
+        <li><a href="#bodysyntax">Body syntax</a></li>
+    </ul>
+</ul>
+
+</nav>
+
+
+<article>
+
 <h1>Info</h1>
 
 <h2>Version</h2>
@@ -39,34 +67,9 @@
 
 <a href="https://nicolas.club1.fr" target="_blank">🚲 Nicolas Peugnet</a>
 
+</article>
 
-
-
-<nav>
-<h2>Manual Summary</h2>
-<ul>
-    <li><a href="#startup">Startup</a></li>
-    <ul>
-
-    </ul>
-    <li><a href="#structure">Structure</a></li>
-    <ul>
-        <li><a href="#attributes">Page attributes</a></li>
-        <li><a href="#database">Database</a></li>
-    </ul>
-    <li><a href="#editor">Editor</a></li>
-    <ul>
-        <li><a href="#elementsyntax">Elements syntax</a></li>
-        <li><a href="#bodysyntax">Body syntax</a></li>
-    </ul>
-</ul>
-
-</nav>
-
-
-
-
-<article>
+<article id="manual">
 
 <h2 id="manual">Manual</h2>
 
@@ -361,6 +364,8 @@ __content of this page html element__
 </blockquote>
 
 </article>
+
+</section>
 
 </main>
 </body>

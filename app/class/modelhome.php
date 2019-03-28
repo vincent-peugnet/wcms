@@ -55,7 +55,7 @@ class Modelhome extends Modelart
     }
 
     /**
-     * @var array array of the columns to show from the user
+     * @param array array of the columns to show from the user
      * 
      * @return array assoc each key columns to a boolean value to show or not
      */

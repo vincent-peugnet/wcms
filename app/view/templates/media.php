@@ -12,7 +12,7 @@
 
 
 <div id="tree">
-<h1>Explorer</h1>
+<h2>Explorer</h2>
 
 
 <table id="dirlsit">
