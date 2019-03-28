@@ -89,6 +89,11 @@ class Element
         }
     }
 
+    public function addtags()
+    {
+        $this->content = PHP_EOL . '<' . $this->type() . '>' . PHP_EOL . $this->content() . PHP_EOL . '</' . $this->type() . '>' . PHP_EOL;
+    }
+
 
 
 

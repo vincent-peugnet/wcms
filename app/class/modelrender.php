@@ -98,6 +98,7 @@ class Modelrender extends Modelart
 			$element = new Element($match, $this->art->id());
 			$element->setcontent($this->getelementcontent($element));
 			$element->setcontent($this->elementparser($element));
+			$element->addtags();
 			$body = str_replace($element->fullmatch(), $element->content(), $body);
 
 		}
