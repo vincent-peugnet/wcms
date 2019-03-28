@@ -27,8 +27,11 @@ abstract class Model
 	const PASSWORD_MAX_LENGTH = 32;
 
 	/** RENDER OPTIONS	 */
+	// add class in html element indicating from witch page the content come.
 	const RENDER_CLASS_ORIGIN = false;
-	const RENDER_EMPTY_ELEMENT = false;
+	// render empty CONTENT element as empty html element, if set to false, render html comment
+	const RENDER_EMPTY_ELEMENT = false; 
+
 
 	/** CONFIG OPTIONS */
 	const HOMEPAGE = ['default', 'search', 'redirect'];

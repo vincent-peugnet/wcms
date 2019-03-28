@@ -11,8 +11,8 @@ class Modelrender extends Modelart
 	protected $externallinkblank = '';
 
 	const SUMMARY = '%SUMMARY%';
-	const REMPLACE_SELF_ELEMENT = false;
 
+	const RENDER_VERBOSE = 1;
 
 	public function __construct($router)
 	{
@@ -59,14 +59,7 @@ class Modelrender extends Modelart
 		if (!empty($this->art->templatebody())) {
 			$templateid = $this->art->templatebody();
 			$templateart = $this->get($templateid);
-			if (self::REMPLACE_SELF_ELEMENT) {
-				$templatebody = preg_replace_callback('~\%(MAIN|ASIDE|NAV|HEADER|FOOTER)!\%~', function ($match) use ($templateid) {
-					return '%' . $match[1] . '.' . $templateid . '%';
-				}, $templateart->body());
-			} else {
-				$templatebody = $templateart->body();
-			}
-			$body = $templatebody;
+			$body = $templateart->body();
 		} else {
 			$body = $this->art->body();
 		}
@@ -76,54 +69,87 @@ class Modelrender extends Modelart
 		return $body;
 	}
 
-	public function getbody(string $body)
-	{
-		$rend = $this;
-		$body = preg_replace_callback('~\%(MAIN|ASIDE|NAV|HEADER|FOOTER)((:[a-z0-9-_]+|!)(\+([a-z0-9-_]+|!))*)?\%~', function ($match) use ($rend) {
-			$element = strtolower($match[1]);
-			$getelement = '';
-			if (isset($match[2]) && !empty($match[2])) {
-				$templatelist = str_replace('!', $this->art->id(), explode('+', ltrim($match[2], ':')));
-				foreach ($templatelist as $template) {
-					if ($template === $rend->art->id()) {
-						$templateelement = $rend->art->$element();
-					} else {
-						$templateelement = $rend->getartelement($template, $element);
-					}
-					$getelement .= $templateelement;
-				}
-			} else {
-				$templatelist = [$rend->art->id()];
-				$getelement = $rend->art->$element();
-			}
-			$getelement = $rend->elementparser($getelement);
-			$eol = "\n";
-			if ($getelement == $eol && !self::RENDER_EMPTY_ELEMENT) {
-				$getelementblock = '<!-- ' . $element . ' block is empty, check options to render empty elements or not -->';
-			} else {
-				if (self::RENDER_CLASS_ORIGIN) {
-					$class = implode(' ', $templatelist);
-					$getelementblock = PHP_EOL . '<' . $element . ' class="' . $class . '">' . $getelement . '</' . $element . '>';
-				} else {
-					$getelementblock = PHP_EOL . '<' . $element . '>' . $getelement . '</' . $element . '>';
-				}
-			}
 
-			return $getelementblock;
-		}, $body);
+	/**
+	 * Analyse BODY, call the corresponding CONTENTs and render everything
+	 * 
+	 * @param string $body as the string BODY of the page
+	 * 
+	 * @return string as the full rendered BODY of the page
+	 */
+	public function getbody(string $body) : string
+	{
+		// Elements that can be detected
+		$types = ['HEADER', 'NAV', 'MAIN', 'ASIDE', 'FOOTER'];
+
+		// First level regex
+		$regex = '~\%(' . implode("|", $types) . ')(\S*)\%~';
+
+		// Match the first level regex
+		preg_match_all($regex, $body, $out);
+
+		// Create a list of all the elements that passed through the first level regex
+		foreach ($out[0] as $key => $match) {
+			$matches[$key] = ['fullmatch' => $match, 'type' => $out[1][$key], 'options' => $out[2][$key]];
+		}
+
+		// First, analyse the synthax and call the corresponding methods
+		foreach ($matches as $key => $match) {
+			$element = new Element($match, $this->art->id());
+			$element->setcontent($this->getelementcontent($element));
+			$element->setcontent($this->elementparser($element));
+			$body = str_replace($element->fullmatch(), $element->content(), $body);
+
+		}
+
+
+
 		return $body;
+
 	}
 
-	public function elementparser($element)
+	public function getelementcontent(Element $element)
 	{
-		$element = $this->article($element);
-		$element = $this->automedialist($element);
-		$element = $this->autotaglistupdate($element);
-		$element = $this->date($element);
-		$element = $this->autolink($element);
-		$element = $this->markdown($element);
+		$content = '';
+		$subseparator = PHP_EOL . PHP_EOL;
+		foreach($element->sources() as $source)
+		{
+			if($source !== $this->art->id()) {
+				$subcontent = $this->getartelement($source, $element->type());
+				if($subcontent !== false) {
+					if(empty($subcontent && self::RENDER_VERBOSE > 0)) {
+						$subcontent = PHP_EOL . '<!-- The ' . strtoupper($element->type()) . ' from page "' . $source . '" is currently empty ! -->' . PHP_EOL;
+					}
+				} else {
+					$read = '<h2>Rendering error :</h2><p>The page <strong><code>' . $source . '</code></strong>, called in <strong><code>'. $element->fullmatch() . '</code></strong>, does not exist yet.</p>';
+					throw new Exception($read);
+				}
 
-		return $element;
+			} else {
+				$type = $element->type();
+				$subcontent = $this->art->$type();
+			}
+		$content .= $subseparator . $subcontent;
+		}
+		return $content . $subseparator;
+	}
+
+	public function elementparser(Element $element)
+	{
+		$content = $this->article($element->content());
+		$content = $this->automedialist($content);
+		$content = $this->autotaglistupdate($content);
+		$content = $this->date($content);
+		if($element->autolink()) {
+			$content = $this->everylink($content, $element->autolink());
+		} else {
+			$content = $this->taglink($content);
+		}
+		if($element->markdown()) {
+			$content = $this->markdown($content);
+		}
+
+		return $content;
 	}
 
 
@@ -498,18 +524,26 @@ class Modelrender extends Modelart
 		return $text;
 	}
 
-	public function autolink($text)
+	public function taglink($text)
 	{
 		$rend = $this;
 		$text = preg_replace_callback('/\%LINK\%(.*)\%LINK\%/msU', function ($matches) use ($rend) {
-			return $rend->everylink($matches[1]);
+			return $rend->everylink($matches[1], 1);
 		}, $text);
 		return $text;
 	}
 
-	public function everylink($text)
+	/**
+	 * Autolink Function : transform every word of more than $limit characters in internal link
+	 * 
+	 * @var string $text The input text to be converted
+	 * 
+	 * @return string Conversion output
+	 */
+	public function everylink(string $text, int $limit) : string
 	{
-		$text = preg_replace_callback("~([\w-_éêèùïüîçà]{2,})~", function ($matches) {
+		$regex = '~([\w-_éêèùïüîçà]{' . $limit . ',})~';
+		$text = preg_replace_callback($regex , function ($matches) {
 			return '<a href="' . idclean($matches[1]) . '">' . $matches[1] . '</a>';
 		}, $text);
 		return $text;

@@ -70,7 +70,7 @@ class Modelart extends Modeldb
 			if ($art !== false) {
 				return $art->$element();
 			} else {
-				return '';
+				return false;
 			}
 		}
 	}
