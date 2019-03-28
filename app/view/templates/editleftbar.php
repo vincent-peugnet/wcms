@@ -43,6 +43,12 @@
             ?>
             </select>
 
+            <div id="thumbnail">
+                <label for="thumbnail">Thumbnail</label>
+                <input type="file" id="thumbnail" name="thumbnail" accept=".jpg, .JPG, .jpeg, .JPEG">
+                <img src="<?= Model::thumbnailpath() ?><?= $art->id() ?>.jpg" alt="no-thumbnail">
+            </div>
+
 
 
 

@@ -537,7 +537,7 @@ class Modelrender extends Modelart
 	/**
 	 * Autolink Function : transform every word of more than $limit characters in internal link
 	 * 
-	 * @var string $text The input text to be converted
+	 * @param string $text The input text to be converted
 	 * 
 	 * @return string Conversion output
 	 */

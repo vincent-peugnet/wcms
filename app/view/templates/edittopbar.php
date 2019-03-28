@@ -2,7 +2,7 @@
 
 
 
-    <form action="<?= $this->uart('artupdate', $art->id()) ?>" method="post" id="update">
+    <form action="<?= $this->uart('artupdate', $art->id()) ?>" method="post" id="update" enctype="multipart/form-data">
 
     <div id="editmenu">
 

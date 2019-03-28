@@ -8,6 +8,7 @@ abstract class Model
 	const FONT_DIR = 'fonts' . DIRECTORY_SEPARATOR;
 	const MEDIA_DIR = 'media' . DIRECTORY_SEPARATOR;
 	const FAVICON_DIR = 'media' . DIRECTORY_SEPARATOR . 'favicon' . DIRECTORY_SEPARATOR;
+	const THUMBNAIL_DIR = 'media' . DIRECTORY_SEPARATOR . 'thumbnail' . DIRECTORY_SEPARATOR;
 	const TEMPLATES_DIR = '.'. DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR;
 	const RENDER_DIR = 'assets'. DIRECTORY_SEPARATOR . 'render' . DIRECTORY_SEPARATOR;
 	const GLOBAL_DIR = 'assets'. DIRECTORY_SEPARATOR . 'global' . DIRECTORY_SEPARATOR;
@@ -74,6 +75,11 @@ abstract class Model
 	public static function faviconpath()
 	{
 		return self::dirtopath(Model::FAVICON_DIR);
+	}
+
+	public static function thumbnailpath()
+	{
+		return self::dirtopath(Model::THUMBNAIL_DIR);
 	}
 
 	public static function fontpath()

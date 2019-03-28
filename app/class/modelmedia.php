@@ -22,6 +22,15 @@ class Modelmedia extends Model
 		}
 	}
 
+	public function thumbnaildircheck()
+	{
+		if(!is_dir(Model::THUMBNAIL_DIR)) {
+			return mkdir(Model::THUMBNAIL_DIR);
+		} else {
+			return true;
+		}
+	}
+
 	public function getmedia($entry, $dir)
 	{
 		$fileinfo = pathinfo($entry);
@@ -118,22 +127,56 @@ class Modelmedia extends Model
 
 	}
 
-	public function upload(string $target)
+	/**
+	 * Upload single file
+	 * 
+	 * @param string $index The file id
+	 * @param string $destination File final destination
+	 * @param bool|int $maxsize Max file size in octets
+	 * @param bool|array $extensions List of authorized extensions
+	 * @param bool $jpgrename Change the file exentension to .jpg
+	 * 
+	 * @return bool If upload process is a succes or not
+	 */
+	function simpleupload(string $index, string $destination, $maxsize = false, $extensions = false, bool $jpgrename = false) : bool
+	{
+	    //Test1: if the file is corectly uploaded
+		if (!isset($_FILES[$index]) || $_FILES[$index]['error'] > 0) return false;
+	    //Test2: check file size
+		if ($maxsize !== false && $_FILES[$index]['size'] > $maxsize) return false;
+	    //Test3: check extension
+		$ext = substr(strrchr($_FILES[$index]['name'],'.'),1);
+		if ($extensions !== false && !in_array($ext, $extensions)) return false;
+		if($jpgrename !== false) {
+			$destination .= '.jpg';
+		} else {
+			$destination .= '.' . $ext;
+		}
+	    //Move to dir
+		return move_uploaded_file($_FILES[$index]['tmp_name'], $destination);
+	}
+
+	/**
+	 * Upload multiple files
+	 * 
+	 * @param string $index Id of the file input
+	 * @param string $target direction to save the files
+	 */
+	public function multiupload(string $index, string $target)
 	{
         if($target[strlen($target)-1] != DIRECTORY_SEPARATOR)
                 $target .= DIRECTORY_SEPARATOR;
             $count=0;
-            foreach ($_FILES['file']['name'] as $filename) 
+            foreach ($_FILES[$index]['name'] as $filename) 
             {
                 $fileinfo = pathinfo($filename);
                 $extension = idclean($fileinfo['extension']);
                 $id = idclean($fileinfo['filename']);
 
-                $temp=$target;
                 $tmp=$_FILES['file']['tmp_name'][$count];
                 $count=$count + 1;
-                $temp .=  $id .'.' .$extension;
-                move_uploaded_file($tmp,$temp);
+                $temp = $target . $id .'.' .$extension;
+                move_uploaded_file($tmp, $temp);
                 $temp='';
                 $tmp='';
             }

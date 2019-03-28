@@ -77,7 +77,7 @@ class Controllerart extends Controller
     /**
      * Render given page
      * 
-     * @var Art2 $art input
+     * @param Art2 $art input
      * 
      * @return Art2 rendered $art
      */
@@ -276,6 +276,9 @@ class Controllerart extends Controller
                 $this->art->updateedited();
                 $this->art->addauthor($this->user->id());
                 $this->art->removeeditby($this->user->id());
+
+                // Add thumbnail image file under 1Mo
+                $this->mediamanager->simpleupload('thumbnail', Model::THUMBNAIL_DIR . $this->art->id(), 1024*1024, ['jpg', 'jpeg', 'JPG', 'JPEG'], true);
 
 
                 $this->artmanager->update($this->art);

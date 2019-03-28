@@ -20,10 +20,13 @@ class Controllermedia extends Controller
         if ($this->user->iseditor()) {
 
             if (!$this->mediamanager->basedircheck()) {
-                throw new Exception("Error : Cant create /media folder");
+                throw new Exception("Media error : Cant create /media folder");
             }
             if (!$this->mediamanager->favicondircheck()) {
-                throw new Exception("Error : Cant create /media/favicon folder");
+                throw new Exception("Media error : Cant create /media/favicon folder");
+            }
+            if (!$this->mediamanager->thumbnaildircheck()) {
+                throw new Exception("Media error : Cant create /media/thumbnail folder");
             }
 
 
@@ -50,7 +53,7 @@ class Controllermedia extends Controller
         if ($this->user->iseditor()) {
             $target = $_POST['dir'] ?? Model::MEDIA_DIR;
             if (!empty($_FILES['file']['name'][0])) {
-                $this->mediamanager->upload($target);
+                $this->mediamanager->multiupload('file', $target);
             }
                 $this->redirect($this->router->generate('media') . '?path=' . $target);
         } else {
