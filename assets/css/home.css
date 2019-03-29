@@ -3,18 +3,17 @@
 }
 
 
-div#flex {
-    display: flex;
-    height: 100%;
-}
 
-div#options {
+
+div#options, article#main {
     min-width: 180px;
     overflow-y: auto;
 }
 
-div#main {
-    overflow: auto;
+
+
+main.home {
+    display: flex;
 }
 
 body {
@@ -48,7 +47,7 @@ h1, h2 {
 
 
 
-main.media div, main.home div#options, main.home div#main, main.info nav, main article {
+main.media div, main.home div#options, main.info nav, main article {
     border: ridge 1px dimgrey;
     margin: 1%;
     background-color: lightgrey;
@@ -92,7 +91,6 @@ th {
 }
 
 main {
-    flex: 1;
     overflow-y: auto;
 }
 
@@ -174,14 +172,6 @@ main.info code, main.info blockquote {
     color: white;
     background-color: #191919;
     width: fit-content;
-}
-
-main.info article {
-    /* max-width: 800px; */
-    /* text-align: justify; */
-    /* background-color: #e2e1e1; */
-    /* margin: 1%; */
-    /* padding: 1%; */
 }
 
 main.info blockquote i {
@@ -375,7 +365,10 @@ main.timeline li.event {
 
 }
 
+article#main {}
 
-
-
-
+div#main {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+}

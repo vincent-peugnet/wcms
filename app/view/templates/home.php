@@ -18,17 +18,15 @@
 
 </div>
 
-
-<div id="flex">
     
     
     <?php $this->insert('homeopt', ['opt' => $opt, 'user' => $user]) ?>
 
-
-
 <div id="main">
-<h2>Pages</h2>
 
+<article id="main">
+
+<h2>Pages</h2>
 
 
 <form action="/massedit" method="post">
@@ -55,6 +53,7 @@
 
 
         <table id="home2table">
+        <thead>
         <tr>
         <th>x</th>
         <th><a href="<?= $opt->getadress('id') ?>">id</a></th>
@@ -89,6 +88,8 @@
         <th class="affcount"><a href="<?= $opt->getadress('affcount') ?>">aff</a></th>
         <?php } ?>
         </tr>
+        </thead>
+        <tbody>
         <?php   foreach ($table2 as $item) { ?>
             <tr>
             <td><input type="checkbox" name="id[]"  value="<?= $item->id() ?>" id="id_<?= $item->id() ?>"></td>
@@ -126,9 +127,10 @@
             </tr>
 
       <?php  }?>
+            </tbody>
  </table>
 </form>
-</div>
+</article>
 </div>
 </main>
 
