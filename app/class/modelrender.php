@@ -142,6 +142,7 @@ class Modelrender extends Modelart
 		$content = $this->autotaglistupdate($content);
 		$content = $this->date($content);
 		if($element->autolink()) {
+			$content = str_replace('%LINK%', '' ,$content);
 			$content = $this->everylink($content, $element->autolink());
 		} else {
 			$content = $this->taglink($content);

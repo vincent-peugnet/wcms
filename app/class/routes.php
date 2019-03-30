@@ -16,6 +16,7 @@ class Routes
         $router->addRoutes([
             ['GET', '/', 'Controllerhome#desktop', 'home'],
             ['POST', '/columns', 'Controllerhome#columns', 'homecolumns'],
+            ['POST', '/upload', 'Controllerart#upload', 'artupload'],
             ['POST', '/!co', 'Controllerconnect#log', 'log'],
             ['GET', '/!co', 'Controllerconnect#connect', 'connect'],
             ['POST', '/!search', 'Controllerhome#search', 'search'],

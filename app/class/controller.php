@@ -15,11 +15,14 @@ class Controller
      */
     protected $usermanager;
     protected $plates;
+    /** @var DateTimeImmutable */
+    protected $now;
 
 	public function __construct($router) {
         $this->setuser();
         $this->router = $router;        
         $this->initplates();
+        $this->now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 	}
 
     public function setuser()

@@ -16,6 +16,17 @@ main.home {
     display: flex;
 }
 
+main.home article#main {
+    width: 100%;
+}
+
+main.home div#main {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+
 body {
     margin: 0;
     height: 100%;
@@ -365,10 +376,3 @@ main.timeline li.event {
 
 }
 
-article#main {}
-
-div#main {
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-}

@@ -241,6 +241,29 @@ class Controllerart extends Controller
         }
     }
 
+    /**
+     * Import page and save it into the database
+     */
+    public function upload()
+    {
+        $art = $this->artmanager->getfromfile();
+
+        if(!empty($_POST['id'])) {
+            $art->setid(idclean($_POST['id']));
+        }
+
+        if($_POST['datecreation']) {
+            $art->setdatecreation($this->now);
+        }
+
+        if($art !== false) {            
+            if($_POST['erase'] || $this->artmanager->get($art) === false) {
+                $this->artmanager->add($art);
+            }
+        }
+        $this->routedirect('home');
+    }
+
     public function delete($id)
     {
         $this->setart($id, 'artdelete');

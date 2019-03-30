@@ -63,6 +63,31 @@ class Modelart extends Modeldb
 		}
 	}
 
+	/**
+	 * Transform File to Art2 Oject
+	 * 
+	 * @return false|Art2 
+	 */
+	public function getfromfile()
+	{
+		if(!isset($_FILES['pagefile']) || $_FILES['pagefile']['error'] > 0 ) return false;
+
+		$ext = substr(strrchr($_FILES['pagefile']['name'],'.'),1);
+		if($ext !== 'json') return false;
+
+		$files = $_FILES;
+
+		$json = file_get_contents($_FILES['pagefile']['tmp_name']);
+		$pagedata = json_decode($json, true);
+
+		if($pagedata === false) return false;
+
+		$page = new Art2($pagedata);
+
+		return $page;
+
+	}
+
 	public function getartelement($id, $element)
 	{
 		if (in_array($element, Model::TEXT_ELEMENTS)) {

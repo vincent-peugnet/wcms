@@ -28,6 +28,29 @@
 
 <h2>Pages</h2>
 
+<details id="import">
+    <summary>Import W JSON page file</summary>
+    <i>Upload page file as json</i>
+    <form action="<?=$this->url('artupload') ?>" method="post" enctype="multipart/form-data">
+    <input type="file" name="pagefile" id="pagefile" accept=".json">
+    <label for="pagefile">JSON Page file</label>
+    <input type="hidden" name="erase" value="0">
+    <input type="hidden" name="datecreation" value="0">
+    </br>
+    <input type="text" name="id" id="id" placeholder="new id (optionnal)">
+    <label for="id">change ID</label>
+    </br>
+    <input type="checkbox" name="datecreation" id="datecreation" value="1">
+    <label for="datecreation">Reset date creation as now</label>
+    </br>
+    <input type="checkbox" name="erase" id="erase" value="1">
+    <label for="erase">Replace if already existing</label>
+    </br>
+    <input type="submit" value="upload">
+    </form>
+</details>
+
+
 
 <form action="/massedit" method="post">
 
