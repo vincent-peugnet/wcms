@@ -141,6 +141,7 @@ class Modelrender extends Modelart
 		$content = $this->automedialist($content);
 		$content = $this->autotaglistupdate($content);
 		$content = $this->date($content);
+		$content = $this->thumbnail($content);
 		if($element->autolink()) {
 			$content = str_replace('%LINK%', '' ,$content);
 			$content = $this->everylink($content, $element->autolink());
@@ -523,6 +524,22 @@ class Modelrender extends Modelart
 		$text = preg_replace_callback('~\%TIME\%~', function ($matches) use ($art) {
 			return '<time datetime=' . $art->date('string') . '>' . $art->date('ptime') . '</time>';
 		}, $text);
+
+		return $text;
+	}
+
+	/**
+	 * Render thumbnail of the page
+	 * 
+	 * @param string $text Text to analyse
+	 * 
+	 * @return string The rendered output
+	 */
+	public function thumbnail(string $text) : string
+	{
+		$img = '<img class="thumbnail" src="' . Model::thumbnailpath() . $this->art->id() . '.jpg" alt="' . $this->art->title() . '">';
+		$img = PHP_EOL . $img . PHP_EOL;
+		$text = str_replace('%THUMBNAIL%', $img, $text);
 
 		return $text;
 	}
