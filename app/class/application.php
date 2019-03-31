@@ -19,6 +19,7 @@ class Application
             } else {
                 Config::hydrate($_POST['configinit']);
             }
+            Config::getdomain();
             if(!is_dir(Model::RENDER_DIR)) {
                 mkdir(Model::RENDER_DIR);
             }
@@ -39,13 +40,16 @@ class Application
 
         } else {
             if(Config::readconfig()) {
-                if(!Config::checkbasepath() || empty(Config::arttable()) || !is_dir(Model::RENDER_DIR)) {
+                if(!Config::checkbasepath() || empty(Config::arttable()) || !is_dir(Model::RENDER_DIR) || !Config::checkdomain()) {
                     echo '<ul>';
                     if(!Config::checkbasepath()) {
                         echo '<li>Wrong path</li>';
                     }
                     if(empty(Config::arttable())) {
                         echo '<li>Unset table name</li>';
+                    }
+                    if(!Config::checkdomain()) {
+                        echo '<li>Need to recheck the domain</li>';
                     }
                     if(!is_dir(Model::RENDER_DIR)) {
                         echo '<li>Render path not existing</li>';
@@ -122,6 +126,7 @@ class Application
 
         <?php
     }
+
 }
 
 

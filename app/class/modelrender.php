@@ -198,6 +198,13 @@ class Modelrender extends Modelart
 		$head .= '<meta name="description" content="' . $this->art->description() . '" />' . PHP_EOL;
 		$head .= '<meta name="viewport" content="width=device-width" />' . PHP_EOL;
 
+
+		$head .= '<meta property="og:title" content="' . $this->art->title() . '">' . PHP_EOL;
+		$head .= '<meta property="og:description" content="' . $this->art->description() . '">' . PHP_EOL;
+		$head .= '<meta property="og:image" content="' . Config::domain() . '/' . Config::basepath() . '/' . self::thumbnailpath() . $this->art->id() . '.jpg">' . PHP_EOL;
+		$head .= '<meta property="og:url" content="' . Config::domain() . '">' . PHP_EOL;
+		
+
 		foreach ($this->art->externalcss() as $externalcss) {
 			$head .= '<link href="' . $externalcss . '" rel="stylesheet" />' . PHP_EOL;
 		}
@@ -215,12 +222,6 @@ class Modelrender extends Modelart
 
 		$head .= '<link href="' . Model::globalpath() . 'fonts.css" rel="stylesheet" />' . PHP_EOL;
 		$head .= '<link href="' . Model::globalpath() . 'global.css" rel="stylesheet" />' . PHP_EOL;
-
-		// if (!empty($this->art->templatecss())) {
-		// 	$tempaltequickcssart = $this->art->templatecss();
-		// 	$head .= '<link href="' . Model::renderpath() . $tempaltequickcssart . '.quick.css" rel="stylesheet" />' . PHP_EOL;
-		// }
-		// $head .= '<link href="' . Model::renderpath() . $this->art->id() . '.quick.css" rel="stylesheet" />' . PHP_EOL;
 
 		if (!empty($this->art->templatecss())) {
 			$tempaltecssart = $this->art->templatecss();

@@ -1,7 +1,7 @@
 {
     "name": "w-cms",
     "description": "point'n think",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "require": {
         "michelf/php-markdown": "^1.8",
         "league/plates": "3.*",

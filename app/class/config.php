@@ -5,6 +5,7 @@
 abstract class Config
 {
 	protected static $arttable = 'mystore';
+	protected static $domain = '';
 	protected static $color4;
 	protected static $fontsize = 15;
 	protected static $basepath = '';
@@ -76,11 +77,32 @@ abstract class Config
 		return (file_exists($path));
 	}
 
+	/**
+	 * Calculate Domain name
+	 */
+    public static function getdomain()
+    {
+        self::$domain = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
+	}
+
+	/**
+	 * Verify Domain name
+	 */
+	public static function checkdomain()
+	{
+		return (self::$domain === $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
+	}
+
 // ________________________________________ G E T _______________________________________
 
 	public static function arttable()
 	{
 		return self::$arttable;
+	}
+
+	public static function domain()
+	{
+		return self::$domain;
 	}
 
 	public static function color4()
@@ -175,6 +197,11 @@ abstract class Config
 	public static function setarttable($arttable)
 	{
 		self::$arttable = strip_tags($arttable);
+	}
+
+	public static function setdomain($domain)
+	{
+		self::$domain = strip_tags(strtolower($domain));
 	}
 
 	public static function setcolor4($color4)
