@@ -201,7 +201,7 @@ class Modelrender extends Modelart
 
 		$head .= '<meta property="og:title" content="' . $this->art->title() . '">' . PHP_EOL;
 		$head .= '<meta property="og:description" content="' . $this->art->description() . '">' . PHP_EOL;
-		$head .= '<meta property="og:image" content="' . Config::domain() . '/' . Config::basepath() . '/' . self::thumbnailpath() . $this->art->id() . '.jpg">' . PHP_EOL;
+		$head .= '<meta property="og:image" content="' . Config::domain() . self::thumbnailpath() . $this->art->id() . '.jpg">' . PHP_EOL;
 		$head .= '<meta property="og:url" content="' . Config::domain() . '">' . PHP_EOL;
 		
 
