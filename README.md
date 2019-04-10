@@ -35,29 +35,23 @@ There is lot more you can by altering the `BODY`.
 
 
 
-
-There is 3 levels of privacy :
-
-0. public
-1. reader : resctricted by reader code (read only)
-2. non published : editor and admin only
-
-And 4 levels of users :
-
-1. Reader
-2. Invite
-3. Editor
-4. Administrator
-
-[Webpage of the project (in french)](http://vincent.club1.fr/w/?id=w)
+[Old webpage of the project (in french)](http://vincent.club1.fr/w/?id=w)
 
 
 # Technology
 
-- Pure PHP.
-- Use MarkDown to edit articles.
-- Intelligent link analysis.
-- Easy to manage Json files database.
+- almost pure PHP.
+- Use MarkDown to edit pages quickly.
+- Easy to manage Json 'flat file' database.
 
 using [James Moss's Flywheel Database](https://github.com/jamesmoss/flywheel), [Michel Fortin's Markdown Extra](https://github.com/michelf/php-markdown) and [Plates](https://github.com/thephpleague/plates) as lightweight template engine.
 
+
+
+To Do
+=====
+
+
+- Implement Code Mirror as editing interface instead of basic text area
+- Locking page system by super editor to prevent editing by the wrong person
+- use AJAX request !!
