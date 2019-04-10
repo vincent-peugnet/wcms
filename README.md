@@ -14,6 +14,28 @@ There is a lots of possibilites of creations, for people who need to create mult
 - Editor interface, the only place where where you can see the master-plan.
 
 
+Overview
+--------
+
+You can access your home following the root folder you've instaled **W**. After connecting, you can see your editor interface.
+
+![home](https://w-cms.top/gif/home.jpg)
+
+Quickly edit pages as if you where taking notes. You need to connect as editor, then just type `../edit` at the end of the page you want to edit ot use the menu.
+
+![edit](https://w-cms.top/gif/edit.jpg)
+
+Then you can se the result.
+
+![read](https://w-cms.top/gif/read.jpg)
+
+There is lot more you can by altering the `BODY`.
+
+![advanced](https://w-cms.top/gif/advanced.jpg)
+
+
+
+
 There is 3 levels of privacy :
 
 0. public
