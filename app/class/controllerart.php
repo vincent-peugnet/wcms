@@ -171,7 +171,7 @@ class Controllerart extends Controller
             }
             $fonts = [];
 
-            $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true, 'tablist' => $tablist, 'artlist' => $idlist, 'showleftpanel' => $showleftpanel, 'showrightpanel' => $showrightpanel, 'fonts' => $fonts, 'tagartlist' => $tagartlist, 'lasteditedartlist' => $lasteditedartlist, 'faviconlist' => $faviconlist, 'editorlist' => $editorlist]);
+            $this->showtemplate('edit', ['art' => $this->art, 'artexist' => true, 'tablist' => $tablist, 'artlist' => $idlist, 'showleftpanel' => $showleftpanel, 'showrightpanel' => $showrightpanel, 'fonts' => $fonts, 'tagartlist' => $tagartlist, 'lasteditedartlist' => $lasteditedartlist, 'faviconlist' => $faviconlist, 'editorlist' => $editorlist, 'codemirror' => true]);
         } else {
             $this->routedirect('artread/', ['art' => $this->art->id()]);
         }

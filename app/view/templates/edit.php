@@ -28,6 +28,18 @@
     const artid = '<?= $art->id() ?>';
 </script>
 <script src="<?= Model::jspath() ?>edit.js"></script>
+
+<?php if($codemirror) { ?>
+<script src="<?= Model::jspath() ?>/codemirror/lib/codemirror.js"></script>
+<link rel="stylesheet" href="<?= Model::jspath() ?>/codemirror/lib/codemirror.css">
+<script src="<?= Model::jspath() ?>/codemirror/mode/javascript/javascript.js"></script>
+<script src="<?= Model::jspath() ?>/codemirror/mode/css/css.js"></script>
+<script src="<?= Model::jspath() ?>/codemirror/mode/markdown/markdown.js"></script>
+<script src="<?= Model::jspath() ?>/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+<script src="<?= Model::jspath() ?>/codemirror.js"></script>
+
+<?php } ?>
+
 </body>
 
 <?php $this->stop('page') ?>
