@@ -35,10 +35,9 @@ class Controlleradmin extends Controller
     }
 
     public function update()
-    {
-        if(!isset($_POST['showeditmenu'])) {
-            $_POST['showeditmenu'] = false;
-        }
+    {        
+        $this->globaldircheck();
+ 
         $globalcss = file_put_contents(Model::GLOBAL_DIR . 'global.css', $_POST['globalcss']);
 
         Config::hydrate($_POST);
@@ -50,7 +49,14 @@ class Controlleradmin extends Controller
     }
 
 
-
+	public function globaldircheck()
+	{
+		if(!is_dir(Model::GLOBAL_DIR)) {
+			return mkdir(Model::GLOBAL_DIR);
+		} else {
+			return true;
+		}
+	}
 
 
 }

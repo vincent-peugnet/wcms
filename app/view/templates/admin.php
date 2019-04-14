@@ -134,7 +134,8 @@
     <h4>Edit quick menu</h4>
 
     <div class="checkbox">
-    <input type="checkbox" name="showeditmenu" id="showeditmenu" <?= Config::showeditmenu() === true ? 'checked' : '' ?>>
+    <input type="hidden" name="showeditmenu" value="false">
+    <input type="checkbox" name="showeditmenu" id="showeditmenu" value="true" <?= Config::showeditmenu() === true ? 'checked' : '' ?>>
     <label for="showeditmenu">Show editor menu in top right corner of pages</label>
     </div>
 
