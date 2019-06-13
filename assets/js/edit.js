@@ -11,7 +11,10 @@ window.onload = () => {
         inputs[i].oninput = changeHandler;
     }
 
-    form.onsubmit = submitHandler;
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        submitHandler(this);
+      });
     window.onkeydown = keyboardHandler;
     window.onbeforeunload = confirmExit;
 
@@ -51,10 +54,22 @@ function changeHandler(e) {
 
 /**
  * Manage submit event
- * @param {Event} e
+ * @param {HTMLFormElement} form
  */
-function submitHandler(e) {
+function submitHandler(form) {
     unsavedChanges = false;
+
+    var xhr = new XMLHttpRequest();
+    var fd = new FormData(form);
+
+    xhr.addEventListener("load", function(event) {
+        alert(event.target.responseText);
+    });
+    xhr.addEventListener("error", function(event) {
+        alert('Oups! Quelque chose s\'est mal passé.');
+    });
+    xhr.open(form.method, form.action);
+    xhr.send(fd);
 }
 
 /**
