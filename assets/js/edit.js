@@ -36,8 +36,7 @@ function keyboardHandler(e) {
             switch (e.key) {
                 case 's':
                     e.preventDefault();
-                    unsavedChanges = false;
-                    form.submit();
+                    submitHandler(form);
                     return false;
             }
         }
@@ -63,10 +62,10 @@ function submitHandler(form) {
     var fd = new FormData(form);
 
     xhr.addEventListener("load", function(event) {
-        alert(event.target.responseText);
+        alert("updated");
     });
     xhr.addEventListener("error", function(event) {
-        alert('Oups! Quelque chose s\'est mal passé.');
+        alert('Error while trying to update.');
     });
     xhr.open(form.method, form.action);
     xhr.send(fd);
