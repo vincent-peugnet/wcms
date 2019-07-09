@@ -93,6 +93,15 @@ abstract class Config
 		return (self::$domain === $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
 	}
 
+	/**
+	 * Generate full url adress where W is installed
+	 * @return string url adress finished by a slash "/"
+	 */
+	public static function url() : string
+	{
+		return self::$domain . (!empty(self::$basepath) ? '/' . self::$basepath : "") . '/';
+	}
+
 // ________________________________________ G E T _______________________________________
 
 	public static function arttable()

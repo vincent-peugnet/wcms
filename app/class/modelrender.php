@@ -203,7 +203,7 @@ class Modelrender extends Modelart
 		$head .= '<meta property="og:title" content="' . $this->art->title() . '">' . PHP_EOL;
 		$head .= '<meta property="og:description" content="' . $this->art->description() . '">' . PHP_EOL;
 		$head .= '<meta property="og:image" content="' . Config::domain() . self::thumbnailpath() . $this->art->id() . '.jpg">' . PHP_EOL;
-		$head .= '<meta property="og:url" content="' . Config::domain() . '">' . PHP_EOL;
+		$head .= '<meta property="og:url" content="' . Config::url() . $this->art->id() . '/">' . PHP_EOL;
 		
 
 		foreach ($this->art->externalcss() as $externalcss) {
@@ -562,7 +562,7 @@ class Modelrender extends Modelart
 	 */
 	public function everylink(string $text, int $limit) : string
 	{
-		$regex = '~([\w-_éêèùïüîçà]{' . $limit . ',})~';
+		$regex = '~([\w-_éêèùïüîçà]{' . $limit . ',})(?![^<]*>|[^<>]*<\/)~';
 		$text = preg_replace_callback($regex , function ($matches) {
 			return '<a href="' . idclean($matches[1]) . '">' . $matches[1] . '</a>';
 		}, $text);
