@@ -3,6 +3,7 @@
 class Modelrender extends Modelart
 {
 	protected $router;
+	/** @var art2 */
 	protected $art;
 	protected $artlist;
 	protected $linkfrom = [];
@@ -202,7 +203,11 @@ class Modelrender extends Modelart
 
 		$head .= '<meta property="og:title" content="' . $this->art->title() . '">' . PHP_EOL;
 		$head .= '<meta property="og:description" content="' . $this->art->description() . '">' . PHP_EOL;
-		$head .= '<meta property="og:image" content="' . Config::domain() . self::thumbnailpath() . $this->art->id() . '.jpg">' . PHP_EOL;
+		
+		if($this->art->thumbnailexist()) {
+			$head .= '<meta property="og:image" content="' . Config::domain() . self::thumbnailpath() . $this->art->id() . '.jpg">' . PHP_EOL;
+		}
+		
 		$head .= '<meta property="og:url" content="' . Config::url() . $this->art->id() . '/">' . PHP_EOL;
 		
 

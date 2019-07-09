@@ -32,7 +32,6 @@ class Art2
 	protected $templatejavascript;
 	protected $templateoptions;
 	protected $favicon;
-	protected $thumbnail;
 	protected $authors;
 	protected $invites;
 	protected $readers;
@@ -104,7 +103,6 @@ class Art2
 		$this->settemplatejavascript('');
 		$this->settemplateoptions(['externalcss', 'externaljavascript', 'favicon', 'reccursivecss', 'quickcss']);
 		$this->setfavicon('');
-		$this->setthumbnail('');
 		$this->setauthors([]);
 		$this->setinvites([]);
 		$this->setreaders([]);
@@ -136,6 +134,21 @@ class Art2
 			}
 		}
 		return $array;
+	}
+
+	/**
+	 * Check if page have a thumbnail
+	 * @return bool true if the page have a thumbnail otherwise return false.
+	 */
+	public function thumbnailexist() : bool
+	{
+		$thumbnaillink = Model::THUMBNAIL_DIR . $this->id . '.jpg';
+
+		$test = file_exists($thumbnaillink);
+
+		$exist =  file_exists(Model::THUMBNAIL_DIR . $this->id . '.jpg');
+
+		return $exist;
 	}
 
 
@@ -410,11 +423,6 @@ class Art2
 	public function favicon($type = 'string')
 	{
 		return $this->favicon;
-	}
-
-	public function thumbnail($type = 'string')
-	{
-		return $this->thumbnail;
 	}
 
 	public function authors($type = 'array')
@@ -713,13 +721,6 @@ class Art2
 	{
 		if (is_string($favicon)) {
 			$this->favicon = $favicon;
-		}
-	}
-
-	public function setthumbnail($thumbnail)
-	{
-		if (is_string($thumbnail)) {
-			$this->thumbnail = $thumbnail;
 		}
 	}
 

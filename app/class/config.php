@@ -97,9 +97,9 @@ abstract class Config
 	 * Generate full url adress where W is installed
 	 * @return string url adress finished by a slash "/"
 	 */
-	public static function url() : string
+	public static function url($endslash = true) : string
 	{
-		return self::$domain . (!empty(self::$basepath) ? '/' . self::$basepath : "") . '/';
+		return self::$domain . (!empty(self::$basepath) ? '/' . self::$basepath : "") . ($endslash ? '/' : '');
 	}
 
 // ________________________________________ G E T _______________________________________
