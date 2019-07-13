@@ -10,6 +10,9 @@
 <body>
 <main class="editor">
 
+    <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'edit']) ?>
+
+
     <?php $this->insert('edittopbar', ['art' => $art, 'user' => $user]) ?>
 
     <div id="workspace">

@@ -62,7 +62,7 @@
 
 
     <details <?= !empty($art->templatebody()) || !empty($art->templatecss()) || !empty($art->templatejavascript()) ? 'open' : '' ?>>
-        <summary>Tempalte</summary>
+        <summary>Template</summary>
             <fieldset>
             <label for="templatebody">BODY template</label>
             <select name="templatebody" id="templatebody">

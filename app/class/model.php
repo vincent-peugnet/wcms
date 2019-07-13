@@ -17,7 +17,7 @@ abstract class Model
 	const MEDIA_EXTENSIONS = array('jpeg', 'jpg', 'JPG', 'png', 'gif', 'mp3', 'mp4', 'mov', 'wav', 'flac', 'pdf');
 	const MEDIA_TYPES = ['image', 'video', 'sound', 'other'];
 
-	const COLUMNS = ['title', 'description', 'tag', 'date', 'datemodif', 'datecreation', 'secure', 'linkfrom', 'linkto', 'visitcount', 'affcount', 'editcount'];
+	const COLUMNS = ['id', 'title', 'description', 'tag', 'date', 'datemodif', 'datecreation', 'secure', 'linkfrom', 'linkto', 'visitcount', 'affcount', 'editcount'];
 
 	const TEXT_ELEMENTS = ['header', 'nav', 'main', 'aside', 'footer'];
 	const EDIT_SYMBOLS = ['pen', 'tool', 'none'];

@@ -26,12 +26,17 @@ main.home div#main {
     flex-direction: column;
 }
 
+main.home table#home2table label {
+    font-family: monospace;
+    font-size: medium;
+}
+
 
 body {
     margin: 0;
     height: 100%;
     background-color: grey;
-    font-family: monospace;
+    font-family: sans-serif;
     font-size: 15px;
     position: fixed;
     display: flex;
@@ -146,7 +151,6 @@ span#search {
 
 #topbar input[type="text"], #topbar input[type="password"] {width: 100px;}
 
-
 main.font table#fontlist {
     width: 100%;
     max-width: 500px;
@@ -160,6 +164,19 @@ main.media table#medialist {
 #topbar a.actualpage {
     text-decoration: underline;
 }
+
+
+
+img.icon {
+    height: 15px;
+}
+
+a:hover img.icon {
+    filter: invert(1);
+}
+
+
+
 
 main.media table#faviconlist {
     width: 100%;
@@ -183,6 +200,8 @@ main.info code, main.info blockquote {
     color: white;
     background-color: #191919;
     width: fit-content;
+    font-family: monospace;
+    font-size: initial;
 }
 
 main.info blockquote i {

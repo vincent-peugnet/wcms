@@ -171,7 +171,7 @@ class Art2
 	public function description($type = 'string')
 	{
 		if($type == 'short' && strlen($this->description) > 15 ) {
-				return substr($this->description, 0, 15) . '.';
+				return substr($this->description, 0, 20) . '...';
 		} else {
 			return $this->description;
 		}
