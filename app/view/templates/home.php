@@ -117,11 +117,11 @@
             <tr>
             <td><input type="checkbox" name="id[]"  value="<?= $item->id() ?>" id="id_<?= $item->id() ?>"></td>
             <td><label title="<?= $item->title() ?>" for="id_<?= $item->id() ?>"><?= $item->id() ?></label></td>
-            <td><a href="<?= $this->uart('artedit', $item->id()) ?>"><img src="assets/icons/edit.png" class="icon"></a></td>
-            <td><a href="<?= $this->uart('artread/', $item->id()) ?>" target="_blank"><img src="assets/icons/read.png" class="icon"></a></td>
+            <td><a href="<?= $this->uart('artedit', $item->id()) ?>"><img src="<?= Model::iconpath() ?>edit.png" class="icon"></a></td>
+            <td><a href="<?= $this->uart('artread/', $item->id()) ?>" target="_blank"><img src="<?= Model::iconpath() ?>read.png" class="icon"></a></td>
             <td class="delete"><a href="<?= $this->uart('artdelete', $item->id()) ?>" >✖</a></td>
             <?php if($user->issupereditor()) { ?>
-            <td><a href="<?= $this->uart('artdownload', $item->id()) ?>" download><img src="assets/icons/download.png" class="icon"></a></td>
+            <td><a href="<?= $this->uart('artdownload', $item->id()) ?>" download><img src="<?= Model::iconpath() ?>download.png" class="icon"></a></td>
             <?php } if($columns['tag']) { ?>
             <td class="tag"><a title="<?= $item->tag('string') ?>"><?= $item->tag('sort') ?></a></td>
             <?php } if($columns['title']) { ?>
