@@ -17,7 +17,7 @@
 
 
 
-    <a href="<?= $this->uart('artread/', $art->id()) ?>" target="_blank" ><img src="/assets/icons/read.png" class="icon">display</a>
+    <a href="<?= $this->uart('artread/', $art->id()) ?>" target="_blank" ><img src="assets/icons/read.png" class="icon">display</a>
     <span id="headid"><?= $art->id() ?></span>
     </span>
 
@@ -28,7 +28,7 @@
 </span>
 
 <span id="download">
-        <a href="<?= $this->uart('artdownload', $art->id()) ?>"><img src="/assets/icons/download.png" class="icon"><span class="text">download</span></a>
+        <a href="<?= $this->uart('artdownload', $art->id()) ?>"><img src="assets/icons/download.png" class="icon"><span class="text">download</span></a>
 </span>
 
 

@@ -12,17 +12,17 @@
 <?php if($user->iseditor()) { ?>
 
 <span id="menu">
-<a href="<?= $this->url('home') ?>" <?= $tab == 'home' ? 'class="actualpage"' : '' ?>><img src="/assets/icons/home.png" alt="" class="icon">home</a>
-<a href="<?= $this->url('media') ?>" <?= $tab == 'media' ? 'class="actualpage"' : '' ?>><img src="/assets/icons/media.png" alt="" class="icon">media</a>
-<a href="<?= $this->url('font') ?>" <?= $tab == 'font' ? 'class="actualpage"' : '' ?>><img src="/assets/icons/font.png" alt="" class="icon">font</a>
+<a href="<?= $this->url('home') ?>" <?= $tab == 'home' ? 'class="actualpage"' : '' ?>><img src="assets/icons/home.png" alt="" class="icon">home</a>
+<a href="<?= $this->url('media') ?>" <?= $tab == 'media' ? 'class="actualpage"' : '' ?>><img src="assets/icons/media.png" alt="" class="icon">media</a>
+<a href="<?= $this->url('font') ?>" <?= $tab == 'font' ? 'class="actualpage"' : '' ?>><img src="assets/icons/font.png" alt="" class="icon">font</a>
 <?php
 if($user->isadmin()) {
 ?>
-<a href="<?= $this->url('admin') ?>" <?= $tab == 'admin' ? 'class="actualpage"' : '' ?>><img src="/assets/icons/admin.png" alt="" class="icon">admin</a>
+<a href="<?= $this->url('admin') ?>" <?= $tab == 'admin' ? 'class="actualpage"' : '' ?>><img src="assets/icons/admin.png" alt="" class="icon">admin</a>
 <?php
 }
 ?>
-<a href="<?= $this->url('info') ?>"  <?= $tab == 'info' ? 'class="actualpage"' : '' ?>><img src="/assets/icons/info.png" alt="" class="icon">info</a>
+<a href="<?= $this->url('info') ?>"  <?= $tab == 'info' ? 'class="actualpage"' : '' ?>><img src="assets/icons/info.png" alt="" class="icon">info</a>
 </span>
 
 
@@ -48,8 +48,8 @@ if($user->isadmin()) {
 <?php } else { ?>  
 
 <span>
-<a href="<?= $this->url('timeline') ?>" <?= $tab == 'timeline' ? 'class="actualpage"' : '' ?>><img src="/assets/icons/timeline.png" alt="" class="icon">timeline</a>
-<a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>><img src="/assets/icons/user.png" alt="" class="icon"><?= $user->id() ?></a> <i><?= $user->level() ?></i>
+<a href="<?= $this->url('timeline') ?>" <?= $tab == 'timeline' ? 'class="actualpage"' : '' ?>><img src="assets/icons/timeline.png" alt="" class="icon">timeline</a>
+<a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>><img src="assets/icons/user.png" alt="" class="icon"><?= $user->id() ?></a> <i><?= $user->level() ?></i>
 </span>
 
 
