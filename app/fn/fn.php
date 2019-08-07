@@ -11,9 +11,6 @@ function class_autoloader($class)
 
 function readablesize($bytes)
 {
-
-	$num = 5;
-	$location = 'tree';
 	$format = ' %d %s';
 
 
@@ -179,6 +176,23 @@ function compare($stringa, $stringb)
 
 	return implode(PHP_EOL, $merge);
 }
+
+
+
+function findsize($file)
+{
+    if(substr(PHP_OS, 0, 3) == "WIN")
+    {
+        exec('for %I in ("'.$file.'") do @echo %~zI', $output);
+        $return = $output[0];
+    }
+    else
+    {
+        $return = filesize($file);
+    }
+    return $return;
+}
+
 
 
 

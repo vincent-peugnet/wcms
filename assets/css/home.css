@@ -70,6 +70,10 @@ main.media div, main.home div#options, main.info nav, main article {
 }
 
 
+p {
+    padding: 0 1%;
+}
+
 
 tr:hover {
     background-color: grey;

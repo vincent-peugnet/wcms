@@ -94,14 +94,17 @@ class Modelrender extends Modelart
 			$matches[$key] = ['fullmatch' => $match, 'type' => $out[1][$key], 'options' => $out[2][$key]];
 		}
 
-		// First, analyse the synthax and call the corresponding methods
-		foreach ($matches as $key => $match) {
-			$element = new Element($match, $this->art->id());
-			$element->setcontent($this->getelementcontent($element));
-			$element->setcontent($this->elementparser($element));
-			$element->addtags();
-			$body = str_replace($element->fullmatch(), $element->content(), $body);
 
+		// First, analyse the synthax and call the corresponding methods
+		if(isset($matches)) {
+			foreach ($matches as $key => $match) {
+				$element = new Element($match, $this->art->id());
+				$element->setcontent($this->getelementcontent($element));
+				$element->setcontent($this->elementparser($element));
+				$element->addtags();
+				$body = str_replace($element->fullmatch(), $element->content(), $body);
+	
+			}
 		}
 
 
@@ -394,8 +397,34 @@ class Modelrender extends Modelart
 		return $text;
 	}
 
-	public function automedialist(string $text) : string
+	/**
+	 * Check for media list call in the text and insert media list
+	 * @param string $text Text to scan and replace
+	 * 
+	 * @return string Output text
+	 */
+	public function automedialist(string $text)
 	{
+		preg_match_all('~\%MEDIA\?([a-zA-Z0-9\&=\-\/\%]*)\%~', $text, $out);
+
+		foreach ($out[0] as $key => $match) {
+			$matches[$key] = ['fullmatch' => $match, 'options' => $out[1][$key]];
+		}
+
+		if(isset($matches)) {
+			foreach ($matches as $match) {
+				$medialist = new Medialist($match);
+			}
+		}
+
+		return $text;
+	}
+
+	public function aautomedialist(string $text) : string
+	{
+
+
+		
 		$text = preg_replace_callback(
 			'~\%MEDIA:(([a-z0-9-_]+(\/([a-z0-9-_])+)*))\%~',
 			function ($matches) {
@@ -409,10 +438,10 @@ class Modelrender extends Modelart
 
 					$dirid = str_replace('/', '-', $dir);
 
-					$ul = '<ul class="medialist" id="' . $dirid . '">' . PHP_EOL;
+					$ul = '<div class="medialist" id="' . $dirid . '">' . PHP_EOL;
 
 					foreach ($medialist as $media) {
-						$ul .= '<li>';
+						$ul .= '<div class="content ' . $media->type() . '">';
 						if ($media->type() == 'image') {
 							$ul .= '<img alt="' . $media->id() . '" id="' . $media->id() . '" src="' . $media->getincludepath() . '" >';
 						} elseif ($media->type() == 'sound') {
@@ -422,10 +451,10 @@ class Modelrender extends Modelart
 						} elseif ($media->type() == 'other') {
 							$ul .= '<a href="' . $media->getincludepath() . '" target="_blank" class="media" >' . $media->id() . '.' . $media->extension() . '</a>';
 						}
-						$ul .= '</li>' . PHP_EOL;
+						$ul .= '</div>' . PHP_EOL;
 					}
 
-					$ul .= '</ul>' . PHP_EOL;
+					$ul .= '</div>' . PHP_EOL;
 
 					return $ul;
 				} else {

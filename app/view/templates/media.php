@@ -81,7 +81,7 @@ foreach ($medialist as $media) {
     <td><a href="<?= $media->getfullpath() ?>" target="_blank"><?= $media->id() ?></a></td>
     <td><?= $media->extension() ?></td>
     <td><?= $media->type() == 'image' ? '<span class="thumbnail">image 👁<img src="' . $media->getfullpath() . '"></span>' : $media->type() ?></td>
-    <td><?= readablesize($media->size()) ?></td>
+    <td><?= $media->size('hr') ?></td>
     <td><?= $media->width() ?></td>
     <td><?= $media->height() ?></td>
     <td><?= $media->length() ?></td>

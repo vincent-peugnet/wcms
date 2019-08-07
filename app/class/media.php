@@ -13,7 +13,7 @@ class Media
 
 	const IMAGE = array('jpg', 'jpeg', 'gif', 'png');
 	const SOUND = array('mp3', 'flac');
-	const VIDEO = array('mp4', 'mov', 'avi');
+	const VIDEO = array('mp4', 'mov', 'avi', 'mkv');
 
 
 
@@ -98,9 +98,13 @@ class Media
 		return $this->type;
 	}
 
-	public function size()
+	public function size($display = 'binary')
 	{
-		return $this->size;
+		if($display == 'hr') {
+			return readablesize($this->size);
+		} else {
+			return $this->size;
+		}
 	}
 
 	public function width()
@@ -122,8 +126,8 @@ class Media
 
 	public function setid($id)
 	{
-		if (strlen($id) < 40 and is_string($id)) {
-			$this->id = strip_tags(strtolower($id));
+		if (is_string($id)) {
+			$this->id = $id;
 		}
 	}
 
