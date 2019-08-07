@@ -414,9 +414,9 @@ class Modelrender extends Modelart
 		if(isset($matches)) {
 			foreach ($matches as $match) {
 				$medialist = new Medialist($match);
+				$text = str_replace($medialist->fullmatch(), $medialist->content(), $text);
 			}
 		}
-
 		return $text;
 	}
 

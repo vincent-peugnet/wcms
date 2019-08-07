@@ -20,7 +20,7 @@
 
 <?php
 
-function treecount(array $dir, string $dirname, int $deepness, string $path, string $currentdir)
+function treecount(array $dir, string $dirname, int $deepness, string $path, string $currentdir, array $opt)
 {
     if ($path === $currentdir) {
         $folder = '├─📂<strong>' . $dirname . '<strong>';
@@ -28,17 +28,17 @@ function treecount(array $dir, string $dirname, int $deepness, string $path, str
         $folder = '├─📁' . $dirname;
     }
     echo '<tr>';
-    echo '<td><a href="?path=' . $path . '">' . str_repeat('&nbsp;&nbsp;', $deepness) . $folder . '</a></td>';
+    echo '<td><a href="?path=' . $path . '&sortby=' . $opt['sortby'] . '&order=' . $opt['order'] . '">' . str_repeat('&nbsp;&nbsp;', $deepness) . $folder . '</a></td>';
     echo '<td>' . $dir['dirfilecount'] . '</td>';
     echo '</tr>';
     foreach ($dir as $key => $value) {
         if (is_array($value)) {
-            treecount($value, $key, $deepness + 1, $path . DIRECTORY_SEPARATOR . $key, $currentdir);
+            treecount($value, $key, $deepness + 1, $path . DIRECTORY_SEPARATOR . $key, $currentdir, $opt);
         }
     }
 }
 
-treecount($dirlist, 'media', 0, 'media', $dir);
+treecount($dirlist, 'media', 0, 'media', $dir, $opt);
 
 ?>
 
@@ -53,7 +53,17 @@ treecount($dirlist, 'media', 0, 'media', $dir);
 
 <h2><?= $dir ?></h2>
 
-Print the whole content of the folder using this code : <span><code>%MEDIA:<?= str_replace('\\', '/', substr($dir, strlen(Model::MEDIA_DIR))) ?>%</code></span>
+
+<details>
+    <summary>Print this content on your page</summary>
+    
+    <p>
+    <code>%MEDIA?path=<?= substr($dir, 6) ?>&sortby=<?= $opt['sortby'] ?>&order=<?= $opt['order'] ?>%</code>
+    </p>
+
+</details>
+
+
 
 <form id="addfolder" action="<?= $this->url('mediafolder') ?>" method="post">
     <label for="foldername">📂 New folder</label>
@@ -72,7 +82,16 @@ Print the whole content of the folder using this code : <span><code>%MEDIA:<?= s
 
 
 <table id="medialist">
-<tr><th>id</th><th>ext</th><th>type</th><th>size</th><th>width</th><th>height</th><th>lengh</th><th>code</th></tr>
+<tr>
+    <th><a href="?path=<?= $dir ?>&sortby=id&order=<?php echo ($opt['order'] * -1); ?>">id</a></th>
+    <th>ext</th>
+    <th><a href="?path=<?= $dir ?>&sortby=type&order=<?php echo ($opt['order'] * -1); ?>">type</a></th>
+    <th><a href="?path=<?= $dir ?>&sortby=size&order=<?php echo ($opt['order'] * -1); ?>">size</a></th>
+    <th>width</th>
+    <th>height</th>
+    <th>lengh</th>
+    <th>code</th>
+</tr>
 
 <?php
 foreach ($medialist as $media) {

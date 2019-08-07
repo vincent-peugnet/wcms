@@ -31,14 +31,19 @@ class Controllermedia extends Controller
 
 
             $dir = rtrim($_GET['path'] ?? Model::MEDIA_DIR, DIRECTORY_SEPARATOR);
+            $sortby = isset($_GET['sortby']) ? $_GET['sortby'] : 'id';
+            $order = isset($_GET['order']) ? $_GET['order'] : '1';
+            $opt = ['dir' => $dir, 'sortby' => $sortby, 'order' => $order];
 
             if(is_dir($dir)) {
                 $medialist = $this->mediamanager->getlistermedia($dir . DIRECTORY_SEPARATOR);
                 $faviconlist = $this->mediamanager->getlistermedia(Model::FAVICON_DIR);
     
                 $dirlist = $this->mediamanager->listdir(Model::MEDIA_DIR);
+
+                $this->mediamanager->medialistsort($medialist, $sortby, $order);
     
-                $this->showtemplate('media', ['medialist' => $medialist, 'faviconlist' => $faviconlist, 'dirlist' => $dirlist, 'dir' => $dir]);
+                $this->showtemplate('media', ['medialist' => $medialist, 'faviconlist' => $faviconlist, 'dirlist' => $dirlist, 'dir' => $dir, 'opt' => $opt]);
             } else {
                 $this->routedirect('media');
             }
