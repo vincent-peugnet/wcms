@@ -41,15 +41,6 @@ class Modeluser extends Modeldb
         }
     }
 
-    // public function invitetest($pass)
-    // {
-    //     $invitepasslist = [];
-    //     if (in_array($pass, $invitepasslist)) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
 
     public function logout()
     {
@@ -146,14 +137,24 @@ class Modeluser extends Modeldb
         }
     }
 
-    public function add(User $user)
+    /**
+     * @param User $user
+     * 
+     * @return bool depending on success
+     */
+    public function add(User $user) : bool
     {
         $userdata = new \JamesMoss\Flywheel\Document($user->dry());
         $userdata->setId($user->id());
-        $this->repo->store($userdata);
+        return $this->repo->store($userdata);
     }
 
 
+    /**
+     * @param string|User $id
+     * 
+     * @return User|false User object or false in case of error
+     */
     public function get($id)
     {
         if ($id instanceof User) {
@@ -174,6 +175,20 @@ class Modeluser extends Modeldb
     public function delete(User $user)
     {
         $this->repo->delete($user->id());
+    }
+
+    /**
+     * Incerment connection counter
+     * 
+     * @param string|User $id
+     * 
+     * @return bool
+     */
+    public function connectcounter($id)
+    {
+        $user = $this->get($id);
+        $user->connectcounter();
+        return $this->add($user);
     }
 
 

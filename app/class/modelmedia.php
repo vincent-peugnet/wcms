@@ -135,9 +135,8 @@ class Modelmedia extends Model
 	{
 		$glob = Model::FAVICON_DIR . '*.png';
 		$faviconlist = glob($glob);
-		$count = strlen(Model::FAVICON_DIR);
-		$faviconlist = array_map(function ($input) use ($count) {
-			return substr($input, $count);
+		$faviconlist = array_map(function ($input){
+			return basename($input);
 		}, $faviconlist);
 		return $faviconlist;
 	}
@@ -147,9 +146,8 @@ class Modelmedia extends Model
 	{
 		$glob = Model::CSS_DIR . '*.css';
 		$listinterfacecss = glob($glob);
-		$count = strlen(Model::CSS_DIR);
-		$listinterfacecss = array_map(function ($input) use ($count) {
-			return substr($input, $count);
+		$listinterfacecss = array_map(function ($input) {
+			return basename($input);
 		}, $listinterfacecss);
 		$listinterfacecss = array_diff($listinterfacecss, ['edit.css', 'home.css']);
 		return $listinterfacecss;

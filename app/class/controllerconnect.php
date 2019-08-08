@@ -37,6 +37,7 @@ class Controllerconnect extends Controller
         if (isset($_POST['pass'])) {
             $this->user = $this->usermanager->passwordcheck($_POST['pass']);
             if($this->user != false) {
+                $this->usermanager->connectcounter($this->user);
                 $this->usermanager->writesession($this->user);
                 $_SESSION['workspace']['showleftpanel'] = true;
                 $_SESSION['workspace']['showrightpanel'] = false;

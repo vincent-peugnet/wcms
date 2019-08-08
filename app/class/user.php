@@ -9,6 +9,7 @@ class User
     protected $passwordhashed = false;
     protected $cookie = 0;
     protected $columns = ['title', 'datemodif', 'datecreation', 'secure', 'visitcount'];
+    protected $connectcount = 0;
 
     public function __construct($datas = [])
     {
@@ -79,6 +80,11 @@ class User
         return $this->columns;
     }
 
+    public function connectcount()
+    {
+        return $this->connectcount;
+    }
+
 
 
     // _______________________ S E T _______________________
@@ -135,6 +141,19 @@ class User
         }
     }
 
+    public function setconnectcount($connectcount)
+    {
+        if(is_int($connectcount) && $connectcount >= 0) {
+            $this->connectcount = $connectcount;
+        }
+    }
+
+
+
+
+
+    //____________________________________________________ F U N ____________________________________________________
+
 
 
 
@@ -183,6 +202,13 @@ class User
     {
         return $this->level === Modeluser::ADMIN;
     }
+
+
+    public function connectcounter()
+    {
+        $this->connectcount ++;
+    }
+
 }
 
 
