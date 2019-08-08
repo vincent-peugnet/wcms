@@ -43,6 +43,9 @@
     <input type="checkbox" name="datecreation" id="datecreation" value="1">
     <label for="datecreation">Reset date creation as now</label>
     </br>
+    <input type="checkbox" name="author" id="author" value="1">
+    <label for="author">Reset author(s) as just you</label>
+    </br>
     <input type="checkbox" name="erase" id="erase" value="1">
     <label for="erase">Replace if already existing</label>
     </br>

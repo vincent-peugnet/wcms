@@ -23,11 +23,11 @@ class Modelrender extends Modelart
 		$this->artlist = $this->getlister();
 
 		if(Config::internallinkblank()) {
-			$this->internallinkblank = ' target="blank" ';
+			$this->internallinkblank = ' target="_blank" ';
 		}
 
 		if(Config::externallinkblank()) {
-			$this->externallinkblank = ' target="blank" ';
+			$this->externallinkblank = ' target="_blank" ';
 		}
 	}
 

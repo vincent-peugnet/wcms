@@ -158,6 +158,10 @@
 
     </article>
 
+
+
+
+
     <article>
 
     <h2>CSS</h2>
@@ -166,18 +170,47 @@
     <textarea name="globalcss" id="globalcss" cols="30" rows="10"><?= $globalcss ?></textarea>
 
     <label for="defaultfavicon">Default favicon</label>
-    <select name="defaultfavicon" id="defaultfavicon">
-    <option value="">--no favicon--</option>
-    <?php
-    foreach ($faviconlist as $favicon) {
-    ?>
-    <option value="<?= $favicon ?>" <?= Config::defaultfavicon() === $favicon ? 'selected' : '' ?>><?= $favicon ?></option>
-    <?php
-    }
-    ?>
-    </select>
+        <select name="defaultfavicon" id="defaultfavicon">
+        <option value="">--no favicon--</option>
+        <?php
+        foreach ($faviconlist as $favicon) {
+        ?>
+        <option value="<?= $favicon ?>" <?= Config::defaultfavicon() === $favicon ? 'selected' : '' ?>><?= $favicon ?></option>
+        <?php
+        }
+        ?>
+        </select>
 
     </article>
+
+
+
+
+
+
+
+    <article>
+
+    <h2>Interface</h2>
+
+    <p>Set interface Style</p>
+
+        <select name="interfacecss" id="interfacecss">
+            <option value="null">--default interface style---</option>
+            <?php
+                foreach ($interfacecsslist as $interfacecss) {
+                    ?>
+                    <option value="<?= $interfacecss ?>" <?= $interfacecss === Config::interfacecss() ? 'selected' : '' ?>><?= $interfacecss ?></option>
+                    <?php
+                }
+            ?>
+        </select>
+
+    </article>
+
+
+
+
 
     <article>
 
@@ -189,6 +222,10 @@
     <i>(Need rendering to work)</i>
 
     </article>
+
+
+
+
 
     <article>
     <input type="submit" value="Update configuration">

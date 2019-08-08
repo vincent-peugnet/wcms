@@ -248,14 +248,21 @@ class Controllerart extends Controller
     {
         $art = $this->artmanager->getfromfile();
 
+        
         if(!empty($_POST['id'])) {
             $art->setid(idclean($_POST['id']));
         }
-
+        
         if($_POST['datecreation']) {
             $art->setdatecreation($this->now);
         }
-
+        
+        if($_POST['author']) {
+            $art->setauthors([$this->user->id()]);
+        }
+        
+        $art->setdaterender($art->datecreation('date'));
+        
         if($art !== false) {            
             if($_POST['erase'] || $this->artmanager->get($art) === false) {
                 $this->artmanager->add($art);

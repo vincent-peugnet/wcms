@@ -3,7 +3,10 @@
 class Controlleradmin extends Controller
 {
 
+    /** @var Modelart $artmanager */
     protected $artmanager;
+
+    /** @var Modelmedia $mediamanager */
     protected $mediamanager;
 
     public function desktop()
@@ -13,6 +16,7 @@ class Controlleradmin extends Controller
             $artlist = $this->artmanager->list();
             $this->mediamanager = new Modelmedia();
             $faviconlist = $this->mediamanager->listfavicon();
+            $interfacecsslist = $this->mediamanager->listinterfacecss();
             if(in_array(Config::defaultart(), $artlist)) {
                 $defaultartexist = true;
             } else {
@@ -27,7 +31,7 @@ class Controlleradmin extends Controller
                 $globalcss = "";
             }
 
-            $admin = ['artlist' => $artlist, 'defaultartexist' => $defaultartexist, 'globalcss' => $globalcss, 'faviconlist' => $faviconlist];
+            $admin = ['artlist' => $artlist, 'defaultartexist' => $defaultartexist, 'globalcss' => $globalcss, 'faviconlist' => $faviconlist, 'interfacecsslist' => $interfacecsslist];
             $this->showtemplate('admin', $admin);
         } else {
             $this->routedirect('home');

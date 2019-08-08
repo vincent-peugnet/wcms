@@ -23,6 +23,7 @@ abstract class Config
 	protected static $defaultprivacy = 0;
 	protected static $homepage = 'default';
 	protected static $homeredirect = null;
+	protected static $interfacecss = null;
 
 
 // _______________________________________ F U N _______________________________________
@@ -199,6 +200,10 @@ abstract class Config
 		return self::$homeredirect;
 	}
 
+	public static function interfacecss()
+	{
+		return self::$interfacecss;
+	}
 
 
 // __________________________________________ S E T ______________________________________
@@ -330,6 +335,15 @@ abstract class Config
 			self::$homeredirect = idclean($homeredirect);
 		} else {
 			self::$homeredirect = null;
+		}
+	}
+
+	public static function setinterfacecss($interfacecss)
+	{
+		if(is_string($interfacecss) && file_exists(Model::CSS_DIR . $interfacecss)) {
+			self::$interfacecss = $interfacecss;
+		} else {
+			self::$interfacecss = null;
 		}
 	}
 	

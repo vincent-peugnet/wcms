@@ -143,6 +143,19 @@ class Modelmedia extends Model
 	}
 
 
+	public function listinterfacecss()
+	{
+		$glob = Model::CSS_DIR . '*.css';
+		$listinterfacecss = glob($glob);
+		$count = strlen(Model::CSS_DIR);
+		$listinterfacecss = array_map(function ($input) use ($count) {
+			return substr($input, $count);
+		}, $listinterfacecss);
+		$listinterfacecss = array_diff($listinterfacecss, ['edit.css', 'home.css']);
+		return $listinterfacecss;
+	}
+
+
 	public function listdir($dir)
 	{
 
