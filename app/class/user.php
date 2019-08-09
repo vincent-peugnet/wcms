@@ -10,6 +10,7 @@ class User
     protected $cookie = 0;
     protected $columns = ['title', 'datemodif', 'datecreation', 'secure', 'visitcount'];
     protected $connectcount = 0;
+    protected $expiredate = false;
 
     public function __construct($datas = [])
     {
@@ -85,6 +86,33 @@ class User
         return $this->connectcount;
     }
 
+    public function expiredate(string $type = 'string')
+    {
+		if ($type == 'string') {
+            if(!empty($this->expiredate)) {
+                return $this->expiredate->format('Y-m-d');
+            } else {
+                return false;
+            }
+		} elseif ($type == 'date') {
+            if(!empty($this->expiredate)) {
+                return $this->expiredate;
+            } else {
+                return false;
+            }
+		} elseif ($type == 'hrdi') {
+            if(empty($this->expiredate)) {
+                return 'never';
+            } else {
+                $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+                if($this->expiredate < $now) {
+                    return 'expired';
+                } else {
+                    return hrdi($this->expiredate->diff($now));
+                }
+            }
+		}
+    }
 
 
     // _______________________ S E T _______________________
@@ -146,6 +174,15 @@ class User
         if(is_int($connectcount) && $connectcount >= 0) {
             $this->connectcount = $connectcount;
         }
+    }
+
+    public function setexpiredate($expiredate)
+    {
+		if ($expiredate instanceof DateTimeImmutable) {
+			$this->expiredate = $expiredate;
+		} else {
+			$this->expiredate = DateTimeImmutable::createFromFormat('Y-m-d', $expiredate, new DateTimeZone('Europe/Paris'));
+		}
     }
 
 

@@ -16,17 +16,26 @@
 
 <h1>User : <?= $user->id() ?></h1>
 
+<h2>Infos</h2>
+
+
+<p>Connections count : <?= $getuser->connectcount() ?></p>
+
+<p>Account will expire in : <?= $getuser->expiredate('hrdi') ?></p>
+
+
+
+<h2>Preferences</h2>
 
 
 <form action="<?= $this->url('userpref') ?>" method="post">
 
-<h2>Preferences</h2>
-
-<input type="number" name="cookie" value="<?= $getuser->cookie() ?>" id="cookie" min="0" max="365">
-<label for="cookie">Cookie conservation time <i>(In days)</i></label>
-
-<input type="submit" value="submit">
-
+<p>
+    <input type="number" name="cookie" value="<?= $getuser->cookie() ?>" id="cookie" min="0" max="365">
+    <label for="cookie">Cookie conservation time <i>(In days)</i></label>
+    <input type="submit" value="submit">
+</p>
+    
 </form>
 
 </article>
@@ -40,7 +49,7 @@
 
 <table>
 <tr>
-<th>id</th><th>password</th><th>hash</th><th>level</th><th>action</th>
+<th>id</th><th>password</th><th>hash</th><th>level</th><th>set expiration date</th><th>action</th><th>expire</th>
 </tr>
 
 <tr>
@@ -67,7 +76,13 @@
         </select>
     </td>
     <td>
+        <input type="date" name="expiredate" id="expiredate" min="<?= $now ?>">
+    </td>
+    <td>
         <input type="submit" value="add">
+    </td>
+    <td>
+
     </td>
     </form>
 </tr>
@@ -102,6 +117,13 @@ foreach ($userlist as $user ) {
     </select>
     </td>
 
+
+    <td>
+        <input type="date" name="expiredate" id="expiredate"<?= $user->expiredate() !== false ?  'value="' . $user->expiredate('string') . '"' : '' ?>>
+        <span>reset<input type="checkbox" name="expiredate" id="expiredate" value="null"></span>
+        
+    </td>
+
     <td>
     <input type="hidden" name="id" value="<?= $user->id() ?>">
     <input type="submit" name="action" value="update">
@@ -109,6 +131,13 @@ foreach ($userlist as $user ) {
     </form>
 
     </td>
+
+
+
+    <td>
+        <?= $user->expiredate('hrdi') ?>
+    </td>
+
 
     </tr>
 

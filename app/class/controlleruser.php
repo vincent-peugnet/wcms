@@ -13,7 +13,7 @@ class Controlleruser extends Controller
             $getuser = $this->usermanager->get($this->user);
             if($this->user->isadmin()) {
                 $userlist = $this->usermanager->getlister();
-                $this->showtemplate('user', ['userlist' => $userlist, 'getuser' => $getuser]);
+                $this->showtemplate('user', ['userlist' => $userlist, 'getuser' => $getuser, 'now' => $this->now->format('Y-m-d')]);
             } else {
                 $this->showtemplate('user', ['getuser' => $getuser]);
             }

@@ -37,11 +37,13 @@ class Controllerconnect extends Controller
         if (isset($_POST['pass'])) {
             $this->user = $this->usermanager->passwordcheck($_POST['pass']);
             if($this->user != false) {
-                $this->usermanager->connectcounter($this->user);
-                $this->usermanager->writesession($this->user);
-                $_SESSION['workspace']['showleftpanel'] = true;
-                $_SESSION['workspace']['showrightpanel'] = false;
-                
+                if($this->user->expiredate() === false || $this->user->level() === 10 || $this->user->expiredate('date') > $this->now) {
+                    $this->user->connectcounter();
+                    $this->usermanager->add($this->user);
+                    $this->usermanager->writesession($this->user);
+                    $_SESSION['workspace']['showleftpanel'] = true;
+                    $_SESSION['workspace']['showrightpanel'] = false;
+                }                
             }
         }
         if ($id !== null) {

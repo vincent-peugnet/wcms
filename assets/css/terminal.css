@@ -15,12 +15,12 @@ body {
 }
 
 div#topbar, article#main, main.media div, main.home div#options, main.info nav, main article, h1, h2, main.info article h4, textarea, input {
-    background:transparent;
+    background:black;
     border-color: white;
 }
 
 .editor div#leftbar, .editor #edittopbar, .editor div#rightbar, details, .editor .tabs {
-    background:transparent;
+    background:black;
     border-color: white;
 }
 

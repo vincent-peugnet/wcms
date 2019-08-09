@@ -50,6 +50,9 @@ class Modeluser extends Modeldb
 
 
 
+    /**
+     * @return array list of User objects
+     */
     public function getlister()
     {
         $userlist = [];
@@ -175,20 +178,6 @@ class Modeluser extends Modeldb
     public function delete(User $user)
     {
         $this->repo->delete($user->id());
-    }
-
-    /**
-     * Incerment connection counter
-     * 
-     * @param string|User $id
-     * 
-     * @return bool
-     */
-    public function connectcounter($id)
-    {
-        $user = $this->get($id);
-        $user->connectcounter();
-        return $this->add($user);
     }
 
 
