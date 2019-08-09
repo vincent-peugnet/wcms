@@ -289,6 +289,8 @@ class Modelrender extends Modelart
 
 		$text = $this->autourl($text);
 
+		$text = $this->authenticate($text);
+
 		return $text;
 	}
 
@@ -419,54 +421,6 @@ class Modelrender extends Modelart
 		}
 		return $text;
 	}
-
-	public function aautomedialist(string $text) : string
-	{
-
-
-		
-		$text = preg_replace_callback(
-			'~\%MEDIA:(([a-z0-9-_]+(\/([a-z0-9-_])+)*))\%~',
-			function ($matches) {
-				$dir = trim($matches[1], '/');
-				$mediamanager = new Modelmedia();
-
-
-
-				if (is_dir(Model::MEDIA_DIR . $dir)) {
-					$medialist = $mediamanager->getlistermedia(Model::MEDIA_DIR . $dir . '/');
-
-					$dirid = str_replace('/', '-', $dir);
-
-					$ul = '<div class="medialist" id="' . $dirid . '">' . PHP_EOL;
-
-					foreach ($medialist as $media) {
-						$ul .= '<div class="content ' . $media->type() . '">';
-						if ($media->type() == 'image') {
-							$ul .= '<img alt="' . $media->id() . '" id="' . $media->id() . '" src="' . $media->getincludepath() . '" >';
-						} elseif ($media->type() == 'sound') {
-							$ul .= '<audio id="' . $media->id() . '" controls src="' . $media->getincludepath() . '" </audio>';
-						} elseif ($media->type() == 'video') {
-							$ul .= '<video controls><source src="' . $media->getincludepath() . '" type="video/' . $media->extension() . '"></video>';
-						} elseif ($media->type() == 'other') {
-							$ul .= '<a href="' . $media->getincludepath() . '" target="_blank" class="media" >' . $media->id() . '.' . $media->extension() . '</a>';
-						}
-						$ul .= '</div>' . PHP_EOL;
-					}
-
-					$ul .= '</div>' . PHP_EOL;
-
-					return $ul;
-				} else {
-					return 'directory "' . $dir . '" not found';
-				}
-			},
-			$text
-		);
-
-		return $text;
-	}
-
 
 
 	function sumparser($text)
@@ -602,6 +556,36 @@ class Modelrender extends Modelart
 		}, $text);
 		return $text;
 	}
+
+
+
+	/**
+	 * @param string $text content to analyse and replace
+	 * 
+	 * @return string text ouput
+	 */
+	public function authenticate(string $text)
+	{
+		$id = $this->art->id();
+		$regex = '~\%CONNECT(\?dir=([a-zA-Z0-9-_]+))?\%~';
+		$text = preg_replace_callback($regex, function ($matches) use ($id) {
+			if(isset($matches[2])) {
+				$id = $matches[2];
+			}
+			$form = '<form action="/!co" method="post">
+			<input type="password" name="pass" id="loginpass" placeholder="password">
+			<input type="hidden" name="route" value="artread/">
+			<input type="hidden" name="id" value="' . $id . '">
+			<input type="submit" name="log" value="login" id="button">
+			</form>';
+			return $form;
+
+		}, $text);
+		return $text;
+	}
+
+
+
 
 
 

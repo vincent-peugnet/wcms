@@ -24,7 +24,7 @@ div#topbar, article#main, main.media div, main.home div#options, main.info nav, 
     border-color: white;
 }
 
-.editor div#leftbarpanel, .editor div#rightbarpanel {
+.editor div#leftbarpanel, .editor div#rightbarpanel, .tabs textarea {
     border: solid 1px;
 }
 

@@ -49,7 +49,7 @@
 
 <table>
 <tr>
-<th>id</th><th>password</th><th>hash</th><th>level</th><th>set expiration date</th><th>action</th><th>expire</th>
+<th>id</th><th>password</th><th>hash</th><th>level</th><th>set expiration date</th><th>action</th><th>expire</th><th>connect</th>
 </tr>
 
 <tr>
@@ -84,6 +84,10 @@
     <td>
 
     </td>
+    <td>
+
+    </td>
+    
     </form>
 </tr>
 
@@ -136,6 +140,10 @@ foreach ($userlist as $user ) {
 
     <td>
         <?= $user->expiredate('hrdi') ?>
+    </td>
+
+    <td>
+        <?= $user->connectcount() ?>
     </td>
 
 
