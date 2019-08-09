@@ -6,11 +6,19 @@ abstract class Config
 {
 	protected static $arttable = 'mystore';
 	protected static $domain = '';
-	protected static $color4;
 	protected static $fontsize = 15;
 	protected static $basepath = '';
-	protected static $route404;
+	protected static $route404;	
+	protected static $alerttitle = '';
+	protected static $alertlink = '';
+	protected static $alertlinktext = '';
 	protected static $existnot = 'This page does not exist yet';
+	protected static $private = 'This page is private';
+	protected static $notpublished = 'This page is not published';
+	protected static $existnotpass = false;
+	protected static $privatepass = false;
+	protected static $notpublishedpass = false;
+	protected static $alertcss = false;
 	protected static $defaultbody = '%HEADER%'. PHP_EOL .PHP_EOL . '%NAV%'. PHP_EOL .PHP_EOL . '%ASIDE%'. PHP_EOL .PHP_EOL . '%MAIN%'. PHP_EOL .PHP_EOL . '%FOOTER%';
 	protected static $defaultart = '';
 	protected static $defaultfavicon = '';
@@ -115,11 +123,6 @@ abstract class Config
 		return self::$domain;
 	}
 
-	public static function color4()
-	{
-		return self::$color4;
-	}
-
 	public static function fontsize()
 	{
 		return self::$fontsize;
@@ -135,9 +138,54 @@ abstract class Config
 		return self::$route404;
 	}
 
+	public static function alerttitle()
+	{
+		return self::$alerttitle;
+	}
+
+	public static function alertlink()
+	{
+		return self::$alertlink;
+	}
+
+	public static function alertlinktext()
+	{
+		return self::$alertlinktext;
+	}
+
 	public static function existnot()
 	{
 		return self::$existnot;
+	}
+
+	public static function private()
+	{
+		return self::$private;
+	}
+
+	public static function notpublished()
+	{
+		return self::$notpublished;
+	}
+
+	public static function existnotpass()
+	{
+		return self::$existnotpass;
+	}
+
+	public static function privatepass()
+	{
+		return self::$privatepass;
+	}
+	
+	public static function notpublishedpass()
+	{
+		return self::$notpublishedpass;
+	}
+		
+	public static function alertcss()
+	{
+		return self::$alertcss;
 	}
 
 	public static function defaultbody()
@@ -218,13 +266,6 @@ abstract class Config
 		self::$domain = strip_tags(strtolower($domain));
 	}
 
-	public static function setcolor4($color4)
-	{
-		if (strlen($color4) <= 8) {
-			self::$color4 = $color4;
-		}
-	}
-
 	public static function setfontsize($fontsize)
 	{
 		$fontsize = intval($fontsize);
@@ -245,11 +286,66 @@ abstract class Config
 		}
 	}
 
-	public static function setexistnot($description)
+	public static function setalerttitle($alerttitle)
 	{
-		if(is_string($description)) {
-			self::$existnot = strip_tags($description);
+		if(is_string($alerttitle)) {
+			self::$alerttitle = strip_tags($alerttitle);
 		}
+	}
+
+	public static function setalertlink($alertlink)
+	{
+		if(is_string($alertlink)) {
+			self::$alertlink = idclean(strip_tags($alertlink));
+		}
+	}
+
+	public static function setalertlinktext($alertlinktext)
+	{
+		if(is_string($alertlinktext)) {
+			self::$alertlinktext = strip_tags($alertlinktext);
+		}
+	}
+
+	public static function setexistnot($existnot)
+	{
+		if(is_string($existnot)) {
+			self::$existnot = strip_tags($existnot);
+		}
+	}
+
+	public static function setprivate($private)
+	{
+		if(is_string($private)) {
+			self::$private = strip_tags($private);
+		}
+	}
+
+	public static function setnotpublished($notpublished)
+	{
+		if(is_string($notpublished)) {
+			self::$notpublished = strip_tags($notpublished);
+		}
+	}
+	
+	public static function setexistnotpass($existnotpass)
+	{
+		self::$existnotpass = boolval($existnotpass);
+	}
+	
+	public static function setprivatepass($privatepass)
+	{
+		self::$privatepass = boolval($privatepass);
+	}
+	
+	public static function setnotpublishedpass($notpublishedpass)
+	{
+		self::$notpublishedpass = boolval($notpublishedpass);
+	}
+	
+	public static function setalertcss($alertcss)
+	{
+		self::$alertcss = boolval($alertcss);
 	}
 
 	public static function setdefaultbody($defaultbody)

@@ -118,7 +118,6 @@ class Controllerart extends Controller
 
         $artexist = $this->importart();
         $canread = $this->user->level() >= $this->art->secure();
-        $alerts = ['alertnotexist' => 'This page does not exist yet', 'alertprivate' => 'You cannot see this page'];
         $page = ['head' => '', 'body' => ''];
 
         if ($artexist) {
@@ -138,9 +137,13 @@ class Controllerart extends Controller
             }
             $this->artmanager->update($this->art);
         }
-        $data = array_merge($alerts, $page, ['art' => $this->art, 'artexist' => $artexist, 'canread' => $canread, 'readernav' => Config::showeditmenu(), 'canedit' => $this->canedit()]);
+        $data = array_merge($page, ['art' => $this->art, 'artexist' => $artexist , 'readernav' => Config::showeditmenu(), 'canedit' => $this->canedit()]);
 
-        $this->showtemplate('read', $data);
+        if($artexist && $canread) {
+            $this->showtemplate('read', $data);
+        } else {
+            $this->showtemplate('alert', $data);
+        }
 
     }
 
