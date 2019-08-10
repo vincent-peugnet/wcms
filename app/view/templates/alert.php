@@ -38,7 +38,7 @@ $this->stop();
     <?php
 
     $form = '<p>
-    <form action="/!co" method="post">
+    <form action="' . $this->url('log') .'" method="post">
     <input type="password" name="pass" id="loginpass" placeholder="password">
     <input type="hidden" name="route" value="artread/">
     <input type="hidden" name="id" value="' . $art->id() . '">
