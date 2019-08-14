@@ -20,7 +20,7 @@ class Art2
 	protected $aside;
 	protected $footer;
 	protected $externalcss;
-	protected $externalscript;
+	protected $customhead;
 	protected $renderhead;
 	protected $renderbody;
 	protected $secure;
@@ -91,7 +91,7 @@ class Art2
 		$this->setaside('');
 		$this->setfooter('');
 		$this->setexternalcss([]);
-		$this->setexternalscript([]);
+		$this->setcustomhead('');
 		$this->setrenderhead('');
 		$this->setrenderbody('');
 		$this->setsecure(Config::defaultprivacy());
@@ -294,9 +294,9 @@ class Art2
 		return $this->externalcss;
 	}
 
-	public function externalscript($type = "array")
+	public function customhead($type = "string")
 	{
-		return $this->externalscript;
+		return $this->customhead;
 	}
 
 	public function footer($type = "string")
@@ -609,10 +609,10 @@ class Art2
 		}
 	}
 
-	public function setexternalscript(array $externalscript)
+	public function setcustomhead(string $customhead)
 	{
-		if(is_array($externalscript)) {
-			$this->externalscript = array_values(array_filter($externalscript));
+		if(is_string($customhead)) {
+			$this->customhead = $customhead;
 		}
 	}
 

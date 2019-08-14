@@ -225,9 +225,8 @@ class Modelrender extends Modelart
 			}
 		}
 
-		foreach ($this->art->externalscript() as $externalscript) {
-			$head .= '<script src="' . $externalscript . '"></script>' . PHP_EOL;
-		}
+		$head .= PHP_EOL . $this->art->customhead() . PHP_EOL;
+
 
 		$head .= '<link href="' . Model::globalpath() . 'fonts.css" rel="stylesheet" />' . PHP_EOL;
 		$head .= '<link href="' . Model::globalpath() . 'global.css" rel="stylesheet" />' . PHP_EOL;

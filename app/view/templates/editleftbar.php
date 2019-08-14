@@ -152,7 +152,7 @@
 
             </fieldset>
     </details>
-    <details id="advanced" <?= !empty($art->externalcss()) || !empty($art->externalscript()) ? 'open' : '' ?>>
+    <details id="advanced" <?= !empty($art->externalcss()) || !empty($art->customhead()) ? 'open' : '' ?>>
         <summary>Advanced</summary>
                 
 
@@ -173,18 +173,9 @@
             }
         ?>
 
-        <label for="externalscript">External script</label>
-        <input type="text" name="externalscript[]" id="externalscript" placeholder="add external adress">
-        <?php
-            foreach ($art->externalscript() as $script) {
-                ?>
-                <div class="checkexternal">
-                <input type="checkbox" name="externalscript[]" id="<?= $script ?>" value="<?= $script ?>" checked>
-                <label for="<?= $script ?>" title="<?= $script ?>"><?= $script ?></label>
-                </div>
-                <?php
-            }
-        ?>
+        <label for="customhead">Custom head</label>
+        <textarea name="customhead" wrap="off" spellcheck="false"><?= $art->customhead() ?></textarea>
+
     </fieldset>
 
     </details>
