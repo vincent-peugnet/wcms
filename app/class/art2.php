@@ -296,7 +296,11 @@ class Art2
 
 	public function customhead($type = "string")
 	{
-		return $this->customhead;
+		if($type === 'string') {
+			return $this->customhead;
+		} elseif($type === 'int') {
+			return substr_count($this->customhead, PHP_EOL) + 1;
+		}
 	}
 
 	public function footer($type = "string")

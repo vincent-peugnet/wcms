@@ -15,6 +15,7 @@ class Routes
         $router->addMatchTypes(array('cid' => '[a-zA-Z0-9-_+,\'!%@&.$€=\(\|\)]+'));
         $router->addRoutes([
             ['GET', '/', 'Controllerhome#desktop', 'home'],
+            ['POST', '/', 'Controllerhome#desktop', 'homequery'],
             ['POST', '/columns', 'Controllerhome#columns', 'homecolumns'],
             ['POST', '/upload', 'Controllerart#upload', 'artupload'],
             ['POST', '/!co', 'Controllerconnect#log', 'log'],

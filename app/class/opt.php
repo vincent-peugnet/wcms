@@ -1,21 +1,21 @@
 <?php
 class Opt
 {
-	private $sortby = 'id';
-	private $order = 1;
-	private $tagfilter = [];
-	private $tagcompare = 'OR';
-	private $authorfilter = [];
-	private $authorcompare = 'OR';
-	private $secure = 4;
-	private $linkto = ['min' => '0', 'max' => '0'];
-	private $linkfrom = ['min' => '0', 'max' => '0'];
-	private $col = ['id'];
-	private $taglist = [];
-	private $authorlist = [];
-	private $invert = 0;
+	protected $sortby = 'id';
+	protected $order = 1;
+	protected $tagfilter = [];
+	protected $tagcompare = 'OR';
+	protected $authorfilter = [];
+	protected $authorcompare = 'OR';
+	protected $secure = 4;
+	protected $linkto = ['min' => '0', 'max' => '0'];
+	protected $linkfrom = ['min' => '0', 'max' => '0'];
+	protected $col = ['id'];
+	protected $taglist = [];
+	protected $authorlist = [];
+	protected $invert = 0;
 
-	private $artvarlist;
+	protected $artvarlist;
 
 	public function __construct(array $donnees = [])
 	{
@@ -202,7 +202,7 @@ class Opt
 
 	public function setsortby($sortby)
 	{
-		if (is_string($sortby) && in_array($sortby, $this->artvarlist())) {
+		if (is_string($sortby) && in_array($sortby, $this->artvarlist)) {
 			$this->sortby = strtolower(strip_tags($sortby));
 		}
 	}

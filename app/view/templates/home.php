@@ -31,7 +31,7 @@
 <details id="import">
     <summary>Import W JSON page file</summary>
     <i>Upload page file as json</i>
-    <form action="<?=$this->url('artupload') ?>" method="post" enctype="multipart/form-data">
+    <form action="<?= $this->url('artupload') ?>" method="post" enctype="multipart/form-data">
     <input type="file" name="pagefile" id="pagefile" accept=".json">
     <label for="pagefile">JSON Page file</label>
     <input type="hidden" name="erase" value="0">
@@ -51,6 +51,43 @@
     </br>
     <input type="submit" value="upload">
     </form>
+</details>
+
+<details id="list" <?= isset($optlist) ? 'open' : '' ?>>
+    <summary>Generate list</summary>
+    <i>Generate code to display a list of pages</i>
+    <form action="<?= $this->url('homequery') ?>" method="post">
+        <input type="hidden" name="query" value="1">
+
+        <input type="hidden" name="description" value="0">
+        <input type="checkbox" name="description" id="list_description" value="1" <?= isset($optlist) && $optlist->description() ? 'checked' : '' ?>>
+        <label for="list_description">Show description</label>
+        </br>
+        <input type="hidden" name="thumbnail" value="0">
+        <input type="checkbox" name="thumbnail" id="list_thumbnail"  value="1" <?= isset($optlist) && $optlist->thumbnail() ? 'checked' : '' ?>>
+        <label for="list_thumbnail">Show thumbnail</label>
+        </br>        
+        <input type="hidden" name="date" value="0">
+        <input type="checkbox" name="date" id="list_date"  value="1" <?= isset($optlist) && $optlist->date() ? 'checked' : '' ?>>
+        <label for="list_date">Show date</label>
+        </br>       
+        <input type="hidden" name="author" value="0">
+        <input type="checkbox" name="author" id="list_author"  value="1" <?= isset($optlist) && $optlist->author() ? 'checked' : '' ?>>
+        <label for="list_author">Show author(s)</label>
+        </br>
+        <select name="style" id="list_style">
+            <option value="0">list</option>
+            <option value="1" <?= isset($optlist) && $optlist->style() == 1 ? 'selected' : '' ?>>div</option>
+        </select>
+        <input type="submit" value="generate">
+    </form>
+
+    <?php
+    if(isset($optlist)) {
+        echo '<code>' . $optlist->getcode() . '</code>';
+    }
+
+    ?>
 </details>
 
 

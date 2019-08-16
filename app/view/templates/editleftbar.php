@@ -174,7 +174,7 @@
         ?>
 
         <label for="customhead">Custom head</label>
-        <textarea name="customhead" wrap="off" spellcheck="false"><?= $art->customhead() ?></textarea>
+        <textarea name="customhead" wrap="off" spellcheck="false" rows="<?= $art->customhead('int') ?>"><?= $art->customhead() ?></textarea>
 
     </fieldset>
 
