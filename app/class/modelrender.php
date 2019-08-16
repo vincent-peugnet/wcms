@@ -143,6 +143,7 @@ class Modelrender extends Modelart
 	{
 		$content = $this->article($element->content());
 		$content = $this->automedialist($content);
+		$content = $this->pagelist($content);
 		$content = $this->autotaglistupdate($content);
 		$content = $this->date($content);
 		$content = $this->thumbnail($content);
@@ -582,6 +583,50 @@ class Modelrender extends Modelart
 		}, $text);
 		return $text;
 	}
+
+	/**
+	 * Render pages list
+	 */
+	public function pagelist(string $text) : string
+	{
+		preg_match_all('~\%LIST\?([a-zA-Z0-9\]\[\&=\-\/\%]*)\%~', $text, $out);
+
+		foreach ($out[0] as $key => $match) {
+			$matches[$key] = ['fullmatch' => $match, 'options' => $out[1][$key]];
+		}
+
+		$modelhome = new Modelhome();
+
+		if(isset($matches)) {
+			foreach ($matches as $match) {
+				$optlist = $modelhome->Optlistinit($this->artlist);
+				$optlist->parsehydrate($match['options']);
+				$table2 = $modelhome->table2($this->artlist, $optlist);
+
+				$content = '<ul>' . PHP_EOL ;
+				foreach ($table2 as $page ) {
+					$content .= '<li>' . PHP_EOL;
+					$content .= '<a href="' . $this->uart($page->id()) . '">' . $page->title() . '</a>' . PHP_EOL;
+					if($optlist->description()) {
+						$content .= '<em>' . $page->description() . '</em>' . PHP_EOL;
+					}
+					if($optlist->date()) {
+						$content .= '<code>' . $page->date('pdate') . '</code>' . PHP_EOL;
+					}
+					if($optlist->author()) {
+						$content .=  $page->authors('string') . PHP_EOL;
+					}
+					$content .= '</li>';
+				}
+				$content .= '</ul>';
+
+				$text = str_replace($match['fullmatch'], $content, $text);
+			}
+		}
+		return $text;
+	}
+
+
 
 
 

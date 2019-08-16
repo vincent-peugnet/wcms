@@ -13,6 +13,11 @@ class Modelart extends Modeldb
 		$this->storeinit(Config::arttable());
 	}
 
+	/**
+	 * Scan library for all pages as objects
+	 * 
+	 * @return array of Pages objects
+	 */
 	public function getlister()
 	{
 		$artlist = [];

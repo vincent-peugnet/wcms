@@ -9,18 +9,13 @@ class Optlist extends Opt
     private $style = 0;
 
 
-    /**
-     * New constructor dedicated to parse input string
-     * 
-     * @param string|array $parsedstring parsed query string
-     */
-    public function __construct($datas = [])
-    {
-        if(is_string($datas)) {
-            $datas = parse_str($this->options, $datas);
 
+    public function parsehydrate(string $encoded)
+    {
+        if(is_string($encoded)) {
+            parse_str($encoded, $datas);
+            $this->hydrate($datas);
         }
-        $this->hydrate($datas);
     }
 
 

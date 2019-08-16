@@ -36,9 +36,7 @@ class Controllerhome extends Controller
 
             if(isset($_POST['query']) && $this->user->iseditor()) {
                 $datas = array_merge($_POST, $_SESSION['opt']);
-                $this->optlist = new Optlist(Art2::classvarlist());
-                $this->optlist->settaglist($table);
-                $this->optlist->setauthorlist($table);
+                $this->optlist = $this->modelhome->Optlistinit($table);
                 $this->optlist->hydrate($datas);
                 $vars['optlist'] = $this->optlist; 
             }

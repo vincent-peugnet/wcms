@@ -389,7 +389,7 @@ main.timeline li.event {
 
 
 @media (max-width: 600px) {
-    main.home .summary, main.home .linkfrom, main.home .linkto, main.home .delete, main.home .datecreation, main.home .date, main.home .log, main.home .secure, main.home .tag {
+    main.home .summary, main.home .linkfrom, main.home .linkto, main.home .delete, main.home .datecreation, main.home .date, main.home .log, main.home .secure, main.home .tag, .hidephone {
         display: none;
     }
 
@@ -404,4 +404,5 @@ main.timeline li.event {
     }
 
 }
+
 

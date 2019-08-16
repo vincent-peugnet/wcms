@@ -431,7 +431,11 @@ class Art2
 
 	public function authors($type = 'array')
 	{
-		return $this->authors;
+		if($type == 'string') {
+			return implode(', ', $this->authors);
+		} elseif ($type == 'array') {
+			return $this->authors;
+		}
 	}
 
 	public function invites($type = 'array')

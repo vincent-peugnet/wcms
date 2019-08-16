@@ -26,9 +26,10 @@
 
 <article id="main">
 
-<h2>Pages</h2>
+<h2>Pages (<?= count($table2) ?>)</h2>
 
-<details id="import">
+
+<details id="import" class="hidephone">
     <summary>Import W JSON page file</summary>
     <i>Upload page file as json</i>
     <form action="<?= $this->url('artupload') ?>" method="post" enctype="multipart/form-data">
@@ -53,7 +54,7 @@
     </form>
 </details>
 
-<details id="list" <?= isset($optlist) ? 'open' : '' ?>>
+<details id="list" class="hidephone" <?= isset($optlist) ? 'open' : '' ?>>
     <summary>Generate list</summary>
     <i>Generate code to display a list of pages</i>
     <form action="<?= $this->url('homequery') ?>" method="post">
@@ -111,7 +112,6 @@
 
 
 
-    <input type="hidden" name="action" value="massedit">
     </div>
 
 

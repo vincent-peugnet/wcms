@@ -19,6 +19,22 @@ class Modelhome extends Modelart
         return $opt;
     }
 
+    /**
+     * Initialise Optlist object using
+     * 
+     * @param array $table the list of all pages objects
+     * 
+     * @return Optlist Object initialized
+     */
+    public function Optlistinit(array $table)
+    {
+        $optlist = new Optlist(Art2::classvarlist());
+        $optlist->settaglist($table);
+        $optlist->setauthorlist($table);
+
+        return $optlist;
+    }
+
 
 
 
