@@ -65,12 +65,24 @@ treecount($dirlist, 'media', 0, 'media', $dir, $opt);
 
 
 
-<form id="addfolder" action="<?= $this->url('mediafolder') ?>" method="post">
+<form id="folderadd" action="<?= $this->url('mediafolderadd') ?>" method="post">
     <label for="foldername">📂 New folder</label>
     <input type="text" name="foldername" id="foldername" placeholder="folder name" required>
     <input type="hidden" name="dir" value="<?= $dir ?>">
     <input type="submit" value="create folder">
 </form>
+
+<?php if($user->issupereditor()) { ?>
+
+<form action="<?= $this->url('mediafolderdelete') ?>" id="deletefolder" method="post" class="hidephone">
+    <input type="hidden" name="dir" value="<?= $dir ?>/">
+    <input type="checkbox" name="deletefolder" id="confirmdeletefolder" value="1">
+    <label for="confirmdeletefolder">Delete folder and all it's content</label>
+    <input type="submit" value="delete folder" >
+</form>
+
+
+<?php } ?>
 
 <form id=addmedia action="<?= $this->url('mediaupload') ?>" method="post" enctype="multipart/form-data">
     <label for="file">🚀 Upload file(s)</label>
@@ -81,8 +93,32 @@ treecount($dirlist, 'media', 0, 'media', $dir, $opt);
 
 
 
+<?php if($user->issupereditor()) { ?>
+
+<form action="<?= $this->url('mediaedit') ?>" method="post" id="mediaedit">
+    <input type="hidden" name="path" value="<?= $dir ?>">
+    <label for="moveto">Selected medias :</label>
+    <select name="dir" id="moveto" >
+        <option value="" selected>---select destination---</option>
+        <option value="<?= Model::MEDIA_DIR ?>">/</option>
+        <?php
+            foreach ($pathlist as $path) {
+                echo '<option value="' . Model::MEDIA_DIR . $path . '">' . $path . '</option>';
+            }
+        ?>
+    </select>
+    <input type="submit" name="action" value="move" >
+    <input type="submit" name="action" value="delete" >
+</form>
+
+<?php } ?>
+
+
+
+
 <table id="medialist">
 <tr>
+    <th>x</th>
     <th><a href="?path=<?= $dir ?>&sortby=id&order=<?php echo ($opt['order'] * -1); ?>">id</a></th>
     <th>ext</th>
     <th><a href="?path=<?= $dir ?>&sortby=type&order=<?php echo ($opt['order'] * -1); ?>">type</a></th>
@@ -97,9 +133,10 @@ treecount($dirlist, 'media', 0, 'media', $dir, $opt);
 foreach ($medialist as $media) {
     ?>
     <tr>
-    <td><a href="<?= $media->getfullpath() ?>" target="_blank"><?= $media->id() ?></a></td>
+    <td><input type="checkbox" name="id[]" value="<?= $media->getfulldir() ?>" form="mediaedit" id="media_<?= $media->id() ?>"></td>
+    <td><label for="media_<?= $media->id() ?>"><?= $media->id() ?></label></td>    
     <td><?= $media->extension() ?></td>
-    <td><?= $media->type() == 'image' ? '<span class="thumbnail">image 👁<img src="' . $media->getfullpath() . '"></span>' : $media->type() ?></td>
+    <td><a href="<?= $media->getfullpath() ?>" target="_blank"><?= $media->type() == 'image' ? '<span class="thumbnail">image 👁<img src="' . $media->getfullpath() . '"></span>' : $media->type() ?></a></td>
     <td><?= $media->size('hr') ?></td>
     <td><?= $media->width() ?></td>
     <td><?= $media->height() ?></td>

@@ -74,6 +74,11 @@ class Media
 		return $includepath;
 	}
 
+	public function getfulldir()
+	{
+		return $this->path . $this->id . '.' . $this->extension;
+	}
+
 
 
 // _________________________________________________ G E T ____________________________________________________

@@ -41,9 +41,13 @@ class Controllermedia extends Controller
     
                 $dirlist = $this->mediamanager->listdir(Model::MEDIA_DIR);
 
+                $pathlist = [];
+
+                $this->mediamanager->listpath($dirlist, '', $pathlist);
+
                 $this->mediamanager->medialistsort($medialist, $sortby, $order);
     
-                $this->showtemplate('media', ['medialist' => $medialist, 'faviconlist' => $faviconlist, 'dirlist' => $dirlist, 'dir' => $dir, 'opt' => $opt]);
+                $this->showtemplate('media', ['medialist' => $medialist, 'faviconlist' => $faviconlist, 'dirlist' => $dirlist, 'pathlist' =>$pathlist, 'dir' => $dir, 'opt' => $opt]);
             } else {
                 $this->routedirect('media');
             }
@@ -66,7 +70,7 @@ class Controllermedia extends Controller
         }
     }
 
-    public function folder()
+    public function folderadd()
     {
         if ($this->user->iseditor()) {
             $dir = $_POST['dir'] ?? Model::MEDIA_DIR;
@@ -75,6 +79,31 @@ class Controllermedia extends Controller
         }
         $this->redirect($this->router->generate('media') . '?path=' . $dir . DIRECTORY_SEPARATOR . $name);
 
+    }
+
+    public function folderdelete()
+    {
+        if(isset($_POST['dir'])) {
+            if(isset($_POST['deletefolder']) && intval($_POST['deletefolder']) && $this->user->issupereditor()) {
+                $this->mediamanager->deletedir($_POST['dir']);
+            } else {
+                $this->redirect($this->router->generate('media') . '?path=' . $_POST['dir']);
+                exit;
+            }
+        }
+        $this->redirect($this->router->generate('media'));
+    }
+
+    public function edit()
+    {
+        if($this->user->issupereditor() && isset($_POST['action']) && isset($_POST['id'])) {
+            if($_POST['action'] == 'delete') {
+                $this->mediamanager->multifiledelete($_POST['id']);
+            } elseif ($_POST['action'] == 'move' && isset($_POST['dir'])) {
+                $this->mediamanager->multimovefile($_POST['id'], $_POST['dir']);
+            }
+        }
+        $this->redirect($this->router->generate('media') . '?path=' . $_POST['path']);
     }
 
 

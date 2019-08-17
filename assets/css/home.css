@@ -116,7 +116,7 @@ main {
     overflow-y: auto;
 }
 
-main.admin input, select, textarea {
+main.admin input, main.admin select, main.admin textarea {
     display: block;
     width: 100%;
 }
@@ -138,7 +138,7 @@ div.radio input[type="radio"] {
     width: auto;
 }
 
-main.font input, select, textarea {
+main.font input, main.font  select, main.font  textarea {
     display: block;
 }
 
@@ -174,7 +174,7 @@ main.media table#medialist {
 
 
 img.icon {
-    height: 15px;
+    height: 12px;
 }
 
 a:hover img.icon {
@@ -280,7 +280,7 @@ main.media table#medialist .thumbnail:hover img {
 
 
 main.media form {
-    margin: 1%;
+    margin: 0.5%;
 }
 
 main.media div#tree, main.media div#explorer {
