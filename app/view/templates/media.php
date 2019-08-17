@@ -99,7 +99,7 @@ treecount($dirlist, 'media', 0, 'media', $dir, $opt);
     <input type="hidden" name="path" value="<?= $dir ?>">
     <label for="moveto">Selected medias :</label>
     <select name="dir" id="moveto" >
-        <option value="" selected>---select destination---</option>
+        <option selected>---select destination---</option>
         <option value="<?= Model::MEDIA_DIR ?>">/</option>
         <?php
             foreach ($pathlist as $path) {

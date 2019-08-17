@@ -1,4 +1,4 @@
-<div id="topbar">
+<header id="topbar">
 
 <span id="search">
 <form action="<?= $this->url('search') ?>" method="post">
@@ -66,4 +66,4 @@ if($user->isadmin()) {
 
 <?php } ?>
 
-</div>
+</header>

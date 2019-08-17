@@ -199,6 +199,9 @@
 
 <?php } ?>
 
+<?php $this->insert('footer', ['footer' => $footer]) ?>
+
+
 </body>
 
 

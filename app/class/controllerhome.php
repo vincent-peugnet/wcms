@@ -33,6 +33,7 @@ class Controllerhome extends Controller
             $columns = $this->modelhome->setcolumns($this->user->columns());
 
             $vars = ['user' => $this->user, 'table2' => $table2, 'opt' => $this->opt, 'columns' => $columns];
+            $vars['footer'] = ['version' => getversion(), 'total' => count($table), 'database' => Config::arttable()];
 
             if(isset($_POST['query']) && $this->user->iseditor()) {
                 $datas = array_merge($_POST, $_SESSION['opt']);
