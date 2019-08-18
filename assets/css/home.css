@@ -14,6 +14,32 @@ div#options, article#main {
 
 main.home {
     display: flex;
+    height: 100%;
+    /* width: 100%; */
+}
+
+
+aside.home {
+    display: flex;
+    background-color: darkgrey;
+}
+
+
+
+aside.home details, aside.home span {
+    width: 30%;
+}
+
+
+
+aside.home details form, aside.home summary {
+    background-color: darkgrey;
+}
+
+
+aside.home form {
+    position: absolute;
+    border: solid 1px dimgrey;
 }
 
 main.home article#main {
@@ -57,14 +83,13 @@ h1, h2 {
     margin: 0;
     background-color: #7b97b9;
     color: white;
-    padding: 0.1% 0.5%;
     font-size: larger;
 }
 
 
 
 main.media div, main.home div#options, main.info nav, main article {
-    border: ridge 1px dimgrey;
+    border: solid 1px dimgrey;
     margin: 1%;
     background-color: lightgrey;
 }
@@ -102,9 +127,10 @@ a:hover {
     color: white;
 }
 
-#options ul {
+ul {
     list-style: none;
     padding-inline-start: 0;
+    margin: 0;
 }
 
 th {
@@ -121,10 +147,6 @@ main.admin input, main.admin select, main.admin textarea {
     width: 100%;
 }
 
-main section {
-    width: fit-content;
-    margin: 1%;
-}
 
 
 div.checkbox [type="checkbox"] {
@@ -384,6 +406,44 @@ main.timeline li.event {
 
 
 
+
+
+
+
+
+section.pages {
+    display: flex;
+    flex-direction: column;
+    max-width: calc(100% - 160px);
+}
+
+.home nav {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 160px;
+}
+
+
+.block {
+    background-color: lightgrey;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    width: 100%;
+}
+
+.scroll {
+    overflow: auto;
+    height: 100%;
+    max-width: 100%;
+}
+
+footer {
+    background-color: black;
+    color: white;
+    opacity: 0.4;
+}
 
 
 

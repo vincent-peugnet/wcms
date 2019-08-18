@@ -62,7 +62,17 @@ class Controllerhome extends Controller
     public function search()
     {
         if(isset($_POST['id']) && !empty($_POST['id'])) {
-            $this->routedirect('artread/', ['art' => $_POST['id']]);
+            if(isset($_POST['action'])) {
+                switch ($_POST['action']) {
+                    case 'read':
+                        $this->routedirect('artread/', ['art' => $_POST['id']]);
+                    break;
+                    
+                    case 'edit':
+                        $this->routedirect('artedit', ['art' => $_POST['id']]);
+                    break;
+                }
+            }
         } else {
             $this->routedirect('home');
         }

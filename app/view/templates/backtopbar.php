@@ -3,7 +3,8 @@
 <span id="search">
 <form action="<?= $this->url('search') ?>" method="post">
 <input type="text" name="id" id="id" placeholder="page id" required>
-<input type="submit" value="go">
+<input type="submit" name="action" value="read">
+<?= $user->iseditor() ? '<input type="submit" name="action" value="edit">' : '' ?>
 </form>
 </span>
 
