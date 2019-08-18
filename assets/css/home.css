@@ -27,7 +27,7 @@ aside.home {
 
 
 aside.home details, aside.home span {
-    width: 30%;
+    width: 100%;
 }
 
 
@@ -111,7 +111,6 @@ tr:hover {
     background-color: #7b97b9;
     width: 100%;
     padding: 3px 0.5%;
-    border-bottom: solid 1px dimgrey;
 }
 
 #topbar form {

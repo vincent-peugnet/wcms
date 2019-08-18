@@ -1,6 +1,6 @@
 <?php
 
-class Controllerhome extends Controller
+class Controllerhome extends Controllerart
 {
     /** @var Modelhome */
     protected $modelhome;
@@ -76,6 +76,18 @@ class Controllerhome extends Controller
         } else {
             $this->routedirect('home');
         }
+    }
+
+    public function renderall()
+    {
+        if($this->user->iseditor()) {
+            $pagelist = $this->modelhome->getlister();
+            foreach ($pagelist as $page) {
+                $this->renderart($page);
+                $this->artmanager->update($page);
+            }
+        }
+        $this->routedirect('home');
     }
 
 

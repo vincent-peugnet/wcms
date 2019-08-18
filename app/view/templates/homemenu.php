@@ -41,9 +41,14 @@
         </form>
     </details>
 
-    <span>
-        <a href="">Render All</a>
-    </span>
+    <details class="hidephone">
+        <summary>Actions</summary>
+        <form action="<?= $this->url('homerenderall') ?>" method="post">
+            Render all pages
+            </br>       
+            <input type="submit" value="renderall">
+        </form>
+        </details>
 
 
 </aside>

@@ -127,7 +127,7 @@ class Modelrender extends Modelart
 					}
 				} else {
 					$read = '<h2>Rendering error :</h2><p>The page <strong><code>' . $source . '</code></strong>, called in <strong><code>'. $element->fullmatch() . '</code></strong>, does not exist yet.</p>';
-					throw new Exception($read);
+					//throw new Exception($read);
 				}
 
 			} else {
@@ -298,7 +298,7 @@ class Modelrender extends Modelart
 	{
 		$text = preg_replace('%(src|href)="([\w-_]+(\/([\w-_])+)*\.[a-z0-9]{1,5})"%', '$1="' . Model::mediapath() . '$2" target="_blank" class="media"', $text);
 		if (!is_string($text)) {
-			throw new Exception('Rendering error -> media module');
+			//throw new Exception('Rendering error -> media module');
 		}
 		return $text;
 	}

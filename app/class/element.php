@@ -72,18 +72,18 @@ class Element
                     $value = $optionmatch[3];
                 } else {                    
                     $read = '<h2>Rendering error :</h2><p>Paramaters must have a value like : <strong><code>/' . $key . '=__value__</code></strong> for parameter : <strong><code>' . $key . '</code></strong></p>';
-                    throw new Exception($read);
+                    //throw new Exception($read);
                 }
                 $method = 'set' . $key;
                 if (in_array($key, self::OPTIONS)) {
                     if (!$this->$method($value)) {
                         $read = '<h2>Rendering error :</h2><p>Invalid value input : <strong><code>' . $value . '</code></strong> for parameter : <strong><code>' . $key . '</code></strong></p>';
-                        throw new Exception($read);
+                        //throw new Exception($read);
 
                     }
                 } else {
                     $read = '<h2>Rendering error :</h2><p>Parameter name : <strong><code>' . $optionmatch[1] . '</code></strong> does not exist<p>';
-                    throw new Exception($read);
+                    //throw new Exception($read);
                 }
             }
         }
