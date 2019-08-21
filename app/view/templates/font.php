@@ -5,7 +5,7 @@
 
 <body>
 
-    <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'font']) ?>
+    <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'font', 'pagelist' => $pagelist]) ?>
 
 
 <main class="font">

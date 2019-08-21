@@ -4,7 +4,6 @@ class Controllerart extends Controller
 {
     /** @var Art2 */
     protected $art;
-    protected $artmanager;
     protected $fontmanager;
     protected $mediamanager;
 
@@ -14,7 +13,6 @@ class Controllerart extends Controller
     {
         parent::__construct($router);
 
-        $this->artmanager = new Modelart();
         $this->fontmanager = new Modelfont();
         $this->mediamanager = new Modelmedia();
 

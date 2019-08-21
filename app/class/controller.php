@@ -2,25 +2,27 @@
 
 class Controller
 {
-    /**
-     * @var User
-     */
+    /** @var User */
     protected $user;
-    /**
-     * @var Routes
-     */
+
+    /** @var Routes */
     protected $router;
-    /**
-     * @var Modeluser
-     */
+
+    /** @var Modeluser */
     protected $usermanager;
+
+    /** @var Modelart */
+    protected $artmanager;
+
     protected $plates;
+    
     /** @var DateTimeImmutable */
     protected $now;
 
 	public function __construct($router) {
         $this->setuser();
-        $this->router = $router;        
+        $this->router = $router;
+        $this->artmanager = new Modelart();
         $this->initplates();
         $this->now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 	}
@@ -54,6 +56,7 @@ class Controller
         $commonsparams = [];
         $commonsparams['router'] = $this->router;
         $commonsparams['user'] = $this->user;
+        $commonsparams['pagelist'] = $this->artmanager->list();
         $commonsparams['css'] = Model::csspath();
         return $commonsparams;
     }

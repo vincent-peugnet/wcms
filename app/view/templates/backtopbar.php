@@ -2,9 +2,18 @@
 
 <span id="search">
 <form action="<?= $this->url('search') ?>" method="post">
-<input type="text" name="id" id="id" placeholder="page id" required>
+<input type="text" list="searchdatalist" name="id" id="search" placeholder="page id" required <?= $tab !== 'edit' ? 'autofocus' : '' ?>>
 <input type="submit" name="action" value="read">
 <?= $user->iseditor() ? '<input type="submit" name="action" value="edit">' : '' ?>
+
+<?php if($user->iseditor()) { ?>
+<datalist id="searchdatalist">
+    <?php foreach ($pagelist as $id) { ?>
+        <option value="<?= $id ?>"><?= $id ?></option>
+    <?php } ?>
+</datalist>
+<?php } ?>
+
 </form>
 </span>
 

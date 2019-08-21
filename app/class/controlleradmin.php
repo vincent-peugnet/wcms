@@ -3,16 +3,12 @@
 class Controlleradmin extends Controller
 {
 
-    /** @var Modelart $artmanager */
-    protected $artmanager;
-
     /** @var Modelmedia $mediamanager */
     protected $mediamanager;
 
     public function desktop()
     {
         if($this->user->isadmin()) {
-            $this->artmanager = new Modelart();
             $artlist = $this->artmanager->list();
             $this->mediamanager = new Modelmedia();
             $faviconlist = $this->mediamanager->listfavicon();
