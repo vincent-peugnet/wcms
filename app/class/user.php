@@ -276,8 +276,11 @@ class User
 
     public function addbookmark(string $id, string $query)
 	{
-		$id = idclean($id);
-		$this->bookmark[$id] = $query;
+        if(!empty($id) && !empty($query)) {
+            $id = idclean($id);
+            $id = substr($id, 0, 16);
+            $this->bookmark[$id] = $query;
+        }
 	}
 
 	public function deletebookmark(string $id)

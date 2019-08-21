@@ -465,8 +465,11 @@ abstract class Config
 
 	public static function addbookmark(string $id, string $query)
 	{
-		$id = idclean($id);
+		if(!empty($id) && !empty($query)) {
+            $id = idclean($id);
+            $id = substr($id, 0, 16);
 		self::$bookmark[$id] = $query;
+		}
 	}
 
 	public static function deletebookmark(string $id)

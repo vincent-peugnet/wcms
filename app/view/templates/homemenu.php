@@ -101,7 +101,7 @@
             <?php } ?>
             <?php if($user->issupereditor()) { ?>
             <form action="<?= $this->url('homebookmark') ?>" method="post">
-                <input type="text" name="id" placeholder="bookmark id">
+                <input type="text" name="id" placeholder="bookmark id" minlength="1" maxlength="16">
                 <input type="hidden" name="query" value="<?= $opt->getadress() ?>">
                 <input type="submit" name="action" value="add">
             </form>
@@ -125,7 +125,7 @@
                 <p>This will store your filters settings as a Bookmark that only you can use.</p>
             <?php } ?>
             <form action="<?= $this->url('homebookmark') ?>" method="post">
-                <input type="text" name="id" placeholder="bookmark id">
+                <input type="text" name="id" placeholder="bookmark id" minlength="1" maxlength="16">
                 <input type="hidden" name="query" value="<?= $opt->getadress() ?>">
                 <input type="hidden" name="user" value="<?= $user->id() ?>">
                 <input type="submit" name="action" value="add">
