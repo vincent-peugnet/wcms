@@ -2,11 +2,11 @@
 
 class Optlist extends Opt
 {
-    private $description = 0;
-    private $thumbnail = 0;
-    private $date = 0;
-    private $author = 0;
-    private $style = 0;
+    protected $description = 0;
+    protected $thumbnail = 0;
+    protected $date = 0;
+    protected $author = 0;
+    protected $style = 0;
 
 
 
@@ -18,24 +18,6 @@ class Optlist extends Opt
         }
     }
 
-
-    /**
-     * Get the query as http string
-     * 
-     * @return string The resulted query
-     */
-    public function getquery() : string
-    {
-        $class = get_class_vars(get_class($this));
-        $object = get_object_vars($this);
-        $class['artvarlist'] = $object['artvarlist'];
-        $class['taglist'] = $object['taglist'];
-        $class['authorlist'] = $object['authorlist'];
-        $query = array_diff_assoc_recursive($object, $class);
-
-        return urldecode(http_build_query($query));
-    }
-
     /**
      * Get the code to insert directly
      */
@@ -43,6 +25,7 @@ class Optlist extends Opt
     {
         return '%LIST?' . $this->getquery() . '%';
     }
+
 
 
 

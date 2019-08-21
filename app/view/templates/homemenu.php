@@ -1,6 +1,8 @@
 <aside class="home">
-    <details class="hidephone">
-        <summary>Import page as file</summary>
+    <details class="hidephone" id="json">
+        <summary>File</summary>
+            <div class="submenu">
+                <h2>Import page as file</h2>
             <form action="<?= $this->url('artupload') ?>" method="post" enctype="multipart/form-data">
             <input type="file" name="pagefile" id="pagefile" accept=".json">
             <label for="pagefile">JSON Page file</label>
@@ -21,12 +23,15 @@
             </br>
             <input type="submit" value="upload">
             </form>
+            </div>
     </details>
 
 
 
-    <details class="hidephone">
+    <details class="hidephone" id="columns">
         <summary>Columns</summary>
+        <div class="submenu">
+            <h2>Columns</h2>
         <form action="<?= $this->url('homecolumns') ?>" method="post">
         <ul>
         <?php
@@ -39,16 +44,80 @@
         </ul>
         <input type="submit" value="update columns">
         </form>
+        </div>
     </details>
 
-    <details class="hidephone">
+    <details class="hidephone" id="actions">
         <summary>Actions</summary>
+        <div class="submenu">
+            <h2>Rendering</h2>
         <form action="<?= $this->url('homerenderall') ?>" method="post">
             Render all pages
             </br>       
             <input type="submit" value="renderall">
         </form>
+        </div>
         </details>
+
+    <details class="hidephone" id="bookmarks">
+        <summary>Bookmarks</summary>
+        <div class="submenu">
+            <h2>Public</h2>
+            <?php if(!empty(Config::bookmark())) { ?>
+            <form action="<?= $this->url('homebookmark') ?>" method="post">
+            <ul>
+            <?php foreach (Config::bookmark() as $id => $query) { ?>  
+                <li>
+                <label for="public-bookmark_<?= $id ?>">
+                    <a href="<?= $query ?>" title="<?= $query ?>"><?= $id ?></a>
+                    </label>
+                    <?php if($user->issupereditor()) { ?>
+                        <input type="checkbox" name="id[]" value="<?= $id ?>" id="public-bookmark_<?= $id ?>">
+                    <?php } ?>
+                </li>
+            <?php } ?>
+            </ul>
+            <input type="hidden" name="action" value="del">
+            <input type="submit" value="delete selected" class="floatright">
+            </form>
+            <?php } elseif($user->issupereditor()) { ?>
+                <p>This will store your filters settings as a Bookmark that every editors users can use.</p>
+            <?php } else { ?>
+                <p>No public Bookmarks yet</p>
+            <?php } ?>
+            <?php if($user->issupereditor()) { ?>
+            <form action="<?= $this->url('homebookmark') ?>" method="post">
+                <input type="text" name="id" placeholder="bookmark id">
+                <input type="hidden" name="query" value="<?= $opt->getadress() ?>">
+                <input type="submit" name="action" value="add">
+            </form>
+            <?php } ?>
+            <h2>Personnal</h2>
+            <?php if(!empty($user->bookmark())) { ?>
+            <form action="<?= $this->url('homebookmark') ?>" method="post">
+            <ul>
+            <?php foreach ($user->bookmark() as $id => $query) { ?>  
+                <li>
+                    <a href="<?= $query ?>" title="<?= $query ?>"><?= $id ?></a>
+                    <input type="checkbox" name="id[]" value="<?= $id ?>">
+                </li>
+            <?php } ?>
+            </ul>
+            <input type="hidden" name="action" value="del">
+            <input type="hidden" name="user" value="<?= $user->id() ?>">
+            <input type="submit" value="delete selected" class="floatright">
+            </form>
+            <?php } else { ?>
+                <p>This will store your filters settings as a Bookmark that only you can use.</p>
+            <?php } ?>
+            <form action="<?= $this->url('homebookmark') ?>" method="post">
+                <input type="text" name="id" placeholder="bookmark id">
+                <input type="hidden" name="query" value="<?= $opt->getadress() ?>">
+                <input type="hidden" name="user" value="<?= $user->id() ?>">
+                <input type="submit" name="action" value="add">
+            </form>
+        </div>
+    </details>
 
 
 </aside>

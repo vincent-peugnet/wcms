@@ -32,6 +32,7 @@ abstract class Config
 	protected static $homepage = 'default';
 	protected static $homeredirect = null;
 	protected static $interfacecss = null;
+	protected static $bookmark = [];
 
 
 // _______________________________________ F U N _______________________________________
@@ -253,6 +254,11 @@ abstract class Config
 		return self::$interfacecss;
 	}
 
+	public static function bookmark()
+	{
+		return self::$bookmark;
+	}
+
 
 // __________________________________________ S E T ______________________________________
 
@@ -440,6 +446,33 @@ abstract class Config
 			self::$interfacecss = $interfacecss;
 		} else {
 			self::$interfacecss = null;
+		}
+	}
+
+	public static function setbookmark($bookmark)
+	{
+		if(is_array($bookmark)) {
+			self::$bookmark = $bookmark;
+		}
+	}
+
+
+
+
+
+
+	// ______________________________________ F U N _________________________________________
+
+	public static function addbookmark(string $id, string $query)
+	{
+		$id = idclean($id);
+		self::$bookmark[$id] = $query;
+	}
+
+	public static function deletebookmark(string $id)
+	{
+		if(key_exists($id, self::$bookmark)) {
+			unset(self::$bookmark[$id]);
 		}
 	}
 	

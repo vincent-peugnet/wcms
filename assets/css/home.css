@@ -2,7 +2,13 @@
     box-sizing: border-box;
 }
 
+.inline {
+    display: inline;
+}
 
+.floatright {
+    float: right;
+}
 
 
 div#options, article#main {
@@ -32,14 +38,29 @@ aside.home details, aside.home span {
 
 
 
-aside.home details form, aside.home summary {
+aside.home details .submenu, aside.home summary {
     background-color: darkgrey;
 }
 
 
-aside.home form {
+aside.home .submenu {
     position: absolute;
     border: solid 1px dimgrey;
+}
+
+
+aside.home details#bookmarks input[type="checkbox"] {
+    opacity: 0.2;
+    float: right;
+    height: 11px;
+}
+
+aside.home details#bookmarks input[type="checkbox"]:hover {
+    opacity: 1;
+}
+
+aside.home details#bookmarks ul {
+    padding: 2%;
 }
 
 main.home article#main {
@@ -463,5 +484,8 @@ footer {
     }
 
 }
+
+
+
 
 

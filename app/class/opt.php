@@ -45,16 +45,16 @@ class Opt
 	}
 
 	public function reset($var)
-	{		
+	{
 		$varlist = get_class_vars(__class__);
-		if(in_array($var, $varlist)) {
+		if (in_array($var, $varlist)) {
 			$this->$var = $varlist[$var];
-		}		
+		}
 	}
 
 	public function submit()
 	{
-		if(isset($_GET['submit'])) {
+		if (isset($_GET['submit'])) {
 			if ($_GET['submit'] == 'reset') {
 				$_SESSION['opt'] = [];
 			} elseif ($_GET['submit'] == 'filter') {
@@ -69,55 +69,71 @@ class Opt
 	{
 		$optlist = ['sortby', 'order', 'secure', 'tagcompare', 'tagfilter', 'authorcompare', 'authorfilter', 'invert'];
 
-        foreach ($optlist as $method) {    
-            if (method_exists($this, $method)) {
-                if(isset($_GET[$method])) {
-                    $setmethod = 'set'. $method;
-                    $this->$setmethod($_GET[$method]);
-                } else {
-                    $this->reset($method);
-                }
-                $_SESSION['opt'][$method] = $this->$method();
-            }
-        }
+		foreach ($optlist as $method) {
+			if (method_exists($this, $method)) {
+				if (isset($_GET[$method])) {
+					$setmethod = 'set' . $method;
+					$this->$setmethod($_GET[$method]);
+				} else {
+					$this->reset($method);
+				}
+				$_SESSION['opt'][$method] = $this->$method();
+			}
+		}
 	}
 
 	public function sessionall()
 	{
-        if(isset($_SESSION['opt'])) {
-            $this->hydrate($_SESSION['opt']);
-        }
-	}
-
-	public function getadress($sortby)
-	{
-		if(in_array($sortby, Model::COLUMNS)) {
-			if($this->sortby() === $sortby) {
-				$order = $this->order * -1;
-			} else {
-				$order = $this->order;
-			}
-			$adress = '?sortby=' . $sortby;
-			$adress .= '&order=' . $order;
-			$adress .= '&secure=' . $this->secure;
-			$adress .= '&tagcompare=' . $this->tagcompare;
-			foreach ($this->tagfilter as $tag) {
-				$adress .= '&tagfilter[]=' . $tag;
-			}
-			$adress .= '&authorcompare=' . $this->authorcompare;
-			foreach ($this->authorfilter as $author) {
-				$adress .= '&authorfilter[]=' . $author;
-			}
-			if($this->invert == 1) {
-				$adress .= '&invert=1';
-			}
-			$adress .= '&submit=filter';
-
-			return $adress;
-		} else {
-			return false;
+		if (isset($_SESSION['opt'])) {
+			$this->hydrate($_SESSION['opt']);
 		}
 	}
+
+	public function getadress(string $sortby = '')
+	{
+		if ($this->sortby() === $sortby) {
+			$order = $this->order * -1;
+		} else {
+			$order = $this->order;
+		}
+		$adress = '?sortby=' . $sortby;
+		$adress .= '&order=' . $order;
+		$adress .= '&secure=' . $this->secure;
+		$adress .= '&tagcompare=' . $this->tagcompare;
+		foreach ($this->tagfilter as $tag) {
+			$adress .= '&tagfilter[]=' . $tag;
+		}
+		$adress .= '&authorcompare=' . $this->authorcompare;
+		foreach ($this->authorfilter as $author) {
+			$adress .= '&authorfilter[]=' . $author;
+		}
+		if ($this->invert == 1) {
+			$adress .= '&invert=1';
+		}
+		$adress .= '&submit=filter';
+
+		return $adress;
+	}
+
+
+
+	/**
+	 * Get the query as http string
+	 * 
+	 * @return string The resulted query
+	 */
+	public function getquery(): string
+	{
+		$class = get_class_vars(get_class($this));
+		$object = get_object_vars($this);
+		$class['artvarlist'] = $object['artvarlist'];
+		$class['taglist'] = $object['taglist'];
+		$class['authorlist'] = $object['authorlist'];
+		$query = array_diff_assoc_recursive($object, $class);
+
+		return urldecode(http_build_query($query));
+	}
+
 
 
 
@@ -220,7 +236,7 @@ class Opt
 		if (!empty($tagfilter) && is_array($tagfilter)) {
 			$tagfilterverif = [];
 			foreach ($tagfilter as $tag) {
-				if(array_key_exists($tag, $this->taglist)) {
+				if (array_key_exists($tag, $this->taglist)) {
 					$tagfilterverif[] = $tag;
 				}
 			}
@@ -240,7 +256,7 @@ class Opt
 		if (!empty($authorfilter) && is_array($authorfilter)) {
 			$authorfilterverif = [];
 			foreach ($authorfilter as $author) {
-				if(array_key_exists($author, $this->authorlist)) {
+				if (array_key_exists($author, $this->authorlist)) {
 					$authorfilterverif[] = $author;
 				}
 			}
@@ -301,34 +317,34 @@ class Opt
 
 	public function settaglist(array $artlist)
 	{
-			$taglist = [];
-			foreach ($artlist as $art) {
-				foreach ($art->tag('array') as $tag) {
-					if (!array_key_exists($tag, $taglist)) {
-						$taglist[$tag] = 1;
-					} else {
-						$taglist[$tag]++;
-					}
+		$taglist = [];
+		foreach ($artlist as $art) {
+			foreach ($art->tag('array') as $tag) {
+				if (!array_key_exists($tag, $taglist)) {
+					$taglist[$tag] = 1;
+				} else {
+					$taglist[$tag]++;
 				}
 			}
-			$taglistsorted = arsort($taglist);
-			$this->taglist = $taglist;
+		}
+		$taglistsorted = arsort($taglist);
+		$this->taglist = $taglist;
 	}
 
 	public function setauthorlist(array $artlist)
 	{
-			$authorlist = [];
-			foreach ($artlist as $art) {
-				foreach ($art->authors('array') as $author) {
-					if (!array_key_exists($author, $authorlist)) {
-						$authorlist[$author] = 1;
-					} else {
-						$authorlist[$author]++;
-					}
+		$authorlist = [];
+		foreach ($artlist as $art) {
+			foreach ($art->authors('array') as $author) {
+				if (!array_key_exists($author, $authorlist)) {
+					$authorlist[$author] = 1;
+				} else {
+					$authorlist[$author]++;
 				}
 			}
-			$authorlistsorted = arsort($authorlist);
-			$this->authorlist = $authorlist;
+		}
+		$authorlistsorted = arsort($authorlist);
+		$this->authorlist = $authorlist;
 	}
 
 	public function setinvert(int $invert)
@@ -345,11 +361,4 @@ class Opt
 	{
 		$this->artvarlist = $artvarlist;
 	}
-
-
 }
-
-
-
-
-?>

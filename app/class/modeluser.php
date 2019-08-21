@@ -35,6 +35,7 @@ class Modeluser extends Modeldb
         if (array_key_exists('user' . Config::basepath(), $_SESSION) && isset($_SESSION['user' . Config::basepath()]['id'])) {
             $userdatas = $_SESSION['user' . Config::basepath()];
             $user = new User($userdatas);
+            $user = $this->get($user);
             return $user;
         } else {
             return new User(['id' => '', 'level' => 0]);

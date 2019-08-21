@@ -11,6 +11,7 @@ class User
     protected $columns = ['title', 'datemodif', 'datecreation', 'secure', 'visitcount'];
     protected $connectcount = 0;
     protected $expiredate = false;
+    protected $bookmark = [];
 
     public function __construct($datas = [])
     {
@@ -114,6 +115,11 @@ class User
 		}
     }
 
+    public function bookmark()
+    {
+        return $this->bookmark;
+    }
+
 
     // _______________________ S E T _______________________
 
@@ -185,6 +191,15 @@ class User
 		}
     }
 
+    public function setbookmark($bookmark)
+    {
+        if(is_array($bookmark)) {
+            $this->bookmark = $bookmark;
+        }
+    }
+
+
+
 
 
 
@@ -245,6 +260,20 @@ class User
     {
         $this->connectcount ++;
     }
+
+    public function addbookmark(string $id, string $query)
+	{
+		$id = idclean($id);
+		$this->bookmark[$id] = $query;
+	}
+
+	public function deletebookmark(string $id)
+	{
+		if(key_exists($id, $this->bookmark)) {
+			unset($this->bookmark[$id]);
+		}
+	}
+	
 
 }
 

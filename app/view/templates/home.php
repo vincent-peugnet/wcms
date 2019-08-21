@@ -14,7 +14,7 @@
 
 
 
-    <?php $this->insert('homemenu', ['user' => $user]) ?>
+    <?php $this->insert('homemenu', ['user' => $user, 'opt' => $opt]) ?>
 
 
     <main class="home">

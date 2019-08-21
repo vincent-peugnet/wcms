@@ -60,7 +60,12 @@ class Modelrender extends Modelart
 		if (!empty($this->art->templatebody())) {
 			$templateid = $this->art->templatebody();
 			$templateart = $this->get($templateid);
-			$body = $templateart->body();
+			if($templateart !== false) {
+				$body = $templateart->body();
+			} else {
+				$body = $this->art->body();
+				$this->art->settemplatebody('');
+			}
 		} else {
 			$body = $this->art->body();
 		}
