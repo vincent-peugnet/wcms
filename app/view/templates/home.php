@@ -181,6 +181,36 @@
             </div>
 
         </section>
+
+
+        <?php if($user->display()['bookmark'] && (!empty(Config::bookmark()) || !empty($user->bookmark()))) { ?>
+
+        <section class="hidephone" id="bookmark">
+            <div class="block">
+                <h2>Bookmarks</h2>
+                <div class="scroll">
+                    <strong>Public</strong>
+                    <ul>
+                        <?php foreach (Config::bookmark() as $id => $query) { ?>
+                            <li>
+                                <a href="<?= $query ?>"><?= $id ?></a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                    <strong><?= $user->id() ?></strong>
+                    <ul>
+                        <?php foreach ($user->bookmark() as $id => $query) { ?>
+                            <li>
+                                <a href="<?= $query ?>"><?= $id ?></a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                </section>
+            </div>
+        </nav>
+
+        <?php } ?>
+
     </main>
 
     <?php $this->insert('footer', ['footer' => $footer]) ?>

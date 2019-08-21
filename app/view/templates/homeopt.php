@@ -116,6 +116,10 @@
 
                     </fieldset>
 
+                    <fieldset>
+                        <legend>Other</legend>
+                        
+
                     <?php
                     if ($opt->invert() == 1) {
                         echo '<input type="checkbox" name="invert" value="1" id="invert" checked>';
@@ -124,6 +128,10 @@
                     }
                     echo '<label for="invert">invert</></br>';
                     ?>
+                        <input type="number" name="limit" id="limit" value="<?= $opt->limit() ?>" min="0" max="9999">
+                        <label for="limit">limit</label>
+                        
+                    </fieldset>
 
                 </div>
 

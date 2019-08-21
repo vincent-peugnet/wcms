@@ -38,14 +38,17 @@ class Modelhome extends Modelart
 
 
 
+    /**
+     * @param array $table
+     * @param Opt $opt
+     */
     public function table2($table, $opt)
     {
-        $listmanager = new Modelart;
 
 
-        $filtertagfilter = $listmanager->filtertagfilter($table, $opt->tagfilter(), $opt->tagcompare());
-        $filterauthorfilter = $listmanager->filterauthorfilter($table, $opt->authorfilter(), $opt->authorcompare());
-        $filtersecure = $listmanager->filtersecure($table, $opt->secure());
+        $filtertagfilter = $this->filtertagfilter($table, $opt->tagfilter(), $opt->tagcompare());
+        $filterauthorfilter = $this->filterauthorfilter($table, $opt->authorfilter(), $opt->authorcompare());
+        $filtersecure = $this->filtersecure($table, $opt->secure());
 
         $filter = array_intersect($filtertagfilter, $filtersecure, $filterauthorfilter);
         $table2 = [];
@@ -64,7 +67,11 @@ class Modelhome extends Modelart
             $table2 = $table2invert;
         }
 
-        $listmanager->artlistsort($table2, $opt->sortby(), $opt->order());
+        $this->artlistsort($table2, $opt->sortby(), $opt->order());
+
+        if($opt->limit() !== 0) {
+            $table2 = array_slice($table2, 0, $opt->limit());
+        }
 
 
         return $table2;

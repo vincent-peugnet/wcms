@@ -23,14 +23,28 @@
             </br>
             <input type="submit" value="upload">
             </form>
+            <h2>Export database</h2>
+            <p>Future feature</p>
             </div>
     </details>
 
 
 
-    <details class="hidephone" id="columns">
-        <summary>Columns</summary>
+    <details class="hidephone" id="display">
+        <summary>Display</summary>
         <div class="submenu">
+            <h2>Worksapce</h2>
+        <form action="">
+            <ul>
+            <?php foreach ($user->display() as $id => $setting) { ?>
+                <li>
+                    <input type="checkbox" name="display[<?= $id ?>]" id="display_<?= $id ?>" value="true" <?= $setting ? 'checked' : '' ?>>
+                    <label for="display_<?= $id ?>"><?= $id ?></label>
+                </li>
+            <?php } ?>
+            </ul>
+            <input type="submit" value="update display">
+        </form>
             <h2>Columns</h2>
         <form action="<?= $this->url('homecolumns') ?>" method="post">
         <ul>

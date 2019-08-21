@@ -14,6 +14,7 @@ class Opt
 	protected $taglist = [];
 	protected $authorlist = [];
 	protected $invert = 0;
+	protected $limit= 0;
 
 	protected $artvarlist;
 
@@ -67,7 +68,7 @@ class Opt
 
 	public function getall()
 	{
-		$optlist = ['sortby', 'order', 'secure', 'tagcompare', 'tagfilter', 'authorcompare', 'authorfilter', 'invert'];
+		$optlist = ['sortby', 'order', 'secure', 'tagcompare', 'tagfilter', 'authorcompare', 'authorfilter', 'limit','invert'];
 
 		foreach ($optlist as $method) {
 			if (method_exists($this, $method)) {
@@ -91,10 +92,13 @@ class Opt
 
 	public function getadress(string $sortby = '')
 	{
-		if ($this->sortby() === $sortby) {
+		if ($this->sortby === $sortby) {
 			$order = $this->order * -1;
 		} else {
 			$order = $this->order;
+		}
+		if(empty($sortby)) {
+			$sortby = $this->sortby;
 		}
 		$adress = '?sortby=' . $sortby;
 		$adress .= '&order=' . $order;
@@ -110,6 +114,7 @@ class Opt
 		if ($this->invert == 1) {
 			$adress .= '&invert=1';
 		}
+		$adress.= '&limit=' .$this->limit;
 		$adress .= '&submit=filter';
 
 		return $adress;
@@ -211,6 +216,11 @@ class Opt
 	public function artvarlist()
 	{
 		return $this->artvarlist;
+	}
+
+	public function limit()
+	{
+		return $this->limit;
 	}
 
 
@@ -354,6 +364,17 @@ class Opt
 		} else {
 			$this->invert = 0;
 		}
+	}
+
+	public function setlimit($limit)
+	{
+		$limit = intval($limit);
+		if($limit < 0) {
+			$limit = 0;
+		} elseif ($limit >= 10000) {
+			$limit = 9999;
+		}
+		$this->limit = $limit;
 	}
 
 

@@ -12,6 +12,7 @@ class User
     protected $connectcount = 0;
     protected $expiredate = false;
     protected $bookmark = [];
+    protected $display = ['bookmark' => false];
 
     public function __construct($datas = [])
     {
@@ -120,6 +121,11 @@ class User
         return $this->bookmark;
     }
 
+    public function display()
+    {
+        return $this->display;
+    }
+
 
     // _______________________ S E T _______________________
 
@@ -195,6 +201,13 @@ class User
     {
         if(is_array($bookmark)) {
             $this->bookmark = $bookmark;
+        }
+    }
+
+    public function setdisplay($display)
+    {
+        if(is_array($display)) {
+            $this->display = $display;
         }
     }
 
