@@ -1,4 +1,7 @@
 <aside class="home">
+
+
+
     <details class="hidephone" id="json">
         <summary>File</summary>
             <div class="submenu">
@@ -30,34 +33,66 @@
 
 
 
-    <details class="hidephone" id="display">
-        <summary>Display</summary>
+    <details class="hidephone" id="edit">
+        <summary>Edit</summary>
         <div class="submenu">
-            <h2>Worksapce</h2>
-        <form action="">
-            <ul>
-            <?php foreach ($user->display() as $id => $setting) { ?>
-                <li>
-                    <input type="checkbox" name="display[<?= $id ?>]" id="display_<?= $id ?>" value="true" <?= $setting ? 'checked' : '' ?>>
-                    <label for="display_<?= $id ?>"><?= $id ?></label>
-                </li>
-            <?php } ?>
-            </ul>
-            <input type="submit" value="update display">
-        </form>
-            <h2>Columns</h2>
-        <form action="<?= $this->url('homecolumns') ?>" method="post">
-        <ul>
-        <?php
-        foreach (Model::COLUMNS as $col) { ?>
-            <li>
-            <input type="checkbox" name="columns[]" value="<?= $col ?>" id="col_<?= $col ?>" <?= in_array($col, $user->columns()) ? 'checked' : '' ?>>
-            <label for="col_<?= $col ?>"><?= $col ?></label>
-            </li>
-            <?php } ?>
-        </ul>
-        <input type="submit" value="update columns">
-        </form>
+            <i>Edit selected pages</i>
+            <h2>Actions</h2>
+            <form action="<?= $this->url('homerenderall') ?>" method="post">
+                <input type="submit" value="render">
+                <input type="submit" value="download">
+                <input type="submit" value="delete">
+            </form>
+            <h2>Edit Meta infos</h2>
+            <form action="" method="post">
+                <strong>Tag</strong>
+                </br>
+                <input type="checkbox" name="resettag" id="resettag">
+                <label for="resettag">reset tag(s)</label>
+                </br>
+                <input type="text" name="tag" id="addtag">
+                <label for="addtag">add tag(s)</label>
+                </br>
+                <strong>Date</strong>
+                </br>
+                <input type="checkbox" name="resetdate" id="resetdate">
+                <label for="resetdate">reset date as now</label>
+                </br>
+                <input type="date" name="date" id="date">
+                <label for="date">Date</label>
+                </br>
+                <input type="time" name="time" id="time">
+                <label for="time">Time</label>
+                </br>
+                <strong>Privacy</strong>
+                </br>
+                <select name="level" id="setlevel">
+                    <option >--change privacy--</option>
+                    <option value="0">public</option>
+                    <option value="1">private</option>
+                    <option value="2">not_published</option>
+                </select>
+                <label for="setlevel">Privacy level</label>
+                </br>
+                <strong>Templates</strong>
+                </br>
+                <select name="templatebody" id="templatebody">
+                    <option>--set template body--</option>
+                </select>
+                <label for="templatebody">Body</label>
+                </br>
+                <select name="templatecss" id="templatecss">
+                    <option>--set template css--</option>
+                </select>
+                <label for="templatecss">CSS</label>
+                </br>
+                <select name="templatejavascript" id="templatejavascript">
+                    <option>--set template javascript--</option>
+                </select>
+                <label for="templatejavascript">Javascript</label>
+                </br>
+                <input type="submit" value="edit">
+            </form>
         </div>
     </details>
 
@@ -66,15 +101,12 @@
 
 
 
+
+
+
     <details class="hidephone" id="selection" <?= !empty($optlist) ? 'open' : '' ?>>
-        <summary>Selection</summary>
+        <summary>Filters</summary>
         <div class="submenu">
-            <h2>Rendering</h2>
-        <form action="<?= $this->url('homerenderall') ?>" method="post">
-            Render selected pages
-            </br>       
-            <input type="submit" value="renderall">
-        </form>
         <h2>Get LIST code</h2>
         <i>Generate code to display a list of pages</i>
         <form action="<?= $this->url('homequery') ?>" method="post">
@@ -111,6 +143,8 @@
         <?php } ?>
         </div>
         </details>
+
+
 
 
 
@@ -176,6 +210,40 @@
             </form>
         </div>
     </details>
+
+
+
+    <details class="hidephone" id="display">
+        <summary>Display</summary>
+        <div class="submenu">
+            <h2>Worksapce</h2>
+        <form action="">
+            <ul>
+            <?php foreach ($user->display() as $id => $setting) { ?>
+                <li>
+                    <input type="checkbox" name="display[<?= $id ?>]" id="display_<?= $id ?>" value="true" <?= $setting ? 'checked' : '' ?>>
+                    <label for="display_<?= $id ?>"><?= $id ?></label>
+                </li>
+            <?php } ?>
+            </ul>
+            <input type="submit" value="update display">
+        </form>
+            <h2>Columns</h2>
+        <form action="<?= $this->url('homecolumns') ?>" method="post">
+        <ul>
+        <?php
+        foreach (Model::COLUMNS as $col) { ?>
+            <li>
+            <input type="checkbox" name="columns[]" value="<?= $col ?>" id="col_<?= $col ?>" <?= in_array($col, $user->columns()) ? 'checked' : '' ?>>
+            <label for="col_<?= $col ?>"><?= $col ?></label>
+            </li>
+            <?php } ?>
+        </ul>
+        <input type="submit" value="update columns">
+        </form>
+        </div>
+    </details>
+
 
 
 </aside>

@@ -28,24 +28,30 @@ main.home {
 aside.home {
     display: flex;
     background-color: darkgrey;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
 }
 
 
 
 aside.home details, aside.home span {
     width: 100%;
+    max-width: 280px;
 }
 
 
 
 aside.home details .submenu, aside.home summary {
     background-color: darkgrey;
+    border-left: 1px solid grey;
 }
 
 
 aside.home .submenu {
     position: absolute;
     border: solid 1px dimgrey;
+    width: 20%;
+    max-width: 280px;
 }
 
 
@@ -64,9 +70,24 @@ aside.home details#bookmarks ul {
 }
 
 
+
+aside.home summary {
+    color: grey;
+}
+
+aside.home details > summary::-webkit-details-marker {
+    display: none;
+}
+
+
+aside.home summary:hover {
+    color: black;
+    cursor: pointer;
+}
+
+
 details#selection code {
     overflow: auto;
-    max-width: 300px;
     display: block;
     white-space: nowrap;
     color: #7b97b9;
