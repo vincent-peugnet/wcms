@@ -63,6 +63,18 @@ aside.home details#bookmarks ul {
     padding: 2%;
 }
 
+
+details#selection code {
+    overflow: auto;
+    max-width: 300px;
+    display: block;
+    white-space: nowrap;
+    color: #7b97b9;
+    background-color: #252525;
+    padding: 1%;
+    font-size: 12px;
+}
+
 main.home article#main {
     width: 100%;
 }

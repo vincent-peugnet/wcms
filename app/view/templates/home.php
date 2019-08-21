@@ -14,7 +14,10 @@
 
 
 
-    <?php $this->insert('homemenu', ['user' => $user, 'opt' => $opt]) ?>
+    <?php
+        $optlist = $optlist ?? null;
+        $this->insert('homemenu', ['user' => $user, 'opt' => $opt, 'optlist' => $optlist]);
+    ?>
 
 
     <main class="home">
@@ -27,51 +30,6 @@
             <div class="block">
 
                 <h2>Pages (<?= count($table2) ?>)</h2>
-
-
-                <details id="list" class="hidephone" <?= isset($optlist) ? 'open' : '' ?>>
-                    <summary>Generate list</summary>
-                    <i>Generate code to display a list of pages</i>
-                    <form action="<?= $this->url('homequery') ?>" method="post">
-                        <input type="hidden" name="query" value="1">
-
-                        <input type="hidden" name="description" value="0">
-                        <input type="checkbox" name="description" id="list_description" value="1" <?= isset($optlist) && $optlist->description() ? 'checked' : '' ?>>
-                        <label for="list_description">Show description</label>
-                        </br>
-                        <input type="hidden" name="thumbnail" value="0">
-                        <input type="checkbox" name="thumbnail" id="list_thumbnail" value="1" <?= isset($optlist) && $optlist->thumbnail() ? 'checked' : '' ?>>
-                        <label for="list_thumbnail">Show thumbnail</label>
-                        </br>
-                        <input type="hidden" name="date" value="0">
-                        <input type="checkbox" name="date" id="list_date" value="1" <?= isset($optlist) && $optlist->date() ? 'checked' : '' ?>>
-                        <label for="list_date">Show date</label>
-                        </br>
-                        <input type="hidden" name="author" value="0">
-                        <input type="checkbox" name="author" id="list_author" value="1" <?= isset($optlist) && $optlist->author() ? 'checked' : '' ?>>
-                        <label for="list_author">Show author(s)</label>
-                        </br>
-                        <select name="style" id="list_style">
-                            <option value="0">list</option>
-                            <option value="1" <?= isset($optlist) && $optlist->style() == 1 ? 'selected' : '' ?>>div</option>
-                        </select>
-                        <input type="submit" value="generate">
-                    </form>
-
-                    <?php
-                        if (isset($optlist)) {
-                            echo '<code>' . $optlist->getcode() . '</code>';
-                        }
-
-                        ?>
-                </details>
-
-
-
-                <form action="/massedit" method="post">
-
-                </form>
-
 
                 <div class="scroll">
 

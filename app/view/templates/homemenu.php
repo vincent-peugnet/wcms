@@ -61,17 +61,61 @@
         </div>
     </details>
 
-    <details class="hidephone" id="actions">
-        <summary>Actions</summary>
+
+
+
+
+
+    <details class="hidephone" id="selection" <?= !empty($optlist) ? 'open' : '' ?>>
+        <summary>Selection</summary>
         <div class="submenu">
             <h2>Rendering</h2>
         <form action="<?= $this->url('homerenderall') ?>" method="post">
-            Render all pages
+            Render selected pages
             </br>       
             <input type="submit" value="renderall">
         </form>
+        <h2>Get LIST code</h2>
+        <i>Generate code to display a list of pages</i>
+        <form action="<?= $this->url('homequery') ?>" method="post">
+            <input type="hidden" name="query" value="1">
+
+            <input type="hidden" name="title" value="0">
+            <input type="checkbox" name="title" id="list_title" value="1" <?= !empty($optlist) && !$optlist->title() ? '' : 'checked' ?>>
+            <label for="list_title">Show title</label>
+            </br>
+            <input type="hidden" name="description" value="0">
+            <input type="checkbox" name="description" id="list_description" value="1" <?= !empty($optlist) && $optlist->description() ? 'checked' : '' ?>>
+            <label for="list_description">Show description</label>
+            </br>
+            <input type="hidden" name="thumbnail" value="0">
+            <input type="checkbox" name="thumbnail" id="list_thumbnail" value="1" <?= !empty($optlist) && $optlist->thumbnail() ? 'checked' : '' ?>>
+            <label for="list_thumbnail">Show thumbnail</label>
+            </br>
+            <input type="hidden" name="date" value="0">
+            <input type="checkbox" name="date" id="list_date" value="1" <?= !empty($optlist) && $optlist->date() ? 'checked' : '' ?>>
+            <label for="list_date">Show date</label>
+            </br>
+            <input type="hidden" name="author" value="0">
+            <input type="checkbox" name="author" id="list_author" value="1" <?= !empty($optlist) && $optlist->author() ? 'checked' : '' ?>>
+            <label for="list_author">Show author(s)</label>
+            </br>
+            <select name="style" id="list_style">
+                <option value="0">list</option>
+                <option value="1" <?= !empty($optlist) && $optlist->style() == 1 ? 'selected' : '' ?>>div</option>
+            </select>
+            <input type="submit" value="generate">
+        </form>
+        <?php if(!empty($optlist)) { ?>
+            <code><?= $optlist->getcode() ?></code>
+        <?php } ?>
         </div>
         </details>
+
+
+
+
+
 
     <details class="hidephone" id="bookmarks">
         <summary>Bookmarks</summary>

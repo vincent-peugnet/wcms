@@ -2,6 +2,7 @@
 
 class Optlist extends Opt
 {
+    protected $title = 1;
     protected $description = 0;
     protected $thumbnail = 0;
     protected $date = 0;
@@ -32,6 +33,11 @@ class Optlist extends Opt
     // _______________________________________ G E T _____________________________________
 
 
+    public function title()
+    {
+        return $this->title;
+    }
+
     public function description()
     {
         return $this->description;
@@ -58,8 +64,12 @@ class Optlist extends Opt
     }
 
 
-
     // _______________________________________ S E T _____________________________________
+
+    public function settitle($title)
+    {
+        $this->title = intval($title);
+    }
 
     public function setdescription($description)
     {
