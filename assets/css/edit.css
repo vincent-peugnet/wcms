@@ -241,6 +241,7 @@ a:hover {
     width: 100%;
     padding: 3px 0.5%;
     border-bottom: solid 1px dimgrey;
+    height: 25px;
 }
 
 #topbar form {
