@@ -6,6 +6,7 @@ class Optlist extends Opt
     protected $description = 0;
     protected $thumbnail = 0;
     protected $date = 0;
+    protected $time = 0;
     protected $author = 0;
     protected $style = 0;
 
@@ -53,6 +54,11 @@ class Optlist extends Opt
         return $this->date;
     }
 
+    public function time()
+    {
+        return $this->time;
+    }
+
     public function author()
     {
         return $this->author;
@@ -84,6 +90,11 @@ class Optlist extends Opt
     public function setdate($date)
     {
         $this->date = intval($date);
+    }
+
+    public function settime($time)
+    {
+        $this->time = intval($time);
     }
 
     public function setauthor($author)

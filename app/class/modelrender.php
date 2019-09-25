@@ -618,6 +618,9 @@ class Modelrender extends Modelart
 					if($optlist->date()) {
 						$content .= '<code>' . $page->date('pdate') . '</code>' . PHP_EOL;
 					}
+					if($optlist->time()) {
+						$content .= '<code>' . $page->date('ptime') . '</code>' . PHP_EOL;
+					}
 					if($optlist->author()) {
 						$content .=  $page->authors('string') . PHP_EOL;
 					}

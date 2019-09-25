@@ -128,6 +128,10 @@
             <input type="checkbox" name="date" id="list_date" value="1" <?= !empty($optlist) && $optlist->date() ? 'checked' : '' ?>>
             <label for="list_date">Show date</label>
             </br>
+            <input type="hidden" name="time" value="0">
+            <input type="checkbox" name="time" id="list_time" value="1" <?= !empty($optlist) && $optlist->time() ? 'checked' : '' ?>>
+            <label for="list_time">Show time</label>
+            </br>
             <input type="hidden" name="author" value="0">
             <input type="checkbox" name="author" id="list_author" value="1" <?= !empty($optlist) && $optlist->author() ? 'checked' : '' ?>>
             <label for="list_author">Show author(s)</label>
