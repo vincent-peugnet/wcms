@@ -247,7 +247,9 @@ class Modelrender extends Modelart
 			$templatejsart = $this->art->templatejavascript();
 			$head .= '<script src="' . Model::renderpath() . $templatejsart . '.js" async/></script>' . PHP_EOL;
 		}
-		$head .= '<script src="' . Model::renderpath() . $this->art->id() . '.js" async/></script>' . PHP_EOL;
+		if (!empty($this->art->javascript())) {
+			$head .= '<script src="' . Model::renderpath() . $this->art->id() . '.js" async/></script>' . PHP_EOL;
+		}
 
 		if (!empty(Config::analytics())) {
 

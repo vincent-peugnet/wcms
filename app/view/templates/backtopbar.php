@@ -2,7 +2,7 @@
 
 <span id="search">
 <form action="<?= $this->url('search') ?>" method="post">
-<input type="text" list="searchdatalist" name="id" id="search" placeholder="page id" required <?= $tab !== 'edit' ? 'autofocus' : '' ?>>
+<input type="text" list="searchdatalist" name="id" id="search" placeholder="page id" required <?= $tab !== 'edit' && !$user->isvisitor() ? 'autofocus' : '' ?>>
 <input type="submit" name="action" value="read">
 <?= $user->iseditor() ? '<input type="submit" name="action" value="edit">' : '' ?>
 
@@ -49,7 +49,7 @@ if($user->isadmin()) {
 
 
 <form action="<?= $this->url('log') ?>" method="post" id="connect">
-<input type="password" name="pass" id="loginpass" placeholder="password">
+<input type="password" name="pass" id="loginpass" placeholder="password" autofocus>
 <input type="hidden" name="route" value="home">
 <input type="submit" name="log" value="login">
 </form>
@@ -64,7 +64,12 @@ if($user->isadmin()) {
 
 
 <form action="<?= $this->url('log') ?>" method="post" id="connect">
-<input type="submit" name="log" value="logout">
+<input type="submit" name="log" value="logout" >
+<?php if($tab === 'edit') { ?>
+    <input type="hidden" name="route" value="artread/">
+    <input type="hidden" name="id" value="<?= $pageid ?>">
+<?php } ?>
+
 </form>
 
 

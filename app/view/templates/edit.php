@@ -10,7 +10,7 @@
 <body>
 <main class="editor">
 
-    <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'edit', 'pagelist' => $pagelist]) ?>
+    <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'edit', 'pagelist' => $pagelist, 'pageid' => $art->id()]) ?>
 
 
     <?php $this->insert('edittopbar', ['art' => $art, 'user' => $user]) ?>
