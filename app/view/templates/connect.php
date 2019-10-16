@@ -11,16 +11,14 @@
 
 <?php if($user->isvisitor()) { ?>
 
-<?= $route === 'artedit' ? '<p>Your edits have been temporary saved. You need to connect and update to store it completly</p>' : '' ?>
-
 <form action="<?= $this->url('log') ?>" method="post">
 <input type="hidden" name="route" value="<?= $route ?>">
 <?php
-if(in_array($route, ['artedit', 'artread', 'artread/'])) {
+if(in_array($route, ['artedit', 'artread', 'artread/', 'artadd'])) {
     echo '<input type="hidden" name="id" value="'. $id .'">';
 }
 ?>
-<input type="password" name="pass" id="loginpass" placeholder="password">
+<input type="password" name="pass" id="loginpass" placeholder="password" autofocus>
 <input name="log" type="submit" value="login">
 </form>
 
@@ -34,5 +32,11 @@ if(in_array($route, ['artedit', 'artread', 'artread/'])) {
 
 
 <?php } ?>
+
+<?php
+if(in_array($route, ['artedit', 'artread', 'artread/', 'artadd'])) {
+    echo '<p><a href="' . $this->uart('artread/', $id) . '">back to page read view</a></p>';
+}
+?>
 
 <?php $this->stop() ?>

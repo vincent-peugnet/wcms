@@ -45,6 +45,20 @@ class Controllerart extends Controller
 
     }
 
+    /**
+     * show credentials for unconnected editors for a specific page
+     * 
+     * @param string $route direction to redirect after the connection form
+     * @return void
+     */
+    public function artconnect(string $route)
+    {
+        if($this->user->isvisitor()) {
+            $this->showtemplate('connect', ['route' => $route, 'id' => $this->art->id()]);
+            exit;
+        }
+    }
+
 
     public function canedit()
     {
@@ -149,6 +163,8 @@ class Controllerart extends Controller
     {
         $this->setart($id, 'artedit');
 
+        $this->artconnect('artedit');
+
 
         if ($this->importart() && $this->canedit()) {
             $tablist = ['main' => $this->art->main(), 'css' => $this->art->css(), 'header' => $this->art->header(), 'nav' => $this->art->nav(), 'aside' => $this->art->aside(), 'footer' => $this->art->footer(), 'body' => $this->art->body(), 'javascript' => $this->art->javascript()];
@@ -189,6 +205,9 @@ class Controllerart extends Controller
     public function add($id)
     {
         $this->setart($id, 'artadd');
+
+        $this->artconnect('artadd');
+
         if ($this->user->iseditor() && !$this->importart()) {
             $this->art->reset();
             if (!empty(Config::defaultart())) {
