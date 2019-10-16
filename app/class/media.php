@@ -12,7 +12,7 @@ class Media
 	private $length;
 
 	const IMAGE = array('jpg', 'jpeg', 'gif', 'png');
-	const SOUND = array('mp3', 'flac');
+	const SOUND = array('mp3', 'flac', 'wav', 'ogg');
 	const VIDEO = array('mp4', 'mov', 'avi', 'mkv');
 
 
@@ -77,6 +77,36 @@ class Media
 	public function getfulldir()
 	{
 		return $this->path . $this->id . '.' . $this->extension;
+	}
+
+	/**
+	 * Generate html code depending on media type
+	 * 
+	 * @return string html code
+	 */
+	public function getcode() : string
+	{
+		switch ($this->type) {
+			case 'image':
+				$code = '![' . $this->id . '](' . $this->getincludepath() . ')';
+				break;
+
+			case 'other':
+				$code = '[' . $this->id . '](' . $this->getincludepath() . ')';
+				break;
+			
+			case 'sound':
+				$code = '&lt;audio controls src="' . $this->getincludepath() . '"&gt;&lt;/audio&gt;';
+				break;
+			
+			case 'video':
+				$code = '&lt;video controls src="' . $this->getincludepath() . '"&gt;&lt;video/&gt;';
+				break;
+			
+		}
+			
+		return $code;
+
 	}
 
 
@@ -199,5 +229,3 @@ class Media
 
 
 }
-
-?>

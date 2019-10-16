@@ -204,30 +204,6 @@
 
                     <i>(This modifications need re-rendering)</i>
 
-                    <h4>Edit quick menu</h4>
-
-                    <div class="checkbox">
-                        <input type="hidden" name="showeditmenu" value="false">
-                        <input type="checkbox" name="showeditmenu" id="showeditmenu" value="true" <?= Config::showeditmenu() === true ? 'checked' : '' ?>>
-                        <label for="showeditmenu">Show editor menu in top right corner of pages</label>
-                    </div>
-
-                    <?php
-                    if (Config::showeditmenu() === true) {
-                        ?>
-                        <label for="editsymbol">Symbol</label>
-                        <select name="editsymbol" id="editsymbol">
-                            <?php
-                            foreach (Model::EDIT_SYMBOLS as $symbol) {
-                                ?>
-                                <option value="<?= $symbol ?>" <?= Config::editsymbol() === $symbol ? 'selected' : '' ?>><?= $symbol ?></option>
-                            <?php
-                            }
-                            ?>
-                        </select>
-                    <?php
-                    }
-                    ?>
 
                 </article>
 

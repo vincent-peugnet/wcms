@@ -22,8 +22,6 @@ abstract class Config
 	protected static $defaultbody = '%HEADER%'. PHP_EOL .PHP_EOL . '%NAV%'. PHP_EOL .PHP_EOL . '%ASIDE%'. PHP_EOL .PHP_EOL . '%MAIN%'. PHP_EOL .PHP_EOL . '%FOOTER%';
 	protected static $defaultart = '';
 	protected static $defaultfavicon = '';
-	protected static $showeditmenu = true;
-	protected static $editsymbol = 'pen';	
 	protected static $analytics = '';	
 	protected static $externallinkblank = true;
 	protected static $internallinkblank = false;
@@ -204,16 +202,6 @@ abstract class Config
 		return self::$defaultfavicon;
 	}
 
-	public static function showeditmenu()
-	{
-		return self::$showeditmenu;
-	}
-
-	public static function editsymbol()
-	{
-		return self::$editsymbol;
-	}
-
 	public static function analytics()
 	{
 		return self::$analytics;
@@ -372,25 +360,6 @@ abstract class Config
 	{
 		if(is_string($defaultart)) {
 			self::$defaultart = idclean($defaultart);
-		}
-	}
-
-	public static function setshoweditmenu($showeditmenu)
-	{
-		if(is_bool($showeditmenu)) {
-			self::$showeditmenu = $showeditmenu;
-		} elseif (is_string($showeditmenu)) {
-			if($showeditmenu === 'on') {
-				self::$showeditmenu = true;
-			}
-		}
-	}
-
-	public static function seteditsymbol($editsymbol)
-	{
-		if(is_string($editsymbol))
-		{
-			self::$editsymbol = $editsymbol;
 		}
 	}
 

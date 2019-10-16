@@ -141,21 +141,7 @@ foreach ($medialist as $media) {
     <td><?= $media->width() ?></td>
     <td><?= $media->height() ?></td>
     <td><?= $media->length() ?></td>
-    <td class="code"><code>
-    <?php
-        if($media->type() == 'image') {
-            ?>
-            ![<?= $media->id() ?>](<?= $media->getincludepath() ?>)
-            <?php
-        } elseif ($media->type() == 'other') {
-            ?>
-            [<?= $media->id() ?>](<?= $media->getincludepath() ?>)
-            <?php
-        } else {
-            echo $media->getincludepath();
-        }
-        ?>
-    </code></td>
+    <td class="code"><code><?= $media->getcode() ?></code></td>
     </tr>
     <?php
 

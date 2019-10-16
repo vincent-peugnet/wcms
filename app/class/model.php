@@ -21,7 +21,6 @@ abstract class Model
 	const COLUMNS = ['id', 'title', 'description', 'tag', 'date', 'datemodif', 'datecreation', 'secure', 'linkfrom', 'linkto', 'visitcount', 'affcount', 'editcount'];
 
 	const TEXT_ELEMENTS = ['header', 'nav', 'main', 'aside', 'footer'];
-	const EDIT_SYMBOLS = ['pen', 'tool', 'none'];
 
 	const MAX_ID_LENGTH = 64;
 	const PASSWORD_HASH = true;

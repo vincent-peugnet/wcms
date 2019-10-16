@@ -15,17 +15,7 @@ $this->stop();
 <body>
 
 
-
-    <?php
-    if ($readernav) {
-        $this->insert('navart', ['user' => $user, 'art' => $art, 'artexist' => $artexist, 'canedit' => $canedit]);
-    }
-
-
-
-    echo $body;
-
-    ?>
+<?= $body ?>
 
 
 </body>
