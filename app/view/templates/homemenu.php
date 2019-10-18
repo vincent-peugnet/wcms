@@ -38,7 +38,7 @@
         <div class="submenu">
             <i>Edit selected pages</i>
             <h2>Actions</h2>
-            <form action="<?= $this->url('homerenderall') ?>" method="post">
+            <form action="" method="post">
                 <input type="submit" value="render">
                 <input type="submit" value="download">
                 <input type="submit" value="delete">

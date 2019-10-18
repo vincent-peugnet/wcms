@@ -17,7 +17,7 @@ class Routes
             ['GET', '/', 'Controllerhome#desktop', 'home'],
             ['POST', '/', 'Controllerhome#desktop', 'homequery'],
             ['POST', '/columns', 'Controllerhome#columns', 'homecolumns'],
-            ['POST', '/renderall', 'Controllerhome#renderall', 'homerenderall'],
+            ['GET', '//renderall', 'Controllerhome#renderall', 'homerenderall'],
             ['POST', '/bookmark', 'Controllerhome#bookmark', 'homebookmark'],
             ['POST', '/upload', 'Controllerart#upload', 'artupload'],
             ['POST', '/!co', 'Controllerconnect#log', 'log'],
