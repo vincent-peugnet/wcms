@@ -21,8 +21,6 @@ class Art2
 	protected $footer;
 	protected $externalcss;
 	protected $customhead;
-	protected $renderhead;
-	protected $renderbody;
 	protected $secure;
 	protected $interface;
 	protected $linkfrom;
@@ -92,8 +90,6 @@ class Art2
 		$this->setfooter('');
 		$this->setexternalcss([]);
 		$this->setcustomhead('');
-		$this->setrenderhead('');
-		$this->setrenderbody('');
 		$this->setsecure(Config::defaultprivacy());
 		$this->setinterface('main');
 		$this->setlinkfrom([]);
@@ -306,20 +302,6 @@ class Art2
 	public function footer($type = "string")
 	{
 		return $this->footer;
-	}
-
-	public function renderhead($type = 'string')
-	{
-		if ($type == 'string') {
-			return $this->renderhead;
-		}
-	}
-
-	public function renderbody($type = 'string')
-	{
-		if ($type == 'string') {
-			return $this->renderbody;
-		}
 	}
 
 	public function secure($type = 'int')
@@ -629,16 +611,6 @@ class Art2
 		if (strlen($footer) < self::LENTEXT and is_string($footer)) {
 			$this->footer = $footer;
 		}
-	}
-
-	public function setrenderhead(string $render)
-	{
-		$this->renderhead = $render;
-	}
-
-	public function setrenderbody(string $render)
-	{
-		$this->renderbody = $render;
 	}
 
 	public function setsecure($secure)

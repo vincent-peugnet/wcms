@@ -6,32 +6,6 @@ class Modelmedia extends Model
 	const MEDIA_SORTBY = ['id', 'size', 'type'];
 
 
-	public function basedircheck()
-	{
-		if (!is_dir(Model::MEDIA_DIR)) {
-			return mkdir(Model::MEDIA_DIR);
-		} else {
-			return true;
-		}
-	}
-
-	public function favicondircheck()
-	{
-		if (!is_dir(Model::FAVICON_DIR)) {
-			return mkdir(Model::FAVICON_DIR);
-		} else {
-			return true;
-		}
-	}
-
-	public function thumbnaildircheck()
-	{
-		if (!is_dir(Model::THUMBNAIL_DIR)) {
-			return mkdir(Model::THUMBNAIL_DIR);
-		} else {
-			return true;
-		}
-	}
 
 	/**
 	 * Get the Media Object

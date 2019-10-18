@@ -4,6 +4,7 @@ assets/global/*
 database/*
 fonts/*
 media/*
+render/
 vendor/*
 config.json
 error_log

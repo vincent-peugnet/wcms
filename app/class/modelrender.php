@@ -36,23 +36,35 @@ class Modelrender extends Modelart
 		return $this->router->generate('artread/', ['art' => $id]);
 	}
 
-	public function renderhead(Art2 $art)
+
+	/**
+	 * Main function
+	 * 
+	 * @param Art2 $art page to render
+	 */
+	public function render(Art2 $art)
 	{
 		$this->art = $art;
+
+		$this->write($this->gethmtl());
+	}
+
+	/**
+	 * Combine body and head to create html file
+	 * 
+	 * @return string html string
+	 */
+	public function gethmtl()
+	{
 
 		$head = $this->gethead();
-		$this->write();
-		return $head;
-	}
-
-	public function renderbody(Art2 $art)
-	{
-		$this->art = $art;
 		$body = $this->getbody($this->readbody());
 		$parsebody = $this->parser($body);
-		return $parsebody;
-	}
 
+		$html = '<!DOCTYPE html>' . PHP_EOL . '<html>' . PHP_EOL . '<head>' . PHP_EOL . $head . PHP_EOL . '</head>' . PHP_EOL . $parsebody . PHP_EOL . '</html>';
+	
+		return $html;
+	}
 
 
 	public function readbody()
@@ -166,8 +178,12 @@ class Modelrender extends Modelart
 	}
 
 
-	public function write()
+	/**
+	 * Write css javascript and html as files in the assets folder
+	 */
+	public function write(string $html)
 	{
+		file_put_contents(Model::HTML_RENDER_DIR . $this->art->id() . '.html', $html);
 		file_put_contents(Model::RENDER_DIR . $this->art->id() . '.css', $this->art->css());
 		//file_put_contents(Model::RENDER_DIR . $this->art->id() . '.quick.css', $this->art->quickcss());
 		file_put_contents(Model::RENDER_DIR . $this->art->id() . '.js', $this->art->javascript());
@@ -226,8 +242,11 @@ class Modelrender extends Modelart
 
 		if (!empty($this->art->templatecss() && in_array('externalcss', $this->art->templateoptions()))) {
 			$templatecss = $this->get($this->art->templatecss());
-			foreach ($templatecss->externalcss() as $externalcss) {
-				$head .= '<link href="' . $externalcss . '" rel="stylesheet" />' . PHP_EOL;
+			if($templatecss !== false) {
+
+				foreach ($templatecss->externalcss() as $externalcss) {
+					$head .= '<link href="' . $externalcss . '" rel="stylesheet" />' . PHP_EOL;
+				}
 			}
 		}
 

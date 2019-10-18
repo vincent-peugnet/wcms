@@ -12,6 +12,7 @@ abstract class Model
 	const THUMBNAIL_DIR = 'media' . DIRECTORY_SEPARATOR . 'thumbnail' . DIRECTORY_SEPARATOR;
 	const TEMPLATES_DIR = '.'. DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR;
 	const RENDER_DIR = 'assets'. DIRECTORY_SEPARATOR . 'render' . DIRECTORY_SEPARATOR;
+	const HTML_RENDER_DIR = 'render' . DIRECTORY_SEPARATOR;
 	const GLOBAL_DIR = 'assets'. DIRECTORY_SEPARATOR . 'global' . DIRECTORY_SEPARATOR;
 	const DATABASE_DIR = '.' . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR;
 	
@@ -90,6 +91,22 @@ abstract class Model
 	public static function iconpath()
 	{
 		return self::dirtopath(Model::ICONS_DIR);
+	}
+
+	/**
+	 * Check if dir exist. If not, create it
+	 * 
+	 * @param string $dir Directory to check
+	 * 
+	 * @return bool return true if the dir already exist or was created succesfullt. Otherwise return false
+	 */
+	public function dircheck(string $dir) : bool
+	{
+		if (!is_dir($dir)) {
+			return mkdir($dir);
+		} else {
+			return true;
+		}
 	}
 
 }

@@ -19,13 +19,13 @@ class Controllermedia extends Controller
     {
         if ($this->user->iseditor()) {
 
-            if (!$this->mediamanager->basedircheck()) {
+            if (!$this->mediamanager->dircheck(Model::MEDIA_DIR)) {
                 throw new Exception("Media error : Cant create /media folder");
             }
-            if (!$this->mediamanager->favicondircheck()) {
+            if (!$this->mediamanager->dircheck(Model::FAVICON_DIR)) {
                 throw new Exception("Media error : Cant create /media/favicon folder");
             }
-            if (!$this->mediamanager->thumbnaildircheck()) {
+            if (!$this->mediamanager->dircheck(Model::THUMBNAIL_DIR)) {
                 throw new Exception("Media error : Cant create /media/thumbnail folder");
             }
 

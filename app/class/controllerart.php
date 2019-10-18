@@ -99,10 +99,7 @@ class Controllerart extends Controller
 
         $renderengine = new Modelrender($this->router);
 
-        $body = $renderengine->renderbody($art);
-        $head = $renderengine->renderhead($art);
-        $art->setrenderbody($body);
-        $art->setrenderhead($head);
+        $renderengine->render($art);
         $art->setdaterender($now);
         $art->setlinkfrom($renderengine->linkfrom());
         $art->setlinkto($renderengine->linkto());
@@ -140,7 +137,6 @@ class Controllerart extends Controller
                 }
                 $this->art = $this->renderart($this->art);
             }
-            $page = ['head' => $this->art->renderhead(), 'body' => $this->art->renderbody()];
             if ($canread) {
                 $this->art->addaffcount();
                 if ($this->user->level() < 2) {
@@ -149,12 +145,17 @@ class Controllerart extends Controller
             }
             $this->artmanager->update($this->art);
         }
-        $data = array_merge($page, ['art' => $this->art, 'artexist' => $artexist , 'readernav' => Config::showeditmenu(), 'canedit' => $this->canedit()]);
 
         if($artexist && $canread) {
-            $this->showtemplate('read', $data);
+            $filedir = Model::HTML_RENDER_DIR . $id . '.html';
+            if(file_exists($filedir)) {
+                $html = file_get_contents($filedir);
+                echo $html;
+            } else {
+                echo 'Please render this page';
+            }
         } else {
-            $this->showtemplate('alert', $data);
+            $this->showtemplate('alert', ['art' => $this->art, 'artexist' => $artexist, 'canedit' => $this->canedit()]);
         }
 
     }

@@ -11,6 +11,9 @@ class Modelart extends Modeldb
 	{
 		parent::__construct();
 		$this->storeinit(Config::arttable());
+		if(!$this->dircheck(Model::HTML_RENDER_DIR)) {
+			throw new Exception("Media error : Cant create /rendernew folder");
+		}
 	}
 
 	/**
@@ -50,7 +53,13 @@ class Modelart extends Modeldb
 		$this->repo->store($artdata);
 	}
 
-
+	/**
+	 * Obtain a page object from the database
+	 * 
+	 * @param Art2|string $id could be an Art2 object or a id string
+	 * 
+	 * @return Art2|false The Art2 object or false if it does not exist.
+	 */
 	public function get($id)
 	{
 		if ($id instanceof Art2) {
@@ -119,6 +128,9 @@ class Modelart extends Modeldb
 			if (file_exists(Model::RENDER_DIR . $artid . $file)) {
 				unlink(Model::RENDER_DIR . $artid . $file);
 			}
+		}
+		if(file_exists(Model::HTML_RENDER_DIR . $artid . '.html')) {
+			unlink(Model::HTML_RENDER_DIR . $artid . '.html');
 		}
 	}
 
