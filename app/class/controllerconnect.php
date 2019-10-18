@@ -19,13 +19,13 @@ class Controllerconnect extends Controller
 
     public function connect()
     {
-        if(isset($_SESSION['artupdate'])) {
-            $artupdate['route'] = 'artedit';
-            $artupdate['id'] = $_SESSION['artupdate']['id'];
+        if(isset($_SESSION['pageupdate'])) {
+            $pageupdate['route'] = 'pageedit';
+            $pageupdate['id'] = $_SESSION['pageupdate']['id'];
         } else {
-            $artupdate = ['route' => 'home'];
+            $pageupdate = ['route' => 'home'];
         }
-        $this->showtemplate('connect', $artupdate);
+        $this->showtemplate('connect', $pageupdate);
     }
 
 
@@ -47,7 +47,7 @@ class Controllerconnect extends Controller
             }
         }
         if ($id !== null) {
-            $this->routedirect($route, ['art' => $id]);
+            $this->routedirect($route, ['page' => $id]);
         } else {
             $this->routedirect($route);
         }
@@ -58,7 +58,7 @@ class Controllerconnect extends Controller
         $this->user = $this->usermanager->logout();
         $this->usermanager->writesession($this->user);
         if ($id !== null && $route !== 'home') {
-            $this->routedirect($route, ['art' => $id]);
+            $this->routedirect($route, ['page' => $id]);
         } else {
             $this->routedirect($route);
         }

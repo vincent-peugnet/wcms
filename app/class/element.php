@@ -19,10 +19,10 @@ class Element
 
 
 
-	public function __construct($datas = [], $artid)
+	public function __construct($datas = [], $pageid)
 	{
         $this->hydrate($datas);
-        $this->analyse($artid);
+        $this->analyse($pageid);
 	}
 
 	public function hydrate($datas)
@@ -36,18 +36,18 @@ class Element
 		}
     }
 
-    private function analyse(string $artid)
+    private function analyse(string $pageid)
     {
         if(!empty($this->options)) {
             
             // Replace "!" by the real page name
-            $this->options = str_replace('!', $artid, $this->options);
+            $this->options = str_replace('!', $pageid, $this->options);
 
             preg_match('~(:([a-z0-9-_+!]+))?(\/([a-z0-9-,_+=]+))?~', $this->options, $matches);
             if(isset($matches[2]) && !empty($matches[2])) {
                 $this->sources = explode('+', $matches[2]);
             } else {
-                $this->sources[] = $artid;
+                $this->sources[] = $pageid;
             }
             if(isset($matches[4])) {
                 $this->params = explode(',', $matches[4]);
@@ -56,7 +56,7 @@ class Element
             $this->readoptions();
 
         } else {
-            $this->sources[] = $artid;
+            $this->sources[] = $pageid;
         }
     }
     

@@ -1,6 +1,6 @@
 <?php
 
-class Art2
+class Page
 {
 	protected $id;
 	protected $title;
@@ -116,7 +116,7 @@ class Art2
 		foreach (get_class_vars(__class__) as $var => $default) {
 			$classvarlist[] = $var;
 		}
-		return ['artvarlist' => $classvarlist];
+		return ['pagevarlist' => $classvarlist];
 	}
 
 	public function dry()

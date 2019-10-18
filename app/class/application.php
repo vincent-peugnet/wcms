@@ -40,12 +40,12 @@ class Application
 
         } else {
             if(Config::readconfig()) {
-                if(!Config::checkbasepath() || empty(Config::arttable()) || !is_dir(Model::RENDER_DIR) || !Config::checkdomain()) {
+                if(!Config::checkbasepath() || empty(Config::pagetable()) || !is_dir(Model::RENDER_DIR) || !Config::checkdomain()) {
                     echo '<ul>';
                     if(!Config::checkbasepath()) {
                         echo '<li>Wrong path</li>';
                     }
-                    if(empty(Config::arttable())) {
+                    if(empty(Config::pagetable())) {
                         echo '<li>Unset table name</li>';
                     }
                     if(!Config::checkdomain()) {
@@ -91,9 +91,9 @@ class Application
         </div>
         <div>
         <h2>
-        <label for="arttable">Name of your database table</label>
+        <label for="pagetable">Name of your database table</label>
         </h2>
-        <input type="text" name="configinit[arttable]"  value="<?= Config::arttable() ?>" id="arttable">
+        <input type="text" name="configinit[pagetable]"  value="<?= Config::pagetable() ?>" id="pagetable">
         <p><i>Set the name of the first folder that is going to store all your work</i></p>
         </div>
         <input type="submit" value="set">

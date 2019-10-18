@@ -11,8 +11,8 @@ class Controller
     /** @var Modeluser */
     protected $usermanager;
 
-    /** @var Modelart */
-    protected $artmanager;
+    /** @var Modelpage */
+    protected $pagemanager;
 
     protected $plates;
     
@@ -22,7 +22,7 @@ class Controller
 	public function __construct($router) {
         $this->setuser();
         $this->router = $router;
-        $this->artmanager = new Modelart();
+        $this->pagemanager = new Modelpage();
         $this->initplates();
         $this->now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 	}
@@ -40,8 +40,8 @@ class Controller
         $this->plates->registerFunction('url', function (string $string, array $vars = []) use ($router) {
             return $router->generate($string, $vars);
         });
-        $this->plates->registerFunction('uart', function (string $string, string $id) use ($router) {
-            return $router->generate($string, ['art' => $id]);
+        $this->plates->registerFunction('upage', function (string $string, string $id) use ($router) {
+            return $router->generate($string, ['page' => $id]);
         });
     }
 
@@ -56,7 +56,7 @@ class Controller
         $commonsparams = [];
         $commonsparams['router'] = $this->router;
         $commonsparams['user'] = $this->user;
-        $commonsparams['pagelist'] = $this->artmanager->list();
+        $commonsparams['pagelist'] = $this->pagemanager->list();
         $commonsparams['css'] = Model::csspath();
         return $commonsparams;
     }

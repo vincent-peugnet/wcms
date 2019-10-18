@@ -28,7 +28,7 @@ class Route
     {
         $array = [];
         if (!empty($this->id)) {
-            $array[] = 'art';
+            $array[] = 'page';
         }
         if (!empty($this->aff)) {
             $array[] = 'aff='.$this->aff;

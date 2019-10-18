@@ -19,7 +19,7 @@ class Routes
             ['POST', '/columns', 'Controllerhome#columns', 'homecolumns'],
             ['GET', '//renderall', 'Controllerhome#renderall', 'homerenderall'],
             ['POST', '/bookmark', 'Controllerhome#bookmark', 'homebookmark'],
-            ['POST', '/upload', 'Controllerart#upload', 'artupload'],
+            ['POST', '/upload', 'Controllerpage#upload', 'pageupload'],
             ['POST', '/!co', 'Controllerconnect#log', 'log'],
             ['GET', '/!co', 'Controllerconnect#connect', 'connect'],
             ['POST', '/!search', 'Controllerhome#search', 'search'],
@@ -41,19 +41,19 @@ class Routes
             ['GET', '/!timeline', 'Controllertimeline#desktop', 'timeline'],
             ['POST', '/!timeline/add', 'Controllertimeline#add', 'timelineadd'],
             ['POST', '/!timeline/clap', 'Controllertimeline#clap', 'timelineclap'],
-            ['GET', '/[cid:art]/', 'Controllerart#read', 'artread/'],
-            ['GET', '/[cid:art]', 'Controllerart#read', 'artread'],
-            ['GET', '/[cid:art]/add', 'Controllerart#add', 'artadd'],
-            ['GET', '/[cid:art]/edit', 'Controllerart#edit', 'artedit'],
-            ['GET', '/[cid:art]/render', 'Controllerart#render', 'artrender'],
-            ['GET', '/[cid:art]/log', 'Controllerart#log', 'artlog'],
-            ['GET', '/[cid:art]/download', 'Controllerart#download', 'artdownload'],
-            ['POST', '/[cid:art]/edit', 'Controllerart#update', 'artupdate'],
-            ['POST', '/[cid:art]/editby', 'Controllerart#editby', 'arteditby'],
-            ['POST', '/[cid:art]/removeeditby', 'Controllerart#removeeditby', 'artremoveeditby'],
-            ['GET', '/[cid:art]/delete', 'Controllerart#confirmdelete', 'artconfirmdelete'],
-            ['POST', '/[cid:art]/delete', 'Controllerart#delete', 'artdelete'],
-            ['GET', '/[cid:art]/[*]', 'Controllerart#artdirect', 'artread/etoile'],
+            ['GET', '/[cid:page]/', 'Controllerpage#read', 'pageread/'],
+            ['GET', '/[cid:page]', 'Controllerpage#read', 'pageread'],
+            ['GET', '/[cid:page]/add', 'Controllerpage#add', 'pageadd'],
+            ['GET', '/[cid:page]/edit', 'Controllerpage#edit', 'pageedit'],
+            ['GET', '/[cid:page]/render', 'Controllerpage#render', 'pagerender'],
+            ['GET', '/[cid:page]/log', 'Controllerpage#log', 'pagelog'],
+            ['GET', '/[cid:page]/download', 'Controllerpage#download', 'pagedownload'],
+            ['POST', '/[cid:page]/edit', 'Controllerpage#update', 'pageupdate'],
+            ['POST', '/[cid:page]/editby', 'Controllerpage#editby', 'pageeditby'],
+            ['POST', '/[cid:page]/removeeditby', 'Controllerpage#removeeditby', 'pageremoveeditby'],
+            ['GET', '/[cid:page]/delete', 'Controllerpage#confirmdelete', 'pageconfirmdelete'],
+            ['POST', '/[cid:page]/delete', 'Controllerpage#delete', 'pagedelete'],
+            ['GET', '/[cid:page]/[*]', 'Controllerpage#pagedirect', 'pageread/etoile'],
         ]);
 
         $match = $router->match();
@@ -70,7 +70,7 @@ class Routes
         else {
             if(!empty(Config::route404())) {
                 $controller = new Controller($router);
-                $controller->routedirect('artread/', ['art' => Config::route404()]);
+                $controller->routedirect('pageread/', ['page' => Config::route404()]);
             } else {
                 header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
             }

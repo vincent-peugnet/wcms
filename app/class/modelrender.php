@@ -1,11 +1,11 @@
 <?php
 
-class Modelrender extends Modelart
+class Modelrender extends Modelpage
 {
 	protected $router;
-	/** @var art2 */
-	protected $art;
-	protected $artlist;
+	/** @var page2 */
+	protected $page;
+	protected $pagelist;
 	protected $linkfrom = [];
 	protected $sum = [];
 	protected $internallinkblank = '';
@@ -20,7 +20,7 @@ class Modelrender extends Modelart
 		parent::__construct();
 
 		$this->router = $router;
-		$this->artlist = $this->getlister();
+		$this->pagelist = $this->getlister();
 
 		if(Config::internallinkblank()) {
 			$this->internallinkblank = ' target="_blank" ';
@@ -31,20 +31,20 @@ class Modelrender extends Modelart
 		}
 	}
 
-	public function uart($id)
+	public function upage($id)
 	{
-		return $this->router->generate('artread/', ['art' => $id]);
+		return $this->router->generate('pageread/', ['page' => $id]);
 	}
 
 
 	/**
 	 * Main function
 	 * 
-	 * @param Art2 $art page to render
+	 * @param Page $page page to render
 	 */
-	public function render(Art2 $art)
+	public function render(Page $page)
 	{
-		$this->art = $art;
+		$this->page = $page;
 
 		$this->write($this->gethmtl());
 	}
@@ -69,17 +69,17 @@ class Modelrender extends Modelart
 
 	public function readbody()
 	{
-		if (!empty($this->art->templatebody())) {
-			$templateid = $this->art->templatebody();
-			$templateart = $this->get($templateid);
-			if($templateart !== false) {
-				$body = $templateart->body();
+		if (!empty($this->page->templatebody())) {
+			$templateid = $this->page->templatebody();
+			$templatepage = $this->get($templateid);
+			if($templatepage !== false) {
+				$body = $templatepage->body();
 			} else {
-				$body = $this->art->body();
-				$this->art->settemplatebody('');
+				$body = $this->page->body();
+				$this->page->settemplatebody('');
 			}
 		} else {
-			$body = $this->art->body();
+			$body = $this->page->body();
 		}
 		$body = $this->article($body);
 		$body = $this->automedialist($body);
@@ -115,7 +115,7 @@ class Modelrender extends Modelart
 		// First, analyse the synthax and call the corresponding methods
 		if(isset($matches)) {
 			foreach ($matches as $key => $match) {
-				$element = new Element($match, $this->art->id());
+				$element = new Element($match, $this->page->id());
 				$element->setcontent($this->getelementcontent($element));
 				$element->setcontent($this->elementparser($element));
 				$element->addtags();
@@ -136,8 +136,8 @@ class Modelrender extends Modelart
 		$subseparator = PHP_EOL . PHP_EOL;
 		foreach($element->sources() as $source)
 		{
-			if($source !== $this->art->id()) {
-				$subcontent = $this->getartelement($source, $element->type());
+			if($source !== $this->page->id()) {
+				$subcontent = $this->getpageelement($source, $element->type());
 				if($subcontent !== false) {
 					if(empty($subcontent && self::RENDER_VERBOSE > 0)) {
 						$subcontent = PHP_EOL . '<!-- The ' . strtoupper($element->type()) . ' from page "' . $source . '" is currently empty ! -->' . PHP_EOL;
@@ -149,7 +149,7 @@ class Modelrender extends Modelart
 
 			} else {
 				$type = $element->type();
-				$subcontent = $this->art->$type();
+				$subcontent = $this->page->$type();
 			}
 		$content .= $subseparator . $subcontent;
 		}
@@ -183,27 +183,27 @@ class Modelrender extends Modelart
 	 */
 	public function write(string $html)
 	{
-		file_put_contents(Model::HTML_RENDER_DIR . $this->art->id() . '.html', $html);
-		file_put_contents(Model::RENDER_DIR . $this->art->id() . '.css', $this->art->css());
-		//file_put_contents(Model::RENDER_DIR . $this->art->id() . '.quick.css', $this->art->quickcss());
-		file_put_contents(Model::RENDER_DIR . $this->art->id() . '.js', $this->art->javascript());
+		file_put_contents(Model::HTML_RENDER_DIR . $this->page->id() . '.html', $html);
+		file_put_contents(Model::RENDER_DIR . $this->page->id() . '.css', $this->page->css());
+		//file_put_contents(Model::RENDER_DIR . $this->page->id() . '.quick.css', $this->page->quickcss());
+		file_put_contents(Model::RENDER_DIR . $this->page->id() . '.js', $this->page->javascript());
 	}
 
 
 
 	public function writetemplates()
 	{
-		if (array_key_exists('css', $this->art->template('array'))) {
-			$tempaltecssart = $this->get($this->art->template('array')['css']);
-			file_put_contents(Model::RENDER_DIR . $tempaltecssart->id() . '.css', $tempaltecssart->css());
+		if (array_key_exists('css', $this->page->template('array'))) {
+			$tempaltecsspage = $this->get($this->page->template('array')['css']);
+			file_put_contents(Model::RENDER_DIR . $tempaltecsspage->id() . '.css', $tempaltecsspage->css());
 		}
-		if (array_key_exists('quickcss', $this->art->template('array'))) {
-			$tempaltequickcssart = $this->get($this->art->template('array')['quickcss']);
-			file_put_contents(Model::RENDER_DIR . $tempaltequickcssart->id() . '.quick.css', $tempaltequickcssart->quickcss());
+		if (array_key_exists('quickcss', $this->page->template('array'))) {
+			$tempaltequickcsspage = $this->get($this->page->template('array')['quickcss']);
+			file_put_contents(Model::RENDER_DIR . $tempaltequickcsspage->id() . '.quick.css', $tempaltequickcsspage->quickcss());
 		}
-		if (array_key_exists('javascript', $this->art->template('array'))) {
-			$templatejsart = $this->get($this->art->template('array')['javascript']);
-			file_put_contents(Model::RENDER_DIR . $templatejsart->id() . '.js', $templatejsart->javascript());
+		if (array_key_exists('javascript', $this->page->template('array'))) {
+			$templatejspage = $this->get($this->page->template('array')['javascript']);
+			file_put_contents(Model::RENDER_DIR . $templatejspage->id() . '.js', $templatejspage->javascript());
 		}
 	}
 
@@ -216,32 +216,32 @@ class Modelrender extends Modelart
 		$head = '';
 
 		$head .= '<meta charset="utf8" />' . PHP_EOL;
-		$head .= '<title>' . $this->art->title() . '</title>' . PHP_EOL;
-		if (!empty($this->art->favicon())) {
-			$head .= '<link rel="shortcut icon" href="' . Model::faviconpath() . $this->art->favicon() . '" type="image/x-icon">';
+		$head .= '<title>' . $this->page->title() . '</title>' . PHP_EOL;
+		if (!empty($this->page->favicon())) {
+			$head .= '<link rel="shortcut icon" href="' . Model::faviconpath() . $this->page->favicon() . '" type="image/x-icon">';
 		} elseif (!empty(Config::defaultfavicon())) {
 			$head .= '<link rel="shortcut icon" href="' . Model::faviconpath() . Config::defaultfavicon() . '" type="image/x-icon">';
 		}
-		$head .= '<meta name="description" content="' . $this->art->description() . '" />' . PHP_EOL;
+		$head .= '<meta name="description" content="' . $this->page->description() . '" />' . PHP_EOL;
 		$head .= '<meta name="viewport" content="width=device-width" />' . PHP_EOL;
 
 
-		$head .= '<meta property="og:title" content="' . $this->art->title() . '">' . PHP_EOL;
-		$head .= '<meta property="og:description" content="' . $this->art->description() . '">' . PHP_EOL;
+		$head .= '<meta property="og:title" content="' . $this->page->title() . '">' . PHP_EOL;
+		$head .= '<meta property="og:description" content="' . $this->page->description() . '">' . PHP_EOL;
 		
-		if($this->art->thumbnailexist()) {
-			$head .= '<meta property="og:image" content="' . Config::domain() . self::thumbnailpath() . $this->art->id() . '.jpg">' . PHP_EOL;
+		if($this->page->thumbnailexist()) {
+			$head .= '<meta property="og:image" content="' . Config::domain() . self::thumbnailpath() . $this->page->id() . '.jpg">' . PHP_EOL;
 		}
 		
-		$head .= '<meta property="og:url" content="' . Config::url() . $this->art->id() . '/">' . PHP_EOL;
+		$head .= '<meta property="og:url" content="' . Config::url() . $this->page->id() . '/">' . PHP_EOL;
 		
 
-		foreach ($this->art->externalcss() as $externalcss) {
+		foreach ($this->page->externalcss() as $externalcss) {
 			$head .= '<link href="' . $externalcss . '" rel="stylesheet" />' . PHP_EOL;
 		}
 
-		if (!empty($this->art->templatecss() && in_array('externalcss', $this->art->templateoptions()))) {
-			$templatecss = $this->get($this->art->templatecss());
+		if (!empty($this->page->templatecss() && in_array('externalcss', $this->page->templateoptions()))) {
+			$templatecss = $this->get($this->page->templatecss());
 			if($templatecss !== false) {
 
 				foreach ($templatecss->externalcss() as $externalcss) {
@@ -250,24 +250,24 @@ class Modelrender extends Modelart
 			}
 		}
 
-		$head .= PHP_EOL . $this->art->customhead() . PHP_EOL;
+		$head .= PHP_EOL . $this->page->customhead() . PHP_EOL;
 
 
 		$head .= '<link href="' . Model::globalpath() . 'fonts.css" rel="stylesheet" />' . PHP_EOL;
 		$head .= '<link href="' . Model::globalpath() . 'global.css" rel="stylesheet" />' . PHP_EOL;
 
-		if (!empty($this->art->templatecss())) {
-			$tempaltecssart = $this->art->templatecss();
-			$head .= '<link href="' . Model::renderpath() . $tempaltecssart . '.css" rel="stylesheet" />' . PHP_EOL;
+		if (!empty($this->page->templatecss())) {
+			$tempaltecsspage = $this->page->templatecss();
+			$head .= '<link href="' . Model::renderpath() . $tempaltecsspage . '.css" rel="stylesheet" />' . PHP_EOL;
 		}
-		$head .= '<link href="' . Model::renderpath() . $this->art->id() . '.css" rel="stylesheet" />' . PHP_EOL;
+		$head .= '<link href="' . Model::renderpath() . $this->page->id() . '.css" rel="stylesheet" />' . PHP_EOL;
 
-		if (!empty($this->art->templatejavascript())) {
-			$templatejsart = $this->art->templatejavascript();
-			$head .= '<script src="' . Model::renderpath() . $templatejsart . '.js" async/></script>' . PHP_EOL;
+		if (!empty($this->page->templatejavascript())) {
+			$templatejspage = $this->page->templatejavascript();
+			$head .= '<script src="' . Model::renderpath() . $templatejspage . '.js" async/></script>' . PHP_EOL;
 		}
-		if (!empty($this->art->javascript())) {
-			$head .= '<script src="' . Model::renderpath() . $this->art->id() . '.js" async/></script>' . PHP_EOL;
+		if (!empty($this->page->javascript())) {
+			$head .= '<script src="' . Model::renderpath() . $this->page->id() . '.js" async/></script>' . PHP_EOL;
 		}
 
 		if (!empty(Config::analytics())) {
@@ -308,7 +308,7 @@ class Modelrender extends Modelart
 		$text = $this->wurl($text);
 		$text = $this->wikiurl($text);
 
-		$text = $this->desctitle($text, $this->art->description(), $this->art->title());
+		$text = $this->desctitle($text, $this->page->description(), $this->page->title());
 
 
 		$text = str_replace('href="http', ' class="external" target="_blank" href="http', $text);
@@ -343,12 +343,12 @@ class Modelrender extends Modelart
 		$text = preg_replace_callback(
 			'%href="([\w-]+)\/?(#?[a-z-_]*)"%',
 			function ($matches) use ($rend, &$linkfrom) {
-				$matchart = $rend->get($matches[1]);
-				if (!$matchart) {
-					$link = 'href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal existnot"' . $this->internallinkblank;
+				$matchpage = $rend->get($matches[1]);
+				if (!$matchpage) {
+					$link = 'href="' . $rend->upage($matches[1]) . '"" title="' . Config::existnot() . '" class="internal existnot"' . $this->internallinkblank;
 				} else {
-					$linkfrom[] = $matchart->id();
-					$link =  'href="' . $rend->uart($matches[1]) . $matches[2] . '" title="' . $matchart->description() . '" class="internal exist '. $matchart->secure('string') .'"' . $this->internallinkblank;
+					$linkfrom[] = $matchpage->id();
+					$link =  'href="' . $rend->upage($matches[1]) . $matches[2] . '" title="' . $matchpage->description() . '" class="internal exist '. $matchpage->secure('string') .'"' . $this->internallinkblank;
 				}
 				return $link;
 			},
@@ -365,12 +365,12 @@ class Modelrender extends Modelart
 		$text = preg_replace_callback(
 			'%\[([\w-]+)\/?#?([a-z-_]*)\]%',
 			function ($matches) use ($rend, &$linkfrom) {
-				$matchart = $rend->get($matches[1]);
-				if (!$matchart) {
-					return '<a href="' . $rend->uart($matches[1]) . '"" title="' . Config::existnot() . '" class="internal existnot" '. $this->internallinkblank .' >' . $matches[1] . '</a>';
+				$matchpage = $rend->get($matches[1]);
+				if (!$matchpage) {
+					return '<a href="' . $rend->upage($matches[1]) . '"" title="' . Config::existnot() . '" class="internal existnot" '. $this->internallinkblank .' >' . $matches[1] . '</a>';
 				} else {
-					$linkfrom[] = $matchart->id();
-					return '<a href="' . $rend->uart($matches[1]) . $matches[2] . '" title="' . $matchart->description() . '" class="internal exist '. $matchart->secure('string') .'" '. $this->internallinkblank .' >' . $matchart->title() . '</a>';
+					$linkfrom[] = $matchpage->id();
+					return '<a href="' . $rend->upage($matches[1]) . $matches[2] . '" title="' . $matchpage->description() . '" class="internal exist '. $matchpage->secure('string') .'" '. $this->internallinkblank .' >' . $matchpage->title() . '</a>';
 				}
 			},
 			$text
@@ -499,21 +499,21 @@ class Modelrender extends Modelart
 		$taglist = $this->autotaglist($text);
 		foreach ($taglist as $tag) {
 			$li = [];
-			foreach ($this->artlist as $item) {
+			foreach ($this->pagelist as $item) {
 				if (in_array($tag, $item->tag('array'))) {
 					$li[] = $item;
 				}
 
 			}
 			$ul = '<ul class="taglist" id="' . $tag . '">' . PHP_EOL;
-			$this->artlistsort($li, 'date', -1);
+			$this->pagelistsort($li, 'date', -1);
 			foreach ($li as $item) {
-				if ($item->id() === $this->art->id()) {
+				if ($item->id() === $this->page->id()) {
 					$actual = ' actualpage';
 				} else {
 					$actual = '';
 				}
-				$ul .= '<li><a href="' . $this->router->generate('artread/', ['art' => $item->id()]) . '" title="' . $item->description() . '" class="internal' . $actual . '" '. $this->internallinkblank .'  >' . $item->title() . '</a></li>' . PHP_EOL;
+				$ul .= '<li><a href="' . $this->router->generate('pageread/', ['page' => $item->id()]) . '" title="' . $item->description() . '" class="internal' . $actual . '" '. $this->internallinkblank .'  >' . $item->title() . '</a></li>' . PHP_EOL;
 			}
 			$ul .= '</ul>' . PHP_EOL;
 
@@ -531,12 +531,12 @@ class Modelrender extends Modelart
 
 	public function date(string $text)
 	{
-		$art = $this->art;
-		$text = preg_replace_callback('~\%DATE\%~', function ($matches) use ($art) {
-			return '<time datetime=' . $art->date('string') . '>' . $art->date('dmy') . '</time>';
+		$page = $this->page;
+		$text = preg_replace_callback('~\%DATE\%~', function ($matches) use ($page) {
+			return '<time datetime=' . $page->date('string') . '>' . $page->date('dmy') . '</time>';
 		}, $text);
-		$text = preg_replace_callback('~\%TIME\%~', function ($matches) use ($art) {
-			return '<time datetime=' . $art->date('string') . '>' . $art->date('ptime') . '</time>';
+		$text = preg_replace_callback('~\%TIME\%~', function ($matches) use ($page) {
+			return '<time datetime=' . $page->date('string') . '>' . $page->date('ptime') . '</time>';
 		}, $text);
 
 		return $text;
@@ -551,7 +551,7 @@ class Modelrender extends Modelart
 	 */
 	public function thumbnail(string $text) : string
 	{
-		$img = '<img class="thumbnail" src="' . Model::thumbnailpath() . $this->art->id() . '.jpg" alt="' . $this->art->title() . '">';
+		$img = '<img class="thumbnail" src="' . Model::thumbnailpath() . $this->page->id() . '.jpg" alt="' . $this->page->title() . '">';
 		$img = PHP_EOL . $img . PHP_EOL;
 		$text = str_replace('%THUMBNAIL%', $img, $text);
 
@@ -592,7 +592,7 @@ class Modelrender extends Modelart
 	 */
 	public function authenticate(string $text)
 	{
-		$id = $this->art->id();
+		$id = $this->page->id();
 		$regex = '~\%CONNECT(\?dir=([a-zA-Z0-9-_]+))?\%~';
 		$text = preg_replace_callback($regex, function ($matches) use ($id) {
 			if(isset($matches[2])) {
@@ -600,7 +600,7 @@ class Modelrender extends Modelart
 			}
 			$form = '<form action="/!co" method="post">
 			<input type="password" name="pass" id="loginpass" placeholder="password">
-			<input type="hidden" name="route" value="artread/">
+			<input type="hidden" name="route" value="pageread/">
 			<input type="hidden" name="id" value="' . $id . '">
 			<input type="submit" name="log" value="login" id="button">
 			</form>';
@@ -625,14 +625,14 @@ class Modelrender extends Modelart
 
 		if(isset($matches)) {
 			foreach ($matches as $match) {
-				$optlist = $modelhome->Optlistinit($this->artlist);
+				$optlist = $modelhome->Optlistinit($this->pagelist);
 				$optlist->parsehydrate($match['options']);
-				$table2 = $modelhome->table2($this->artlist, $optlist);
+				$table2 = $modelhome->table2($this->pagelist, $optlist);
 
 				$content = '<ul>' . PHP_EOL ;
 				foreach ($table2 as $page ) {
 					$content .= '<li>' . PHP_EOL;
-					$content .= '<a href="' . $this->uart($page->id()) . '">' . $page->title() . '</a>' . PHP_EOL;
+					$content .= '<a href="' . $this->upage($page->id()) . '">' . $page->title() . '</a>' . PHP_EOL;
 					if($optlist->description()) {
 						$content .= '<em>' . $page->description() . '</em>' . PHP_EOL;
 					}
@@ -673,9 +673,9 @@ class Modelrender extends Modelart
 	public function linkto()
 	{
 		$linkto = [];
-		foreach ($this->artlist as $art) {
-			if (in_array($this->art->id(), $art->linkfrom())) {
-				$linkto[] = $art->id();
+		foreach ($this->pagelist as $page) {
+			if (in_array($this->page->id(), $page->linkfrom())) {
+				$linkto[] = $page->id();
 			}
 		}
 		return $linkto;

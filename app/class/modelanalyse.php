@@ -2,7 +2,7 @@
 
 
 
-class Modelanalyse extends Modelart
+class Modelanalyse extends Modelpage
 {
 
 
@@ -12,38 +12,38 @@ class Modelanalyse extends Modelart
     
     public function analyseall()
     {
-        $artlist = $this->getlister();
+        $pagelist = $this->getlister();
 
-        $artlist2 = [];
-        foreach ($artlist as $art) {
-            $art->setlinkfrom($this->analyselinkfrom($art));
-            $artlist2[] = $art;
+        $pagelist2 = [];
+        foreach ($pagelist as $page) {
+            $page->setlinkfrom($this->analyselinkfrom($page));
+            $pagelist2[] = $page;
         }
-        foreach ($artlist2 as $art) {
-            $art->setlinkto($this->analyselinkto($art->id(), $artlist));
-            $this->update($art);
+        foreach ($pagelist2 as $page) {
+            $page->setlinkto($this->analyselinkto($page->id(), $pagelist));
+            $this->update($page);
         }
     }
 
 
-    public function analyse(Art2 $art)
+    public function analyse(Page $page)
 	{        
-        $art->setlinkfrom($this->analyselinkfrom($art));
+        $page->setlinkfrom($this->analyselinkfrom($page));
 
-        $artlist = $this->getlister();
-        $art->setlinkto($this->analyselinkto($art->id(), $artlist));
+        $pagelist = $this->getlister();
+        $page->setlinkto($this->analyselinkto($page->id(), $pagelist));
 
-        return $art;
+        return $page;
 	}
 
 
 
 
-	public function analyselinkto($id, $artlist)
+	public function analyselinkto($id, $pagelist)
 	{
-        //analyse les liens vers cet article en fouillant tout les linkfrom de la bdd, génere un tableau à stocker dans l'article
+        //analyse les liens vers cet pageicle en fouillant tout les linkfrom de la bdd, génere un tableau à stocker dans l'pageicle
         $linkto = [];
-        foreach ($artlist as $link) {
+        foreach ($pagelist as $link) {
             if (in_array($id, $link->linkfrom('array')) && $id != $link->id()) {
                 $linkto[] = $link->id();
             }
@@ -51,11 +51,11 @@ class Modelanalyse extends Modelart
         return $linkto;
 	}
 
-	public function analyselinkfrom(Art2 $art)
+	public function analyselinkfrom(Page $page)
 	{
         $linkfrom = [];
         foreach (self::TEXT_ELEMENTS as $element) {
-		    preg_match_all('#\]\((\?id=|=)(\w+)\)#', $art->$element(), $out);	
+		    preg_match_all('#\]\((\?id=|=)(\w+)\)#', $page->$element(), $out);	
 			$linkfrom = array_merge($linkfrom, $out[2]);
         }
         return array_unique($linkfrom);

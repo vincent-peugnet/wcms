@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => '✏ '.$art->title(), 'css' => $css . 'edit.css', 'favicon' => $art->favicon()]) ?>
+<?php $this->layout('layout', ['title' => '✏ '.$page->title(), 'css' => $css . 'edit.css', 'favicon' => $page->favicon()]) ?>
 
 
 
@@ -10,16 +10,16 @@
 <body>
 <main class="editor">
 
-    <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'edit', 'pagelist' => $pagelist, 'pageid' => $art->id()]) ?>
+    <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'edit', 'pagelist' => $pagelist, 'pageid' => $page->id()]) ?>
 
 
-    <?php $this->insert('edittopbar', ['art' => $art, 'user' => $user]) ?>
+    <?php $this->insert('edittopbar', ['page' => $page, 'user' => $user]) ?>
 
     <div id="workspace">
 
-    <?php $this->insert('editleftbar', ['art' => $art, 'tablist' => $tablist, 'artlist' => $artlist, 'showleftpanel' => $showleftpanel, 'faviconlist' => $faviconlist]) ?>
-    <?php $this->insert('edittabs', ['tablist' => $tablist, 'opentab' => $art->interface(), 'templates' => $art->template()]) ?>
-    <?php $this->insert('editrightbar', ['art' => $art, 'artlist' => $artlist, 'showrightpanel' => $showrightpanel, 'templates' => $art->template(), 'tagartlist' => $tagartlist, 'lasteditedartlist' => $lasteditedartlist, 'editorlist' => $editorlist, 'user' => $user]) ?>
+    <?php $this->insert('editleftbar', ['page' => $page, 'tablist' => $tablist, 'pagelist' => $pagelist, 'showleftpanel' => $showleftpanel, 'faviconlist' => $faviconlist]) ?>
+    <?php $this->insert('edittabs', ['tablist' => $tablist, 'opentab' => $page->interface(), 'templates' => $page->template()]) ?>
+    <?php $this->insert('editrightbar', ['page' => $page, 'pagelist' => $pagelist, 'showrightpanel' => $showrightpanel, 'templates' => $page->template(), 'tagpagelist' => $tagpagelist, 'lasteditedpagelist' => $lasteditedpagelist, 'editorlist' => $editorlist, 'user' => $user]) ?>
 
     </div>
 
@@ -28,7 +28,7 @@
 </main>
 
 <script>
-    const artid = '<?= $art->id() ?>';
+    const pageid = '<?= $page->id() ?>';
 </script>
 <script src="<?= Model::jspath() ?>edit.js"></script>
 </body>

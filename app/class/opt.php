@@ -16,7 +16,7 @@ class Opt
 	protected $invert = 0;
 	protected $limit= 0;
 
-	protected $artvarlist;
+	protected $pagevarlist;
 
 	public function __construct(array $donnees = [])
 	{
@@ -131,7 +131,7 @@ class Opt
 	{
 		$class = get_class_vars(get_class($this));
 		$object = get_object_vars($this);
-		$class['artvarlist'] = $object['artvarlist'];
+		$class['pagevarlist'] = $object['pagevarlist'];
 		$class['taglist'] = $object['taglist'];
 		$class['authorlist'] = $object['authorlist'];
 		$query = array_diff_assoc_recursive($object, $class);
@@ -213,9 +213,9 @@ class Opt
 		return $this->invert;
 	}
 
-	public function artvarlist()
+	public function pagevarlist()
 	{
-		return $this->artvarlist;
+		return $this->pagevarlist;
 	}
 
 	public function limit()
@@ -228,7 +228,7 @@ class Opt
 
 	public function setsortby($sortby)
 	{
-		if (is_string($sortby) && in_array($sortby, $this->artvarlist)) {
+		if (is_string($sortby) && in_array($sortby, $this->pagevarlist)) {
 			$this->sortby = strtolower(strip_tags($sortby));
 		}
 	}
@@ -321,15 +321,15 @@ class Opt
 	public function setcol($col)
 	{
 		if (is_array($col)) {
-			$this->col = array_intersect($this->artvarlist(), $col);
+			$this->col = array_intersect($this->pagevarlist(), $col);
 		}
 	}
 
-	public function settaglist(array $artlist)
+	public function settaglist(array $pagelist)
 	{
 		$taglist = [];
-		foreach ($artlist as $art) {
-			foreach ($art->tag('array') as $tag) {
+		foreach ($pagelist as $page) {
+			foreach ($page->tag('array') as $tag) {
 				if (!array_key_exists($tag, $taglist)) {
 					$taglist[$tag] = 1;
 				} else {
@@ -341,11 +341,11 @@ class Opt
 		$this->taglist = $taglist;
 	}
 
-	public function setauthorlist(array $artlist)
+	public function setauthorlist(array $pagelist)
 	{
 		$authorlist = [];
-		foreach ($artlist as $art) {
-			foreach ($art->authors('array') as $author) {
+		foreach ($pagelist as $page) {
+			foreach ($page->authors('array') as $author) {
 				if (!array_key_exists($author, $authorlist)) {
 					$authorlist[$author] = 1;
 				} else {
@@ -378,8 +378,8 @@ class Opt
 	}
 
 
-	public function setartvarlist(array $artvarlist)
+	public function setpagevarlist(array $pagevarlist)
 	{
-		$this->artvarlist = $artvarlist;
+		$this->pagevarlist = $pagevarlist;
 	}
 }

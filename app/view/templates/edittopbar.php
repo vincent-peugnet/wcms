@@ -2,7 +2,7 @@
 
 
 
-    <form action="<?= $this->uart('artupdate', $art->id()) ?>" method="post" id="update" enctype="multipart/form-data">
+    <form action="<?= $this->upage('pageupdate', $page->id()) ?>" method="post" id="update" enctype="multippage/form-data">
 
     <div id="editmenu">
 
@@ -17,8 +17,8 @@
 
 
 
-    <a href="<?= $this->uart('artread/', $art->id()) ?>" target="_blank" ><img src="<?= Model::iconpath() ?>read.png" class="icon">display</a>
-    <span id="headid"><?= $art->id() ?></span>
+    <a href="<?= $this->upage('pageread/', $page->id()) ?>" target="_blank" ><img src="<?= Model::iconpath() ?>read.png" class="icon">display</a>
+    <span id="headid"><?= $page->id() ?></span>
     </span>
 
 <span id="fontsize">
@@ -28,12 +28,12 @@
 </span>
 
 <span id="download">
-        <a href="<?= $this->uart('artdownload', $art->id()) ?>"><img src="<?= Model::iconpath() ?>download.png" class="icon"><span class="text">download</span></a>
+        <a href="<?= $this->upage('pagedownload', $page->id()) ?>"><img src="<?= Model::iconpath() ?>download.png" class="icon"><span class="text">download</span></a>
 </span>
 
 
 <span id="delete">
-        <a href="<?= $this->uart('artconfirmdelete', $art->id()) ?>"><span class="symbol">✖</span><span class="text">delete</span></a>
+        <a href="<?= $this->upage('pageconfirmdelete', $page->id()) ?>"><span class="symbol">✖</span><span class="text">delete</span></a>
 </span>
 
 </div>

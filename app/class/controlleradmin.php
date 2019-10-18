@@ -9,14 +9,14 @@ class Controlleradmin extends Controller
     public function desktop()
     {
         if($this->user->isadmin()) {
-            $artlist = $this->artmanager->list();
+            $pagelist = $this->pagemanager->list();
             $this->mediamanager = new Modelmedia();
             $faviconlist = $this->mediamanager->listfavicon();
             $interfacecsslist = $this->mediamanager->listinterfacecss();
-            if(in_array(Config::defaultart(), $artlist)) {
-                $defaultartexist = true;
+            if(in_array(Config::defaultpage(), $pagelist)) {
+                $defaultpageexist = true;
             } else {
-                $defaultartexist = true;
+                $defaultpageexist = true;
             }
 
             $globalcssfile = Model::GLOBAL_DIR . 'global.css';
@@ -27,7 +27,7 @@ class Controlleradmin extends Controller
                 $globalcss = "";
             }
 
-            $admin = ['artlist' => $artlist, 'defaultartexist' => $defaultartexist, 'globalcss' => $globalcss, 'faviconlist' => $faviconlist, 'interfacecsslist' => $interfacecsslist];
+            $admin = ['pagelist' => $pagelist, 'defaultpageexist' => $defaultpageexist, 'globalcss' => $globalcss, 'faviconlist' => $faviconlist, 'interfacecsslist' => $interfacecsslist];
             $this->showtemplate('admin', $admin);
         } else {
             $this->routedirect('home');

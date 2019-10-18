@@ -1,6 +1,6 @@
 <?php
 
-class Modelhome extends Modelart
+class Modelhome extends Modelpage
 {
  	
 	public function __construct() {
@@ -10,7 +10,7 @@ class Modelhome extends Modelart
     public function optinit($table)
     {
 
-        $opt = new Opt(Art2::classvarlist());
+        $opt = new Opt(Page::classvarlist());
         $opt->setcol(['id', 'tag', 'linkfrom', 'linkto', 'description', 'title', 'datemodif', 'datecreation', 'date', 'secure', 'visitcount', 'editcount', 'affcount']);
         $opt->settaglist($table);
         $opt->setauthorlist($table);
@@ -28,7 +28,7 @@ class Modelhome extends Modelart
      */
     public function Optlistinit(array $table)
     {
-        $optlist = new Optlist(Art2::classvarlist());
+        $optlist = new Optlist(Page::classvarlist());
         $optlist->settaglist($table);
         $optlist->setauthorlist($table);
 
@@ -53,11 +53,11 @@ class Modelhome extends Modelart
         $filter = array_intersect($filtertagfilter, $filtersecure, $filterauthorfilter);
         $table2 = [];
         $table2invert = [];
-        foreach ($table as $art) {
-            if (in_array($art->id(), $filter)) {
-                $table2[] = $art;
+        foreach ($table as $page) {
+            if (in_array($page->id(), $filter)) {
+                $table2[] = $page;
             } else {
-                $table2invert[] = $art;
+                $table2invert[] = $page;
             }
 
 
@@ -67,7 +67,7 @@ class Modelhome extends Modelart
             $table2 = $table2invert;
         }
 
-        $this->artlistsort($table2, $opt->sortby(), $opt->order());
+        $this->pagelistsort($table2, $opt->sortby(), $opt->order());
 
         if($opt->limit() !== 0) {
             $table2 = array_slice($table2, 0, $opt->limit());

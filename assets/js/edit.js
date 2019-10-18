@@ -1,6 +1,6 @@
 let form;
 let unsavedChanges = false;
-const arturl = basepath + artid;
+const pageurl = basepath + pageid;
 const myWorker = new Worker(jspath + 'worker.js');
 
 window.onload = () => {
@@ -17,7 +17,7 @@ window.onload = () => {
 
     myWorker.postMessage({
         type: 'init',
-        arturl: arturl,
+        pageurl: pageurl,
     });
     myWorker.postMessage({ type: 'stillEditing' });
 };
@@ -63,7 +63,7 @@ function submitHandler(e) {
  */
 function confirmExit(e) {
     if (unsavedChanges) {
-        const url = arturl + '/removeeditby';
+        const url = pageurl + '/removeeditby';
         console.log('send quit editing')
         fetch(url, { method: 'POST' })
             .then(handleErrors)

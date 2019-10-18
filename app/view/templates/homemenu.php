@@ -6,7 +6,7 @@
         <summary>File</summary>
             <div class="submenu">
                 <h2>Import page as file</h2>
-            <form action="<?= $this->url('artupload') ?>" method="post" enctype="multipart/form-data">
+            <form action="<?= $this->url('pageupload') ?>" method="post" enctype="multipart/form-data">
             <input type="file" name="pagefile" id="pagefile" accept=".json">
             <label for="pagefile">JSON Page file</label>
             <input type="hidden" name="erase" value="0">

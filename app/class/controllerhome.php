@@ -1,6 +1,6 @@
 <?php
 
-class Controllerhome extends Controllerart
+class Controllerhome extends Controllerpage
 {
     /** @var Modelhome */
     protected $modelhome;
@@ -20,7 +20,7 @@ class Controllerhome extends Controllerart
     public function desktop()
     {
         if ($this->user->isvisitor() && Config::homepage() === 'redirect' && Config::homeredirect() !== null) {
-            $this->routedirect('artread/', ['art' => Config::homeredirect()]);
+            $this->routedirect('pageread/', ['page' => Config::homeredirect()]);
         } else {
 
 
@@ -34,7 +34,7 @@ class Controllerhome extends Controllerart
             $columns = $this->modelhome->setcolumns($this->user->columns());
 
             $vars = ['user' => $this->user, 'table2' => $table2, 'opt' => $this->opt, 'columns' => $columns];
-            $vars['footer'] = ['version' => getversion(), 'total' => count($table), 'database' => Config::arttable()];
+            $vars['footer'] = ['version' => getversion(), 'total' => count($table), 'database' => Config::pagetable()];
 
             if (isset($_POST['query']) && $this->user->iseditor()) {
                 $datas = array_merge($_POST, $_SESSION['opt']);
@@ -64,11 +64,11 @@ class Controllerhome extends Controllerart
             if (isset($_POST['action'])) {
                 switch ($_POST['action']) {
                     case 'read':
-                        $this->routedirect('artread/', ['art' => $_POST['id']]);
+                        $this->routedirect('pageread/', ['page' => $_POST['id']]);
                         break;
 
                     case 'edit':
-                        $this->routedirect('artedit', ['art' => $_POST['id']]);
+                        $this->routedirect('pageedit', ['page' => $_POST['id']]);
                         break;
                 }
             }
@@ -85,8 +85,8 @@ class Controllerhome extends Controllerart
         if ($this->user->iseditor()) {
             $pagelist = $this->modelhome->getlister();
             foreach ($pagelist as $page) {
-                $this->renderart($page);
-                $this->artmanager->update($page);
+                $this->renderpage($page);
+                $this->pagemanager->update($page);
             }
         }
         $this->routedirect('home');

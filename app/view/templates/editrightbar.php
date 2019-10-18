@@ -8,9 +8,9 @@
         <summary>Last edited</summary>
     <ul>
     <?php
-    foreach ($lasteditedartlist as $id) {
+    foreach ($lasteditedpagelist as $id) {
         ?>
-        <li><a href="<?= $this->uart('artedit', $id) ?>"><?= $id === $art->id() ? '➤' : '✎' ?> <?= $id ?></a></li>
+        <li><a href="<?= $this->upage('pageedit', $id) ?>"><?= $id === $page->id() ? '➤' : '✎' ?> <?= $id ?></a></li>
         <?php
     }
 
@@ -23,7 +23,7 @@
     <details id="tags" open>
         <summary>Tags</summary>
         <?php
-        foreach ($tagartlist as $tag => $idlist) {
+        foreach ($tagpagelist as $tag => $idlist) {
             if(count($idlist) > 1) {
             ?>
             <strong><?= $tag ?></strong>
@@ -31,11 +31,11 @@
 
             echo '<ul>';
             foreach ($idlist as $id) {
-                if($id === $art->id()) {
+                if($id === $page->id()) {
                     echo '<li>➤ '.$id.'</li>';
                 } else {
                 ?>
-                <li><a href="<?= $this->uart('artedit', $id) ?>">✎ <?= $id ?></a></li>
+                <li><a href="<?= $this->upage('pageedit', $id) ?>">✎ <?= $id ?></a></li>
                 <?php
                 }
             }
@@ -54,7 +54,7 @@
         foreach ($templates as $template => $id) {
             if(!empty($id) && !is_bool($id)) {
                 ?>
-                <li><?= $template ?> : <?= $id ?> <a href="<?= $this->uart('artedit', $id) ?>">✎</a></li>
+                <li><?= $template ?> : <?= $id ?> <a href="<?= $this->upage('pageedit', $id) ?>">✎</a></li>
                 <?php
             }
         }
@@ -74,7 +74,7 @@
     <select name="authors[]" id="authors">
     <option value="" selected>--add author--</option>
     <?php
-    $notyetauthorlist = array_diff($editorlist, $art->authors());
+    $notyetauthorlist = array_diff($editorlist, $page->authors());
         foreach ($notyetauthorlist as $author) {
             echo '<option value="'.$author.'" >'.$author.'</option>';
         }
@@ -83,7 +83,7 @@
 
     </select>
     <?php
-        $alreadyauthorlist = array_intersect($editorlist, $art->authors());
+        $alreadyauthorlist = array_intersect($editorlist, $page->authors());
         foreach ($alreadyauthorlist as $author) {
             ?>
             <div class="checkexternal">

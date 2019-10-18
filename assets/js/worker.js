@@ -1,9 +1,9 @@
-let arturl;
+let pageurl;
 
 onmessage = function (e) {
     switch (e.data.type) {
         case 'init':
-            arturl = e.data.arturl;
+            pageurl = e.data.pageurl;
             break;
         case 'stillEditing':
             stillEditing();
@@ -16,7 +16,7 @@ onmessage = function (e) {
 
 function stillEditing() {
     console.log('send still editing');
-    const url = arturl + '/editby';
+    const url = pageurl + '/editby';
     const req = new XMLHttpRequest();
     req.open('POST', url, false);
     req.send(null);
@@ -27,7 +27,7 @@ function stillEditing() {
 
 function quitEditing() {
     console.log('send quit editing');
-    const url = arturl + '/removeeditby';
+    const url = pageurl + '/removeeditby';
     const req = new XMLHttpRequest();
     req.open('POST', url, false);
     req.send(null);

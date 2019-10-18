@@ -3,7 +3,7 @@
 class Modeltimeline extends Modeldb
 {
 	const EVENT_BASE = ['message'];
-	const EVENT_ART = ['art_add', 'art_edit', 'art_delete'];
+	const EVENT_ART = ['page_add', 'page_edit', 'page_delete'];
 	const EVENT_MEDIA = ['media_add', 'media_delete'];
 	const EVENT_FONT = ['font_add', 'font_delete'];
 

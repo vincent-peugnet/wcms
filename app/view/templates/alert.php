@@ -35,14 +35,14 @@ $this->stop();
     $form = '<p>
     <form action="' . $this->url('log') .'" method="post">
     <input type="password" name="pass" id="loginpass" placeholder="password">
-    <input type="hidden" name="route" value="artread/">
-    <input type="hidden" name="id" value="' . $art->id() . '">
+    <input type="hidden" name="route" value="pageread/">
+    <input type="hidden" name="id" value="' . $page->id() . '">
     <input type="submit" name="log" value="login" id="button">
     </form>
     </p>';
 
 
-    if(!$artexist) {
+    if(!$pageexist) {
         if(!empty(Config::existnot())) {
             echo '<h2>' . Config::existnot() . '</h2>';
         }
@@ -53,7 +53,7 @@ $this->stop();
 
 
 
-        switch ($art->secure()) {
+        switch ($page->secure()) {
             case 1:
                 if(!empty(Config::private())) {
                     echo '<h2>' . Config::private() . '</h2>';
@@ -78,11 +78,11 @@ $this->stop();
 
     if ($canedit) {
         ?>
-        <p><a href="<?= $this->uart('artadd', $art->id()) ?>">⭐ Create</a></p>            
+        <p><a href="<?= $this->upage('pageadd', $page->id()) ?>">⭐ Create</a></p>            
         <?php
         } elseif(!empty(Config::alertlink())) {
             ?>
-            <p><a href="<?= $this->uart('artread/', Config::alertlink()) ?>"><?= empty(Config::alertlinktext()) ? Config::alertlink() : Config::alertlinktext() ?></a></p>
+            <p><a href="<?= $this->upage('pageread/', Config::alertlink()) ?>"><?= empty(Config::alertlinktext()) ? Config::alertlink() : Config::alertlinktext() ?></a></p>
             <?php
         }
 

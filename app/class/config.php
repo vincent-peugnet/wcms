@@ -4,7 +4,7 @@
 
 abstract class Config
 {
-	protected static $arttable = 'mystore';
+	protected static $pagetable = 'mystore';
 	protected static $domain = '';
 	protected static $fontsize = 15;
 	protected static $basepath = '';
@@ -20,7 +20,7 @@ abstract class Config
 	protected static $notpublishedpass = false;
 	protected static $alertcss = false;
 	protected static $defaultbody = '%HEADER%'. PHP_EOL .PHP_EOL . '%NAV%'. PHP_EOL .PHP_EOL . '%ASIDE%'. PHP_EOL .PHP_EOL . '%MAIN%'. PHP_EOL .PHP_EOL . '%FOOTER%';
-	protected static $defaultart = '';
+	protected static $defaultpage = '';
 	protected static $defaultfavicon = '';
 	protected static $analytics = '';	
 	protected static $externallinkblank = true;
@@ -112,9 +112,9 @@ abstract class Config
 
 // ________________________________________ G E T _______________________________________
 
-	public static function arttable()
+	public static function pagetable()
 	{
-		return self::$arttable;
+		return self::$pagetable;
 	}
 
 	public static function domain()
@@ -192,9 +192,9 @@ abstract class Config
 		return self::$defaultbody;
 	}
 
-	public static function defaultart()
+	public static function defaultpage()
 	{
-		return self::$defaultart;
+		return self::$defaultpage;
 	}
 
 	public static function defaultfavicon()
@@ -250,9 +250,9 @@ abstract class Config
 
 // __________________________________________ S E T ______________________________________
 
-	public static function setarttable($arttable)
+	public static function setpagetable($pagetable)
 	{
-		self::$arttable = strip_tags($arttable);
+		self::$pagetable = strip_tags($pagetable);
 	}
 
 	public static function setdomain($domain)
@@ -356,10 +356,10 @@ abstract class Config
 		}
 	}
 
-	public static function setdefaultart($defaultart)
+	public static function setdefaultpage($defaultpage)
 	{
-		if(is_string($defaultart)) {
-			self::$defaultart = idclean($defaultart);
+		if(is_string($defaultpage)) {
+			self::$defaultpage = idclean($defaultpage);
 		}
 	}
 

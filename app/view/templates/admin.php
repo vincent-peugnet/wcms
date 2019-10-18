@@ -47,9 +47,9 @@
                         <option value="" <?= Config::homeredirect() === null ? 'selected' : '' ?>>--select page to redirect--</option>
 
                         <?php
-                        foreach ($artlist as $art) {
+                        foreach ($pagelist as $page) {
                             ?>
-                            <option value="<?= $art ?>" <?= Config::homeredirect() === $art ? 'selected' : '' ?>><?= $art ?></option>
+                            <option value="<?= $page ?>" <?= Config::homeredirect() === $page ? 'selected' : '' ?>><?= $page ?></option>
                         <?php
                         }
 
@@ -76,19 +76,19 @@
 
 
 
-                    <label for="defaultart">Or, create new page BODY based on an already existing one</label>
-                    <select name="defaultart" id="defaultart">
-                        <option value="" <?= Config::defaultart() === '' || !$defaultartexist ? 'selected' : '' ?>>--use default BODY element--</option>
+                    <label for="defaultpage">Or, create new page BODY based on an already existing one</label>
+                    <select name="defaultpage" id="defaultpage">
+                        <option value="" <?= Config::defaultpage() === '' || !$defaultpageexist ? 'selected' : '' ?>>--use default BODY element--</option>
                         <?php
-                        foreach ($artlist as $art) {
+                        foreach ($pagelist as $page) {
                             ?>
-                            <option value="<?= $art ?>" <?= Config::defaultart() === $art ? 'selected' : '' ?>><?= $art ?></option>
+                            <option value="<?= $page ?>" <?= Config::defaultpage() === $page ? 'selected' : '' ?>><?= $page ?></option>
                         <?php    }
                         ?>
                     </select>
 
                     <?php
-                    if (empty(!$defaultartexist || Config::defaultart())) {
+                    if (empty(!$defaultpageexist || Config::defaultpage())) {
                         ?>
                         <label for="defaultbody">Edit default BODY element</label>
                         <textarea name="defaultbody" id="defaultbody" cols="30" rows="10"><?= Config::defaultbody() ?></textarea>
@@ -114,9 +114,9 @@
                     <select name="alertlink" id="alertlink">
                         <option value="" <?= empty(Config::alertlink()) ? 'selected' : '' ?>>--No link--</option>
                         <?php
-                        foreach ($artlist as $art) {
+                        foreach ($pagelist as $page) {
                             ?>
-                            <option value="<?= $art ?>" <?= Config::alertlink() === $art ? 'selected' : '' ?>><?= $art ?></option>
+                            <option value="<?= $page ?>" <?= Config::alertlink() === $page ? 'selected' : '' ?>><?= $page ?></option>
                         <?php    }
                         ?>
                     </select>

@@ -66,7 +66,7 @@ if($user->isadmin()) {
 <form action="<?= $this->url('log') ?>" method="post" id="connect">
 <input type="submit" name="log" value="logout" >
 <?php if($tab === 'edit') { ?>
-    <input type="hidden" name="route" value="artread/">
+    <input type="hidden" name="route" value="pageread/">
     <input type="hidden" name="id" value="<?= $pageid ?>">
 <?php } ?>
 
