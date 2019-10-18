@@ -77,6 +77,9 @@ class Controllerhome extends Controllerart
         }
     }
 
+    /**
+     * Render every pages in the database 
+     */
     public function renderall()
     {
         if ($this->user->iseditor()) {

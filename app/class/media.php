@@ -100,7 +100,7 @@ class Media
 				break;
 			
 			case 'video':
-				$code = '&lt;video controls src="' . $this->getincludepath() . '"&gt;&lt;video/&gt;';
+				$code = '&lt;video controls=""&gt;&lt;source src="' . $this->getincludepath() . '" type="video/' . $this->extension . '"&gt;&lt;/video&gt;';
 				break;
 			
 		}
