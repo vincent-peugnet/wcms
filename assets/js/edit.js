@@ -27,10 +27,18 @@ function keyboardHandler(e) {
             switch (e.key) {
                 // ctrl + s
                 case 's':
-                    e.preventDefault();
                     submitHandler(form);
-                    return false;
+                    break;
+                // ctrl + d
+                case 'd':
+                    url = document.getElementById('update').getAttribute('href');
+                    window.open(url);
+                    break;
+                default:
+                    return true;
             }
+            e.preventDefault();
+            return false;
         }
     }
 }
