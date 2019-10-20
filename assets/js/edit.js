@@ -1,11 +1,20 @@
+import CodeMirror from "codemirror";
+import "codemirror/lib/codemirror.css";
+import "codemirror/mode/markdown/markdown.js";
+
 let form;
 let unsavedChanges = false;
 const pageurl = basepath + pageid;
 
+let myCodeMirror = CodeMirror.fromTextArea(document.getElementById('main'), {
+    mode: 'markdown',
+    lineNumbers: true,
+});
+
 window.onload = () => {
     form = document.getElementById('update');
     let inputs = form.elements;
-    for (i = 0; i < inputs.length; i++) {
+    for (let i = 0; i < inputs.length; i++) {
         inputs[i].oninput = changeHandler;
     }
 

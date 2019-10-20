@@ -30,7 +30,7 @@
 <script>
     const pageid = '<?= $page->id() ?>';
 </script>
-<script src="<?= Model::jspath() ?>edit.js"></script>
+<script src="<?= Model::jspath() ?>edit.bundle.js"></script>
 </body>
 
 <?php $this->stop('page') ?>
