@@ -6,7 +6,6 @@ window.onload = () => {
     form = document.getElementById('update');
     let inputs = form.elements;
     for (i = 0; i < inputs.length; i++) {
-        inputs[i].onchange = changeHandler;
         inputs[i].oninput = changeHandler;
     }
 
@@ -25,8 +24,8 @@ window.onload = () => {
 function keyboardHandler(e) {
     if (e.composed) {
         if (e.ctrlKey) {
-            // console.log(e.key);
             switch (e.key) {
+                // ctrl + s
                 case 's':
                     e.preventDefault();
                     submitHandler(form);
@@ -38,9 +37,12 @@ function keyboardHandler(e) {
 
 /**
  * Manage change event
- * @param {Event} e
+ * @param {InputEvent} e
  */
 function changeHandler(e) {
+    if(e.target.classList.contains("toggle")) {
+        return;
+    }
     unsavedChanges = true;
 }
 
@@ -49,12 +51,11 @@ function changeHandler(e) {
  * @param {HTMLFormElement} form
  */
 function submitHandler(form) {
-    unsavedChanges = false;
-
     var xhr = new XMLHttpRequest();
     var fd = new FormData(form);
 
     xhr.addEventListener("load", function(event) {
+        unsavedChanges = false;
         alert("updated");
     });
     xhr.addEventListener("error", function(event) {
