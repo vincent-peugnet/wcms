@@ -140,7 +140,7 @@ function submitHandler(form) {
 
     xhr.addEventListener("load", function(event) {
         unsavedChanges = false;
-        alert("updated");
+        // Add "last update" timestamp here
     });
     xhr.addEventListener("error", function(event) {
         alert('Error while trying to update.');
