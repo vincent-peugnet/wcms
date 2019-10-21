@@ -2,6 +2,8 @@
 
     <h4>update shortcut</h4>
     <kbd>CTRL</kbd> + <kbd>S</kbd>
+    <h4>display shortcut</h4>
+    <kbd>CTRL</kbd> + <kbd>D</kbd>
     <h4>Markdown synthax</h4>
     <ul>
     <li><code>[<i>hello</i>](<i>PAGE_ID</i>)</code>link</li>
