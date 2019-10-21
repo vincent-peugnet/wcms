@@ -115,7 +115,7 @@ body {
 	background-color: #dc8ad2;
 	left: 0px;
 	width: 100%;
-	height: calc(100% - 30px);
+	height: 100%;
 }
 
 .checkboxtab
@@ -242,7 +242,6 @@ a:hover {
     width: 100%;
     padding: 3px 0.5%;
     border-bottom: solid 1px dimgrey;
-    height: 25px;
 }
 
 #topbar form {
@@ -388,6 +387,11 @@ div#thumbnail img {
     #edittopbar .text {
         display: none;
     }
+
+    img.icon {
+        height: 23px;
+    }
+    
 
 }
 

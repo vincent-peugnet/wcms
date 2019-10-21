@@ -520,6 +520,10 @@ footer {
         max-width: 100%;
     }
 
+    img.icon {
+        height: 23px;
+    }
+
 }
 
 
