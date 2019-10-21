@@ -17,7 +17,8 @@
 
 
 
-    <a href="<?= $this->upage('pageread/', $page->id()) ?>" target="_blank" ><img src="<?= Model::iconpath() ?>read.png" class="icon">
+    <a href="<?= $this->upage('pageread/', $page->id()) ?>" target="_blank" id="display">
+        <img src="<?= Model::iconpath() ?>read.png" class="icon">
         <span class="hidephone">display</span>
     </a>
     <span id="headid"><?= $page->id() ?></span>
