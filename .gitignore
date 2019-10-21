@@ -1,4 +1,5 @@
 .vscode/*
+*.bundle.js
 assets/render/*
 assets/global/*
 database/*
@@ -6,6 +7,7 @@ fonts/*
 media/*
 render/
 vendor/*
+node_modules/*
 config.json
 error_log
 !README.md

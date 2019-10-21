@@ -27,7 +27,7 @@
 <span id="fontsize" class="hidephone">
     
     <label for="fontsize">Font-size</label>
-    <input type="number" name="fontsize" value="<?= Config::fontsize() ?>" id="fontsize" min="5" max="99">
+    <input type="number" name="fontsize" value="<?= Config::fontsize() ?>" id="editfontsize" min="5" max="99">
 </span>
 
 <span id="download" class="hidephone">
