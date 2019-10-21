@@ -21,6 +21,8 @@ window.onload = () => {
         submitHandler(this);
     });
 
+    delete CodeMirror.keyMap['default']["Ctrl-D"];
+
     CodeMirror.fromTextArea(document.getElementById('editmain'), {
         mode: 'markdown',
         lineNumbers: true,
@@ -79,7 +81,7 @@ function keyboardHandler(e) {
                     break;
                 // ctrl + d
                 case 'd':
-                    url = document.getElementById('update').getAttribute('href');
+                    const url = document.getElementById('update').getAttribute('href');
                     window.open(url);
                     break;
                 default:
