@@ -329,7 +329,10 @@ class Controllerpage extends Controller
                 $this->page->removeeditby($this->user->id());
 
                 // Add thumbnail image file under 1Mo
-                $this->mediamanager->simpleupload('thumbnail', Model::THUMBNAIL_DIR . $this->page->id(), 1024*1024, ['jpg', 'jpeg', 'JPG', 'JPEG'], true);
+                If(isset($_FILES)) {
+                    $this->mediamanager->dircheck(Model::THUMBNAIL_DIR);
+                    $this->mediamanager->simpleupload('thumbnail', Model::THUMBNAIL_DIR . $this->page->id(), 1024*1024, ['jpg', 'jpeg', 'JPG', 'JPEG'], true);
+                }
 
 
                 $this->pagemanager->update($this->page);
