@@ -46,11 +46,40 @@ There is lot more you can by altering the `BODY`.
 
 using [James Moss's Flywheel Database](https://github.com/jamesmoss/flywheel), [Michel Fortin's Markdown Extra](https://github.com/michelf/php-markdown) and [Plates](https://github.com/thephpleague/plates) as lightweight template engine.
 
+# Install from sources
+
+If you want to contribute to the project.
+
+## Prerequisites
+
+- PHP ^5.6
+- [Composer](https://getcomposer.org/)
+- _Optionally_ [NPM](https://www.npmjs.com/get-npm)
+
+### Debian and derivatives
+
+    sudo apt install php composer nodejs
+
+## Installation
+
+1.  Clone the git repository.
+2.  Install PHP dependencies.
+
+        composer install
+
+3.  _Optionnally_ install and build JS dependencies to get UI enhancements.
+
+        npm install && npm run build
+
+## Development
+
+While developing the JS sources it is useful to run webpack in watch mode so that the bundles get built at each file change. To do so, use the following command:
+
+    npm run watch
 
 
 To Do
 =====
 
 
-- Implement Code Mirror as editing interface instead of basic text area
 - Locking page system by super editor to prevent editing by the wrong person
