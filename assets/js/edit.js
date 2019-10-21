@@ -40,7 +40,7 @@ function keyboardHandler(e) {
  * @param {InputEvent} e
  */
 function changeHandler(e) {
-    if(e.target.classList.contains("toggle")) {
+    if(e.target.classList.contains("toggle")||e.target.classList.contains("checkboxtab")) {
         return;
     }
     unsavedChanges = true;
