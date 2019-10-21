@@ -8,7 +8,7 @@ module.exports = (env) => {
 
 		// Constant
 		entry: {
-			edit: './assets/js/edit.js',
+			edit: './src/edit.js',
 		},
 		output: {
 			filename: 'assets/js/[name].bundle.js',

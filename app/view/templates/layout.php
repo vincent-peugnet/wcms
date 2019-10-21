@@ -18,11 +18,6 @@
         echo '<link rel="stylesheet" href="' . Model::csspath() . Config::interfacecss() . '">';
     }
     ?>
-    <script>
-        // global js vars
-        const basepath = '/<?= Config::basepath() ?>/';
-        const jspath = '<?= Model::jspath() ?>';
-    </script>
 </head>
 
 

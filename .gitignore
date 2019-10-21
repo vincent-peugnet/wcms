@@ -1,5 +1,5 @@
 .vscode/*
-assets/js/*.bundle.js
+*.bundle.js
 assets/render/*
 assets/global/*
 database/*

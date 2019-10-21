@@ -4,7 +4,6 @@ import "codemirror/mode/markdown/markdown.js";
 
 let form;
 let unsavedChanges = false;
-const pageurl = basepath + pageid;
 
 let myCodeMirror = CodeMirror.fromTextArea(document.getElementById('main'), {
     mode: 'markdown',
