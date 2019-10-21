@@ -13,9 +13,9 @@ foreach ($tablist as $key => $value) {
 
     echo '<div class="content">';
     if ($key == $opentab) {
-        echo '<textarea name="' . $key . '" id="' . $key . '"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus >' . $value . '</textarea>';
+        echo '<textarea name="' . $key . '" id="edit' . $key . '"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus >' . $value . '</textarea>';
     } else {
-        echo '<textarea name="' . $key . '" id="' . $key . '"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">' . $value . '</textarea>';
+        echo '<textarea name="' . $key . '" id="edit' . $key . '"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">' . $value . '</textarea>';
     }
     echo '</div>';
     echo '</div>';

@@ -1,26 +1,66 @@
 import CodeMirror from "codemirror";
 import "codemirror/lib/codemirror.css";
-import "codemirror/mode/markdown/markdown.js";
+import "codemirror/mode/markdown/markdown";
+import "codemirror/mode/css/css"
+import "codemirror/mode/htmlmixed/htmlmixed"
+import "codemirror/mode/javascript/javascript"
 
 let form;
 let unsavedChanges = false;
-
-let myCodeMirror = CodeMirror.fromTextArea(document.getElementById('main'), {
-    mode: 'markdown',
-    lineNumbers: true,
-});
+const inputEvent = new InputEvent('input');
 
 window.onload = () => {
     form = document.getElementById('update');
     let inputs = form.elements;
-    for (let i = 0; i < inputs.length; i++) {
-        inputs[i].oninput = changeHandler;
+    for (const input of inputs) {
+        input.oninput = changeHandler;
     }
 
     form.addEventListener("submit", function (event) {
         event.preventDefault();
         submitHandler(this);
-      });
+    });
+
+    CodeMirror.fromTextArea(document.getElementById('editmain'), {
+        mode: 'markdown',
+        lineNumbers: true,
+    }).on('change', cmChangeHandler);
+
+    CodeMirror.fromTextArea(document.getElementById('editcss'), {
+        mode: 'css',
+        lineNumbers: true,
+    }).on('change', cmChangeHandler);
+
+    CodeMirror.fromTextArea(document.getElementById('editheader'), {
+        mode: 'markdown',
+        lineNumbers: true,
+    }).on('change', cmChangeHandler);
+
+    CodeMirror.fromTextArea(document.getElementById('editnav'), {
+        mode: 'markdown',
+        lineNumbers: true,
+    }).on('change', cmChangeHandler);
+
+    CodeMirror.fromTextArea(document.getElementById('editaside'), {
+        mode: 'markdown',
+        lineNumbers: true,
+    }).on('change', cmChangeHandler);
+
+    CodeMirror.fromTextArea(document.getElementById('editfooter'), {
+        mode: 'markdown',
+        lineNumbers: true,
+    }).on('change', cmChangeHandler);
+
+    CodeMirror.fromTextArea(document.getElementById('editbody'), {
+        mode: 'htmlmixed',
+        lineNumbers: true,
+    }).on('change', cmChangeHandler);
+
+    CodeMirror.fromTextArea(document.getElementById('editjavascript'), {
+        mode: 'javascript',
+        lineNumbers: true,
+    }).on('change', cmChangeHandler);
+
     window.onkeydown = keyboardHandler;
     window.onbeforeunload = confirmExit;
 };
@@ -60,6 +100,16 @@ function changeHandler(e) {
         return;
     }
     unsavedChanges = true;
+}
+
+/**
+ * Manage CodeMirror editor change event
+ * @param {CodeMirror.EditorFromTextArea} cm the CodeMirror instance
+ */
+function cmChangeHandler(cm){
+    let textArea = cm.getTextArea();
+    textArea.value = cm.getValue();
+    textArea.dispatchEvent(inputEvent);
 }
 
 /**

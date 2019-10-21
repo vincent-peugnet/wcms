@@ -116,7 +116,7 @@ body {
 	left: 0px;
 	width: 100%;
 	height: 100%;
-    display: none;
+    visibility: hidden;
 }
 
 .checkboxtab
@@ -147,7 +147,7 @@ body {
 
 .checkboxtab:checked ~.content
 {
-	display: block;
+	visibility: visible;
 }
 
 
@@ -376,6 +376,7 @@ div#thumbnail img {
 /* Custom CodeMirror CSS */
 .CodeMirror {
     height: 100% !important;
+    cursor: text;
 }
 
 
