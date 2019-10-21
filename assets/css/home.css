@@ -512,8 +512,12 @@ footer {
         margin-top: 1%;
     }
 
-    main.home div#options {
+    main.home nav {
         display: none;
+    }
+
+    section.pages {
+        max-width: 100%;
     }
 
 }

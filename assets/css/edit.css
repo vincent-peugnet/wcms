@@ -98,6 +98,7 @@ body {
     display: flex;
     height: calc(100% - 50px);
     position: relative;
+    width: 100%;
 }
 
 /* clip the tabs names */
@@ -376,7 +377,7 @@ div#thumbnail img {
 
 
 @media (max-width: 600px) {
-    .bar {
+    .bar, .hidephone {
         display: none;
     }
 

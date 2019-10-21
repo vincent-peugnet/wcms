@@ -1,6 +1,6 @@
 <header id="topbar">
 
-<span id="search">
+<span id="search" class="hidephone">
 <form action="<?= $this->url('search') ?>" method="post">
 <input type="text" list="searchdatalist" name="id" id="search" placeholder="page id" required <?= $tab !== 'edit' && !$user->isvisitor() ? 'autofocus' : '' ?>>
 <input type="submit" name="action" value="read">
@@ -22,17 +22,33 @@
 <?php if($user->iseditor()) { ?>
 
 <span id="menu">
-<a href="<?= $this->url('home') ?>" <?= $tab == 'home' ? 'class="actualpage"' : '' ?>><img src="<?= Model::iconpath() ?>home.png" alt="" class="icon">home</a>
-<a href="<?= $this->url('media') ?>" <?= $tab == 'media' ? 'class="actualpage"' : '' ?>><img src="<?= Model::iconpath() ?>media.png" alt="" class="icon">media</a>
-<a href="<?= $this->url('font') ?>" <?= $tab == 'font' ? 'class="actualpage"' : '' ?>><img src="<?= Model::iconpath() ?>font.png" alt="" class="icon">font</a>
+<a href="<?= $this->url('home') ?>" <?= $tab == 'home' ? 'class="actualpage"' : '' ?>>
+    <img src="<?= Model::iconpath() ?>home.png" alt="" class="icon">
+    <span class="hidephone">home</span>
+</a>
+<a href="<?= $this->url('media') ?>" <?= $tab == 'media' ? 'class="actualpage"' : '' ?>>
+    <img src="<?= Model::iconpath() ?>media.png" alt="" class="icon">
+    <span class="hidephone">media</span>
+</a>
+<a href="<?= $this->url('font') ?>" <?= $tab == 'font' ? 'class="actualpage"' : '' ?>>
+    <img src="<?= Model::iconpath() ?>font.png" alt="" class="icon">
+    <span class="hidephone">font</span>
+</a>
 <?php
 if($user->isadmin()) {
 ?>
-<a href="<?= $this->url('admin') ?>" <?= $tab == 'admin' ? 'class="actualpage"' : '' ?>><img src="<?= Model::iconpath() ?>admin.png" alt="" class="icon">admin</a>
+<a href="<?= $this->url('admin') ?>" <?= $tab == 'admin' ? 'class="actualpage"' : '' ?>>
+    <img src="<?= Model::iconpath() ?>admin.png" alt="" class="icon">
+    <span class="hidephone">admin</span>
+
+</a>
 <?php
 }
 ?>
-<a href="<?= $this->url('info') ?>"  <?= $tab == 'info' ? 'class="actualpage"' : '' ?>><img src="<?= Model::iconpath() ?>info.png" alt="" class="icon">info</a>
+<a href="<?= $this->url('info') ?>"  <?= $tab == 'info' ? 'class="actualpage"' : '' ?>>
+    <img src="<?= Model::iconpath() ?>info.png" alt="" class="icon">
+    <span class="hidephone">info</span>
+</a>
 </span>
 
 
@@ -58,8 +74,15 @@ if($user->isadmin()) {
 <?php } else { ?>  
 
 <span>
-<a href="<?= $this->url('timeline') ?>" <?= $tab == 'timeline' ? 'class="actualpage"' : '' ?>><img src="<?= Model::iconpath() ?>timeline.png" alt="" class="icon">timeline</a>
-<a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>><img src="<?= Model::iconpath() ?>user.png" alt="" class="icon"><?= $user->id() ?></a> <i><?= $user->level() ?></i>
+<a href="<?= $this->url('timeline') ?>" <?= $tab == 'timeline' ? 'class="actualpage"' : '' ?>>
+    <img src="<?= Model::iconpath() ?>timeline.png" alt="" class="icon">
+    <span class="hidephone">timeline</span>
+</a>
+<a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>>
+    <img src="<?= Model::iconpath() ?>user.png" alt="" class="icon">
+    <span class="hidephone"><?= $user->id() ?></span>
+</a>
+<i><?= $user->level() ?></i>
 </span>
 
 
