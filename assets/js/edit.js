@@ -1,25 +1,20 @@
 let form;
 let unsavedChanges = false;
 const pageurl = basepath + pageid;
-const myWorker = new Worker(jspath + 'worker.js');
 
 window.onload = () => {
     form = document.getElementById('update');
     let inputs = form.elements;
     for (i = 0; i < inputs.length; i++) {
-        inputs[i].onchange = changeHandler;
         inputs[i].oninput = changeHandler;
     }
 
-    form.onsubmit = submitHandler;
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        submitHandler(this);
+      });
     window.onkeydown = keyboardHandler;
     window.onbeforeunload = confirmExit;
-
-    myWorker.postMessage({
-        type: 'init',
-        pageurl: pageurl,
-    });
-    myWorker.postMessage({ type: 'stillEditing' });
 };
 
 /**
@@ -29,12 +24,11 @@ window.onload = () => {
 function keyboardHandler(e) {
     if (e.composed) {
         if (e.ctrlKey) {
-            // console.log(e.key);
             switch (e.key) {
+                // ctrl + s
                 case 's':
                     e.preventDefault();
-                    unsavedChanges = false;
-                    form.submit();
+                    submitHandler(form);
                     return false;
             }
         }
@@ -43,18 +37,32 @@ function keyboardHandler(e) {
 
 /**
  * Manage change event
- * @param {Event} e
+ * @param {InputEvent} e
  */
 function changeHandler(e) {
+    if(e.target.classList.contains("toggle")) {
+        return;
+    }
     unsavedChanges = true;
 }
 
 /**
  * Manage submit event
- * @param {Event} e
+ * @param {HTMLFormElement} form
  */
-function submitHandler(e) {
-    unsavedChanges = false;
+function submitHandler(form) {
+    var xhr = new XMLHttpRequest();
+    var fd = new FormData(form);
+
+    xhr.addEventListener("load", function(event) {
+        unsavedChanges = false;
+        alert("updated");
+    });
+    xhr.addEventListener("error", function(event) {
+        alert('Error while trying to update.');
+    });
+    xhr.open(form.method, form.action);
+    xhr.send(fd);
 }
 
 /**
@@ -63,26 +71,6 @@ function submitHandler(e) {
  */
 function confirmExit(e) {
     if (unsavedChanges) {
-        const url = pageurl + '/removeeditby';
-        console.log('send quit editing')
-        fetch(url, { method: 'POST' })
-            .then(handleErrors)
-            .then((response) => {
-                console.log(response);
-                setTimeout(() => {
-                    myWorker.postMessage({ type: 'stillEditing' });
-                }, 1500);
-            });
         return 'You have unsaved changes, do you really want to leave this page?';
-    } else {
-        myWorker.postMessage({ type: 'quitEditing' });
     }
-}
-
-async function handleErrors(response) {
-    if (!response.ok) {
-        const data = await response.json();
-        throw Error(`${response.statusText}. ${data.message}`);
-    }
-    return response.json();
 }

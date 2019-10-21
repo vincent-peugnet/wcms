@@ -54,4 +54,3 @@ To Do
 
 - Implement Code Mirror as editing interface instead of basic text area
 - Locking page system by super editor to prevent editing by the wrong person
-- use AJAX request !!
