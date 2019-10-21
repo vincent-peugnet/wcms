@@ -28,6 +28,7 @@ window.onload = () => {
         CodeMirror.fromTextArea(document.getElementById('editmain'), {
             mode: 'markdown',
             lineNumbers: true,
+            lineWrapping: true,
         }),
         CodeMirror.fromTextArea(document.getElementById('editcss'), {
             mode: 'css',
@@ -36,18 +37,22 @@ window.onload = () => {
         CodeMirror.fromTextArea(document.getElementById('editheader'), {
             mode: 'markdown',
             lineNumbers: true,
+            lineWrapping: true,
         }),
         CodeMirror.fromTextArea(document.getElementById('editnav'), {
             mode: 'markdown',
             lineNumbers: true,
+            lineWrapping: true,
         }),
         CodeMirror.fromTextArea(document.getElementById('editaside'), {
             mode: 'markdown',
             lineNumbers: true,
+            lineWrapping: true,
         }),
         CodeMirror.fromTextArea(document.getElementById('editfooter'), {
             mode: 'markdown',
             lineNumbers: true,
+            lineWrapping: true,
         }),
         CodeMirror.fromTextArea(document.getElementById('editbody'), {
             mode: 'htmlmixed',
