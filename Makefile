@@ -12,14 +12,17 @@ dist: distclean $(zip_release)
 dist/w_cms_%.zip: all
 	@echo "Building Zip release..."
 	mkdir -p $(dir $@)
+	git archive --format=zip HEAD -o $@
+	zip -d $@ \
+		"src*" \
+		.gitignore \
+		composer.lock \
+		Makefile \
+		"package*" \
+		webpack.config.js
 	zip -r $@ \
-		app \
-		assets \
+		assets/js \
 		vendor \
-		.htaccess \
-		index.php \
-		LICENSE.md \
-		README.md \
 		-x "*test*" \
 		-x "*docs*"
 
