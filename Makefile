@@ -5,11 +5,11 @@ js_sources := $(wildcard src/*.js)
 js_bundles := $(js_sources:src/%.js=assets/js/%.bundle.js)
 zip_release := $(GIT_VERSION:%=dist/w_cms_%.zip)
 
-build: clean $(zip_release)
+all: php_dependencies $(js_bundles)
 
-install: php_dependencies $(js_bundles)
+dist: distclean $(zip_release)
 
-dist/w_cms_%.zip: install
+dist/w_cms_%.zip: all
 	@echo "Building Zip release..."
 	mkdir -p $(dir $@)
 	zip -r $@ \
@@ -43,6 +43,9 @@ js_dependencies:
 js_clean:
 	@echo "Cleaning JS..."
 	rm -rf node_modules
+	rm -rf $(js_bundles)
 
 clean: php_clean js_clean
+
+distclean:
 	rm -rf dist
