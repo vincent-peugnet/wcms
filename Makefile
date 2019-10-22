@@ -1,12 +1,15 @@
+PATH := vendor/bin:node_modules/.bin:$(PATH)
 GIT_VERSION := $(shell git --no-pager describe --always --tags)
 
 js_sources := $(wildcard src/*.js)
-js_bundles :=  $(js_sources:src/%.js=assets/js/%.bundle.js)
-zip_release := $(GIT_VERSION:%=dist/wcms-%.zip)
+js_bundles := $(js_sources:src/%.js=assets/js/%.bundle.js)
+zip_release := $(GIT_VERSION:%=dist/w_cms_%.zip)
 
-release: clean $(zip_release)
+build: clean $(zip_release)
 
-dist/wcms-%.zip: php_dependencies $(js_bundles)
+install: php_dependencies $(js_bundles)
+
+dist/w_cms_%.zip: install
 	@echo "Building Zip release..."
 	mkdir -p $(dir $@)
 	zip -r $@ \
@@ -23,7 +26,7 @@ dist/wcms-%.zip: php_dependencies $(js_bundles)
 assets/js/%.bundle.js: src/%.js js_dependencies
 	@echo "Building JS Bundles..."
 	mkdir -p $(dir $@)
-	npm run build
+	webpack --env prod
 
 php_dependencies:
 	@echo "Installing PHP dependencies..."
@@ -42,3 +45,4 @@ js_clean:
 	rm -rf node_modules
 
 clean: php_clean js_clean
+	rm -rf dist
