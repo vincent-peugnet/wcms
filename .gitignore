@@ -6,6 +6,7 @@ database/*
 fonts/*
 media/*
 render/
+dist/
 vendor/*
 node_modules/*
 config.json
