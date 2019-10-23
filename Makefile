@@ -1,3 +1,5 @@
+include .env
+export
 PATH := vendor/bin:node_modules/.bin:$(PATH)
 GIT_VERSION := $(shell git --no-pager describe --always --tags)
 
@@ -6,6 +8,9 @@ js_bundles := $(js_sources:src/%.js=assets/js/%.bundle.js)
 zip_release := $(GIT_VERSION:%=dist/w_cms_%.zip)
 
 all: php_dependencies $(js_bundles)
+
+release:
+	release-it
 
 dist: distclean $(zip_release)
 
@@ -16,6 +21,7 @@ dist/w_cms_%.zip: all
 	zip -d $@ \
 		"src*" \
 		.gitignore \
+		.release-it.json \
 		composer.lock \
 		Makefile \
 		"package*" \
