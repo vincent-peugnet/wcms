@@ -6,8 +6,9 @@ database/*
 fonts/*
 media/*
 render/
+dist/
 vendor/*
-node_modules/*
+node_modules/
 config.json
 error_log
 !README.md

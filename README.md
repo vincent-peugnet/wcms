@@ -77,6 +77,10 @@ While developing the JS sources it is useful to run webpack in watch mode so tha
 
     npm run watch
 
+## Release zip
+
+To build the release zip, make sure you are on `master` and executed `git pull` then run `make dist`. This will create a zip file in `dist/`.
+
 
 To Do
 =====
