@@ -4,6 +4,12 @@ import "codemirror/mode/markdown/markdown";
 import "codemirror/mode/css/css"
 import "codemirror/mode/htmlmixed/htmlmixed"
 import "codemirror/mode/javascript/javascript"
+import "codemirror/addon/search/search";
+import "codemirror/addon/search/searchcursor";
+import "codemirror/addon/search/jump-to-line";
+import "codemirror/addon/dialog/dialog";
+import "codemirror/addon/dialog/dialog.css";
+
 
 let form;
 let editors = [];
@@ -29,38 +35,46 @@ window.onload = () => {
             mode: 'markdown',
             lineNumbers: true,
             lineWrapping: true,
+            extraKeys: {"Alt-F": "findPersistent"}
         }),
         CodeMirror.fromTextArea(document.getElementById('editcss'), {
             mode: 'css',
             lineNumbers: true,
+            extraKeys: {"Alt-F": "findPersistent"}
         }),
         CodeMirror.fromTextArea(document.getElementById('editheader'), {
             mode: 'markdown',
             lineNumbers: true,
             lineWrapping: true,
+            extraKeys: {"Alt-F": "findPersistent"}
         }),
         CodeMirror.fromTextArea(document.getElementById('editnav'), {
             mode: 'markdown',
             lineNumbers: true,
             lineWrapping: true,
+            extraKeys: {"Alt-F": "findPersistent"}
         }),
         CodeMirror.fromTextArea(document.getElementById('editaside'), {
             mode: 'markdown',
             lineNumbers: true,
             lineWrapping: true,
+            extraKeys: {"Alt-F": "findPersistent"}
         }),
         CodeMirror.fromTextArea(document.getElementById('editfooter'), {
             mode: 'markdown',
             lineNumbers: true,
             lineWrapping: true,
+            extraKeys: {"Alt-F": "findPersistent"}
         }),
         CodeMirror.fromTextArea(document.getElementById('editbody'), {
             mode: 'htmlmixed',
             lineNumbers: true,
+            extraKeys: {"Alt-F": "findPersistent"}
         }),
         CodeMirror.fromTextArea(document.getElementById('editjavascript'), {
             mode: 'javascript',
             lineNumbers: true,
+            extraKeys: {"Alt-F": "findPersistent"}
         }),
     ];
     for (const editor of editors) {

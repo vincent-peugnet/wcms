@@ -4,6 +4,8 @@
     <kbd>CTRL</kbd> + <kbd>S</kbd>
     <h4>display shortcut</h4>
     <kbd>CTRL</kbd> + <kbd>D</kbd>
+    <h4>Search</h4>
+    <kbd>ALT</kbd> + <kbd>F</kbd>
     <h4>Markdown synthax</h4>
     <ul>
     <li><code>[<i>hello</i>](<i>PAGE_ID</i>)</code>link</li>
@@ -42,7 +44,8 @@
     <h4>More infos</h4>
 
     <ul>
-    <li><a href="<?= $this->url('info') ?>" target="_blank">📕 W Manual</a></li>
-    <li><a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">📏 Markdown encoding</a></li>
-    <li><a href="https://michelf.ca/projects/php-markdown/extra/" target="_blank">📐 Markdown Extra</a></li>
+        <li><a href="<?= $this->url('info') ?>" target="_blank">📕 W Manual</a></li>
+        <li><a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">📏 Markdown encoding</a></li>
+        <li><a href="https://michelf.ca/projects/php-markdown/extra/" target="_blank">📐 Markdown Extra</a></li>
+        <li><a href="https://codemirror.net/demo/search.html" target="_blank" rel="noopener noreferrer">🐒 Full Search/replace Doc</a></li>
     </ul>
