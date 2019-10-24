@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "21aa4f4247c76d4a524ea5054aa6f09a",
+    "content-hash": "f9644fc739f56d4f7a89c3050f0771d4",
     "packages": [
         {
             "name": "altorouter/altorouter",
@@ -226,7 +226,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.2"
+        "php": ">=5.6.0"
     },
     "platform-dev": []
 }

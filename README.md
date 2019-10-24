@@ -52,7 +52,7 @@ If you want to contribute to the project.
 
 ## Prerequisites
 
-- PHP ^5.6
+- PHP >=5.6.0
 - [Composer](https://getcomposer.org/)
 - _Optionally_ [NPM](https://www.npmjs.com/get-npm)
 
