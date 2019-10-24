@@ -20,6 +20,7 @@ dist/w_cms_%.zip: all
 	git archive --format=zip HEAD -o $@
 	zip -d $@ \
 		"src*" \
+		.default.env \
 		.gitignore \
 		.release-it.json \
 		composer.lock \
@@ -36,6 +37,9 @@ assets/js/%.bundle.js: src/%.js js_dependencies
 	@echo "Building JS Bundles..."
 	mkdir -p $(dir $@)
 	webpack --env prod
+
+.env:
+	cp .default.env .env
 
 php_dependencies:
 	@echo "Installing PHP dependencies..."
