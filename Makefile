@@ -23,6 +23,7 @@ dist/w_cms_%.zip: all
 		.default.env \
 		.gitignore \
 		.release-it.json \
+		composer.json \
 		composer.lock \
 		Makefile \
 		"package*" \

@@ -11,7 +11,10 @@
 	},
 	"plugins": {
 		"@release-it/bumper": {
-			"out": "composer.json"
+			"out": {
+				"file": "VERSION",
+				"type": "text/plain"
+			}
 		}
 	},
 	"hooks": {
