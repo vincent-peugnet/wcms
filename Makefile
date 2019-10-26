@@ -1,3 +1,5 @@
+include .env
+export
 PATH := vendor/bin:node_modules/.bin:$(PATH)
 GIT_VERSION := $(shell git --no-pager describe --always --tags)
 
@@ -7,6 +9,9 @@ zip_release := $(GIT_VERSION:%=dist/w_cms_%.zip)
 
 all: php_dependencies $(js_bundles)
 
+release:
+	release-it
+
 dist: distclean $(zip_release)
 
 dist/w_cms_%.zip: all
@@ -15,7 +20,10 @@ dist/w_cms_%.zip: all
 	git archive --format=zip HEAD -o $@
 	zip -d $@ \
 		"src*" \
+		.default.env \
 		.gitignore \
+		.release-it.json \
+		composer.json \
 		composer.lock \
 		Makefile \
 		"package*" \
@@ -30,6 +38,9 @@ assets/js/%.bundle.js: src/%.js js_dependencies
 	@echo "Building JS Bundles..."
 	mkdir -p $(dir $@)
 	webpack --env prod
+
+.env:
+	cp .default.env .env
 
 php_dependencies:
 	@echo "Installing PHP dependencies..."

@@ -1,0 +1,23 @@
+{
+	"npm": false,
+	"git": {
+		"tagName": "v${version}"
+	},
+	"github": {
+		"release": true,
+		"assets": [
+			"dist/*.zip"
+		]
+	},
+	"plugins": {
+		"@release-it/bumper": {
+			"out": {
+				"file": "VERSION",
+				"type": "text/plain"
+			}
+		}
+	},
+	"hooks": {
+		"after:git:release": "make dist"
+	}
+}

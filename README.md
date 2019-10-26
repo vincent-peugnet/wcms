@@ -46,7 +46,7 @@ There is lot more you can by altering the `BODY`.
 
 using [James Moss's Flywheel Database](https://github.com/jamesmoss/flywheel), [Michel Fortin's Markdown Extra](https://github.com/michelf/php-markdown) and [Plates](https://github.com/thephpleague/plates) as lightweight template engine.
 
-# Install from sources
+# Development informations
 
 If you want to contribute to the project.
 
@@ -60,7 +60,7 @@ If you want to contribute to the project.
 
     sudo apt install php composer nodejs
 
-## Installation
+## Install from sources
 
 1.  Clone the git repository.
 2.  Install PHP dependencies.
@@ -71,15 +71,26 @@ If you want to contribute to the project.
 
         npm install && npm run build
 
-## Development
+## JS development
 
 While developing the JS sources it is useful to run webpack in watch mode so that the bundles get built at each file change. To do so, use the following command:
 
     npm run watch
 
-## Release zip
+## Publish a new release
 
-To build the release zip, make sure you are on `master` and executed `git pull` then run `make dist`. This will create a zip file in `dist/`.
+The release process uses [release-it](https://github.com/release-it/release-it), so to create and publish a new release you will need a [GitHub personnal access token](https://github.com/settings/tokens) with repository access, saved in a `.env` file like so:
+
+```bash
+# .env
+GITHUB_TOKEN='{{github token value}}'
+```
+
+Then, to make the release, run the following command:
+
+    make release
+
+To only build the release zip, simply run `make dist`. This will create a zip file in `dist/` of the current version.
 
 
 To Do
