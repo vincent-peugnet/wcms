@@ -85,8 +85,7 @@ function idclean(string $input)
 function getversion()
 {
 	if(file_exists('VERSION')) {
-		$composer = file_get_contents('VERSION');
-		$version = $composer['version'];
+		$version = file_get_contents('VERSION');
 	} else {
 		$version = 'unknown';
 	}
