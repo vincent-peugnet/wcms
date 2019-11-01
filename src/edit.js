@@ -27,6 +27,7 @@ window.addEventListener('load', () => {
         submitHandler(this);
     });
 
+    // disable CodeMirror's default ctrl+D shortcut (delete line)
     delete CodeMirror.keyMap['default']['Ctrl-D'];
 
     editors = [
@@ -127,7 +128,7 @@ function changeHandler(e) {
     ) {
         return;
     }
-    unsavedChanges = true;
+    changed();
 }
 
 /**
@@ -157,8 +158,7 @@ function submitHandler(form) {
     var fd = new FormData(form);
 
     xhr.addEventListener('load', function(event) {
-        unsavedChanges = false;
-        // Add "last update" timestamp here
+        saved();
     });
     xhr.addEventListener('error', function(event) {
         alert('Error while trying to update.');
@@ -175,4 +175,14 @@ function confirmExit(e) {
     if (unsavedChanges) {
         return 'You have unsaved changes, do you really want to leave this page?';
     }
+}
+
+function changed() {
+    unsavedChanges = true;
+    document.title = '✏ *' + pageid;
+}
+
+function saved() {
+    unsavedChanges = false;
+    document.title = '✏ ' + pageid;
 }
