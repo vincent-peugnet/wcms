@@ -65,17 +65,19 @@ If you want to contribute to the project.
 1.  Clone the git repository.
 2.  Install PHP dependencies.
 
-        composer install
+        make vendor
 
 3.  _Optionnally_ install and build JS dependencies to get UI enhancements.
 
-        npm install && npm run build
+        make build
+
+The last two commands can be run at once using only `make`.
 
 ## JS development
 
 While developing the JS sources it is useful to run webpack in watch mode so that the bundles get built at each file change. To do so, use the following command:
 
-    npm run watch
+    make watch
 
 ## Publish a new release
 
