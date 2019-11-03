@@ -36,7 +36,7 @@
                     <table id="home2table">
                         <thead>
                             <tr>
-                                <th class="hidephone">x</th>
+                                <th id="checkall" class="hidephone">x</th>
                                 <th><a href="<?= $opt->getadress('id') ?>">id</a></th>
                                 <th>edit</th>
                                 <th>see</th>
@@ -176,6 +176,7 @@
     <?php } ?>
 
 
+    <script src="<?= Model::jspath() ?>home.bundle.js"></script>
 </body>
 
 
