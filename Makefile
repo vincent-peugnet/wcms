@@ -64,7 +64,7 @@ endif
 
 node_modules: package.json package-lock.json
 	@echo "Installing JS dependencies..."
-	npm install
+	npm install --loglevel=error
 
 clean: buildclean
 	@echo "Cleaning PHP..."

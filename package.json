@@ -1,5 +1,7 @@
 {
   "name": "wcms",
+  "repository": "github:vincent-peugnet/wcms",
+  "license": "MIT",
   "dependencies": {
     "codemirror": "^5.49.0"
   },
