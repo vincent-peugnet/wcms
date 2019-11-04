@@ -1,6 +1,5 @@
 include .default.env
 include .env
-ENV ?= dev
 export
 
 PATH := vendor/bin:node_modules/.bin:$(PATH)
