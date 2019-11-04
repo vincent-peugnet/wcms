@@ -23,22 +23,22 @@
 
 <span id="menu">
 <a href="<?= $this->url('home') ?>" <?= $tab == 'home' ? 'class="actualpage"' : '' ?>>
-    <img src="<?= Model::iconpath() ?>home.png" alt="" class="icon">
+    <img src="<?= Wcms\Model::iconpath() ?>home.png" alt="" class="icon">
     <span class="hidephone">home</span>
 </a>
 <a href="<?= $this->url('media') ?>" <?= $tab == 'media' ? 'class="actualpage"' : '' ?>>
-    <img src="<?= Model::iconpath() ?>media.png" alt="" class="icon">
+    <img src="<?= Wcms\Model::iconpath() ?>media.png" alt="" class="icon">
     <span class="hidephone">media</span>
 </a>
 <a href="<?= $this->url('font') ?>" <?= $tab == 'font' ? 'class="actualpage"' : '' ?>>
-    <img src="<?= Model::iconpath() ?>font.png" alt="" class="icon">
+    <img src="<?= Wcms\Model::iconpath() ?>font.png" alt="" class="icon">
     <span class="hidephone">font</span>
 </a>
 <?php
 if($user->isadmin()) {
 ?>
 <a href="<?= $this->url('admin') ?>" <?= $tab == 'admin' ? 'class="actualpage"' : '' ?>>
-    <img src="<?= Model::iconpath() ?>admin.png" alt="" class="icon">
+    <img src="<?= Wcms\Model::iconpath() ?>admin.png" alt="" class="icon">
     <span class="hidephone">admin</span>
 
 </a>
@@ -46,7 +46,7 @@ if($user->isadmin()) {
 }
 ?>
 <a href="<?= $this->url('info') ?>"  <?= $tab == 'info' ? 'class="actualpage"' : '' ?>>
-    <img src="<?= Model::iconpath() ?>info.png" alt="" class="icon">
+    <img src="<?= Wcms\Model::iconpath() ?>info.png" alt="" class="icon">
     <span class="hidephone">info</span>
 </a>
 </span>
@@ -75,11 +75,11 @@ if($user->isadmin()) {
 
 <span>
 <a href="<?= $this->url('timeline') ?>" <?= $tab == 'timeline' ? 'class="actualpage"' : '' ?>>
-    <img src="<?= Model::iconpath() ?>timeline.png" alt="" class="icon">
+    <img src="<?= Wcms\Model::iconpath() ?>timeline.png" alt="" class="icon">
     <span class="hidephone">timeline</span>
 </a>
 <a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>>
-    <img src="<?= Model::iconpath() ?>user.png" alt="" class="icon">
+    <img src="<?= Wcms\Model::iconpath() ?>user.png" alt="" class="icon">
     <span class="hidephone"><?= $user->id() ?></span>
 </a>
 <i><?= $user->level() ?></i>

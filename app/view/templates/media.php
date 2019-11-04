@@ -100,10 +100,10 @@ treecount($dirlist, 'media', 0, 'media', $dir, $opt);
     <label for="moveto">Selected medias :</label>
     <select name="dir" id="moveto" >
         <option selected>---select destination---</option>
-        <option value="<?= Model::MEDIA_DIR ?>">/</option>
+        <option value="<?= Wcms\Model::MEDIA_DIR ?>">/</option>
         <?php
             foreach ($pathlist as $path) {
-                echo '<option value="' . Model::MEDIA_DIR . $path . '">' . $path . '</option>';
+                echo '<option value="' . Wcms\Model::MEDIA_DIR . $path . '">' . $path . '</option>';
             }
         ?>
     </select>

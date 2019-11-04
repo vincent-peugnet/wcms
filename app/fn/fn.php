@@ -1,14 +1,5 @@
 <?php
 
-
-function class_autoloader($class)
-{
-    require('.'. DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'class' . DIRECTORY_SEPARATOR . strtolower(str_replace('\\', DIRECTORY_SEPARATOR, $class)) . '.php');
-}
-
-
-
-
 function readablesize($bytes)
 {
 	$format = ' %d %s';
@@ -76,7 +67,7 @@ function idclean(string $input)
 
 	$input = preg_replace('%[^a-z0-9-_+]%', '', strtolower(trim($input)));
 
-	$input = substr($input, 0, Model::MAX_ID_LENGTH);
+	$input = substr($input, 0, Wcms\Model::MAX_ID_LENGTH);
 
 	return $input;
 }

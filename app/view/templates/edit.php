@@ -5,7 +5,7 @@
 
 <?php $this->start('page') ?>
 
-<style>.tabs textarea{font-size: <?= Config::fontsize() ?>px}</style>
+<style>.tabs textarea{font-size: <?= Wcms\Config::fontsize() ?>px}</style>
 
 <body>
 <main class="editor">
@@ -30,7 +30,7 @@
 <script>
     const pageid = '<?= $page->id() ?>';
 </script>
-<script src="<?= Model::jspath() ?>edit.bundle.js"></script>
+<script src="<?= Wcms\Model::jspath() ?>edit.bundle.js"></script>
 </body>
 
 <?php $this->stop('page') ?>

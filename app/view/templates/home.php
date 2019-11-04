@@ -87,11 +87,11 @@
                             <tr>
                                 <td class="hidephone"><input type="checkbox" name="id[]" value="<?= $item->id() ?>" id="id_<?= $item->id() ?>"></td>
                                 <td><label title="<?= $item->title() ?>" for="id_<?= $item->id() ?>"><?= $item->id() ?></label></td>
-                                <td><a href="<?= $this->upage('pageedit', $item->id()) ?>"><img src="<?= Model::iconpath() ?>edit.png" class="icon"></a></td>
-                                <td><a href="<?= $this->upage('pageread/', $item->id()) ?>" target="_blank"><img src="<?= Model::iconpath() ?>read.png" class="icon"></a></td>
+                                <td><a href="<?= $this->upage('pageedit', $item->id()) ?>"><img src="<?= Wcms\Model::iconpath() ?>edit.png" class="icon"></a></td>
+                                <td><a href="<?= $this->upage('pageread/', $item->id()) ?>" target="_blank"><img src="<?= Wcms\Model::iconpath() ?>read.png" class="icon"></a></td>
                                 <td class="delete"><a href="<?= $this->upage('pagedelete', $item->id()) ?>">✖</a></td>
                                 <?php if ($user->issupereditor()) { ?>
-                                <td class="hidephone"><a href="<?= $this->upage('pagedownload', $item->id()) ?>" download><img src="<?= Model::iconpath() ?>download.png" class="icon"></a></td>
+                                <td class="hidephone"><a href="<?= $this->upage('pagedownload', $item->id()) ?>" download><img src="<?= Wcms\Model::iconpath() ?>download.png" class="icon"></a></td>
                                 <?php }
                                         if ($columns['tag']) { ?>
                                 <td class="tag"><a title="<?= $item->tag('string') ?>"><?= $item->tag('sort') ?></a></td>
@@ -141,7 +141,7 @@
         </section>
 
 
-        <?php if($user->display()['bookmark'] && (!empty(Config::bookmark()) || !empty($user->bookmark()))) { ?>
+        <?php if($user->display()['bookmark'] && (!empty(Wcms\Config::bookmark()) || !empty($user->bookmark()))) { ?>
 
         <section class="hidephone" id="bookmark">
             <div class="block">
@@ -149,7 +149,7 @@
                 <div class="scroll">
                     <strong>Public</strong>
                     <ul>
-                        <?php foreach (Config::bookmark() as $id => $query) { ?>
+                        <?php foreach (Wcms\Config::bookmark() as $id => $query) { ?>
                             <li>
                                 <a href="<?= $query ?>"><?= $id ?></a>
                             </li>
@@ -176,7 +176,7 @@
     <?php } ?>
 
 
-    <script src="<?= Model::jspath() ?>home.bundle.js"></script>
+    <script src="<?= Wcms\Model::jspath() ?>home.bundle.js"></script>
 </body>
 
 
