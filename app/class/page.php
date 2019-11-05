@@ -480,7 +480,7 @@ class Page
 	{
 		if (is_string($tag)) {
 
-			if (strlen($tag) < self::LEN and is_string($tag)) {
+			if (strlen($tag) < self::LEN) {
 				$tag = strip_tags(trim(strtolower($tag)));
 				$tag = str_replace('*', '', $tag);
 				$tag = str_replace(' ', '', $tag);

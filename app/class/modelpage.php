@@ -12,7 +12,7 @@ class Modelpage extends Modeldb
 		parent::__construct();
 		$this->storeinit(Config::pagetable());
 		if(!$this->dircheck(Model::HTML_RENDER_DIR)) {
-			throw new Exception("Media error : Cant create /rendernew folder");
+			throw new Exception("Media error : Cant create /render folder");
 		}
 	}
 
@@ -32,7 +32,14 @@ class Modelpage extends Modeldb
 	}
 
 
-	public function getlisterid(array $idlist = [])
+	/**
+	 * Scan database for specific pages IDs and return array of Pages objects
+	 * 
+	 * @param array $idlist list of ID strings
+	 * 
+	 * @return array of Page objects
+	 */
+	public function getlisterid(array $idlist = []) : array
 	{
 		$pagedatalist = $this->repo->query()
 		->where('__id', 'IN', $idlist)
@@ -45,6 +52,11 @@ class Modelpage extends Modeldb
 		return $pagelist;
 	}
 
+	/**
+	 * Store new page in the database
+	 * 
+	 * @param Page $page object
+	 */
 	public function add(Page $page)
 	{
 
@@ -194,6 +206,7 @@ class Modelpage extends Modeldb
 	 * @param array $pagelist List of Page
 	 * @param array $tagchecked list of tags
 	 * @param string $tagcompare string, can be 'OR' or 'AND', set the tag filter method
+	 * 
 	 * @return array $array
 	 */
 
@@ -280,6 +293,7 @@ class Modelpage extends Modeldb
 	/**
 	 * @param array $taglist list of tags
 	 * @param array $pagelist list of Page
+	 * 
 	 * @return array list of tags each containing list of id
 	 */
 
