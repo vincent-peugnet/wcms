@@ -13,6 +13,7 @@ require('./vendor/autoload.php');
 
 $app = new Wcms\Application();
 $app->wakeup();
+Sentry\init(['dsn' => Wcms\Config::sentrydsn()]);
 
 try {
     $matchoper = new Wcms\Routes();

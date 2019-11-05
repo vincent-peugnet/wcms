@@ -32,6 +32,7 @@ abstract class Config
 	protected static $homeredirect = null;
 	protected static $interfacecss = null;
 	protected static $bookmark = [];
+	protected static $sentrydsn = '';
 
 
 // _______________________________________ F U N _______________________________________
@@ -248,6 +249,11 @@ abstract class Config
 		return self::$bookmark;
 	}
 
+	public static function sentrydsn()
+	{
+		return self::$sentrydsn;
+	}
+
 
 // __________________________________________ S E T ______________________________________
 
@@ -423,6 +429,13 @@ abstract class Config
 	{
 		if(is_array($bookmark)) {
 			self::$bookmark = $bookmark;
+		}
+	}
+
+	public static function setsentrydsn($sentrydsn)
+	{
+		if (is_string($sentrydsn)) {
+			self::$sentrydsn = $sentrydsn;
 		}
 	}
 
