@@ -1,15 +1,14 @@
-import CodeMirror from "codemirror";
-import "codemirror/lib/codemirror.css";
-import "codemirror/mode/markdown/markdown";
-import "codemirror/mode/css/css"
-import "codemirror/mode/htmlmixed/htmlmixed"
-import "codemirror/mode/javascript/javascript"
-import "codemirror/addon/search/search";
-import "codemirror/addon/search/searchcursor";
-import "codemirror/addon/search/jump-to-line";
-import "codemirror/addon/dialog/dialog";
-import "codemirror/addon/dialog/dialog.css";
-
+import CodeMirror from 'codemirror';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/markdown/markdown';
+import 'codemirror/mode/css/css';
+import 'codemirror/mode/htmlmixed/htmlmixed';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/addon/search/search';
+import 'codemirror/addon/search/searchcursor';
+import 'codemirror/addon/search/jump-to-line';
+import 'codemirror/addon/dialog/dialog';
+import 'codemirror/addon/dialog/dialog.css';
 
 let form;
 let editors = [];
@@ -23,58 +22,58 @@ window.onload = () => {
         input.oninput = changeHandler;
     }
 
-    form.addEventListener("submit", function (event) {
+    form.addEventListener('submit', function(event) {
         event.preventDefault();
         submitHandler(this);
     });
 
-    delete CodeMirror.keyMap['default']["Ctrl-D"];
+    delete CodeMirror.keyMap['default']['Ctrl-D'];
 
     editors = [
         CodeMirror.fromTextArea(document.getElementById('editmain'), {
             mode: 'markdown',
             lineNumbers: true,
             lineWrapping: true,
-            extraKeys: {"Alt-F": "findPersistent"}
+            extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editcss'), {
             mode: 'css',
             lineNumbers: true,
-            extraKeys: {"Alt-F": "findPersistent"}
+            extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editheader'), {
             mode: 'markdown',
             lineNumbers: true,
             lineWrapping: true,
-            extraKeys: {"Alt-F": "findPersistent"}
+            extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editnav'), {
             mode: 'markdown',
             lineNumbers: true,
             lineWrapping: true,
-            extraKeys: {"Alt-F": "findPersistent"}
+            extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editaside'), {
             mode: 'markdown',
             lineNumbers: true,
             lineWrapping: true,
-            extraKeys: {"Alt-F": "findPersistent"}
+            extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editfooter'), {
             mode: 'markdown',
             lineNumbers: true,
             lineWrapping: true,
-            extraKeys: {"Alt-F": "findPersistent"}
+            extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editbody'), {
             mode: 'htmlmixed',
             lineNumbers: true,
-            extraKeys: {"Alt-F": "findPersistent"}
+            extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editjavascript'), {
             mode: 'javascript',
             lineNumbers: true,
-            extraKeys: {"Alt-F": "findPersistent"}
+            extraKeys: { 'Alt-F': 'findPersistent' },
         }),
     ];
     for (const editor of editors) {
@@ -82,7 +81,7 @@ window.onload = () => {
     }
 
     const fontSizeInput = document.getElementById('editfontsize');
-    fontSizeInput.addEventListener('change', fontSizeChangeHandler)
+    fontSizeInput.addEventListener('change', fontSizeChangeHandler);
     fontSizeInput.dispatchEvent(new Event('change'));
 
     window.onkeydown = keyboardHandler;
@@ -103,7 +102,9 @@ function keyboardHandler(e) {
                     break;
                 // ctrl + d
                 case 'd':
-                    const url = document.getElementById('update').getAttribute('href');
+                    const url = document
+                        .getElementById('update')
+                        .getAttribute('href');
                     window.open(url);
                     break;
                 default:
@@ -120,7 +121,10 @@ function keyboardHandler(e) {
  * @param {InputEvent} e
  */
 function changeHandler(e) {
-    if(e.target.classList.contains("toggle")||e.target.classList.contains("checkboxtab")) {
+    if (
+        e.target.classList.contains('toggle') ||
+        e.target.classList.contains('checkboxtab')
+    ) {
         return;
     }
     unsavedChanges = true;
@@ -130,7 +134,7 @@ function changeHandler(e) {
  * Manage CodeMirror editor change event
  * @param {CodeMirror.EditorFromTextArea} cm the CodeMirror instance
  */
-function cmChangeHandler(cm){
+function cmChangeHandler(cm) {
     let textArea = cm.getTextArea();
     textArea.value = cm.getValue();
     textArea.dispatchEvent(inputEvent);
@@ -152,11 +156,11 @@ function submitHandler(form) {
     var xhr = new XMLHttpRequest();
     var fd = new FormData(form);
 
-    xhr.addEventListener("load", function(event) {
+    xhr.addEventListener('load', function(event) {
         unsavedChanges = false;
         // Add "last update" timestamp here
     });
-    xhr.addEventListener("error", function(event) {
+    xhr.addEventListener('error', function(event) {
         alert('Error while trying to update.');
     });
     xhr.open(form.method, form.action);

@@ -1,4 +1,5 @@
 const path = require('path');
+const PrettierPlugin = require('prettier-webpack-plugin');
 
 module.exports = (env) => {
 	return {
@@ -27,5 +28,12 @@ module.exports = (env) => {
 				},
 			],
 		},
+		plugins: [
+			new PrettierPlugin({
+				tabWidth: 4,
+				trailingComma: 'es5',
+				singleQuote: true,
+			})
+		],
 	}
 };
