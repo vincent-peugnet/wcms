@@ -1,17 +1,25 @@
+include .default.env
 include .env
 export
+
 PATH := vendor/bin:node_modules/.bin:$(PATH)
 GIT_VERSION := $(shell git --no-pager describe --always --tags)
 
 js_sources := $(wildcard src/*.js)
 js_bundles := $(js_sources:src/%.js=assets/js/%.bundle.js)
-zip_release := $(GIT_VERSION:%=dist/w_cms_%.zip)
+zip_release := dist/w_cms_$(GIT_VERSION).zip
 
-all: php_dependencies $(js_bundles)
+all: vendor build
+
+build: $(js_bundles)
+
+watch: node_modules
+	webpack --env dev --watch
 
 release:
 	release-it
 
+dist: ENV := prod
 dist: distclean $(zip_release)
 
 dist/w_cms_%.zip: all
@@ -34,32 +42,41 @@ dist/w_cms_%.zip: all
 		-x "*test*" \
 		-x "*docs*"
 
-assets/js/%.bundle.js: src/%.js js_dependencies
+assets/js/%.bundle.js: src/%.js node_modules
 	@echo "Building JS Bundles..."
 	mkdir -p $(dir $@)
-	webpack --env prod
+ifeq ($(ENV),prod)
+	webpack $< -o $@ --env prod -p
+else
+	webpack $< -o $@ --env dev
+endif
 
 .env:
 	cp .default.env .env
 
-php_dependencies:
+vendor: composer.json composer.lock
 	@echo "Installing PHP dependencies..."
+ifeq ($(ENV),prod)
 	composer install --no-dev --prefer-dist
+else
+	composer install
+endif
 
-php_clean:
+node_modules: package.json package-lock.json
+	@echo "Installing JS dependencies..."
+	npm install --loglevel=error
+
+clean: buildclean
 	@echo "Cleaning PHP..."
 	rm -rf vendor
-
-js_dependencies:
-	@echo "Installing JS dependencies..."
-	npm install
-
-js_clean:
 	@echo "Cleaning JS..."
 	rm -rf node_modules
+
+distclean: buildclean
+	rm -rf dist
+
+buildclean:
+	@echo "Cleaning build artifacts..."
 	rm -rf $(js_bundles)
 
-clean: php_clean js_clean
-
-distclean:
-	rm -rf dist
+.PHONY: all build watch release dist clean distclean buildclean

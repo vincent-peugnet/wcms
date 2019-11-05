@@ -1,10 +1,7 @@
 {
   "name": "wcms",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "webpack --env dev --watch",
-    "build": "webpack --env prod"
-  },
+  "repository": "github:vincent-peugnet/wcms",
+  "license": "MIT",
   "dependencies": {
     "codemirror": "^5.49.0"
   },
