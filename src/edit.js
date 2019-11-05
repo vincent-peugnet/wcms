@@ -10,9 +10,16 @@ import 'codemirror/addon/search/jump-to-line';
 import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/dialog/dialog.css';
 
+/** @type {HTMLFormElement} */
 let form;
+
+/** @type {CodeMirror.EditorFromTextArea[]} */
 let editors = [];
+
+/** @type {boolean} */
 let unsavedChanges = false;
+
+/** @type {InputEvent} */
 const inputEvent = new InputEvent('input');
 
 window.addEventListener('load', () => {
@@ -179,10 +186,10 @@ function confirmExit(e) {
 
 function changed() {
     unsavedChanges = true;
-    document.title = '✏ *' + pageid;
+    document.title = '✏ *' + pagetitle;
 }
 
 function saved() {
     unsavedChanges = false;
-    document.title = '✏ ' + pageid;
+    document.title = '✏ ' + pagetitle;
 }

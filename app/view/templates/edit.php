@@ -29,6 +29,7 @@
 
 <script>
     const pageid = '<?= $page->id() ?>';
+    let pagetitle = '<?= $page->title() ?>';
 </script>
 <script src="<?= Model::jspath() ?>edit.bundle.js"></script>
 </body>
