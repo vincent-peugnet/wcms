@@ -15,7 +15,7 @@ let editors = [];
 let unsavedChanges = false;
 const inputEvent = new InputEvent('input');
 
-window.onload = () => {
+window.addEventListener('load', () => {
     form = document.getElementById('update');
     let inputs = form.elements;
     for (const input of inputs) {
@@ -86,7 +86,7 @@ window.onload = () => {
 
     window.onkeydown = keyboardHandler;
     window.onbeforeunload = confirmExit;
-};
+});
 
 /**
  * Manage a keyboardEvent
