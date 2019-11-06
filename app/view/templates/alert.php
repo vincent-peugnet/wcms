@@ -7,7 +7,7 @@ $this->start('head');
 ?>
 
 <head>
-    <?= Config::alertcss() ? '<link href="' . Model::globalpath() . 'global.css" rel="stylesheet" />' : '' ?>
+    <?= Wcms\Config::alertcss() ? '<link href="' . Wcms\Model::globalpath() . 'global.css" rel="stylesheet" />' : '' ?>
 </head>
 
 
@@ -28,7 +28,7 @@ $this->stop();
 
 
 
-    <?= !empty(Config::alerttitle()) ? '<h1>' . Config::alerttitle() . '</h1>' : '' ?>
+    <?= !empty(Wcms\Config::alerttitle()) ? '<h1>' . Wcms\Config::alerttitle() . '</h1>' : '' ?>
 
     <?php
 
@@ -43,10 +43,10 @@ $this->stop();
 
 
     if(!$pageexist) {
-        if(!empty(Config::existnot())) {
-            echo '<h2>' . Config::existnot() . '</h2>';
+        if(!empty(Wcms\Config::existnot())) {
+            echo '<h2>' . Wcms\Config::existnot() . '</h2>';
         }
-        if(Config::existnotpass() && !$canedit) {
+        if(Wcms\Config::existnotpass() && !$canedit) {
             echo $form;
         }        
     } else {
@@ -55,19 +55,19 @@ $this->stop();
 
         switch ($page->secure()) {
             case 1:
-                if(!empty(Config::private())) {
-                    echo '<h2>' . Config::private() . '</h2>';
+                if(!empty(Wcms\Config::private())) {
+                    echo '<h2>' . Wcms\Config::private() . '</h2>';
                 }
-                if(Config::privatepass()) {
+                if(Wcms\Config::privatepass()) {
                     echo $form;
                 }
                 break;
             
             case 2:
-                if(!empty(Config::notpublished())) {
-                    echo '<h2>' . Config::notpublished() . '</h2>';
+                if(!empty(Wcms\Config::notpublished())) {
+                    echo '<h2>' . Wcms\Config::notpublished() . '</h2>';
                 }
-                if(Config::notpublishedpass()) {
+                if(Wcms\Config::notpublishedpass()) {
                     echo $form;
                 }
                 break;
@@ -80,9 +80,9 @@ $this->stop();
         ?>
         <p><a href="<?= $this->upage('pageadd', $page->id()) ?>">⭐ Create</a></p>            
         <?php
-        } elseif(!empty(Config::alertlink())) {
+        } elseif(!empty(Wcms\Config::alertlink())) {
             ?>
-            <p><a href="<?= $this->upage('pageread/', Config::alertlink()) ?>"><?= empty(Config::alertlinktext()) ? Config::alertlink() : Config::alertlinktext() ?></a></p>
+            <p><a href="<?= $this->upage('pageread/', Wcms\Config::alertlink()) ?>"><?= empty(Wcms\Config::alertlinktext()) ? Wcms\Config::alertlink() : Wcms\Config::alertlinktext() ?></a></p>
             <?php
         }
 

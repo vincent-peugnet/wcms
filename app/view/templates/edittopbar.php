@@ -18,7 +18,7 @@
 
 
     <a href="<?= $this->upage('pageread/', $page->id()) ?>" target="_blank" id="display">
-        <img src="<?= Model::iconpath() ?>read.png" class="icon">
+        <img src="<?= Wcms\Model::iconpath() ?>read.png" class="icon">
         <span class="hidephone">display</span>
     </a>
     <span id="headid"><?= $page->id() ?></span>
@@ -27,11 +27,11 @@
 <span id="fontsize" class="hidephone">
     
     <label for="fontsize">Font-size</label>
-    <input type="number" name="fontsize" value="<?= Config::fontsize() ?>" id="editfontsize" min="5" max="99">
+    <input type="number" name="fontsize" value="<?= Wcms\Config::fontsize() ?>" id="editfontsize" min="5" max="99">
 </span>
 
 <span id="download" class="hidephone">
-        <a href="<?= $this->upage('pagedownload', $page->id()) ?>"><img src="<?= Model::iconpath() ?>download.png" class="icon"><span class="text">download</span></a>
+        <a href="<?= $this->upage('pagedownload', $page->id()) ?>"><img src="<?= Wcms\Model::iconpath() ?>download.png" class="icon"><span class="text">download</span></a>
 </span>
 
 

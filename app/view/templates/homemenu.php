@@ -159,10 +159,10 @@
         <summary>Bookmarks</summary>
         <div class="submenu">
             <h2>Public</h2>
-            <?php if(!empty(Config::bookmark())) { ?>
+            <?php if(!empty(Wcms\Config::bookmark())) { ?>
             <form action="<?= $this->url('homebookmark') ?>" method="post">
             <ul>
-            <?php foreach (Config::bookmark() as $id => $query) { ?>  
+            <?php foreach (Wcms\Config::bookmark() as $id => $query) { ?>  
                 <li>
                 <label for="public-bookmark_<?= $id ?>">
                     <a href="<?= $query ?>" title="<?= $query ?>"><?= $id ?></a>
@@ -236,7 +236,7 @@
         <form action="<?= $this->url('homecolumns') ?>" method="post">
         <ul>
         <?php
-        foreach (Model::COLUMNS as $col) { ?>
+        foreach (Wcms\Model::COLUMNS as $col) { ?>
             <li>
             <input type="checkbox" name="columns[]" value="<?= $col ?>" id="col_<?= $col ?>" <?= in_array($col, $user->columns()) ? 'checked' : '' ?>>
             <label for="col_<?= $col ?>"><?= $col ?></label>

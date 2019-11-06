@@ -1,0 +1,82 @@
+<?php
+
+namespace Wcms;
+
+use AltoRouter;
+
+class Routes
+{
+    /**
+     * Cherche une correspondance entre l'URL et les routes, et appelle la méthode appropriée
+     */
+    public function match()
+    {
+        $router = new AltoRouter();
+        if(!empty(Config::basepath())) {
+            $router->setBasePath('/' . Config::basepath());
+        }
+        $router->addMatchTypes(array('cid' => '[a-zA-Z0-9-_+,\'!%@&.$€=\(\|\)]+'));
+        $router->addRoutes([
+            ['GET', '/', 'Controllerhome#desktop', 'home'],
+            ['POST', '/', 'Controllerhome#desktop', 'homequery'],
+            ['POST', '/columns', 'Controllerhome#columns', 'homecolumns'],
+            ['GET', '//renderall', 'Controllerhome#renderall', 'homerenderall'],
+            ['POST', '/bookmark', 'Controllerhome#bookmark', 'homebookmark'],
+            ['POST', '/upload', 'Controllerpage#upload', 'pageupload'],
+            ['POST', '/!co', 'Controllerconnect#log', 'log'],
+            ['GET', '/!co', 'Controllerconnect#connect', 'connect'],
+            ['POST', '/!search', 'Controllerhome#search', 'search'],
+            ['GET', '/!media', 'Controllermedia#desktop', 'media'],
+            ['POST', '/!media/upload', 'Controllermedia#upload', 'mediaupload'],
+            ['POST', '/!media/folderadd', 'Controllermedia#folderadd', 'mediafolderadd'],
+            ['POST', '/!media/folderdelete', 'Controllermedia#folderdelete', 'mediafolderdelete'],
+            ['POST', '/!media/edit', 'Controllermedia#edit', 'mediaedit'],
+            ['GET', '/!font', 'Controllerfont#desktop', 'font'],
+            ['GET', '/!font/render', 'Controllerfont#render', 'fontrender'],
+            ['POST', '/!font/add', 'Controllerfont#add', 'fontadd'],
+            ['POST', '/!admin', 'Controlleradmin#update', 'adminupdate'],
+            ['GET', '/!admin', 'Controlleradmin#desktop', 'admin'],
+            ['GET', '/!user', 'Controlleruser#desktop', 'user'],
+            ['POST', '/!user/add', 'Controlleruser#add', 'useradd'],
+            ['POST', '/!user/update', 'Controlleruser#update', 'userupdate'],
+            ['POST', '/!user/pref', 'Controlleruser#pref', 'userpref'],
+            ['GET', '/!info', 'Controllerinfo#desktop', 'info'],
+            ['GET', '/!timeline', 'Controllertimeline#desktop', 'timeline'],
+            ['POST', '/!timeline/add', 'Controllertimeline#add', 'timelineadd'],
+            ['POST', '/!timeline/clap', 'Controllertimeline#clap', 'timelineclap'],
+            ['GET', '/[cid:page]/', 'Controllerpage#read', 'pageread/'],
+            ['GET', '/[cid:page]', 'Controllerpage#read', 'pageread'],
+            ['GET', '/[cid:page]/add', 'Controllerpage#add', 'pageadd'],
+            ['GET', '/[cid:page]/edit', 'Controllerpage#edit', 'pageedit'],
+            ['GET', '/[cid:page]/render', 'Controllerpage#render', 'pagerender'],
+            ['GET', '/[cid:page]/log', 'Controllerpage#log', 'pagelog'],
+            ['GET', '/[cid:page]/download', 'Controllerpage#download', 'pagedownload'],
+            ['POST', '/[cid:page]/edit', 'Controllerpage#update', 'pageupdate'],
+            ['POST', '/[cid:page]/editby', 'Controllerpage#editby', 'pageeditby'],
+            ['POST', '/[cid:page]/removeeditby', 'Controllerpage#removeeditby', 'pageremoveeditby'],
+            ['GET', '/[cid:page]/delete', 'Controllerpage#confirmdelete', 'pageconfirmdelete'],
+            ['POST', '/[cid:page]/delete', 'Controllerpage#delete', 'pagedelete'],
+            ['GET', '/[cid:page]/[*]', 'Controllerpage#pagedirect', 'pageread/etoile'],
+        ]);
+
+        $match = $router->match();
+        if ($match) {
+            $callableParts = explode('#', $match['target']);
+            $controllerName = '\\Wcms\\' . $callableParts[0];
+            $methodName = $callableParts[1];
+
+            $controller = new $controllerName($router);
+			
+            call_user_func_array(array($controller, $methodName), $match['params']);
+        }
+		//404
+        else {
+            if(!empty(Config::route404())) {
+                $controller = new Controller($router);
+                $controller->routedirect('pageread/', ['page' => Config::route404()]);
+            } else {
+                header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+            }
+        }
+    }
+}

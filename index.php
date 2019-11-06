@@ -10,14 +10,12 @@ require('app/fn/fn.php');
 
 require('./vendor/autoload.php');
 
-spl_autoload_register('class_autoloader');
 
-
-$app = new Application();
+$app = new Wcms\Application();
 $app->wakeup();
 
 try {
-    $matchoper = new Routes();
+    $matchoper = new Wcms\Routes();
     $matchoper->match();
 
 } catch (Exception $e) {
