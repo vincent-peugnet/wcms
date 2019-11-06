@@ -2,6 +2,7 @@
 
 namespace Wcms;
 
+use Exception;
 use JamesMoss\Flywheel\Document;
 
 class Modelpage extends Modeldb

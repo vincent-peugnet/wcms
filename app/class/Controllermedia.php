@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use Exception;
+
 class Controllermedia extends Controller
 {
     /**

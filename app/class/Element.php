@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use Exception;
+
 class Element
 {
     protected $fullmatch;

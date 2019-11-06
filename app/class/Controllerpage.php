@@ -4,6 +4,7 @@ namespace Wcms;
 
 use DateTimeImmutable;
 use DateTimeZone;
+use Exception;
 
 class Controllerpage extends Controller
 {

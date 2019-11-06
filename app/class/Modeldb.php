@@ -2,7 +2,7 @@
 
 namespace Wcms;
 
-use JamesMoss\Flywheel\Config;
+use JamesMoss\Flywheel;
 use Wcms\Flywheel\Formatter\JSON;
 use Wcms\Flywheel\Query;
 use Wcms\Flywheel\Repository;
@@ -22,7 +22,7 @@ class Modeldb extends Model
 
 	public function dbinit()
 	{
-		$this->database = new Config(Model::DATABASE_DIR, [
+		$this->database = new Flywheel\Config(Model::DATABASE_DIR, [
 			'query_class' => Query::class,
 			'formatter' => new JSON,
 		]);

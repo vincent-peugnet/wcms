@@ -2,6 +2,9 @@
 
 namespace Wcms;
 
+use Exception;
+use Michelf\MarkdownExtra;
+
 class Modelrender extends Modelpage
 {
 	protected $router;
@@ -398,9 +401,8 @@ class Modelrender extends Modelpage
 	}
 
 	public function markdown($text)
-	{		
-		//use Michelf\MarkdownExtra;
-		$fortin = new Michelf\MarkdownExtra;
+	{
+		$fortin = new MarkdownExtra;
 		// id in headers
 		// $fortin->header_id_func = function ($header) {
 		// 	return preg_replace('/[^\w]/', '', strtolower($header));
