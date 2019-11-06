@@ -92,6 +92,10 @@ window.addEventListener('load', () => {
     fontSizeInput.addEventListener('change', fontSizeChangeHandler);
     fontSizeInput.dispatchEvent(new Event('change'));
 
+    document.getElementById('title').addEventListener('input', e => {
+        pagetitle = e.target.value;
+    });
+
     window.onkeydown = keyboardHandler;
     window.onbeforeunload = confirmExit;
 });
