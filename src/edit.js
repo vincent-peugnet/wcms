@@ -187,9 +187,11 @@ function confirmExit(e) {
 function changed() {
     unsavedChanges = true;
     document.title = '✏ *' + pagetitle;
+    document.getElementById('headid').innerHTML = '*' + pageid;
 }
 
 function saved() {
     unsavedChanges = false;
     document.title = '✏ ' + pagetitle;
+    document.getElementById('headid').innerHTML = pageid;
 }
