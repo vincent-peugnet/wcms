@@ -34,23 +34,27 @@ dist/%: ENV := prod
 dist/w_cms_%.zip: all
 	@echo "Building Zip release..."
 	mkdir -p $(dir $@)
-	git archive --format=zip HEAD -o $@
-	zip -d $@ \
-		"src*" \
-		.default.env \
-		.gitignore \
-		.release-it.json \
-		composer.json \
-		composer.lock \
-		Makefile \
-		"package*" \
-		webpack.config.js
+# Include git tracked files (everything except ignored) + needed files
 	zip -r $@ \
+		$(shell git ls-tree -r HEAD --name-only) \
 		VERSION \
 		assets/js \
 		vendor \
 		-x "*test*" \
 		-x "*docs*"
+# Include non-empty git tracked directories (to keep dir permissions)
+	zip $@ $(shell git ls-tree -r HEAD --name-only -d)
+# Remove non-useful files
+	zip -d $@ \
+		$(js_sources) \
+		$(js_srcmaps) \
+		.default.env \
+		.gitignore \
+		.release-it.json \
+		Makefile \
+		"composer*" \
+		"package*" \
+		webpack.config.js
 
 assets/js/%.bundle.js assets/js/%.bundle.map: src/%.js node_modules
 	@echo "Building JS Bundles..."
@@ -77,17 +81,17 @@ node_modules: package.json package-lock.json
 	npm install --loglevel=error
 
 clean: buildclean
-	@echo "Cleaning PHP..."
+	@echo "Cleaning make artifacts..."
 	rm -rf vendor
-	@echo "Cleaning JS..."
 	rm -rf node_modules
+	rm -rf VERSION
 
 distclean: buildclean
+	@echo "Cleaning dist artifacts..."
 	rm -rf dist
 
 buildclean:
 	@echo "Cleaning build artifacts..."
-	rm -rf VERSION
 	rm -rf $(js_bundles)
 	rm -rf $(js_srcmaps)
 
