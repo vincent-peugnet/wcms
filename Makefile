@@ -4,7 +4,7 @@ export
 
 PATH := vendor/bin:node_modules/.bin:$(PATH)
 override GIT_VERSION := $(shell git --no-pager describe --always --tags)
-override CUR_VERSION := $(strip $(shell cat VERSION))
+override CUR_VERSION := $(strip $(shell cat VERSION 2>/dev/null))
 
 js_sources := $(wildcard src/*.js)
 js_bundles := $(js_sources:src/%.js=assets/js/%.bundle.js)
@@ -18,8 +18,15 @@ build: VERSION $(js_bundles)
 watch: node_modules
 	webpack --env dev --watch
 
-release:
+release: node_modules
 	release-it
+
+sentryrelease: ENV := prod
+sentryrelease: build
+	sentry-cli releases new $(GIT_VERSION)
+	sentry-cli releases set-commits $(GIT_VERSION) --auto
+	sentry-cli releases files $(GIT_VERSION) upload-sourcemaps assets/js --url-prefix '~/assets/js'
+	sentry-cli releases finalize $(GIT_VERSION)
 
 dist: distclean $(zip_release) $(js_srcmaps)
 
@@ -86,4 +93,4 @@ buildclean:
 
 FORCE: ;
 
-.PHONY: all build watch release dist clean distclean buildclean
+.PHONY: all build watch release sentryrelease dist clean distclean buildclean
