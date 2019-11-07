@@ -5,6 +5,8 @@ export
 PATH := vendor/bin:node_modules/.bin:$(PATH)
 override GIT_VERSION := $(shell git --no-pager describe --always --tags)
 override CUR_VERSION := $(strip $(shell cat VERSION 2>/dev/null))
+PREV_ENV_FILE := /tmp/wcms_prev_env
+PREV_ENV=$(strip $(shell cat $(PREV_ENV_FILE) 2>/dev/null))
 
 js_sources := $(wildcard src/*.js)
 js_bundles := $(js_sources:src/%.js=assets/js/%.bundle.js)
@@ -13,7 +15,7 @@ zip_release := dist/w_cms_$(GIT_VERSION).zip
 
 all: vendor build
 
-build: VERSION $(js_bundles)
+build: VERSION $(PREV_ENV_FILE) $(js_bundles)
 
 watch: node_modules
 	webpack --env dev --watch
@@ -21,16 +23,20 @@ watch: node_modules
 release: node_modules
 	release-it
 
-sentryrelease: ENV := prod
-sentryrelease: buildclean build
+sentryrelease:
+	$(MAKE) .sentryrelease ENV=prod
+
+.sentryrelease: build
 	sentry-cli releases new $(GIT_VERSION)
 	sentry-cli releases set-commits $(GIT_VERSION) --auto
 	sentry-cli releases files $(GIT_VERSION) upload-sourcemaps assets/js --url-prefix '~/assets/js' --rewrite
 	sentry-cli releases finalize $(GIT_VERSION)
 
-dist: distclean $(zip_release) $(js_srcmaps)
+dist:
+	$(MAKE) .dist ENV=prod
 
-dist/%: ENV := prod
+.dist: distclean $(zip_release) $(js_srcmaps)
+
 dist/w_cms_%.zip: all
 	@echo "Building Zip release..."
 	mkdir -p $(dir $@)
@@ -56,7 +62,7 @@ dist/w_cms_%.zip: all
 		"package*" \
 		webpack.config.js
 
-assets/js/%.bundle.js assets/js/%.bundle.map: src/%.js node_modules
+assets/js/%.bundle.js assets/js/%.bundle.js.map: src/%.js node_modules
 	@echo "Building JS Bundles..."
 	mkdir -p $(dir $@)
 	webpack $< -o $@ $(if $(filter $(ENV),prod),--env prod -p,--env dev)
@@ -67,9 +73,16 @@ assets/js/%.bundle.js assets/js/%.bundle.map: src/%.js node_modules
 # use a force (fake) target to always rebuild this file but have Make
 # consider this updated if it was actually rewritten (a .PHONY target
 # is always considered new)
-VERSION: FORCE
+VERSION: .FORCE
 ifneq ($(CUR_VERSION),$(GIT_VERSION))
-	@echo $(GIT_VERSION) > VERSION
+	@echo $(GIT_VERSION) > $@
+endif
+
+$(PREV_ENV_FILE): .FORCE
+ifneq ($(PREV_ENV),$(ENV))
+	@echo Build env has changed !
+	$(MAKE) buildclean
+	@echo $(ENV) > $@
 endif
 
 vendor: composer.json composer.lock
@@ -86,7 +99,7 @@ clean: buildclean
 	rm -rf node_modules
 	rm -rf VERSION
 
-distclean: buildclean
+distclean:
 	@echo "Cleaning dist artifacts..."
 	rm -rf dist
 
@@ -95,6 +108,6 @@ buildclean:
 	rm -rf $(js_bundles)
 	rm -rf $(js_srcmaps)
 
-FORCE: ;
+.FORCE: ;
 
-.PHONY: all build watch release sentryrelease dist clean distclean buildclean
+.PHONY: all build watch release sentryrelease .sentryrelease dist .dist clean distclean buildclean
