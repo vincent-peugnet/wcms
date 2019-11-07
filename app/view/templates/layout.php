@@ -18,6 +18,13 @@
         echo '<link rel="stylesheet" href="' . Wcms\Model::csspath() . Wcms\Config::interfacecss() . '">';
     }
     ?>
+    <script>
+        const sentrydsn = '<?= Wcms\Config::sentrydsn() ?>';
+        const version = '<?= getversion() ?>';
+        const url = '<?= Wcms\Config::url() ?>';
+        const basepath = '<?= Wcms\Config::basepath() ?>';
+    </script>
+    <script src="<?= Wcms\Model::jspath() ?>sentry.bundle.js"></script>
 </head>
 
 

@@ -22,10 +22,10 @@ release: node_modules
 	release-it
 
 sentryrelease: ENV := prod
-sentryrelease: build
+sentryrelease: buildclean build
 	sentry-cli releases new $(GIT_VERSION)
 	sentry-cli releases set-commits $(GIT_VERSION) --auto
-	sentry-cli releases files $(GIT_VERSION) upload-sourcemaps assets/js --url-prefix '~/assets/js'
+	sentry-cli releases files $(GIT_VERSION) upload-sourcemaps assets/js --url-prefix '~/assets/js' --rewrite
 	sentry-cli releases finalize $(GIT_VERSION)
 
 dist: distclean $(zip_release) $(js_srcmaps)

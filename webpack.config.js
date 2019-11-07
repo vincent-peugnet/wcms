@@ -5,13 +5,14 @@ module.exports = (env) => {
 	return {
 		// Environment dependent
 		mode: env == 'dev' ? 'development' : 'production',
-		devtool: env == 'dev' ? 'cheap-eval-source-map' : 'hidden-source-map',
+		devtool: env == 'dev' ? 'cheap-eval-source-map' : 'source-map',
 		stats: env == 'dev' ? {} : { warnings: false },
 
 		// Constant
 		entry: {
 			edit: './src/edit.js',
 			home: './src/home.js',
+			sentry: './src/sentry.js',
 		},
 		output: {
 			filename: 'assets/js/[name].bundle.js',
