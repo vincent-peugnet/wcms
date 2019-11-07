@@ -1,6 +1,7 @@
 .vscode/*
 .env
 *.bundle.js
+*.bundle.js.map
 assets/render/*
 assets/global/*
 database/*
