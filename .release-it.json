@@ -9,14 +9,6 @@
 			"dist/*.zip"
 		]
 	},
-	"plugins": {
-		"@release-it/bumper": {
-			"out": {
-				"file": "VERSION",
-				"type": "text/plain"
-			}
-		}
-	},
 	"hooks": {
 		"after:git:release": "make dist"
 	}

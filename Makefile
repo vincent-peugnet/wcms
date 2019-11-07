@@ -3,7 +3,8 @@ include .env
 export
 
 PATH := vendor/bin:node_modules/.bin:$(PATH)
-GIT_VERSION := $(shell git --no-pager describe --always --tags)
+override GIT_VERSION := $(shell git --no-pager describe --always --tags)
+override CUR_VERSION := $(strip $(shell cat VERSION))
 
 js_sources := $(wildcard src/*.js)
 js_bundles := $(js_sources:src/%.js=assets/js/%.bundle.js)
@@ -12,7 +13,7 @@ zip_release := dist/w_cms_$(GIT_VERSION).zip
 
 all: vendor build
 
-build: $(js_bundles)
+build: VERSION $(js_bundles)
 
 watch: node_modules
 	webpack --env dev --watch
@@ -38,6 +39,7 @@ dist/w_cms_%.zip: all
 		"package*" \
 		webpack.config.js
 	zip -r $@ \
+		VERSION \
 		assets/js \
 		vendor \
 		-x "*test*" \
@@ -50,6 +52,14 @@ assets/js/%.bundle.js assets/js/%.bundle.map: src/%.js node_modules
 
 .env:
 	cp .default.env .env
+
+# use a force (fake) target to always rebuild this file but have Make
+# consider this updated if it was actually rewritten (a .PHONY target
+# is always considered new)
+VERSION: FORCE
+ifneq ($(CUR_VERSION),$(GIT_VERSION))
+	@echo $(GIT_VERSION) > VERSION
+endif
 
 vendor: composer.json composer.lock
 	@echo "Installing PHP dependencies..."
@@ -70,7 +80,10 @@ distclean: buildclean
 
 buildclean:
 	@echo "Cleaning build artifacts..."
+	rm -rf VERSION
 	rm -rf $(js_bundles)
 	rm -rf $(js_srcmaps)
+
+FORCE: ;
 
 .PHONY: all build watch release dist clean distclean buildclean

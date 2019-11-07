@@ -6,7 +6,6 @@
     "codemirror": "^5.49.0"
   },
   "devDependencies": {
-    "@release-it/bumper": "^1.0.5",
     "css-loader": "^3.2.0",
     "prettier": "^1.18.2",
     "prettier-webpack-plugin": "^1.2.0",

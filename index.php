@@ -15,7 +15,7 @@ $app = new Wcms\Application();
 $app->wakeup();
 Sentry\init([
     'dsn' => Wcms\Config::sentrydsn(),
-    'release' => 'w_cms_v' . getversion(),
+    'release' => getversion(),
     'project_root' => 'app',
 ]);
 Sentry\configureScope(function (Sentry\State\Scope $scope): void {

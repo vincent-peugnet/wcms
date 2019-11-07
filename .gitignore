@@ -13,4 +13,5 @@ vendor/*
 node_modules/
 config.json
 error_log
+VERSION
 !README.md
