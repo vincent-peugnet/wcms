@@ -5,7 +5,11 @@ module.exports = (env) => {
 	return {
 		// Environment dependent
 		mode: env == 'dev' ? 'development' : 'production',
-		devtool: env == 'dev' ? 'cheap-eval-source-map' : 'source-map',
+		devtool: env == 'dev' ?
+			'cheap-eval-source-map' :
+			env == 'dist' ?
+				'hidden-source-map' :
+				'source-map',
 		stats: env == 'dev' ? {} : { warnings: false },
 
 		// Constant

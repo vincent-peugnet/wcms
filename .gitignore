@@ -8,6 +8,7 @@ database/*
 fonts/*
 media/*
 render/
+build/
 dist/
 vendor/*
 node_modules/
