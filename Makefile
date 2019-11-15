@@ -31,8 +31,13 @@ build: VERSION $(PREV_ENV_FILE) $(js_bundles)
 
 # Run webpack in watch mode.
 .PHONY: watch
-watch: node_modules
-	webpack --env dev --watch
+watch: ENV := dev
+watch:
+	$(MAKE) .watch ENV=$(ENV)
+
+.PHONY: .watch
+.watch: $(PREV_ENV_FILE) node_modules
+	webpack --env $(ENV) --watch
 
 # Create a new release and upload it on GitHub.
 .PHONY: release
