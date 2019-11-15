@@ -87,7 +87,7 @@ dist/w_cms_%.zip: all
 		webpack.config.js
 
 # Generate the js bundles (and sourcemaps).
-assets/js/%.bundle.js assets/js/%.bundle.js.map: $(js_src_dir)/%.js node_modules
+assets/js/%.bundle.js assets/js/%.bundle.js.map: $(js_src_dir)/%.js node_modules webpack.config.js
 	@echo Building JS Bundles...
 	mkdir -p $(dir $@)
 	webpack $< -o $@ --env $(ENV) $(WEBPACK_FLAGS)

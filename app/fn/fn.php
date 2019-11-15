@@ -72,6 +72,11 @@ function idclean(string $input)
 	return $input;
 }
 
+function isreportingerrors()
+{
+	return function_exists('Sentry\init') && !empty(Wcms\Config::sentrydsn());
+}
+
 
 function getversion()
 {

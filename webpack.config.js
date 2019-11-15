@@ -19,8 +19,8 @@ module.exports = (env) => {
 			sentry: './src/sentry.js',
 		},
 		output: {
-			filename: 'assets/js/[name].bundle.js',
-			path: path.resolve(__dirname),
+			filename: '[name].bundle.js',
+			path: path.resolve(__dirname, 'assets', 'js'),
 			libraryTarget: 'window'
 		},
 		module: {
@@ -41,5 +41,8 @@ module.exports = (env) => {
 				singleQuote: true,
 			})
 		],
+		externals: {
+			'@sentry/browser': 'Sentry',
+		},
 	}
 };

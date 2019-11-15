@@ -17,7 +17,7 @@
     if (!empty(Wcms\Config::interfacecss())) {
         echo '<link rel="stylesheet" href="' . Wcms\Model::csspath() . Wcms\Config::interfacecss() . '">';
     }
-    if (!empty(Wcms\Config::sentrydsn())) {
+    if (isreportingerrors()) {
     ?>
     <script>
         const sentrydsn = '<?= Wcms\Config::sentrydsn() ?>';
@@ -25,6 +25,7 @@
         const url = '<?= Wcms\Config::url() ?>';
         const basepath = '<?= Wcms\Config::basepath() ?>';
     </script>
+    <script src="https://browser.sentry-cdn.com/5.9.0/bundle.min.js"></script>
     <script src="<?= Wcms\Model::jspath() ?>sentry.bundle.js"></script>
     <?php } ?>
 </head>

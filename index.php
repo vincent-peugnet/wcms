@@ -13,7 +13,8 @@ require('./vendor/autoload.php');
 
 $app = new Wcms\Application();
 $app->wakeup();
-try {
+
+if (isreportingerrors()) {
     Sentry\init([
         'dsn' => Wcms\Config::sentrydsn(),
         'release' => getversion(),
@@ -25,8 +26,6 @@ try {
             'username' => Wcms\Config::basepath(),
         ]);
     });
-} catch (Throwable $th) {
-    // No problem: Sentry is optionnal
 }
 
 try {
@@ -34,10 +33,8 @@ try {
     $matchoper->match();
 
 } catch (Exception $e) {
-    try {
+    if (isreportingerrors()) {
         Sentry\captureException($e);
-    } catch (Throwable $th) {
-        // No problem: Sentry is optionnal
     }
     echo '<h1>⚠ Woops ! There is a little problem : </h1>', $e->getMessage(), "\n";
 }
