@@ -10,9 +10,16 @@ import 'codemirror/addon/search/jump-to-line';
 import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/dialog/dialog.css';
 
+/** @type {HTMLFormElement} */
 let form;
+
+/** @type {CodeMirror.EditorFromTextArea[]} */
 let editors = [];
+
+/** @type {boolean} */
 let unsavedChanges = false;
+
+/** @type {InputEvent} */
 const inputEvent = new InputEvent('input');
 
 window.addEventListener('load', () => {
@@ -27,6 +34,7 @@ window.addEventListener('load', () => {
         submitHandler(this);
     });
 
+    // disable CodeMirror's default ctrl+D shortcut (delete line)
     delete CodeMirror.keyMap['default']['Ctrl-D'];
 
     editors = [
@@ -84,6 +92,10 @@ window.addEventListener('load', () => {
     fontSizeInput.addEventListener('change', fontSizeChangeHandler);
     fontSizeInput.dispatchEvent(new Event('change'));
 
+    document.getElementById('title').addEventListener('input', e => {
+        pagetitle = e.target.value;
+    });
+
     window.onkeydown = keyboardHandler;
     window.onbeforeunload = confirmExit;
 });
@@ -127,7 +139,7 @@ function changeHandler(e) {
     ) {
         return;
     }
-    unsavedChanges = true;
+    changed();
 }
 
 /**
@@ -157,8 +169,7 @@ function submitHandler(form) {
     var fd = new FormData(form);
 
     xhr.addEventListener('load', function(event) {
-        unsavedChanges = false;
-        // Add "last update" timestamp here
+        saved();
     });
     xhr.addEventListener('error', function(event) {
         alert('Error while trying to update.');
@@ -175,4 +186,16 @@ function confirmExit(e) {
     if (unsavedChanges) {
         return 'You have unsaved changes, do you really want to leave this page?';
     }
+}
+
+function changed() {
+    unsavedChanges = true;
+    document.title = '✏ *' + pagetitle;
+    document.getElementById('headid').innerHTML = '*' + pageid;
+}
+
+function saved() {
+    unsavedChanges = false;
+    document.title = '✏ ' + pagetitle;
+    document.getElementById('headid').innerHTML = pageid;
 }
