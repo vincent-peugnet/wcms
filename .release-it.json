@@ -9,15 +9,8 @@
 			"dist/*.zip"
 		]
 	},
-	"plugins": {
-		"@release-it/bumper": {
-			"out": {
-				"file": "VERSION",
-				"type": "text/plain"
-			}
-		}
-	},
 	"hooks": {
-		"after:git:release": "make dist"
+		"after:git:release": "make dist",
+		"after:release": "make sentryrelease"
 	}
 }

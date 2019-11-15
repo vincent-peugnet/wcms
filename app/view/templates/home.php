@@ -173,10 +173,10 @@
 
     <?php $this->insert('footer', ['footer' => $footer]) ?>
 
+    <script src="<?= Wcms\Model::jspath() ?>home.bundle.js"></script>
+
     <?php } ?>
 
-
-    <script src="<?= Wcms\Model::jspath() ?>home.bundle.js"></script>
 </body>
 
 

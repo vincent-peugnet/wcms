@@ -72,11 +72,16 @@ function idclean(string $input)
 	return $input;
 }
 
+function isreportingerrors()
+{
+	return function_exists('Sentry\init') && !empty(Wcms\Config::sentrydsn());
+}
+
 
 function getversion()
 {
 	if(file_exists('VERSION')) {
-		$version = file_get_contents('VERSION');
+		$version = trim(file_get_contents('VERSION'));
 	} else {
 		$version = 'unknown';
 	}

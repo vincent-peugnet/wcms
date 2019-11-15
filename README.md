@@ -73,6 +73,19 @@ If you want to contribute to the project.
 
 The last two commands can be run at once using only `make`.
 
+There are 3 different build environments that `make` can use:
+
+-   **`dev`** _when developing the application._  
+    It installs every dependencies and builds big but easy-to-debug js bundles.
+
+-   **`prod`** _when installing from sources a deployed production application._  
+    It installs every dependencies and builds minified js bundles.
+
+-   **`dist`** _to create the releases' distribution zip._  
+    It strips all the development dependencies and the error reporting module and the sourcemaps of the js bundles are hidden. It can also be used for a production environment if the error reports are not used.
+
+The build environment can be set either for each `make` command by changing it in the `.env` file or on a per command basis by adding it at the end of the command (e.g. `make build ENV=prod`).
+
 ## JS development
 
 While developing the JS sources it is useful to run webpack in watch mode so that the bundles get built at each file change. To do so, use the following command:
@@ -81,11 +94,16 @@ While developing the JS sources it is useful to run webpack in watch mode so tha
 
 ## Publish a new release
 
-The release process uses [release-it](https://github.com/release-it/release-it), so to create and publish a new release you will need a [GitHub personnal access token](https://github.com/settings/tokens) with repository access, saved in a `.env` file like so:
+The release process uses [release-it](https://github.com/release-it/release-it) and uploads sourcemaps to [Sentry](https://sentry.io/). So to create and publish a new release you will need two access tokens:
+-   a [GitHub personnal access token](https://github.com/settings/tokens) with `repository` access
+-   a [Sentry authentification token](https://sentry.io/settings/account/api/auth-tokens/) with `project:read`, `project:releases` and `org:read` access
+
+saved in a `.env` file like so:
 
 ```bash
 # .env
-GITHUB_TOKEN='{{github token value}}'
+GITHUB_TOKEN='<github token value>'
+SENTRY_AUTH_TOKEN='<sentry token value>'
 ```
 
 Then, to make the release, run the following command:

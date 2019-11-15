@@ -5,17 +5,22 @@ module.exports = (env) => {
 	return {
 		// Environment dependent
 		mode: env == 'dev' ? 'development' : 'production',
-		devtool: env == 'dev' ? 'inline-source-map' : 'none',
+		devtool: env == 'dev' ?
+			'cheap-eval-source-map' :
+			env == 'dist' ?
+				'hidden-source-map' :
+				'source-map',
 		stats: env == 'dev' ? {} : { warnings: false },
 
 		// Constant
 		entry: {
 			edit: './src/edit.js',
 			home: './src/home.js',
+			sentry: './src/sentry.js',
 		},
 		output: {
-			filename: 'assets/js/[name].bundle.js',
-			path: path.resolve(__dirname),
+			filename: '[name].bundle.js',
+			path: path.resolve(__dirname, 'assets', 'js'),
 			libraryTarget: 'window'
 		},
 		module: {
@@ -36,5 +41,8 @@ module.exports = (env) => {
 				singleQuote: true,
 			})
 		],
+		externals: {
+			'@sentry/browser': 'Sentry',
+		},
 	}
 };
