@@ -2,22 +2,22 @@ include .default.env
 include .env
 export
 
-build_dir := build
+build_dir  := build
+js_src_dir := src
 
 # Misc variables.
-PATH := vendor/bin:node_modules/.bin:$(PATH)
-override GIT_VERSION := $(shell git --no-pager describe --always --tags)
-override CUR_VERSION := $(strip $(shell cat VERSION 2>/dev/null))
-override WEBPACK_FLAGS += $(if $(filter $(ENV),dist),-p)
+PATH                    := vendor/bin:node_modules/.bin:$(PATH)
+override GIT_VERSION    := $(shell git --no-pager describe --always --tags)
+override CUR_VERSION    := $(strip $(shell cat VERSION 2>/dev/null))
+override WEBPACK_FLAGS  += $(if $(filter $(ENV),dist),-p)
 override COMPOSER_FLAGS += $(if $(filter $(ENV),dist),--no-dev --prefer-dist)
-PREV_ENV_FILE := $(build_dir)/prev_env
-PREV_ENV := $(strip $(shell cat $(PREV_ENV_FILE) 2>/dev/null))
+PREV_ENV_FILE           := $(build_dir)/prev_env
+PREV_ENV                := $(strip $(shell cat $(PREV_ENV_FILE) 2>/dev/null))
 
 # Files variables.
-js_src_dir := src
-js_sources := $(wildcard $(js_src_dir)/*.js)
-js_bundles := $(js_sources:$(js_src_dir)/%.js=assets/js/%.bundle.js)
-js_srcmaps := $(js_sources:$(js_src_dir)/%.js=assets/js/%.bundle.js.map)
+js_sources  := $(wildcard $(js_src_dir)/*.js)
+js_bundles  := $(js_sources:$(js_src_dir)/%.js=assets/js/%.bundle.js)
+js_srcmaps  := $(js_sources:$(js_src_dir)/%.js=assets/js/%.bundle.js.map)
 zip_release := dist/w_cms_$(GIT_VERSION).zip
 
 # Default target. This executes everything targets needed to get a fully
