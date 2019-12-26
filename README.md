@@ -52,7 +52,7 @@ If you want to contribute to the project.
 
 ## Prerequisites
 
-- PHP >=5.6.0
+- PHP >=7.2.0
 - PHP extensions : curl mbstring
 - [Composer](https://getcomposer.org/)
 - _Optionally_ [NPM](https://www.npmjs.com/get-npm)

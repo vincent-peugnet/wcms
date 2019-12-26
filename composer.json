@@ -2,7 +2,7 @@
     "name": "w-cms",
     "description": "point'n think",
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=7.2.0",
         "altorouter/altorouter": "^1.2",
         "jamesmoss/flywheel": "^0.5.2",
         "league/plates": "^3.3",
