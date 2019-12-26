@@ -15,5 +15,10 @@
     "style-loader": "^1.0.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9"
+  },
+  "prettier": {
+    "tabWidth": 4,
+    "trailingComma": "es5",
+    "singleQuote": true
   }
 }

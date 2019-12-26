@@ -35,11 +35,7 @@ module.exports = (env) => {
 			],
 		},
 		plugins: [
-			new PrettierPlugin({
-				tabWidth: 4,
-				trailingComma: 'es5',
-				singleQuote: true,
-			})
+			new PrettierPlugin(),
 		],
 		externals: {
 			'@sentry/browser': 'Sentry',
