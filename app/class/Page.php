@@ -114,8 +114,6 @@ class Page
 		$this->seteditby([]);
 	}
 
-
-
 	public static function classvarlist()
 	{
 		$classvarlist = [];
@@ -484,18 +482,10 @@ class Page
 
 	public function settag($tag)
 	{
-		if (is_string($tag)) {
-
-			if (strlen($tag) < self::LEN) {
-				$tag = strip_tags(trim(strtolower($tag)));
-				$tag = str_replace('*', '', $tag);
-				$tag = str_replace(' ', '', $tag);
-
-				$taglist = explode(",", $tag);
-				$taglist = array_filter($taglist);
-				$this->tag = $taglist;
+		if (is_string($tag) && strlen($tag) < self::LEN) {
+				$tag = $this->tagtoarray($tag);
 			}
-		} elseif (is_array($tag)) {
+		if (is_array($tag)) {
 			$this->tag = $tag;
 		}
 	}
@@ -506,6 +496,22 @@ class Page
 			$this->date = $date;
 		} else {
 			$this->date = DateTimeImmutable::createFromFormat(DateTime::ISO8601, $date, new DateTimeZone('Europe/Paris'));
+		}
+	}
+
+	public function setptime($ptime)
+	{
+		if(is_string($ptime) && DateTime::createFromFormat('H:i', $ptime) !== FALSE) {
+			$time = explode(':', $ptime);
+			$this->date = $this->date->setTime($time[0], $time[1]);
+		}
+	}
+
+	public function setpdate($pdate)
+	{
+		if(is_string($pdate) &&  DateTime::createFromFormat('Y-m-d', $pdate) !== FALSE) {
+			$date = explode('-', $pdate);
+			$this->date = $this->date->setDate($date[0], $date[1], $date[2]);
 		}
 	}
 
@@ -813,6 +819,41 @@ class Page
 		return count($this->editby) > 0;
 	}
 
+	/**
+	 * Merge new tag with actual tags
+	 * 
+	 * @param string|array $tag Could be tags as string or array
+	 */
+
+	public function addtag($tag)
+	{
+		if (is_string($tag)) {
+				$tag = $this->tagtoarray($tag);
+		}
+		if(is_array($tag)) {
+			$this->tag = array_unique(array_merge($this->tag, $tag));
+		}
+	}
+
+
+	// _________________________________ T O O L S ______________________________________
+
+	/**
+	 * Convert a tag string to an array ready to be stored
+	 * 
+	 * @param string $tagstring Tag as string separated by commas
+	 * @return array Tags stored as an array
+	 */
+
+	private function tagtoarray(string $tagstring) : array
+	{
+		$tag = strip_tags(trim(strtolower($tagstring)));
+		$tag = str_replace('*', '', $tag);
+		$tag = str_replace(' ', '', $tag);
+		$taglist = explode(",", $tag);
+		$taglist = array_filter($taglist);
+		return $taglist;
+	}
 
 }
 

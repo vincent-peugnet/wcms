@@ -315,11 +315,10 @@ class Controllerpage extends Controller
         $this->movepanels();
         $this->fontsize();
 
-        $date = new DateTimeImmutable($_POST['pdate'] . $_POST['ptime'], new DateTimeZone('Europe/Paris'));
-        $date = ['date' => $date];
+
 
         if ($this->importpage()) {
-            if ($this->canedit()) {                
+            if ($this->canedit()) {
             
             // Check if someone esle edited the page during the editing.
                 $oldpage = clone $this->page;
@@ -329,7 +328,6 @@ class Controllerpage extends Controller
 
                 }
 
-                $this->page->hydrate($date);
                 $this->page->updateedited();
                 $this->page->addauthor($this->user->id());
                 $this->page->removeeditby($this->user->id());
@@ -405,7 +403,7 @@ class Controllerpage extends Controller
             Config::savejson();
         }
     }
-
+    
     public function pagedirect($id)
     {
         $this->routedirect('pageread/', ['page' => idclean($id)]);
