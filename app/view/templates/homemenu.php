@@ -44,30 +44,32 @@
                 <input type="submit" value="delete">
             </form>
             <h2>Edit Meta infos</h2>
-            <form action="" method="post">
+            <form action="<?= $this->url('multiedit') ?>" method="post" id="multiedit">
                 <strong>Tag</strong>
                 </br>
-                <input type="checkbox" name="resettag" id="resettag">
+                <input type="hidden" name="reset[tag]" value="0">
+                <input type="checkbox" name="reset[tag]" id="resettag" value="1">
                 <label for="resettag">reset tag(s)</label>
                 </br>
-                <input type="text" name="tag" id="addtag">
+                <input type="text" name="addtag" id="addtag">
                 <label for="addtag">add tag(s)</label>
                 </br>
                 <strong>Date</strong>
                 </br>
-                <input type="checkbox" name="resetdate" id="resetdate">
+                <input type="hidden" name="reset[date]" value="0">
+                <input type="checkbox" name="reset[date]" id="resetdate" value="1">
                 <label for="resetdate">reset date as now</label>
                 </br>
-                <input type="date" name="date" id="date">
+                <input type="date" name="datas[pdate]" id="date">
                 <label for="date">Date</label>
                 </br>
-                <input type="time" name="time" id="time">
+                <input type="time" name="datas[ptime]" id="time">
                 <label for="time">Time</label>
                 </br>
                 <strong>Privacy</strong>
                 </br>
-                <select name="level" id="setlevel">
-                    <option >--change privacy--</option>
+                <select name="datas[secure]" id="setlevel">
+                    <option value=""  disabled selected>--change privacy--</option>
                     <option value="0">public</option>
                     <option value="1">private</option>
                     <option value="2">not_published</option>
@@ -76,20 +78,37 @@
                 </br>
                 <strong>Templates</strong>
                 </br>
-                <select name="templatebody" id="templatebody">
-                    <option>--set template body--</option>
+                <select name="datas[templatebody]" id="templatebody">
+                    <option value="" disabled selected>--set template body--</option>
+                    <?php
+                        foreach ($pagelist as $page) {
+                            echo '<option value ="' . $page . '">' . $page . '</option>';
+                        }
+                    ?>
                 </select>
                 <label for="templatebody">Body</label>
                 </br>
-                <select name="templatecss" id="templatecss">
-                    <option>--set template css--</option>
-                </select>
+                <select name="datas[templatecss]" id="templatecss">
+                <option value="" disabled selected>--set css template--</option>
+                    <?php
+                        foreach ($pagelist as $page) {
+                            echo '<option value ="' . $page . '">' . $page . '</option>';
+                        }
+                    ?>                </select>
                 <label for="templatecss">CSS</label>
                 </br>
-                <select name="templatejavascript" id="templatejavascript">
-                    <option>--set template javascript--</option>
-                </select>
+                <select name="datas[templatejavascript]" id="templatejavascript">
+                <option value="" disabled selected>--set javascript template--</option>
+                    <?php
+                        foreach ($pagelist as $page) {
+                            echo '<option value ="' . $page . '">' . $page . '</option>';
+                        }
+                    ?>                </select>
                 <label for="templatejavascript">Javascript</label>
+                </br>
+                <input type="hidden" name="reset[datemodif]" value="0">
+                <input type="checkbox" name="reset[datemodif]" id="resetdatemodif" value="1">
+                <label for="resetdatemodif">update modification date</label>
                 </br>
                 <input type="submit" value="edit">
             </form>

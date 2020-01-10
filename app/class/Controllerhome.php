@@ -6,6 +6,7 @@ class Controllerhome extends Controllerpage
 {
     /** @var Modelhome */
     protected $modelhome;
+    /** @var Opt */
     protected $opt;
     /** @var Optlist */
     protected $optlist;
@@ -121,6 +122,19 @@ class Controllerhome extends Controllerpage
                     }
                     Config::savejson();
                 }
+            }
+        }
+        $this->routedirect('home');
+    }
+
+    public function multiedit()
+    {
+        if ($this->user->issupereditor() && isset($_POST['pagesid'])) {
+            $datas = $_POST['datas'] ?? [];
+            $reset = $_POST['reset'] ?? [];
+            $addtag = $_POST['addtag'] ?? [];
+            foreach ($_POST['pagesid'] as $id) {
+                $this->pagemanager->pageedit($id, $datas, $reset, $addtag);
             }
         }
         $this->routedirect('home');

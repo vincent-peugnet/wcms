@@ -2,7 +2,7 @@
 let checkboxes = [];
 
 window.addEventListener('load', () => {
-    checkboxes = document.getElementsByName('id[]');
+    checkboxes = document.getElementsByName('pagesid[]');
     let checkall = document.getElementById('checkall');
     let checkbox = document.createElement('input');
     checkbox.type = 'checkbox';

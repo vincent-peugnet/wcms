@@ -16,7 +16,7 @@
 
     <?php
         $optlist = $optlist ?? null;
-        $this->insert('homemenu', ['user' => $user, 'opt' => $opt, 'optlist' => $optlist]);
+        $this->insert('homemenu', ['user' => $user, 'opt' => $opt, 'optlist' => $optlist, 'pagelist' => $pagelist]);
     ?>
 
 
@@ -85,7 +85,7 @@
                         <tbody>
                             <?php foreach ($table2 as $item) { ?>
                             <tr>
-                                <td class="hidephone"><input type="checkbox" name="id[]" value="<?= $item->id() ?>" id="id_<?= $item->id() ?>"></td>
+                                <td class="hidephone"><input type="checkbox" name="pagesid[]" value="<?= $item->id() ?>" id="id_<?= $item->id() ?>" form="multiedit"></td>
                                 <td><label title="<?= $item->title() ?>" for="id_<?= $item->id() ?>"><?= $item->id() ?></label></td>
                                 <td><a href="<?= $this->upage('pageedit', $item->id()) ?>"><img src="<?= Wcms\Model::iconpath() ?>edit.png" class="icon"></a></td>
                                 <td><a href="<?= $this->upage('pageread/', $item->id()) ?>" target="_blank"><img src="<?= Wcms\Model::iconpath() ?>read.png" class="icon"></a></td>

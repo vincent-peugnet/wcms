@@ -152,11 +152,21 @@ class Modelpage extends Modeldb
 		}
 	}
 
+	/**
+	 * Update a page in the database
+	 * 
+	 * @todo Check if page already exist before updating ?
+	 * 
+	 * @param Page $page The page that is going to be updated
+	 * 
+	 * @return bool True if success otherwise, false
+	 * 
+	 */
 	public function update(Page $page)
 	{
 		$pagedata = new Document($page->dry());
 		$pagedata->setId($page->id());
-		$this->repo->store($pagedata);
+		return $this->repo->store($pagedata);
 	}
 
 	public function combine(Page $pagea, Page $pageb)
@@ -322,5 +332,29 @@ class Modelpage extends Modeldb
 		}
 		return $idlist;
 	}
+
+	public function pageedit($pageid, $datas, $reset, $addtag)
+	{
+		$page = $this->get($pageid);
+		$page = $this->reset($page, $reset);
+		$page->hydrate($datas);
+		$page->addtag($addtag);
+		$this->update($page);
+	}
+
+
+    public function reset(Page $page, $reset)
+    {
+        if($reset['tag']) {
+            $page->settag([]);
+        }
+        if($reset['date']) {
+			// reset date as now
+		}
+        if($reset['datemodif']) {
+			// reset datemodif as now
+		}
+		return $page;
+    }
 
 }
