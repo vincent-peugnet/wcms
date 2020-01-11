@@ -76,6 +76,18 @@
                 </select>
                 <label for="setlevel">Privacy level</label>
                 </br>
+                <strong>Favicon</strong>
+                </br>
+                <select name="datas[favicon]" id="favicon">
+                <option value="" disabled selected>--set favicon--</option>
+                    <?php
+                        foreach ($faviconlist as $favicon) {
+                            echo '<option value ="' . $favicon . '">' . $favicon . '</option>';
+                        }
+                    ?>
+                </select>
+                <label for="favicon">Favicon</label>
+                </br>
                 <strong>Templates</strong>
                 </br>
                 <select name="datas[templatebody]" id="templatebody">
@@ -105,6 +117,22 @@
                         }
                     ?>                </select>
                 <label for="templatejavascript">Javascript</label>
+                </br>
+                <strong>Author</strong>
+                </br>
+                <select name="addauthor" id="addauthor">
+                <option value="" disabled selected>--add author--</option>
+                    <?php
+                        foreach ($editorlist as $editor) {
+                            echo '<option value ="' . $editor . '">' . $editor . '</option>';
+                        }
+                    ?>
+                </select>
+                <label for="addauthor">Author</label>
+                </br>
+                <input type="hidden" name="reset[author]" value="0">
+                <input type="checkbox" name="reset[author]" id="resetauthor" value="1">
+                <label for="resetauthor">Empty Authors</label>
                 </br>
                 <input type="hidden" name="reset[datemodif]" value="0">
                 <input type="checkbox" name="reset[datemodif]" id="resetdatemodif" value="1">

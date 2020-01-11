@@ -163,7 +163,6 @@ class Controllerpage extends Controller
         } else {
             $this->showtemplate('alert', ['page' => $this->page, 'pageexist' => $pageexist, 'canedit' => $this->canedit()]);
         }
-
     }
 
     public function edit($id)

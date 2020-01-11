@@ -333,20 +333,40 @@ class Modelpage extends Modeldb
 		return $idlist;
 	}
 
-	public function pageedit($pageid, $datas, $reset, $addtag)
+	/**
+	 * Edit a page based on meta infos
+	 * 
+	 * @param string $pageid
+	 * @param array $datas
+	 * @param array $reset
+	 * @param string $addtag
+	 * @param string $addauthor
+	 */
+	public function pageedit($pageid, $datas, $reset, $addtag, $addauthor)
 	{
 		$page = $this->get($pageid);
 		$page = $this->reset($page, $reset);
 		$page->hydrate($datas);
 		$page->addtag($addtag);
+		$page->addauthor($addauthor);
 		$this->update($page);
 	}
 
-
-    public function reset(Page $page, $reset)
+	/**
+	 * Reset values of a page
+	 * 
+	 * @param Page $page Page object to be reseted
+	 * @param array $reset List of parameters needing reset
+	 * 
+	 * @return Page The reseted page object
+	 */
+    public function reset(Page $page, array $reset) : Page
     {
         if($reset['tag']) {
             $page->settag([]);
+        }
+        if($reset['author']) {
+            $page->setauthors([]);
         }
         if($reset['date']) {
 			// reset date as now

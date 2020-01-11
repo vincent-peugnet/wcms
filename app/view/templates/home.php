@@ -16,7 +16,7 @@
 
     <?php
         $optlist = $optlist ?? null;
-        $this->insert('homemenu', ['user' => $user, 'opt' => $opt, 'optlist' => $optlist, 'pagelist' => $pagelist]);
+        $this->insert('homemenu', ['user' => $user, 'opt' => $opt, 'optlist' => $optlist, 'pagelist' => $pagelist, 'faviconlist' => $faviconlist, 'editorlist' => $editorlist]);
     ?>
 
 

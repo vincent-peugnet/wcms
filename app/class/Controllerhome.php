@@ -36,7 +36,7 @@ class Controllerhome extends Controllerpage
 
             $columns = $this->modelhome->setcolumns($this->user->columns());
 
-            $vars = ['user' => $this->user, 'table2' => $table2, 'opt' => $this->opt, 'columns' => $columns];
+            $vars = ['user' => $this->user, 'table2' => $table2, 'opt' => $this->opt, 'columns' => $columns, 'faviconlist' => $this->mediamanager->listfavicon(), 'editorlist' => $this->usermanager->getlisterbylevel(2, '>=')];
             $vars['footer'] = ['version' => getversion(), 'total' => count($table), 'database' => Config::pagetable()];
 
             if (isset($_POST['query']) && $this->user->iseditor()) {
@@ -132,9 +132,10 @@ class Controllerhome extends Controllerpage
         if ($this->user->issupereditor() && isset($_POST['pagesid'])) {
             $datas = $_POST['datas'] ?? [];
             $reset = $_POST['reset'] ?? [];
-            $addtag = $_POST['addtag'] ?? [];
+            $addtag = $_POST['addtag'] ?? '';
+            $addauthor = $_POST['addauthor'] ?? '';
             foreach ($_POST['pagesid'] as $id) {
-                $this->pagemanager->pageedit($id, $datas, $reset, $addtag);
+                $this->pagemanager->pageedit($id, $datas, $reset, $addtag, $addauthor);
             }
         }
         $this->routedirect('home');

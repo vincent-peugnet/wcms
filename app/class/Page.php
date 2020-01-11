@@ -719,7 +719,7 @@ class Page
 	public function setauthors($authors)
 	{
 		if(is_array($authors)) {
-			$this->authors = array_values(array_filter($authors));
+			$this->authors = array_unique(array_values(array_filter($authors)));
 		}
 	}
 
