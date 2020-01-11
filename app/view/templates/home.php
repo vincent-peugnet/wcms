@@ -87,9 +87,9 @@
                             <tr>
                                 <?php if($user->issupereditor()) { ?><td class="hidephone"><input type="checkbox" name="pagesid[]" value="<?= $item->id() ?>" id="id_<?= $item->id() ?>" form="multiedit"></td><?php } ?>
                                 <td><label title="<?= $item->title() ?>" for="id_<?= $item->id() ?>"><?= $item->id() ?></label></td>
-                                <td><a href="<?= $this->upage('pageedit', $item->id()) ?>"><img src="<?= Wcms\Model::iconpath() ?>edit.png" class="icon"></a></td>
+                                <td><?php if($user->issupereditor() || in_array($user->id(), $item->authors())) { ?><a href="<?= $this->upage('pageedit', $item->id()) ?>"><img src="<?= Wcms\Model::iconpath() ?>edit.png" class="icon"></a><?php } ?></td>
                                 <td><a href="<?= $this->upage('pageread/', $item->id()) ?>" target="_blank"><img src="<?= Wcms\Model::iconpath() ?>read.png" class="icon"></a></td>
-                                <td class="delete"><a href="<?= $this->upage('pagedelete', $item->id()) ?>">✖</a></td>
+                            <td class="delete"><?php if($user->issupereditor() || $item->authors() === [$user->id()]) { ?><a href="<?= $this->upage('pagedelete', $item->id()) ?>">✖</a><?php } ?></td>
                                 <?php if ($user->issupereditor()) { ?>
                                 <td class="hidephone"><a href="<?= $this->upage('pagedownload', $item->id()) ?>" download><img src="<?= Wcms\Model::iconpath() ?>download.png" class="icon"></a></td>
                                 <?php }

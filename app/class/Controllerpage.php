@@ -203,9 +203,13 @@ class Controllerpage extends Controller
 
     public function log($id)
     {
-        $this->setpage($id, 'pagelog');
-        $this->importpage();
-        var_dump($this->page);
+        if($this->user->issupereditor()) {
+            $this->setpage($id, 'pagelog');
+            $this->importpage();
+            var_dump($this->page);
+        } else {
+            $this->routedirect('pageread/', ['page' => $id]);
+        }
     }
 
     public function add($id)
@@ -216,6 +220,7 @@ class Controllerpage extends Controller
 
         if ($this->user->iseditor() && !$this->importpage()) {
             $this->page->reset();
+            $this->page->addauthor($this->user->id());
             if (!empty(Config::defaultpage())) {
                 $defaultpage = $this->pagemanager->get(Config::defaultpage());
                 if ($defaultpage !== false) {
@@ -236,7 +241,7 @@ class Controllerpage extends Controller
     public function confirmdelete($id)
     {
         $this->setpage($id, 'pageconfirmdelete');
-        if ($this->user->iseditor() && $this->importpage()) {
+        if ($this->importpage() && ($this->user->issupereditor() || $this->page->authors() === [$this->user->id()] )) {
 
             $this->showtemplate('confirmdelete', ['page' => $this->page, 'pageexist' => true]);
 
