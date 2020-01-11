@@ -4,6 +4,8 @@ namespace Wcms;
 
 use Exception;
 use JamesMoss\Flywheel\Document;
+use DateTimeImmutable;
+
 
 class Modelpage extends Modeldb
 {
@@ -362,6 +364,7 @@ class Modelpage extends Modeldb
 	 */
     public function reset(Page $page, array $reset) : Page
     {
+		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
         if($reset['tag']) {
             $page->settag([]);
         }
@@ -369,10 +372,10 @@ class Modelpage extends Modeldb
             $page->setauthors([]);
         }
         if($reset['date']) {
-			// reset date as now
+			$page->setdate($now);
 		}
         if($reset['datemodif']) {
-			// reset datemodif as now
+			$page->setdatemodif($now);
 		}
 		return $page;
     }

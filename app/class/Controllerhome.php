@@ -130,7 +130,10 @@ class Controllerhome extends Controllerpage
     public function multiedit()
     {
         if ($this->user->issupereditor() && isset($_POST['pagesid'])) {
-            $datas = $_POST['datas'] ?? [];
+            $datas = $_POST['datas']?? [];
+            $datas = array_filter($datas, function ($var) {
+                return $var !== "";
+            });
             $reset = $_POST['reset'] ?? [];
             $addtag = $_POST['addtag'] ?? '';
             $addauthor = $_POST['addauthor'] ?? '';

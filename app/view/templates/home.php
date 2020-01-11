@@ -36,7 +36,7 @@
                     <table id="home2table">
                         <thead>
                             <tr>
-                                <th id="checkall" class="hidephone">x</th>
+                                <?php if($user->issupereditor()) { ?><th id="checkall" class="hidephone">x</th> <?php } ?>
                                 <th><a href="<?= $opt->getadress('id') ?>">id</a></th>
                                 <th>edit</th>
                                 <th>see</th>
@@ -85,7 +85,7 @@
                         <tbody>
                             <?php foreach ($table2 as $item) { ?>
                             <tr>
-                                <td class="hidephone"><input type="checkbox" name="pagesid[]" value="<?= $item->id() ?>" id="id_<?= $item->id() ?>" form="multiedit"></td>
+                                <?php if($user->issupereditor()) { ?><td class="hidephone"><input type="checkbox" name="pagesid[]" value="<?= $item->id() ?>" id="id_<?= $item->id() ?>" form="multiedit"></td><?php } ?>
                                 <td><label title="<?= $item->title() ?>" for="id_<?= $item->id() ?>"><?= $item->id() ?></label></td>
                                 <td><a href="<?= $this->upage('pageedit', $item->id()) ?>"><img src="<?= Wcms\Model::iconpath() ?>edit.png" class="icon"></a></td>
                                 <td><a href="<?= $this->upage('pageread/', $item->id()) ?>" target="_blank"><img src="<?= Wcms\Model::iconpath() ?>read.png" class="icon"></a></td>

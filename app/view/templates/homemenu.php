@@ -1,7 +1,7 @@
 <aside class="home">
 
 
-
+<?php if($user->issupereditor()) { ?>
     <details class="hidephone" id="json">
         <summary>File</summary>
             <div class="submenu">
@@ -45,6 +45,12 @@
             </form>
             <h2>Edit Meta infos</h2>
             <form action="<?= $this->url('multiedit') ?>" method="post" id="multiedit">
+            <input type="text" name="datas[title]" id="title">
+                <label for="title">title</label>
+                </br>
+                <input type="text" name="datas[description]" id="description">
+                <label for="description">description</label>
+                </br>
                 <strong>Tag</strong>
                 </br>
                 <input type="hidden" name="reset[tag]" value="0">
@@ -142,6 +148,7 @@
             </form>
         </div>
     </details>
+    <?php } ?>
 
 
 
