@@ -1,4 +1,4 @@
-<aside class="media">
+<aside class="media hidephone">
 
     <details>
         <summary>File</summary>

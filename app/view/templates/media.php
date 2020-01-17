@@ -12,68 +12,69 @@
 <main class="media">
 
 
-<nav>
+<nav class="media">
     <div class="block">
+    <h2>Explorer</h2>
+        <div class="scroll">
+            <table id="dirlsit">
+            <tr><th>folder</th><th>files</th></tr>
 
-<h2>Explorer</h2>
+            <?php
 
+            function treecount(array $dir, string $dirname, int $deepness, string $path, string $currentdir, array $opt)
+            {
+                if ($path === $currentdir) {
+                    $folder = '├─📂<strong>' . $dirname . '<strong>';
+                } else {
+                    $folder = '├─📁' . $dirname;
+                }
+                echo '<tr>';
+                echo '<td><a href="?path=' . $path . '&sortby=' . $opt['sortby'] . '&order=' . $opt['order'] . '">' . str_repeat('&nbsp;&nbsp;', $deepness) . $folder . '</a></td>';
+                echo '<td>' . $dir['dirfilecount'] . '</td>';
+                echo '</tr>';
+                foreach ($dir as $key => $value) {
+                    if (is_array($value)) {
+                        treecount($value, $key, $deepness + 1, $path . DIRECTORY_SEPARATOR . $key, $currentdir, $opt);
+                    }
+                }
+            }
 
-<table id="dirlsit">
-<tr><th>folder</th><th>files</th></tr>
+            treecount($dirlist, 'media', 0, 'media', $dir, $opt);
 
-<?php
+            ?>
 
-function treecount(array $dir, string $dirname, int $deepness, string $path, string $currentdir, array $opt)
-{
-    if ($path === $currentdir) {
-        $folder = '├─📂<strong>' . $dirname . '<strong>';
-    } else {
-        $folder = '├─📁' . $dirname;
-    }
-    echo '<tr>';
-    echo '<td><a href="?path=' . $path . '&sortby=' . $opt['sortby'] . '&order=' . $opt['order'] . '">' . str_repeat('&nbsp;&nbsp;', $deepness) . $folder . '</a></td>';
-    echo '<td>' . $dir['dirfilecount'] . '</td>';
-    echo '</tr>';
-    foreach ($dir as $key => $value) {
-        if (is_array($value)) {
-            treecount($value, $key, $deepness + 1, $path . DIRECTORY_SEPARATOR . $key, $currentdir, $opt);
-        }
-    }
-}
-
-treecount($dirlist, 'media', 0, 'media', $dir, $opt);
-
-?>
-
-
-
-
-</table>
-
-
+            </table>
+        </div>
+        
         <h2>filter</h2>
-
-        <form action="" method="get">
-            <ul>
-                <li><input type="checkbox" name="type[]" id="image" value="image" <?= in_array('image', $opt['type']) ? 'checked' : '' ?>><label for="image">image</label></li>
-                <li><input type="checkbox" name="type[]" id="sound" value="sound" <?= in_array('sound', $opt['type']) ? 'checked' : '' ?>><label for="sound">sound</label></li>
-                <li><input type="checkbox" name="type[]" id="video" value="video" <?= in_array('video', $opt['type']) ? 'checked' : '' ?>><label for="video">video</label></li>
-                <li><input type="checkbox" name="type[]" id="other" value="other" <?= in_array('other', $opt['type']) ? 'checked' : '' ?>><label for="other">other</label></li>
-            </ul>
-            <select name="" id="">
-                <option value="id" <?= $opt['sortby'] === 'id' ? 'selected' : '' ?>>id</option>
-                <option value="type" <?= $opt['sortby'] === 'type' ? 'selected' : '' ?>>type</option>
-                <option value="size" <?= $opt['sortby'] === 'size' ? 'selected' : '' ?>>size</option>
-            </select>
-            </br>
-            <input type="radio" name="order" id="asc" value="1" <?= $opt['order'] == 1 ? 'checked' : '' ?>><label for="asc">ascending</label>
-            </br>
-            <input type="radio" name="order" id="desc" value="-1" <?= $opt['order'] == -1 ? 'checked' : '' ?>><label for="desc">descending</label>
-            </br>
-            <input type="hidden" name="path" value="<?= $dir ?>">
-            <input type="submit" value="filter">
-        </form>
-
+        <div class="scroll">
+            <form action="" method="get">
+                <fieldset>
+                    <legend>Type</legend>
+                    <ul>
+                        <li><input type="checkbox" name="type[]" id="image" value="image" <?= in_array('image', $opt['type']) ? 'checked' : '' ?>><label for="image">image</label></li>
+                        <li><input type="checkbox" name="type[]" id="sound" value="sound" <?= in_array('sound', $opt['type']) ? 'checked' : '' ?>><label for="sound">sound</label></li>
+                        <li><input type="checkbox" name="type[]" id="video" value="video" <?= in_array('video', $opt['type']) ? 'checked' : '' ?>><label for="video">video</label></li>
+                        <li><input type="checkbox" name="type[]" id="other" value="other" <?= in_array('other', $opt['type']) ? 'checked' : '' ?>><label for="other">other</label></li>
+                    </ul>
+                </fieldset>
+                <fieldset>
+                    <legend>Sort</legend>
+                    <select name="sortby" id="sortby">
+                        <option value="id" <?= $opt['sortby'] === 'id' ? 'selected' : '' ?>>id</option>
+                        <option value="type" <?= $opt['sortby'] === 'type' ? 'selected' : '' ?>>type</option>
+                        <option value="size" <?= $opt['sortby'] === 'size' ? 'selected' : '' ?>>size</option>
+                    </select>
+                    </br>
+                    <input type="radio" name="order" id="asc" value="1" <?= $opt['order'] == 1 ? 'checked' : '' ?>><label for="asc">ascending</label>
+                    </br>
+                    <input type="radio" name="order" id="desc" value="-1" <?= $opt['order'] == -1 ? 'checked' : '' ?>><label for="desc">descending</label>
+                    </br>
+                </fieldset>
+                <input type="hidden" name="path" value="<?= $dir ?>">
+                <input type="submit" value="filter">
+            </form>
+        </div>
     </div>
 </nav>
 
