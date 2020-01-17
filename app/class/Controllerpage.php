@@ -156,6 +156,7 @@ class Controllerpage extends Controller
             $filedir = Model::HTML_RENDER_DIR . $id . '.html';
             if(file_exists($filedir)) {
                 $html = file_get_contents($filedir);
+                sleep($this->page->sleep());
                 echo $html;
             } else {
                 echo 'Please render this page';

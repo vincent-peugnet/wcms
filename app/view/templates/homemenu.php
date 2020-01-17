@@ -124,6 +124,11 @@
                     ?>                </select>
                 <label for="templatejavascript">Javascript</label>
                 </br>
+                <strong>Advanced</strong>
+                </br>
+                <input type="number" name="datas[sleep]" id="sleep" min="0" max="180">
+                <label for="sleep">Sleep time (seconds)</label>
+                </br>
                 <strong>Author</strong>
                 </br>
                 <select name="addauthor" id="addauthor">

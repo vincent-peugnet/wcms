@@ -152,7 +152,11 @@
 
             </fieldset>
     </details>
-    <details id="advanced" <?= !empty($page->externalcss()) || !empty($page->customhead()) ? 'open' : '' ?>>
+
+
+
+
+    <details id="advanced" <?= !empty($page->externalcss()) || !empty($page->customhead()) || !empty($page->sleep()) ? 'open' : '' ?>>
         <summary>Advanced</summary>
                 
 
@@ -175,6 +179,9 @@
 
         <label for="customhead">Custom head</label>
         <textarea name="customhead" wrap="off" spellcheck="false" rows="<?= $page->customhead('int') ?>"><?= $page->customhead() ?></textarea>
+
+        <label for="sleep">Sleep time (seconds)</label>
+        <input type="number" name="sleep" id="sleep" value="<?= $page->sleep() ?>" min="0" max="180">
 
     </fieldset>
 

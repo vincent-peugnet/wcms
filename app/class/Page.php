@@ -43,6 +43,7 @@ class Page
 	protected $visitcount;
 	protected $editcount;
 	protected $editby;
+	protected $sleep;
 
 
 	const LEN = 255;
@@ -112,6 +113,7 @@ class Page
 		$this->setvisitcount(0);
 		$this->seteditcount(0);
 		$this->seteditby([]);
+		$this->setsleep(0);
 	}
 
 	public static function classvarlist()
@@ -452,6 +454,11 @@ class Page
 	public function editby($type = 'array')
 	{
 		return $this->editby;
+	}
+
+	public function sleep($type = 'int')
+	{
+		return $this->sleep;
 	}
 
 
@@ -817,6 +824,15 @@ class Page
 	public function iseditedby()
 	{
 		return count($this->editby) > 0;
+	}
+
+	public function setsleep($sleep)
+	{
+		$sleep = abs(intval($sleep));
+		if($sleep > 180) {
+			$sleep = 180;
+		}
+		$this->sleep = $sleep;
 	}
 
 	/**
