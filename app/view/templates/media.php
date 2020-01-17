@@ -7,6 +7,7 @@
 
     <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'media', 'pagelist' => $pagelist]) ?>
 
+    <?php $this->insert('mediamenu', ['dir' => $dir, 'user' => $user, 'pathlist' => $pathlist, 'opt' => $opt]) ?>
 
 <main class="media">
 
@@ -52,67 +53,6 @@ treecount($dirlist, 'media', 0, 'media', $dir, $opt);
 
 
 <h2><?= $dir ?></h2>
-
-
-<details>
-    <summary>Print this content on your page</summary>
-    
-    <p>
-    <code>%MEDIA?path=<?= substr($dir, 6) ?>&sortby=<?= $opt['sortby'] ?>&order=<?= $opt['order'] ?>%</code>
-    </p>
-
-</details>
-
-
-
-<form id="folderadd" action="<?= $this->url('mediafolderadd') ?>" method="post">
-    <label for="foldername">📂 New folder</label>
-    <input type="text" name="foldername" id="foldername" placeholder="folder name" required>
-    <input type="hidden" name="dir" value="<?= $dir ?>">
-    <input type="submit" value="create folder">
-</form>
-
-<?php if($user->issupereditor()) { ?>
-
-<form action="<?= $this->url('mediafolderdelete') ?>" id="deletefolder" method="post" class="hidephone">
-    <input type="hidden" name="dir" value="<?= $dir ?>/">
-    <input type="checkbox" name="deletefolder" id="confirmdeletefolder" value="1">
-    <label for="confirmdeletefolder">Delete folder and all it's content</label>
-    <input type="submit" value="delete folder" >
-</form>
-
-
-<?php } ?>
-
-<form id=addmedia action="<?= $this->url('mediaupload') ?>" method="post" enctype="multipart/form-data">
-    <label for="file">🚀 Upload file(s)</label>
-    <input type='file' id="file" name='file[]' multiple required>
-    <input type="hidden" name="dir" value="<?= $dir ?>">
-    <input type="submit" value="upload">
-</form>
-
-
-
-<?php if($user->issupereditor()) { ?>
-
-<form action="<?= $this->url('mediaedit') ?>" method="post" id="mediaedit">
-    <input type="hidden" name="path" value="<?= $dir ?>">
-    <label for="moveto">Selected medias :</label>
-    <select name="dir" id="moveto" >
-        <option selected>---select destination---</option>
-        <option value="<?= Wcms\Model::MEDIA_DIR ?>">/</option>
-        <?php
-            foreach ($pathlist as $path) {
-                echo '<option value="' . Wcms\Model::MEDIA_DIR . $path . '">' . $path . '</option>';
-            }
-        ?>
-    </select>
-    <input type="submit" name="action" value="move" >
-    <input type="submit" name="action" value="delete" >
-</form>
-
-<?php } ?>
-
 
 
 

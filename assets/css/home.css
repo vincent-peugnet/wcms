@@ -25,7 +25,7 @@ main.home {
 }
 
 
-aside.home {
+aside {
     display: flex;
     background-color: darkgrey;
     border-top: 1px solid grey;
@@ -34,24 +34,39 @@ aside.home {
 
 
 
-aside.home details, aside.home span {
+aside details, aside span {
     width: 100%;
     max-width: 280px;
 }
 
 
 
-aside.home details .submenu, aside.home summary {
+aside details .submenu, aside summary {
     background-color: darkgrey;
     border-left: 1px solid grey;
 }
 
 
-aside.home .submenu {
+aside .submenu {
     position: absolute;
     border: solid 1px dimgrey;
     width: 20%;
     max-width: 280px;
+}
+
+
+aside summary {
+    color: grey;
+}
+
+aside details > summary::-webkit-details-marker {
+    display: none;
+}
+
+
+aside summary:hover {
+    color: black;
+    cursor: pointer;
 }
 
 
@@ -71,22 +86,8 @@ aside.home details#bookmarks ul {
 
 
 
-aside.home summary {
-    color: grey;
-}
 
-aside.home details > summary::-webkit-details-marker {
-    display: none;
-}
-
-
-aside.home summary:hover {
-    color: black;
-    cursor: pointer;
-}
-
-
-details#selection code {
+aside .submenu code {
     overflow: auto;
     display: block;
     white-space: nowrap;
@@ -525,8 +526,3 @@ footer {
     }
 
 }
-
-
-
-
-
