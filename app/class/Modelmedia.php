@@ -33,16 +33,23 @@ class Modelmedia extends Model
 		}
 	}
 
+	public function medialistopt(Medialist $mediaopt)
+	{
+		$medialist = $this->getlistermedia($mediaopt->dir(), $mediaopt->type());
+		$this->medialistsort($medialist, $mediaopt->sortby(), $mediaopt->order());
+
+		return $medialist;
+	}
+
 	/**
 	 * Display a list of media
 	 * 
 	 * @param string $path
-	 * @param string $sortby
-	 * @param string $order
+	 * @param array $type
 	 * 
 	 * @return array of Media objects
 	 */
-	public function getlistermedia($dir, $type = "all")
+	public function getlistermedia($dir, $type = Model::MEDIA_TYPES)
 	{
 		if (is_dir($dir)) {
 			if ($handle = opendir($dir)) {
@@ -56,11 +63,7 @@ class Modelmedia extends Model
 
 							$media->analyse();
 
-							if (in_array($type, self::MEDIA_TYPES)) {
-								if ($media->type() == $type) {
-									$list[] = $media;
-								}
-							} else {
+							if (in_array($media->type(), $type)) {
 								$list[] = $media;
 							}
 						}
@@ -71,22 +74,6 @@ class Modelmedia extends Model
 		} else {
 			return false;
 		}
-	}
-
-
-
-	public function mediacompare($media1, $media2, $method = 'id', $order = 1)
-	{
-		$result = ($media1->$method() <=> $media2->$method());
-		return $result * $order;
-	}
-
-	public function buildsorter($sortby, $order)
-	{
-		return function ($media1, $media2) use ($sortby, $order) {
-			$result = $this->mediacompare($media1, $media2, $sortby, $order);
-			return $result;
-		};
 	}
 
 
@@ -103,6 +90,21 @@ class Modelmedia extends Model
 		$order = ($order === 1 || $order === -1) ? $order : 1;
 		return usort($medialist, $this->buildsorter($sortby, $order));
 	}
+	
+	public function buildsorter($sortby, $order)
+	{
+		return function ($media1, $media2) use ($sortby, $order) {
+			$result = $this->mediacompare($media1, $media2, $sortby, $order);
+			return $result;
+		};
+	}
+
+	public function mediacompare($media1, $media2, $method = 'id', $order = 1)
+	{
+		$result = ($media1->$method() <=> $media2->$method());
+		return $result * $order;
+	}
+
 
 
 

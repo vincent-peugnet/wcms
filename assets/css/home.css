@@ -357,6 +357,9 @@ main.media code {
 
 td.code {
     background-color: darkslategrey;
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 

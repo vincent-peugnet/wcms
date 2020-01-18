@@ -7,8 +7,8 @@ class Medialist
     /** @var string full regex match */
     protected $fullmatch;
 
-    /** @var string options */
-    protected $options = '';
+    /** @var string full filter code line */
+    protected $filter = '';
 
     /** @var string directory of media */
     protected $path = '';
@@ -19,16 +19,20 @@ class Medialist
     /** @var int */
     protected $order = 1;
 
+    /** @var array list of media type to display */
+    protected $type = ['image', 'sound', 'video', 'other'];
+
     /** @var int display media contents*/
     protected $display = 1;
 
     /** @var int display download links*/
     protected $links = 0;
 
-    /** @var string ouput html code generated*/
-    protected $content = '';
+    /** @var string display the file name of the file */
+    protected $filename = 0;
 
-    const SORT_BY_OPTIONS = ['id', 'size', 'type'];
+    const SORT_BY_FILTER = ['id', 'size', 'type'];
+    const TYPES = ['image', 'sound', 'video', 'other'];
 
 
 
@@ -39,8 +43,6 @@ class Medialist
     public function __construct(array $datas = [])
     {
         $this->hydrate($datas);
-        $this->readoptions();
-        $this->generatecontent();
     }
 
     public function hydrate($datas)
@@ -54,16 +56,16 @@ class Medialist
         }
     }
 
-    public function readoptions()
+    public function readfilter()
     {
-        parse_str($this->options, $datas);
+        parse_str($this->filter, $datas);
         $this->hydrate($datas);
     }
 
     public function generatecontent()
     {
         $mediamanager = new Modelmedia();
-        $medialist = $mediamanager->getlistermedia(Model::MEDIA_DIR . $this->path . '/');
+        $medialist = $mediamanager->getlistermedia($this->dir(), $this->type);
         if (!$medialist) {
             $this->content = '<strong>RENDERING ERROR :</strong> path : <code>' . Model::MEDIA_DIR . $this->path . '/</code> does not exist';
             return false;
@@ -91,10 +93,44 @@ class Medialist
 
             $div .= '</div>' . PHP_EOL;
 
-            $this->content = $div;
-
-            return true;
+            return $div;
         }
+    }
+
+    /**
+     * Generate link adress for table header
+     * 
+     * @param string $sortby 
+     * @return string link adress
+     */
+    public function getsortbyadress(string $sortby) : string
+    {
+        if(!in_array($sortby, self::SORT_BY_FILTER)) {
+            $sortby = 'id';
+        }
+		if ($this->sortby === $sortby) {
+			$order = $this->order * -1;
+		} else {
+			$order = $this->order;
+		}
+        $query = ['path' => $this->path, 'sortby' => $sortby, 'order' => $order, 'type' => $this->type];
+        return '?' . urldecode(http_build_query($query));
+
+    }
+
+    public function getpathadress(string $path) : string
+    {
+        $query = ['path' => '/' . $path, 'sortby' => $this->sortby, 'order' => $this->order, 'type' => $this->type];
+        return '?' . urldecode(http_build_query($query));
+    }
+
+    public function getquery()
+    {
+        $query = ['path' => $this->path, 'sortby' => $this->sortby, 'order' => $this->order];
+        if(array_diff( self::TYPES, $this->type) != []) {
+            $query['type'] = $this->type;
+        }
+        return '%MEDIA?' . urldecode(http_build_query($query)). '%';
     }
 
 
@@ -106,17 +142,38 @@ class Medialist
         return $this->fullmatch;
     }
 
-    public function options()
+    public function filter()
     {
-        return $this->options;
+        return $this->filter;
     }
 
-    public function content()
+    public function path()
     {
-        return $this->content;
+        return $this->path;
     }
 
+    /**
+     * @return string formated like `media/<folder>/`
+     */
+    public function dir()
+    {
+        return ltrim($this->path, '/') . '/';
+    }
 
+    public function sortby()
+    {
+        return $this->sortby;
+    }
+
+    public function order()
+    {
+        return $this->order;
+    }
+
+    public function type()
+    {
+        return $this->type;
+    }
 
     // __________________________________________________ S E T ____________________________________________________________
 
@@ -127,21 +184,25 @@ class Medialist
     }
 
 
-    public function setoptions(string $options)
+    public function setfilter(string $filter)
     {
-        if (!empty($options)) {
-            $this->options = $options;
+        if (!empty($filter)) {
+            $this->filter = $filter;
         }
     }
 
     public function setpath(string $path)
     {
-        $this->path = $path;
+        if(preg_match('%^\/' . Model::MEDIA_DIR . '%', $path)) {
+            $this->path = $path;
+        } elseif (!preg_match('%^\/%', $path)) {
+            $this->path = '/' . Model::MEDIA_DIR . $path; 
+        }
     }
 
     public function setsortby(string $sortby)
     {
-        if (in_array($sortby, self::SORT_BY_OPTIONS)) {
+        if (in_array($sortby, self::SORT_BY_FILTER)) {
             $this->sortby = $sortby;
         }
     }
@@ -150,6 +211,13 @@ class Medialist
     {
         if ($order === -1 || $order === 1) {
             $this->order = $order;
+        }
+    }
+
+    public function settype($type)
+    {
+        if(is_array($type)) {
+            $this->type = array_intersect(self::TYPES, array_unique($type));
         }
     }
 }
