@@ -10,7 +10,7 @@ class Controller
     /** @var User */
     protected $user;
 
-    /** @var Routes */
+    /** @var \AltoRouter */
     protected $router;
 
     /** @var Modeluser */

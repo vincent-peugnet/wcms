@@ -353,6 +353,10 @@ main.media code {
     padding: 1px;
 }
 
+nav.media span#currentdir {
+    color: hsla(213, 70%, 40%, 1);
+}
+
 
 
 td.code {
@@ -512,3 +516,4 @@ footer {
     }
 
 }
+

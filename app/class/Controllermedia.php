@@ -61,7 +61,7 @@ class Controllermedia extends Controller
             if (!empty($_FILES['file']['name'][0])) {
                 $this->mediamanager->multiupload('file', $target);
             }
-                $this->redirect($this->router->generate('media') . '?path=' . $target);
+                $this->redirect($this->router->generate('media') . '?path=/' . $target);
         } else {
             $this->routedirect('home');
         }
@@ -74,7 +74,7 @@ class Controllermedia extends Controller
             $name = idclean($_POST['foldername']) ?? 'new-folder';
             $this->mediamanager->adddir($dir, $name);
         }
-        $this->redirect($this->router->generate('media') . '?path=' . $dir . DIRECTORY_SEPARATOR . $name);
+        $this->redirect($this->router->generate('media') . '?path=/' . $dir . DIRECTORY_SEPARATOR . $name);
 
     }
 
@@ -84,7 +84,7 @@ class Controllermedia extends Controller
             if(isset($_POST['deletefolder']) && intval($_POST['deletefolder']) && $this->user->issupereditor()) {
                 $this->mediamanager->deletedir($_POST['dir']);
             } else {
-                $this->redirect($this->router->generate('media') . '?path=' . $_POST['dir']);
+                $this->redirect($this->router->generate('media') . '?path=/' . $_POST['dir']);
                 exit;
             }
         }

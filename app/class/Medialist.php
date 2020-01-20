@@ -113,14 +113,20 @@ class Medialist
 		} else {
 			$order = $this->order;
 		}
-        $query = ['path' => $this->path, 'sortby' => $sortby, 'order' => $order, 'type' => $this->type];
+        $query = ['path' => $this->path, 'sortby' => $sortby, 'order' => $order];
+        if(array_diff( self::TYPES, $this->type) != []) {
+            $query['type'] = $this->type;
+        }
         return '?' . urldecode(http_build_query($query));
 
     }
 
     public function getpathadress(string $path) : string
     {
-        $query = ['path' => '/' . $path, 'sortby' => $this->sortby, 'order' => $this->order, 'type' => $this->type];
+        $query = ['path' => '/' . $path, 'sortby' => $this->sortby, 'order' => $this->order];
+        if(array_diff( self::TYPES, $this->type) != []) {
+            $query['type'] = $this->type;
+        }
         return '?' . urldecode(http_build_query($query));
     }
 
@@ -147,6 +153,9 @@ class Medialist
         return $this->filter;
     }
 
+    /**
+     * @return string formated like `/media/<folder>`
+     */
     public function path()
     {
         return $this->path;
@@ -193,10 +202,10 @@ class Medialist
 
     public function setpath(string $path)
     {
-        if(preg_match('%^\/' . Model::MEDIA_DIR . '%', $path)) {
-            $this->path = $path;
+        if(preg_match('%^\/' . rtrim(Model::MEDIA_DIR, DIRECTORY_SEPARATOR) . '%', $path)) {
+            $this->path = rtrim($path, DIRECTORY_SEPARATOR);
         } elseif (!preg_match('%^\/%', $path)) {
-            $this->path = '/' . Model::MEDIA_DIR . $path; 
+            $this->path = '/' . Model::MEDIA_DIR . rtrim($path, DIRECTORY_SEPARATOR); 
         }
     }
 

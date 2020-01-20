@@ -214,8 +214,8 @@ function array_diff_assoc_recursive($array1, $array2) {
  */
 function treecount(array $dir, string $dirname, int $deepness, string $path, string $currentdir, Medialist $mediaopt)
 {
-	if ($path === $currentdir) {
-		$folder = '├─📂<strong>' . $dirname . '<strong>';
+	if ($path . '/' === $currentdir) {
+		$folder = '├─📂<span id="currentdir">' . $dirname . '<span>';
 	} else {
 		$folder = '├─📁' . $dirname;
 	}
