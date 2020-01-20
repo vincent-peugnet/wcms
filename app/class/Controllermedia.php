@@ -33,25 +33,18 @@ class Controllermedia extends Controller
                 throw new Exception("Media error : Cant create /media/thumbnail folder");
             }
 
+            $mediaopt = new Medialist($_GET);
 
-            $dir = rtrim($_GET['path'] ?? Model::MEDIA_DIR, DIRECTORY_SEPARATOR);
-            $sortby = isset($_GET['sortby']) ? $_GET['sortby'] : 'id';
-            $order = isset($_GET['order']) ? $_GET['order'] : '1';
-            $opt = ['dir' => $dir, 'sortby' => $sortby, 'order' => $order];
-
-            if(is_dir($dir)) {
-                $medialist = $this->mediamanager->getlistermedia($dir . DIRECTORY_SEPARATOR);
-                $faviconlist = $this->mediamanager->getlistermedia(Model::FAVICON_DIR);
+            if(is_dir($mediaopt->dir())) {
+                $medialist = $this->mediamanager->medialistopt($mediaopt);
     
                 $dirlist = $this->mediamanager->listdir(Model::MEDIA_DIR);
 
                 $pathlist = [];
-
                 $this->mediamanager->listpath($dirlist, '', $pathlist);
 
-                $this->mediamanager->medialistsort($medialist, $sortby, $order);
     
-                $this->showtemplate('media', ['medialist' => $medialist, 'faviconlist' => $faviconlist, 'dirlist' => $dirlist, 'pathlist' =>$pathlist, 'dir' => $dir, 'opt' => $opt]);
+                $this->showtemplate('media', ['medialist' => $medialist, 'dirlist' => $dirlist, 'pathlist' =>$pathlist, 'mediaopt' => $mediaopt]);
             } else {
                 $this->routedirect('media');
             }
@@ -68,7 +61,7 @@ class Controllermedia extends Controller
             if (!empty($_FILES['file']['name'][0])) {
                 $this->mediamanager->multiupload('file', $target);
             }
-                $this->redirect($this->router->generate('media') . '?path=' . $target);
+                $this->redirect($this->router->generate('media') . '?path=/' . $target);
         } else {
             $this->routedirect('home');
         }
@@ -81,7 +74,7 @@ class Controllermedia extends Controller
             $name = idclean($_POST['foldername']) ?? 'new-folder';
             $this->mediamanager->adddir($dir, $name);
         }
-        $this->redirect($this->router->generate('media') . '?path=' . $dir . DIRECTORY_SEPARATOR . $name);
+        $this->redirect($this->router->generate('media') . '?path=/' . $dir . DIRECTORY_SEPARATOR . $name);
 
     }
 
@@ -91,7 +84,7 @@ class Controllermedia extends Controller
             if(isset($_POST['deletefolder']) && intval($_POST['deletefolder']) && $this->user->issupereditor()) {
                 $this->mediamanager->deletedir($_POST['dir']);
             } else {
-                $this->redirect($this->router->generate('media') . '?path=' . $_POST['dir']);
+                $this->redirect($this->router->generate('media') . '?path=/' . $_POST['dir']);
                 exit;
             }
         }

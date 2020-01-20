@@ -437,16 +437,17 @@ class Modelrender extends Modelpage
 	 */
 	public function automedialist(string $text)
 	{
-		preg_match_all('~\%MEDIA\?([a-zA-Z0-9\&=\-\/\%]*)\%~', $text, $out);
+		preg_match_all('~\%MEDIA\?([a-zA-Z0-9\[\]\&=\-\/\%]*)\%~', $text, $out);
 
 		foreach ($out[0] as $key => $match) {
-			$matches[$key] = ['fullmatch' => $match, 'options' => $out[1][$key]];
+			$matches[$key] = ['fullmatch' => $match, 'filter' => $out[1][$key]];
 		}
 
 		if(isset($matches)) {
 			foreach ($matches as $match) {
 				$medialist = new Medialist($match);
-				$text = str_replace($medialist->fullmatch(), $medialist->content(), $text);
+				$medialist->readfilter();
+				$text = str_replace($medialist->fullmatch(), $medialist->generatecontent(), $text);
 			}
 		}
 		return $text;

@@ -1,5 +1,7 @@
 <?php
 
+use Wcms\Medialist;
+
 function readablesize($bytes)
 {
 	$format = ' %d %s';
@@ -204,6 +206,28 @@ function array_diff_assoc_recursive($array1, $array2) {
         }
     }
     return $difference;
+}
+
+
+/**
+ * Generate a folder tree based on reccurive array
+ */
+function treecount(array $dir, string $dirname, int $deepness, string $path, string $currentdir, Medialist $mediaopt)
+{
+	if ($path . '/' === $currentdir) {
+		$folder = '├─📂<span id="currentdir">' . $dirname . '<span>';
+	} else {
+		$folder = '├─📁' . $dirname;
+	}
+	echo '<tr>';
+	echo '<td><a href="' . $mediaopt->getpathadress($path) . '">' . str_repeat('&nbsp;&nbsp;', $deepness) . $folder . '</a></td>';
+	echo '<td>' . $dir['dirfilecount'] . '</td>';
+	echo '</tr>';
+	foreach ($dir as $key => $value) {
+		if (is_array($value)) {
+			treecount($value, $key, $deepness + 1, $path . DIRECTORY_SEPARATOR . $key, $currentdir, $mediaopt);
+		}
+	}
 }
 
 
