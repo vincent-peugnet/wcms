@@ -143,13 +143,6 @@ h1, h2 {
 
 
 
-main.info nav, main article {
-    border: solid 1px dimgrey;
-    margin: 1%;
-    background-color: lightgrey;
-}
-
-
 p {
     padding: 0 1%;
 }
@@ -314,13 +307,6 @@ main.info blockquote {
     padding: 6px 12px;
     text-align: left;
     word-break: break-all;
-}
-
-main.info nav {
-    position: fixed;
-    left: 850px;
-    top: 0px;
-    margin-top: 50px;
 }
 
 main.info article code i {
