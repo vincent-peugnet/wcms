@@ -32,8 +32,11 @@ class Controllermedia extends Controller
             if (!$this->mediamanager->dircheck(Model::THUMBNAIL_DIR)) {
                 throw new Exception("Media error : Cant create /media/thumbnail folder");
             }
-
+            
             $mediaopt = new Medialist($_GET);
+            if(empty($mediaopt->path())) {
+                $mediaopt->setpath(DIRECTORY_SEPARATOR . Model::MEDIA_DIR);
+            }
 
             if(is_dir($mediaopt->dir())) {
                 $medialist = $this->mediamanager->medialistopt($mediaopt);
