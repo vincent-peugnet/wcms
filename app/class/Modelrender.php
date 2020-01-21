@@ -36,6 +36,21 @@ class Modelrender extends Modelpage
 		}
 	}
 
+	/**
+	 * Used to convert the markdown user manual to html document
+	 * 
+	 * @param string $text Input text in markdown
+	 * @return string html formated text
+	 */
+	public function rendermanual(string $text) : string
+	{
+		$text = $this->markdown($text);
+		$text = $this->headerid($text, 3);
+		return $text;
+
+	}
+
+
 	public function upage($id)
 	{
 		return $this->router->generate('pageread/', ['page' => $id]);
@@ -384,11 +399,25 @@ class Modelrender extends Modelpage
 		return $text;
 	}
 
-	public function headerid($text)
+	/**
+	 * Add Id to hrml header elements and store the titles in the `sum` parameter
+	 * 
+	 * @param string $text Input html document to scan
+	 * @param int $maxdeepness Maximum header deepness to look for. Min = 1 Max = 6 Default = 6
+	 * 
+	 * @return string text with id in header
+	 */
+
+	public function headerid($text, int $maxdeepness = 6)
 	{
+		if($maxdeepness > 6 || $maxdeepness < 1) {
+			$maxdeepness = 6;
+		}
+
+
 		$sum = [];
 		$text = preg_replace_callback(
-			'/<h([1-6])(\s+(\s*\w+="\w+")*)?\s*>(.+)<\/h[1-6]>/mU',
+			'/<h([1-' . $maxdeepness . '])(\s+(\s*\w+="\w+")*)?\s*>(.+)<\/h[1-' . $maxdeepness . ']>/mU',
 			function ($matches) use (&$sum) {
 				$cleanid = idclean($matches[4]);
 				$sum[$cleanid][$matches[1]] = $matches[4];
@@ -453,15 +482,14 @@ class Modelrender extends Modelpage
 		return $text;
 	}
 
-
-	function sumparser($text)
+	/**
+	 * Generate a Summary based on header ids. Need to use `$this->headerid` before to scan text
+	 *  
+	 * @return string html list with anchor link
+	 */
+	function sumparser() : string
 	{
-		preg_match_all('#<h([1-6]) id="(\w+)">(.+)</h[1-6]>#iU', $text, $out);
-
-
 		$sum = $this->sum;
-
-
 
 		$sumstring = '';
 		$last = 0;

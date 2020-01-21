@@ -273,8 +273,19 @@ main.info blockquote i {
     color: #7b97b9;
 }
 
+main.info article#manual h1 {
+    text-align: center;
+    font-size: 50px;
+    color: black;
+    background-color: transparent;
+    font-weight: lighter;
+    margin: 6%;
+    border-top: solid;
+    border-bottom: solid;
+}
 
-main.info article h2#manual {
+
+main.info article#manual h2 {
     text-align: center;
     font-size: 40px;
 }

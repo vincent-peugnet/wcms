@@ -5,7 +5,8 @@ namespace Wcms;
 abstract class Model
 {
 
-    const CONFIG_FILE = 'config.json';
+	const CONFIG_FILE = 'config.json';
+	const MAN_FILE = 'MANUAL.md';
 	const CSS_DIR = 'assets' . DIRECTORY_SEPARATOR .'css' . DIRECTORY_SEPARATOR;
 	const JS_DIR = 'assets' . DIRECTORY_SEPARATOR .'js' . DIRECTORY_SEPARATOR;
 	const ICONS_DIR = 'assets' . DIRECTORY_SEPARATOR .'icons' . DIRECTORY_SEPARATOR;

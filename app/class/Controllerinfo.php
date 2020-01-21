@@ -1,6 +1,7 @@
 <?php
 
 namespace Wcms;
+use Michelf\MarkdownExtra;
 
 class Controllerinfo extends Controller
 {
@@ -12,7 +13,20 @@ class Controllerinfo extends Controller
     public function desktop()
     {
         if($this->user->iseditor()) {
-            $this->showtemplate('info', ['version' => getversion()]);
+
+            if(file_exists(Model::MAN_FILE)) {
+
+                $render = new Modelrender($this->router);
+                $htmlman = file_get_contents(Model::MAN_FILE);
+                $htmlman = $render->rendermanual($htmlman);
+
+                $summary = $render->sumparser($htmlman, 3);
+
+
+                $this->showtemplate('info', ['version' => getversion(), 'manual' => $htmlman, 'summary' => $summary]);
+
+            }
+
         }
     }
 

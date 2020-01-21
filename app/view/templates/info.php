@@ -12,24 +12,23 @@
 
 <nav>
     <div class="block">
-        <h2>Manual Summary</h2>
-        <div class="scroll">
-        <ul>
-            <li><a href="#startup">Startup</a></li>
-            <ul>
 
-            </ul>
-            <li><a href="#structure">Structure</a></li>
-            <ul>
-                <li><a href="#attributes">Page attributes</a></li>
-                <li><a href="#database">Database</a></li>
-            </ul>
-            <li><a href="#editor">Editor</a></li>
-            <ul>
-                <li><a href="#elementsyntax">Elements syntax</a></li>
-                <li><a href="#bodysyntax">Body syntax</a></li>
-            </ul>
+    <h2>Version</h2>
+
+    <?= $version ?>
+
+
+
+    <h2>Links</h2>
+
+        <ul>
+        <li><a href="https://github.com/vincent-peugnet/wcms" target="_blank">🐱‍👤 Github</a></li>
+        <li><a href="https://w-cms.top" target="_blank">🌵 Website</a></li>
         </ul>
+
+        <h2>Manual Summary</h2>
+
+        <?= $summary ?>
 
         </div>
     </div>
@@ -38,22 +37,12 @@
 <section class="info">
 
     <div class="block">
+        <h1>Info</h1>
         <div class="scroll">
             <article>
 
-                <h1>Info</h1>
 
-                <h2>Version</h2>
 
-                <?= $version ?>
-
-                <h2>Links</h2>
-
-                <ul>
-                <li><a href="https://github.com/vincent-peugnet/wcms" target="_blank">🐱‍👤 Github</a></li>
-                <li><a href="#manual">📕 Manual</a></li>
-                <li><a href="https://w-cms.top" target="_blank">🌵 Website</a></li>
-                </ul>
 
                 <h2>About</h2>
 
@@ -72,7 +61,10 @@
 
             </article>
 
-            <?php $this->insert('man') ?>
+            <article id="manual">
+                <?= $manual ?>
+            </article>
+
 
         </div>
     </div>
