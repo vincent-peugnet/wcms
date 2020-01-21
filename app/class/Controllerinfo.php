@@ -20,7 +20,7 @@ class Controllerinfo extends Controller
                 $htmlman = file_get_contents(Model::MAN_FILE);
                 $htmlman = $render->rendermanual($htmlman);
 
-                $summary = $render->sumparser($htmlman, 4);
+                $summary = $render->sumparser(2, 3);
 
 
                 $this->showtemplate('info', ['version' => getversion(), 'manual' => $htmlman, 'summary' => $summary]);

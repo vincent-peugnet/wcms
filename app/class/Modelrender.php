@@ -487,13 +487,22 @@ class Modelrender extends Modelpage
 	 *  
 	 * @return string html list with anchor link
 	 */
-	function sumparser() : string
+	function sumparser(int $start = 1, int $end = 6) : string
 	{
 		$sum = $this->sum;
 
+		$filteredsum = [];
+
+		foreach ($sum as $key => $menu) {
+			$deepness = array_keys($menu)[0];
+			if($deepness >= $start && $deepness <= $end) {
+				$filteredsum[$key] = $menu;
+			}
+		}
+
 		$sumstring = '';
 		$last = 0;
-		foreach ($sum as $title => $list) {
+		foreach ($filteredsum as $title => $list) {
 			foreach ($list as $h => $link) {
 				if ($h > $last) {
 					for ($i = 1; $i <= ($h - $last); $i++) {
