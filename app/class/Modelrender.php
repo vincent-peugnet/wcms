@@ -45,7 +45,7 @@ class Modelrender extends Modelpage
 	public function rendermanual(string $text) : string
 	{
 		$text = $this->markdown($text);
-		$text = $this->headerid($text, 4);
+		$text = $this->headerid($text, 5);
 		return $text;
 
 	}
@@ -485,17 +485,23 @@ class Modelrender extends Modelpage
 	/**
 	 * Generate a Summary based on header ids. Need to use `$this->headerid` before to scan text
 	 *  
+	 * @param int $min Minimum header deepness to start the summary : Between 1 and 6.
+	 * @param int $max Maximum header deepness to start the summary : Between 1 and 6.
+	 * 
 	 * @return string html list with anchor link
 	 */
-	function sumparser(int $start = 1, int $end = 6) : string
+	function sumparser(int $min = 1, int $max = 6) : string
 	{
+		$min = $min >= 1 && $min <= 6 && $min <= $max ? $min : 1;
+		$end = $max >=1 && $max <= 6 && $max >= $min ? $max : 6;
+
 		$sum = $this->sum;
 
 		$filteredsum = [];
 
 		foreach ($sum as $key => $menu) {
 			$deepness = array_keys($menu)[0];
-			if($deepness >= $start && $deepness <= $end) {
+			if($deepness >= $min && $deepness <= $max) {
 				$filteredsum[$key] = $menu;
 			}
 		}
