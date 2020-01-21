@@ -28,8 +28,8 @@ W try to help you create pages more spontaneously.
 
 - low latency page loading
 - Use markdown synthax, HTML, CSS and Javascript
-- url based command interface
-- Media manager
+- [url based command interface](MANUAL.md#url-based-command-interface)
+- [Media manager](MANUAL.md#media-manager)
 - Font manager
 - Multi-users
 - No hierarchy between pages

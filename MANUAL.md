@@ -10,14 +10,16 @@ If it's you're first time using it, you should learn how to [create your first p
 
 If you already know the basics, you may want to check the references :
 
-- Discover the differents [interfaces](#interfaces).
-- Get to know the [structure of a page]() to edit meta content.
-- Learn more about the [commands](#commands) you can type in the adress bar.
-- Master the [render engine]() to release the full potential of __W__.
+- Discover how to [navigate](#navigation).
+- Get to know the [structure of a page](#page-structure) to edit meta content.
+- Learn more about the [URL based commands](#url-based-command-interface) you can type in the adress bar.
+- Master the [render engine](#page-editing) to release the full potential of __W__.
 
 
 
 ### Create your first page
+
+This 3 steps tutorial will introduce you to the basic __W__ moves.
 
 #### Add a new page
 
@@ -70,84 +72,273 @@ All those methods will create a link pointing to the `<page_id>` you've given.
 Those kind of links are called internal links beccause they stay inside of your domain. To set a link outside of your website, simply remplace `<page_id>` by
 
 
-Interfaces
-----------
+### Navigation
 
-### Home
+Discover the differents interfaces of __W__.
 
-### Editor
+#### Home
 
-### Media
+The Home interface is the main view of your project. You can access it only when you're connected. All the pages of your database are listed here.
 
-### Admin
+The [readers](#reader) and [invite editors](#invite-editor) can't access this interface.
 
-### User
+##### Home menu
+
+In the home menu [super editors and above](#super-editor) can :
+
+- File : import pages as JSON file. (usefull for transfering pages from a W instance to another)
+- Edit : 
+
+The Home view is divided in two main parts :
+
+##### Options
+
+ where you can apply filters and sorting
+
+##### Pages
+
+the list of pages after filtering
+
+#### Edition
+
+The edition interface is accessible when typing `/edit` after an existing [page_id](#page-id) in the adress bar. Or from the [home](#home), by clicking on the pencil button.
+
+[Invite editors](#invite-editor) and [editors](#editor) users can only access edition of pages where they are listed as [author](#authors).
+
+The Edition view is composed of a main content edition area, surounded by two lateral panels that you can deploy or hide.
+
+##### left panel
+
+This is the 
+
+- Meta infos : edit [title](#title), [description](#description) and more infos about your page.
+- Templating
+- Advanced
+- Help : a quick synthax reference for markdown and W synthax
+
+##### contents area
+
+Each tab allow you to edit a different type of content :
+
+[main](#main), [nav](#nav), [aside](#aside)
+
+Note that the MAIN tab is the default opened tab, this is meant to be the most spontaneous place to store information when you are using __W__ in *note taking style*.
+
+##### right panel
+
+#### Media manager
+
+When you need to use images, sound or videos in your pages, or any other type of files, you can use the media manager to host them before including them in your pages.
+
+[Invite editors](#invite-editor) don't have access to this place.
+
+##### Media menu
+
+The media menu allow you to do more powerfull function like moving medias or delete folders.
+
+#### Admin
+
+#### User manager
+
+
+
+
+
+
+
+
+
+Page Editing
+------------
+
+### Synthax
+
+#### Markdown
+
+- [Daring Fireballs](https://daringfireball.net/projects/markdown/syntax) Official reference of Markdown Synthax
+- [Michel Fortin's Markdown extra](https://michelf.ca/projects/php-markdown/extra/) The library used in W.
+
+
+#### W specific synthax
+
+##### Auto url
+
+When you use an adress starting with `http://` or `https://`, W will automaitcaly create a link pointing to a new tab.
+
+    <a href="<url>" target="_blank" class="external"><url></a>
+
+Note that the `.external` class have been added.
+
+##### Quick links
+
+    [<page_id>]
+
+Will generate :
+
+    <a href="<page_id>" title="PAGE_DESCRIPTION" class="internal">PAGE_TITLE</a>
+
+Where [PAGE_DESCRIPTION](#description) and [PAGE_TITLE](page-title) are the [page_id](#page-id)'s meta infos.
+
+Note that the `.internal` class have been added to the `a` html link, allowing you to differenciate internal link styling from `.external`.
+
+### Inclusions
+
+#### Basic inclusions
+
+##### Title inclusion
+
+    %TITLE%
+
+This will include the page [title](#page-title).
+
+##### Description inclusion
+
+    %DESCRIPTION%
+
+This will include the page [description](#description).
+
+##### Date inclusion
+
+    %DATE%
+
+
+#### Page list
+
+The page list
+
+#### Media list
+
+### Templating
+
+### Content insertion
+
+#### Advanced BODY synthax
+
+
+
+
 
 
 References
 ---------
 
 
-### Structure of a page
+### Page structure
 
 
 Technicaly, each page is stored as a JSON object in yout fatabase folder.
 
 A page consist of meta informations and contents.
 
-#### Page ID
+#### Meta infos
+
+##### Page ID
 
 The unique identifier of a page.
 
-#### Page title
+##### Page title
 
 The page title is also very important. It's like the official name of a page.
 
-#### Description
+##### Description
 
-#### Tag
+##### Tag
 
-#### Date & time
+Tags are very powerfull to help you organize your pages. As in __W__, there is no hierarchy between pages, this is the only tool to create groups of pages.
 
-#### Thumbnail
+Tags can be set in the [left panel of the editor interface](#left-panel) using comma to separate tags.
+
+##### Date & time
+
+##### Thumbnail
+
+The thumbnail have two use cases :
+
+- When you share a link to a page on a social network
+- When you generate a [list of page](#page-list) and activated the `thumbail` option. 
+
+##### Authors
+
+List of [users](#user-levels) that have edited the page, or that can do it. You have to be at least [super-editor](#super-editor) to add or remove authors.
+
+#### Content
+
+##### Main, Nav, Aside, Header, Footer
+
+##### CSS
+
+##### BODY
+
+##### Javascript
 
 
 
-### Formating
 
 
+### User levels
 
-Controls
---------
+#### Visitor
 
+> level : 0
 
+#### Reader
 
+> level : 1
 
-### Pages commands
+#### Invite Editor
+
+> level : 2
+
+Invite Editors are the lowest editor status possible. They can only access the [Edition interface](#edition). They can't create page but only edit page when listed as [author](#authors).
+
+#### Editor
+
+> level : 3
+
+- Can create pages and edit them.
+- Can only edit pages when listed as [author](#authors)
+
+#### Super Editor
+
+> level : 4
+
+- Can edit any pages they like (they will be added as [author](#authors) of the page).
+- Can use the home menu and media menu to access powerfull features.
+
+#### Administrator
+
+> level : 10
+
+- Can access the [admin interface](#admin).
+- Can create new users.
+
+### URL based command interface
+
+#### Pages commands
 
 Type thoses commands after a __page_id__ 
 
 `<page_id>/COMMAND`
 
-#### /add
+##### /add
 
 Command used to add a page in the database.
 
-#### /edit
+##### /edit
 
 Command used to edit a page. If you're not logged in, it will ask for your credentials.
 
-#### /delete
+##### /delete
 
 Command used to delete a page from the database. This will ask you for a confirmation.
 
-#### /render
+##### /render
 
 Force the rendering of a page.
 
-#### /log
+##### /log
 
 Show a `var_dump` of the page object. This could be usefull for debbuging.
 
 
-### Home commands
+

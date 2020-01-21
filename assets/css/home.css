@@ -92,7 +92,7 @@ aside .submenu code {
     display: block;
     white-space: nowrap;
     color: #7b97b9;
-    background-color: #252525;
+    background-color: #233143;
     padding: 1%;
     font-size: 12px;
 }
@@ -247,7 +247,8 @@ a:hover img.icon {
 }
 
 section.info {
-    max-width: 700px;
+    max-width: 600px;
+    list-style: inside disc;
 }
 
 
@@ -259,14 +260,13 @@ main.info a {
     text-decoration: underline white;
 }
 
-main.info ul {
-    list-style: none;
+nav.info ul {
     padding-inline-start: 10px;
 }
 
 main.info code {
     color: white;
-    background-color: #191919;
+    background-color: #233143;
     width: fit-content;
     font-family: monospace;
     font-size: initial;
@@ -292,31 +292,43 @@ main.info article#manual h1 {
 main.info article#manual h2 {
     text-align: center;
     font-size: 40px;
+    margin-top: 60px;
 }
 
 main.info article#manual h3 {
     border-bottom: solid 1px grey;
-    margin-top: 100px;
+    margin-top: 30px;
     padding-top: 15px;
     font-size: 35px;
 }
 
 main.info article h4 {
     background-color: darkgrey;
-    padding: 10px;
     font-size: x-large;
-    margin-top: 70px;
+    margin-top: 35px;
+    margin-bottom: 25px;
 }
 
-main.info article h5 {
+main.info article#manual h5 {
     text-transform: uppercase;
-    margin-top: 45px;
-    font-size: large;
+    margin-top: 20px;
+    margin-bottom: 0;
+    font-size: medium;
+}
+
+
+section.info ul {
+    list-style: inside disc;
+    padding-inline-start: 10px;
 }
 
 main.info code {
     padding: 0 4px;
 }
+
+
+
+main.info pre {width: fit-content;padding: 1%;background-color: hsla(213, 31%, 20%, 1);white-space: pre-wrap;margin: 1%;}
 
 main.info blockquote {
     padding: 6px 12px;
@@ -501,7 +513,6 @@ footer {
     main.info nav {
         position: relative;
         left: 0;
-        margin-top: 1%;
     }
 
     main.home nav {
@@ -517,6 +528,3 @@ footer {
     }
 
 }
-
-
-

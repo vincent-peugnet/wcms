@@ -10,26 +10,27 @@
 
 <main class="info">
 
-<nav>
+<nav class="info">
     <div class="block">
+        <div class="scroll">
 
-    <h2>Version</h2>
+            <h2>Version</h2>
 
-    <?= $version ?>
+            <?= $version ?>
 
 
 
-    <h2>Links</h2>
+            <h2>Links</h2>
 
-        <ul>
-        <li><a href="https://github.com/vincent-peugnet/wcms" target="_blank">🐱‍👤 Github</a></li>
-        <li><a href="https://w-cms.top" target="_blank">🌵 Website</a></li>
-        </ul>
+                <ul>
+                <li><a href="https://github.com/vincent-peugnet/wcms" target="_blank">🐱‍👤 Github</a></li>
+                <li><a href="https://w-cms.top" target="_blank">🌵 Website</a></li>
+                </ul>
 
-        <h2>Manual Summary</h2>
+                <h2>Manual Summary</h2>
 
-        <?= $summary ?>
-
+                <?= $summary ?>
+            </div>
         </div>
     </div>
 </nav>
