@@ -13,6 +13,8 @@ There is a lots of possibilites of creations, for people who need to create mult
 - The pages load very quickly as they can be rendered
 - Editor interface, the only place where where you can see the master-plan.
 
+[User manual](MANUAL.md)
+
 
 Overview
 --------
