@@ -677,7 +677,7 @@ class Modelrender extends Modelpage
 				$optlist->parsehydrate($match['options']);
 				$table2 = $modelhome->table2($this->pagelist, $optlist);
 
-				$content = '<ul>' . PHP_EOL ;
+				$content = '<ul class="pagelist">' . PHP_EOL ;
 				foreach ($table2 as $page ) {
 					$content .= '<li>' . PHP_EOL;
 					$content .= '<a href="' . $this->upage($page->id()) . '">' . $page->title() . '</a>' . PHP_EOL;

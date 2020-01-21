@@ -204,7 +204,29 @@ This will include the page [description](#description).
 
 #### Page list
 
-The page list
+Sometimes, when you want to add links to a lot of pages, it can be way to long. This tool is here to help you generate list of links automatically.
+
+It use the same logic as the page filter.
+
+When you are in the [home view](#home), ajust the filters using the [options panel](#options) to achieve the page selection you desire. Then select "filters" in the [menu](#home-menu), choose options you prefer and hit "generate". You can now copy and paste the code obtainded that way in one of the [elements](#markdown-elements) of a page.
+
+Display options are :
+
+- title : display the [title](#page-title) of the page
+- description : display the [description](#description) of the page.
+- thumbnail : display the [thumnail](#thumbnail) of the page.
+- date : display the [date](#date) of the page.
+- time : display the [time](#time) of the page.
+
+Generate :
+
+
+    <ul class="pagelist">
+        <li><a href="ID">TITLE</a> DESCRIPTION DATE TIME ... </li>
+        ....
+    </ul>
+
+
 
 #### Media list
 
@@ -263,7 +285,9 @@ List of [users](#user-levels) that have edited the page, or that can do it. You 
 
 #### Content
 
-##### Main, Nav, Aside, Header, Footer
+##### markdown elements
+
+Main, Nav, Aside, Header, Footer
 
 ##### CSS
 
