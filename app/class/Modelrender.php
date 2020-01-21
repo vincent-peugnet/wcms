@@ -45,7 +45,7 @@ class Modelrender extends Modelpage
 	public function rendermanual(string $text) : string
 	{
 		$text = $this->markdown($text);
-		$text = $this->headerid($text, 3);
+		$text = $this->headerid($text, 4);
 		return $text;
 
 	}

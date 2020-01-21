@@ -246,6 +246,10 @@ a:hover img.icon {
     filter: invert(1);
 }
 
+section.info {
+    max-width: 700px;
+}
+
 
 main.info ul i {
     color: grey;
@@ -260,7 +264,7 @@ main.info ul {
     padding-inline-start: 10px;
 }
 
-main.info code, main.info blockquote {
+main.info code {
     color: white;
     background-color: #191919;
     width: fit-content;
@@ -513,4 +517,6 @@ footer {
     }
 
 }
+
+
 
