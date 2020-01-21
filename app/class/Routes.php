@@ -22,7 +22,7 @@ class Routes
             ['POST', '/columns', 'Controllerhome#columns', 'homecolumns'],
             ['GET', '//renderall', 'Controllerhome#renderall', 'homerenderall'],
             ['POST', '/bookmark', 'Controllerhome#bookmark', 'homebookmark'],
-            ['POST', '/multiedit', 'Controllerhome#multiedit', 'multiedit'],
+            ['POST', '/multi', 'Controllerhome#multi', 'multi'],
             ['POST', '/upload', 'Controllerpage#upload', 'pageupload'],
             ['POST', '/!co', 'Controllerconnect#log', 'log'],
             ['GET', '/!co', 'Controllerconnect#connect', 'connect'],

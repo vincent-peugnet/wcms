@@ -38,13 +38,11 @@
         <div class="submenu">
             <i>Edit selected pages</i>
             <h2>Actions</h2>
-            <form action="" method="post">
-                <input type="submit" value="render">
-                <input type="submit" value="download">
-                <input type="submit" value="delete">
-            </form>
+            <form action="<?= $this->url('multi') ?>" method="post" id="multi">
+                <input type="submit" name="action" value="render">
+                <input type="submit" name="action" value="download">
+                <input type="submit" name="action" value="delete">
             <h2>Edit Meta infos</h2>
-            <form action="<?= $this->url('multiedit') ?>" method="post" id="multiedit">
             <input type="text" name="datas[title]" id="title">
                 <label for="title">title</label>
                 </br>
@@ -144,7 +142,7 @@
                 <input type="checkbox" name="reset[datemodif]" id="resetdatemodif" value="1">
                 <label for="resetdatemodif">update modification date</label>
                 </br>
-                <input type="submit" value="edit">
+                <input type="submit" name="action" value="edit">
             </form>
         </div>
     </details>

@@ -127,6 +127,22 @@ class Controllerhome extends Controllerpage
         $this->routedirect('home');
     }
 
+    public function multi()
+    {
+        if(isset($_POST['action'])) {
+            switch ($_POST['action']) {
+                case 'edit':
+                    $this->multiedit();
+                break;
+
+                case 'render':
+                    $this->multirender();
+                break;
+            }
+        }
+        $this->routedirect('home');
+    }
+
     public function multiedit()
     {
         if ($this->user->issupereditor() && isset($_POST['pagesid'])) {
@@ -141,7 +157,17 @@ class Controllerhome extends Controllerpage
                 $this->pagemanager->pageedit($id, $datas, $reset, $addtag, $addauthor);
             }
         }
-        $this->routedirect('home');
+    }
+
+    public function multirender()
+    {
+        $pagelist = $_POST['pagesid'] ?? [];
+        $pagelist = $this->pagemanager->getlisterid($pagelist);
+        foreach ($pagelist as $page) {
+            $page = $this->renderpage($page);
+            $this->pagemanager->update($page);
+        }
+
     }
 }
 
