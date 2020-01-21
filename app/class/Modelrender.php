@@ -323,7 +323,7 @@ class Modelrender extends Modelpage
 
 		$text = $this->headerid($text);
 
-		$text = str_replace(self::SUMMARY, $this->sumparser($text), $text);
+		$text = str_replace(self::SUMMARY, $this->sumparser(), $text);
 
 		$text = $this->wurl($text);
 		$text = $this->wikiurl($text);
