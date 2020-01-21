@@ -1,19 +1,40 @@
 # W-CMS
 
+W is a lightweight CMS tool, meant to help you design a website using a unique approach. It's targeting artists, or experimental projects.
+
+To have a better idea of what W can do, you can check out the [User manual](MANUAL.md), or dicover the [ideas](#ideas) behind this specific tool.
+
+If tou want to try it out, you can :
+
+- follow the [install instructions](#how-to-install) to host your own instance of W.
+- be hosted for free by [club1.fr](https://club1.fr) as an official tester (please contact [v.peugnet@free.fr](mailto:v.peugnet@free.fr) for more info).
+- [install from sources](#install-from-sources), if you want to contribute to the code.
+
+W is a free and open source tool under the MIT License. The project was initiated in 2018 by Vincent Peugnet.
+
+Ideas
+-----
+
 **W** was first a tool, based on my way of thinking, as a protesis, to write on ideas and create a self explorating text point n' click game.
 
-It's a mix between a drive, wikipedia and a personnal blog. You can create articles very quickly and share them with other people or keep them for you and restricted people.  
-There is no boundaries beetween taking notes and creating a website. When you create a article, you create a space in internet, a place, that can be public or private. Then, you decide to link it or not with the others places you've created before.
+It's a mix between a drive, wikipedia and a personnal blog. You can create page very quickly and share them with other people or keep them for you and restricted people.  
+There is no boundaries beetween taking notes and creating a website. When you create a page, you create a space in internet, a place, that can be public or private. Then, you decide to link it or not with the others places you've created before.
 There is a lots of possibilites of creations, for people who need to create multi-aspect labyrinth websites, to use a half public/private mindmap, or even interactives fictions.
 
-## Highlights
+Highlights
+----------
 
-- The user can never see the whole map of the website : yo can create specific auto-menu for each page if you want.
-- Each page, of group of pages can be like a single website, with it's own style. (You can create your mini internet on internet)
-- The pages load very quickly as they can be rendered
-- Editor interface, the only place where where you can see the master-plan.
+W try to help you create pages more spontaneously.
 
-[User manual](MANUAL.md)
+- low latency page loading
+- Use markdown synthax, HTML, CSS and Javascript
+- url based command interface
+- Media manager
+- Font manager
+- Multi-users
+- No hierarchy between pages
+- Configured without landing-page (by default)
+- optional javascript ergonomic enhancement (no-script proof)
 
 
 Overview
@@ -40,13 +61,31 @@ There is lot more you can by altering the `BODY`.
 [Old webpage of the project (in french)](http://vincent.club1.fr/w/?id=w)
 
 
-# Technology
+How to install
+--------------
 
-- almost pure PHP.
-- Use MarkDown to edit pages quickly.
-- Easy to manage Json 'flat file' database.
+### Server requirements
 
-using [James Moss's Flywheel Database](https://github.com/jamesmoss/flywheel), [Michel Fortin's Markdown Extra](https://github.com/michelf/php-markdown) and [Plates](https://github.com/thephpleague/plates) as lightweight template engine.
+- apache server
+- PHP >=7.2.0
+
+__W__ don't need any database manager as it use a "flat file" system.
+
+
+### Installation guide
+
+Simply download the [latest realease](https://github.com/vincent-peugnet/wcms/releases/latest) from github, and unzip it in your hosted folder. You can put W at the root of your domain, or in subfolders. Then access the adress in your browser and follow the differents steps.
+
+W will ask you for the path you've installed it, if you installed it at the root, leave this field blank, otherwise, indiquate the subfolders like `path/to/wcms`.
+
+
+
+### Thanks to
+
+- [James Moss's Flywheel Database](https://github.com/jamesmoss/flywheel)
+- [Michel Fortin's Markdown Extra](https://github.com/michelf/php-markdown)
+- [Plates](https://github.com/thephpleague/plates) as template engine.
+- [Nicolas Peugnet](https://nicolas.club1.fr/) for the technical support
 
 # Development informations
 
@@ -114,10 +153,3 @@ Then, to make the release, run the following command:
     make release
 
 To only build the release zip, simply run `make dist`. This will create a zip file in `dist/` of the current version.
-
-
-To Do
-=====
-
-
-- Locking page system by super editor to prevent editing by the wrong person
