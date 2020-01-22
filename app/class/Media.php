@@ -111,6 +111,28 @@ class Media
 
 	}
 
+	public function getsymbol()
+	{
+		switch ($this->type) {
+			case 'image':
+				$symbol = "🖼";
+				break;
+			
+			case 'sound':
+				$symbol = "🎵";
+				break;
+			
+			case 'video':
+				$symbol = "🎞";
+				break;
+			
+			case 'other':
+				$symbol = "📄";
+				break;
+		}
+		return $symbol;
+	}
+
 
 
 // _________________________________________________ G E T ____________________________________________________

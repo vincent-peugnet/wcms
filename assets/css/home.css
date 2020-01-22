@@ -503,6 +503,11 @@ footer {
 }
 
 
+.nowrap {
+    white-space: nowrap;
+}
+
+
 
 
 @media (max-width: 600px) {

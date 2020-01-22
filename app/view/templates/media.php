@@ -71,40 +71,42 @@
 <section>
     <div class="block">
 
-<h2>/<?= $mediaopt->dir() ?></h2>
+    <h2>/<?= $mediaopt->dir() ?></h2>
 
+    <div class="scroll">
 
+        <table id="medialist">
+        <tr>
+            <th>x</th>
+            <th><a href="<?= $mediaopt->getsortbyadress('id') ?>">id</a></th>
+            <th>ext</th>
+            <th><a href="<?= $mediaopt->getsortbyadress('type') ?>">type</a></th>
+            <th><a href="<?= $mediaopt->getsortbyadress('size') ?>">size</a></th>
+            <th>width</th>
+            <th>height</th>
+            <th>lengh</th>
+            <th>code</th>
+        </tr>
 
-<table id="medialist">
-<tr>
-    <th>x</th>
-    <th><a href="<?= $mediaopt->getsortbyadress('id') ?>">id</a></th>
-    <th>ext</th>
-    <th><a href="<?= $mediaopt->getsortbyadress('type') ?>">type</a></th>
-    <th><a href="<?= $mediaopt->getsortbyadress('size') ?>">size</a></th>
-    <th>width</th>
-    <th>height</th>
-    <th>lengh</th>
-    <th>code</th>
-</tr>
+        <?php
+        foreach ($medialist as $media) {
+            ?>
+            <tr>
+            <td><input type="checkbox" name="id[]" value="<?= $media->getfulldir() ?>" form="mediaedit" id="media_<?= $media->id() ?>"></td>
+            <td><label for="media_<?= $media->id() ?>"><?= $media->id() ?></label></td>    
+            <td><?= $media->extension() ?></td>
+            <td class="nowrap"><a href="<?= $media->getfullpath() ?>" target="_blank"><?= $media->type() == 'image' ? '<span class="thumbnail">' . $media->getsymbol() . '<img src="' . $media->getfullpath() . '"></span>' : $media->getsymbol() ?></a></td>
+            <td class="nowrap"><?= $media->size('hr') ?></td>
+            <td><?= $media->width() ?></td>
+            <td><?= $media->height() ?></td>
+            <td><?= $media->length() ?></td>
+            <td class="code"><code><?= $media->getcode() ?></code></td>
+            </tr>
+            <?php
+        }
+        ?>
 
-<?php
-foreach ($medialist as $media) {
-    ?>
-    <tr>
-    <td><input type="checkbox" name="id[]" value="<?= $media->getfulldir() ?>" form="mediaedit" id="media_<?= $media->id() ?>"></td>
-    <td><label for="media_<?= $media->id() ?>"><?= $media->id() ?></label></td>    
-    <td><?= $media->extension() ?></td>
-    <td><a href="<?= $media->getfullpath() ?>" target="_blank"><?= $media->type() == 'image' ? '<span class="thumbnail">image 👁<img src="' . $media->getfullpath() . '"></span>' : $media->type() . '⧉' ?></a></td>
-    <td><?= $media->size('hr') ?></td>
-    <td><?= $media->width() ?></td>
-    <td><?= $media->height() ?></td>
-    <td><?= $media->length() ?></td>
-    <td class="code"><code><?= $media->getcode() ?></code></td>
-    </tr>
-    <?php
-}
-?>
+    </div>
 
 </table>
 
