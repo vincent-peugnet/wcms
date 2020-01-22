@@ -134,13 +134,29 @@ class Modelpage extends Modeldb
 		}
 	}
 
-	public function delete(Page $page)
+	/**
+	 * Delete a page and it's linked rendered html and css files
+	 * 
+	 * @param Page|string $id could be an Page object or a id string
+	 * 
+	 * @return bool true if success otherwise false
+	 */
+	public function delete($page) : bool
 	{
-		$this->repo->delete($page->id());
-		$this->unlink($page->id());
+		if ($page instanceof Page) {
+			$page = $page->id();
+		}
+		if (is_string($page)) {
+			$this->unlink($page);
+			return $this->repo->delete($page);
+		} else {
+			return false;
+		}
 	}
 
-
+	/**
+	 * Delete rendered CSS and HTML files
+	 */
 	public function unlink(string $pageid)
 	{
 		$files = ['.css', '.quick.css', '.js'];

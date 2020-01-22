@@ -127,9 +127,29 @@ class Controllerhome extends Controllerpage
         $this->routedirect('home');
     }
 
+    public function multi()
+    {
+        if(isset($_POST['action']) && $this->user->issupereditor() && !empty($_POST['pagesid'])) {
+            switch ($_POST['action']) {
+                case 'edit':
+                    $this->multiedit();
+                break;
+
+                case 'render':
+                    $this->multirender();
+                break;
+
+                case 'delete':
+                    $this->multidelete();
+                break;
+            }
+        }
+        $this->routedirect('home');
+    }
+
     public function multiedit()
     {
-        if ($this->user->issupereditor() && isset($_POST['pagesid'])) {
+        if (isset($_POST['pagesid'])) {
             $datas = $_POST['datas']?? [];
             $datas = array_filter($datas, function ($var) {
                 return $var !== "";
@@ -141,7 +161,27 @@ class Controllerhome extends Controllerpage
                 $this->pagemanager->pageedit($id, $datas, $reset, $addtag, $addauthor);
             }
         }
-        $this->routedirect('home');
+    }
+
+    public function multirender()
+    {
+        $pagelist = $_POST['pagesid'] ?? [];
+        $pagelist = $this->pagemanager->getlisterid($pagelist);
+        foreach ($pagelist as $page) {
+            $page = $this->renderpage($page);
+            $this->pagemanager->update($page);
+        }
+
+    }
+
+    public function multidelete()
+    {
+        if(isset($_POST['confirmdelete']) && $_POST['confirmdelete']) {
+            $pagelist = $_POST['pagesid'] ?? [];
+            foreach ($pagelist as $id) {
+                $this->pagemanager->delete($id);
+            }
+        }        
     }
 }
 
