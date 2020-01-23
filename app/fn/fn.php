@@ -230,6 +230,20 @@ function treecount(array $dir, string $dirname, int $deepness, string $path, str
 	}
 }
 
+function checkboxes(string $name, array $optionlist = [], array $checkedlist = [])
+{
+	$checkboxes = '';
+	foreach ($optionlist as $option) {
+		$checkboxes .= '<li><input type="checkbox" name="' . $name . '[]" id="' . $option . '" value="' . $option . '"';
+		if(in_array($option, $checkedlist)) {
+			$checkboxes .= ' checked';
+		}
+		$checkboxes .= '><label for="' . $option . '">' . $option . '</label></li>';
+		$checkboxes .= PHP_EOL;
+	}
+	return '<ul>' . PHP_EOL . $checkboxes . PHP_EOL . '</ul>';
+}
+
 
 
 

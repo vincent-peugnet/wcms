@@ -1,4 +1,8 @@
-<?php $this->layout('layout', ['title' => 'media', 'css' => $css . 'home.css']) ?>
+<?php
+
+use Wcms\Model;
+
+$this->layout('layout', ['title' => 'media', 'css' => $css . 'home.css']) ?>
 
 
 <?php $this->start('page') ?>
@@ -39,12 +43,7 @@
             <form action="" method="get">
                 <fieldset>
                     <legend>Type</legend>
-                    <ul>
-                        <li><input type="checkbox" name="type[]" id="image" value="image" <?= in_array('image', $mediaopt->type()) ? 'checked' : '' ?>><label for="image">image</label></li>
-                        <li><input type="checkbox" name="type[]" id="sound" value="sound" <?= in_array('sound', $mediaopt->type()) ? 'checked' : '' ?>><label for="sound">sound</label></li>
-                        <li><input type="checkbox" name="type[]" id="video" value="video" <?= in_array('video', $mediaopt->type()) ? 'checked' : '' ?>><label for="video">video</label></li>
-                        <li><input type="checkbox" name="type[]" id="other" value="other" <?= in_array('other', $mediaopt->type()) ? 'checked' : '' ?>><label for="other">other</label></li>
-                    </ul>
+                    <?= checkboxes('type', Model::mediatypes(), $mediaopt->type()) ?>
                 </fieldset>
                 <fieldset>
                     <legend>Sort</legend>

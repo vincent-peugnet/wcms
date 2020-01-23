@@ -16,6 +16,7 @@ class Media
 	const IMAGE = array('jpg', 'jpeg', 'gif', 'png');
 	const SOUND = array('mp3', 'flac', 'wav', 'ogg');
 	const VIDEO = array('mp4', 'mov', 'avi', 'mkv');
+	const ARCHIVE = array('zip', 'rar');
 
 
 
@@ -92,17 +93,17 @@ class Media
 			case 'image':
 				$code = '![' . $this->id . '](' . $this->getincludepath() . ')';
 				break;
-
-			case 'other':
-				$code = '[' . $this->id . '](' . $this->getincludepath() . ')';
-				break;
-			
+				
 			case 'sound':
-				$code = '&lt;audio controls src="' . $this->getincludepath() . '"&gt;&lt;/audio&gt;';
+					$code = '&lt;audio controls src="' . $this->getincludepath() . '"&gt;&lt;/audio&gt;';
 				break;
-			
+				
 			case 'video':
-				$code = '&lt;video controls=""&gt;&lt;source src="' . $this->getincludepath() . '" type="video/' . $this->extension . '"&gt;&lt;/video&gt;';
+					$code = '&lt;video controls=""&gt;&lt;source src="' . $this->getincludepath() . '" type="video/' . $this->extension . '"&gt;&lt;/video&gt;';
+				break;
+
+			default :
+					$code = '[' . $this->id . '](' . $this->getincludepath() . ')';
 				break;
 			
 		}
@@ -125,9 +126,21 @@ class Media
 			case 'video':
 				$symbol = "🎞";
 				break;
+				
+			case 'document':
+				$symbol = "📓";
+				break;
 			
-			case 'other':
+			case 'archive':
+				$symbol = "🗜";
+				break;
+					
+			case 'code':
 				$symbol = "📄";
+				break;
+							
+			default :
+				$symbol = "🎲";
 				break;
 		}
 		return $symbol;
@@ -206,16 +219,10 @@ class Media
 
 	public function settype()
 	{
-		if (isset($this->extension)) {
-			if (in_array($this->extension, $this::IMAGE)) {
-				$this->type = "image";
-			} elseif (in_array($this->extension, $this::SOUND)) {
-				$this->type = "sound";
-			} elseif (in_array($this->extension, $this::VIDEO)) {
-				$this->type = "video";
-			} else {
-				$this->type = "other";
-			}
+		if (!empty($this->extension) && isset(Model::MEDIA_EXT[$this->extension])) {
+			$this->type = Model::MEDIA_EXT[$this->extension];
+		} else {
+			$this->type = 'other';
 		}
 	}
 

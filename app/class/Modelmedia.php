@@ -49,7 +49,7 @@ class Modelmedia extends Model
 	 * 
 	 * @return array of Media objects
 	 */
-	public function getlistermedia($dir, $type = Model::MEDIA_TYPES)
+	public function getlistermedia($dir, $type = [])
 	{
 		if (is_dir($dir)) {
 			if ($handle = opendir($dir)) {
@@ -63,7 +63,7 @@ class Modelmedia extends Model
 
 							$media->analyse();
 
-							if (in_array($media->type(), $type)) {
+							if (empty($type) || in_array($media->type(), $type)) {
 								$list[] = $media;
 							}
 						}

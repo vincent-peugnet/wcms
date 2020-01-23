@@ -20,8 +20,43 @@ abstract class Model
 	const GLOBAL_DIR = 'assets'. DIRECTORY_SEPARATOR . 'global' . DIRECTORY_SEPARATOR;
 	const DATABASE_DIR = '.' . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR;
 	
-	const MEDIA_EXTENSIONS = array('jpeg', 'jpg', 'JPG', 'png', 'gif', 'mp3', 'mp4', 'mov', 'wav', 'flac', 'pdf');
-	const MEDIA_TYPES = ['image', 'video', 'sound', 'other'];
+	const MEDIA_EXT = [
+		'jpg' => 'image',
+		'jpeg' => 'image',
+		'png' => 'image',
+		'gif' => 'image',
+		'ico' => 'image',
+		'tiff' => 'image',
+		'bmp' => 'image',
+		'mp3' => 'sound',
+		'opus' => 'sound',
+		'wav' => 'sound',
+		'ogg' => 'sound',
+		'flac' => 'sound',
+		'aiff' => 'sound',
+		'm4a' => 'sound',
+		'mp4' => 'video',
+		'mkv' => 'video',
+		'avi' => 'video',
+		'mov' => 'video',
+		'wmv' => 'video',
+		'm4v' => 'video',
+		'zip' => 'archive',
+		'7zip' => 'archive',
+		'pdf' => 'document',
+		'odt' => 'document',
+		'doc' => 'document',
+		'docx' => 'document',
+		'woff' => 'font',
+		'woff2' => 'font',
+		'otf' => 'font',
+		'ttf' => 'font',
+		'js' => 'code',
+		'html' => 'code',
+		'css' => 'code',
+		'php' => 'code',
+		'' => 'other'
+	];
 
 	const COLUMNS = ['id', 'title', 'description', 'tag', 'date', 'datemodif', 'datecreation', 'secure', 'linkfrom', 'linkto', 'visitcount', 'affcount', 'editcount'];
 
@@ -111,6 +146,14 @@ abstract class Model
 		} else {
 			return true;
 		}
+	}
+
+	/**
+	 * 
+	 */
+	public static function mediatypes()
+	{
+		return array_unique(array_values(self::MEDIA_EXT));
 	}
 
 }

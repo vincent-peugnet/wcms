@@ -20,7 +20,7 @@ class Medialist
     protected $order = 1;
 
     /** @var array list of media type to display */
-    protected $type = ['image', 'sound', 'video', 'other'];
+    protected $type = [];
 
     /** @var int display media contents*/
     protected $display = 1;
@@ -42,6 +42,7 @@ class Medialist
 
     public function __construct(array $datas = [])
     {
+        $this->type = Model::mediatypes();
         $this->hydrate($datas);
     }
 
@@ -226,7 +227,7 @@ class Medialist
     public function settype($type)
     {
         if(is_array($type)) {
-            $this->type = array_intersect(self::TYPES, array_unique($type));
+            $this->type = array_intersect(Model::mediatypes(), array_unique($type));
         }
     }
 }
