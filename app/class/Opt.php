@@ -32,7 +32,7 @@ class Opt extends Item
 
 	public function resetall()
 	{
-		$varlist = get_class_vars(__class__);
+		$varlist = get_class_vars(self::class);
 
 		foreach ($varlist as $var => $default) {
 			$method = 'set' . $var;
@@ -42,7 +42,7 @@ class Opt extends Item
 
 	public function reset($var)
 	{
-		$varlist = get_class_vars(__class__);
+		$varlist = get_class_vars(self::class);
 		if (in_array($var, $varlist)) {
 			$this->$var = $varlist[$var];
 		}
