@@ -153,6 +153,12 @@ table a.secure.public {
 }
 
 
+table img.favicon {
+    height: 16px;
+    max-width: 32px;
+}
+
+
 body {
     margin: 0;
     height: 100%;
@@ -573,6 +579,7 @@ footer {
     }
 
 }
+
 
 
 

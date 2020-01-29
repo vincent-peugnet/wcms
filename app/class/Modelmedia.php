@@ -111,8 +111,12 @@ class Modelmedia extends Model
 
 	public function listfavicon()
 	{
-		$glob = Model::FAVICON_DIR . '*.png';
-		$faviconlist = glob($glob);
+		$extensions = ['ico', 'png', 'jpg', 'jpeg'];
+		$faviconlist = [];
+		foreach ($extensions as $extension ) {
+			$glob = Model::FAVICON_DIR . '*.' . $extension;
+			$faviconlist = array_merge($faviconlist, glob($glob));
+		}
 		$faviconlist = array_map(function ($input){
 			return basename($input);
 		}, $faviconlist);

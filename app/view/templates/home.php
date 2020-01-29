@@ -37,6 +37,9 @@
                         <thead>
                             <tr>
                                 <?php if($user->issupereditor()) { ?><th id="checkall" class="hidephone">x</th> <?php } ?>
+                                <?php if($columns['favicon']) { ?>
+                                    <th class="favicon"><a href="<?= $opt->sortbyorder('favicon') ?>">ico</a></th>
+                                <?php } ?>
                                 <th class="id"><a href="<?= $opt->sortbyorder('id') ?>">id</a></th>
                                 <th>edit</th>
                                 <th>see</th>
@@ -89,6 +92,9 @@
                             <?php foreach ($table2 as $item) { ?>
                             <tr>
                                 <?php if($user->issupereditor()) { ?><td class="hidephone"><input type="checkbox" name="pagesid[]" value="<?= $item->id() ?>" id="id_<?= $item->id() ?>" form="multi"></td><?php } ?>
+                                <?php if($columns['favicon']) { ?>
+                                    <td class="favicon"><img class="favicon" src="<?= Wcms\Model::faviconpath() . $item->favicon() ?>" alt="<?= $item->favicon() ?>" title="<?= $item->favicon() ?>"></td>
+                                <?php } ?>
                                 <td class="id"><label title="<?= $item->title() ?>" for="id_<?= $item->id() ?>"><?= $item->id() ?></label></td>
                                 <td><?php if($user->issupereditor() || in_array($user->id(), $item->authors())) { ?><a href="<?= $this->upage('pageedit', $item->id()) ?>"><img src="<?= Wcms\Model::iconpath() ?>edit.png" class="icon"></a><?php } ?></td>
                                 <td><a href="<?= $this->upage('pageread/', $item->id()) ?>" target="_blank"><img src="<?= Wcms\Model::iconpath() ?>read.png" class="icon"></a></td>
