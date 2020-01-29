@@ -27,10 +27,11 @@ class Controllerhome extends Controllerpage
         } else {
 
 
-
-
             $table = $this->modelhome->getlister();
             $this->opt = $this->modelhome->optinit($table);
+
+            $css = 'a.tag_bgg-fds_gd { background-color: #FF0021; } ';
+            $this->opt->parsetagcss($css);
 
             $table2 = $this->modelhome->table2($table, $this->opt);
 
