@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => 'info', 'css' => $css . 'home.css']) ?>
+<?php $this->layout('layout', ['title' => 'info', 'stylesheets' => [$css . 'home.css']]) ?>
 
 
 <?php $this->start('page') ?>

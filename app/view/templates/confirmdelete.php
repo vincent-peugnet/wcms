@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => 'delete', 'description' => 'delete', 'css' => $css . 'delete.css']) ?>
+<?php $this->layout('layout', ['title' => 'delete', 'description' => 'delete', 'stylesheets' => [$css . 'home.css']]) ?>
 
 
 <?php $this->start('page') ?>

@@ -30,8 +30,7 @@ class Controllerhome extends Controllerpage
             $table = $this->modelhome->getlister();
             $this->opt = $this->modelhome->optinit($table);
 
-            $css = 'a.tag_bgg-fds_gd { background-color: #FF0021; } ';
-            $this->opt->parsetagcss($css);
+            $colors = new Colors($this->opt->taglist());
 
             $table2 = $this->modelhome->table2($table, $this->opt);
 

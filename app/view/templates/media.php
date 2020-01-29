@@ -2,7 +2,7 @@
 
 use Wcms\Model;
 
-$this->layout('layout', ['title' => 'media', 'css' => $css . 'home.css']) ?>
+$this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css']]) ?>
 
 
 <?php $this->start('page') ?>
