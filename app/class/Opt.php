@@ -17,7 +17,7 @@ class Opt extends Item
 	protected $taglist = [];
 	protected $authorlist = [];
 	protected $invert = 0;
-	protected $limit= 0;
+	protected $limit = 0;
 
 	protected $pagevarlist;
 
@@ -63,7 +63,7 @@ class Opt extends Item
 
 	public function getall()
 	{
-		$optlist = ['sortby', 'order', 'secure', 'tagcompare', 'tagfilter', 'authorcompare', 'authorfilter', 'limit','invert'];
+		$optlist = ['sortby', 'order', 'secure', 'tagcompare', 'tagfilter', 'authorcompare', 'authorfilter', 'limit', 'invert'];
 
 		foreach ($optlist as $method) {
 			if (method_exists($this, $method)) {
@@ -96,7 +96,7 @@ class Opt extends Item
 	public function sortbyorder($sortby = "")
 	{
 		$object = $this->drylist(['sortby', 'order', 'secure', 'tagfilter', 'tagcompare', 'authorfilter', 'authorcompare', 'invert', 'limit']);
-		if(!empty($sortby)) {
+		if (!empty($sortby)) {
 			$object['sortby'] = $sortby;
 		}
 		$object['order'] = $object['order'] * -1;
@@ -111,10 +111,10 @@ class Opt extends Item
 	 * @param array $taglist List of tag to be
 	 * @return string html code to be printed
 	 */
-	public function taglinks(array $taglist = []) : string
+	public function taglinks(array $taglist = []): string
 	{
 		$tagstring = "";
-		foreach ($taglist as $tag ) {
+		foreach ($taglist as $tag) {
 			$tagstring .= '<a class="tag tag_' . $tag . '" href="?' . $this->getfilteradress(['tagfilter' => [$tag]]) . '" >' . $tag . '</a>' . PHP_EOL;
 		}
 		return $tagstring;
@@ -126,11 +126,11 @@ class Opt extends Item
 	 * @param array $authorlist List of author to be
 	 * @return string html code to be printed
 	 */
-	public function authorlinks(array $authorlist = []) : string
+	public function authorlinks(array $authorlist = []): string
 	{
 		$authorstring = "";
-		foreach ($authorlist as $author ) {
-			$authorstring .= '<a class="tag author_' . $author . '" href="?' . $this->getfilteradress(['authorfilter' => [$author]]) . '" >' . $author . '</a>' . PHP_EOL;
+		foreach ($authorlist as $author) {
+			$authorstring .= '<a class="author author_' . $author . '" href="?' . $this->getfilteradress(['authorfilter' => [$author]]) . '" >' . $author . '</a>' . PHP_EOL;
 		}
 		return $authorstring;
 	}
@@ -170,7 +170,27 @@ class Opt extends Item
 		return urldecode(http_build_query($query));
 	}
 
+	public function parsetagcss(string $cssstring)
+	{
+		$classprefix = 'tag';
+		$pattern = '%a\.' . $classprefix . '\_([a-z0-9\-\_]*)\s*\{\s*(background-color):\s*(#[A-F0-6]{6})\;\s*\}%';
+		preg_match($pattern, $cssstring, $matches);
+		foreach ($matches as $value) {
+		}
+	}
 
+	public function tocss($cssdatas)
+	{
+		$string = '';
+		foreach ($cssdatas as $element => $css) {
+			$string .= PHP_EOL . $element . ' {';
+			foreach ($css as $param => $value) {
+				$string .= PHP_EOL . '    ' . $param . ': ' . $value . ';';
+			}
+			$string .= PHP_EOL . '}' . PHP_EOL;
+		}
+		return $string;
+	}
 
 
 	// _______________________________________________ G E T _______________________________________________
@@ -400,7 +420,7 @@ class Opt extends Item
 	public function setlimit($limit)
 	{
 		$limit = intval($limit);
-		if($limit < 0) {
+		if ($limit < 0) {
 			$limit = 0;
 		} elseif ($limit >= 10000) {
 			$limit = 9999;

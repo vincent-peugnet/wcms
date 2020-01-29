@@ -20,6 +20,7 @@ class Routes
             ['GET', '/', 'Controllerhome#desktop', 'home'],
             ['POST', '/', 'Controllerhome#desktop', 'homequery'],
             ['POST', '/columns', 'Controllerhome#columns', 'homecolumns'],
+            ['POST', '/colors', 'Controllerhome#colors', 'homecolors'],
             ['GET', '//renderall', 'Controllerhome#renderall', 'homerenderall'],
             ['POST', '/bookmark', 'Controllerhome#bookmark', 'homebookmark'],
             ['POST', '/multi', 'Controllerhome#multi', 'multi'],

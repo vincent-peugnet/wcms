@@ -139,7 +139,7 @@ abstract class Model
 	 * 
 	 * @return bool return true if the dir already exist or was created succesfullt. Otherwise return false
 	 */
-	public function dircheck(string $dir) : bool
+	public static function dircheck(string $dir) : bool
 	{
 		if (!is_dir($dir)) {
 			return mkdir($dir);

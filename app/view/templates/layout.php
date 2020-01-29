@@ -12,7 +12,11 @@
         <link rel="shortcut icon" href="<?= Wcms\Model::faviconpath() . Wcms\Config::defaultfavicon() ?>" type="image/x-icon">
     <?php } ?>
     <title><?= $title ?></title>
-    <link rel="stylesheet" href="<?= $css ?>">
+
+    <?php foreach ($stylesheets as $stylsheet) { ?>
+        <link rel="stylesheet" href="<?= $stylsheet ?>">
+    <?php } ?>
+    
     <?php
     if (!empty(Wcms\Config::interfacecss())) {
         echo '<link rel="stylesheet" href="' . Wcms\Model::csspath() . Wcms\Config::interfacecss() . '">';

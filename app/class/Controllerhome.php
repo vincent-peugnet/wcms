@@ -27,16 +27,16 @@ class Controllerhome extends Controllerpage
         } else {
 
 
-
-
             $table = $this->modelhome->getlister();
             $this->opt = $this->modelhome->optinit($table);
+
+            $colors = new Colors($this->opt->taglist());
 
             $table2 = $this->modelhome->table2($table, $this->opt);
 
             $columns = $this->modelhome->setcolumns($this->user->columns());
 
-            $vars = ['user' => $this->user, 'table2' => $table2, 'opt' => $this->opt, 'columns' => $columns, 'faviconlist' => $this->mediamanager->listfavicon(), 'editorlist' => $this->usermanager->getlisterbylevel(2, '>=')];
+            $vars = ['user' => $this->user, 'table2' => $table2, 'opt' => $this->opt, 'columns' => $columns, 'faviconlist' => $this->mediamanager->listfavicon(), 'editorlist' => $this->usermanager->getlisterbylevel(2, '>='), 'colors' => $colors];
             $vars['footer'] = ['version' => getversion(), 'total' => count($table), 'database' => Config::pagetable()];
 
             if (isset($_POST['query']) && $this->user->iseditor()) {
@@ -59,6 +59,18 @@ class Controllerhome extends Controllerpage
             $this->usermanager->writesession($user);
         }
         $this->routedirect('home');
+    }
+
+    public function colors()
+    {
+        if (isset($_POST['tagcolor']) && $this->user->issupereditor()) {
+            $colors = new Colors();
+            $colors->hydrate($_POST);
+            $colors->tocss();
+            $colors->writecssfile();
+        }
+        $this->routedirect('home');
+
     }
 
     public function search()

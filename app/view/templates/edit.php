@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => '✏ '.$page->title(), 'css' => $css . 'edit.css', 'favicon' => $page->favicon()]) ?>
+<?php $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [$css . 'edit.css'], 'favicon' => $page->favicon()]) ?>
 
 
 

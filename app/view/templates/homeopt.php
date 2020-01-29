@@ -63,9 +63,9 @@
 
                     if (in_array($tagfilter, $opt->tagfilter())) {
 
-                        echo '<li><input type="checkbox" name="tagfilter[]" id="tag_' . $tagfilter . '" value="' . $tagfilter . '" checked /><label for="tag_' . $tagfilter . '">' . $tagfilter . ' (' . $count . ')</label></li>';
+                        echo '<li><input type="checkbox" name="tagfilter[]" id="tag_' . $tagfilter . '" value="' . $tagfilter . '" checked /><label for="tag_' . $tagfilter . '">' . $tagfilter . ' <span class="counter tag_' . $tagfilter . '">' . $count . '</span></label></li>';
                     } else {
-                        echo '<li><input type="checkbox" name="tagfilter[]" id="tag_' . $tagfilter . '" value="' . $tagfilter . '" /><label for="tag_' . $tagfilter . '">' . $tagfilter . ' (' . $count . ')</label></li>';
+                        echo '<li><input type="checkbox" name="tagfilter[]" id="tag_' . $tagfilter . '" value="' . $tagfilter . '" /><label for="tag_' . $tagfilter . '">' . $tagfilter . ' <span class="counter tag_' . $tagfilter . '">' . $count . '</span></label></li>';
                     }
                 }
                 if ($in = true || $out = true) {

@@ -118,11 +118,22 @@ main.home table .id {
     font-size: medium;
 }
 
+nav span.counter {
+    border-radius: 100%;
+    width: 17px;
+    height: 17px;
+    display: inline-block;
+    text-align: center;
+}
 
-table a.tag {
-    background-color: #7b97b9;
+
+table a.tag, table a.author {
     border-radius: 10px;
     padding: 1px 4px;
+}
+
+table a.author {
+    background-color: darkgrey;
 }
 
 table a.secure{

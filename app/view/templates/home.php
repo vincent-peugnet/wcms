@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => 'home', 'css' => $css . 'home.css', 'favicon' => '']) ?>
+<?php $this->layout('layout', ['title' => 'home', 'stylesheets' => [$css . 'home.css', $css . 'tagcolors.css'], 'favicon' => '']) ?>
 
 
 
@@ -16,7 +16,7 @@
 
     <?php
         $optlist = $optlist ?? null;
-        $this->insert('homemenu', ['user' => $user, 'opt' => $opt, 'optlist' => $optlist, 'pagelist' => $pagelist, 'faviconlist' => $faviconlist, 'editorlist' => $editorlist]);
+        $this->insert('homemenu', ['user' => $user, 'opt' => $opt, 'optlist' => $optlist, 'pagelist' => $pagelist, 'faviconlist' => $faviconlist, 'editorlist' => $editorlist, 'colors' => $colors]);
     ?>
 
 
