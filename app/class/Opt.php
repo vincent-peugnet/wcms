@@ -9,7 +9,7 @@ class Opt extends Item
 	protected $tagfilter = [];
 	protected $tagcompare = 'AND';
 	protected $authorfilter = [];
-	protected $authorcompare = 'OR';
+	protected $authorcompare = 'AND';
 	protected $secure = 4;
 	protected $linkto = ['min' => '0', 'max' => '0'];
 	protected $linkfrom = ['min' => '0', 'max' => '0'];
@@ -85,34 +85,24 @@ class Opt extends Item
 		}
 	}
 
-	public function getadress(string $sortby = '')
+	public function getadress()
 	{
-		if ($this->sortby === $sortby) {
-			$order = $this->order * -1;
-		} else {
-			$order = $this->order;
-		}
-		if(empty($sortby)) {
-			$sortby = $this->sortby;
-		}
-		$adress = '?sortby=' . $sortby;
-		$adress .= '&order=' . $order;
-		$adress .= '&secure=' . $this->secure;
-		$adress .= '&tagcompare=' . $this->tagcompare;
-		foreach ($this->tagfilter as $tag) {
-			$adress .= '&tagfilter[]=' . $tag;
-		}
-		$adress .= '&authorcompare=' . $this->authorcompare;
-		foreach ($this->authorfilter as $author) {
-			$adress .= '&authorfilter[]=' . $author;
-		}
-		if ($this->invert == 1) {
-			$adress .= '&invert=1';
-		}
-		$adress.= '&limit=' .$this->limit;
-		$adress .= '&submit=filter';
+		$object = $this->drylist(['sortby', 'order', 'secure', 'tagfilter', 'tagcompare', 'authorcompare', 'author', 'invert', 'limit']);
+		$object['submit'] = 'filter';
 
-		return $adress;
+		return '?' . urldecode(http_build_query($object));
+	}
+
+	public function sortbyorder($sortby = "")
+	{
+		$object = $this->drylist(['sortby', 'order', 'secure', 'tagfilter', 'tagcompare', 'authorcompare', 'author', 'invert', 'limit']);
+		if(!empty($sortby)) {
+			$object['sortby'] = $sortby;
+		}
+		$object['order'] = $object['order'] * -1;
+		$object['submit'] = 'filter';
+
+		return '?' . urldecode(http_build_query($object));
 	}
 
 	/**

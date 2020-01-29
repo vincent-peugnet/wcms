@@ -37,7 +37,7 @@
                         <thead>
                             <tr>
                                 <?php if($user->issupereditor()) { ?><th id="checkall" class="hidephone">x</th> <?php } ?>
-                                <th><a href="<?= $opt->getadress('id') ?>">id</a></th>
+                                <th><a href="<?= $opt->sortbyorder('id') ?>">id</a></th>
                                 <th>edit</th>
                                 <th>see</th>
                                 <th class="delete" title="delete page">del</th>
@@ -45,40 +45,41 @@
                                 <th class="download hidephone" title="download page as json">dl</th>
                                 <?php }
                                     if ($columns['tag']) { ?>
-                                <th class="tag"><a href="<?= $opt->getadress('tag') ?>">tag</a></th>
+                                <th class="tag"><a href="<?= $opt->sortbyorder('tag') ?>">tag</a></th>
                                 <?php }
                                     if ($columns['title']) { ?>
-                                <th class="title"><a href="<?= $opt->getadress('title') ?>">title</a></th>
+                                <th class="title"><a href="<?= $opt->sortbyorder('title') ?>">title</a></th>
                                 <?php }
                                     if ($columns['description']) { ?>
                                 <th class="summary">summary</th>
                                 <?php }
                                     if ($columns['linkto']) { ?>
-                                <th class="linkto"><a href="<?= $opt->getadress('linkto') ?>">to</a></th>
+                                <th class="linkto"><a href="<?= $opt->sortbyorder('linkto') ?>">to</a></th>
                                 <?php }
                                     if ($columns['linkfrom']) { ?>
-                                <th class="linkfrom"><a href="<?= $opt->getadress('linkfrom') ?>">from</a></th>
+                                <th class="linkfrom"><a href="<?= $opt->sortbyorder('linkfrom') ?>">from</a></th>
                                 <?php }
                                     if ($columns['datemodif']) { ?>
-                                <th class="datemodif"><a href="<?= $opt->getadress('datemodif') ?>">last modification</a></th>
+                                <th class="datemodif"><a href="<?= $opt->sortbyorder('datemodif') ?>">last modification</a></th>
                                 <?php }
                                     if ($columns['datecreation']) { ?>
-                                <th class="datecreation"><a href="<?= $opt->getadress('datecreation') ?>">date of creation</a></th>
+                                <th class="datecreation"><a href="<?= $opt->sortbyorder('datecreation') ?>">date of creation</a></th>
                                 <?php }
                                     if ($columns['date']) { ?>
-                                <th class="date"><a href="<?= $opt->getadress('date') ?>">date</a></th>
+                                <th class="date"><a href="<?= $opt->sortbyorder('date') ?>">date</a></th>
                                 <?php }
                                     if ($columns['secure']) { ?>
-                                <th class="secure"><a href="<?= $opt->getadress('secure') ?>">privacy</a></th>
+                                <th class="secure"><a href="<?= $opt->sortbyorder('secure') ?>">privacy</a></th>
                                 <?php }
+                                    
                                     if ($columns['visitcount']) { ?>
-                                <th class="visitcount"><a href="<?= $opt->getadress('visitcount') ?>">visit</a></th>
+                                <th class="visitcount"><a href="<?= $opt->sortbyorder('visitcount') ?>">visit</a></th>
                                 <?php }
                                     if ($columns['editcount']) { ?>
-                                <th class="editcount"><a href="<?= $opt->getadress('editcount') ?>">edit</a></th>
+                                <th class="editcount"><a href="<?= $opt->sortbyorder('editcount') ?>">edit</a></th>
                                 <?php }
                                     if ($columns['affcount']) { ?>
-                                <th class="affcount"><a href="<?= $opt->getadress('affcount') ?>">aff</a></th>
+                                <th class="affcount"><a href="<?= $opt->sortbyorder('affcount') ?>">aff</a></th>
                                 <?php } ?>
                             </tr>
                         </thead>
