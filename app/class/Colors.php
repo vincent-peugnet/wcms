@@ -2,7 +2,7 @@
 
 namespace Wcms;
 
-class Colors
+class Colors extends Item
 {
 
     protected $file = MODEL::CSS_DIR . 'tagcolors.css';
@@ -84,13 +84,42 @@ class Colors
         }
     }
 
-    public function htmlcolorpicker(array $csstagcolor): string
+    public function htmlcolorpicker(): string
     {
         $html = '<ul>';
-        foreach ($csstagcolor as $tag => $color) {
-            $html .= PHP_EOL . '<li><input type="color" name="colors[' . $tag . ']" value="' . $color . '"></li>';
+        foreach ($this->tagcolor as $tag => $color) {
+            $html .= PHP_EOL . '<li><input type="color" name="tagcolor[' . $tag . ']" value="' . $color . '" id="color_' . $tag . '"><label for="color_' . $tag . '" >' . $tag . '</label></li>';
         }
         $html .= PHP_EOL . '</ul>';
         return $html;
+    }
+
+
+    // ______________________ G E T _________________________
+
+    public function rawcss()
+    {
+        return $this->rawcss;
+    }
+
+    public function tagcolor()
+    {
+        return $this->tagcolor;
+    }
+
+    // _______________________ S E T _________________________
+
+    public function setrawcss($rawcss)
+    {
+        if(is_string($rawcss)) {
+            $this->rawcss = $rawcss;
+        }
+    }
+
+    public function settagcolor($tagcolor)
+    {
+        if(is_array($tagcolor)) {
+            $this->tagcolor = $tagcolor;
+        }
     }
 }

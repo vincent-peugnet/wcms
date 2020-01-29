@@ -1,8 +1,9 @@
 
-.tag_color { background-color: #72b8e8; }
-.tag_w { background-color: #b5d689; }
-.tag_sans { background-color: #7be87e; }
-.tag_secret { background-color: #97b495; }
+.tag_color { background-color: #ff0000; }
+.tag_w { background-color: #50e2f9; }
+.tag_sans { background-color: #00ff07; }
+.tag_secret { background-color: #10580b; }
+.tag_fiit { background-color: #ba7db4; }
 .tag_salle { background-color: #d2946d; }
 .tag_ab { background-color: #fbd4fd; }
 .tag_template { background-color: #f4cbfe; }

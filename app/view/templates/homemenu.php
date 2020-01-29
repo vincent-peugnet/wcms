@@ -304,6 +304,13 @@
         </ul>
         <input type="submit" value="update columns">
         </form>
+        <?php if($user->issupereditor()) { ?>
+        <h2>Tag colors</h2>
+        <form action="<?= $this->url('homecolors') ?>" method="post">
+            <?= $colors->htmlcolorpicker() ?>
+            <input type="submit" value="update">
+        </form>
+        <?php } ?>
         </div>
     </details>
 

@@ -130,7 +130,7 @@ class Opt extends Item
 	{
 		$authorstring = "";
 		foreach ($authorlist as $author) {
-			$authorstring .= '<a class="tag author_' . $author . '" href="?' . $this->getfilteradress(['authorfilter' => [$author]]) . '" >' . $author . '</a>' . PHP_EOL;
+			$authorstring .= '<a class="author author_' . $author . '" href="?' . $this->getfilteradress(['authorfilter' => [$author]]) . '" >' . $author . '</a>' . PHP_EOL;
 		}
 		return $authorstring;
 	}
