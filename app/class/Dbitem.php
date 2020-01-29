@@ -2,33 +2,25 @@
 
 namespace Wcms;
 
-class Dbitem
+use DateTime;
+use DateTimeImmutable;
+
+abstract class Dbitem extends Item
 {
-    public function hydrate($datas)
-    {
-        foreach ($datas as $key => $value) {
-            $method = 'set' . $key;
-
-            if (method_exists($this, $method)) {
-                $this->$method($value);
-            }
-        }
-
-    }
 
     public function dry()
-	{
-		$array = [];
-		foreach (get_object_vars($this) as $var => $value) {
-			if (in_array($var, $this::VAR_DATE)) {
-				$array[$var] = $this->$var('string');
-			} else {
-				$array[$var] = $this->$var();
-			}
-		}
+    {
+        $array = [];
+        foreach ($this as $var => $value) {
+            if($value instanceof DateTime || $value instanceof DateTimeImmutable) {
+                $array[$var] = $this->$var('string');
+            } else {
+                $array[$var] = $this->$var();
+            }
+        }
         return $array;
     }
-}
 
+}
 
 ?>

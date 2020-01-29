@@ -6,7 +6,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 
-class Page
+class Page extends Dbitem
 {
 	protected $id;
 	protected $title;
@@ -63,17 +63,6 @@ class Page
 		$this->hydrate($datas);
 	}
 
-	public function hydrate($datas)
-	{
-		foreach ($datas as $key => $value) {
-			$method = 'set' . $key;
-
-			if (method_exists($this, $method)) {
-				$this->$method($value);
-			}
-		}
-	}
-
 	public function reset()
 	{
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
@@ -123,19 +112,6 @@ class Page
 			$classvarlist[] = $var;
 		}
 		return ['pagevarlist' => $classvarlist];
-	}
-
-	public function dry()
-	{
-		$array = [];
-		foreach (get_class_vars(__class__) as $var => $value) {
-			if (in_array($var, self::VAR_DATE)) {
-				$array[$var] = $this->$var('string');
-			} else {
-				$array[$var] = $this->$var();
-			}
-		}
-		return $array;
 	}
 
 	/**

@@ -2,7 +2,7 @@
 
 namespace Wcms;
 
-class Opt
+class Opt extends Item
 {
 	protected $sortby = 'id';
 	protected $order = 1;
@@ -26,32 +26,8 @@ class Opt
 		$this->hydrate($donnees);
 	}
 
-	public function hydrate(array $donnees)
-	{
-		foreach ($donnees as $key => $value) {
-			$method = 'set' . $key;
 
-			if (method_exists($this, $method)) {
-				$this->$method($value);
-			}
-		}
-	}
 
-	/**
-	 * Return any asked vars and their values of an object as associative array
-	 * 
-	 * @param array $vars list of vars
-	 * @return array Associative array `$var => $value`
-	 */
-	public function drylist(array $vars) : array
-	{
-		$array = [];
-		foreach ($vars as $var) {
-			if (property_exists($this, $var))
-			$array[$var] = $this->$var;
-		}
-		return $array;
-	}
 
 
 	public function resetall()

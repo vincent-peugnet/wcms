@@ -4,7 +4,7 @@ namespace Wcms;
 
 use Exception;
 
-class Element
+class Element extends Item
 {
     protected $fullmatch;
     protected $type;
@@ -28,17 +28,6 @@ class Element
         $this->hydrate($datas);
         $this->analyse($pageid);
 	}
-
-	public function hydrate($datas)
-	{
-		foreach ($datas as $key => $value) {
-			$method = 'set' . $key;
-
-			if (method_exists($this, $method)) {
-				$this->$method($value);
-			}
-		}
-    }
 
     private function analyse(string $pageid)
     {

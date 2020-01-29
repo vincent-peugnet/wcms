@@ -2,7 +2,7 @@
 
 namespace Wcms;
 
-class Quickcss
+class Quickcss extends Item
 {
 
 
@@ -41,17 +41,7 @@ class Quickcss
 
     public function __construct($data)
     {
-        $this->hydrate($data);    }
-
-    public function hydrate($data)
-    {
-		foreach ($data as $key => $value) {
-			$method = 'set' . $key;
-
-			if (method_exists($this, $method)) {
-				$this->$method($value);
-			}
-		}
+        $this->hydrate($data);    
     }
 
     public function calc()

@@ -2,7 +2,7 @@
 
 namespace Wcms;
 
-class Medialist
+class Medialist extends Item
 {
     /** @var string full regex match */
     protected $fullmatch;
@@ -44,17 +44,6 @@ class Medialist
     {
         $this->type = Model::mediatypes();
         $this->hydrate($datas);
-    }
-
-    public function hydrate($datas)
-    {
-        foreach ($datas as $key => $value) {
-            $method = 'set' . $key;
-
-            if (method_exists($this, $method)) {
-                $this->$method($value);
-            }
-        }
     }
 
     public function readfilter()

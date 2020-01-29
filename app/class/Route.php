@@ -2,7 +2,7 @@
 
 namespace Wcms;
 
-class Route
+class Route extends Item
 {
     protected $id = null;
     protected $aff = null;
@@ -14,16 +14,6 @@ class Route
     public function __construct($vars)
     {
         $this->hydrate($vars);
-    }
-
-    public function hydrate($vars)
-    {
-        foreach ($vars as $var => $value) {
-            $method = 'set' . $var;
-            if (method_exists($this, $method)) {
-                $this->$method($value);
-            }
-        }
     }
 
     public function toarray()

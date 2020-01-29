@@ -2,7 +2,7 @@
 
 namespace Wcms;
 
-class Media
+class Media extends Item
 {
 	private $id;
 	private $path;
@@ -26,18 +26,6 @@ class Media
 	{
 		$this->hydrate($donnees);
 	}
-
-	public function hydrate(array $donnees)
-	{
-		foreach ($donnees as $key => $value) {
-			$method = 'set' . $key;
-
-			if (method_exists($this, $method)) {
-				$this->$method($value);
-			}
-		}
-	}
-
 
 	public function analyse()
 	{

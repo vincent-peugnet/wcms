@@ -5,7 +5,7 @@ namespace Wcms;
 use DateTimeImmutable;
 use DateTimeZone;
 
-class User
+class User extends Item
 {
     protected $id;
     protected $level = 0;
@@ -25,27 +25,6 @@ class User
             $this->hydrate($datas);
         }
     }
-
-    public function hydrate($datas = [])
-    {
-        foreach ($datas as $key => $value) {
-            $method = 'set' . $key;
-
-            if (method_exists($this, $method)) {
-                $this->$method($value);
-            }
-        }
-    }
-
-    public function dry()
-    {
-        $array = [];
-        foreach (get_class_vars(__class__) as $var => $value) {
-            $array[$var] = $this->$var();
-        }
-        return $array;
-    }
-
 
     // _________________________ G E T _______________________
 
