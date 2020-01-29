@@ -16,6 +16,7 @@ module.exports = (env) => {
 		entry: {
 			edit: './src/edit.js',
 			home: './src/home.js',
+			media: './src/media.js',
 			sentry: './src/sentry.js',
 		},
 		output: {

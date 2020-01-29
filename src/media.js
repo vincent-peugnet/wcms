@@ -1,7 +1,7 @@
 import { checkallHandler, closeSubmenus } from './fn/fn';
 
 window.addEventListener('load', () => {
-    let checkboxes = document.getElementsByName('pagesid[]');
+    let checkboxes = document.getElementsByName('id[]');
     let checkall = document.getElementById('checkall');
     let checkbox = document.createElement('input');
     checkbox.type = 'checkbox';

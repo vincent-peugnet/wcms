@@ -76,7 +76,7 @@ $this->layout('layout', ['title' => 'media', 'css' => $css . 'home.css']) ?>
 
         <table id="medialist">
         <tr>
-            <th>x</th>
+            <th id="checkall">x</th>
             <th><a href="<?= $mediaopt->getsortbyadress('id') ?>">id</a></th>
             <th>ext</th>
             <th><a href="<?= $mediaopt->getsortbyadress('type') ?>">type</a></th>
@@ -113,6 +113,9 @@ $this->layout('layout', ['title' => 'media', 'css' => $css . 'home.css']) ?>
 </section>
 
 </main>
+
+<script src="<?= Wcms\Model::jspath() ?>media.bundle.js"></script>
+
 </body>
 
 <?php $this->stop('page') ?>
