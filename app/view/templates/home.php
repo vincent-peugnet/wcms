@@ -97,7 +97,7 @@
                                 <td class="hidephone"><a href="<?= $this->upage('pagedownload', $item->id()) ?>" download><img src="<?= Wcms\Model::iconpath() ?>download.png" class="icon"></a></td>
                                 <?php }
                                         if ($columns['tag']) { ?>
-                                <td class="tag"><?= $opt->tag($item->tag('array')) ?></td>
+                                <td class="tag"><?= $opt->taglinks($item->tag('array')) ?></td>
                                 <?php }
                                         if ($columns['title']) { ?>
                                 <td class="title" title="<?= $item->title() ?>"><?= $item->title() ?></td>
@@ -121,10 +121,10 @@
                                 <td class="date"><?= $item->date('dmy') ?></td>
                                 <?php }
                                         if ($columns['secure']) { ?>
-                                <td class="secure"><?= $item->secure('string') ?></td>
+                                <td class="secure"><?= $opt->securelink($item->secure('int') , $item->secure('string')) ?></td>
                                 <?php }
                                         if ($columns['authors']) { ?>
-                                <td class="authors"><?= $opt->author($item->authors('array')) ?></td>
+                                <td class="authors"><?= $opt->authorlinks($item->authors('array')) ?></td>
                                 <?php }
                                         if ($columns['visitcount']) { ?>
                                 <td class="visitcount"><?= $item->visitcount() ?></td>

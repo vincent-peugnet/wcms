@@ -119,6 +119,22 @@ table a.tag {
     padding: 1px 4px;
 }
 
+table a.secure{
+    padding: 1px 3px;
+}
+
+table a.secure.private {
+    background-color: #b9b67b;
+}
+
+table a.secure.not_published {
+    background-color: #b97b7b;
+}
+
+table a.secure.public {
+    background-color: #80b97b;
+}
+
 
 body {
     margin: 0;
@@ -540,4 +556,6 @@ footer {
     }
 
 }
+
+
 

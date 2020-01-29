@@ -111,32 +111,14 @@ class Opt extends Item
 	 * @param array $taglist List of tag to be
 	 * @return string html code to be printed
 	 */
-	public function tag(array $taglist = []) : string
+	public function taglinks(array $taglist = []) : string
 	{
 		$tagstring = "";
 		foreach ($taglist as $tag ) {
-			$tagstring .= '<a class="tag" href="?' . $this->gettagadress($tag) . '" >' . $tag . '</a>' . PHP_EOL;
+			$tagstring .= '<a class="tag tag_' . $tag . '" href="?' . $this->getfilteradress(['tagfilter' => [$tag]]) . '" >' . $tag . '</a>' . PHP_EOL;
 		}
 		return $tagstring;
 	}
-
-	/**
-	 * Generate http query based on a new tagfilter input
-	 * 
-	 * @param string $tag The tag to be selected
-	 * @return string Query string without `?`
-	 */
-	public function gettagadress(string $tag = "") : string
-	{
-		$object = $this->drylist(['sortby', 'order', 'secure', 'tagcompare', 'authorfilter', 'authorcompare', 'invert', 'limit']);
-		if(!empty($tag)) {
-			$object['tagfilter'][] = $tag;
-		}
-		$object['submit'] = 'filter';
-
-		return urldecode(http_build_query($object));
-	}
-
 
 	/**
 	 * Get the link list for each authors of an page
@@ -144,31 +126,31 @@ class Opt extends Item
 	 * @param array $authorlist List of author to be
 	 * @return string html code to be printed
 	 */
-	public function author(array $authorlist = []) : string
+	public function authorlinks(array $authorlist = []) : string
 	{
 		$authorstring = "";
 		foreach ($authorlist as $author ) {
-			$authorstring .= '<a class="tag" href="?' . $this->getauthoradress($author) . '" >' . $author . '</a>' . PHP_EOL;
+			$authorstring .= '<a class="tag author_' . $author . '" href="?' . $this->getfilteradress(['authorfilter' => [$author]]) . '" >' . $author . '</a>' . PHP_EOL;
 		}
 		return $authorstring;
 	}
 
-	/**
-	 * Generate http query based on a new authorfilter input
-	 * 
-	 * @param string $author The author to be selected
-	 * @return string Query string without `?`
-	 */
-	public function getauthoradress(string $author = "") : string
+	public function securelink(int $level, string $secure)
 	{
-		$object = $this->drylist(['sortby', 'order', 'secure', 'tagfilter', 'tagcompare', 'authorcompare', 'invert', 'limit']);
-		if(!empty($author)) {
-			$object['authorfilter'][] = $author;
-		}
-		$object['submit'] = 'filter';
+		return '<a class="secure ' . $secure . '" href="?' . $this->getfilteradress(['secure' => $level]) . '">' . $secure . '</a>' . PHP_EOL;
+	}
 
+
+	public function getfilteradress(array $vars = [])
+	{
+		$varlist = ['sortby', 'order', 'secure', 'tagfilter', 'tagcompare', 'authorfilter', 'authorcompare', 'invert', 'limit'];
+		// array_filter($vars, function ())
+		$object = $this->drylist($varlist);
+		$object = array_merge($object, $vars);
+		$object['submit'] = 'filter';
 		return urldecode(http_build_query($object));
 	}
+
 
 
 	/**
