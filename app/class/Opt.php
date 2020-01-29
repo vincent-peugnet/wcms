@@ -87,7 +87,7 @@ class Opt extends Item
 
 	public function getadress()
 	{
-		$object = $this->drylist(['sortby', 'order', 'secure', 'tagfilter', 'tagcompare', 'authorcompare', 'author', 'invert', 'limit']);
+		$object = $this->drylist(['sortby', 'order', 'secure', 'tagfilter', 'tagcompare', 'authorfilter', 'authorcompare', 'invert', 'limit']);
 		$object['submit'] = 'filter';
 
 		return '?' . urldecode(http_build_query($object));
@@ -95,7 +95,7 @@ class Opt extends Item
 
 	public function sortbyorder($sortby = "")
 	{
-		$object = $this->drylist(['sortby', 'order', 'secure', 'tagfilter', 'tagcompare', 'authorcompare', 'author', 'invert', 'limit']);
+		$object = $this->drylist(['sortby', 'order', 'secure', 'tagfilter', 'tagcompare', 'authorfilter', 'authorcompare', 'invert', 'limit']);
 		if(!empty($sortby)) {
 			$object['sortby'] = $sortby;
 		}
@@ -128,9 +128,42 @@ class Opt extends Item
 	 */
 	public function gettagadress(string $tag = "") : string
 	{
-		$object = $this->drylist(['sortby', 'order', 'secure', 'tagcompare', 'authorcompare', 'author', 'invert', 'limit']);
+		$object = $this->drylist(['sortby', 'order', 'secure', 'tagcompare', 'authorfilter', 'authorcompare', 'invert', 'limit']);
 		if(!empty($tag)) {
 			$object['tagfilter'][] = $tag;
+		}
+		$object['submit'] = 'filter';
+
+		return urldecode(http_build_query($object));
+	}
+
+
+	/**
+	 * Get the link list for each authors of an page
+	 * 
+	 * @param array $authorlist List of author to be
+	 * @return string html code to be printed
+	 */
+	public function author(array $authorlist = []) : string
+	{
+		$authorstring = "";
+		foreach ($authorlist as $author ) {
+			$authorstring .= '<a class="tag" href="?' . $this->getauthoradress($author) . '" >' . $author . '</a>' . PHP_EOL;
+		}
+		return $authorstring;
+	}
+
+	/**
+	 * Generate http query based on a new authorfilter input
+	 * 
+	 * @param string $author The author to be selected
+	 * @return string Query string without `?`
+	 */
+	public function getauthoradress(string $author = "") : string
+	{
+		$object = $this->drylist(['sortby', 'order', 'secure', 'tagfilter', 'tagcompare', 'authorcompare', 'invert', 'limit']);
+		if(!empty($author)) {
+			$object['authorfilter'][] = $author;
 		}
 		$object['submit'] = 'filter';
 

@@ -124,8 +124,8 @@
                                 <td class="secure"><?= $item->secure('string') ?></td>
                                 <?php }
                                         if ($columns['authors']) { ?>
-                                            <td class="authors"><?= $item->authors('string') ?></td>
-                                            <?php }
+                                <td class="authors"><?= $opt->author($item->authors('array')) ?></td>
+                                <?php }
                                         if ($columns['visitcount']) { ?>
                                 <td class="visitcount"><?= $item->visitcount() ?></td>
                                 <?php }
