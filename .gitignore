@@ -4,6 +4,7 @@
 *.bundle.js.map
 assets/render/*
 assets/global/*
+assets/css/tagcolors.css
 database/*
 fonts/*
 media/*

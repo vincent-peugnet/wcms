@@ -42,7 +42,7 @@ class Colors extends Item
             if (key_exists($tag, $this->tagcolor)) {
                 $tagcolor[$tag] = $this->tagcolor[$tag];
             } else {
-                $tagcolor[$tag] = '#' . dechex(rand(100, 255)) . dechex(rand(100, 255)) . dechex(rand(100, 255));
+                $tagcolor[$tag] = '#' . dechex(rand(50, 255)) . dechex(rand(50, 255)) . dechex(rand(50, 255));
             }
         }
         $this->tagcolor = $tagcolor;
