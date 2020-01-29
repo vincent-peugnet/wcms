@@ -52,6 +52,12 @@ aside .submenu {
     border: solid 1px dimgrey;
     width: 20%;
     max-width: 280px;
+    max-height: 85%;
+    overflow-y: auto;
+}
+
+aside .submenu * {
+    max-width: 100%;
 }
 
 
