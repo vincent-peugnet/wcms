@@ -107,7 +107,7 @@ main.home div#main {
     flex-direction: column;
 }
 
-main.home table#home2table label {
+main.home table .id {
     font-family: monospace;
     font-size: medium;
 }

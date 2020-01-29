@@ -37,7 +37,7 @@
                         <thead>
                             <tr>
                                 <?php if($user->issupereditor()) { ?><th id="checkall" class="hidephone">x</th> <?php } ?>
-                                <th><a href="<?= $opt->sortbyorder('id') ?>">id</a></th>
+                                <th class="id"><a href="<?= $opt->sortbyorder('id') ?>">id</a></th>
                                 <th>edit</th>
                                 <th>see</th>
                                 <th class="delete" title="delete page">del</th>
@@ -89,7 +89,7 @@
                             <?php foreach ($table2 as $item) { ?>
                             <tr>
                                 <?php if($user->issupereditor()) { ?><td class="hidephone"><input type="checkbox" name="pagesid[]" value="<?= $item->id() ?>" id="id_<?= $item->id() ?>" form="multi"></td><?php } ?>
-                                <td><label title="<?= $item->title() ?>" for="id_<?= $item->id() ?>"><?= $item->id() ?></label></td>
+                                <td class="id"><label title="<?= $item->title() ?>" for="id_<?= $item->id() ?>"><?= $item->id() ?></label></td>
                                 <td><?php if($user->issupereditor() || in_array($user->id(), $item->authors())) { ?><a href="<?= $this->upage('pageedit', $item->id()) ?>"><img src="<?= Wcms\Model::iconpath() ?>edit.png" class="icon"></a><?php } ?></td>
                                 <td><a href="<?= $this->upage('pageread/', $item->id()) ?>" target="_blank"><img src="<?= Wcms\Model::iconpath() ?>read.png" class="icon"></a></td>
                             <td class="delete"><?php if($user->issupereditor() || $item->authors() === [$user->id()]) { ?><a href="<?= $this->upage('pagedelete', $item->id()) ?>">✖</a><?php } ?></td>
@@ -100,7 +100,7 @@
                                 <td class="tag"><?= $opt->taglinks($item->tag('array')) ?></td>
                                 <?php }
                                         if ($columns['title']) { ?>
-                                <td class="title" title="<?= $item->title() ?>"><?= $item->title() ?></td>
+                                <td class="title" title="<?= $item->title() ?>"><label for="id_<?= $item->id() ?>"><?= $item->title() ?></label></td>
                                 <?php }
                                         if ($columns['description']) { ?>
                                 <td class="summary" title="<?= $item->description() ?>"><?= $item->description('short') ?></td>
