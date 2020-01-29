@@ -113,6 +113,13 @@ main.home table#home2table label {
 }
 
 
+table a.tag {
+    background-color: #7b97b9;
+    border-radius: 10px;
+    padding: 1px 4px;
+}
+
+
 body {
     margin: 0;
     height: 100%;
@@ -533,3 +540,4 @@ footer {
     }
 
 }
+

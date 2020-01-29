@@ -7,7 +7,7 @@ class Opt
 	protected $sortby = 'id';
 	protected $order = 1;
 	protected $tagfilter = [];
-	protected $tagcompare = 'OR';
+	protected $tagcompare = 'AND';
 	protected $authorfilter = [];
 	protected $authorcompare = 'OR';
 	protected $secure = 4;
@@ -35,6 +35,22 @@ class Opt
 				$this->$method($value);
 			}
 		}
+	}
+
+	/**
+	 * Return any asked vars and their values of an object as associative array
+	 * 
+	 * @param array $vars list of vars
+	 * @return array Associative array `$var => $value`
+	 */
+	public function drylist(array $vars) : array
+	{
+		$array = [];
+		foreach ($vars as $var) {
+			if (property_exists($this, $var))
+			$array[$var] = $this->$var;
+		}
+		return $array;
 	}
 
 
@@ -123,6 +139,37 @@ class Opt
 		return $adress;
 	}
 
+	/**
+	 * Get the link list for each tags of an page
+	 * 
+	 * @param array $taglist List of tag to be
+	 * @return string html code to be printed
+	 */
+	public function tag(array $taglist = []) : string
+	{
+		$tagstring = "";
+		foreach ($taglist as $tag ) {
+			$tagstring .= '<a class="tag" href="?' . $this->gettagadress($tag) . '" >' . $tag . '</a>' . PHP_EOL;
+		}
+		return $tagstring;
+	}
+
+	/**
+	 * Generate http query based on a new tagfilter input
+	 * 
+	 * @param string $tag The tag to be selected
+	 * @return string Query string without `?`
+	 */
+	public function gettagadress(string $tag = "") : string
+	{
+		$object = $this->drylist(['sortby', 'order', 'secure', 'tagcompare', 'authorcompare', 'author', 'invert', 'limit']);
+		if(!empty($tag)) {
+			$object['tagfilter'][] = $tag;
+		}
+		$object['submit'] = 'filter';
+
+		return urldecode(http_build_query($object));
+	}
 
 
 	/**

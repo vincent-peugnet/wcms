@@ -94,7 +94,7 @@
                                 <td class="hidephone"><a href="<?= $this->upage('pagedownload', $item->id()) ?>" download><img src="<?= Wcms\Model::iconpath() ?>download.png" class="icon"></a></td>
                                 <?php }
                                         if ($columns['tag']) { ?>
-                                <td class="tag"><a title="<?= $item->tag('string') ?>"><?= $item->tag('sort') ?></a></td>
+                                <td class="tag"><?= $opt->tag($item->tag('array')) ?></td>
                                 <?php }
                                         if ($columns['title']) { ?>
                                 <td class="title" title="<?= $item->title() ?>"><?= $item->title() ?></td>
