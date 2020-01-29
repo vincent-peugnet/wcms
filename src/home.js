@@ -11,7 +11,7 @@ window.addEventListener('load', () => {
     checkall.appendChild(checkbox);
 });
 
-window.addEventListener('click', clickHandler);
+window.addEventListener('click', closeSubmenus);
 
 /**
  * Manage input event on the checkall checkbox.
@@ -30,11 +30,11 @@ function checkallHandler(e) {
 }
 
 /**
- * Manage click event on the home page.
+ * Close all submenus of the menubar.
  * @param {MouseEvent} e
  */
-function clickHandler(e) {
-    let details = document.querySelectorAll('details');
+function closeSubmenus(e) {
+    let details = document.querySelectorAll('aside details');
     let currentDetail = e.target.closest('details');
     for (const detail of details) {
         if (!detail.isSameNode(currentDetail)) {
