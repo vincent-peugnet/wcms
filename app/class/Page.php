@@ -399,6 +399,8 @@ class Page extends Dbitem
 			return implode(', ', $this->authors);
 		} elseif ($type == 'array') {
 			return $this->authors;
+		} elseif ($type == 'sort') {
+			return count($this->authors);
 		}
 	}
 

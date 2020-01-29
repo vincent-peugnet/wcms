@@ -13,7 +13,7 @@ class Modelhome extends Modelpage
     {
 
         $opt = new Opt(Page::classvarlist());
-        $opt->setcol(['id', 'tag', 'linkfrom', 'linkto', 'description', 'title', 'datemodif', 'datecreation', 'date', 'secure', 'visitcount', 'editcount', 'affcount']);
+        $opt->setcol(['id', 'tag', 'linkfrom', 'linkto', 'description', 'title', 'datemodif', 'datecreation', 'date', 'secure', 'authors', 'visitcount', 'editcount', 'affcount']);
         $opt->settaglist($table);
         $opt->setauthorlist($table);
         $opt->submit();

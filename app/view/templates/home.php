@@ -71,7 +71,9 @@
                                     if ($columns['secure']) { ?>
                                 <th class="secure"><a href="<?= $opt->sortbyorder('secure') ?>">privacy</a></th>
                                 <?php }
-                                    
+                                    if ($columns['authors']) { ?>
+                                        <th class="authors"><a href="<?= $opt->sortbyorder('authors') ?>">authors</a></th>
+                                        <?php }
                                     if ($columns['visitcount']) { ?>
                                 <th class="visitcount"><a href="<?= $opt->sortbyorder('visitcount') ?>">visit</a></th>
                                 <?php }
@@ -121,6 +123,9 @@
                                         if ($columns['secure']) { ?>
                                 <td class="secure"><?= $item->secure('string') ?></td>
                                 <?php }
+                                        if ($columns['authors']) { ?>
+                                            <td class="authors"><?= $item->authors('string') ?></td>
+                                            <?php }
                                         if ($columns['visitcount']) { ?>
                                 <td class="visitcount"><?= $item->visitcount() ?></td>
                                 <?php }

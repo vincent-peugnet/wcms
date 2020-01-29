@@ -58,7 +58,7 @@ abstract class Model
 		'' => 'other'
 	];
 
-	const COLUMNS = ['id', 'title', 'description', 'tag', 'date', 'datemodif', 'datecreation', 'secure', 'linkfrom', 'linkto', 'visitcount', 'affcount', 'editcount'];
+	const COLUMNS = ['id', 'title', 'description', 'tag', 'date', 'datemodif', 'datecreation', 'secure', 'authors', 'linkfrom', 'linkto', 'visitcount', 'affcount', 'editcount'];
 
 	const TEXT_ELEMENTS = ['header', 'nav', 'main', 'aside', 'footer'];
 

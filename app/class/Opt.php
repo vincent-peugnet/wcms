@@ -244,7 +244,7 @@ class Opt extends Item
 
 	public function setsortby($sortby)
 	{
-		if (is_string($sortby) && in_array($sortby, $this->pagevarlist)) {
+		if (is_string($sortby) && in_array($sortby, $this->pagevarlist) && in_array($sortby, Model::COLUMNS)) {
 			$this->sortby = strtolower(strip_tags($sortby));
 		}
 	}
@@ -337,7 +337,7 @@ class Opt extends Item
 	public function setcol($col)
 	{
 		if (is_array($col)) {
-			$this->col = array_intersect($this->pagevarlist(), $col);
+			$this->col = array_intersect($this->pagevarlist, $col);
 		}
 	}
 
