@@ -159,6 +159,15 @@ table img.favicon {
 }
 
 
+td.title {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+td label, td time {white-space: nowrap;}
+
+
 body {
     margin: 0;
     height: 100%;
@@ -579,6 +588,7 @@ footer {
     }
 
 }
+
 
 
 

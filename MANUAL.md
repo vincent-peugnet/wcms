@@ -19,7 +19,7 @@ If you already know the basics, you may want to check the references :
 
 ### Create your first page
 
-This 3 steps tutorial will introduce you to the basic __W__ moves.
+This 4 steps tutorial will introduce you to the basic __W__ moves.
 
 #### Add a new page
 
@@ -72,6 +72,31 @@ All those methods will create a link pointing to the `<page_id>` you've given.
 Those kind of links are called internal links beccause they stay inside of your domain. To set a link outside of your website, simply remplace `<page_id>` by
 
 
+#### Insert images
+
+When adding an image to a page, you can either use an already web-hosted image, wich is a bit dangerous, or host yourself the image using W's [media interface](#media-manager).
+
+Markdown synthax for inserting an image :
+
+    ![<alt_comment>](<image_adress>)
+
+It's the equivalent of HTML (More info about `<img>` tag on [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Img)) :
+
+    <img src="<image_adress>" alt="<alt_comment>">
+
+If your image is already hosted, just use it's URL adress for `<image_adress>`. Otherwise, access W's [media interface](#medua-manager) using the top bar menu, just after "home", or by typing `<your-W-url>/!media`.
+
+Once you're here, you'll have to first choose, using the navigation panel on the left, or create a folder, by selecting __File > New Folder__ in the menu.
+
+When you've selected the folder you prefer for hosting your image, it's time for uploading it using __File > Upload__. Browse you computer or drag n' drop files onto the "Choose Files" button, then click "Upload". Note that you can upload multiple files at once !
+
+Now you should see your files appearing in the table. W will remove whitespaces and special characters of your medias to avoid synthax problems.
+
+To add the image on your page, the simplest method is to copy the Makdown generated code on the right side.
+
+*For bigger files transfer, you can always use FTP or SSH connections to add, delete, move files by accessing the `/media` directory of your W installation folder*
+
+
 ### Navigation
 
 Discover the differents interfaces of __W__.
@@ -86,22 +111,29 @@ The [readers](#reader) and [invite editors](#invite-editor) can't access this in
 
 In the home menu [super editors and above](#super-editor) can :
 
-- File : import pages as JSON file. (usefull for transfering pages from a W instance to another)
-- Edit : 
-
-The Home view is divided in two main parts :
+- __File :__ Import pages as JSON file. (usefull for transfering pages from a W instance to another).
+- __Edit :__ Apply changes, render, or delete multiple pages at once.
+- __Filters :__ Use your [filtering options](#options) to generate a [automatic menu](#page-list) you can later include in a page.
+- __Bookmarks :__ Save your [filtering options](#options) presets here. Common and personnal storages are possible.
+- __Display :__ Set columns to be shown (user based) and tag colors.
 
 ##### Options
 
- where you can apply filters and sorting
+The option panel contains multiples options for sorting and filtering your pages database.
+
+Just select the options you want and press "Fitler". Use the "Reset" button to come back to the default settings. W will keep the settings for the SESSION time.
 
 ##### Pages
 
-the list of pages after filtering
+The table is composed of [meta](#meta-infos) datas and actions links that are :
+
+__EDIT__, __READ__, __DELETE__ and __DOWNLOAD__, they are equivalent to [pages commands](#pages-commands). Don't hesitate to open edit or read links in a new tab, to keep the Home view open.
+
+To edit columns you want to see, use the [menu](#home-menu)>Display submenu.
 
 #### Edition
 
-The edition interface is accessible when typing `/edit` after an existing [page_id](#page-id) in the adress bar. Or from the [home](#home), by clicking on the pencil button.
+The edition interface is accessible when [typing `/edit`](#edit) after an existing [page_id](#page-id) in the adress bar. Or from the [home](#home), by clicking on the pencil button.
 
 [Invite editors](#invite-editor) and [editors](#editor) users can only access edition of pages where they are listed as [author](#authors).
 
@@ -342,7 +374,7 @@ Invite Editors are the lowest editor status possible. They can only access the [
 
 Type thoses commands after a __page_id__ 
 
-`<page_id>/COMMAND`
+`<page_id>/<COMMAND>`
 
 ##### /add
 
@@ -359,6 +391,10 @@ Command used to delete a page from the database. This will ask you for a confirm
 ##### /render
 
 Force the rendering of a page.
+
+##### /download
+
+Simply download the page as a JSON object file. Reserved to users that can edit the page.
 
 ##### /log
 

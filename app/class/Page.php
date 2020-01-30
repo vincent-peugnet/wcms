@@ -168,59 +168,23 @@ class Page extends Dbitem
 
 	public function date($option = 'date')
 	{
-		if ($option == 'string') {
-			return $this->date->format(DateTime::ISO8601);
-		} elseif ($option == 'date' || $option == 'sort') {
-			return $this->date;
-		} elseif ($option == 'hrdi') {
-			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
-			return hrdi($this->date->diff($now));
-		} elseif ($option == 'pdate') {
-			return $this->date->format('Y-m-d');
-		} elseif ($option == 'ptime') {
-			return $this->date->format('H:i');
-		} elseif ($option = 'dmy') {
-			return $this->date->format('d/m/Y');
-		}
-
-
+		return $this->datetransform('date', $option);
 	}
 
 	public function datecreation($option = 'date')
 	{
-		if ($option == 'string') {
-			return $this->datecreation->format(DateTime::ISO8601);
-		} elseif ($option == 'date' || $option == 'sort') {
-			return $this->datecreation;
-		} elseif ($option == 'hrdi') {
-			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
-			return hrdi($this->datecreation->diff($now));
-		}
+		return $this->datetransform('datecreation', $option);
 	}
 
 
 	public function datemodif($option = 'date')
 	{
-		if ($option == 'string') {
-			return $this->datemodif->format(DateTime::ISO8601);
-		} elseif ($option == 'date' || $option == 'sort') {
-			return $this->datemodif;
-		} elseif ($option == 'hrdi') {
-			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
-			return hrdi($this->datemodif->diff($now));
-		}
+		return $this->datetransform('datemodif', $option);
 	}
 
 	public function daterender($option = 'date')
 	{
-		if ($option == 'string') {
-			return $this->daterender->format(DateTime::ISO8601);
-		} elseif ($option == 'date' || $option == 'sort') {
-			return $this->daterender;
-		} elseif ($option == 'hrdi') {
-			$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
-			return hrdi($this->daterender->diff($now));
-		}
+		return $this->datetransform('daterender', $option);
 	}
 
 	public function css($type = 'string')
@@ -847,6 +811,36 @@ class Page extends Dbitem
 		$taglist = explode(",", $tag);
 		$taglist = array_filter($taglist);
 		return $taglist;
+	}
+
+	/**
+	 * Tool for accessing different view of the same DateTimeImmutable var
+	 * 
+	 * @param string $property DateTimeImmutable var to access
+	 * @param string $option
+	 * 
+	 * @return mixed string or false if propriety does not exist
+	 */
+	private function datetransform(string $property, string $option = 'date')
+	{
+		if(property_exists($this, $property)) {
+			if ($option == 'string') {
+				return $this->$property->format(DateTime::ISO8601);
+			} elseif ($option == 'date' || $option == 'sort') {
+				return $this->$property;
+			} elseif ($option == 'hrdi') {
+				$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+				return hrdi($this->$property->diff($now));
+			} elseif ($option == 'pdate') {
+				return $this->$property->format('Y-m-d');
+			} elseif ($option == 'ptime') {
+				return $this->$property->format('H:i');
+			} elseif ($option = 'dmy') {
+				return $this->$property->format('d/m/Y');
+			}
+		} else {
+			return false;
+		}
 	}
 
 }
