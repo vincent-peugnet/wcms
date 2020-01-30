@@ -2,7 +2,7 @@
 
 
 
-    <form action="<?= $this->upage('pageupdate', $page->id()) ?>" method="post" id="update" enctype="multippage/form-data">
+    <form action="<?= $this->upage('pageupdate', $page->id()) ?>" method="post" id="update">
 
     <div id="editmenu">
 

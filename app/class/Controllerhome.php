@@ -36,7 +36,7 @@ class Controllerhome extends Controllerpage
 
             $columns = $this->modelhome->setcolumns($this->user->columns());
 
-            $vars = ['user' => $this->user, 'table2' => $table2, 'opt' => $this->opt, 'columns' => $columns, 'faviconlist' => $this->mediamanager->listfavicon(), 'editorlist' => $this->usermanager->getlisterbylevel(2, '>='), 'colors' => $colors];
+            $vars = ['user' => $this->user, 'table2' => $table2, 'opt' => $this->opt, 'columns' => $columns, 'faviconlist' => $this->mediamanager->listfavicon(), 'thumbnaillist' => $this->mediamanager->listthumbnail(), 'editorlist' => $this->usermanager->getlisterbylevel(2, '>='), 'colors' => $colors];
             $vars['footer'] = ['version' => getversion(), 'total' => count($table), 'database' => Config::pagetable()];
 
             if (isset($_POST['query']) && $this->user->iseditor()) {

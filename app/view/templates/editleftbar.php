@@ -52,7 +52,9 @@
                 <option value="<?= $page->thumbnail() ?>">--using template thumbnail--</option>
                 <?php
             } else {
-                echo '<option value="">--no thumbnail--</option>';
+                if(!file_exists(Wcms\Model::thumbnailpath() . $page->thumbnail())) {
+                    echo '<option value="">--no thumbnail--</option>';
+                }
             foreach ($thumbnaillist as $thumbnail) {
                 ?>
                 <option value="<?= $thumbnail ?>" <?= $page->thumbnail() === $thumbnail ? 'selected' : '' ?>><?= $thumbnail ?></option>
@@ -97,6 +99,11 @@
             ?>
             </select>
 
+            <div class="subtemplate">
+                <input type="checkbox" name="templateoptions[]" id="othumbnail" value="thumbnail" <?= in_array('thumbnail', $page->templateoptions()) ? 'checked' : '' ?>>
+                <label for="othumbnail">Thumbnail</label>
+            </div>
+
 
             <label for="templatecss">CSS template</label>
             <select name="templatecss" id="templatecss">
@@ -109,10 +116,6 @@
             }
             ?>
             </select>
-            
-            <?php
-            if(!empty($page->templatecss())) {
-                ?>
 
                 <div class="subtemplate">
                 <input type="checkbox" name="templateoptions[]" id="oreccursivecss" value="reccursivecss" <?= in_array('reccursivecss', $page->templateoptions()) ? 'checked' : '' ?>>
@@ -126,20 +129,7 @@
                 <input type="checkbox" name="templateoptions[]" id="ofavicon" value="favicon" <?= in_array('favicon', $page->templateoptions()) ? 'checked' : '' ?>>
                 <label for="ofavicon">Favicon</label>
                 </div>
-                <div class="subtemplate">
-                <input type="checkbox" name="templateoptions[]" id="othumbnail" value="thumbnail" <?= in_array('thumbnail', $page->templateoptions()) ? 'checked' : '' ?>>
-                <label for="othumbnail">Thumbnail</label>
-                </div>
-                <?php
-            } else {
-                foreach($page->templateoptions() as $option) {
-                    if($option != 'externaljavascript') {
-                        echo '<input type="hidden" name="templateoptions[]" value="'.$option.'">';
-                    }
-                }
-            }
-            
-            ?>
+
 
 
             <label for="templatejavascript">Javascript template</label>
@@ -155,20 +145,12 @@
             </select>
 
 
-            <?php
-            if(!empty($page->templatejavascript())) {
-            ?>
+
             <div class="subtemplate">
             <input type="checkbox" name="templateoptions[]" value="externaljavascript" id="oexternaljs" <?= in_array('externaljavascript', $page->templateoptions()) ? 'checked' : '' ?>>
             <label for="oexternaljs">external js</label>
             </div>
 
-            <?php } else {
-                if(in_array('externaljavascript', $page->templateoptions())) {
-                    echo '<input type="hidden" name="templateoptions[]" value="externaljavascript">';
-                }
-                
-            } ?>
 
 
             </fieldset>

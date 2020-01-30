@@ -76,7 +76,7 @@
                 </select>
                 <label for="setlevel">Privacy level</label>
                 </br>
-                <strong>Favicon</strong>
+                <strong>Images</strong>
                 </br>
                 <select name="datas[favicon]" id="favicon">
                 <option value="" disabled selected>--set favicon--</option>
@@ -87,6 +87,16 @@
                     ?>
                 </select>
                 <label for="favicon">Favicon</label>
+                </br>
+                <select name="datas[thumbnail]" id="thumbnail">
+                <option value="" disabled selected>--set thumbnail--</option>
+                    <?php
+                        foreach ($thumbnaillist as $thumbnail) {
+                            echo '<option value ="' . $thumbnail . '">' . $thumbnail . '</option>';
+                        }
+                    ?>
+                </select>
+                <label for="favicon">Thumnail</label>
                 </br>
                 <strong>Templates</strong>
                 </br>
