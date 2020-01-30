@@ -11,26 +11,26 @@ class Controlleradmin extends Controller
     public function desktop()
     {
         if($this->user->isadmin()) {
-            $pagelist = $this->pagemanager->list();
+            $datas['pagelist'] = $this->pagemanager->list();
             $this->mediamanager = new Modelmedia();
-            $faviconlist = $this->mediamanager->listfavicon();
-            $interfacecsslist = $this->mediamanager->listinterfacecss();
-            if(in_array(Config::defaultpage(), $pagelist)) {
-                $defaultpageexist = true;
+            $datas['faviconlist'] = $this->mediamanager->listfavicon();
+            $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();
+            $datas['interfacecsslist'] = $this->mediamanager->listinterfacecss();
+            if(in_array(Config::defaultpage(), $datas['pagelist'])) {
+                $datas['defaultpageexist'] = true;
             } else {
-                $defaultpageexist = true;
+                $datas['defaultpageexist'] = false;
             }
 
             $globalcssfile = Model::GLOBAL_DIR . 'global.css';
 
             if(is_file($globalcssfile)) {
-                $globalcss = file_get_contents($globalcssfile);
+                $datas['globalcss'] = file_get_contents($globalcssfile);
             } else {
-                $globalcss = "";
+                $datas['globalcss'] = "";
             }
 
-            $admin = ['pagelist' => $pagelist, 'defaultpageexist' => $defaultpageexist, 'globalcss' => $globalcss, 'faviconlist' => $faviconlist, 'interfacecsslist' => $interfacecsslist];
-            $this->showtemplate('admin', $admin);
+            $this->showtemplate('admin', $datas);
         } else {
             $this->routedirect('home');
         }

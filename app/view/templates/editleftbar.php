@@ -62,6 +62,12 @@
             ?>
             </select>
 
+            <?php if(!empty($page->thumbnail())) { ?>
+            <div id="showthumbnail">
+                <img src="<?= Wcms\Model::thumbnailpath() . $page->thumbnail() ?>">
+            </div>
+            <?php } ?>
+
             
 
 

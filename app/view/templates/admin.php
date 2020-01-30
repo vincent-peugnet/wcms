@@ -229,7 +229,7 @@
                         ?>
                     </select>
 
-                    <label for="defaultfavicon">Default thumbnail</label>
+                    <label for="defaultthumbnail">Default thumbnail</label>
                     <select name="defaultthumbnail" id="defaultthumbnail" form="admin">
                         <option value="">--no thumbnail--</option>
                         <?php

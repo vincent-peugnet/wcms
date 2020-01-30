@@ -8,7 +8,7 @@ use Michelf\MarkdownExtra;
 class Modelrender extends Modelpage
 {
 	protected $router;
-	/** @var page2 */
+	/** @var Page */
 	protected $page;
 	protected $pagelist;
 	protected $linkfrom = [];
@@ -249,8 +249,10 @@ class Modelrender extends Modelpage
 		$head .= '<meta property="og:title" content="' . $this->page->title() . '">' . PHP_EOL;
 		$head .= '<meta property="og:description" content="' . $this->page->description() . '">' . PHP_EOL;
 		
-		if($this->page->thumbnailexist()) {
-			$head .= '<meta property="og:image" content="' . Config::domain() . self::thumbnailpath() . $this->page->id() . '.jpg">' . PHP_EOL;
+		if(!empty($this->page->thumbnail())) {
+			$head .= '<meta property="og:image" content="' . Config::domain() . self::thumbnailpath() . $this->page->thumbnail() . '">' . PHP_EOL;
+		} elseif(!empty(Config::defaultthumbnail())) {
+			$head .= '<meta property="og:image" content="' . Config::domain() . self::thumbnailpath() . Config::defaultthumbnail() . '">' . PHP_EOL;
 		}
 		
 		$head .= '<meta property="og:url" content="' . Config::url() . $this->page->id() . '/">' . PHP_EOL;

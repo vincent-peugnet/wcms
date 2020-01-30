@@ -35,6 +35,7 @@ class Page extends Dbitem
 	protected $templatejavascript;
 	protected $templateoptions;
 	protected $favicon;
+	protected $thumbnail;
 	protected $authors;
 	protected $invites;
 	protected $readers;
@@ -93,6 +94,7 @@ class Page extends Dbitem
 		$this->settemplatejavascript('');
 		$this->settemplateoptions(['externalcss', 'externaljavascript', 'favicon', 'thumbnail', 'reccursivecss']);
 		$this->setfavicon('');
+		$this->setthumbnail('');
 		$this->setauthors([]);
 		$this->setinvites([]);
 		$this->setreaders([]);
@@ -111,22 +113,6 @@ class Page extends Dbitem
 		}
 		return ['pagevarlist' => $classvarlist];
 	}
-
-	/**
-	 * Check if page have a thumbnail
-	 * @return bool true if the page have a thumbnail otherwise return false.
-	 */
-	public function thumbnailexist() : bool
-	{
-		$thumbnaillink = Model::THUMBNAIL_DIR . $this->id . '.jpg';
-
-		$test = file_exists($thumbnaillink);
-
-		$exist =  file_exists(Model::THUMBNAIL_DIR . $this->id . '.jpg');
-
-		return $exist;
-	}
-
 
 		// _____________________________________________________ G E T ____________________________________________________
 
@@ -380,6 +366,11 @@ class Page extends Dbitem
 	public function favicon($type = 'string')
 	{
 		return $this->favicon;
+	}
+
+	public function thumbnail($type = 'string')
+	{
+		return $this->thumbnail;
 	}
 
 	public function authors($type = 'array')
@@ -678,6 +669,13 @@ class Page extends Dbitem
 	{
 		if (is_string($favicon)) {
 			$this->favicon = $favicon;
+		}
+	}
+
+	public function setthumbnail($thumbnail)
+	{
+		if (is_string($thumbnail)) {
+			$this->thumbnail = $thumbnail;
 		}
 	}
 

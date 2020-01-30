@@ -111,28 +111,39 @@ class Modelmedia extends Model
 
 	public function listfavicon()
 	{
-		$extensions = ['ico', 'png', 'jpg', 'jpeg'];
-		$faviconlist = [];
-		foreach ($extensions as $extension ) {
-			$glob = Model::FAVICON_DIR . '*.' . $extension;
-			$faviconlist = array_merge($faviconlist, glob($glob));
-		}
-		$faviconlist = array_map(function ($input){
-			return basename($input);
-		}, $faviconlist);
+		$faviconlist = $this->globlist(self::FAVICON_DIR, ['ico', 'png', 'jpg', 'jpeg', 'gif']);
+		return $faviconlist;
+	}
+
+	public function listthumbnail()
+	{
+		$faviconlist = $this->globlist(self::THUMBNAIL_DIR, ['ico', 'png', 'jpg', 'jpeg', 'gif']);
 		return $faviconlist;
 	}
 
 
 	public function listinterfacecss()
 	{
-		$glob = Model::CSS_DIR . '*.css';
-		$listinterfacecss = glob($glob);
-		$listinterfacecss = array_map(function ($input) {
-			return basename($input);
-		}, $listinterfacecss);
-		$listinterfacecss = array_diff($listinterfacecss, ['edit.css', 'home.css']);
+		$listinterfacecss = $this->globlist(self::CSS_DIR, ['css']);
+		$listinterfacecss = array_diff($listinterfacecss, ['edit.css', 'home.css', 'tagcolors.css']);
 		return $listinterfacecss;
+	}
+
+	public function globlist (string $dir = '', array $extensions = []) : array
+	{
+		$list = [];
+		if(empty($extensions)) {
+			$glob = $dir . '*.';
+		} else {
+			foreach ($extensions as $extension ) {
+				$glob = $dir . '*.' . $extension;
+				$list = array_merge($list, glob($glob));
+			}
+		}
+		$list = array_map(function ($input){
+			return basename($input);
+		}, $list);
+		return $list;
 	}
 
 

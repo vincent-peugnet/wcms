@@ -174,28 +174,28 @@ class Controllerpage extends Controller
 
 
         if ($this->importpage() && $this->canedit()) {
-            $tablist = ['main' => $this->page->main(), 'css' => $this->page->css(), 'header' => $this->page->header(), 'nav' => $this->page->nav(), 'aside' => $this->page->aside(), 'footer' => $this->page->footer(), 'body' => $this->page->body(), 'javascript' => $this->page->javascript()];
+            $datas['tablist'] = ['main' => $this->page->main(), 'css' => $this->page->css(), 'header' => $this->page->header(), 'nav' => $this->page->nav(), 'aside' => $this->page->aside(), 'footer' => $this->page->footer(), 'body' => $this->page->body(), 'javascript' => $this->page->javascript()];
 
-            $faviconlist = $this->mediamanager->listfavicon();
-            $idlist = $this->pagemanager->list();
+            $datas['faviconlist'] = $this->mediamanager->listfavicon();
+            $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();
+            $datas['pagelist'] = $this->pagemanager->list();
 
 
             $pagelist = $this->pagemanager->getlister();
-            $tagpagelist = $this->pagemanager->tagpagelist($this->page->tag('array'), $pagelist);
-            $lasteditedpagelist = $this->pagemanager->lasteditedpagelist(5, $pagelist);
+            $datas['tagpagelist'] = $this->pagemanager->tagpagelist($this->page->tag('array'), $pagelist);
+            $datas['lasteditedpagelist'] = $this->pagemanager->lasteditedpagelist(5, $pagelist);
 
-            $editorlist = $this->usermanager->getlisterbylevel(2, '>=');
+            $datas['editorlist'] = $this->usermanager->getlisterbylevel(2, '>=');
 
             if (isset($_SESSION['workspace'])) {
-                $showleftpanel = $_SESSION['workspace']['showleftpanel'];
-                $showrightpanel = $_SESSION['workspace']['showrightpanel'];
+                $datas['showleftpanel'] = $_SESSION['workspace']['showleftpanel'];
+                $datas['showrightpanel'] = $_SESSION['workspace']['showrightpanel'];
             } else {
-                $showleftpanel = false;
-                $showrightpanel = false;
+                $datas['showleftpanel'] = false;
+                $datas['showrightpanel'] = false;
             }
-            $fonts = [];
-
-            $this->showtemplate('edit', ['page' => $this->page, 'pageexist' => true, 'tablist' => $tablist, 'pagelist' => $idlist, 'showleftpanel' => $showleftpanel, 'showrightpanel' => $showrightpanel, 'fonts' => $fonts, 'tagpagelist' => $tagpagelist, 'lasteditedpagelist' => $lasteditedpagelist, 'faviconlist' => $faviconlist, 'editorlist' => $editorlist, 'user' => $this->user]);
+            $datas = array_merge($datas, ['page' => $this->page, 'pageexist' => true, 'user' => $this->user]);
+            $this->showtemplate('edit', $datas);
         } else {
             $this->routedirect('pageread/', ['page' => $this->page->id()]);
         }
@@ -336,13 +336,6 @@ class Controllerpage extends Controller
                 $this->page->updateedited();
                 $this->page->addauthor($this->user->id());
                 $this->page->removeeditby($this->user->id());
-
-                // Add thumbnail image file under 1Mo
-                If(isset($_FILES)) {
-                    $this->mediamanager->dircheck(Model::THUMBNAIL_DIR);
-                    $this->mediamanager->simpleupload('thumbnail', Model::THUMBNAIL_DIR . $this->page->id(), 1024*1024, ['jpg', 'jpeg', 'JPG', 'JPEG'], true);
-                }
-
 
                 $this->pagemanager->update($this->page);
 
