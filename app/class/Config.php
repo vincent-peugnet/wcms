@@ -23,6 +23,7 @@ abstract class Config
 	protected static $defaultbody = '%HEADER%'. PHP_EOL .PHP_EOL . '%NAV%'. PHP_EOL .PHP_EOL . '%ASIDE%'. PHP_EOL .PHP_EOL . '%MAIN%'. PHP_EOL .PHP_EOL . '%FOOTER%';
 	protected static $defaultpage = '';
 	protected static $defaultfavicon = '';
+	protected static $defaultthumbnail = '';
 	protected static $analytics = '';	
 	protected static $externallinkblank = true;
 	protected static $internallinkblank = false;
@@ -204,6 +205,11 @@ abstract class Config
 		return self::$defaultfavicon;
 	}
 
+	public static function defaultthumbnail()
+	{
+		return self::$defaultthumbnail;
+	}
+
 	public static function analytics()
 	{
 		return self::$analytics;
@@ -360,6 +366,13 @@ abstract class Config
 	{
 		if(is_string($defaultfavicon)) {
 			self::$defaultfavicon = $defaultfavicon;
+		}
+	}
+
+	public static function setdefaultthumbnail($defaultthumbnail)
+	{
+		if(is_string($defaultthumbnail)) {
+			self::$defaultthumbnail = $defaultthumbnail;
 		}
 	}
 

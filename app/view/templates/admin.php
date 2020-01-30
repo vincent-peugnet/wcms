@@ -229,6 +229,18 @@
                         ?>
                     </select>
 
+                    <label for="defaultfavicon">Default thumbnail</label>
+                    <select name="defaultthumbnail" id="defaultthumbnail" form="admin">
+                        <option value="">--no thumbnail--</option>
+                        <?php
+                        foreach ($thumbnaillist as $thumbnail) {
+                            ?>
+                            <option value="<?= $thumbnail ?>" <?= Wcms\Config::defaultthumbnail() === $thumbnail ? 'selected' : '' ?>><?= $thumbnail ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+
 
 
                     <h2 id="databases">Databases</h2>

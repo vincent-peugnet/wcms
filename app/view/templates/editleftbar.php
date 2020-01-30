@@ -43,11 +43,26 @@
             ?>
             </select>
 
-            <div id="thumbnail">
-                <label for="thumbnail">Thumbnail</label>
-                <input type="file" id="thumbnail" name="thumbnail" accept=".jpg, .JPG, .jpeg, .JPEG">
-                <img src="<?= Wcms\Model::thumbnailpath() ?><?= $page->id() ?>.jpg" alt="no-thumbnail">
-            </div>
+            
+            <label for="thumbnail">Thumbnail</label>
+            <select name="thumbnail" id="thumbnail">
+            <?php
+            if(!empty($page->templatebody()) && $page->template()['thumbnail']) {
+                ?>
+                <option value="<?= $page->thumbnail() ?>">--using template thumbnail--</option>
+                <?php
+            } else {
+                echo '<option value="">--no thumbnail--</option>';
+            foreach ($thumbnaillist as $thumbnail) {
+                ?>
+                <option value="<?= $thumbnail ?>" <?= $page->thumbnail() === $thumbnail ? 'selected' : '' ?>><?= $thumbnail ?></option>
+                <?php
+                }
+            }
+            ?>
+            </select>
+
+            
 
 
 
@@ -98,16 +113,16 @@
                 <label for="oreccursivecss">Reccursive template</label>
                 </div>
                 <div class="subtemplate">
-                <input type="checkbox" name="templateoptions[]" id="oquickcss" value="quickcss" <?= in_array('quickcss', $page->templateoptions()) ? 'checked' : '' ?>>
-                <label for="oquickcss">Quickcss</label>
-                </div>
-                <div class="subtemplate">
                 <input type="checkbox" name="templateoptions[]" id="oexternalcss" value="externalcss" <?= in_array('externalcss', $page->templateoptions()) ? 'checked' : '' ?>>
                 <label for="oexternalcss">External CSS</label>
                 </div>
                 <div class="subtemplate">
                 <input type="checkbox" name="templateoptions[]" id="ofavicon" value="favicon" <?= in_array('favicon', $page->templateoptions()) ? 'checked' : '' ?>>
                 <label for="ofavicon">Favicon</label>
+                </div>
+                <div class="subtemplate">
+                <input type="checkbox" name="templateoptions[]" id="othumbnail" value="thumbnail" <?= in_array('thumbnail', $page->templateoptions()) ? 'checked' : '' ?>>
+                <label for="othumbnail">Thumbnail</label>
                 </div>
                 <?php
             } else {
