@@ -69,7 +69,7 @@
                 <strong>Privacy</strong>
                 </br>
                 <select name="datas[secure]" id="setlevel">
-                    <option value=""  disabled selected>--change privacy--</option>
+                    <option value=""  selected>--keep privacy--</option>
                     <option value="0">public</option>
                     <option value="1">private</option>
                     <option value="2">not_published</option>
@@ -79,7 +79,8 @@
                 <strong>Images</strong>
                 </br>
                 <select name="datas[favicon]" id="favicon">
-                <option value="" disabled selected>--set favicon--</option>
+                <option value=""  selected>--keep favicon--</option>
+                <option value="!" >--unset favicon--</option>
                     <?php
                         foreach ($faviconlist as $favicon) {
                             echo '<option value ="' . $favicon . '">' . $favicon . '</option>';
@@ -88,20 +89,24 @@
                 </select>
                 <label for="favicon">Favicon</label>
                 </br>
+
                 <select name="datas[thumbnail]" id="thumbnail">
-                <option value="" disabled selected>--set thumbnail--</option>
+                <option value="" selected>--keep thumbnail--</option>
+                <option value="!">--unset thumbnail--</option>
                     <?php
                         foreach ($thumbnaillist as $thumbnail) {
                             echo '<option value ="' . $thumbnail . '">' . $thumbnail . '</option>';
                         }
                     ?>
                 </select>
-                <label for="favicon">Thumnail</label>
+                <label for="thumbnail">Thumnail</label>
                 </br>
+
                 <strong>Templates</strong>
                 </br>
                 <select name="datas[templatebody]" id="templatebody">
-                    <option value="" disabled selected>--set template body--</option>
+                    <option value="" selected>--keep template body--</option>
+                    <option value="!" >--unset template body--</option>
                     <?php
                         foreach ($pagelist as $page) {
                             echo '<option value ="' . $page . '">' . $page . '</option>';
@@ -110,8 +115,10 @@
                 </select>
                 <label for="templatebody">Body</label>
                 </br>
+
                 <select name="datas[templatecss]" id="templatecss">
-                <option value="" disabled selected>--set css template--</option>
+                <option value="" selected>--keep css template--</option>
+                <option value="!" >--unset css template--</option>
                     <?php
                         foreach ($pagelist as $page) {
                             echo '<option value ="' . $page . '">' . $page . '</option>';
@@ -119,8 +126,10 @@
                     ?>                </select>
                 <label for="templatecss">CSS</label>
                 </br>
+
                 <select name="datas[templatejavascript]" id="templatejavascript">
-                <option value="" disabled selected>--set javascript template--</option>
+                <option value="" selected>--keep javascript template--</option>
+                <option value="!" >--unset javascript template--</option>
                     <?php
                         foreach ($pagelist as $page) {
                             echo '<option value ="' . $page . '">' . $page . '</option>';

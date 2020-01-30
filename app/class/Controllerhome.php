@@ -166,6 +166,13 @@ class Controllerhome extends Controllerpage
             $datas = array_filter($datas, function ($var) {
                 return $var !== "";
             });
+            $datas = array_map(function ($value) {
+                if($value === "!") {
+                    return "";
+                } else {
+                    return $value;
+                }
+            }, $datas);
             $reset = $_POST['reset'] ?? [];
             $addtag = $_POST['addtag'] ?? '';
             $addauthor = $_POST['addauthor'] ?? '';
