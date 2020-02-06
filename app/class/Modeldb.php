@@ -20,9 +20,9 @@ class Modeldb extends Model
 	}
 
 
-	public function dbinit()
+	public function dbinit($dir = Model::DATABASE_DIR)
 	{
-		$this->database = new Flywheel\Config(Model::DATABASE_DIR, [
+		$this->database = new Flywheel\Config($dir , [
 			'query_class' => Query::class,
 			'formatter' => new JSON,
 		]);

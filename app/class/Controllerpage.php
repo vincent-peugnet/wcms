@@ -255,7 +255,7 @@ class Controllerpage extends Controller
     {
         if($this->user->isadmin()) {
 
-            $file = Model::DATABASE_DIR . Config::pagetable() . DIRECTORY_SEPARATOR . $id . '.json';
+            $file = Model::PAGES_DIR . Config::pagetable() . DIRECTORY_SEPARATOR . $id . '.json';
             
             if (file_exists($file)) {
                 header('Content-Description: File Transfer');
