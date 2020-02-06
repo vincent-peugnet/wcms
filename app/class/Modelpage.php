@@ -17,7 +17,7 @@ class Modelpage extends Modeldb
 
 	public function __construct()
 	{
-		parent::__construct();
+		$this->dbinit(Model::PAGES_DIR);
 		$this->storeinit(Config::pagetable());
 		if(!$this->dircheck(Model::HTML_RENDER_DIR)) {
 			throw new Exception("Media error : Cant create /render folder");

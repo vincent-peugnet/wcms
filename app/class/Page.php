@@ -17,7 +17,6 @@ class Page extends Dbitem
 	protected $datemodif;
 	protected $daterender;
 	protected $css;
-	protected $quickcss;
 	protected $javascript;
 	protected $body;
 	protected $header;
@@ -36,6 +35,7 @@ class Page extends Dbitem
 	protected $templatejavascript;
 	protected $templateoptions;
 	protected $favicon;
+	protected $thumbnail;
 	protected $authors;
 	protected $invites;
 	protected $readers;
@@ -76,7 +76,6 @@ class Page extends Dbitem
 		$this->setdatemodif($now);
 		$this->setdaterender($now);
 		$this->setcss('');
-		$this->setquickcss([]);
 		$this->setjavascript('');
 		$this->setbody('');
 		$this->setheader('');
@@ -93,8 +92,9 @@ class Page extends Dbitem
 		$this->settemplatebody('');
 		$this->settemplatecss('');
 		$this->settemplatejavascript('');
-		$this->settemplateoptions(['externalcss', 'externaljavascript', 'favicon', 'reccursivecss', 'quickcss']);
+		$this->settemplateoptions(['externalcss', 'externaljavascript', 'favicon', 'thumbnail', 'reccursivecss']);
 		$this->setfavicon('');
+		$this->setthumbnail('');
 		$this->setauthors([]);
 		$this->setinvites([]);
 		$this->setreaders([]);
@@ -113,22 +113,6 @@ class Page extends Dbitem
 		}
 		return ['pagevarlist' => $classvarlist];
 	}
-
-	/**
-	 * Check if page have a thumbnail
-	 * @return bool true if the page have a thumbnail otherwise return false.
-	 */
-	public function thumbnailexist() : bool
-	{
-		$thumbnaillink = Model::THUMBNAIL_DIR . $this->id . '.jpg';
-
-		$test = file_exists($thumbnaillink);
-
-		$exist =  file_exists(Model::THUMBNAIL_DIR . $this->id . '.jpg');
-
-		return $exist;
-	}
-
 
 		// _____________________________________________________ G E T ____________________________________________________
 
@@ -190,15 +174,6 @@ class Page extends Dbitem
 	public function css($type = 'string')
 	{
 		return $this->css;
-	}
-
-	public function quickcss($type = 'array')
-	{
-		if ($type == 'json') {
-			return json_encode($this->quickcss);
-		} elseif ($type == 'array') {
-			return $this->quickcss;
-		}
 	}
 
 	public function javascript($type = 'string')
@@ -329,9 +304,9 @@ class Page extends Dbitem
 		$template['javascript'] = $this->templatejavascript;
 
 		$template['cssreccursive'] = $this->checkoption('reccursive');
-		$template['cssquickcss'] = $this->checkoption('quickcss');
 		$template['externalcss'] = $this->checkoption('externalcss');
 		$template['cssfavicon'] = $this->checkoption('favicon');
+		$template['cssthumbnail'] = $this->checkoption('thumbnail');
 
 		$template['externaljavascript'] = $this->checkoption('externaljavascript');
 
@@ -345,7 +320,7 @@ class Page extends Dbitem
 
 	function checkoption($option)
 	{
-		if (in_array('reccursive', $this->templateoptions)) {
+		if (in_array($option, $this->templateoptions)) {
 			return true;
 		} else {
 			return false;
@@ -355,6 +330,11 @@ class Page extends Dbitem
 	public function favicon($type = 'string')
 	{
 		return $this->favicon;
+	}
+
+	public function thumbnail($type = 'string')
+	{
+		return $this->thumbnail;
 	}
 
 	public function authors($type = 'array')
@@ -500,15 +480,6 @@ class Page extends Dbitem
 	}
 
 
-	public function setquickcss($quickcss)
-	{
-		if (is_string($quickcss)) {
-			$quickcss = json_decode($quickcss, true);
-		}
-		if (is_array($quickcss)) {
-			$this->quickcss = $quickcss;
-		}
-	}
 
 	public function setjavascript($javascript)
 	{
@@ -662,6 +633,13 @@ class Page extends Dbitem
 	{
 		if (is_string($favicon)) {
 			$this->favicon = $favicon;
+		}
+	}
+
+	public function setthumbnail($thumbnail)
+	{
+		if (is_string($thumbnail)) {
+			$this->thumbnail = $thumbnail;
 		}
 	}
 

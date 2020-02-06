@@ -17,7 +17,7 @@
 
     <div id="workspace">
 
-    <?php $this->insert('editleftbar', ['page' => $page, 'tablist' => $tablist, 'pagelist' => $pagelist, 'showleftpanel' => $showleftpanel, 'faviconlist' => $faviconlist]) ?>
+    <?php $this->insert('editleftbar', ['page' => $page, 'tablist' => $tablist, 'pagelist' => $pagelist, 'showleftpanel' => $showleftpanel, 'faviconlist' => $faviconlist, 'thumbnaillist' => $thumbnaillist]) ?>
     <?php $this->insert('edittabs', ['tablist' => $tablist, 'opentab' => $page->interface(), 'templates' => $page->template()]) ?>
     <?php $this->insert('editrightbar', ['page' => $page, 'pagelist' => $pagelist, 'showrightpanel' => $showrightpanel, 'templates' => $page->template(), 'tagpagelist' => $tagpagelist, 'lasteditedpagelist' => $lasteditedpagelist, 'editorlist' => $editorlist, 'user' => $user]) ?>
 

@@ -19,6 +19,7 @@ abstract class Model
 	const HTML_RENDER_DIR = 'render' . DIRECTORY_SEPARATOR;
 	const GLOBAL_DIR = 'assets'. DIRECTORY_SEPARATOR . 'global' . DIRECTORY_SEPARATOR;
 	const DATABASE_DIR = '.' . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR;
+	const PAGES_DIR = self::DATABASE_DIR . 'pages' . DIRECTORY_SEPARATOR;
 	
 	const MEDIA_EXT = [
 		'jpg' => 'image',

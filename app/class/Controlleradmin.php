@@ -7,30 +7,42 @@ class Controlleradmin extends Controller
 
     /** @var Modelmedia $mediamanager */
     protected $mediamanager;
+    /** @var Modeladmin */
+    protected $adminmanager;
+
+    public function __construct($router)
+    {
+        parent::__construct($router);
+
+        $this->adminmanager = new Modeladmin();
+    }
 
     public function desktop()
     {
         if($this->user->isadmin()) {
-            $pagelist = $this->pagemanager->list();
+            $datas['pagelist'] = $this->pagemanager->list();
             $this->mediamanager = new Modelmedia();
-            $faviconlist = $this->mediamanager->listfavicon();
-            $interfacecsslist = $this->mediamanager->listinterfacecss();
-            if(in_array(Config::defaultpage(), $pagelist)) {
-                $defaultpageexist = true;
+            $datas['faviconlist'] = $this->mediamanager->listfavicon();
+            $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();
+            $datas['interfacecsslist'] = $this->mediamanager->listinterfacecss();
+            if(in_array(Config::defaultpage(), $datas['pagelist'])) {
+                $datas['defaultpageexist'] = true;
             } else {
-                $defaultpageexist = true;
+                $datas['defaultpageexist'] = false;
             }
 
             $globalcssfile = Model::GLOBAL_DIR . 'global.css';
 
             if(is_file($globalcssfile)) {
-                $globalcss = file_get_contents($globalcssfile);
+                $datas['globalcss'] = file_get_contents($globalcssfile);
             } else {
-                $globalcss = "";
+                $datas['globalcss'] = "";
             }
 
-            $admin = ['pagelist' => $pagelist, 'defaultpageexist' => $defaultpageexist, 'globalcss' => $globalcss, 'faviconlist' => $faviconlist, 'interfacecsslist' => $interfacecsslist];
-            $this->showtemplate('admin', $admin);
+            $datas['pagesdblist'] = $this->adminmanager->pagesdblist();
+            $datas['pagesdbtree'] = $this->mediamanager->listdir(Model::PAGES_DIR);
+
+            $this->showtemplate('admin', $datas);
         } else {
             $this->routedirect('home');
         }
@@ -38,8 +50,8 @@ class Controlleradmin extends Controller
 
     public function update()
     {        
-        $this->globaldircheck();
- 
+        MODEL::dircheck(MODEL::GLOBAL_DIR);
+
         $globalcss = file_put_contents(Model::GLOBAL_DIR . 'global.css', $_POST['globalcss']);
 
         Config::hydrate($_POST);
@@ -50,16 +62,25 @@ class Controlleradmin extends Controller
         }
     }
 
-
-	public function globaldircheck()
-	{
-		if(!is_dir(Model::GLOBAL_DIR)) {
-			return mkdir(Model::GLOBAL_DIR);
-		} else {
-			return true;
-		}
-	}
-
+    public function database()
+    {
+        if(!empty($_POST['action'])) {
+            switch ($_POST['action']) {
+                case 'duplicate':
+                    if(!empty($_POST['dbsrc']) && !empty($_POST['dbtarget'])) {
+                        $this->adminmanager->copydb($_POST['dbsrc'], $_POST['dbtarget']);
+                    }
+                    break;                
+                case 'select':
+                    if(!empty($_POST['pagetable'])) {
+                        Config::hydrate($_POST);
+                        Config::savejson();
+                    }
+                    break;
+            }
+        }
+        $this->routedirect('admin');
+    }
 
 }
 
