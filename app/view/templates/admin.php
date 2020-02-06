@@ -10,37 +10,37 @@
 
     <main class="admin">
 
-    <nav class="admin">
+        <nav class="admin">
 
-        <div class="block">
-            <h1>Administration</h1>
-            
-            <div class="scroll">
-                <ul>
-                    <li><a href="#home-page">Home page</a></li>
-                    <li><a href="#page-creation">Page creation</a></li>
-                    <li><a href="#alert-pages">Alert Pages</a></li>
-                    <li><a href="#render">Render</a></li>
-                    <li><a href="#css">CSS</a></li>
-                    <li><a href="#databases">Databases</a></li>
-                    <li><a href="#interface">Interface</a></li>
-                    <li><a href="#tracking">Tracking</a></li>
-                </ul>
-                
-                <form action="<?= $this->url('adminupdate') ?>" method="post" id="admin">
-                    <input type="submit" value="Update configuration">
-                </form>
+            <div class="block">
+                <h1>Administration</h1>
+
+                <div class="scroll">
+                    <ul>
+                        <li><a href="#home-page">Home page</a></li>
+                        <li><a href="#page-creation">Page creation</a></li>
+                        <li><a href="#alert-pages">Alert Pages</a></li>
+                        <li><a href="#render">Render</a></li>
+                        <li><a href="#css">CSS</a></li>
+                        <li><a href="#interface">Interface</a></li>
+                        <li><a href="#tracking">Tracking</a></li>
+                    </ul>
+
+                    <form action="<?= $this->url('adminupdate') ?>" method="post" id="admin">
+                        <input type="submit" value="Update configuration">
+                    </form>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
         <section class="admin">
 
             <div class="block">
 
-                
+                <h1>configuration</h1>
+
                 <div class="scroll">
-                        
+
 
                     <h2 id="home-page">Home page</h2>
 
@@ -49,11 +49,6 @@
                     <div class="radio">
                         <input type="radio" name="homepage" value="default" id="default" <?= Wcms\Config::homepage() === 'default' ? 'checked' : '' ?> form="admin">
                         <label for="default">default</label>
-                    </div>
-
-                    <div class="radio">
-                        <input type="radio" name="homepage" value="search" id="searchbar" <?= Wcms\Config::homepage() === 'search' ? 'checked' : '' ?> form="admin">
-                        <label for="searchbar">search bar</label>
                     </div>
 
                     <div class="radio">
@@ -66,7 +61,7 @@
 
                         <?php
                         foreach ($pagelist as $page) {
-                            ?>
+                        ?>
                             <option value="<?= $page ?>" <?= Wcms\Config::homeredirect() === $page ? 'selected' : '' ?>><?= $page ?></option>
                         <?php
                         }
@@ -96,7 +91,7 @@
                         <option value="" <?= Wcms\Config::defaultpage() === '' || !$defaultpageexist ? 'selected' : '' ?>>--use default BODY element--</option>
                         <?php
                         foreach ($pagelist as $page) {
-                            ?>
+                        ?>
                             <option value="<?= $page ?>" <?= Wcms\Config::defaultpage() === $page ? 'selected' : '' ?>><?= $page ?></option>
                         <?php    }
                         ?>
@@ -104,7 +99,7 @@
 
                     <?php
                     if (empty(!$defaultpageexist || Wcms\Config::defaultpage())) {
-                        ?>
+                    ?>
                         <label for="defaultbody">Edit default BODY element</label>
                         <textarea name="defaultbody" id="defaultbody" cols="30" rows="10" form="admin"><?= Wcms\Config::defaultbody() ?></textarea>
                     <?php
@@ -113,6 +108,8 @@
 
 
                     <h2 id="alert-pages">Alert pages</h2>
+
+                    <p>Set the style and text to show when a page does not exist, or when a visitor don't have access to it.</p>
 
                     <h4>Common options</h4>
 
@@ -125,7 +122,7 @@
                         <option value="" <?= empty(Wcms\Config::alertlink()) ? 'selected' : '' ?>>--No link--</option>
                         <?php
                         foreach ($pagelist as $page) {
-                            ?>
+                        ?>
                             <option value="<?= $page ?>" <?= Wcms\Config::alertlink() === $page ? 'selected' : '' ?>><?= $page ?></option>
                         <?php    }
                         ?>
@@ -183,7 +180,7 @@
                         <i>You can use <code>body.alert</code> class to specify style.</i>
                     </p>
 
-                    
+
 
                     <h2 id="render">Render</h2>
 
@@ -222,7 +219,7 @@
                         <option value="">--no favicon--</option>
                         <?php
                         foreach ($faviconlist as $favicon) {
-                            ?>
+                        ?>
                             <option value="<?= $favicon ?>" <?= Wcms\Config::defaultfavicon() === $favicon ? 'selected' : '' ?>><?= $favicon ?></option>
                         <?php
                         }
@@ -234,36 +231,10 @@
                         <option value="">--no thumbnail--</option>
                         <?php
                         foreach ($thumbnaillist as $thumbnail) {
-                            ?>
-                            <option value="<?= $thumbnail ?>" <?= Wcms\Config::defaultthumbnail() === $thumbnail ? 'selected' : '' ?>><?= $thumbnail ?></option>
-                        <?php
-                        }
                         ?>
+                            <option value="<?= $thumbnail ?>" <?= Wcms\Config::defaultthumbnail() === $thumbnail ? 'selected' : '' ?>><?= $thumbnail ?></option>
+                        <?php } ?>
                     </select>
-
-
-
-                    <h2 id="databases">Databases</h2>
-
-                    <p>Manage databases</p>
-
-                    <p>
-                        <label for="database">Select database to use</label>
-
-                        <select name="database" id="database">
-                            <option value="01"><?= Wcms\Config::pagetable() ?></option>
-                        </select>
-                    </p>
-
-                    <p>
-                    <form action="" method="post">
-                        <label for="name">new name</label>
-                        <input type="text" name="name" id="name" value="<?= Wcms\Config::pagetable() ?>_1">
-                        <input type="submit" value="duplicate">
-                    </form>
-                    </p>
-                    
-
 
                     <h2 id="interface">Interface</h2>
 
@@ -273,7 +244,7 @@
                         <option value="null">--default interface style---</option>
                         <?php
                         foreach ($interfacecsslist as $interfacecss) {
-                            ?>
+                        ?>
                             <option value="<?= $interfacecss ?>" <?= $interfacecss === Wcms\Config::interfacecss() ? 'selected' : '' ?>><?= $interfacecss ?></option>
                         <?php
                         }
@@ -291,10 +262,54 @@
 
 
                 </div>
-                
+
             </div>
 
 
+        </section>
+
+        <section id="databases">
+            <div class="block">
+                <h1>Databases</h1>
+                <div class="scroll">
+
+                <form action="<?= $this->url('admindatabase') ?>" method="post">
+
+                    
+                    <table id="dirlsit">
+                        <tr><th>using</th><th>databases</th><th>pages</th></tr>
+                        
+                        <?php basictree($pagesdbtree, 'pages', 0, '', DIRECTORY_SEPARATOR . Wcms\Config::pagetable()); ?>
+                    </table>
+
+                    <input type="hidden" name="action" value="select">
+                    <input type="submit" value="select" name="change database">
+
+                </form>
+
+                <h4>Duplicate Database</h4>
+
+                <form action="<?= $this->url('admindatabase') ?>" method="post">
+
+                    <label for="dbsrc">Database to duplicate</label>
+                    <select name="dbsrc" id="dbsrc">
+                        <?php
+                        foreach ($pagesdblist as $db) {
+                            ?>
+                            <option value="<?= $db ?>" <?= $db === Wcms\Config::pagetable() ? 'selected' : '' ?>><?= $db ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+
+                    <label for="duplicate">New name</label>
+                    <input type="text" name="dbtarget" id="duplicate" value="" required>
+                    <input type="submit" name="action" value="duplicate">
+                </form>
+
+
+                </div>
+            </div>
         </section>
 
     </main>

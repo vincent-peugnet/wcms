@@ -30,10 +30,6 @@
     <img src="<?= Wcms\Model::iconpath() ?>media.png" alt="" class="icon">
     <span class="hidephone">media</span>
 </a>
-<a href="<?= $this->url('font') ?>" <?= $tab == 'font' ? 'class="actualpage"' : '' ?>>
-    <img src="<?= Wcms\Model::iconpath() ?>font.png" alt="" class="icon">
-    <span class="hidephone">font</span>
-</a>
 <?php
 if($user->isadmin()) {
 ?>
@@ -74,10 +70,7 @@ if($user->isadmin()) {
 <?php } else { ?>  
 
 <span>
-<a href="<?= $this->url('timeline') ?>" <?= $tab == 'timeline' ? 'class="actualpage"' : '' ?>>
-    <img src="<?= Wcms\Model::iconpath() ?>timeline.png" alt="" class="icon">
-    <span class="hidephone">timeline</span>
-</a>
+
 <a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>>
     <img src="<?= Wcms\Model::iconpath() ?>user.png" alt="" class="icon">
     <span class="hidephone"><?= $user->id() ?></span>

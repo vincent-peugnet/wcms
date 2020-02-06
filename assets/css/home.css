@@ -242,6 +242,12 @@ main.admin input, main.admin select, main.admin textarea {
 
 
 
+main section.admin {
+    max-width: 400px;
+}
+
+
+
 div.checkbox [type="checkbox"] {
     display: inline-block;
     width: auto;

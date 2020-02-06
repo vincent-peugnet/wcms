@@ -210,9 +210,9 @@ function array_diff_assoc_recursive($array1, $array2) {
 
 
 /**
- * Generate a folder tree based on reccurive array
+ * Generate a clickable folder tree based on reccurive array
  */
-function treecount(array $dir, string $dirname, int $deepness, string $path, string $currentdir, Medialist $mediaopt)
+function treecount(array $dirlist, string $dirname, int $deepness, string $path, string $currentdir, Medialist $mediaopt)
 {
 	if ($path . '/' === $currentdir) {
 		$folder = '├─📂<span id="currentdir">' . $dirname . '<span>';
@@ -221,11 +221,44 @@ function treecount(array $dir, string $dirname, int $deepness, string $path, str
 	}
 	echo '<tr>';
 	echo '<td><a href="' . $mediaopt->getpathadress($path) . '">' . str_repeat('&nbsp;&nbsp;', $deepness) . $folder . '</a></td>';
-	echo '<td>' . $dir['dirfilecount'] . '</td>';
+	echo '<td>' . $dirlist['dirfilecount'] . '</td>';
 	echo '</tr>';
-	foreach ($dir as $key => $value) {
+	foreach ($dirlist as $key => $value) {
 		if (is_array($value)) {
 			treecount($value, $key, $deepness + 1, $path . DIRECTORY_SEPARATOR . $key, $currentdir, $mediaopt);
+		}
+	}
+}
+
+
+/**
+ * Generate a clickable folder tree based on reccurive array
+ */
+function basictree(array $dirlist, string $dirname, int $deepness, string $path, string $currentdir)
+{
+
+	if ($path === $currentdir) {
+		$folder = '├─📂<span id="currentdir">' . $dirname . '<span>';
+		$checked = 'checked';
+	} else {
+		$folder = '├─📁' . $dirname;
+		$checked = '';
+	}
+
+	if($deepness === 1) {
+		$radio = '<input type="radio" name="pagetable" value="' . $dirname . '" id="db_' . $path . '" ' . $checked . '>';
+	} else {
+		$radio = '';
+	}
+
+	echo '<tr>';
+	echo '<td>' . $radio . '</td>';
+	echo '<td><label for="db_' . $path . '">' . str_repeat('&nbsp;&nbsp;', $deepness) . $folder . '</label></td>';
+	echo '<td>' . $dirlist['dirfilecount'] . '</td>';
+	echo '</tr>';
+	foreach ($dirlist as $key => $value) {
+		if (is_array($value)) {
+			basictree($value, $key, $deepness + 1, $path . DIRECTORY_SEPARATOR . $key, $currentdir);
 		}
 	}
 }
@@ -244,6 +277,22 @@ function checkboxes(string $name, array $optionlist = [], array $checkedlist = [
 	return '<ul>' . PHP_EOL . $checkboxes . PHP_EOL . '</ul>';
 }
 
+
+function recurse_copy($src,$dst) { 
+    $dir = opendir($src); 
+    mkdir($dst); 
+    while(false !== ( $file = readdir($dir)) ) { 
+        if (( $file != '.' ) && ( $file != '..' )) { 
+            if ( is_dir($src . '/' . $file) ) { 
+                recurse_copy($src . '/' . $file,$dst . '/' . $file); 
+            } 
+            else { 
+                copy($src . '/' . $file,$dst . '/' . $file); 
+            } 
+        } 
+    } 
+    closedir($dir); 
+} 
 
 
 
