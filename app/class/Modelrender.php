@@ -235,7 +235,7 @@ class Modelrender extends Modelpage
 
 		$head = '';
 
-		$head .= '<meta charset="utf8" />' . PHP_EOL;
+		$head .= '<meta charset="utf-8" />' . PHP_EOL;
 		$head .= '<title>' . $this->page->title() . '</title>' . PHP_EOL;
 		if (!empty($this->page->favicon())) {
 			$head .= '<link rel="shortcut icon" href="' . Model::faviconpath() . $this->page->favicon() . '" type="image/x-icon">';

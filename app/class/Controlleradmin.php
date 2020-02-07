@@ -25,11 +25,6 @@ class Controlleradmin extends Controller
             $datas['faviconlist'] = $this->mediamanager->listfavicon();
             $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();
             $datas['interfacecsslist'] = $this->mediamanager->listinterfacecss();
-            if(in_array(Config::defaultpage(), $datas['pagelist'])) {
-                $datas['defaultpageexist'] = true;
-            } else {
-                $datas['defaultpageexist'] = false;
-            }
 
             $globalcssfile = Model::GLOBAL_DIR . 'global.css';
 

@@ -84,27 +84,9 @@
 
 
 
+                    <label for="defaultbody">Edit default BODY element</label>
+                    <textarea name="defaultbody" id="defaultbody" cols="30" rows="10" form="admin"><?= Wcms\Config::defaultbody() ?></textarea>
 
-
-                    <label for="defaultpage">Or, create new page BODY based on an already existing one</label>
-                    <select name="defaultpage" id="defaultpage" form="admin">
-                        <option value="" <?= Wcms\Config::defaultpage() === '' || !$defaultpageexist ? 'selected' : '' ?>>--use default BODY element--</option>
-                        <?php
-                        foreach ($pagelist as $page) {
-                        ?>
-                            <option value="<?= $page ?>" <?= Wcms\Config::defaultpage() === $page ? 'selected' : '' ?>><?= $page ?></option>
-                        <?php    }
-                        ?>
-                    </select>
-
-                    <?php
-                    if (empty(!$defaultpageexist || Wcms\Config::defaultpage())) {
-                    ?>
-                        <label for="defaultbody">Edit default BODY element</label>
-                        <textarea name="defaultbody" id="defaultbody" cols="30" rows="10" form="admin"><?= Wcms\Config::defaultbody() ?></textarea>
-                    <?php
-                    }
-                    ?>
 
 
                     <h2 id="alert-pages">Alert pages</h2>
