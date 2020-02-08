@@ -193,7 +193,7 @@ Page Editing
 
 #### W specific synthax
 
-##### Auto url
+##### url auto link
 
 When you use an adress starting with `http://` or `https://`, W will automaitcaly create a link pointing to a new tab.
 
@@ -234,6 +234,31 @@ This will include the page [description](#description).
     %DATE%
 
 
+##### Login inclusion
+
+    %CONNECT%
+
+This will include a connection form, redirecting to the actual page.
+
+    %CONNECT?dir=<page_id>%
+
+This will include a connection form, redirecting to a specified page. Where `<page_id>` is the [ID](#page-id) of the page.
+
+
+##### Summary
+
+    %SUMMARY%
+
+This will include a summary based on the page headers titles.
+
+    %SUMMARY?min=<min>&max=<max>%
+
+Where `<min>` and `<max>` are integers beetwen `1` to `6`.
+
+You can set `<min>` and `<max>` values to filters beetwen `<h*>` and `<h*>` header to take care of.
+
+
+
 #### Page list
 
 Sometimes, when you want to add links to a lot of pages, it can be way to long. This tool is here to help you generate list of links automatically.
@@ -262,12 +287,89 @@ Generate :
 
 #### Media list
 
+Just like [page lists](#page-list), media list are used to generate a list of media based on filters.
+
+
+
+### BODY Content insertion
+
+
+The BODY tab allow you to create more complex canvas for your pages.
+
+It use only HTML.
+
+#### Element inclusion
+
+The main purpose of BODY, is to display [Markdown elements](#markdown-elements) of your page.
+
+    %<element>%
+
+Where `<element>` can be `MAIN`, `HEADER`, `ASIDE`, `NAV` or `FOOTER`. This will invoke the selected element into your page's BODY.
+
+#### External Element inclusion
+
+##### Simple usage
+
+    %<element>?id=<page_id>%
+
+
+##### concatenate elements
+
+    %<element>?id=<page1_id>+<page2_id>+*%
+
+Where `*` is the page ID of the rendered page.
+
+
+
+#### Rendering options
+
+
+##### Autolink
+
+    %<element>?autolink=<level>%
+
+Where `<level>` is an integer. By default `autolink=0`.
+
+Autolink will transform each word containing a minimum of `<level>` letter(s), into internal links.
+
+
+
+
+
 ### Templating
 
-### Content insertion
+There is no particular template document, each page can be used as a template.
+There is 3 types of templating in W :
 
-#### Advanced BODY synthax
+#### BODY template
 
+This will call the BODY of another page.
+
+#### CSS template
+
+CSS template allow you to link another page's stylesheet to your page.
+
+Options are :
+
+##### Reccursive template
+
+If templated page is already templating another page, this will add it to the stylesheet links.
+If you don't want this reccursivity, uncheck the option.
+
+This option is checked by default.
+
+##### External CSS
+
+If templated page is using external stylesheet, this will include them as well.
+
+This option is checked by default.
+
+
+##### Favicon
+
+Use this option if you want to use templated page favicon.
+
+#### Javascript template
 
 
 
@@ -288,21 +390,28 @@ A page consist of meta informations and contents.
 
 ##### Page ID
 
-The unique identifier of a page.
+__The unique identifier of a page__. It can only contain lowercases characters from `a-z`, numbers `0-9`, underscore `_` and hyphen `-`.
+Normaly W will take care of cleaning your pages's ID, by lowering uppercases, removing some accents, and remplacing special characters or spaces with hyphens.
 
 ##### Page title
 
-The page title is also very important. It's like the official name of a page.
+The page title is also very important. It's like the official name of a page. It will be displayed in the browser tab of your page.
 
 ##### Description
+
+The description will be used by web search engines when they display lists of pages. This is also usefull for social media sharing.
 
 ##### Tag
 
 Tags are very powerfull to help you organize your pages. As in __W__, there is no hierarchy between pages, this is the only tool to create groups of pages.
 
-Tags can be set in the [left panel of the editor interface](#left-panel) using comma to separate tags.
+Tags can be set in the [left panel of the editor interface](#left-panel) using comma to separate tags, or by using the multi edit tool in the [Home menu bar > Edit](#home-menu).
 
 ##### Date & time
+
+Date and Time are just a
+
+By default, page's date and time are the same as creation date and time.
 
 ##### Thumbnail
 
@@ -322,6 +431,8 @@ List of [users](#user-levels) that have edited the page, or that can do it. You 
 Main, Nav, Aside, Header, Footer
 
 ##### CSS
+
+Each page have a dedicated stylesheet, that can be called by other pages using [templating](#templating).
 
 ##### BODY
 
@@ -374,7 +485,7 @@ Invite Editors are the lowest editor status possible. They can only access the [
 
 Type thoses commands after a __page_id__ 
 
-`<page_id>/<COMMAND>`
+    <page_id>/<COMMAND>
 
 ##### /add
 
@@ -399,6 +510,15 @@ Simply download the page as a JSON object file. Reserved to users that can edit 
 ##### /log
 
 Show a `var_dump` of the page object. This could be usefull for debbuging.
+
+
+#### Home commands
+
+
+
+##### //renderall
+
+Render all pages in the database
 
 
 

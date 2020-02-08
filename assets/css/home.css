@@ -357,7 +357,7 @@ main.info article#manual h2 {
 }
 
 main.info article#manual h3 {
-    border-bottom: solid 1px grey;
+    border-bottom: solid 2px #7b97b9;
     margin-top: 30px;
     padding-top: 15px;
     font-size: 35px;
@@ -368,13 +368,20 @@ main.info article h4 {
     font-size: x-large;
     margin-top: 35px;
     margin-bottom: 25px;
+    padding: 0 20px;
 }
 
 main.info article#manual h5 {
     text-transform: uppercase;
     margin-top: 20px;
     margin-bottom: 0;
+    margin-left: 0;
     font-size: medium;
+    border: solid 1px;
+    width: fit-content;
+    padding: 0 3px;
+    border-left: 8px solid;
+    border-color: #7b97b9;
 }
 
 

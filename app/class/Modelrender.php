@@ -648,7 +648,7 @@ class Modelrender extends Modelpage
 			if(isset($matches[2])) {
 				$id = $matches[2];
 			}
-			$form = '<form action="/!co" method="post">
+			$form = '<form action="' . $this->dirtopath('!co') . '" method="post">
 			<input type="password" name="pass" id="loginpass" placeholder="password">
 			<input type="hidden" name="route" value="pageread/">
 			<input type="hidden" name="id" value="' . $id . '">
