@@ -444,10 +444,19 @@ class Page extends Dbitem
 		}
 	}
 
+	/**
+	 * DateTimeImmutable : set date
+	 * string ISO8601 : set date
+	 * true : reset to now
+	 * 
+	 * @param string|DateTimeImmutable|true $datecreation Set or reset date of creation
+	 */
 	public function setdatecreation($datecreation)
 	{
 		if ($datecreation instanceof DateTimeImmutable) {
 			$this->datecreation = $datecreation;
+		} elseif ($datecreation === true) {
+			$this->datecreation = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 		} else {
 			$this->datecreation = DateTimeImmutable::createFromFormat(DateTime::ISO8601, $datecreation, new DateTimeZone('Europe/Paris'));
 		}

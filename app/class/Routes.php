@@ -50,6 +50,7 @@ class Routes
             ['GET', '/[cid:page]/', 'Controllerpage#read', 'pageread/'],
             ['GET', '/[cid:page]', 'Controllerpage#read', 'pageread'],
             ['GET', '/[cid:page]/add', 'Controllerpage#add', 'pageadd'],
+            ['GET', '/[cid:page]/add:[cid:copy]', 'Controllerpage#addascopy', 'pageaddascopy'],
             ['GET', '/[cid:page]/edit', 'Controllerpage#edit', 'pageedit'],
             ['GET', '/[cid:page]/render', 'Controllerpage#render', 'pagerender'],
             ['GET', '/[cid:page]/log', 'Controllerpage#log', 'pagelog'],
@@ -59,6 +60,7 @@ class Routes
             ['POST', '/[cid:page]/removeeditby', 'Controllerpage#removeeditby', 'pageremoveeditby'],
             ['GET', '/[cid:page]/delete', 'Controllerpage#confirmdelete', 'pageconfirmdelete'],
             ['POST', '/[cid:page]/delete', 'Controllerpage#delete', 'pagedelete'],
+            ['GET', '/[cid:page]/duplicate:[cid:duplicate]', 'Controllerpage#duplicate', 'pageduplicate'],
             ['GET', '/[cid:page]/[*]', 'Controllerpage#pagedirect', 'pageread/etoile'],
         ]);
 

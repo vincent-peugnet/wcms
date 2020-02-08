@@ -491,6 +491,12 @@ Type thoses commands after a __page_id__
 
 Command used to add a page in the database.
 
+##### /add:id
+
+    /add:<page_id>
+
+Will create a new page, as a copy of `<page_id>`.
+
 ##### /edit
 
 Command used to edit a page. If you're not logged in, it will ask for your credentials.
@@ -510,6 +516,10 @@ Simply download the page as a JSON object file. Reserved to users that can edit 
 ##### /log
 
 Show a `var_dump` of the page object. This could be usefull for debbuging.
+
+##### /duplicate
+
+    <pageid>/duplicate:<newpageid>
 
 
 #### Home commands

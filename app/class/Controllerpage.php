@@ -230,6 +230,16 @@ class Controllerpage extends Controller
         }
     }
 
+    public function addascopy(string $id, string $copy)
+    {
+        $id = idclean($id);
+        if($this->copy($copy, $id)) {
+            $this->routedirect('pageedit', ['page' => $this->page->id()]);
+        } else {
+            $this->routedirect('pageread/', ['page' => $id]);
+        }
+    }
+
     public function confirmdelete($id)
     {
         $this->setpage($id, 'pageconfirmdelete');
@@ -302,6 +312,38 @@ class Controllerpage extends Controller
             $this->pagemanager->delete($this->page);
         }
         $this->routedirect('home');
+    }
+
+    public function duplicate(string $srcid, string $targetid)
+    {
+        $targetid = idclean($targetid);
+        if ($this->copy($srcid, $targetid)) {
+            $this->routedirect('pageread/', ['page' => $targetid]);
+        } else {
+            $this->routedirect('pageread/', ['page' => idclean($srcid)]);
+
+        }
+    }
+
+    /**
+     * Copy a page to a new ID
+     * 
+     * @param string $srcid Source page ID
+     * @param string $targetid Target page ID
+     */
+    public function copy(string $srcid, string $targetid)
+    {
+        if ($this->user->iseditor()) {
+            $this->page = $this->pagemanager->get($srcid);
+            if($this->page !== false && $this->canedit() && $this->pagemanager->get($targetid) === false) {
+                $this->page->setid($targetid);
+                $this->page->setdatecreation(true); // Reset date of creation
+                $this->page->addauthor($this->user->id());
+                $this->pagemanager->add($this->page);
+                return true;
+            }
+        }
+        return false;
     }
 
     public function update($id)
