@@ -106,9 +106,9 @@ class Opt extends Item
 	}
 
 	/**
-	 * Get the link list for each tags of an page
+	 * Get the link list for each tags of a page
 	 * 
-	 * @param array $taglist List of tag to be
+	 * @param array $taglist List of tag to be abalysed
 	 * @return string html code to be printed
 	 */
 	public function taglinks(array $taglist = []): string

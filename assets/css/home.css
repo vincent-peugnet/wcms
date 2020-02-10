@@ -62,7 +62,7 @@ aside .submenu * {
 
 
 aside summary {
-    color: grey;
+    color: black;
 }
 
 aside details > summary::-webkit-details-marker {
@@ -71,8 +71,9 @@ aside details > summary::-webkit-details-marker {
 
 
 aside summary:hover {
-    color: black;
+    /* color: white; */
     cursor: pointer;
+    background-color: lightgrey;
 }
 
 
@@ -88,6 +89,15 @@ aside.home details#bookmarks input[type="checkbox"]:hover {
 
 aside.home details#bookmarks ul {
     padding: 2%;
+}
+
+
+div#deepsearchbar {
+    background-color: lightgrey;
+}
+
+input#search {
+    width: 30%;
 }
 
 
@@ -601,6 +611,7 @@ footer {
     }
 
 }
+
 
 
 

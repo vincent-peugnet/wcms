@@ -22,7 +22,7 @@ class Controllerhome extends Controllerpage
 
     public function desktop()
     {
-        if ($this->user->isvisitor() && Config::homepage() === 'redirect' && Config::homeredirect() !== null) {
+        if ($this->user->isvisitor() && Config::homepage() === 'redirect' && !empty(Config::homeredirect())) {
             $this->routedirect('pageread/', ['page' => Config::homeredirect()]);
         } else {
 
@@ -30,13 +30,30 @@ class Controllerhome extends Controllerpage
             $table = $this->modelhome->getlister();
             $this->opt = $this->modelhome->optinit($table);
 
-            $colors = new Colors($this->opt->taglist());
+            $vars['colors'] = new Colors($this->opt->taglist());
+            if (!isset($_GET['search'])) {
+                $searchopt = ['title' => 1, 'description' => 1, 'content' => 1, 'other' => 0];
+            } else {
+                $searchopt['title'] = $_GET['title'] ?? 0;
+                $searchopt['description'] = $_GET['description'] ?? 0;
+                $searchopt['content'] = $_GET['content'] ?? 0;
+                $searchopt['other'] = $_GET['other'] ?? 0;
 
-            $table2 = $this->modelhome->table2($table, $this->opt);
+            }
+            $regex = $_GET['search'] ?? '';
 
-            $columns = $this->modelhome->setcolumns($this->user->columns());
+            $vars['table2'] = $this->modelhome->table2($table, $this->opt, $regex , $searchopt);
 
-            $vars = ['user' => $this->user, 'table2' => $table2, 'opt' => $this->opt, 'columns' => $columns, 'faviconlist' => $this->mediamanager->listfavicon(), 'thumbnaillist' => $this->mediamanager->listthumbnail(), 'editorlist' => $this->usermanager->getlisterbylevel(2, '>='), 'colors' => $colors];
+            $vars['columns'] = $this->modelhome->setcolumns($this->user->columns());
+
+            $vars['faviconlist'] = $this->mediamanager->listfavicon();
+            $vars['thumbnaillist'] = $this->mediamanager->listthumbnail();
+            $vars['editorlist'] = $this->usermanager->getlisterbylevel(2, '>=');
+            $vars['user'] = $this->user;
+            $vars['opt'] = $this->opt;
+            $vars['deepsearch'] = $regex;
+            $vars['searchopt'] = $searchopt;
+
             $vars['footer'] = ['version' => getversion(), 'total' => count($table), 'database' => Config::pagetable()];
 
             if (isset($_POST['query']) && $this->user->iseditor()) {
