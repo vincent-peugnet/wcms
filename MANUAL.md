@@ -24,7 +24,7 @@ This 4 steps tutorial will introduce you to the basic __W__ moves.
 #### Add a new page
 
 
-The first thing you have to do before creating a page is to **choose an adress** for this page. Each page have a unique adress that identify it, it's the [**page id**](#page-id). You can use the adress bar of your web browser to directly access, [edit](#edit) or [delete](#delete) a page.
+The first thing you have to do before creating a page is to **choose an adress** for this page. Each page have a unique adress that identify it, it is the [**page id**](#page-id). You can use the adress bar of your web browser to directly access, [edit](#edit) or [delete](#delete) a page.
 
 You can type anything in your adress bar, if it's an already exisiting page_id, you will access a page, otherwise, you will arrive to an empty space waiting to be filled.
 
