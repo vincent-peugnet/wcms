@@ -96,7 +96,12 @@ class Modelhome extends Modelpage
 	 */
 	public function deepsearch(string $regex, array $options, array $pagelist) : array
 	{
-        $regex = '/' . $regex . '/';
+        if($options['casesensitive']) {
+            $case = '';
+        } else {
+            $case = 'i';
+        }
+        $regex = '/' . $regex . '/' . $case;
         $pageselected = [];
 		foreach ($pagelist as $page) {
 			$count = 0;

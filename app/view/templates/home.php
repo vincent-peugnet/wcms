@@ -30,6 +30,8 @@
             <label for="deepcontent" title="Markdown content : MAIN, HEADER, NAV, ASIDE, FOOTER">content</label>
             <input type="checkbox" name="other" id="deepother" value="1"  <?= $searchopt['other'] ? 'checked' : '' ?>>
             <label for="deepother" title="Structure content : BODY, CSS, Javascript">other</label>
+            <input type="checkbox" name="case" id="deepcase" value="1"  <?= $searchopt['casesensitive'] ? 'checked' : '' ?>>
+            <label for="deepcase" title="Case sensitive or not">case sensitive</label>
             <input type="submit" value="search">
         </form>
     </div>

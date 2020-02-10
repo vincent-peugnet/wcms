@@ -32,12 +32,13 @@ class Controllerhome extends Controllerpage
 
             $vars['colors'] = new Colors($this->opt->taglist());
             if (!isset($_GET['search'])) {
-                $searchopt = ['title' => 1, 'description' => 1, 'content' => 1, 'other' => 0];
+                $searchopt = ['title' => 1, 'description' => 1, 'content' => 1, 'other' => 0, 'casesensitive' => 0];
             } else {
                 $searchopt['title'] = $_GET['title'] ?? 0;
                 $searchopt['description'] = $_GET['description'] ?? 0;
                 $searchopt['content'] = $_GET['content'] ?? 0;
                 $searchopt['other'] = $_GET['other'] ?? 0;
+                $searchopt['casesensitive'] = $_GET['case'] ?? 0;
 
             }
             $regex = $_GET['search'] ?? '';

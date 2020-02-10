@@ -117,11 +117,22 @@ In the home menu [super editors and above](#super-editor) can :
 - __Bookmarks :__ Save your [filtering options](#options) presets here. Common and personnal storages are possible.
 - __Display :__ Set columns to be shown (user based) and tag colors.
 
+
+##### Deep Search Bar
+
+The Deep Search bar help you to look for words or regular expressions in your pages.
+
+By default, searching only look in [title](#page-title), [description](#description) and [contents (markdown elements)](#markdown-elements), but the "other" checkbox will allow you to look up in [css](#css), [javascript](#javascript) and [BODY](#body) contents.
+
+Unlike the [filterings options](#options) below, searches can't be saved or used for [page lists](#page-list).
+
 ##### Options
 
 The option panel contains multiples options for sorting and filtering your pages database.
 
 Just select the options you want and press "Fitler". Use the "Reset" button to come back to the default settings. W will keep the settings for the SESSION time.
+
+This panel is also usefull to set up a [page list](#page-list) to include the same list of page you've filtered in any page.
 
 ##### Pages
 

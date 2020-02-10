@@ -404,6 +404,15 @@ main.info code {
     padding: 0 4px;
 }
 
+article#manual a {
+    text-decoration: none;
+    background-color: #7b97b959;
+}
+
+article#manual a:hover {
+    background-color: #7b97b9;
+}
+
 
 
 main.info pre {width: fit-content;padding: 1%;background-color: hsla(213, 31%, 20%, 1);white-space: pre-wrap;margin: 1%;}
@@ -611,6 +620,8 @@ footer {
     }
 
 }
+
+
 
 
 
