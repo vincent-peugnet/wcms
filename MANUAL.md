@@ -12,7 +12,7 @@ If you already know the basics, you may want to check the references :
 
 - Discover how to [navigate](#navigation).
 - Get to know the [structure of a page](#page-structure) to edit meta content.
-- Learn more about the [URL based commands](#url-based-command-interface) you can type in the adress bar.
+- Learn more about the [URL based commands](#url-based-command-interface) you can type in the address bar.
 - Master the [render engine](#page-editing) to release the full potential of __W__.
 
 
@@ -24,29 +24,29 @@ This 4 steps tutorial will introduce you to the basic __W__ moves.
 #### Add a new page
 
 
-The first thing you have to do before creating a page is to **choose an adress** for this page. Each page have a unique adress that identify it, it is the [**page id**](#page-id). You can use the adress bar of your web browser to directly access, [edit](#edit) or [delete](#delete) a page.
+The first thing you have to do before creating a page is to **choose an address** for this page. Each page have a unique address that identify it, it is the [**page id**](#page-id). You can use the address bar of your web browser to directly access, [edit](#edit) or [delete](#delete) a page.
 
-You can type anything in your adress bar, if it's an already exisiting page_id, you will access a page, otherwise, you will arrive to an empty space waiting to be filled.
+You can type anything in your address bar. If it is an already exisiting page_id, you will access a page. Otherwise, you will arrive to an empty space waiting to be filled.
 
-Once you've typed an adress and found nothing, if you are connected, you now have the opportunity to create a page at this adress.
+Once you've typed an address and found nothing, if you are connected, you now have the opportunity to create a page at this address.
 
 There is two ways to do this :
 
 1. Graphicaly, by clicking the "create" button
-2. Using the adress bar, by typing `/add` just after the adress
+2. Using the address bar, by typing `/add` just after the address
 
 There it is ! Congratulation, you've created your first page using W.
 
 
 #### Edit your page content
 
-Now you should be in front of the [edit interface](#editor) of your page. If you check the adress bar, you will now see `/edit` written after your page adress.
+Now you should be in front of the [edit interface](#editor) of your page. If you check the address bar, you will now see `/edit` written after your page address.
 
 You can type a few words in the main text area. Once you're happy with what you wrote, it's time to save your work : click on the <kbd>update</kbd> button in the top left corner. You can use the shortcut <kbd>CTRL</kbd> + <kbd>S</kbd> too if you prefer. After you've done this, you sould have notice that the asterix `*` next to your page_id have left, it's the sign that saving was sucesfull.
 
 Let's come back to the page reading view to see the result of our editing. There are different approaches for doing so :
 
-1. By removing the `/edit` command after your page adress
+1. By removing the `/edit` command after your page address
 2. Pressing the "display" button (next to "update"), or using <kbd>CTRL</kbd> + <kbd>D</kbd> shortcut.
 
 The first method will use the same tab while the second will create a new one, wich is usefull if you want to keep your [edit interface](#editor) open to come back quickly.
@@ -57,7 +57,7 @@ You should now see something that look like what you've typed.
 #### Create a hyperlink
 
 
-The [markdown synthax](), this is a formating standard well known accross the web. It's main goal is to be a intermediate between an easy to read prose text, and the internet standard tag language, the HTML. One of the main interest of Markdown, is it's ability to be mixed with HTML. That way, people can type more easily basic text, and switch to HTML at any time, to achieve a more complex layout. You can use the official Markdonw synthax with __W__ alongside with HTML to build your pages.
+The [markdown synthax](), this is a formating standard well known accross the web. It's main goal is to be a intermediate between an easy to read prose text, and the internet standard tag language, the HTML. One of the main interest of Markdown, is it is ability to be mixed with HTML. That way, people can type more easily basic text, and switch to HTML at any time, to achieve a more complex layout. You can use the official Markdonw synthax with __W__ alongside with HTML to build your pages.
 
 [Official website describing Markdown synthax](https://daringfireball.net/projects/markdown/syntax)
 
@@ -78,13 +78,13 @@ When adding an image to a page, you can either use an already web-hosted image, 
 
 Markdown synthax for inserting an image :
 
-    ![<alt_comment>](<image_adress>)
+    ![<alt_comment>](<image_address>)
 
 It's the equivalent of HTML (More info about `<img>` tag on [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Img)) :
 
-    <img src="<image_adress>" alt="<alt_comment>">
+    <img src="<image_address>" alt="<alt_comment>">
 
-If your image is already hosted, just use it's URL adress for `<image_adress>`. Otherwise, access W's [media interface](#medua-manager) using the top bar menu, just after "home", or by typing `<your-W-url>/!media`.
+If your image is already hosted, just use it's URL address for `<image_address>`. Otherwise, access W's [media interface](#medua-manager) using the top bar menu, just after "home", or by typing `<your-W-url>/!media`.
 
 Once you're here, you'll have to first choose, using the navigation panel on the left, or create a folder, by selecting __File > New Folder__ in the menu.
 
@@ -144,7 +144,7 @@ To edit columns you want to see, use the [menu](#home-menu)>Display submenu.
 
 #### Edition
 
-The edition interface is accessible when [typing `/edit`](#edit) after an existing [page_id](#page-id) in the adress bar. Or from the [home](#home), by clicking on the pencil button.
+The edition interface is accessible when [typing `/edit`](#edit) after an existing [page_id](#page-id) in the address bar. Or from the [home](#home), by clicking on the pencil button.
 
 [Invite editors](#invite-editor) and [editors](#editor) users can only access edition of pages where they are listed as [author](#authors).
 
@@ -206,7 +206,7 @@ Page Editing
 
 ##### url auto link
 
-When you use an adress starting with `http://` or `https://`, W will automaitcaly create a link pointing to a new tab.
+When you use an address starting with `http://` or `https://`, W will automaitcaly create a link pointing to a new tab.
 
     <a href="<url>" target="_blank" class="external"><url></a>
 
