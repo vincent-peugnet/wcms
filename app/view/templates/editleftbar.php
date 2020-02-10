@@ -159,7 +159,7 @@
 
 
 
-    <details id="advanced" <?= !empty($page->externalcss()) || !empty($page->customhead()) || !empty($page->sleep()) ? 'open' : '' ?>>
+    <details id="advanced" <?= !empty($page->externalcss()) || !empty($page->customhead()) || !empty($page->sleep()) || !empty($page->redirection()) ? 'open' : '' ?>>
         <summary>Advanced</summary>
                 
 
@@ -185,6 +185,12 @@
 
         <label for="sleep">Sleep time (seconds)</label>
         <input type="number" name="sleep" id="sleep" value="<?= $page->sleep() ?>" min="0" max="180">
+
+        <label for="redirection" title="page_id or URL like https://domain.org">Redirection</label>
+        <input type="text" name="redirection" id="redirection" value="<?= $page->redirection() ?>" list="searchdatalist">
+
+        <label for="refresh" title="Time before redirection (in seconds)">Refresh time</label>
+        <input type="number" name="refresh" value="<?= $page->refresh() ?>" id="refresh" min="0" max="180">
 
     </fieldset>
 

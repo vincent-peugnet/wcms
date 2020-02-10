@@ -38,6 +38,13 @@
         <div class="submenu">
             <i>Edit selected pages</i>
             <form action="<?= $this->url('multi') ?>" method="post" id="multi">
+            <h2>Render</h2>
+                <input type="submit" name="action" value="render">
+            <h2>Delete</h2>
+                <input type="hidden" name="confirmdelete" value="0">
+                <input type="checkbox" name="confirmdelete" id="confirmdelete" value="1">
+                <label for="confirmdelete">confirm</label>
+                <input type="submit" name="action" value="delete">
             <h2>Edit Meta infos</h2>
             <input type="text" name="datas[title]" id="title">
                 <label for="title">title</label>
@@ -142,6 +149,16 @@
                 <input type="number" name="datas[sleep]" id="sleep" min="0" max="180">
                 <label for="sleep">Sleep time (seconds)</label>
                 </br>
+                <input type="hidden" name="reset[redirection]" value="0">
+                <input type="checkbox" name="reset[redirection]" id="resetredirection" value="1">
+                <label for="resetredirection">reset redirection</label>
+                </br>
+                <input type="text" name="datas[redirection]" id="redirection" list="searchdatalist">     
+                <label for="redirection" title="page_id or URL like https://domain.org">Redirection</label>
+                </br>
+                <input type="number" name="datas[refresh]" id="refresh" min="0" max="180">
+                <label for="refresh">refresh time (seconds)</label>
+                </br>
                 <strong>Author</strong>
                 </br>
                 <select name="addauthor" id="addauthor">
@@ -159,16 +176,11 @@
                 <label for="resetauthor">Empty Authors</label>
                 </br>
                 <input type="hidden" name="reset[datemodif]" value="0">
-                <input type="checkbox" name="reset[datemodif]" id="resetdatemodif" value="1">
+                <input type="checkbox" name="reset[datemodif]" id="resetdatemodif" value="1" checked>
                 <label for="resetdatemodif">update modification date</label>
                 </br>
                 <input type="submit" name="action" value="edit">
-                <h2>Actions</h2>
-                <input type="submit" name="action" value="render">
-                <input type="hidden" name="confirmdelete" value="0">
-                <input type="checkbox" name="confirmdelete" id="confirmdelete" value="1">
-                <label for="confirmdelete">confirm</label>
-                <input type="submit" name="action" value="delete">
+
             </form>
         </div>
     </details>

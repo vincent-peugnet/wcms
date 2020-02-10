@@ -387,6 +387,9 @@ class Modelpage extends Modeldb
         if($reset['author']) {
             $page->setauthors([]);
         }
+        if($reset['redirection']) {
+            $page->setredirection('');
+        }
         if($reset['date']) {
 			$page->setdate($now);
 		}

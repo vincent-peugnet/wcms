@@ -33,7 +33,12 @@ class Modeldb extends Model
 		$this->repo = new Repository($repo, $this->database);
 	}
 
-	public function list()
+	/**
+	 * List every IDs of a database
+	 * 
+	 * @return array of ID strings
+	 */
+	public function list() : array
 	{
 		return $this->repo->getAllIds();
 	}

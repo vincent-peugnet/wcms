@@ -44,6 +44,8 @@ class Page extends Dbitem
 	protected $editcount;
 	protected $editby;
 	protected $sleep;
+	protected $redirection;
+	protected $refresh;
 
 
 	const LEN = 255;
@@ -103,6 +105,9 @@ class Page extends Dbitem
 		$this->seteditcount(0);
 		$this->seteditby([]);
 		$this->setsleep(0);
+		$this->setredirection('');
+		$this->setrefresh(0);
+
 	}
 
 	public static function classvarlist()
@@ -381,6 +386,16 @@ class Page extends Dbitem
 	public function sleep($type = 'int')
 	{
 		return $this->sleep;
+	}
+
+	public function redirection($type = 'string')
+	{
+		return $this->redirection;
+	}
+
+	public function refresh($type = 'int')
+	{
+		return $this->refresh;
 	}
 
 
@@ -705,6 +720,32 @@ class Page extends Dbitem
 		if(is_array($editby)) {
 			$this->editby = $editby;
 		}
+	}
+
+	public function setredirection($redirection)
+	{
+		if(is_string($redirection) && strlen($redirection) <= 64) {
+			$redirection = strip_tags($redirection);
+			if(preg_match('%https?:\/\/\S*%', $redirection, $out)) {
+				$this->redirection = $out[0];
+			} else {
+				$redirection = idclean($redirection);
+				if ($redirection !== $this->id) {
+					$this->redirection = $redirection;
+				}
+			}
+		}
+	}
+
+	public function setrefresh($refresh)
+	{
+		$refresh = intval($refresh);
+		if($refresh > 180) {
+			$refresh = 180;
+		} elseif ($refresh < 0) {
+			$refresh = 0;
+		}
+		$this->refresh = $refresh;
 	}
 
 

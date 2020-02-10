@@ -108,8 +108,7 @@ class Controllerpage extends Controller
         $renderengine->render($page);
         $page->setdaterender($now);
         $page->setlinkfrom($renderengine->linkfrom());
-        $page->setlinkto($renderengine->linkto());
-
+        
         return $page;
 
     }

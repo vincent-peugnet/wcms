@@ -10,6 +10,7 @@ class Modelrender extends Modelpage
 	protected $router;
 	/** @var Page */
 	protected $page;
+	/** @var array list of ID as strings */
 	protected $pagelist;
 	protected $linkfrom = [];
 	protected $sum = [];
@@ -25,7 +26,7 @@ class Modelrender extends Modelpage
 		parent::__construct();
 
 		$this->router = $router;
-		$this->pagelist = $this->getlister();
+		$this->pagelist = $this->list();
 
 		if(Config::internallinkblank()) {
 			$this->internallinkblank = ' target="_blank" ';
@@ -51,7 +52,14 @@ class Modelrender extends Modelpage
 	}
 
 
-	public function upage($id)
+	/**
+	 * Generate page relative link for given page_id including basepath
+	 * 
+	 * @param string $id given page ID
+	 * 
+	 * @return string Relative URL
+	 */
+	public function upage(string $id) : string
 	{
 		return $this->router->generate('pageread/', ['page' => $id]);
 	}
@@ -103,7 +111,6 @@ class Modelrender extends Modelpage
 		}
 		$body = $this->article($body);
 		$body = $this->automedialist($body);
-		$body = $this->autotaglistupdate($body);
 		return $body;
 	}
 
@@ -181,7 +188,6 @@ class Modelrender extends Modelpage
 		$content = $this->article($element->content());
 		$content = $this->automedialist($content);
 		$content = $this->pagelist($content);
-		$content = $this->autotaglistupdate($content);
 		$content = $this->date($content);
 		$content = $this->thumbnail($content);
 		if($element->autolink()) {
@@ -216,10 +222,6 @@ class Modelrender extends Modelpage
 		if (array_key_exists('css', $this->page->template('array'))) {
 			$tempaltecsspage = $this->get($this->page->template('array')['css']);
 			file_put_contents(Model::RENDER_DIR . $tempaltecsspage->id() . '.css', $tempaltecsspage->css());
-		}
-		if (array_key_exists('quickcss', $this->page->template('array'))) {
-			$tempaltequickcsspage = $this->get($this->page->template('array')['quickcss']);
-			file_put_contents(Model::RENDER_DIR . $tempaltequickcsspage->id() . '.quick.css', $tempaltequickcsspage->quickcss());
 		}
 		if (array_key_exists('javascript', $this->page->template('array'))) {
 			$templatejspage = $this->get($this->page->template('array')['javascript']);
@@ -305,6 +307,16 @@ class Modelrender extends Modelpage
 			gtag(\'config\', \'' . Config::analytics() . '\');
 			</script>
 			' . PHP_EOL;
+		}
+		
+		if (!empty($this->page->redirection())) {
+			if (preg_match('%https?:\/\/\S*%', $this->page->redirection(), $out)) {
+				$url = $out[0];
+				$head .= PHP_EOL . '<meta http-equiv="refresh" content="' . $this->page->refresh() . '; URL=' . $url . '" />';
+			} elseif (in_array($this->page->redirection(), $this->pagelist)) {
+				$url = $this->upage($this->page->redirection());
+				$head .= PHP_EOL . '<meta http-equiv="refresh" content="' . $this->page->refresh() . '; URL=' . $url . '" />';
+			}
 		}
 
 
@@ -535,50 +547,6 @@ class Modelrender extends Modelpage
 	}
 
 
-
-	public function autotaglist($text)
-	{
-		$pattern = "/\%TAG:([a-z0-9_-]+)\%/";
-		preg_match_all($pattern, $text, $out);
-		return $out[1];
-
-	}
-
-	public function autotaglistupdate($text)
-	{
-		$taglist = $this->autotaglist($text);
-		foreach ($taglist as $tag) {
-			$li = [];
-			foreach ($this->pagelist as $item) {
-				if (in_array($tag, $item->tag('array'))) {
-					$li[] = $item;
-				}
-
-			}
-			$ul = '<ul class="taglist" id="' . $tag . '">' . PHP_EOL;
-			$this->pagelistsort($li, 'date', -1);
-			foreach ($li as $item) {
-				if ($item->id() === $this->page->id()) {
-					$actual = ' actualpage';
-				} else {
-					$actual = '';
-				}
-				$ul .= '<li><a href="' . $this->router->generate('pageread/', ['page' => $item->id()]) . '" title="' . $item->description() . '" class="internal' . $actual . '" '. $this->internallinkblank .'  >' . $item->title() . '</a></li>' . PHP_EOL;
-			}
-			$ul .= '</ul>' . PHP_EOL;
-
-
-			$text = str_replace('%TAG:' . $tag . '%', $ul, $text);
-
-			$li = array_map(function ($item) {
-				return $item->id();
-			}, $li);
-			$this->linkfrom = array_unique(array_merge($this->linkfrom, $li));
-		}
-		return $text;
-	}
-
-
 	public function date(string $text)
 	{
 		$page = $this->page;
@@ -674,10 +642,12 @@ class Modelrender extends Modelpage
 		$modelhome = new Modelhome();
 
 		if(isset($matches)) {
+			$pagelist = $this->getlister();
+
 			foreach ($matches as $match) {
-				$optlist = $modelhome->Optlistinit($this->pagelist);
+				$optlist = $modelhome->Optlistinit($pagelist);
 				$optlist->parsehydrate($match['options']);
-				$table2 = $modelhome->table2($this->pagelist, $optlist);
+				$table2 = $modelhome->table2($pagelist, $optlist, '', []);
 
 				$content = '<ul class="pagelist">' . PHP_EOL ;
 				foreach ($table2 as $page ) {
@@ -719,18 +689,6 @@ class Modelrender extends Modelpage
 		$this->linkfrom = [];
 		return $linkfrom;
 	}
-
-	public function linkto()
-	{
-		$linkto = [];
-		foreach ($this->pagelist as $page) {
-			if (in_array($this->page->id(), $page->linkfrom())) {
-				$linkto[] = $page->id();
-			}
-		}
-		return $linkto;
-	}
-
 
 
 

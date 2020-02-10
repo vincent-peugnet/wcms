@@ -45,7 +45,7 @@ class Modelhome extends Modelpage
      * @param Opt $opt
      * @param string $regex
      */
-    public function table2(array $table, Opt $opt, string $regex, array $searchopt)
+    public function table2(array $table, Opt $opt, string $regex = "", array $searchopt = [])
     {
 
 

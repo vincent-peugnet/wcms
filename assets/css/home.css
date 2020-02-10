@@ -91,6 +91,10 @@ aside.home details#bookmarks ul {
     padding: 2%;
 }
 
+aside.home #edit input[type="submit"] {
+    width: 100%;
+}
+
 
 div#deepsearchbar {
     background-color: lightgrey;
