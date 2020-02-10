@@ -128,14 +128,14 @@ class Modelrender extends Modelpage
 		$types = ['HEADER', 'NAV', 'MAIN', 'ASIDE', 'FOOTER'];
 
 		// First level regex
-		$regex = '~\%(' . implode("|", $types) . ')(\S*)\%~';
+		$regex = '~\%(' . implode("|", $types) . ')(\?([\S]+))?\%~';
 
 		// Match the first level regex
 		preg_match_all($regex, $body, $out);
 
 		// Create a list of all the elements that passed through the first level regex
 		foreach ($out[0] as $key => $match) {
-			$matches[$key] = ['fullmatch' => $match, 'type' => $out[1][$key], 'options' => $out[2][$key]];
+			$matches[$key] = ['fullmatch' => $match, 'type' => $out[1][$key], 'options' => $out[3][$key]];
 		}
 
 
@@ -143,7 +143,7 @@ class Modelrender extends Modelpage
 		if(isset($matches)) {
 			foreach ($matches as $key => $match) {
 				$element = new Element($match, $this->page->id());
-				$element->setcontent($this->getelementcontent($element));
+				$element->setcontent($this->getelementcontent($element->sources(), $element->type()));
 				$element->setcontent($this->elementparser($element));
 				$element->addtags();
 				$body = str_replace($element->fullmatch(), $element->content(), $body);
@@ -157,25 +157,30 @@ class Modelrender extends Modelpage
 
 	}
 
-	public function getelementcontent(Element $element)
+	/**
+	 * Foreach $sources (pages), this will get the corresponding $type element content
+	 * 
+	 * @param array $sources Array of pages ID
+	 * @param string $type Type of element 
+	 */
+	public function getelementcontent(array $sources, string $type)
 	{
 		$content = '';
 		$subseparator = PHP_EOL . PHP_EOL;
-		foreach($element->sources() as $source)
+		foreach($sources as $source)
 		{
 			if($source !== $this->page->id()) {
-				$subcontent = $this->getpageelement($source, $element->type());
+				$subcontent = $this->getpageelement($source, $type);
 				if($subcontent !== false) {
 					if(empty($subcontent && self::RENDER_VERBOSE > 0)) {
-						$subcontent = PHP_EOL . '<!-- The ' . strtoupper($element->type()) . ' from page "' . $source . '" is currently empty ! -->' . PHP_EOL;
+						$subcontent = PHP_EOL . '<!-- The ' . strtoupper($type) . ' from page "' . $source . '" is currently empty ! -->' . PHP_EOL;
 					}
 				} else {
-					$read = '<h2>Rendering error :</h2><p>The page <strong><code>' . $source . '</code></strong>, called in <strong><code>'. $element->fullmatch() . '</code></strong>, does not exist yet.</p>';
+					$read = '<h2>Rendering error :</h2><p>The page <strong><code>' . $source . '</code></strong>, does not exist yet.</p>';
 					//throw new Exception($read);
 				}
 
 			} else {
-				$type = $element->type();
 				$subcontent = $this->page->$type();
 			}
 		$content .= $subseparator . $subcontent;
@@ -191,10 +196,7 @@ class Modelrender extends Modelpage
 		$content = $this->date($content);
 		$content = $this->thumbnail($content);
 		if($element->autolink()) {
-			$content = str_replace('%LINK%', '' ,$content);
 			$content = $this->everylink($content, $element->autolink());
-		} else {
-			$content = $this->taglink($content);
 		}
 		if($element->markdown()) {
 			$content = $this->markdown($content);
@@ -573,15 +575,6 @@ class Modelrender extends Modelpage
 		$img = PHP_EOL . $img . PHP_EOL;
 		$text = str_replace('%THUMBNAIL%', $img, $text);
 
-		return $text;
-	}
-
-	public function taglink($text)
-	{
-		$rend = $this;
-		$text = preg_replace_callback('/\%LINK\%(.*)\%LINK\%/msU', function ($matches) use ($rend) {
-			return $rend->everylink($matches[1], 1);
-		}, $text);
 		return $text;
 	}
 

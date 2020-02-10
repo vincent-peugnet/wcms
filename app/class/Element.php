@@ -10,13 +10,9 @@ class Element extends Item
     protected $type;
     protected $options;
     protected $sources = [];
-    protected $params = [];
     protected $autolink = 0;
     protected $markdown = 1;
     protected $content = '';
-
-    const OPTIONS = ['autolink', 'markdown'];
-
 
 
     // __________________________________________________ F U N ____________________________________________________________
@@ -27,58 +23,21 @@ class Element extends Item
 	{
         $this->hydrate($datas);
         $this->analyse($pageid);
-	}
+    }
 
     private function analyse(string $pageid)
     {
         if(!empty($this->options)) {
-            
-            // Replace "!" by the real page name
-            $this->options = str_replace('!', $pageid, $this->options);
-
-            preg_match('~(:([a-z0-9-_+!]+))?(\/([a-z0-9-,_+=]+))?~', $this->options, $matches);
-            if(isset($matches[2]) && !empty($matches[2])) {
-                $this->sources = explode('+', $matches[2]);
+            $this->options = str_replace('*', $pageid, $this->options);
+            parse_str($this->options, $datas);
+            if (isset($datas['id'])) {
+                $this->sources = explode(' ', $datas['id']);
             } else {
-                $this->sources[] = $pageid;
+                $this->sources = [$pageid];
             }
-            if(isset($matches[4])) {
-                $this->params = explode(',', $matches[4]);
-            }
-
-            $this->readoptions();
-
+            $this->hydrate($datas);
         } else {
-            $this->sources[] = $pageid;
-        }
-    }
-    
-    private function readoptions()
-    {
-        if(!empty($this->params)) {
-            foreach ($this->params as $param ) {
-                preg_match('~([a-z0-9-_]+)(=(-?[0-9]+))?~', $param, $optionmatch);
-                if(isset($optionmatch[1])) {
-                    $key = $optionmatch[1];
-                }
-                if(isset($optionmatch[3])) {
-                    $value = $optionmatch[3];
-                } else {                    
-                    $read = '<h2>Rendering error :</h2><p>Paramaters must have a value like : <strong><code>/' . $key . '=__value__</code></strong> for parameter : <strong><code>' . $key . '</code></strong></p>';
-                    //throw new Exception($read);
-                }
-                $method = 'set' . $key;
-                if (in_array($key, self::OPTIONS)) {
-                    if (!$this->$method($value)) {
-                        $read = '<h2>Rendering error :</h2><p>Invalid value input : <strong><code>' . $value . '</code></strong> for parameter : <strong><code>' . $key . '</code></strong></p>';
-                        //throw new Exception($read);
-
-                    }
-                } else {
-                    $read = '<h2>Rendering error :</h2><p>Parameter name : <strong><code>' . $optionmatch[1] . '</code></strong> does not exist<p>';
-                    //throw new Exception($read);
-                }
-            }
+            $this->sources = [$pageid];
         }
     }
 
@@ -107,11 +66,6 @@ class Element extends Item
     public function options()
     {
         return $this->options;
-    }
-
-    public function params()
-    {
-        return $this->params;
     }
 
     public function sources()
