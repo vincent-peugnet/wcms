@@ -130,7 +130,46 @@ class Modelhome extends Modelpage
 			}
 		}
 		return $pageselected;
-	}
+    }
+    
+    /**
+     * Transform list of page into list of nodes and edges
+     */
+    public function mapdata(array $pagelist)
+    {
+        $nodes = [];
+        $edges = [];
+        foreach ($pagelist as $page) {
+            $node['group'] = 'nodes';
+            $node['data']['id'] = $page->id();
+            $node['classes'] = [$page->secure('string')];
+            $nodes[] = $node;
+
+
+            foreach ($page->linkto() as $linkto) {
+                $edge['group'] = 'edges';
+                $edge['data']['id'] = $page->id() . '>' . $linkto;
+                $edge['data']['source'] = $page->id();
+                $edge['data']['target'] = $linkto;
+                $edges[] = $edge;
+            }
+        }
+        $datas['elements'] = array_merge($nodes, $edges);
+
+        $datas['layout']['name'] = 'preset';
+        $datas['style'] = [
+            'selector' => 'node',
+            'style' => [
+                'label' => 'data(id)'
+            ]
+            ];
+        return $datas;
+    }
+
+    public function cytodata(array $mapdata)
+    {
+        
+    }
 
 
     /**

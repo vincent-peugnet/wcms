@@ -86,6 +86,24 @@ class Controllerhome extends Controllerpage
         }
     }
 
+    /**
+     * Temporary map display function
+     */
+    public function map()
+    {
+        if ($this->user->isadmin()) {
+
+            $pagelist = $this->modelhome->getlister();
+            $datas = $this->modelhome->mapdata($pagelist);
+
+            $vars['json'] = json_encode($datas, JSON_PRETTY_PRINT);
+
+            $this->showtemplate('map', $vars);
+
+        }
+
+    }
+
     public function columns()
     {
         if (isset($_POST['columns']) && $this->user->iseditor()) {
@@ -127,12 +145,7 @@ class Controllerhome extends Controllerpage
             $this->routedirect('home');
         }
     }
-
-    public function map()
-    {
-        
-    }
-
+    
     /**
      * Render every pages in the database 
      */
