@@ -28,7 +28,6 @@ class Page extends Dbitem
 	protected $customhead;
 	protected $secure;
 	protected $interface;
-	protected $linkfrom;
 	protected $linkto;
 	protected $templatebody;
 	protected $templatecss;
@@ -89,7 +88,6 @@ class Page extends Dbitem
 		$this->setcustomhead('');
 		$this->setsecure(Config::defaultprivacy());
 		$this->setinterface('main');
-		$this->setlinkfrom([]);
 		$this->setlinkto([]);
 		$this->settemplatebody('');
 		$this->settemplatecss('');
@@ -255,21 +253,6 @@ class Page extends Dbitem
 	public function interface($type = 'string')
 	{
 		return $this->interface;
-	}
-
-	public function linkfrom($option = 'array')
-	{
-		if ($option == 'json') {
-			$linkfrom = json_encode($this->linkfrom);
-		} elseif ($option == 'array') {
-			$linkfrom = $this->linkfrom;
-		} elseif ($option == 'sort') {
-			return count($this->linkfrom);
-		} elseif ($option == 'string') {
-			return implode(', ', $this->linkfrom);
-		}
-		return $linkfrom;
-
 	}
 
 	public function linkto($option = 'array')
@@ -594,20 +577,6 @@ class Page extends Dbitem
 	{
 		if (in_array($interface, self::TABS)) {
 			$this->interface = $interface;
-		}
-	}
-
-	public function setlinkfrom($linkfrom)
-	{
-		if (is_array($linkfrom)) {
-			$this->linkfrom = $linkfrom;
-		} elseif (is_string($linkfrom)) {
-			$linkfromjson = json_decode($linkfrom);
-			if (is_array($linkfromjson)) {
-				$this->linkfrom = $linkfromjson;
-			}
-		} elseif ($linkfrom === null) {
-			$this->linkfrom = [];
 		}
 	}
 

@@ -10,7 +10,7 @@ use DateTimeImmutable;
 class Modelpage extends Modeldb
 {
 
-	const SELECT = ['title', 'id', 'description', 'tag', 'date', 'datecreation', 'datemodif', 'daterender', 'css', 'quickcss', 'javascript', 'body', 'header', 'main', 'nav', 'aside', 'footer', 'render', 'secure', 'invitepassword', 'interface', 'linkfrom', 'linkto', 'template', 'affcount', 'editcount'];
+	const SELECT = ['title', 'id', 'description', 'tag', 'date', 'datecreation', 'datemodif', 'daterender', 'css', 'quickcss', 'javascript', 'body', 'header', 'main', 'nav', 'aside', 'footer', 'render', 'secure', 'invitepassword', 'interface', 'linkto', 'template', 'affcount', 'editcount'];
 	const BY = ['datecreation', 'title', 'id', 'description', 'datemodif', 'secure'];
 	const ORDER = ['DESC', 'ASC'];
 
@@ -311,7 +311,7 @@ class Modelpage extends Modeldb
 	{
 		$filteredlist = [];
 		foreach ($pagelist as $page) {
-			if (in_array( $linkto, $page->linkfrom('array'))) {
+			if (in_array( $linkto, $page->linkto('array'))) {
 				$filteredlist[] = $page->id();
 			} elseif (empty($linkto)) {
 				$filteredlist[] = $page->id();

@@ -132,6 +132,13 @@ main.home table .id {
     font-size: medium;
 }
 
+#home2table a.linkto {
+    font-family: monospace;
+    font-size: medium;
+    text-decoration: underline;
+    text-decoration-color: white;
+}
+
 nav span.counter {
     border-radius: 100%;
     width: 17px;
@@ -602,7 +609,7 @@ footer {
 
 
 @media (max-width: 600px) {
-    main.home .summary, main.home .linkfrom, main.home .linkto, main.home .delete, main.home .datecreation, main.home .date, main.home .log, main.home .secure, main.home .tag, .hidephone {
+    main.home .summary, main.home .linkto, main.home .linkto, main.home .delete, main.home .datecreation, main.home .date, main.home .log, main.home .secure, main.home .tag, .hidephone {
         display: none;
     }
 

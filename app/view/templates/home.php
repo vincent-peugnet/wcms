@@ -74,10 +74,7 @@
                                 <th class="summary">summary</th>
                                 <?php }
                                     if ($columns['linkto']) { ?>
-                                <th class="linkto"><a href="<?= $opt->sortbyorder('linkto') ?>">to</a></th>
-                                <?php }
-                                    if ($columns['linkfrom']) { ?>
-                                <th class="linkfrom"><a href="<?= $opt->sortbyorder('linkfrom') ?>">from</a></th>
+                                <th class="linkto"><a href="<?= $opt->sortbyorder('linkto') ?>">linkto</a></th>
                                 <?php }
                                     if ($columns['datemodif']) { ?>
                                 <th class="datemodif"><a href="<?= $opt->sortbyorder('datemodif') ?>">last modification</a></th>
@@ -129,10 +126,7 @@
                                 <td class="summary" title="<?= $item->description() ?>"><?= $item->description('short') ?></td>
                                 <?php }
                                         if ($columns['linkto']) { ?>
-                                <td class="linkto"><a title="<?= $item->linkto('string') ?>"><?= $item->linkto('sort') ?></a></td>
-                                <?php }
-                                        if ($columns['linkfrom']) { ?>
-                                <td class="linkfrom"><?= $opt->linktolink($item->linkfrom('array')) ?></td>
+                                <td class="linkto"><?= $opt->linktolink($item->linkto('array')) ?></td>
                                 <?php }
                                         if ($columns['datemodif']) { ?>
                                 <td class="datemodif"><time datetime="<?= $item->datemodif('string') ?>" title="<?= $item->datemodif('dmy') . ' ' . $item->datemodif('ptime') ?>"><?= $item->datemodif('hrdi') ?></time></td>

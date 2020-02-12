@@ -141,19 +141,19 @@ class Opt extends Item
 		return '<a class="secure ' . $secure . '" href="?' . $this->getfilteradress(['secure' => $level]) . '">' . $secure . '</a>' . PHP_EOL;
 	}
 
-	public function linktolink(array $linkfromlist)
+	public function linktolink(array $linktolist)
 	{
-		$linkfromstring = "";
-		foreach ($linkfromlist as $linkfrom ) {
-			$linkfromstring .= '<a class="linkfrom" href="?' . $this->getfilteradress(['linkto' => $linkfrom]) . '" >' . $linkfrom . '</a>' . PHP_EOL;
+		$linktostring = "";
+		foreach ($linktolist as $linkto ) {
+			$linktostring .= '<a class="linkto" href="?' . $this->getfilteradress(['linkto' => $linkto]) . '" >' . $linkto . '</a>' . PHP_EOL;
 		}
-		return $linkfromstring;
+		return $linktostring;
 	}
 
 
 	public function getfilteradress(array $vars = [])
 	{
-		$varlist = ['sortby', 'order', 'secure', 'tagfilter', 'tagcompare', 'authorfilter', 'authorcompare', 'invert', 'limit'];
+		$varlist = ['sortby', 'order', 'secure', 'tagfilter', 'tagcompare', 'authorfilter', 'authorcompare', 'linkto', 'invert', 'limit'];
 		// array_filter($vars, function ())
 		$object = $this->drylist($varlist);
 		$object = array_merge($object, $vars);
@@ -352,8 +352,10 @@ class Opt extends Item
 	public function setlinkto($linkto) : bool
 	{
 		if (is_string($linkto)) {
-			if (in_array($linkto, $this->pageidlist)) {
-				
+			if(empty($this->pageidlist)) {
+				$this->linkto = idclean($linkto);
+				return true;				
+			} elseif (in_array($linkto, $this->pageidlist)) {
 				$this->linkto = idclean($linkto);
 				return true;
 			} else {
@@ -362,26 +364,6 @@ class Opt extends Item
 		} else {
 			return false;
 		}
-	}
-
-	public function setlinktomin($min)
-	{
-		$this->linkto['min'] = intval($min);
-	}
-
-	public function setlinktomax($max)
-	{
-		$this->linkto['max'] = intval($max);
-	}
-
-	public function setlinkfrommin($min)
-	{
-		$this->linkfrom['min'] = intval($min);
-	}
-
-	public function setlinkfrommax($max)
-	{
-		$this->linkfrom['max'] = intval($max);
 	}
 
 	public function setcol($col)

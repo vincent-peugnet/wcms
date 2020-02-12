@@ -12,7 +12,7 @@ class Modelrender extends Modelpage
 	protected $page;
 	/** @var array list of ID as strings */
 	protected $pagelist;
-	protected $linkfrom = [];
+	protected $linkto = [];
 	protected $sum = [];
 	protected $internallinkblank = '';
 	protected $externallinkblank = '';
@@ -374,44 +374,44 @@ class Modelrender extends Modelpage
 
 	public function wurl(string $text)
 	{
-		$linkfrom = [];
+		$linkto = [];
 		$rend = $this;
 		$text = preg_replace_callback(
 			'%href="([\w-]+)\/?(#?[a-z-_]*)"%',
-			function ($matches) use ($rend, &$linkfrom) {
+			function ($matches) use ($rend, &$linkto) {
 				$matchpage = $rend->get($matches[1]);
 				if (!$matchpage) {
 					$link = 'href="' . $rend->upage($matches[1]) . '"" title="' . Config::existnot() . '" class="internal existnot"' . $this->internallinkblank;
 				} else {
-					$linkfrom[] = $matchpage->id();
+					$linkto[] = $matchpage->id();
 					$link =  'href="' . $rend->upage($matches[1]) . $matches[2] . '" title="' . $matchpage->description() . '" class="internal exist '. $matchpage->secure('string') .'"' . $this->internallinkblank;
 				}
 				return $link;
 			},
 			$text
 		);
-		$this->linkfrom = array_unique(array_merge($this->linkfrom, $linkfrom));
+		$this->linkto = array_unique(array_merge($this->linkto, $linkto));
 		return $text;
 	}
 
 	public function wikiurl(string $text)
 	{
-		$linkfrom = [];
+		$linkto = [];
 		$rend = $this;
 		$text = preg_replace_callback(
 			'%\[([\w-]+)\/?#?([a-z-_]*)\]%',
-			function ($matches) use ($rend, &$linkfrom) {
+			function ($matches) use ($rend, &$linkto) {
 				$matchpage = $rend->get($matches[1]);
 				if (!$matchpage) {
 					return '<a href="' . $rend->upage($matches[1]) . '"" title="' . Config::existnot() . '" class="internal existnot" '. $this->internallinkblank .' >' . $matches[1] . '</a>';
 				} else {
-					$linkfrom[] = $matchpage->id();
+					$linkto[] = $matchpage->id();
 					return '<a href="' . $rend->upage($matches[1]) . $matches[2] . '" title="' . $matchpage->description() . '" class="internal exist '. $matchpage->secure('string') .'" '. $this->internallinkblank .' >' . $matchpage->title() . '</a>';
 				}
 			},
 			$text
 		);
-		$this->linkfrom = array_unique(array_merge($this->linkfrom, $linkfrom));
+		$this->linkto = array_unique(array_merge($this->linkto, $linkto));
 		return $text;
 	}
 
@@ -675,12 +675,12 @@ class Modelrender extends Modelpage
 
 
 
-	public function linkfrom()
+	public function linkto()
 	{
-		sort($this->linkfrom);
-		$linkfrom = $this->linkfrom;
-		$this->linkfrom = [];
-		return $linkfrom;
+		sort($this->linkto);
+		$linkto = $this->linkto;
+		$this->linkto = [];
+		return $linkto;
 	}
 
 
