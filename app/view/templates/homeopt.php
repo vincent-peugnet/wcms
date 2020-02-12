@@ -117,7 +117,31 @@
                     </fieldset>
 
                     <fieldset>
+                        <legend>Link to</legend>
+
+                    <label for="linkto" title="filter pages that have links pointing to the following selected page">Link pointing to</label>
+                    </br>
+                    <select name="linkto" id="linkto">
+                        <option value="" selected>-- not set --</option>
+                        <?php
+                        foreach ($opt->pageidlist() as $id) {
+                            if ($id === $opt->linkto()) {
+                                $selected = ' selected';
+                            } else {
+                                $selected = '';
+                            }
+                            echo '<option value="' . $id . '"' . $selected . '>' . $id . '</option>';
+                        }
+                        ?>
+                    </select>
+                    </fieldset>
+
+
+                    
+
+                    <fieldset>
                         <legend>Other</legend>
+
                         
 
                     <?php

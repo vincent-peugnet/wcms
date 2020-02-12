@@ -132,7 +132,7 @@
                                 <td class="linkto"><a title="<?= $item->linkto('string') ?>"><?= $item->linkto('sort') ?></a></td>
                                 <?php }
                                         if ($columns['linkfrom']) { ?>
-                                <td class="linkfrom"><a title="<?= $item->linkfrom('string') ?>"><?= $item->linkfrom('sort') ?></a></td>
+                                <td class="linkfrom"><?= $opt->linktolink($item->linkfrom('array')) ?></td>
                                 <?php }
                                         if ($columns['datemodif']) { ?>
                                 <td class="datemodif"><time datetime="<?= $item->datemodif('string') ?>" title="<?= $item->datemodif('dmy') . ' ' . $item->datemodif('ptime') ?>"><?= $item->datemodif('hrdi') ?></time></td>

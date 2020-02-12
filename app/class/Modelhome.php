@@ -16,6 +16,7 @@ class Modelhome extends Modelpage
         $opt->setcol(['id', 'tag', 'linkfrom', 'linkto', 'description', 'title', 'datemodif', 'datecreation', 'date', 'secure', 'authors', 'visitcount', 'editcount', 'affcount']);
         $opt->settaglist($table);
         $opt->setauthorlist($table);
+        $opt->setpageidlist($table);
         $opt->submit();
 
         return $opt;
@@ -52,8 +53,9 @@ class Modelhome extends Modelpage
         $filtertagfilter = $this->filtertagfilter($table, $opt->tagfilter(), $opt->tagcompare());
         $filterauthorfilter = $this->filterauthorfilter($table, $opt->authorfilter(), $opt->authorcompare());
         $filtersecure = $this->filtersecure($table, $opt->secure());
+        $filterlinkto = $this->filterlinkto($table, $opt->linkto());
 
-        $filter = array_intersect($filtertagfilter, $filtersecure, $filterauthorfilter);
+        $filter = array_intersect($filtertagfilter, $filtersecure, $filterauthorfilter, $filterlinkto);
         $table2 = [];
         $table2invert = [];
         foreach ($table as $page) {

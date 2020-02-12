@@ -11,13 +11,14 @@ class Opt extends Item
 	protected $authorfilter = [];
 	protected $authorcompare = 'AND';
 	protected $secure = 4;
-	protected $linkto = ['min' => '0', 'max' => '0'];
-	protected $linkfrom = ['min' => '0', 'max' => '0'];
+	protected $linkto = '';
 	protected $col = ['id'];
 	protected $taglist = [];
 	protected $authorlist = [];
 	protected $invert = 0;
 	protected $limit = 0;
+
+	protected $pageidlist = [];
 
 	protected $pagevarlist;
 
@@ -63,7 +64,7 @@ class Opt extends Item
 
 	public function getall()
 	{
-		$optlist = ['sortby', 'order', 'secure', 'tagcompare', 'tagfilter', 'authorcompare', 'authorfilter', 'limit', 'invert'];
+		$optlist = ['sortby', 'order', 'secure', 'tagcompare', 'tagfilter', 'authorcompare', 'authorfilter', 'limit', 'invert', 'linkto'];
 
 		foreach ($optlist as $method) {
 			if (method_exists($this, $method)) {
@@ -138,6 +139,15 @@ class Opt extends Item
 	public function securelink(int $level, string $secure)
 	{
 		return '<a class="secure ' . $secure . '" href="?' . $this->getfilteradress(['secure' => $level]) . '">' . $secure . '</a>' . PHP_EOL;
+	}
+
+	public function linktolink(array $linkfromlist)
+	{
+		$linkfromstring = "";
+		foreach ($linkfromlist as $linkfrom ) {
+			$linkfromstring .= '<a class="linkfrom" href="?' . $this->getfilteradress(['linkto' => $linkfrom]) . '" >' . $linkfrom . '</a>' . PHP_EOL;
+		}
+		return $linkfromstring;
 	}
 
 
@@ -230,14 +240,9 @@ class Opt extends Item
 		return $this->authorcompare;
 	}
 
-	public function linkto($type = 'array')
+	public function linkto($type = 'string')
 	{
 		return $this->linkto;
-	}
-
-	public function linkfrom($type = 'array')
-	{
-		return $this->linkfrom;
 	}
 
 	public function col($type = 'array')
@@ -272,6 +277,11 @@ class Opt extends Item
 	public function limit()
 	{
 		return $this->limit;
+	}
+
+	public function pageidlist()
+	{
+		return $this->pageidlist;
 	}
 
 
@@ -339,14 +349,19 @@ class Opt extends Item
 		}
 	}
 
-	public function setlinkto($range)
+	public function setlinkto($linkto) : bool
 	{
-		$this->linkto = $range;
-	}
-
-	public function setlinkfrom($range)
-	{
-		$this->linkfrom = $range;
+		if (is_string($linkto)) {
+			if (in_array($linkto, $this->pageidlist)) {
+				
+				$this->linkto = idclean($linkto);
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 
 	public function setlinktomin($min)
@@ -426,6 +441,29 @@ class Opt extends Item
 			$limit = 9999;
 		}
 		$this->limit = $limit;
+	}
+
+	/**
+	 * Import list of pages IDs
+	 * 
+	 * @param array $pageidlist could be array of IDs or array of Page Object
+	 * 
+	 * @return bool false if array content isn't string or Pages, otherwise : true
+	 */
+	public function setpageidlist(array $pageidlist) : bool
+	{
+		$idlist = [];
+		foreach ($pageidlist as $item) {
+			if (is_string($item)) {
+				$idlist[] = $item;
+			} elseif ($item instanceof Page) {
+				$idlist[] = $item->id();
+			} else {
+				return false;
+			}
+		}
+		$this->pageidlist = $idlist;
+		return true;
 	}
 
 

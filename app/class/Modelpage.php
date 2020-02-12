@@ -290,13 +290,30 @@ class Modelpage extends Modeldb
 		return $filteredlist;
 	}
 
-	public function filtersecure(array $pagelist, $secure)
+	public function filtersecure(array $pagelist, $secure) : array
 	{
 		$filteredlist = [];
 		foreach ($pagelist as $page) {
 			if ($page->secure() == intval($secure)) {
 				$filteredlist[] = $page->id();
 			} elseif (intval($secure) >= 4) {
+				$filteredlist[] = $page->id();
+			}
+		}
+		return $filteredlist;
+	}
+
+	/**
+	 * @param array $pagelist Array of Page object
+	 * @param string $linkto
+	 */
+	public function filterlinkto(array $pagelist, string $linkto) : array
+	{
+		$filteredlist = [];
+		foreach ($pagelist as $page) {
+			if (in_array( $linkto, $page->linkfrom('array'))) {
+				$filteredlist[] = $page->id();
+			} elseif (empty($linkto)) {
 				$filteredlist[] = $page->id();
 			}
 		}
