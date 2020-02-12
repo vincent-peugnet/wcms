@@ -416,7 +416,7 @@ class Modelrender extends Modelpage
 	}
 
 	/**
-	 * Add Id to hrml header elements and store the titles in the `sum` parameter
+	 * Add Id to html header elements and store the titles in the `sum` parameter
 	 * 
 	 * @param string $text Input html document to scan
 	 * @param int $maxdeepness Maximum header deepness to look for. Min = 1 Max = 6 Default = 6

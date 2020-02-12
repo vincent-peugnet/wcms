@@ -323,8 +323,12 @@ Where `<element>` can be `MAIN`, `HEADER`, `ASIDE`, `NAV` or `FOOTER`. This will
 
     %<element>?id=<page_id>%
 
+Just specify the [ID](#page-id) of the page [elements](#markdown-elements) you want to include.
+
 
 ##### concatenate elements
+
+You can even concatenate differents pages [elements](#markdown-elements), using `+` symbol separating [pages IDs](#page-id). All contents of differents pages elements will be concatenated inside one element.
 
     %<element>?id=<page1_id>+<page2_id>+*%
 
@@ -343,6 +347,12 @@ Where `<level>` is an integer. By default `autolink=0`.
 
 Autolink will transform each word containing a minimum of `<level>` letter(s), into internal links.
 
+
+##### Markdown disable
+
+    %<element>?mardown=(0|1)%
+
+Activate or desactivate [markdonw](#markdown) parser in called `<element>`. By default, Markdown is set to `1`.
 
 
 
