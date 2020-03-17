@@ -19,22 +19,6 @@
         $this->insert('homemenu', ['user' => $user, 'opt' => $opt, 'optlist' => $optlist, 'pagelist' => $pagelist, 'faviconlist' => $faviconlist, 'thumbnaillist' => $thumbnaillist, 'editorlist' => $editorlist, 'colors' => $colors]);
     ?>
 
-    <div id="deepsearchbar" class="hidephone">
-        <form action="<?= $this->url('home') ?>" method="get">
-            <input type="text" name="search" value="<?= $deepsearch ?>" id="search" placeholder="deep search">
-            <input type="checkbox" name="title" id="deeptitle" value="1" <?= $searchopt['title'] ? 'checked' : '' ?>>
-            <label for="deeptitle">title</label>
-            <input type="checkbox" name="description" id="deepdescription" value="1"  <?= $searchopt['description'] ? 'checked' : '' ?>>
-            <label for="deepdescription">description</label>
-            <input type="checkbox" name="content" id="deepcontent" value="1"  <?= $searchopt['content'] ? 'checked' : '' ?>>
-            <label for="deepcontent" title="Markdown content : MAIN, HEADER, NAV, ASIDE, FOOTER">content</label>
-            <input type="checkbox" name="other" id="deepother" value="1"  <?= $searchopt['other'] ? 'checked' : '' ?>>
-            <label for="deepother" title="Structure content : BODY, CSS, Javascript">other</label>
-            <input type="checkbox" name="case" id="deepcase" value="1"  <?= $searchopt['casesensitive'] ? 'checked' : '' ?>>
-            <label for="deepcase" title="Case sensitive or not">case sensitive</label>
-            <input type="submit" value="search">
-        </form>
-    </div>
 
 
     <main class="home">
@@ -47,6 +31,24 @@
             <div class="block">
 
                 <h2 class="hidephone">Pages (<?= count($table2) ?>)</h2>
+
+
+                <div id="deepsearchbar" class="hidephone">
+                    <form action="<?= $this->url('home') ?>" method="get">
+                        <input type="text" name="search" value="<?= $deepsearch ?>" id="deepsearch" placeholder="deep search">
+                        <input type="checkbox" name="title" id="deeptitle" value="1" <?= $searchopt['title'] ? 'checked' : '' ?>>
+                        <label for="deeptitle">title</label>
+                        <input type="checkbox" name="description" id="deepdescription" value="1"  <?= $searchopt['description'] ? 'checked' : '' ?>>
+                        <label for="deepdescription">description</label>
+                        <input type="checkbox" name="content" id="deepcontent" value="1"  <?= $searchopt['content'] ? 'checked' : '' ?>>
+                        <label for="deepcontent" title="Markdown content : MAIN, HEADER, NAV, ASIDE, FOOTER">content</label>
+                        <input type="checkbox" name="other" id="deepother" value="1"  <?= $searchopt['other'] ? 'checked' : '' ?>>
+                        <label for="deepother" title="Structure content : BODY, CSS, Javascript">other</label>
+                        <input type="checkbox" name="case" id="deepcase" value="1"  <?= $searchopt['casesensitive'] ? 'checked' : '' ?>>
+                        <label for="deepcase" title="Case sensitive or not">case sensitive</label>
+                        <input type="submit" value="search">
+                    </form>
+                </div>
 
                 <div class="scroll">
 

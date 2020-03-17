@@ -98,9 +98,10 @@ aside.home #edit input[type="submit"] {
 
 div#deepsearchbar {
     background-color: lightgrey;
+    border: solid 1px grey;
 }
 
-input#search {
+#deepsearchbar input[type=text] {
     width: 30%;
 }
 
