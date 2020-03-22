@@ -31,7 +31,7 @@ class Medialist extends Item
     /** @var string display the file name of the file */
     protected $filename = 0;
 
-    const SORT_BY_FILTER = ['id', 'size', 'type'];
+    const SORT_BY_FILTER = ['id', 'size', 'type', 'date'];
     const TYPES = ['image', 'sound', 'video', 'other'];
 
 

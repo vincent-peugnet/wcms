@@ -2,16 +2,21 @@
 
 namespace Wcms;
 
+use DateTime;
+use DateTimeImmutable;
+use DateTimeZone;
+
 class Media extends Item
 {
-	private $id;
-	private $path;
-	private $extension;
-	private $type;
-	private $size;
-	private $width;
-	private $height;
-	private $length;
+	Protected $id;
+	Protected $path;
+	Protected $extension;
+	Protected $type;
+	Protected $size;
+	Protected $date;
+	Protected $width;
+	Protected $height;
+	Protected $length;
 
 	const IMAGE = array('jpg', 'jpeg', 'gif', 'png');
 	const SOUND = array('mp3', 'flac', 'wav', 'ogg');
@@ -30,6 +35,8 @@ class Media extends Item
 	public function analyse()
 	{
 		$this->settype();
+
+		$this->setdate();
 
 		$filepath = $this->path . $this->id . '.' . $this->extension;
 
@@ -167,6 +174,11 @@ class Media extends Item
 		}
 	}
 
+	public function date($option = 'string')
+	{
+		return $this->datetransform('date', $option);
+	}
+
 	public function width()
 	{
 		return $this->width;
@@ -219,6 +231,12 @@ class Media extends Item
 		if (40 and is_int($size)) {
 			$this->size = strip_tags(strtolower($size));
 		}
+	}
+
+	public function setdate()
+	{
+		$timestamp = filemtime($this->getfulldir());
+		$this->date = new DateTimeImmutable("@$timestamp");
 	}
 
 	public function setwidth($width)

@@ -810,35 +810,6 @@ class Page extends Dbitem
 		return $taglist;
 	}
 
-	/**
-	 * Tool for accessing different view of the same DateTimeImmutable var
-	 * 
-	 * @param string $property DateTimeImmutable var to access
-	 * @param string $option
-	 * 
-	 * @return mixed string or false if propriety does not exist
-	 */
-	private function datetransform(string $property, string $option = 'date')
-	{
-		if(property_exists($this, $property)) {
-			if ($option == 'string') {
-				return $this->$property->format(DateTime::ISO8601);
-			} elseif ($option == 'date' || $option == 'sort') {
-				return $this->$property;
-			} elseif ($option == 'hrdi') {
-				$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
-				return hrdi($this->$property->diff($now));
-			} elseif ($option == 'pdate') {
-				return $this->$property->format('Y-m-d');
-			} elseif ($option == 'ptime') {
-				return $this->$property->format('H:i');
-			} elseif ($option = 'dmy') {
-				return $this->$property->format('d/m/Y');
-			}
-		} else {
-			return false;
-		}
-	}
 
 }
 

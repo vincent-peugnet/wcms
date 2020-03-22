@@ -81,6 +81,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
             <th>ext</th>
             <th><a href="<?= $mediaopt->getsortbyadress('type') ?>">type</a></th>
             <th><a href="<?= $mediaopt->getsortbyadress('size') ?>">size</a></th>
+            <th><a href="<?= $mediaopt->getsortbyadress('date') ?>">date</a></th>
             <th>width</th>
             <th>height</th>
             <th>lengh</th>
@@ -96,6 +97,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
             <td><?= $media->extension() ?></td>
             <td class="nowrap"><a href="<?= $media->getfullpath() ?>" target="_blank"><?= $media->type() == 'image' ? '<span class="thumbnail">' . $media->getsymbol() . '<img src="' . $media->getfullpath() . '"></span>' : $media->getsymbol() ?></a></td>
             <td class="nowrap"><?= $media->size('hr') ?></td>
+            <td class="nowrap"><?= $media->date('hrdi') ?></td>
             <td><?= $media->width() ?></td>
             <td><?= $media->height() ?></td>
             <td><?= $media->length() ?></td>
