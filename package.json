@@ -3,7 +3,8 @@
   "repository": "github:vincent-peugnet/wcms",
   "license": "MIT",
   "dependencies": {
-    "codemirror": "^5.49.0"
+    "codemirror": "^5.49.0",
+    "cytoscape": "^3.14.1"
   },
   "devDependencies": {
     "@sentry/browser": "^5.9.0",
