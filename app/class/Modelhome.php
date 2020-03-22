@@ -158,11 +158,20 @@ class Modelhome extends Modelpage
 
         $datas['layout']['name'] = 'random';
         $datas['style'] = [
-            'selector' => 'node',
-            'style' => [
-                'label' => 'data(id)'
-            ]
-            ];
+            [
+                'selector' => 'node',
+                'style' => [
+                    'label' => 'data(id)',
+                ],
+            ],
+            [
+                'selector' => 'edge',
+                'style' => [
+                    'curve-style' => 'bezier',
+                    'target-arrow-shape' => 'triangle',
+                ],
+            ],
+        ];
         return $datas;
     }
 
