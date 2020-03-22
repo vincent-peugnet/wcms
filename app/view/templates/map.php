@@ -1,5 +1,15 @@
-<pre>
+<style>
+    #graph {
+        height: 100%;
+        width: 100%;
+    }
+</style>
 
-    <?= $json ?>
+<div id="graph"></div>
 
-</pre>
+<script>
+    var data = <?= $json ?>;
+    console.log(data);
+</script>
+
+<script src="<?= Wcms\Model::jspath() ?>map.bundle.js"></script>
