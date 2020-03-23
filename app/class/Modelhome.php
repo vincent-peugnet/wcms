@@ -40,65 +40,84 @@ class Modelhome extends Modelpage
 
 
 
+    
 
     /**
-     * @param array $table
-     * @param Opt $opt
-     * @param string $regex
+     * Filter the pages list acording to the options and invert
      * 
-     * @return array of `Page` object
+     * @param array $pagelist of `Page` objects
+     * @param Opt $opt
+     * 
+     * @return array of `string` pages id
      */
-    public function table2(array $table, Opt $opt, string $regex = "", array $searchopt = []) : array
+
+    public function filter(array $pagelist, Opt $opt) : array
     {
 
-
-        $filtertagfilter = $this->filtertagfilter($table, $opt->tagfilter(), $opt->tagcompare());
-        $filterauthorfilter = $this->filterauthorfilter($table, $opt->authorfilter(), $opt->authorcompare());
-        $filtersecure = $this->filtersecure($table, $opt->secure());
-        $filterlinkto = $this->filterlinkto($table, $opt->linkto());
+        $filtertagfilter = $this->filtertagfilter($pagelist, $opt->tagfilter(), $opt->tagcompare());
+        $filterauthorfilter = $this->filterauthorfilter($pagelist, $opt->authorfilter(), $opt->authorcompare());
+        $filtersecure = $this->filtersecure($pagelist, $opt->secure());
+        $filterlinkto = $this->filterlinkto($pagelist, $opt->linkto());
 
         $filter = array_intersect($filtertagfilter, $filtersecure, $filterauthorfilter, $filterlinkto);
-        $table2 = [];
-        $table2invert = [];
-        foreach ($table as $page) {
-            if (in_array($page->id(), $filter)) {
-                $table2[] = $page;
-            } else {
-                $table2invert[] = $page;
-            }
 
-
+        if($opt->invert()) {
+            $idlist = array_keys($pagelist);
+            $filter = array_diff($idlist, $filter);
         }
 
-        if (!empty($opt->invert())) {
-            $table2 = $table2invert;
-        }
+        return $filter;
+    }
 
-        if(!empty($regex)) {
-            $table2 = $this->deepsearch($regex, $searchopt, $table2);
-        }
 
-        $this->pagelistsort($table2, $opt->sortby(), $opt->order());
+
+    /**
+     * Convert list of id into a list of Page objects
+     * 
+     * @param array $pagelist
+     * @param array $idlist
+     * 
+     * @return array Filtered list of `Page` objects
+     */
+    public function pagelistfilter(array $pagelist, array $fiter) : array
+    {
+        return array_intersect_key($pagelist, array_flip($fiter));
+    }
+
+
+
+
+
+    /**
+     * Sort and limit an array of Pages
+     * 
+     * @param array $pagelist of `Page` objects
+     * @param Opt $opt
+     * 
+	 * @return array associative array of `Page` objects
+     */
+    public function sort(array $pagelist, Opt $opt) : array
+    {
+        $this->pagelistsort($pagelist, $opt->sortby(), $opt->order());
 
         if($opt->limit() !== 0) {
-            $table2 = array_slice($table2, 0, $opt->limit());
+            $pagelist = array_slice($pagelist, 0, $opt->limit());
         }
 
-
-        return $table2;
+        return $pagelist;
     }
 
 
 	/**
 	 * Search for regex and count occurences
 	 * 
+	 * @param array $page list Array of Pages.
 	 * @param string $regex Regex to match.
 	 * @param array $options Option search, could be `content` `title` `description`.
-	 * @param array $page list Array of Pages.
 	 * 
-	 * @return array associative array of Pages
+	 * @return array associative array of `Page` objects
 	 */
-	public function deepsearch(string $regex, array $options, array $pagelist) : array
+	public function deepsearch(array $pagelist, string $regex, array $options) : array
 	{
         if($options['casesensitive']) {
             $case = '';
@@ -128,21 +147,38 @@ class Modelhome extends Modelpage
 				$count += preg_match($regex, $page->description());
 			}
 			if ($count !== 0) {
-				$pageselected[] = $page;
+				$pageselected[$page->id()] = $page;
 			}
 		}
 		return $pageselected;
     }
+
+
     
     /**
      * Transform list of page into list of nodes and edges
+     * 
+     * @param array $pagelist associative array of pages as `id => Page`
+     * @param string $layout 
+     * @param bool $hideorphans if `true`, remove orphans pages
+     * 
+     * 
      */
-    public function cytodata(array $pagelist, string $layout = 'random')
+    public function cytodata(array $pagelist, string $layout = 'random', bool $hideorphans = false)
     {
-        $datas['elements'] = $this->mapdata($pagelist);
+        $datas['elements'] = $this->mapdata($pagelist, $hideorphans);
 
         $datas['layout'] = [
             'name' => $layout,
+            'quality' => 'proof',
+            'fit' => true,
+            'randomize' => true,
+            'nodeDimensionsIncludeLabels' => true,
+            'tile' => false,
+            'edgeElasticity' => 0.75,
+            'gravity' => 0.25,
+            'idealEdgeLength' => 60,
+            'numIter' => 10000
         ];
         $datas['style'] = [
             [
@@ -162,25 +198,54 @@ class Modelhome extends Modelpage
         return $datas;
     }
 
-    public function mapdata(array $pagelist)
+    /**
+     * Transform list of Pages into cytoscape nodes and edge datas
+     * 
+     * @param array $pagelist associative array of pages as `id => Page`
+     * @param bool $hideorphans if `true`, remove orphans pages
+     * 
+     * @return array of cytoscape datas
+     */
+    public function mapdata(array $pagelist, bool $hideorphans = false) : array
     {
-        $nodes = [];
+        $idlist = array_keys($pagelist);
+
         $edges = [];
         foreach ($pagelist as $page) {
-            $node['group'] = 'nodes';
-            $node['data']['id'] = $page->id();
-            $node['classes'] = [$page->secure('string')];
-            $nodes[] = $node;
-
-
             foreach ($page->linkto() as $linkto) {
-                $edge['group'] = 'edges';
-                $edge['data']['id'] = $page->id() . '>' . $linkto;
-                $edge['data']['source'] = $page->id();
-                $edge['data']['target'] = $linkto;
-                $edges[] = $edge;
+                if(in_array($linkto, $idlist)) {
+                    $edge['group'] = 'edges';
+                    $edge['data']['id'] = $page->id() . '>' . $linkto;
+                    $edge['data']['source'] = $page->id();
+                    $edge['data']['target'] = $linkto;
+                    $edges[] = $edge;
+                    $notorphans[] = $linkto;
+                }
+            }
+            if(!empty($page->linkto())) {
+                $notorphans[] = $page->id();
             }
         }
+
+        $notorphans = array_unique($notorphans);
+
+        $nodes = [];
+        foreach ($pagelist as $id => $page) {
+            if($hideorphans) {
+                if(in_array($id, $notorphans)) {
+                    $node['group'] = 'nodes';
+                    $node['data']['id'] = $page->id();
+                    $node['classes'] = [$page->secure('string')];
+                    $nodes[] = $node;
+                }
+            } else {
+                $node['group'] = 'nodes';
+                $node['data']['id'] = $page->id();
+                $node['classes'] = [$page->secure('string')];
+                $nodes[] = $node;
+            }
+        }
+
         return array_merge($nodes, $edges);
 
     }

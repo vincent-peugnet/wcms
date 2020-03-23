@@ -30,7 +30,7 @@
 
             <div class="block">
 
-                <h2 class="hidephone">Pages (<?= count($table2) ?>) <span class="right"><a href="?display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> >list</a> / <a href="?display=map"  <?= $display === 'map' ? 'style="color: white"' : '' ?>  >map</a></span> </h2>
+                <h2 class="hidephone">Pages (<?= count($pagelistopt) ?>) <span class="right"><a href="?display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> >list</a> / <a href="?display=map"  <?= $display === 'map' ? 'style="color: white"' : '' ?>  >map</a></span> </h2>
 
                 <?php if($display === 'map') { ?>
 
@@ -39,12 +39,12 @@
                 <div id="deepsearchbar">
                     <form action="" method="get">
                         <input type="hidden" name="display" value="map">
-                        <input type="checkbox" name="" id="orphan" checked>
-                        <label for="orphan">Show orphans pages</label>
+                        <input type="checkbox" name="hideorphans" value="1" id="hideorphans" <?= $hideorphans ? 'checked' : '' ?>>
+                        <label for="hideorphans">hide orphans pages</label>
                         <select name="layout" id="layout">
                             <?= options(Wcms\Model::MAP_LAYOUTS, $layout) ?>
                         </select>
-                        <label for="layout">graph style</label>
+                        <label for="layout">graph layout</label>
                         <input type="submit" value="update">
                     </form>
                 </div>
@@ -134,7 +134,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($table2 as $item) { ?>
+                            <?php foreach ($pagelistopt as $item) { ?>
                             <tr>
                                 <?php if($user->issupereditor()) { ?><td class="hidephone"><input type="checkbox" name="pagesid[]" value="<?= $item->id() ?>" id="id_<?= $item->id() ?>" form="multi"></td><?php } ?>
                                 <?php if($columns['favicon']) { ?>

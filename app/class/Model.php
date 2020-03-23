@@ -23,9 +23,12 @@ abstract class Model
 
 	const MAP_LAYOUTS = [
         'cose' => 'cose',
+		'cose-bilkent' => 'cose-bilkent',
         'circle' => 'circle',
+		'breadthfirst' => 'breadthfirst',
+		'concentric' => 'concentric',
+		'grid' => 'grid',
 		'random' => 'random',
-		'cose-bilkent' => 'cose-bilkent'
     ];
  	
 	

@@ -27,7 +27,7 @@ class Modelpage extends Modeldb
 	/**
 	 * Scan library for all pages as objects
 	 * 
-	 * @return array of Pages objects
+	 * @return array of Pages objects as `id => Page`
 	 */
 	public function getlister()
 	{
@@ -232,7 +232,7 @@ class Modelpage extends Modeldb
 
 	public function pagelistsort(&$pagelist, $sortby, $order = 1)
 	{
-		return usort($pagelist, $this->buildsorter($sortby, $order));
+		return uasort($pagelist, $this->buildsorter($sortby, $order));
 	}
 
 
@@ -241,7 +241,7 @@ class Modelpage extends Modeldb
 	 * @param array $tagchecked list of tags
 	 * @param string $tagcompare string, can be 'OR' or 'AND', set the tag filter method
 	 * 
-	 * @return array $array
+	 * @return array $array of `string` page id
 	 */
 
 	public function filtertagfilter(array $pagelist, array $tagchecked, $tagcompare = 'OR')
@@ -267,6 +267,16 @@ class Modelpage extends Modeldb
 		return $filteredlist;
 	}
 
+
+
+	/**
+	 * @param array $pagelist List of Page
+	 * @param array $authorchecked list of authors
+	 * @param string $authorcompare, can be 'OR' or 'AND', set the author filter method
+	 * 
+	 * @return array $array of `string` page id
+	 */
+
 	public function filterauthorfilter(array $pagelist, array $authorchecked, $authorcompare = 'OR')
 	{
 
@@ -290,7 +300,15 @@ class Modelpage extends Modeldb
 		return $filteredlist;
 	}
 
-	public function filtersecure(array $pagelist, $secure) : array
+	/**
+	 * @param array $pagelist List of Page
+	 * @param int $secure secure level
+	 * @param string $authorcompare, can be 'OR' or 'AND', set the author filter method
+	 * 
+	 * @return array $array of `string` page id
+	 */
+
+	public function filtersecure(array $pagelist, int $secure) : array
 	{
 		$filteredlist = [];
 		foreach ($pagelist as $page) {
