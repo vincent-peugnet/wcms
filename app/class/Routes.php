@@ -19,7 +19,6 @@ class Routes
         $router->addRoutes([
             ['GET', '/', 'Controllerhome#desktop', 'home'],
             ['POST', '/', 'Controllerhome#desktop', 'homequery'],
-            ['GET', '/map', 'Controllerhome#map', 'map'],
             ['POST', '/columns', 'Controllerhome#columns', 'homecolumns'],
             ['POST', '/colors', 'Controllerhome#colors', 'homecolors'],
             ['GET', '//renderall', 'Controllerhome#renderall', 'homerenderall'],
