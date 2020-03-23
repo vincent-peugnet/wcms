@@ -45,8 +45,10 @@ class Modelhome extends Modelpage
      * @param array $table
      * @param Opt $opt
      * @param string $regex
+     * 
+     * @return array of `Page` object
      */
-    public function table2(array $table, Opt $opt, string $regex = "", array $searchopt = [])
+    public function table2(array $table, Opt $opt, string $regex = "", array $searchopt = []) : array
     {
 
 
@@ -135,6 +137,45 @@ class Modelhome extends Modelpage
     /**
      * Transform list of page into list of nodes and edges
      */
+    public function cytodata(array $pagelist, string $layout = 'random')
+    {
+        $datas['elements'] = $this->mapdata($pagelist);
+
+<<<<<<< HEAD
+            foreach ($page->linkto() as $linkto) {
+                $edge['group'] = 'edges';
+                $edge['data']['id'] = $page->id() . '>' . $linkto;
+                $edge['data']['source'] = $page->id();
+                $edge['data']['target'] = $linkto;
+                $edges[] = $edge;
+            }
+        }
+        $datas['elements'] = array_merge($nodes, $edges);
+
+        $datas['layout']['name'] = 'cose-bilkent';
+=======
+        $datas['layout'] = [
+            'name' => $layout,
+        ];
+>>>>>>> map integration in home
+        $datas['style'] = [
+            [
+                'selector' => 'node',
+                'style' => [
+                    'label' => 'data(id)',
+                ],
+            ],
+            [
+                'selector' => 'edge',
+                'style' => [
+                    'curve-style' => 'bezier',
+                    'target-arrow-shape' => 'triangle',
+                ],
+            ],
+        ];
+        return $datas;
+    }
+
     public function mapdata(array $pagelist)
     {
         $nodes = [];
@@ -154,30 +195,8 @@ class Modelhome extends Modelpage
                 $edges[] = $edge;
             }
         }
-        $datas['elements'] = array_merge($nodes, $edges);
+        return array_merge($nodes, $edges);
 
-        $datas['layout']['name'] = 'cose-bilkent';
-        $datas['style'] = [
-            [
-                'selector' => 'node',
-                'style' => [
-                    'label' => 'data(id)',
-                ],
-            ],
-            [
-                'selector' => 'edge',
-                'style' => [
-                    'curve-style' => 'bezier',
-                    'target-arrow-shape' => 'triangle',
-                ],
-            ],
-        ];
-        return $datas;
-    }
-
-    public function cytodata(array $mapdata)
-    {
-        
     }
 
 

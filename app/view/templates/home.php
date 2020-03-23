@@ -30,8 +30,37 @@
 
             <div class="block">
 
-                <h2 class="hidephone">Pages (<?= count($table2) ?>)</h2>
+                <h2 class="hidephone">Pages (<?= count($table2) ?>) <span class="right"><a href="?display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> >list</a> / <a href="?display=map"  <?= $display === 'map' ? 'style="color: white"' : '' ?>  >map</a></span> </h2>
 
+                <?php if($display === 'map') { ?>
+
+                <!-- ___________________ M  A  P _________________________ -->
+
+                <div id="deepsearchbar">
+                    <form action="" method="get">
+                        <input type="hidden" name="display" value="map">
+                        <input type="checkbox" name="" id="orphan" checked>
+                        <label for="orphan">Show orphans pages</label>
+                        <select name="layout" id="layout">
+                            <?= options(Wcms\Model::MAP_LAYOUTS, $layout) ?>
+                        </select>
+                        <label for="layout">graph style</label>
+                        <input type="submit" value="update">
+                    </form>
+                </div>
+
+                <div id="graph"></div>
+
+                <script>
+                    var data = <?= $json ?>;
+                    console.log(data);
+                </script>
+
+                <script src="<?= Wcms\Model::jspath() ?>map.bundle.js"></script>
+
+                <?php } else { ?>
+
+                <!-- ___________________ L I S T _________________________ -->
 
                 <div id="deepsearchbar" class="hidephone">
                     <form action="<?= $this->url('home') ?>" method="get">
@@ -160,6 +189,8 @@
                         </tbody>
                     </table>
                 </div>
+
+                <?php } ?>
 
             </div>
 

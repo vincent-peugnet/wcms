@@ -45,6 +45,13 @@ class Controllerhome extends Controllerpage
             $vars['opt'] = $this->opt;
             $vars['deepsearch'] = $deepsearch['regex'];
             $vars['searchopt'] = $deepsearch['searchopt'];
+            $vars['display'] = $_GET['display'] ?? 'list';
+            
+            $vars['layout'] = $_GET['layout'] ?? 'random';
+            if($vars['display'] === 'map') {
+                $datas = $this->modelhome->cytodata($vars['table2'], $vars['layout']);
+                $vars['json'] = json_encode($datas, JSON_PRETTY_PRINT);
+            }
 
             $vars['footer'] = ['version' => getversion(), 'total' => count($pagelist), 'database' => Config::pagetable()];
 
