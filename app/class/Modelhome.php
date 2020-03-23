@@ -141,23 +141,9 @@ class Modelhome extends Modelpage
     {
         $datas['elements'] = $this->mapdata($pagelist);
 
-<<<<<<< HEAD
-            foreach ($page->linkto() as $linkto) {
-                $edge['group'] = 'edges';
-                $edge['data']['id'] = $page->id() . '>' . $linkto;
-                $edge['data']['source'] = $page->id();
-                $edge['data']['target'] = $linkto;
-                $edges[] = $edge;
-            }
-        }
-        $datas['elements'] = array_merge($nodes, $edges);
-
-        $datas['layout']['name'] = 'cose-bilkent';
-=======
         $datas['layout'] = [
             'name' => $layout,
         ];
->>>>>>> map integration in home
         $datas['style'] = [
             [
                 'selector' => 'node',
