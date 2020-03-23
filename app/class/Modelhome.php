@@ -156,7 +156,7 @@ class Modelhome extends Modelpage
         }
         $datas['elements'] = array_merge($nodes, $edges);
 
-        $datas['layout']['name'] = 'random';
+        $datas['layout']['name'] = 'cose-bilkent';
         $datas['style'] = [
             [
                 'selector' => 'node',

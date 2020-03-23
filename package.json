@@ -4,7 +4,8 @@
   "license": "MIT",
   "dependencies": {
     "codemirror": "^5.49.0",
-    "cytoscape": "^3.14.1"
+    "cytoscape": "^3.14.1",
+    "cytoscape-cose-bilkent": "^4.1.0"
   },
   "devDependencies": {
     "@sentry/browser": "^5.9.0",
