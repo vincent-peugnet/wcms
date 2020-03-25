@@ -3,6 +3,8 @@
 
 namespace Wcms;
 
+use Http\Client\Common\Plugin\RetryPlugin;
+
 abstract class Config
 {
 	protected static $pagetable = 'mystore';
@@ -129,9 +131,16 @@ abstract class Config
 		return self::$fontsize;
 	}
 
-	public static function basepath()
+	/**
+	 * @param bool $trailingslash If not empty basepath, add a trailing slash after the basepath
+	 */
+	public static function basepath(bool $trailingslash = false) : string
 	{
-		return self::$basepath;
+		if($trailingslash && !empty(self::$basepath)) {
+			return self::$basepath . '/';
+		} else {
+			return self::$basepath;
+		}
 	}
 
 	public static function route404()

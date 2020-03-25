@@ -7,6 +7,7 @@ use Michelf\MarkdownExtra;
 
 class Modelrender extends Modelpage
 {
+    /** @var \AltoRouter */
 	protected $router;
 	/** @var Page */
 	protected $page;
@@ -21,7 +22,7 @@ class Modelrender extends Modelpage
 
 	const RENDER_VERBOSE = 1;
 
-	public function __construct($router)
+	public function __construct(\AltoRouter $router)
 	{
 		parent::__construct();
 
@@ -657,10 +658,10 @@ class Modelrender extends Modelpage
 			foreach ($matches as $match) {
 				$optlist = $modelhome->Optlistinit($pagelist);
 				$optlist->parsehydrate($match['options']);
-				$table2 = $modelhome->table2($pagelist, $optlist, '', []);
+				$pagetable = $modelhome->pagetable($pagelist, $optlist, '', []);
 
 				$content = '<ul class="pagelist">' . PHP_EOL ;
-				foreach ($table2 as $page ) {
+				foreach ($pagetable as $page ) {
 					$content .= '<li>' . PHP_EOL;
 					$content .= '<a href="' . $this->upage($page->id()) . '">' . $page->title() . '</a>' . PHP_EOL;
 					if($optlist->description()) {

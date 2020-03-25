@@ -24,13 +24,62 @@
     <main class="home">
 
 
-        <?php $this->insert('homeopt', ['opt' => $opt, 'user' => $user]) ?>
+        <?php $this->insert('homeopt', ['opt' => $opt, 'user' => $user, 'display' => $display]) ?>
 
         <section class="pages">
 
             <div class="block">
 
-                <h2 class="hidephone">Pages (<?= count($table2) ?>)</h2>
+                <h2 class="hidephone">Pages (<?= count($pagelistopt) ?>) <span class="right"><a href="?display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> >list</a> / <a href="?display=map"  <?= $display === 'map' ? 'style="color: white"' : '' ?>  >map</a></span> </h2>
+
+                <?php if($display === 'map') { ?>
+
+                <!-- ___________________ M  A  P _________________________ -->
+
+                <div id="deepsearchbar">
+                    <form action="" method="get">
+                        <input type="hidden" name="display" value="map">
+                        <input type="checkbox" name="showorphans" value="1" id="showorphans" <?= $showorphans ? 'checked' : '' ?>>
+                        <label for="showorphans">show orphans pages</label>
+                        <input type="checkbox" name="showredirection" value="1" id="showredirection" <?= $showredirection ? 'checked' : '' ?>>
+                        <label for="showredirection">show redirections</label>
+                        <select name="layout" id="layout">
+                            <?= options(Wcms\Model::MAP_LAYOUTS, $layout) ?>
+                        </select>
+                        <label for="layout">graph layout</label>
+                        <input type="submit" value="update">
+                    </form>
+                </div>
+
+                <div id="graph"></div>
+
+                <script>
+                    var data = <?= $json ?>;
+                    console.log(data);
+                </script>
+
+                <script src="<?= Wcms\Model::jspath() ?>map.bundle.js"></script>
+
+                <?php } else { ?>
+
+                <!-- ___________________ L I S T _________________________ -->
+
+                <div id="deepsearchbar" class="hidephone">
+                    <form action="<?= $this->url('home') ?>" method="get">
+                        <input type="text" name="search" value="<?= $deepsearch ?>" id="deepsearch" placeholder="deep search">
+                        <input type="checkbox" name="title" id="deeptitle" value="1" <?= $searchopt['title'] ? 'checked' : '' ?>>
+                        <label for="deeptitle">title</label>
+                        <input type="checkbox" name="description" id="deepdescription" value="1"  <?= $searchopt['description'] ? 'checked' : '' ?>>
+                        <label for="deepdescription">description</label>
+                        <input type="checkbox" name="content" id="deepcontent" value="1"  <?= $searchopt['content'] ? 'checked' : '' ?>>
+                        <label for="deepcontent" title="Markdown content : MAIN, HEADER, NAV, ASIDE, FOOTER">content</label>
+                        <input type="checkbox" name="other" id="deepother" value="1"  <?= $searchopt['other'] ? 'checked' : '' ?>>
+                        <label for="deepother" title="Structure content : BODY, CSS, Javascript">other</label>
+                        <input type="checkbox" name="case" id="deepcase" value="1"  <?= $searchopt['casesensitive'] ? 'checked' : '' ?>>
+                        <label for="deepcase" title="Case sensitive or not">case sensitive</label>
+                        <input type="submit" value="search">
+                    </form>
+                </div>
 
 
                 <div id="deepsearchbar" class="hidephone">
@@ -105,7 +154,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($table2 as $item) { ?>
+                            <?php foreach ($pagelistopt as $item) { ?>
                             <tr>
                                 <?php if($user->issupereditor()) { ?><td class="hidephone"><input type="checkbox" name="pagesid[]" value="<?= $item->id() ?>" id="id_<?= $item->id() ?>" form="multi"></td><?php } ?>
                                 <?php if($columns['favicon']) { ?>
@@ -160,6 +209,8 @@
                         </tbody>
                     </table>
                 </div>
+
+                <?php } ?>
 
             </div>
 

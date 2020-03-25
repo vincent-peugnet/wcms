@@ -27,23 +27,15 @@ class Controllerhome extends Controllerpage
         } else {
 
 
-            $table = $this->modelhome->getlister();
-            $this->opt = $this->modelhome->optinit($table);
+            $pagelist = $this->modelhome->getlister();
+            $this->opt = $this->modelhome->optinit($pagelist);
 
             $vars['colors'] = new Colors($this->opt->taglist());
-            if (!isset($_GET['search'])) {
-                $searchopt = ['title' => 1, 'description' => 1, 'content' => 1, 'other' => 0, 'casesensitive' => 0];
-            } else {
-                $searchopt['title'] = $_GET['title'] ?? 0;
-                $searchopt['description'] = $_GET['description'] ?? 0;
-                $searchopt['content'] = $_GET['content'] ?? 0;
-                $searchopt['other'] = $_GET['other'] ?? 0;
-                $searchopt['casesensitive'] = $_GET['case'] ?? 0;
 
-            }
-            $regex = $_GET['search'] ?? '';
+            $deepsearch = $this->deepsearch();
 
-            $vars['table2'] = $this->modelhome->table2($table, $this->opt, $regex , $searchopt);
+            $vars['pagelistopt'] = $this->modelhome->pagetable($pagelist, $this->opt, $deepsearch['regex'], $deepsearch['searchopt']);
+
 
             $vars['columns'] = $this->modelhome->setcolumns($this->user->columns());
 
@@ -52,19 +44,55 @@ class Controllerhome extends Controllerpage
             $vars['editorlist'] = $this->usermanager->getlisterbylevel(2, '>=');
             $vars['user'] = $this->user;
             $vars['opt'] = $this->opt;
-            $vars['deepsearch'] = $regex;
-            $vars['searchopt'] = $searchopt;
-
-            $vars['footer'] = ['version' => getversion(), 'total' => count($table), 'database' => Config::pagetable()];
-
-            if (isset($_POST['query']) && $this->user->iseditor()) {
-                $datas = array_merge($_POST, $_SESSION['opt']);
-                $this->optlist = $this->modelhome->Optlistinit($table);
-                $this->optlist->hydrate($datas);
-                $vars['optlist'] = $this->optlist;
+            $vars['deepsearch'] = $deepsearch['regex'];
+            $vars['searchopt'] = $deepsearch['searchopt'];
+            $vars['display'] = $_GET['display'] ?? 'list';
+            
+            if($vars['display'] === 'map') {
+                $vars['layout'] = $_GET['layout'] ?? 'cose-bilkent';
+                $vars['showorphans'] = boolval($_GET['showorphans'] ?? false); 
+                $vars['showredirection'] = boolval($_GET['showredirection'] ?? false);
+                $datas = $this->modelhome->cytodata($vars['pagelistopt'], $vars['layout'], $vars['showorphans'], $vars['showredirection']);
+                $vars['json'] = json_encode($datas, JSON_PRETTY_PRINT);
             }
 
+            $vars['footer'] = ['version' => getversion(), 'total' => count($pagelist), 'database' => Config::pagetable()];
+
+            $this->listquery($pagelist);
+
+            $vars['optlist'] = $this->optlist ?? null;
+
             $this->showtemplate('home', $vars);
+        }
+    }
+
+    /**
+     * Look for GET deepsearch datas and transform it an array
+     * 
+     * @return array containing `string $regex` and `array $searchopt`
+     */
+    public function deepsearch() : array
+    {
+        if (!isset($_GET['search'])) {
+            $searchopt = ['title' => 1, 'description' => 1, 'content' => 1, 'other' => 0, 'casesensitive' => 0];
+        } else {
+            $searchopt['title'] = $_GET['title'] ?? 0;
+            $searchopt['description'] = $_GET['description'] ?? 0;
+            $searchopt['content'] = $_GET['content'] ?? 0;
+            $searchopt['other'] = $_GET['other'] ?? 0;
+            $searchopt['casesensitive'] = $_GET['case'] ?? 0;
+        }
+        $regex = $_GET['search'] ?? '';
+        return ['regex' => $regex, 'searchopt' => $searchopt];
+    }
+
+    public function listquery(array $pagelist)
+    {
+        if (isset($_POST['query']) && $this->user->iseditor()) {
+            $datas = array_merge($_POST, $_SESSION['opt']);
+            $this->optlist = $this->modelhome->Optlistinit($pagelist);
+            $this->optlist->hydrate($datas);
+            $vars['optlist'] = $this->optlist;
         }
     }
 
@@ -109,7 +137,7 @@ class Controllerhome extends Controllerpage
             $this->routedirect('home');
         }
     }
-
+    
     /**
      * Render every pages in the database 
      */
