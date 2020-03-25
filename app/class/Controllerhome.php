@@ -34,11 +34,7 @@ class Controllerhome extends Controllerpage
 
             $deepsearch = $this->deepsearch();
 
-            $idlistfilter = $this->modelhome->filter($pagelist, $this->opt);
-            $pagelistfilter = $this->modelhome->pagelistfilter($pagelist, $idlistfilter);
-            $pagelistdeep = $this->modelhome->deepsearch($pagelistfilter, $deepsearch['regex'] , $deepsearch['searchopt']);
-            $pagelistsort = $this->modelhome->sort($pagelistdeep, $this->opt);
-            $vars['pagelistopt'] = $pagelistsort;
+            $vars['pagelistopt'] = $this->modelhome->pagetable($pagelist, $this->opt, $deepsearch['regex'], $deepsearch['searchopt']);
 
 
             $vars['columns'] = $this->modelhome->setcolumns($this->user->columns());
@@ -54,8 +50,9 @@ class Controllerhome extends Controllerpage
             
             if($vars['display'] === 'map') {
                 $vars['layout'] = $_GET['layout'] ?? 'cose-bilkent';
-                $vars['hideorphans'] = boolval($_GET['hideorphans'] ?? false);
-                $datas = $this->modelhome->cytodata($pagelistsort, $vars['layout'], $vars['hideorphans']);
+                $vars['showorphans'] = boolval($_GET['showorphans'] ?? false); 
+                $vars['showredirection'] = boolval($_GET['showredirection'] ?? false);
+                $datas = $this->modelhome->cytodata($vars['pagelistopt'], $vars['layout'], $vars['showorphans'], $vars['showredirection']);
                 $vars['json'] = json_encode($datas, JSON_PRETTY_PRINT);
             }
 

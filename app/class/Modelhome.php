@@ -39,6 +39,25 @@ class Modelhome extends Modelpage
     }
 
 
+    /**
+	 * @param array  $pagelist of Pages objects as `id => Page`
+     * @param Opt $opt
+     * 
+	 * @param string $regex Regex to match.
+	 * @param array $options Option search, could be `content` `title` `description`.
+	 * 
+	 * @return array associative array of `Page` objects     * 
+     */
+    public function pagetable(array $pagelist, Opt $opt, $regex = '', $searchopt = []) : array
+    {
+        $pagelist = $this->filter($pagelist, $opt);
+        if(!empty($regex)) {
+            $pagelist = $this->deepsearch($pagelist, $regex , $searchopt);
+        }
+        $pagelist = $this->sort($pagelist, $opt);
+
+        return $pagelist;
+    }
 
     
 
@@ -66,25 +85,8 @@ class Modelhome extends Modelpage
             $filter = array_diff($idlist, $filter);
         }
 
-        return $filter;
+        return array_intersect_key($pagelist, array_flip($filter));
     }
-
-
-
-    /**
-     * Convert list of id into a list of Page objects
-     * 
-     * @param array $pagelist
-     * @param array $idlist
-     * 
-     * @return array Filtered list of `Page` objects
-     */
-    public function pagelistfilter(array $pagelist, array $fiter) : array
-    {
-        return array_intersect_key($pagelist, array_flip($fiter));
-    }
-
-
 
 
 
@@ -160,13 +162,14 @@ class Modelhome extends Modelpage
      * 
      * @param array $pagelist associative array of pages as `id => Page`
      * @param string $layout 
-     * @param bool $hideorphans if `true`, remove orphans pages
+     * @param bool $showorphans if `false`, remove orphans pages
+     * @param bool $showredirection if `true`, add redirections
      * 
-     * 
+     * @return array
      */
-    public function cytodata(array $pagelist, string $layout = 'random', bool $hideorphans = false)
+    public function cytodata(array $pagelist, string $layout = 'random', bool $showorphans = false, bool $showredirection = false) : array
     {
-        $datas['elements'] = $this->mapdata($pagelist, $hideorphans);
+        $datas['elements'] = $this->mapdata($pagelist, $showorphans, $showredirection);
 
         $datas['layout'] = [
             'name' => $layout,
@@ -175,7 +178,7 @@ class Modelhome extends Modelpage
             'randomize' => true,
             'nodeDimensionsIncludeLabels' => true,
             'tile' => false,
-            'edgeElasticity' => 0.75,
+            'edgeElasticity' => 0.45,
             'gravity' => 0.25,
             'idealEdgeLength' => 60,
             'numIter' => 10000
@@ -185,6 +188,24 @@ class Modelhome extends Modelpage
                 'selector' => 'node',
                 'style' => [
                     'label' => 'data(id)',
+                    'background-image' => 'data(favicon)',
+                    'background-fit' => 'contain',
+                    'border-width' => 3,
+                    'border-color' => '#80b97b'
+                ],
+            ],
+            [
+                'selector' => 'node.not_published',
+                'style' => [
+                    'shape' => 'round-hexagon',
+                    'border-color' => '#b97b7b'
+                ],
+            ],
+            [
+                'selector' => 'node.private',
+                'style' => [
+                    'shape' => 'round-triangle',
+                    'border-color' => '#b9b67b'
                 ],
             ],
             [
@@ -192,6 +213,14 @@ class Modelhome extends Modelpage
                 'style' => [
                     'curve-style' => 'bezier',
                     'target-arrow-shape' => 'triangle',
+                    'arrow-scale' => 1.5
+                ],
+            ],
+            [
+                'selector' => 'edge.redirect',
+                'style' => [
+                    'line-style' => 'dashed',
+                    'label' => 'data(refresh)'
                 ],
             ],
         ];
@@ -202,15 +231,17 @@ class Modelhome extends Modelpage
      * Transform list of Pages into cytoscape nodes and edge datas
      * 
      * @param array $pagelist associative array of pages as `id => Page`
-     * @param bool $hideorphans if `true`, remove orphans pages
-     * 
+     * @param bool $showorphans if `false`, remove orphans pages
+     * @param bool $showredirection if `true`, add redirections
+     *
      * @return array of cytoscape datas
      */
-    public function mapdata(array $pagelist, bool $hideorphans = false) : array
+    public function mapdata(array $pagelist, bool $showorphans = true, bool $showredirection = false) : array
     {
         $idlist = array_keys($pagelist);
 
         $edges = [];
+        $notorphans = [];
         foreach ($pagelist as $page) {
             foreach ($page->linkto() as $linkto) {
                 if(in_array($linkto, $idlist)) {
@@ -220,9 +251,19 @@ class Modelhome extends Modelpage
                     $edge['data']['target'] = $linkto;
                     $edges[] = $edge;
                     $notorphans[] = $linkto;
+                    $notorphans[] = $page->id();
                 }
             }
-            if(!empty($page->linkto())) {
+            // add redirection edge
+            if($showredirection && key_exists($page->redirection(), $pagelist)) {
+                $edger['group'] = 'edges';
+                $edger['data']['id'] = $page->id() . '>' . $page->redirection();
+                $edger['data']['refresh'] = $page->refresh();
+                $edger['data']['source'] = $page->id();
+                $edger['data']['target'] = $page->redirection();
+                $edger['classes'] = 'redirect';
+                $edges[] = $edger;
+                $notorphans[] = $page->redirection();
                 $notorphans[] = $page->id();
             }
         }
@@ -231,16 +272,11 @@ class Modelhome extends Modelpage
 
         $nodes = [];
         foreach ($pagelist as $id => $page) {
-            if($hideorphans) {
-                if(in_array($id, $notorphans)) {
-                    $node['group'] = 'nodes';
-                    $node['data']['id'] = $page->id();
-                    $node['classes'] = [$page->secure('string')];
-                    $nodes[] = $node;
-                }
-            } else {
+            if($showorphans || (!$showorphans && in_array($id, $notorphans))) {
                 $node['group'] = 'nodes';
                 $node['data']['id'] = $page->id();
+                $node['data']['edit'] = $page->id() . DIRECTORY_SEPARATOR . 'edit';
+                $node['data']['favicon'] = Model::faviconpath() . $page->favicon();
                 $node['classes'] = [$page->secure('string')];
                 $nodes[] = $node;
             }

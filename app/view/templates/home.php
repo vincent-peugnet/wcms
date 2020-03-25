@@ -24,7 +24,7 @@
     <main class="home">
 
 
-        <?php $this->insert('homeopt', ['opt' => $opt, 'user' => $user]) ?>
+        <?php $this->insert('homeopt', ['opt' => $opt, 'user' => $user, 'display' => $display]) ?>
 
         <section class="pages">
 
@@ -39,8 +39,10 @@
                 <div id="deepsearchbar">
                     <form action="" method="get">
                         <input type="hidden" name="display" value="map">
-                        <input type="checkbox" name="hideorphans" value="1" id="hideorphans" <?= $hideorphans ? 'checked' : '' ?>>
-                        <label for="hideorphans">hide orphans pages</label>
+                        <input type="checkbox" name="showorphans" value="1" id="showorphans" <?= $showorphans ? 'checked' : '' ?>>
+                        <label for="showorphans">show orphans pages</label>
+                        <input type="checkbox" name="showredirection" value="1" id="showredirection" <?= $showredirection ? 'checked' : '' ?>>
+                        <label for="showredirection">show redirections</label>
                         <select name="layout" id="layout">
                             <?= options(Wcms\Model::MAP_LAYOUTS, $layout) ?>
                         </select>
