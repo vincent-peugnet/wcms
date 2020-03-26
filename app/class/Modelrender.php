@@ -348,7 +348,9 @@ class Modelrender extends Modelpage
 		$text = $this->desctitle($text, $this->page->description(), $this->page->title());
 
 
-		$text = str_replace('href="http', ' class="external" target="_blank" href="http', $text);
+		$text = str_replace('href="http', "class=\"external\" $this->externallinkblank href=\"http", $text);
+
+		$text = $this->shortenurl($text);
 
 		$text = $this->autourl($text);
 
@@ -366,10 +368,25 @@ class Modelrender extends Modelpage
 		return $text;
 	}
 
+	/**
+	 * Shorten the urls of links whose content equals the href.
+	 *
+	 * @param string $text the page text as html
+	 */
+	public function shortenurl(string $text): string
+	{
+		$text = preg_replace('#<a(.*href="(https?:\/\/(.+))".*)>\2</a>#', "<a$1>$3</a>", $text);
+		return $text;
+	}
+
 
 	public function autourl($text)
 	{
-		$text = preg_replace('#( |\R|>)(https?:\/\/((\S+)\.([^< ]+)))#', '$1<a href="$2" class="external" '. $this->externallinkblank .'>$3</a>', $text);
+		$text = preg_replace(
+			'#( |\R|(>)|(&lt;))(https?:\/\/(\S+\.[^< ]+))(((?(3)&gt;|))(?(2)</[^a]|))#',
+			"$1<a href=\"$4\" class=\"external\" $this->externallinkblank>$4</a>$6",
+			$text
+		);
 		return $text;
 	}
 
