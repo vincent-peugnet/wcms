@@ -108,6 +108,7 @@ div#deepsearchbar {
 
 
 
+
 aside .submenu code {
     overflow: auto;
     display: block;
@@ -126,6 +127,12 @@ main.home div#main {
     display: flex;
     align-items: flex-start;
     flex-direction: column;
+}
+
+
+main.home div#graph {
+    height: 1000px;
+    width: 800px;
 }
 
 main.home table .id {
@@ -218,6 +225,9 @@ h1, h2 {
     font-size: larger;
 }
 
+h2 .right {
+    float: right;
+}
 
 
 p {
@@ -632,6 +642,7 @@ footer {
     }
 
 }
+
 
 
 

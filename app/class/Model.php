@@ -20,6 +20,17 @@ abstract class Model
 	const GLOBAL_DIR = 'assets'. DIRECTORY_SEPARATOR . 'global' . DIRECTORY_SEPARATOR;
 	const DATABASE_DIR = '.' . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR;
 	const PAGES_DIR = self::DATABASE_DIR . 'pages' . DIRECTORY_SEPARATOR;
+
+	const MAP_LAYOUTS = [
+        'cose' => 'cose',
+		'cose-bilkent' => 'cose-bilkent',
+        'circle' => 'circle',
+		'breadthfirst' => 'breadthfirst',
+		'concentric' => 'concentric',
+		'grid' => 'grid',
+		'random' => 'random',
+    ];
+ 	
 	
 	const MEDIA_EXT = [
 		'jpg' => 'image',

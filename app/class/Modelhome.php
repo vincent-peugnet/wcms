@@ -39,64 +39,87 @@ class Modelhome extends Modelpage
     }
 
 
+    /**
+	 * @param array  $pagelist of Pages objects as `id => Page`
+     * @param Opt $opt
+     * 
+	 * @param string $regex Regex to match.
+	 * @param array $options Option search, could be `content` `title` `description`.
+	 * 
+	 * @return array associative array of `Page` objects     * 
+     */
+    public function pagetable(array $pagelist, Opt $opt, $regex = '', $searchopt = []) : array
+    {
+        $pagelist = $this->filter($pagelist, $opt);
+        if(!empty($regex)) {
+            $pagelist = $this->deepsearch($pagelist, $regex , $searchopt);
+        }
+        $pagelist = $this->sort($pagelist, $opt);
+
+        return $pagelist;
+    }
+
+    
+
+    /**
+     * Filter the pages list acording to the options and invert
+     * 
+     * @param array $pagelist of `Page` objects
+     * @param Opt $opt
+     * 
+     * @return array of `string` pages id
+     */
+
+    public function filter(array $pagelist, Opt $opt) : array
+    {
+
+        $filtertagfilter = $this->filtertagfilter($pagelist, $opt->tagfilter(), $opt->tagcompare());
+        $filterauthorfilter = $this->filterauthorfilter($pagelist, $opt->authorfilter(), $opt->authorcompare());
+        $filtersecure = $this->filtersecure($pagelist, $opt->secure());
+        $filterlinkto = $this->filterlinkto($pagelist, $opt->linkto());
+
+        $filter = array_intersect($filtertagfilter, $filtersecure, $filterauthorfilter, $filterlinkto);
+
+        if($opt->invert()) {
+            $idlist = array_keys($pagelist);
+            $filter = array_diff($idlist, $filter);
+        }
+
+        return array_intersect_key($pagelist, array_flip($filter));
+    }
+
 
 
     /**
-     * @param array $table
+     * Sort and limit an array of Pages
+     * 
+     * @param array $pagelist of `Page` objects
      * @param Opt $opt
-     * @param string $regex
+     * 
+	 * @return array associative array of `Page` objects
      */
-    public function table2(array $table, Opt $opt, string $regex = "", array $searchopt = [])
+    public function sort(array $pagelist, Opt $opt) : array
     {
-
-
-        $filtertagfilter = $this->filtertagfilter($table, $opt->tagfilter(), $opt->tagcompare());
-        $filterauthorfilter = $this->filterauthorfilter($table, $opt->authorfilter(), $opt->authorcompare());
-        $filtersecure = $this->filtersecure($table, $opt->secure());
-        $filterlinkto = $this->filterlinkto($table, $opt->linkto());
-
-        $filter = array_intersect($filtertagfilter, $filtersecure, $filterauthorfilter, $filterlinkto);
-        $table2 = [];
-        $table2invert = [];
-        foreach ($table as $page) {
-            if (in_array($page->id(), $filter)) {
-                $table2[] = $page;
-            } else {
-                $table2invert[] = $page;
-            }
-
-
-        }
-
-        if (!empty($opt->invert())) {
-            $table2 = $table2invert;
-        }
-
-        if(!empty($regex)) {
-            $table2 = $this->deepsearch($regex, $searchopt, $table2);
-        }
-
-        $this->pagelistsort($table2, $opt->sortby(), $opt->order());
+        $this->pagelistsort($pagelist, $opt->sortby(), $opt->order());
 
         if($opt->limit() !== 0) {
-            $table2 = array_slice($table2, 0, $opt->limit());
+            $pagelist = array_slice($pagelist, 0, $opt->limit());
         }
 
-
-        return $table2;
+        return $pagelist;
     }
 
 
 	/**
 	 * Search for regex and count occurences
 	 * 
+	 * @param array $page list Array of Pages.
 	 * @param string $regex Regex to match.
 	 * @param array $options Option search, could be `content` `title` `description`.
-	 * @param array $page list Array of Pages.
 	 * 
-	 * @return array associative array of Pages
+	 * @return array associative array of `Page` objects
 	 */
-	public function deepsearch(string $regex, array $options, array $pagelist) : array
+	public function deepsearch(array $pagelist, string $regex, array $options) : array
 	{
         if($options['casesensitive']) {
             $case = '';
@@ -126,11 +149,142 @@ class Modelhome extends Modelpage
 				$count += preg_match($regex, $page->description());
 			}
 			if ($count !== 0) {
-				$pageselected[] = $page;
+				$pageselected[$page->id()] = $page;
 			}
 		}
 		return $pageselected;
-	}
+    }
+
+
+    
+    /**
+     * Transform list of page into list of nodes and edges
+     * 
+     * @param array $pagelist associative array of pages as `id => Page`
+     * @param string $layout 
+     * @param bool $showorphans if `false`, remove orphans pages
+     * @param bool $showredirection if `true`, add redirections
+     * 
+     * @return array
+     */
+    public function cytodata(array $pagelist, string $layout = 'random', bool $showorphans = false, bool $showredirection = false) : array
+    {
+        $datas['elements'] = $this->mapdata($pagelist, $showorphans, $showredirection);
+
+        $datas['layout'] = [
+            'name' => $layout,
+            'quality' => 'proof',
+            'fit' => true,
+            'randomize' => true,
+            'nodeDimensionsIncludeLabels' => true,
+            'tile' => false,
+            'edgeElasticity' => 0.45,
+            'gravity' => 0.25,
+            'idealEdgeLength' => 60,
+            'numIter' => 10000
+        ];
+        $datas['style'] = [
+            [
+                'selector' => 'node',
+                'style' => [
+                    'label' => 'data(id)',
+                    'background-image' => 'data(favicon)',
+                    'background-fit' => 'contain',
+                    'border-width' => 3,
+                    'border-color' => '#80b97b'
+                ],
+            ],
+            [
+                'selector' => 'node.not_published',
+                'style' => [
+                    'shape' => 'round-hexagon',
+                    'border-color' => '#b97b7b'
+                ],
+            ],
+            [
+                'selector' => 'node.private',
+                'style' => [
+                    'shape' => 'round-triangle',
+                    'border-color' => '#b9b67b'
+                ],
+            ],
+            [
+                'selector' => 'edge',
+                'style' => [
+                    'curve-style' => 'bezier',
+                    'target-arrow-shape' => 'triangle',
+                    'arrow-scale' => 1.5
+                ],
+            ],
+            [
+                'selector' => 'edge.redirect',
+                'style' => [
+                    'line-style' => 'dashed',
+                    'label' => 'data(refresh)'
+                ],
+            ],
+        ];
+        return $datas;
+    }
+
+    /**
+     * Transform list of Pages into cytoscape nodes and edge datas
+     * 
+     * @param array $pagelist associative array of pages as `id => Page`
+     * @param bool $showorphans if `false`, remove orphans pages
+     * @param bool $showredirection if `true`, add redirections
+     *
+     * @return array of cytoscape datas
+     */
+    public function mapdata(array $pagelist, bool $showorphans = true, bool $showredirection = false) : array
+    {
+        $idlist = array_keys($pagelist);
+
+        $edges = [];
+        $notorphans = [];
+        foreach ($pagelist as $page) {
+            foreach ($page->linkto() as $linkto) {
+                if(in_array($linkto, $idlist)) {
+                    $edge['group'] = 'edges';
+                    $edge['data']['id'] = $page->id() . '>' . $linkto;
+                    $edge['data']['source'] = $page->id();
+                    $edge['data']['target'] = $linkto;
+                    $edges[] = $edge;
+                    $notorphans[] = $linkto;
+                    $notorphans[] = $page->id();
+                }
+            }
+            // add redirection edge
+            if($showredirection && key_exists($page->redirection(), $pagelist)) {
+                $edger['group'] = 'edges';
+                $edger['data']['id'] = $page->id() . '>' . $page->redirection();
+                $edger['data']['refresh'] = $page->refresh();
+                $edger['data']['source'] = $page->id();
+                $edger['data']['target'] = $page->redirection();
+                $edger['classes'] = 'redirect';
+                $edges[] = $edger;
+                $notorphans[] = $page->redirection();
+                $notorphans[] = $page->id();
+            }
+        }
+
+        $notorphans = array_unique($notorphans);
+
+        $nodes = [];
+        foreach ($pagelist as $id => $page) {
+            if($showorphans || (!$showorphans && in_array($id, $notorphans))) {
+                $node['group'] = 'nodes';
+                $node['data']['id'] = $page->id();
+                $node['data']['edit'] = $page->id() . DIRECTORY_SEPARATOR . 'edit';
+                $node['data']['favicon'] = Model::faviconpath() . $page->favicon();
+                $node['classes'] = [$page->secure('string')];
+                $nodes[] = $node;
+            }
+        }
+
+        return array_merge($nodes, $edges);
+
+    }
 
 
     /**

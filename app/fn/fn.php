@@ -2,6 +2,8 @@
 
 use Wcms\Medialist;
 
+use function Clue\StreamFilter\fun;
+
 function readablesize($bytes)
 {
 	$format = ' %d %s';
@@ -292,7 +294,29 @@ function recurse_copy($src,$dst) {
         } 
     } 
     closedir($dir); 
-} 
+}
+
+/**
+ * Generate a list of <options> html drop down list
+ * 
+ * @param array $options as `value => title`
+ * @param string|int $selected value of actualy selected option
+ * 
+ * @return string HTML list of options
+ */
+function options(array $options, $selected = null) : string
+{
+	$html = '';
+	foreach ($options as $value => $title) {
+		if($value == $selected) {
+			$attribute = 'selected';
+		} else {
+			$attribute = '';
+		}
+		$html .= '<option value="' . $value . '" ' . $attribute . '>' . $title . '</option>' . PHP_EOL;
+	}
+	return $html;
+}
 
 
 

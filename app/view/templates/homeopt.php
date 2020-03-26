@@ -159,6 +159,8 @@
 
                 </div>
 
+                <input type="hidden" name="display" value="<?= $display ?>">
+
 
                 <input type="submit" name="submit" value="filter">
                 ⬅<input type="submit" name="submit" value="reset">
