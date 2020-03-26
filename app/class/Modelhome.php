@@ -142,6 +142,9 @@ class Modelhome extends Modelpage
 				$count += preg_match($regex, $page->css());
 				$count += preg_match($regex, $page->javascript());
 			}
+			if ($options['id']) {
+				$count += preg_match($regex, $page->id());
+			}
 			if ($options['title']) {
 				$count += preg_match($regex, $page->title());
 			}

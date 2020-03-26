@@ -74,8 +74,9 @@ class Controllerhome extends Controllerpage
     public function deepsearch() : array
     {
         if (!isset($_GET['search'])) {
-            $searchopt = ['title' => 1, 'description' => 1, 'content' => 1, 'other' => 0, 'casesensitive' => 0];
+            $searchopt = ['id' => 1, 'title' => 1, 'description' => 1, 'content' => 1, 'other' => 0, 'casesensitive' => 0];
         } else {
+            $searchopt['id'] = $_GET['id'] ?? 0;
             $searchopt['title'] = $_GET['title'] ?? 0;
             $searchopt['description'] = $_GET['description'] ?? 0;
             $searchopt['content'] = $_GET['content'] ?? 0;

@@ -67,6 +67,8 @@
                 <div id="deepsearchbar" class="hidephone">
                     <form action="<?= $this->url('home') ?>" method="get">
                         <input type="text" name="search" value="<?= $deepsearch ?>" id="deepsearch" placeholder="deep search">
+                        <input type="checkbox" name="id" id="deepid" value="1" <?= $searchopt['id'] ? 'checked' : '' ?>>
+                        <label for="deepid">id</label>
                         <input type="checkbox" name="title" id="deeptitle" value="1" <?= $searchopt['title'] ? 'checked' : '' ?>>
                         <label for="deeptitle">title</label>
                         <input type="checkbox" name="description" id="deepdescription" value="1"  <?= $searchopt['description'] ? 'checked' : '' ?>>

@@ -78,7 +78,7 @@ class Page extends Dbitem
 		$this->setdaterender($now);
 		$this->setcss('');
 		$this->setjavascript('');
-		$this->setbody('');
+		$this->setbody(Config::defaultbody());
 		$this->setheader('');
 		$this->setmain('');
 		$this->setnav('');

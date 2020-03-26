@@ -221,7 +221,6 @@ class Controllerpage extends Controller
         if ($this->user->iseditor() && !$this->importpage()) {
             $this->page->reset();
             $this->page->addauthor($this->user->id());
-            $this->page->setbody(Config::defaultbody());
             $this->pagemanager->add($this->page);
             $this->routedirect('pageedit', ['page' => $this->page->id()]);
         } else {
