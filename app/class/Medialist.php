@@ -31,7 +31,6 @@ class Medialist extends Item
     /** @var string display the file name of the file */
     protected $filename = 0;
 
-    const SORT_BY_FILTER = ['id', 'size', 'type', 'date'];
     const TYPES = ['image', 'sound', 'video', 'other'];
 
 
@@ -95,7 +94,7 @@ class Medialist extends Item
      */
     public function getsortbyadress(string $sortby) : string
     {
-        if(!in_array($sortby, self::SORT_BY_FILTER)) {
+        if(!in_array($sortby, Model::MEDIA_SORTBY)) {
             $sortby = 'id';
         }
 		if ($this->sortby === $sortby) {
@@ -201,7 +200,7 @@ class Medialist extends Item
 
     public function setsortby(string $sortby)
     {
-        if (in_array($sortby, self::SORT_BY_FILTER)) {
+        if (in_array($sortby, Model::MEDIA_SORTBY)) {
             $this->sortby = $sortby;
         }
     }

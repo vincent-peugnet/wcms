@@ -48,9 +48,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
                 <fieldset>
                     <legend>Sort</legend>
                     <select name="sortby" id="sortby">
-                        <option value="id" <?= $mediaopt->sortby() === 'id' ? 'selected' : '' ?>>id</option>
-                        <option value="type" <?= $mediaopt->sortby() === 'type' ? 'selected' : '' ?>>type</option>
-                        <option value="size" <?= $mediaopt->sortby() === 'size' ? 'selected' : '' ?>>size</option>
+                        <?= options(Model::MEDIA_SORTBY, $mediaopt->sortby()) ?>
                     </select>
                     </br>
                     <input type="radio" name="order" id="asc" value="1" <?= $mediaopt->order() == 1 ? 'checked' : '' ?>><label for="asc">ascending</label>
@@ -78,7 +76,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
         <tr>
             <th id="checkall">x</th>
             <th><a href="<?= $mediaopt->getsortbyadress('id') ?>">id</a></th>
-            <th>ext</th>
+            <th><a href="<?= $mediaopt->getsortbyadress('extension') ?>">ext</a></th>
             <th><a href="<?= $mediaopt->getsortbyadress('type') ?>">type</a></th>
             <th><a href="<?= $mediaopt->getsortbyadress('size') ?>">size</a></th>
             <th><a href="<?= $mediaopt->getsortbyadress('date') ?>">date</a></th>
@@ -97,7 +95,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
             <td><?= $media->extension() ?></td>
             <td class="nowrap"><a href="<?= $media->getfullpath() ?>" target="_blank"><?= $media->type() == 'image' ? '<span class="thumbnail">' . $media->getsymbol() . '<img src="' . $media->getfullpath() . '"></span>' : $media->getsymbol() ?></a></td>
             <td class="nowrap"><?= $media->size('hr') ?></td>
-            <td class="nowrap"><?= $media->date('hrdi') ?></td>
+            <td class="nowrap" title="<?= $media->date('dmy') ?> <?= $media->date('ptime') ?>"><?= $media->date('hrdi') ?></td>
             <td><?= $media->width() ?></td>
             <td><?= $media->height() ?></td>
             <td><?= $media->length() ?></td>

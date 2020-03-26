@@ -5,10 +5,6 @@ namespace Wcms;
 class Modelmedia extends Model
 {
 
-	const MEDIA_SORTBY = ['id', 'size', 'type'];
-
-
-
 	/**
 	 * Get the Media Object
 	 * 

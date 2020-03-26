@@ -21,6 +21,14 @@ abstract class Model
 	const DATABASE_DIR = '.' . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR;
 	const PAGES_DIR = self::DATABASE_DIR . 'pages' . DIRECTORY_SEPARATOR;
 
+	const MEDIA_SORTBY = [
+		'id' => 'id',
+		'size' => 'size',
+		'type' => 'type',
+		'date' => 'date',
+		'extension' => 'extension'
+	];
+
 	const MAP_LAYOUTS = [
         'cose' => 'cose',
 		'cose-bilkent' => 'cose-bilkent',

@@ -174,7 +174,7 @@ class Media extends Item
 		}
 	}
 
-	public function date($option = 'string')
+	public function date($option = 'date')
 	{
 		return $this->datetransform('date', $option);
 	}
