@@ -74,7 +74,7 @@ class Medialist extends Item
                     $div .= '<audio id="' . $media->id() . '" controls src="' . $media->getincludepath() . '" </audio>';
                 } elseif ($media->type() == 'video') {
                     $div .= '<video controls><source src="' . $media->getincludepath() . '" type="video/' . $media->extension() . '"></video>';
-                } elseif ($media->type() == 'other') {
+                } else {
                     $div .= '<a href="' . $media->getincludepath() . '" target="_blank" class="media" >' . $media->id() . '.' . $media->extension() . '</a>';
                 }
                 $div .= '</div>' . PHP_EOL;

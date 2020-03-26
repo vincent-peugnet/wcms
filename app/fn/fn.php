@@ -4,24 +4,29 @@ use Wcms\Medialist;
 
 use function Clue\StreamFilter\fun;
 
-function readablesize($bytes)
+function readablesize($bytes, $base = 2 ** 10)
 {
 	$format = ' %d %s';
 
+	if ($base === 2 ** 10) {
+		$i = 'i';
+	} else {
+		$i = '';
+	}
 
+	$unit = '';
 
-	if ($bytes < 2 ** 10) {
+	if ($bytes < $base) {
 		$num = $bytes;
-		$unit = 'o';
-	} elseif ($bytes < 2 ** 20) {
-		$num = round($bytes / 2 ** 10, 1);
-		$unit = 'Kio';
-	} elseif ($bytes < 2 ** 30) {
-		$num = round($bytes / 2 ** 20, 1);
-		$unit = 'Mio';
-	} elseif ($bytes < 2 ** 40) {
-		$num = round($bytes / 2 ** 30, 1);
-		$unit = 'Gio';
+	} elseif ($bytes < $base ** 2) {
+		$num = round($bytes / $base, 1);
+		$unit = 'K' . $i;
+	} elseif ($bytes < $base ** 3) {
+		$num = round($bytes / $base ** 2, 1);
+		$unit = 'M' . $i;
+	} elseif ($bytes < $base ** 4) {
+		$num = round($bytes / $base ** 3, 1);
+		$unit = 'G' . $i;
 	}
 
 	return sprintf($format, $num, $unit);

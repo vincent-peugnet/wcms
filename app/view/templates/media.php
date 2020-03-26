@@ -80,9 +80,9 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
             <th><a href="<?= $mediaopt->getsortbyadress('type') ?>">type</a></th>
             <th><a href="<?= $mediaopt->getsortbyadress('size') ?>">size</a></th>
             <th><a href="<?= $mediaopt->getsortbyadress('date') ?>">date</a></th>
-            <th>width</th>
-            <th>height</th>
-            <th>lengh</th>
+            <th>user</th>
+            <th>perms</th>
+            <th>surface</th>
             <th>code</th>
         </tr>
 
@@ -96,9 +96,9 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
             <td class="nowrap"><a href="<?= $media->getfullpath() ?>" target="_blank"><?= $media->type() == 'image' ? '<span class="thumbnail">' . $media->getsymbol() . '<img src="' . $media->getfullpath() . '"></span>' : $media->getsymbol() ?></a></td>
             <td class="nowrap"><?= $media->size('hr') ?></td>
             <td class="nowrap" title="<?= $media->date('dmy') ?> <?= $media->date('ptime') ?>"><?= $media->date('hrdi') ?></td>
-            <td><?= $media->width() ?></td>
-            <td><?= $media->height() ?></td>
-            <td><?= $media->length() ?></td>
+            <td><?= $media->uid('name') ?></td>
+            <td><code><?= $media->permissions() ?></code></td>
+            <td><?= $media->surface() ?></td>
             <td class="code"><code><?= $media->getcode() ?></code></td>
             </tr>
             <?php

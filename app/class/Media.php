@@ -17,6 +17,8 @@ class Media extends Item
 	Protected $width;
 	Protected $height;
 	Protected $length;
+	Protected $uid;
+	Protected $permissions;
 
 	const IMAGE = array('jpg', 'jpeg', 'gif', 'png');
 	const SOUND = array('mp3', 'flac', 'wav', 'ogg');
@@ -40,13 +42,19 @@ class Media extends Item
 
 		$filepath = $this->path . $this->id . '.' . $this->extension;
 
-		$this->size = filesize($filepath);
-
 		if ($this->type == 'image') {
 			list($width, $height, $type, $attr) = getimagesize($filepath);
 			$this->width = $width;
 			$this->height = $height;
 		}
+
+		$stat = stat($filepath);
+
+		$permissions = decoct(fileperms($filepath) & 0777);
+
+		$this->setpermissions($permissions);
+
+		$this->hydrate($stat);
 
 
 	}
@@ -168,7 +176,7 @@ class Media extends Item
 	public function size($display = 'binary')
 	{
 		if($display == 'hr') {
-			return readablesize($this->size);
+			return readablesize($this->size) . 'o';
 		} else {
 			return $this->size;
 		}
@@ -192,6 +200,27 @@ class Media extends Item
 	public function length()
 	{
 		return $this->length;
+	}
+
+	public function surface()
+	{
+		$surface = $this->width * $this->height;
+		return readablesize($surface, 1000) . 'px';
+	}
+
+	public function uid($option = 'id')
+	{
+		if($option === 'name') {
+			$userinfo = posix_getpwuid($this->uid);
+			return $userinfo['name'];
+		} else {
+			return $this->uid;
+		}
+	}
+
+	public function permissions()
+	{
+		return $this->permissions;
 	}
 
 // ___________________________________________________ S E T __________________________________________________
@@ -228,8 +257,8 @@ class Media extends Item
 
 	public function setsize($size)
 	{
-		if (40 and is_int($size)) {
-			$this->size = strip_tags(strtolower($size));
+		if (is_int($size)) {
+			$this->size = $size;
 		}
 	}
 
@@ -260,7 +289,15 @@ class Media extends Item
 		}
 	}
 
+	public function setuid($uid)
+	{
+		$this->uid = $uid;
+	}
 
+	public function setpermissions($permissions)
+	{
+		$this->permissions = $permissions;
+	}
 
 
 
