@@ -13,21 +13,24 @@ class Element extends Item
     protected $autolink = 0;
     protected $markdown = 1;
     protected $content = '';
+    protected $minheaderid = 1;
+    protected $maxheaderid = 6;
+    protected $headerid = 1;
 
 
     // __________________________________________________ F U N ____________________________________________________________
 
 
 
-	public function __construct($datas = [], $pageid)
-	{
+    public function __construct($datas = [], $pageid)
+    {
         $this->hydrate($datas);
         $this->analyse($pageid);
     }
 
     private function analyse(string $pageid)
     {
-        if(!empty($this->options)) {
+        if (!empty($this->options)) {
             $this->options = str_replace('*', $pageid, $this->options);
             parse_str($this->options, $datas);
             if (isset($datas['id'])) {
@@ -88,6 +91,21 @@ class Element extends Item
         return $this->content;
     }
 
+    public function minheaderid()
+    {
+        return $this->minheaderid;
+    }
+
+    public function maxheaderid()
+    {
+        return $this->maxheaderid;
+    }
+
+    public function headerid()
+    {
+        return $this->headerid;
+    }
+
 
 
 
@@ -104,21 +122,21 @@ class Element extends Item
     public function settype(string $type)
     {
         $type = strtolower($type);
-        if(in_array($type, Model::TEXT_ELEMENTS)) {
+        if (in_array($type, Model::TEXT_ELEMENTS)) {
             $this->type = $type;
         }
     }
 
     public function setoptions(string $options)
     {
-        if(!empty($options)) {
+        if (!empty($options)) {
             $this->options = $options;
         }
     }
 
     public function setautolink(int $level)
     {
-        if($level >= 0 && $level <= 16) {
+        if ($level >= 0 && $level <= 16) {
             $this->autolink = $level;
             return true;
         } else {
@@ -128,7 +146,7 @@ class Element extends Item
 
     public function setmarkdown(int $level)
     {
-        if($level >= 0 && $level <= 1) {
+        if ($level >= 0 && $level <= 1) {
             $this->markdown = $level;
             return true;
         } else {
@@ -141,9 +159,14 @@ class Element extends Item
         $this->content = $content;
     }
 
+    public function setheaderid(string $headerid)
+    {
+        if ($headerid == 0) {
+            $this->headerid = 0;
+        } else {
+            preg_match('~([1-6])\-([1-6])~', $headerid, $out);
+            $this->minheaderid = intval($out[1]);
+            $this->maxheaderid = intval($out[2]);
+        }
+    }
 }
-
-
-
-
-?>

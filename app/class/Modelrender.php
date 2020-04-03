@@ -7,7 +7,7 @@ use Michelf\MarkdownExtra;
 
 class Modelrender extends Modelpage
 {
-    /** @var \AltoRouter */
+	/** @var \AltoRouter */
 	protected $router;
 	/** @var Page */
 	protected $page;
@@ -18,8 +18,6 @@ class Modelrender extends Modelpage
 	protected $internallinkblank = '';
 	protected $externallinkblank = '';
 
-	const SUMMARY = '%SUMMARY%';
-
 	const RENDER_VERBOSE = 1;
 
 	public function __construct(\AltoRouter $router)
@@ -29,11 +27,11 @@ class Modelrender extends Modelpage
 		$this->router = $router;
 		$this->pagelist = $this->list();
 
-		if(Config::internallinkblank()) {
+		if (Config::internallinkblank()) {
 			$this->internallinkblank = ' target="_blank" ';
 		}
 
-		if(Config::externallinkblank()) {
+		if (Config::externallinkblank()) {
 			$this->externallinkblank = ' target="_blank" ';
 		}
 	}
@@ -44,12 +42,11 @@ class Modelrender extends Modelpage
 	 * @param string $text Input text in markdown
 	 * @return string html formated text
 	 */
-	public function rendermanual(string $text) : string
+	public function rendermanual(string $text): string
 	{
 		$text = $this->markdown($text);
-		$text = $this->headerid($text, 5);
+		$text = $this->headerid($text, 1, 5);
 		return $text;
-
 	}
 
 
@@ -60,7 +57,7 @@ class Modelrender extends Modelpage
 	 * 
 	 * @return string Relative URL
 	 */
-	public function upage(string $id) : string
+	public function upage(string $id): string
 	{
 		return $this->router->generate('pageread/', ['page' => $id]);
 	}
@@ -88,10 +85,10 @@ class Modelrender extends Modelpage
 
 		$head = $this->gethead();
 		$body = $this->getbody($this->readbody());
-		$parsebody = $this->parser($body);
+		$parsebody = $this->bodyparser($body);
 
 		$html = '<!DOCTYPE html>' . PHP_EOL . '<html>' . PHP_EOL . '<head>' . PHP_EOL . $head . PHP_EOL . '</head>' . PHP_EOL . $parsebody . PHP_EOL . '</html>';
-	
+
 		return $html;
 	}
 
@@ -101,7 +98,7 @@ class Modelrender extends Modelpage
 		if (!empty($this->page->templatebody())) {
 			$templateid = $this->page->templatebody();
 			$templatepage = $this->get($templateid);
-			if($templatepage !== false) {
+			if ($templatepage !== false) {
 				$body = $templatepage->body();
 			} else {
 				$body = $this->page->body();
@@ -123,7 +120,7 @@ class Modelrender extends Modelpage
 	 * 
 	 * @return string as the full rendered BODY of the page
 	 */
-	public function getbody(string $body) : string
+	public function getbody(string $body): string
 	{
 		// Elements that can be detected
 		$types = ['HEADER', 'NAV', 'MAIN', 'ASIDE', 'FOOTER'];
@@ -134,21 +131,19 @@ class Modelrender extends Modelpage
 		$matches = $this->match($body, $regex);
 
 		// First, analyse the synthax and call the corresponding methods
-		if(isset($matches)) {
+		if (isset($matches)) {
 			foreach ($matches as $key => $match) {
 				$element = new Element($match, $this->page->id());
 				$element->setcontent($this->getelementcontent($element->sources(), $element->type()));
 				$element->setcontent($this->elementparser($element));
 				$element->addtags();
 				$body = str_replace($element->fullmatch(), $element->content(), $body);
-	
 			}
 		}
 
 
 
 		return $body;
-
 	}
 
 	/**
@@ -161,23 +156,21 @@ class Modelrender extends Modelpage
 	{
 		$content = '';
 		$subseparator = PHP_EOL . PHP_EOL;
-		foreach($sources as $source)
-		{
-			if($source !== $this->page->id()) {
+		foreach ($sources as $source) {
+			if ($source !== $this->page->id()) {
 				$subcontent = $this->getpageelement($source, $type);
-				if($subcontent !== false) {
-					if(empty($subcontent && self::RENDER_VERBOSE > 0)) {
+				if ($subcontent !== false) {
+					if (empty($subcontent && self::RENDER_VERBOSE > 0)) {
 						$subcontent = PHP_EOL . '<!-- The ' . strtoupper($type) . ' from page "' . $source . '" is currently empty ! -->' . PHP_EOL;
 					}
 				} else {
 					$read = '<h2>Rendering error :</h2><p>The page <strong><code>' . $source . '</code></strong>, does not exist yet.</p>';
 					//throw new Exception($read);
 				}
-
 			} else {
 				$subcontent = $this->page->$type();
 			}
-		$content .= $subseparator . $subcontent;
+			$content .= $subseparator . $subcontent;
 		}
 		return $content . $subseparator;
 	}
@@ -189,11 +182,15 @@ class Modelrender extends Modelpage
 		$content = $this->pagelist($content);
 		$content = $this->date($content);
 		$content = $this->thumbnail($content);
-		if($element->autolink()) {
+		if ($element->autolink()) {
 			$content = $this->everylink($content, $element->autolink());
 		}
-		if($element->markdown()) {
+		if ($element->markdown()) {
 			$content = $this->markdown($content);
+		}
+		$content = $this->desctitle($content, $this->page->description(), $this->page->title());
+		if($element->headerid()) {
+			$content = $this->headerid($content, $element->minheaderid(),  $element->maxheaderid(), $element->type());
 		}
 
 		return $content;
@@ -246,15 +243,15 @@ class Modelrender extends Modelpage
 
 		$head .= '<meta property="og:title" content="' . $this->page->title() . '">' . PHP_EOL;
 		$head .= '<meta property="og:description" content="' . $this->page->description() . '">' . PHP_EOL;
-		
-		if(!empty($this->page->thumbnail())) {
+
+		if (!empty($this->page->thumbnail())) {
 			$head .= '<meta property="og:image" content="' . Config::domain() . self::thumbnailpath() . $this->page->thumbnail() . '">' . PHP_EOL;
-		} elseif(!empty(Config::defaultthumbnail())) {
+		} elseif (!empty(Config::defaultthumbnail())) {
 			$head .= '<meta property="og:image" content="' . Config::domain() . self::thumbnailpath() . Config::defaultthumbnail() . '">' . PHP_EOL;
 		}
-		
+
 		$head .= '<meta property="og:url" content="' . Config::url() . $this->page->id() . '/">' . PHP_EOL;
-		
+
 
 		foreach ($this->page->externalcss() as $externalcss) {
 			$head .= '<link href="' . $externalcss . '" rel="stylesheet" />' . PHP_EOL;
@@ -262,7 +259,7 @@ class Modelrender extends Modelpage
 
 		if (!empty($this->page->templatecss() && in_array('externalcss', $this->page->templateoptions()))) {
 			$templatecss = $this->get($this->page->templatecss());
-			if($templatecss !== false) {
+			if ($templatecss !== false) {
 
 				foreach ($templatecss->externalcss() as $externalcss) {
 					$head .= '<link href="' . $externalcss . '" rel="stylesheet" />' . PHP_EOL;
@@ -304,7 +301,7 @@ class Modelrender extends Modelpage
 			</script>
 			' . PHP_EOL;
 		}
-		
+
 		if (!empty($this->page->redirection())) {
 			if (preg_match('%https?:\/\/\S*%', $this->page->redirection(), $out)) {
 				$url = $out[0];
@@ -327,19 +324,16 @@ class Modelrender extends Modelpage
 	}
 
 
-	public function parser(string $text)
+	public function bodyparser(string $text)
 	{
 		$text = $this->media($text);
-
-		$text = $this->headerid($text);
-
+		
 		$text = $this->summary($text);
 
 		$text = $this->wurl($text);
 		$text = $this->wikiurl($text);
-
-		$text = $this->desctitle($text, $this->page->description(), $this->page->title());
-
+		
+		
 
 		$text = str_replace('href="http', "class=\"external\" $this->externallinkblank href=\"http", $text);
 
@@ -352,7 +346,7 @@ class Modelrender extends Modelpage
 		return $text;
 	}
 
-	public function media(string $text) : string
+	public function media(string $text): string
 	{
 		$text = preg_replace('%(src|href)="([\w-_]+(\/([\w-_])+)*\.[a-z0-9]{1,5})"%', '$1="' . Model::mediapath() . '$2" target="_blank" class="media"', $text);
 		if (!is_string($text)) {
@@ -395,7 +389,7 @@ class Modelrender extends Modelpage
 					$link = 'href="' . $rend->upage($matches[1]) . '"" title="' . Config::existnot() . '" class="internal existnot"' . $this->internallinkblank;
 				} else {
 					$linkto[] = $matchpage->id();
-					$link =  'href="' . $rend->upage($matches[1]) . $matches[2] . '" title="' . $matchpage->description() . '" class="internal exist '. $matchpage->secure('string') .'"' . $this->internallinkblank;
+					$link =  'href="' . $rend->upage($matches[1]) . $matches[2] . '" title="' . $matchpage->description() . '" class="internal exist ' . $matchpage->secure('string') . '"' . $this->internallinkblank;
 				}
 				return $link;
 			},
@@ -414,10 +408,10 @@ class Modelrender extends Modelpage
 			function ($matches) use ($rend, &$linkto) {
 				$matchpage = $rend->get($matches[1]);
 				if (!$matchpage) {
-					return '<a href="' . $rend->upage($matches[1]) . '"" title="' . Config::existnot() . '" class="internal existnot" '. $this->internallinkblank .' >' . $matches[1] . '</a>';
+					return '<a href="' . $rend->upage($matches[1]) . '"" title="' . Config::existnot() . '" class="internal existnot" ' . $this->internallinkblank . ' >' . $matches[1] . '</a>';
 				} else {
 					$linkto[] = $matchpage->id();
-					return '<a href="' . $rend->upage($matches[1]) . $matches[2] . '" title="' . $matchpage->description() . '" class="internal exist '. $matchpage->secure('string') .'" '. $this->internallinkblank .' >' . $matchpage->title() . '</a>';
+					return '<a href="' . $rend->upage($matches[1]) . $matches[2] . '" title="' . $matchpage->description() . '" class="internal exist ' . $matchpage->secure('string') . '" ' . $this->internallinkblank . ' >' . $matchpage->title() . '</a>';
 				}
 			},
 			$text
@@ -430,21 +424,25 @@ class Modelrender extends Modelpage
 	 * Add Id to html header elements and store the titles in the `$this->sum` var
 	 * 
 	 * @param string $text Input html document to scan
-	 * @param int $maxdeepness Maximum header deepness to look for. Min = 1 Max = 6 Default = 6
+	 * @param int $min Maximum header deepness to look for. Min = 1 Max = 6 Default = 1
+	 * @param int $max Maximum header deepness to look for. Min = 1 Max = 6 Default = 6
+	 * @param string $element Name of element being analysed
 	 * 
 	 * @return string text with id in header
 	 */
 
-	public function headerid($text, int $maxdeepness = 6)
+	public function headerid(string $text, int $min = 1, int $max = 6, string $element = 'body') : string
 	{
-		if($maxdeepness > 6 || $maxdeepness < 1) {
-			$maxdeepness = 6;
+		if ($min > 6 || $min < 1) {
+			$min = 6;
 		}
-
+		if ($max > 6 || $max < 1) {
+			$max = 6;
+		}
 
 		$sum = [];
 		$text = preg_replace_callback(
-			'/<h([1-' . $maxdeepness . '])(\s+(\s*\w+="\w+")*)?\s*>(.+)<\/h[1-' . $maxdeepness . ']>/mU',
+			'/<h([' . $min . '-' . $max . '])(\s+(\s*\w+="\w+")*)?\s*>(.+)<\/h[' . $min . '-' . $max . ']>/mU',
 			function ($matches) use (&$sum) {
 				$cleanid = idclean($matches[4]);
 				$sum[$cleanid][$matches[1]] = $matches[4];
@@ -452,7 +450,7 @@ class Modelrender extends Modelpage
 			},
 			$text
 		);
-		$this->sum = $sum;
+		$this->sum[$element] = $sum;
 		return $text;
 	}
 
@@ -493,9 +491,9 @@ class Modelrender extends Modelpage
 	 * 
 	 * @return array $matches Ordered array containing an array of `fullmatch` and `filter`
 	 */
-	public function match(string $text, string $include) : array
+	public function match(string $text, string $include): array
 	{
-		preg_match_all('~\%(' . $include . ')(\?([a-zA-Z0-9\[\]\&=\-\/\%]*))?\%~', $text, $out);
+		preg_match_all('~\%(' . $include . ')(\?([a-zA-Z0-9\[\]\&=\-\/\%\+\*\;]*))?\%~', $text, $out);
 
 		$matches = [];
 
@@ -511,11 +509,11 @@ class Modelrender extends Modelpage
 	 * 
 	 * @return string Output text
 	 */
-	public function automedialist(string $text) : string
+	public function automedialist(string $text): string
 	{
 		$matches = $this->match($text, 'MEDIA');
 
-		if(isset($matches)) {
+		if (isset($matches)) {
 			foreach ($matches as $match) {
 				$medialist = new Medialist($match);
 				$medialist->readoptions();
@@ -531,12 +529,12 @@ class Modelrender extends Modelpage
 	 * 
 	 * @return string Output text
 	 */
-	public function summary(string $text) : string
+	public function summary(string $text): string
 	{
 		$matches = $this->match($text, 'SUMMARY');
 
 
-		if(!empty($matches)) {
+		if (!empty($matches)) {
 			foreach ($matches as $match) {
 				$data = array_merge($match, ['sum' => $this->sum]);
 				$summary = new Summary($data);
@@ -548,7 +546,7 @@ class Modelrender extends Modelpage
 
 
 
-	public function date(string $text) : string
+	public function date(string $text): string
 	{
 		$page = $this->page;
 		$text = preg_replace_callback('~\%DATE\%~', function ($matches) use ($page) {
@@ -568,7 +566,7 @@ class Modelrender extends Modelpage
 	 * 
 	 * @return string The rendered output
 	 */
-	public function thumbnail(string $text) : string
+	public function thumbnail(string $text): string
 	{
 		$img = '<img class="thumbnail" src="' . Model::thumbnailpath() . $this->page->id() . '.jpg" alt="' . $this->page->title() . '">';
 		$img = PHP_EOL . $img . PHP_EOL;
@@ -584,10 +582,10 @@ class Modelrender extends Modelpage
 	 * 
 	 * @return string Conversion output
 	 */
-	public function everylink(string $text, int $limit) : string
+	public function everylink(string $text, int $limit): string
 	{
 		$regex = '~([\w-_éêèùïüîçà]{' . $limit . ',})(?![^<]*>|[^<>]*<\/)~';
-		$text = preg_replace_callback($regex , function ($matches) {
+		$text = preg_replace_callback($regex, function ($matches) {
 			return '<a href="' . idclean($matches[1]) . '">' . $matches[1] . '</a>';
 		}, $text);
 		return $text;
@@ -600,12 +598,12 @@ class Modelrender extends Modelpage
 	 * 
 	 * @return string text ouput
 	 */
-	public function authenticate(string $text) : string
+	public function authenticate(string $text): string
 	{
 		$id = $this->page->id();
 		$regex = '~\%CONNECT(\?dir=([a-zA-Z0-9-_]+))?\%~';
 		$text = preg_replace_callback($regex, function ($matches) use ($id) {
-			if(isset($matches[2])) {
+			if (isset($matches[2])) {
 				$id = $matches[2];
 			}
 			$form = '<form action="' . $this->dirtopath('!co') . '" method="post">
@@ -615,7 +613,6 @@ class Modelrender extends Modelpage
 			<input type="submit" name="log" value="login" id="button">
 			</form>';
 			return $form;
-
 		}, $text);
 		return $text;
 	}
@@ -623,13 +620,13 @@ class Modelrender extends Modelpage
 	/**
 	 * Render pages list
 	 */
-	public function pagelist(string $text) : string
+	public function pagelist(string $text): string
 	{
 		$matches = $this->match($text, 'LIST');
 
 		$modelhome = new Modelhome();
 
-		if(isset($matches)) {
+		if (isset($matches)) {
 			$pagelist = $this->getlister();
 
 			foreach ($matches as $match) {
@@ -637,20 +634,20 @@ class Modelrender extends Modelpage
 				$optlist->parsehydrate($match['options']);
 				$pagetable = $modelhome->pagetable($pagelist, $optlist, '', []);
 
-				$content = '<ul class="pagelist">' . PHP_EOL ;
-				foreach ($pagetable as $page ) {
+				$content = '<ul class="pagelist">' . PHP_EOL;
+				foreach ($pagetable as $page) {
 					$content .= '<li>' . PHP_EOL;
 					$content .= '<a href="' . $this->upage($page->id()) . '">' . $page->title() . '</a>' . PHP_EOL;
-					if($optlist->description()) {
+					if ($optlist->description()) {
 						$content .= '<em>' . $page->description() . '</em>' . PHP_EOL;
 					}
-					if($optlist->date()) {
+					if ($optlist->date()) {
 						$content .= '<code>' . $page->date('pdate') . '</code>' . PHP_EOL;
 					}
-					if($optlist->time()) {
+					if ($optlist->time()) {
 						$content .= '<code>' . $page->date('ptime') . '</code>' . PHP_EOL;
 					}
-					if($optlist->author()) {
+					if ($optlist->author()) {
 						$content .=  $page->authors('string') . PHP_EOL;
 					}
 					$content .= '</li>';
@@ -679,5 +676,10 @@ class Modelrender extends Modelpage
 	}
 
 
+	// _________________________ G E T ___________________________________
 
+	public function sum()
+	{
+		return $this->sum;
+	}
 }

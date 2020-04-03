@@ -19,6 +19,9 @@ class Summary extends Item
     /** @var array Headers datas */
     protected $sum = [];
 
+    /** @var string Name of element to display */
+    protected $element = null;
+
 
 
 
@@ -32,7 +35,7 @@ class Summary extends Item
 
     public function readoptions()
     {
-        parse_str($this->options, $datas);
+        parse_str(htmlspecialchars_decode($this->options), $datas);
         $this->hydrate($datas);
     }
 
@@ -44,38 +47,46 @@ class Summary extends Item
 	 */
     public function sumparser()
     {
-		$filteredsum = [];
+        $sumstring = '';
 
-		foreach ($this->sum as $key => $menu) {
-			$deepness = array_keys($menu)[0];
-			if($deepness >= $this->min && $deepness <= $this->max) {
-				$filteredsum[$key] = $menu;
-			}
-		}
+        
+        foreach ($this->sum as $type => $element) {
+            if(!empty($element) && (empty($this->element) || $type === $this->element)) {
 
-		$sumstring = '';
-		$last = 0;
-		foreach ($filteredsum as $title => $list) {
-			foreach ($list as $h => $link) {
-				if ($h > $last) {
-					for ($i = 1; $i <= ($h - $last); $i++) {
-						$sumstring .= '<ul>';
-					}
-					$sumstring .= '<li><a href="#' . $title . '">' . $link . '</a></li>';
-				} elseif ($h < $last) {
-					for ($i = 1; $i <= ($last - $h); $i++) {
-						$sumstring .= '</ul>';
-					}
-					$sumstring .= '<li><a href="#' . $title . '">' . $link . '</a></li>';
-				} elseif ($h = $last) {
-					$sumstring .= '<li><a href="#' . $title . '">' . $link . '</a></li>';
-				}
-				$last = $h;
-			}
-		}
-		for ($i = 1; $i <= ($last); $i++) {
-			$sumstring .= '</ul>';
-		}
+                $filteredsum = [];
+        
+                foreach ($element as $key => $menu) {
+                    $deepness = array_keys($menu)[0];
+                    if($deepness >= $this->min && $deepness <= $this->max) {
+                        $filteredsum[$key] = $menu;
+                    }
+                }
+        
+                $last = 0;
+                foreach ($filteredsum as $title => $list) {
+                    foreach ($list as $h => $link) {
+                        if ($h > $last) {
+                            for ($i = 1; $i <= ($h - $last); $i++) {
+                                $sumstring .= '<ul>' . PHP_EOL;
+                            }
+                            $sumstring .= '<li><a href="#' . $title . '">' . $link . '</a></li>' . PHP_EOL;
+                        } elseif ($h < $last) {
+                            for ($i = 1; $i <= ($last - $h); $i++) {
+                                $sumstring .= '</ul>' . PHP_EOL;
+                            }
+                            $sumstring .= '<li><a href="#' . $title . '">' . $link . '</a></li>' . PHP_EOL;
+                        } elseif ($h = $last) {
+                            $sumstring .= '<li><a href="#' . $title . '">' . $link . '</a></li>' . PHP_EOL;
+                        }
+                        $last = $h;
+                    }
+                }
+                for ($i = 1; $i <= ($last); $i++) {
+                    $sumstring .= '</ul>' . PHP_EOL;
+                }
+
+            }
+        }
 		return $sumstring;
     }
 
@@ -92,6 +103,11 @@ class Summary extends Item
     public function options()
     {
         return $this->options;
+    }
+
+    public function element()
+    {
+        return $this->element;
     }
 
 
@@ -132,8 +148,11 @@ class Summary extends Item
         $this->sum = $sum;
     }
 
+    public function setelement(string $element)
+    {
+        if(in_array($element, Model::TEXT_ELEMENTS)) {
+            $this->element = $element;
+        }
+    }
+
 }
-
-
-
-?>

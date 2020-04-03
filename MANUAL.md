@@ -262,13 +262,13 @@ This will include a connection form, redirecting to a specified page. Where `<pa
 
 This will include a summary based on the page headers titles.
 
-    %SUMMARY?min=<min>&max=<max>%
+    %SUMMARY?min=<min>&max=<max>&element=<element>%
 
 Where `<min>` and `<max>` are integers beetwen `1` to `6`.
 
-You can set `<min>` and `<max>` values to filters beetwen `<h*>` and `<h*>` header to take care of.
+You can set `<min>` and `<max>` values to filters beetwen `<h*>` and `<h*>` headlines to take care of.
 
-
+You can specify an [element](#markdown-elements) to target with the `element` parameter. The summary will only refer to this `element` headlines.
 
 #### Page list
 
@@ -354,6 +354,15 @@ Autolink will transform each word containing a minimum of `<level>` letter(s), i
 
 Activate or desactivate [markdonw](#markdown) parser in called `<element>`. By default, Markdown is set to `1`.
 
+
+
+##### Header ID
+
+    %<element>?headerid=<x>-<y>%
+
+By default, HTML `#id` are generated for every `<h1>` to `<h6>` headings. You can specify a range of headers outside which no ID will be added.
+
+You can also set `headerid=0` to totaly disable ID generation for this element.
 
 
 
