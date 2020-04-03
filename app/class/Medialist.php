@@ -7,8 +7,8 @@ class Medialist extends Item
     /** @var string full regex match */
     protected $fullmatch;
 
-    /** @var string full filter code line */
-    protected $filter = '';
+    /** @var string full options code line */
+    protected $options = '';
 
     /** @var string directory of media */
     protected $path = '';
@@ -45,9 +45,9 @@ class Medialist extends Item
         $this->hydrate($datas);
     }
 
-    public function readfilter()
+    public function readoptions()
     {
-        parse_str($this->filter, $datas);
+        parse_str($this->options, $datas);
         $this->hydrate($datas);
     }
 
@@ -137,9 +137,9 @@ class Medialist extends Item
         return $this->fullmatch;
     }
 
-    public function filter()
+    public function options()
     {
-        return $this->filter;
+        return $this->options;
     }
 
     /**
@@ -182,10 +182,10 @@ class Medialist extends Item
     }
 
 
-    public function setfilter(string $filter)
+    public function setoptions(string $options)
     {
-        if (!empty($filter)) {
-            $this->filter = $filter;
+        if (!empty($options)) {
+            $this->options = $options;
         }
     }
 

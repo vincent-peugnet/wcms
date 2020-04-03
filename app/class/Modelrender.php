@@ -129,16 +129,9 @@ class Modelrender extends Modelpage
 		$types = ['HEADER', 'NAV', 'MAIN', 'ASIDE', 'FOOTER'];
 
 		// First level regex
-		$regex = '~\%(' . implode("|", $types) . ')(\?([\S]+))?\%~';
+		$regex = implode("|", $types);
 
-		// Match the first level regex
-		preg_match_all($regex, $body, $out);
-
-		// Create a list of all the elements that passed through the first level regex
-		foreach ($out[0] as $key => $match) {
-			$matches[$key] = ['fullmatch' => $match, 'type' => $out[1][$key], 'options' => $out[3][$key]];
-		}
-
+		$matches = $this->match($body, $regex);
 
 		// First, analyse the synthax and call the corresponding methods
 		if(isset($matches)) {
@@ -340,7 +333,7 @@ class Modelrender extends Modelpage
 
 		$text = $this->headerid($text);
 
-		$text = str_replace(self::SUMMARY, $this->sumparser(), $text);
+		$text = $this->summary($text);
 
 		$text = $this->wurl($text);
 		$text = $this->wikiurl($text);
@@ -434,7 +427,7 @@ class Modelrender extends Modelpage
 	}
 
 	/**
-	 * Add Id to html header elements and store the titles in the `sum` parameter
+	 * Add Id to html header elements and store the titles in the `$this->sum` var
 	 * 
 	 * @param string $text Input html document to scan
 	 * @param int $maxdeepness Maximum header deepness to look for. Min = 1 Max = 6 Default = 6
@@ -493,23 +486,39 @@ class Modelrender extends Modelpage
 	}
 
 	/**
+	 * Match `%INCLUDE?params=values&...%`
+	 * 
+	 * @param string $text Input text to scan
+	 * @param string $include word to match
+	 * 
+	 * @return array $matches Ordered array containing an array of `fullmatch` and `filter`
+	 */
+	public function match(string $text, string $include) : array
+	{
+		preg_match_all('~\%(' . $include . ')(\?([a-zA-Z0-9\[\]\&=\-\/\%]*))?\%~', $text, $out);
+
+		$matches = [];
+
+		foreach ($out[0] as $key => $match) {
+			$matches[$key] = ['fullmatch' => $match, 'type' => $out[1][$key], 'options' => $out[3][$key]];
+		}
+		return $matches;
+	}
+
+	/**
 	 * Check for media list call in the text and insert media list
 	 * @param string $text Text to scan and replace
 	 * 
 	 * @return string Output text
 	 */
-	public function automedialist(string $text)
+	public function automedialist(string $text) : string
 	{
-		preg_match_all('~\%MEDIA\?([a-zA-Z0-9\[\]\&=\-\/\%]*)\%~', $text, $out);
-
-		foreach ($out[0] as $key => $match) {
-			$matches[$key] = ['fullmatch' => $match, 'filter' => $out[1][$key]];
-		}
+		$matches = $this->match($text, 'MEDIA');
 
 		if(isset($matches)) {
 			foreach ($matches as $match) {
 				$medialist = new Medialist($match);
-				$medialist->readfilter();
+				$medialist->readoptions();
 				$text = str_replace($medialist->fullmatch(), $medialist->generatecontent(), $text);
 			}
 		}
@@ -517,57 +526,29 @@ class Modelrender extends Modelpage
 	}
 
 	/**
-	 * Generate a Summary based on header ids. Need to use `$this->headerid` before to scan text
-	 *  
-	 * @param int $min Minimum header deepness to start the summary : Between 1 and 6.
-	 * @param int $max Maximum header deepness to start the summary : Between 1 and 6.
+	 * Check for Summary calls in the text and insert html summary
+	 * @param string $text Text to scan and replace
 	 * 
-	 * @return string html list with anchor link
+	 * @return string Output text
 	 */
-	function sumparser(int $min = 1, int $max = 6) : string
+	public function summary(string $text) : string
 	{
-		$min = $min >= 1 && $min <= 6 && $min <= $max ? $min : 1;
-		$end = $max >=1 && $max <= 6 && $max >= $min ? $max : 6;
+		$matches = $this->match($text, 'SUMMARY');
 
-		$sum = $this->sum;
 
-		$filteredsum = [];
-
-		foreach ($sum as $key => $menu) {
-			$deepness = array_keys($menu)[0];
-			if($deepness >= $min && $deepness <= $max) {
-				$filteredsum[$key] = $menu;
+		if(!empty($matches)) {
+			foreach ($matches as $match) {
+				$data = array_merge($match, ['sum' => $this->sum]);
+				$summary = new Summary($data);
+				$text = str_replace($summary->fullmatch(), $summary->sumparser(), $text);
 			}
 		}
-
-		$sumstring = '';
-		$last = 0;
-		foreach ($filteredsum as $title => $list) {
-			foreach ($list as $h => $link) {
-				if ($h > $last) {
-					for ($i = 1; $i <= ($h - $last); $i++) {
-						$sumstring .= '<ul>';
-					}
-					$sumstring .= '<li><a href="#' . $title . '">' . $link . '</a></li>';
-				} elseif ($h < $last) {
-					for ($i = 1; $i <= ($last - $h); $i++) {
-						$sumstring .= '</ul>';
-					}
-					$sumstring .= '<li><a href="#' . $title . '">' . $link . '</a></li>';
-				} elseif ($h = $last) {
-					$sumstring .= '<li><a href="#' . $title . '">' . $link . '</a></li>';
-				}
-				$last = $h;
-			}
-		}
-		for ($i = 1; $i <= ($last); $i++) {
-			$sumstring .= '</ul>';
-		}
-		return $sumstring;
+		return $text;
 	}
 
 
-	public function date(string $text)
+
+	public function date(string $text) : string
 	{
 		$page = $this->page;
 		$text = preg_replace_callback('~\%DATE\%~', function ($matches) use ($page) {
@@ -619,7 +600,7 @@ class Modelrender extends Modelpage
 	 * 
 	 * @return string text ouput
 	 */
-	public function authenticate(string $text)
+	public function authenticate(string $text) : string
 	{
 		$id = $this->page->id();
 		$regex = '~\%CONNECT(\?dir=([a-zA-Z0-9-_]+))?\%~';
@@ -644,11 +625,7 @@ class Modelrender extends Modelpage
 	 */
 	public function pagelist(string $text) : string
 	{
-		preg_match_all('~\%LIST\?([a-zA-Z0-9\]\[\&=\-\/\%]*)\%~', $text, $out);
-
-		foreach ($out[0] as $key => $match) {
-			$matches[$key] = ['fullmatch' => $match, 'options' => $out[1][$key]];
-		}
+		$matches = $this->match($text, 'LIST');
 
 		$modelhome = new Modelhome();
 
@@ -704,7 +681,3 @@ class Modelrender extends Modelpage
 
 
 }
-
-
-
-?>
