@@ -493,7 +493,7 @@ class Modelrender extends Modelpage
 	 */
 	public function match(string $text, string $include): array
 	{
-		preg_match_all('~\%(' . $include . ')(\?([a-zA-Z0-9\[\]\&=\-\/\%\+\*\;]*))?\%~', $text, $out);
+		preg_match_all('~\%(' . $include . ')(\?([a-zA-Z0-9\[\]\&=\-_\/\%\+\*\;]*))?\%~', $text, $out);
 
 		$matches = [];
 
