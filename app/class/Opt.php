@@ -305,13 +305,7 @@ class Opt extends Item
 	public function settagfilter($tagfilter)
 	{
 		if (!empty($tagfilter) && is_array($tagfilter)) {
-			$tagfilterverif = [];
-			foreach ($tagfilter as $tag) {
-				if (array_key_exists($tag, $this->taglist)) {
-					$tagfilterverif[] = $tag;
-				}
-			}
-			$this->tagfilter = $tagfilterverif;
+			$this->tagfilter = $tagfilter;
 		}
 	}
 
@@ -325,13 +319,7 @@ class Opt extends Item
 	public function setauthorfilter($authorfilter)
 	{
 		if (!empty($authorfilter) && is_array($authorfilter)) {
-			$authorfilterverif = [];
-			foreach ($authorfilter as $author) {
-				if (array_key_exists($author, $this->authorlist)) {
-					$authorfilterverif[] = $author;
-				}
-			}
-			$this->authorfilter = $authorfilterverif;
+			$this->authorfilter = $authorfilter;
 		}
 	}
 

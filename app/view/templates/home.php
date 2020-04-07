@@ -62,7 +62,7 @@
 
                 <?php } else { ?>
 
-                <!-- ___________________ L I S T _________________________ -->
+                <!-- ___________________ D E E P _________________________ -->
 
                 <div id="deepsearchbar" class="hidephone">
                     <form action="<?= $this->url('home') ?>" method="get">
@@ -82,6 +82,9 @@
                         <input type="submit" value="search">
                     </form>
                 </div>
+
+
+                <!-- ___________________ T A B L E _______________________ -->
 
 
                 <div class="scroll">

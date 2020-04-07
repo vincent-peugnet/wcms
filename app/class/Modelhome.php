@@ -32,9 +32,6 @@ class Modelhome extends Modelpage
     public function Optlistinit(array $table)
     {
         $optlist = new Optlist(Page::classvarlist());
-        $optlist->settaglist($table);
-        $optlist->setauthorlist($table);
-
         return $optlist;
     }
 
