@@ -413,6 +413,8 @@ class Page extends Dbitem
 				$tag = $this->tagtoarray($tag);
 			}
 		if (is_array($tag)) {
+			$tag = array_map('idclean', $tag);
+			$tag = array_filter($tag);
 			$this->tag = $tag;
 		}
 	}
@@ -786,6 +788,8 @@ class Page extends Dbitem
 				$tag = $this->tagtoarray($tag);
 		}
 		if(is_array($tag)) {
+			$tag = array_map('idclean', $tag);
+			$tag = array_filter($tag);
 			$this->tag = array_unique(array_merge($this->tag, $tag));
 		}
 	}
@@ -803,7 +807,6 @@ class Page extends Dbitem
 	private function tagtoarray(string $tagstring) : array
 	{
 		$tag = strip_tags(trim(strtolower($tagstring)));
-		$tag = str_replace('*', '', $tag);
 		$tag = str_replace(' ', '', $tag);
 		$taglist = explode(",", $tag);
 		$taglist = array_filter($taglist);
