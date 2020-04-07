@@ -294,7 +294,15 @@ Generate :
         ....
     </ul>
 
+##### styling
 
+Some `.class` and `#id` are generated to optimize styling.
+
+`.public`, `.private`, `not_published` are used to define the privacity level of pages.
+
+`.current_page` is used to highlight the current page.
+
+`#<pageid>` is set to each item to allow selective styling.
 
 #### Media list
 

@@ -10,16 +10,13 @@ class Optlist extends Opt
     protected $date = 0;
     protected $time = 0;
     protected $author = 0;
-    protected $style = 0;
+    protected $style = 'list';
 
-    /** @var Modelrender Render engine used to generate pages urls */
-    protected $render = null;
-
-
+    protected $render;
 
     public function parsehydrate(string $encoded)
     {
-        if(is_string($encoded)) {
+        if (is_string($encoded)) {
             parse_str($encoded, $datas);
             $this->hydrate($datas);
         }
@@ -28,39 +25,93 @@ class Optlist extends Opt
     /**
      * Get the code to insert directly
      */
-    public function getcode() : string
+    public function getcode(): string
     {
         return '%LIST?' . $this->getquery() . '%';
     }
 
 
-    public function listhtml(array $pagelist)
+    public function listhtml(array $pagelist, Page $actualpage, Modelrender $render)
     {
-        if(!empty($this->render)) {
-            $content = '<ul class="pagelist">' . PHP_EOL;
-            foreach ($pagelist as $page) {
-                $content .= '<li>' . PHP_EOL;
-                $content .= '<a href="' . $this->render->upage($page->id()) . '">' . $page->title() . '</a>' . PHP_EOL;
-                if ($this->description()) {
-                    $content .= '<em>' . $page->description() . '</em>' . PHP_EOL;
-                }
-                if ($this->date()) {
-                    $content .= '<code>' . $page->date('pdate') . '</code>' . PHP_EOL;
-                }
-                if ($this->time()) {
-                    $content .= '<code>' . $page->date('ptime') . '</code>' . PHP_EOL;
-                }
-                if ($this->author()) {
-                    $content .=  $page->authors('string') . PHP_EOL;
-                }
-                $content .= '</li>';
-            }
-            $content .= '</ul>';
+        $this->render = $render;
 
-            return $content;
-                    
+        $li = '';
+
+        foreach ($pagelist as $page) {
+
+            // ================= Class =============
+
+            $classdata = [];
+            if ($page->id() === $actualpage->id()) {
+                $classdata['actual'] = 'current_page';
+            }
+            $classdata['secure'] = $page->secure('string');
+            $class = ' class="' . implode(' ', $classdata) . '" ';
+
+
+            // ================ Content
+
+            $content = '';
+
+            $title = '<span class="title">' . $page->title() . '</span>';
+            if ($this->description()) {
+                $content .= '<span class="description">' . $page->description() . '</span>';
+            }
+            if ($this->date()) {
+                $content .= '<time datetime="' . $page->date('pdate') . '">' . $page->date('pdate') . '</time>' . PHP_EOL;
+            }
+            if ($this->time()) {
+                $content .= '<time datetime="' . $page->date('ptime') . '">' . $page->date('ptime') . '</time>' . PHP_EOL;
+            }
+            if ($this->author()) {
+                $content .=  $page->authors('string') . PHP_EOL;
+            }
+            if ($this->thumbnail) {
+                $content .= '<img class="thumbnail" src="' . Model::thumbnailpath() . $page->thumbnail() . '" alt="' . $page->title() . '">';
+            }
+
+
+
+            switch ($this->style) {
+                case 'card':
+                    $li .= $this->li($this->a($title . $content, $class, $page->id()), $page->id());
+                    break;
+
+                case 'list':
+                    $li .= $this->li($this->a($title, $class, $page->id()) . $content, $page->id());
+                    break;
+            }
+        }
+
+        $html = $this->ul($li);
+
+        return $html;
+    }
+
+    public function ul(string $content)
+    {
+        return '<ul class="pagelist">' . PHP_EOL . $content . PHP_EOL . '</ul>';
+    }
+
+    public function li(string $content, string $id)
+    {
+        return '<li id="' . $id . '">' . PHP_EOL . $content . PHP_EOL . '</li>' . PHP_EOL;
+    }
+
+    public function a(string $content, string $class, string $id)
+    {
+        return '<a ' . $class . ' href="' . $this->render->upage($id) . '">' . $content . '</a>' . PHP_EOL;
+    }
+
+    public function spandescription(Page $page)
+    {
+        if ($this->description) {
+            return '<span class="description">' . $page->description() . '</span>';
+        } else {
+            return '';
         }
     }
+
 
 
 
@@ -137,13 +188,8 @@ class Optlist extends Opt
 
     public function setstyle($style)
     {
-        $this->style = intval($style);
-    }
-
-    public function setrender($render)
-    {
-        if(is_a($render, 'Wcms\Modelrender')) {
-            $this->render = $render;
+        if (is_string($style) && key_exists($style, Model::LIST_STYLES)) {
+            $this->style = $style;
         }
     }
 }

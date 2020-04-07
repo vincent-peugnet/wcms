@@ -227,8 +227,7 @@
             <label for="list_author">Show author(s)</label>
             </br>
             <select name="style" id="list_style">
-                <option value="0">list</option>
-                <option value="1" <?= !empty($optlist) && $optlist->style() == 1 ? 'selected' : '' ?>>div</option>
+                <?= options(Wcms\Model::LIST_STYLES , !empty($optlist) ? $optlist->style() : null) ?>
             </select>
             <input type="submit" value="generate">
         </form>

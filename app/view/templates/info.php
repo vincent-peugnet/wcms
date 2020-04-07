@@ -53,7 +53,9 @@
                 <li><a href="https://github.com/jamesmoss/flywheel" target="_blank">🎡 James Moss's Flywheel Database</a> <i>as json noSQL flatfile database engine</i></li>
                 <li><a href="https://github.com/michelf/php-markdown" target="_blank">📝 Michel Fortin's Markdown Extra</a> <i>markdown library</i></li>
                 <li><a href="https://github.com/thephpleague/plates" target="_blank">🎨 Plates</a> <i>as templating engine</i></li>
-                <li><a href="https://github.com/dannyvankooten/AltoRouter">🐶 Alto Router</a> <i>as router engine</i></li>
+                <li><a href="https://github.com/dannyvankooten/AltoRouter" target="_blank">🐶 Alto Router</a> <i>as router engine</i></li>
+                <li><a href="https://codemirror.net/" target="_blank">🐒 Code mirror</a> <i>as rich text editor</i></li>
+                <li><a href="https://js.cytoscape.org/" target="_blank">⚛️ Cytoscape.js</a> <i>as graph tool</i></li>
                 </ul>
 
                 <h3>Special thanks to :</h3>

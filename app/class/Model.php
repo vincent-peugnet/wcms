@@ -78,6 +78,11 @@ abstract class Model
 		'' => 'other'
 	];
 
+	const LIST_STYLES = [
+		'list' => 'list',
+		'card' => 'card'
+	];
+
 	const COLUMNS = ['id', 'favicon', 'title', 'description', 'tag', 'date', 'datemodif', 'datecreation', 'secure', 'authors', 'linkto', 'visitcount', 'affcount', 'editcount'];
 
 	const TEXT_ELEMENTS = ['header', 'nav', 'main', 'aside', 'footer'];

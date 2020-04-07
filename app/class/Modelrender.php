@@ -9,7 +9,7 @@ class Modelrender extends Modelpage
 {
 	/** @var \AltoRouter */
 	protected $router;
-	/** @var Page */
+	/** @var Page Actual page being rendered*/
 	protected $page;
 	protected $linkto = [];
 	protected $sum = [];
@@ -557,7 +557,7 @@ class Modelrender extends Modelpage
 				$optlist = new Optlist(['render' => $this]);
 				$optlist->parsehydrate($match['options']);
 				$pagetable = $modelhome->pagetable($this->pagelist(), $optlist, '', []);
-				$content = $optlist->listhtml($pagetable);
+				$content = $optlist->listhtml($pagetable, $this->page, $this);
 				$text = str_replace($match['fullmatch'], $content, $text);
 			}
 		}
@@ -588,7 +588,7 @@ class Modelrender extends Modelpage
 	 */
 	public function thumbnail(string $text): string
 	{
-		$img = '<img class="thumbnail" src="' . Model::thumbnailpath() . $this->page->id() . '.jpg" alt="' . $this->page->title() . '">';
+		$img = '<img class="thumbnail" src="' . Model::thumbnailpath() . $this->page->thumbnail() . '" alt="' . $this->page->title() . '">';
 		$img = PHP_EOL . $img . PHP_EOL;
 		$text = str_replace('%THUMBNAIL%', $img, $text);
 
