@@ -108,15 +108,6 @@ class Page extends Dbitem
 
 	}
 
-	public static function classvarlist()
-	{
-		$classvarlist = [];
-		foreach (get_class_vars(__class__) as $var => $default) {
-			$classvarlist[] = $var;
-		}
-		return ['pagevarlist' => $classvarlist];
-	}
-
 		// _____________________________________________________ G E T ____________________________________________________
 
 	public function id($type = 'string')

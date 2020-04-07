@@ -45,7 +45,7 @@ class Modeltimeline extends Modeldb
 	}
 
 
-	public function getlisterid(array $idlist = []) : array
+	public function pagelistbyid(array $idlist = []) : array
 	{
 		$eventdatalist = $this->repo->query()
 			->where('__id', 'IN', $idlist)

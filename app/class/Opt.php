@@ -22,9 +22,10 @@ class Opt extends Item
 
 	protected $pagevarlist;
 
-	public function __construct(array $donnees = [])
+	public function __construct(array $data = [])
 	{
-		$this->hydrate($donnees);
+		$this->hydrate($data);
+		$this->pagevarlist = get_object_vars(new Page());
 	}
 
 
@@ -434,11 +435,5 @@ class Opt extends Item
 		}
 		$this->pageidlist = $idlist;
 		return true;
-	}
-
-
-	public function setpagevarlist(array $pagevarlist)
-	{
-		$this->pagevarlist = $pagevarlist;
 	}
 }

@@ -69,7 +69,7 @@ class Modeluser extends Modeldb
     }
 
 
-    public function getlisterid(array $idlist = [])
+    public function pagelistbyid(array $idlist = [])
     {
         $userdatalist = $this->repo->query()
             ->where('__id', 'IN', $idlist)

@@ -12,7 +12,7 @@ class Modelhome extends Modelpage
     public function optinit($table)
     {
 
-        $opt = new Opt(Page::classvarlist());
+        $opt = new Opt();
         $opt->setcol(['id', 'tag', 'linkto', 'description', 'title', 'datemodif', 'datecreation', 'date', 'secure', 'authors', 'visitcount', 'editcount', 'affcount']);
         $opt->settaglist($table);
         $opt->setauthorlist($table);
@@ -22,20 +22,8 @@ class Modelhome extends Modelpage
         return $opt;
     }
 
-    /**
-     * Initialise Optlist object using
-     * 
-     * @param array $table the list of all pages objects
-     * 
-     * @return Optlist Object initialized
-     */
-    public function Optlistinit(array $table)
-    {
-        $optlist = new Optlist(Page::classvarlist());
-        return $optlist;
-    }
 
-
+    
     /**
 	 * @param array  $pagelist of Pages objects as `id => Page`
      * @param Opt $opt

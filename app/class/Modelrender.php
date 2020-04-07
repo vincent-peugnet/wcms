@@ -11,8 +11,6 @@ class Modelrender extends Modelpage
 	protected $router;
 	/** @var Page */
 	protected $page;
-	/** @var array list of ID as strings */
-	protected $pagelist;
 	protected $linkto = [];
 	protected $sum = [];
 	protected $internallinkblank = '';
@@ -25,7 +23,7 @@ class Modelrender extends Modelpage
 		parent::__construct();
 
 		$this->router = $router;
-		$this->pagelist = $this->list();
+		$this->pagelist = $this->pagelist();
 
 		if (Config::internallinkblank()) {
 			$this->internallinkblank = ' target="_blank" ';
@@ -54,7 +52,6 @@ class Modelrender extends Modelpage
 	 * Generate page relative link for given page_id including basepath
 	 * 
 	 * @param string $id given page ID
-	 * 
 	 * @return string Relative URL
 	 */
 	public function upage(string $id): string
@@ -179,7 +176,7 @@ class Modelrender extends Modelpage
 	{
 		$content = $this->article($element->content());
 		$content = $this->automedialist($content);
-		$content = $this->pagelist($content);
+		$content = $this->pageoptlist($content);
 		$content = $this->date($content);
 		$content = $this->thumbnail($content);
 		if ($element->autolink()) {
@@ -306,7 +303,7 @@ class Modelrender extends Modelpage
 			if (preg_match('%https?:\/\/\S*%', $this->page->redirection(), $out)) {
 				$url = $out[0];
 				$head .= PHP_EOL . '<meta http-equiv="refresh" content="' . $this->page->refresh() . '; URL=' . $url . '" />';
-			} elseif (in_array($this->page->redirection(), $this->pagelist)) {
+			} elseif (key_exists($this->page->redirection(), $this->pagelist())) {
 				$url = $this->upage($this->page->redirection());
 				$head .= PHP_EOL . '<meta http-equiv="refresh" content="' . $this->page->refresh() . '; URL=' . $url . '" />';
 			}
@@ -545,6 +542,29 @@ class Modelrender extends Modelpage
 	}
 
 
+	/**
+	 * Render pages list
+	 */
+	public function pageoptlist(string $text): string
+	{
+		$matches = $this->match($text, 'LIST');
+
+		$modelhome = new Modelhome();
+
+		if (isset($matches)) {
+
+			foreach ($matches as $match) {
+				$optlist = new Optlist(['render' => $this]);
+				$optlist->parsehydrate($match['options']);
+				$pagetable = $modelhome->pagetable($this->pagelist(), $optlist, '', []);
+				$content = $optlist->listhtml($pagetable);
+				$text = str_replace($match['fullmatch'], $content, $text);
+			}
+		}
+		return $text;
+	}
+
+
 
 	public function date(string $text): string
 	{
@@ -616,53 +636,6 @@ class Modelrender extends Modelpage
 		}, $text);
 		return $text;
 	}
-
-	/**
-	 * Render pages list
-	 */
-	public function pagelist(string $text): string
-	{
-		$matches = $this->match($text, 'LIST');
-
-		$modelhome = new Modelhome();
-
-		if (isset($matches)) {
-			$pagelist = $this->getlister();
-
-			foreach ($matches as $match) {
-				$optlist = $modelhome->Optlistinit($pagelist);
-				$optlist->parsehydrate($match['options']);
-				$pagetable = $modelhome->pagetable($pagelist, $optlist, '', []);
-
-				$content = '<ul class="pagelist">' . PHP_EOL;
-				foreach ($pagetable as $page) {
-					$content .= '<li>' . PHP_EOL;
-					$content .= '<a href="' . $this->upage($page->id()) . '">' . $page->title() . '</a>' . PHP_EOL;
-					if ($optlist->description()) {
-						$content .= '<em>' . $page->description() . '</em>' . PHP_EOL;
-					}
-					if ($optlist->date()) {
-						$content .= '<code>' . $page->date('pdate') . '</code>' . PHP_EOL;
-					}
-					if ($optlist->time()) {
-						$content .= '<code>' . $page->date('ptime') . '</code>' . PHP_EOL;
-					}
-					if ($optlist->author()) {
-						$content .=  $page->authors('string') . PHP_EOL;
-					}
-					$content .= '</li>';
-				}
-				$content .= '</ul>';
-
-				$text = str_replace($match['fullmatch'], $content, $text);
-			}
-		}
-		return $text;
-	}
-
-
-
-
 
 
 

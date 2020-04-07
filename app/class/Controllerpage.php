@@ -180,7 +180,7 @@ class Controllerpage extends Controller
             $datas['pagelist'] = $this->pagemanager->list();
 
 
-            $pagelist = $this->pagemanager->getlister();
+            $pagelist = $this->pagemanager->pagelist();
             $datas['tagpagelist'] = $this->pagemanager->tagpagelist($this->page->tag('array'), $pagelist);
             $datas['lasteditedpagelist'] = $this->pagemanager->lasteditedpagelist(5, $pagelist);
 

@@ -12,6 +12,9 @@ class Optlist extends Opt
     protected $author = 0;
     protected $style = 0;
 
+    /** @var Modelrender Render engine used to generate pages urls */
+    protected $render = null;
+
 
 
     public function parsehydrate(string $encoded)
@@ -30,6 +33,34 @@ class Optlist extends Opt
         return '%LIST?' . $this->getquery() . '%';
     }
 
+
+    public function listhtml(array $pagelist)
+    {
+        if(!empty($this->render)) {
+            $content = '<ul class="pagelist">' . PHP_EOL;
+            foreach ($pagelist as $page) {
+                $content .= '<li>' . PHP_EOL;
+                $content .= '<a href="' . $this->render->upage($page->id()) . '">' . $page->title() . '</a>' . PHP_EOL;
+                if ($this->description()) {
+                    $content .= '<em>' . $page->description() . '</em>' . PHP_EOL;
+                }
+                if ($this->date()) {
+                    $content .= '<code>' . $page->date('pdate') . '</code>' . PHP_EOL;
+                }
+                if ($this->time()) {
+                    $content .= '<code>' . $page->date('ptime') . '</code>' . PHP_EOL;
+                }
+                if ($this->author()) {
+                    $content .=  $page->authors('string') . PHP_EOL;
+                }
+                $content .= '</li>';
+            }
+            $content .= '</ul>';
+
+            return $content;
+                    
+        }
+    }
 
 
 
@@ -108,8 +139,11 @@ class Optlist extends Opt
     {
         $this->style = intval($style);
     }
+
+    public function setrender($render)
+    {
+        if(is_a($render, 'Wcms\Modelrender')) {
+            $this->render = $render;
+        }
+    }
 }
-
-
-
-?>

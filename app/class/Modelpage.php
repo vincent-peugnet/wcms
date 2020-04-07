@@ -10,9 +10,7 @@ use DateTimeImmutable;
 class Modelpage extends Modeldb
 {
 
-	const SELECT = ['title', 'id', 'description', 'tag', 'date', 'datecreation', 'datemodif', 'daterender', 'css', 'quickcss', 'javascript', 'body', 'header', 'main', 'nav', 'aside', 'footer', 'render', 'secure', 'invitepassword', 'interface', 'linkto', 'template', 'affcount', 'editcount'];
-	const BY = ['datecreation', 'title', 'id', 'description', 'datemodif', 'secure'];
-	const ORDER = ['DESC', 'ASC'];
+	protected $pagelist = [];
 
 
 	public function __construct()
@@ -25,18 +23,21 @@ class Modelpage extends Modeldb
 	}
 
 	/**
-	 * Scan library for all pages as objects
+	 * Scan library for all pages as objects.
+	 * If a scan has already been perform, it will just
+	 * read `pagelist` Propriety
 	 * 
 	 * @return array of Pages objects as `id => Page`
 	 */
-	public function getlister()
+	public function pagelist()
 	{
-		$pagelist = [];
-		$list = $this->repo->findAll();
-		foreach ($list as $pagedata) {
-			$pagelist[$pagedata->id] = new Page($pagedata);
+		if(empty($this->pagelist)) {
+			$list = $this->repo->findAll();
+			foreach ($list as $pagedata) {
+				$this->pagelist[$pagedata->id] = new Page($pagedata);
+			}
 		}
-		return $pagelist;
+		return $this->pagelist;
 	}
 
 
@@ -47,7 +48,7 @@ class Modelpage extends Modeldb
 	 * 
 	 * @return array of Page objects
 	 */
-	public function getlisterid(array $idlist = []) : array
+	public function pagelistbyid(array $idlist = []) : array
 	{
 		$pagedatalist = $this->repo->query()
 		->where('__id', 'IN', $idlist)

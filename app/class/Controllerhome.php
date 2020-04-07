@@ -27,7 +27,7 @@ class Controllerhome extends Controllerpage
         } else {
 
 
-            $pagelist = $this->modelhome->getlister();
+            $pagelist = $this->modelhome->pagelist();
             $this->opt = $this->modelhome->optinit($pagelist);
 
             $vars['colors'] = new Colors($this->opt->taglist());
@@ -91,7 +91,7 @@ class Controllerhome extends Controllerpage
     {
         if (isset($_POST['query']) && $this->user->iseditor()) {
             $datas = array_merge($_POST, $_SESSION['opt']);
-            $this->optlist = $this->modelhome->Optlistinit($pagelist);
+            $this->optlist = new Optlist();
             $this->optlist->hydrate($datas);
             $vars['optlist'] = $this->optlist;
         }
@@ -145,7 +145,7 @@ class Controllerhome extends Controllerpage
     public function renderall()
     {
         if ($this->user->iseditor()) {
-            $pagelist = $this->modelhome->getlister();
+            $pagelist = $this->modelhome->pagelist();
             foreach ($pagelist as $page) {
                 $this->renderpage($page);
                 $this->pagemanager->update($page);
@@ -232,7 +232,7 @@ class Controllerhome extends Controllerpage
     public function multirender()
     {
         $pagelist = $_POST['pagesid'] ?? [];
-        $pagelist = $this->pagemanager->getlisterid($pagelist);
+        $pagelist = $this->pagemanager->pagelistbyid($pagelist);
         foreach ($pagelist as $page) {
             $page = $this->renderpage($page);
             $this->pagemanager->update($page);
