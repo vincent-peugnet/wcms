@@ -11,7 +11,7 @@ abstract class Config
 	protected static $domain = '';
 	protected static $fontsize = 15;
 	protected static $basepath = '';
-	protected static $route404;	
+	protected static $route404;
 	protected static $alerttitle = '';
 	protected static $alertlink = '';
 	protected static $alertlinktext = '';
@@ -22,10 +22,10 @@ abstract class Config
 	protected static $privatepass = false;
 	protected static $notpublishedpass = false;
 	protected static $alertcss = false;
-	protected static $defaultbody = '%HEADER%'. PHP_EOL .PHP_EOL . '%NAV%'. PHP_EOL .PHP_EOL . '%ASIDE%'. PHP_EOL .PHP_EOL . '%MAIN%'. PHP_EOL .PHP_EOL . '%FOOTER%';
+	protected static $defaultbody = '%HEADER%' . PHP_EOL . PHP_EOL . '%NAV%' . PHP_EOL . PHP_EOL . '%ASIDE%' . PHP_EOL . PHP_EOL . '%MAIN%' . PHP_EOL . PHP_EOL . '%FOOTER%';
 	protected static $defaultfavicon = '';
 	protected static $defaultthumbnail = '';
-	protected static $analytics = '';	
+	protected static $analytics = '';
 	protected static $externallinkblank = true;
 	protected static $internallinkblank = false;
 	protected static $reccursiverender = true;
@@ -34,10 +34,14 @@ abstract class Config
 	protected static $homeredirect = null;
 	protected static $interfacecss = null;
 	protected static $bookmark = [];
+	protected static $secretkey = null;
 	protected static $sentrydsn = '';
 
+	const SECRET_KEY_MIN = 16;
+	const SECRET_KEY_MAX = 128;
 
-// _______________________________________ F U N _______________________________________
+
+	// _______________________________________ F U N _______________________________________
 
 
 
@@ -92,9 +96,9 @@ abstract class Config
 	/**
 	 * Calculate Domain name
 	 */
-    public static function getdomain()
-    {
-        self::$domain = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
+	public static function getdomain()
+	{
+		self::$domain = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
 	}
 
 	/**
@@ -109,12 +113,12 @@ abstract class Config
 	 * Generate full url adress where W is installed
 	 * @return string url adress finished by a slash "/"
 	 */
-	public static function url($endslash = true) : string
+	public static function url($endslash = true): string
 	{
 		return self::$domain . (!empty(self::$basepath) ? '/' . self::$basepath : "") . ($endslash ? '/' : '');
 	}
 
-// ________________________________________ G E T _______________________________________
+	// ________________________________________ G E T _______________________________________
 
 	public static function pagetable()
 	{
@@ -134,9 +138,9 @@ abstract class Config
 	/**
 	 * @param bool $trailingslash If not empty basepath, add a trailing slash after the basepath
 	 */
-	public static function basepath(bool $trailingslash = false) : string
+	public static function basepath(bool $trailingslash = false): string
 	{
-		if($trailingslash && !empty(self::$basepath)) {
+		if ($trailingslash && !empty(self::$basepath)) {
 			return self::$basepath . '/';
 		} else {
 			return self::$basepath;
@@ -187,12 +191,12 @@ abstract class Config
 	{
 		return self::$privatepass;
 	}
-	
+
 	public static function notpublishedpass()
 	{
 		return self::$notpublishedpass;
 	}
-		
+
 	public static function alertcss()
 	{
 		return self::$alertcss;
@@ -258,13 +262,18 @@ abstract class Config
 		return self::$bookmark;
 	}
 
+	public static function secretkey()
+	{
+		return self::$secretkey;
+	}
+
 	public static function sentrydsn()
 	{
 		return self::$sentrydsn;
 	}
 
 
-// __________________________________________ S E T ______________________________________
+	// __________________________________________ S E T ______________________________________
 
 	public static function setpagetable($pagetable)
 	{
@@ -291,68 +300,68 @@ abstract class Config
 
 	public static function setroute404($id)
 	{
-		if(is_string($id)) {
+		if (is_string($id)) {
 			self::$route404 = idclean($id);
 		}
 	}
 
 	public static function setalerttitle($alerttitle)
 	{
-		if(is_string($alerttitle)) {
+		if (is_string($alerttitle)) {
 			self::$alerttitle = strip_tags($alerttitle);
 		}
 	}
 
 	public static function setalertlink($alertlink)
 	{
-		if(is_string($alertlink)) {
+		if (is_string($alertlink)) {
 			self::$alertlink = idclean(strip_tags($alertlink));
 		}
 	}
 
 	public static function setalertlinktext($alertlinktext)
 	{
-		if(is_string($alertlinktext)) {
+		if (is_string($alertlinktext)) {
 			self::$alertlinktext = strip_tags($alertlinktext);
 		}
 	}
 
 	public static function setexistnot($existnot)
 	{
-		if(is_string($existnot)) {
+		if (is_string($existnot)) {
 			self::$existnot = strip_tags($existnot);
 		}
 	}
 
 	public static function setprivate($private)
 	{
-		if(is_string($private)) {
+		if (is_string($private)) {
 			self::$private = strip_tags($private);
 		}
 	}
 
 	public static function setnotpublished($notpublished)
 	{
-		if(is_string($notpublished)) {
+		if (is_string($notpublished)) {
 			self::$notpublished = strip_tags($notpublished);
 		}
 	}
-	
+
 	public static function setexistnotpass($existnotpass)
 	{
 		self::$existnotpass = boolval($existnotpass);
 	}
-	
+
 	public static function setprivatepass($privatepass)
 	{
 		self::$privatepass = boolval($privatepass);
 	}
-	
+
 	public static function setnotpublishedpass($notpublishedpass)
 	{
 		self::$notpublishedpass = boolval($notpublishedpass);
 	}
-	
+
 	public static function setalertcss($alertcss)
 	{
 		self::$alertcss = boolval($alertcss);
@@ -360,32 +369,32 @@ abstract class Config
 
 	public static function setdefaultbody($defaultbody)
 	{
-		if(is_string($defaultbody)) {
+		if (is_string($defaultbody)) {
 			self::$defaultbody = $defaultbody;
 		}
 	}
 
 	public static function setdefaultfavicon($defaultfavicon)
 	{
-		if(is_string($defaultfavicon)) {
+		if (is_string($defaultfavicon)) {
 			self::$defaultfavicon = $defaultfavicon;
 		}
 	}
 
 	public static function setdefaultthumbnail($defaultthumbnail)
 	{
-		if(is_string($defaultthumbnail)) {
+		if (is_string($defaultthumbnail)) {
 			self::$defaultthumbnail = $defaultthumbnail;
 		}
 	}
 
 	public static function setanalytics($analytics)
 	{
-		if(is_string($analytics) && strlen($analytics) < 25) {
+		if (is_string($analytics) && strlen($analytics) < 25) {
 			self::$analytics = $analytics;
 		}
 	}
-	
+
 	public static function setexternallinkblank($externallinkblank)
 	{
 		self::$externallinkblank = boolval($externallinkblank);
@@ -404,21 +413,21 @@ abstract class Config
 	public static function setdefaultprivacy($defaultprivacy)
 	{
 		$defaultprivacy = intval($defaultprivacy);
-		if($defaultprivacy >= 0 && $defaultprivacy <= 2) {
+		if ($defaultprivacy >= 0 && $defaultprivacy <= 2) {
 			self::$defaultprivacy = $defaultprivacy;
 		}
 	}
 
 	public static function sethomepage($homepage)
 	{
-		if(in_array($homepage, Model::HOMEPAGE)) {
+		if (in_array($homepage, Model::HOMEPAGE)) {
 			self::$homepage = $homepage;
 		}
 	}
 
 	public static function sethomeredirect($homeredirect)
 	{
-		if(is_string($homeredirect) && strlen($homeredirect) > 0) {
+		if (is_string($homeredirect) && strlen($homeredirect) > 0) {
 			self::$homeredirect = idclean($homeredirect);
 		} else {
 			self::$homeredirect = null;
@@ -427,7 +436,7 @@ abstract class Config
 
 	public static function setinterfacecss($interfacecss)
 	{
-		if(is_string($interfacecss) && file_exists(Model::CSS_DIR . $interfacecss)) {
+		if (is_string($interfacecss) && file_exists(Model::CSS_DIR . $interfacecss)) {
 			self::$interfacecss = $interfacecss;
 		} else {
 			self::$interfacecss = null;
@@ -436,8 +445,21 @@ abstract class Config
 
 	public static function setbookmark($bookmark)
 	{
-		if(is_array($bookmark)) {
+		if (is_array($bookmark)) {
 			self::$bookmark = $bookmark;
+		}
+	}
+
+	public static function setsecretkey($secretkey)
+	{
+		if (is_string($secretkey)) {
+			$stripedsecretkey = strip_tags($secretkey);
+			if ($stripedsecretkey === $secretkey) {
+				$length = strlen($secretkey);
+				if ($length < self::SECRET_KEY_MAX && $length > self::SECRET_KEY_MIN) {
+					self::$secretkey = $secretkey;
+				}
+			}
 		}
 	}
 
@@ -457,31 +479,17 @@ abstract class Config
 
 	public static function addbookmark(string $id, string $query)
 	{
-		if(!empty($id) && !empty($query)) {
-            $id = idclean($id);
-            $id = substr($id, 0, 16);
-		self::$bookmark[$id] = $query;
+		if (!empty($id) && !empty($query)) {
+			$id = idclean($id);
+			$id = substr($id, 0, 16);
+			self::$bookmark[$id] = $query;
 		}
 	}
 
 	public static function deletebookmark(string $id)
 	{
-		if(key_exists($id, self::$bookmark)) {
+		if (key_exists($id, self::$bookmark)) {
 			unset(self::$bookmark[$id]);
 		}
 	}
-	
-
-
-
 }
-
-
-
-
-
-
-
-
-
-?>

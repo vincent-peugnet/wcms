@@ -8,7 +8,7 @@ class Modelauthtoken extends Modeldb
 {
 
     const AUTHTOKEN_REPO_NAME = 'authtoken';
-
+    const AUTHTOKEN_ID_LENGTH = 30;
 
     public function __construct()
     {
@@ -29,6 +29,14 @@ class Modelauthtoken extends Modeldb
             'creationdate' => '1'
         ];
         $tokendata = new Document($datas);
+
+        $exist = true;
+        while ($exist !== false) {
+            $id = bin2hex(random_bytes(self::AUTHTOKEN_ID_LENGTH));
+            $exist = $this->repo->findById($id);
+        }
+
+        $tokendata->setId($id);
         return $this->repo->store($tokendata);
 
     }

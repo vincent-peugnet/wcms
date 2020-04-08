@@ -100,14 +100,16 @@ class Controllerconnect extends Controller
     /**
      * Create a cookie called `authtoken`
      * 
-     * @param string $id Token string
+     * @param string $token Token string
      * @param int $conservation Time in day to keep the token
      * 
      * @return bool True in cas of success, otherwise, false.
      */
-    public function creatauthcookie(string $id, int $conservation): bool
+    public function creatauthcookie(string $token, int $conservation): bool
     {
-        return setcookie('authtoken', $id, time() + $conservation * 24 * 3600, null, null, false, true);
+        $hash = secrethash($token);
+        $cookie = $token . ':' . $hash;
+        return setcookie('authtoken', $cookie, time() + $conservation * 24 * 3600, null, null, false, true);
     }
 
     /**
@@ -120,4 +122,5 @@ class Controllerconnect extends Controller
 
         //deleteauthcookie
     }
+
 }

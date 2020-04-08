@@ -41,7 +41,7 @@ class Application
 
         } else {
             if(Config::readconfig()) {
-                if(!Config::checkbasepath() || empty(Config::pagetable()) || !is_dir(Model::RENDER_DIR) || !Config::checkdomain()) {
+                if(!Config::checkbasepath() || empty(Config::pagetable()) || !is_dir(Model::RENDER_DIR) || !Config::checkdomain() || empty(Config::secretkey())) {
                     echo '<ul>';
                     if(!Config::checkbasepath()) {
                         echo '<li>Wrong path</li>';
@@ -54,6 +54,9 @@ class Application
                     }
                     if(!is_dir(Model::RENDER_DIR)) {
                         echo '<li>Render path not existing</li>';
+                    }
+                    if(!is_dir(Model::RENDER_DIR)) {
+                        echo '<li>Secret Key not set or not valid</li>';
                     }
                     echo '</ul>';
                     $this->configform();
@@ -84,18 +87,25 @@ class Application
         
         <form action="" method="post">
         <div>
-        <h2>
-        <label for="basepath">Path to W-CMS</label>
-        </h2>
-        <input type="text" name="configinit[basepath]"  value="<?= Config::basepath() ?>" id="basepath">
-        <p><i>Leave it empty if W-CMS is in your root folder, otherwise, indicate the subfolder(s) in witch you installed the CMS</i></p>
+            <h2>
+                <label for="basepath">Path to W-CMS</label>
+            </h2>
+            <input type="text" name="configinit[basepath]"  value="<?= Config::basepath() ?>" id="basepath">
+            <p><i>Leave it empty if W-CMS is in your root folder, otherwise, indicate the subfolder(s) in witch you installed the CMS</i></p>
         </div>
         <div>
-        <h2>
-        <label for="pagetable">Name of your database table</label>
-        </h2>
-        <input type="text" name="configinit[pagetable]"  value="<?= Config::pagetable() ?>" id="pagetable">
-        <p><i>Set the name of the first folder that is going to store all your work</i></p>
+            <h2>
+                <label for="pagetable">Name of your database table</label>
+            </h2>
+            <input type="text" name="configinit[pagetable]"  value="<?= Config::pagetable() ?>" id="pagetable">
+            <p><i>Set the name of the first folder that is going to store all your work</i></p>
+        </div>
+        <div>
+            <h2>
+                <label for="secretkey">Secret Key</label>
+            </h2>
+            <input type="text" name="configinit[secretkey]"  value="<?= bin2hex(random_bytes(10)) ?>" id="secretkey" minlength="16" maxlength="128" required>
+            <p><i>The secret key is used to secure cookies. There are no need to remind it. (16 to 128 characters)</i></p>
         </div>
         <input type="submit" value="set">
         </form>

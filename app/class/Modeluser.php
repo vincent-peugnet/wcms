@@ -43,15 +43,19 @@ class Modeluser extends Modeldb
             return $user;
         }
         
-        if(isset($_COOKIE['authtoken'])) {
+        if(isset($_COOKIE['authtoken']) && strpos($_COOKIE['authtoken'], ':')) {
+            list($cookietoken, $cookiemac) = explode(':', $_COOKIE['authtoken']);
             $authtokenmanager = new Modelauthtoken();
-            $token = $authtokenmanager->getbytoken($_COOKIE['authtoken']);
-            if ($token !== false) {
-                $user = $this->get($token->user);
-                if ($user !== false) {
-                    $this->writesession($user, $_COOKIE['authtoken']);
+            $dbtoken = $authtokenmanager->getbytoken($cookietoken);
+
+            if ($dbtoken !== false) {
+                if(hash_equals($cookiemac, secrethash($dbtoken->getId()))) {
+                    $user = $this->get($dbtoken->user);
+                    if ($user !== false) {
+                        $this->writesession($user, $_COOKIE['authtoken']);
+                    }
+                    return $user;
                 }
-                return $user;
 
             }
         }
@@ -70,7 +74,7 @@ class Modeluser extends Modeldb
 
 
     /**
-     * @return array list of User objects
+     * @return User[] associative array of User objects `id => User`
      */
     public function getlister()
     {

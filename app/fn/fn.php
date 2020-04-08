@@ -324,6 +324,19 @@ function options(array $options, $selected = null) : string
 }
 
 
+/**
+ * Hash a Token using secret key and sha256
+ * 
+ * @param string $token Input token
+ * 
+ * @return string Hashed mac
+ */
+function secrethash(string $token) : string
+{
+	return hash_hmac('sha256', $token, Wcms\Config::secretkey());
+}
+
+
 
 
 
