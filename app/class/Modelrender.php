@@ -438,11 +438,19 @@ class Modelrender extends Modelpage
 		}
 
 		$text = preg_replace_callback(
-			'/<h([' . $min . '-' . $max . '])(\s+(\s*\w+="\w+")*)?\s*>(.+)<\/h[' . $min . '-' . $max . ']>/mU',
+			"/<h([$min-$max])((.*)id=\"([^\"]*)\"(.*)|.*)>(.+)<\/h[$min-$max]>/mU",
 			function ($matches) {
-				$cleanid = idclean($matches[4]);
-				$this->sum[] = new Header($cleanid, intval($matches[1]), $matches[4]);
-				return '<h' . $matches[1] . $matches[2] . ' id="' . $cleanid . '">' . $matches[4] . '</h' . $matches[1] . '>';
+				$level = $matches[1];
+				$beforeid = $matches[3];
+				$id = $matches[4];
+				$afterid = $matches[5];
+				$content = $matches[6];
+				// if no custom id is defined, use idclean of the content as id
+				if (empty($id)) {
+					$id = idclean($content);
+				}
+				$this->sum[] = new Header($id, intval($level), $content);
+				return "<h$level $beforeid id=\"$id\" $afterid>$content</h$level>";
 			},
 			$text
 		);
