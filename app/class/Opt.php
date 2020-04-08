@@ -12,7 +12,6 @@ class Opt extends Item
 	protected $authorcompare = 'AND';
 	protected $secure = 4;
 	protected $linkto = '';
-	protected $col = ['id'];
 	protected $taglist = [];
 	protected $authorlist = [];
 	protected $invert = 0;
@@ -25,7 +24,8 @@ class Opt extends Item
 	public function __construct(array $data = [])
 	{
 		$this->hydrate($data);
-		$this->pagevarlist = get_object_vars(new Page());
+		$page = new Page();
+		$this->pagevarlist = ($page->getobjectvars());
 	}
 
 
@@ -246,15 +246,6 @@ class Opt extends Item
 		return $this->linkto;
 	}
 
-	public function col($type = 'array')
-	{
-		if ($type == 'string') {
-			return implode(', ', $this->col);
-		} else {
-			return ($this->col);
-		}
-	}
-
 	public function taglist()
 	{
 		return $this->taglist;
@@ -352,13 +343,6 @@ class Opt extends Item
 			}
 		} else {
 			return false;
-		}
-	}
-
-	public function setcol($col)
-	{
-		if (is_array($col)) {
-			$this->col = array_intersect($this->pagevarlist, $col);
 		}
 	}
 

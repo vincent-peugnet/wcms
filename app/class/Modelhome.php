@@ -13,7 +13,6 @@ class Modelhome extends Modelpage
     {
 
         $opt = new Opt();
-        $opt->setcol(['id', 'tag', 'linkto', 'description', 'title', 'datemodif', 'datecreation', 'date', 'secure', 'authors', 'visitcount', 'editcount', 'affcount']);
         $opt->settaglist($table);
         $opt->setauthorlist($table);
         $opt->setpageidlist($table);

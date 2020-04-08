@@ -64,6 +64,11 @@ class Page extends Dbitem
 		$this->hydrate($datas);
 	}
 
+	public function getobjectvars() : array
+	{
+		return get_object_vars($this);
+	}
+
 	public function reset()
 	{
 		$now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));

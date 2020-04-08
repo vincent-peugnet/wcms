@@ -16,7 +16,7 @@
                         <legend>Sort</legend>
                         <select name="sortby" id="sortby">
                             <?php
-                            foreach ($opt->col('array') as $key => $col) {
+                            foreach (Wcms\Model::COLUMNS as $col) {
                                 echo '<option value="' . $col . '" ' . ($opt->sortby() == $col ? "selected" : "") . '>' . $col . '</option>';
                             }
                             ?>

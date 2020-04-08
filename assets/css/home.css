@@ -143,8 +143,7 @@ main.home table .id {
 #home2table a.linkto {
     font-family: monospace;
     font-size: medium;
-    text-decoration: underline;
-    text-decoration-color: white;
+    background-color: #7b97b9;
 }
 
 nav span.counter {
