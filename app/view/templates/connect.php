@@ -19,6 +19,9 @@ if(in_array($route, ['pageedit', 'pageread', 'pageread/', 'pageadd'])) {
 }
 ?>
 <input type="password" name="pass" id="loginpass" placeholder="password" autofocus>
+<input type="hidden" name="rememberme" value="0">
+<input type="checkbox" name="rememberme" id="rememberme" value="1">
+<label for="rememberme">Remember me</label>
 <input name="log" type="submit" value="login">
 </form>
 

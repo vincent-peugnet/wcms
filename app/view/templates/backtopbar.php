@@ -63,6 +63,9 @@ if($user->isadmin()) {
 <form action="<?= $this->url('log') ?>" method="post" id="connect">
 <input type="password" name="pass" id="loginpass" placeholder="password" autofocus>
 <input type="hidden" name="route" value="home">
+<input type="hidden" name="rememberme" value="0">
+<input type="checkbox" name="rememberme" id="rememberme" value="1">
+<label for="rememberme">Remember me</label>
 <input type="submit" name="log" value="login">
 </form>
 

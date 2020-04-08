@@ -21,16 +21,16 @@ class Modeluser extends Modeldb
         $this->storeinit(self::USER_REPO_NAME);
     }
 
+    /**
+     * Write session cookie according to users datas and define the current authtoken being used
+     * 
+     * @param User $user Current user to keep in session
+     */
     public function writesession(User $user)
     {
-        $_SESSION['user' . Config::basepath()] = ['level' => $user->level(), 'id' => $user->id(), 'columns' =>$user->columns()];
-    }
-
-    public function writecookie(User $user)
-    {
-        $cookiehash = 
-        $cookie = ['level' => $user->level(), 'id' => $user->id()];
-        setcookie('user ' . Config::basepath(), $cookie, time() + $user->cookie()*24*3600, null, null, false, true);
+        $_SESSION['user' . Config::basepath()]['level'] = $user->level();
+        $_SESSION['user' . Config::basepath()]['id'] = $user->id();
+        $_SESSION['user' . Config::basepath()]['columns'] = $user->columns();
     }
 
     public function readsession()
@@ -41,9 +41,23 @@ class Modeluser extends Modeldb
             $user = new User($userdatas);
             $user = $this->get($user);
             return $user;
-        } else {
-            return new User(['id' => '', 'level' => 0]);
         }
+        
+        if(isset($_COOKIE['authtoken'])) {
+            $authtokenmanager = new Modelauthtoken();
+            $token = $authtokenmanager->getbytoken($_COOKIE['authtoken']);
+            if ($token !== false) {
+                $user = $this->get($token->user);
+                if ($user !== false) {
+                    $this->writesession($user, $_COOKIE['authtoken']);
+                }
+                return $user;
+
+            }
+        }
+
+        return new User(['id' => '', 'level' => 0]);
+
     }
 
 
@@ -159,7 +173,7 @@ class Modeluser extends Modeldb
 
 
     /**
-     * @param string|User $id
+     * @param string|User $id Can be an User object or a string ID
      * 
      * @return User|false User object or false in case of error
      */

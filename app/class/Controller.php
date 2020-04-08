@@ -34,7 +34,7 @@ class Controller
 
     public function setuser()
     {
-        $this->usermanager = new Modeluser;        
+        $this->usermanager = new Modeluser;
         $this->user = $this->usermanager->readsession();
     }
 
