@@ -16,7 +16,7 @@ class Summary extends Item
     /** @var int Maximum summary level*/
     protected $max = 6;
 
-    /** @var array Headers datas */
+    /** @var Header[] Headers datas */
     protected $sum = [];
 
     /** @var string Name of element to display */
@@ -48,46 +48,30 @@ class Summary extends Item
     public function sumparser()
     {
         $sumstring = '';
+        $minlevel = $this->min - 1;
+        $prevlevel = $minlevel;
 
-        
-        foreach ($this->sum as $type => $element) {
-            if(!empty($element) && (empty($this->element) || $type === $this->element)) {
-
-                $filteredsum = [];
-        
-                foreach ($element as $key => $menu) {
-                    $deepness = array_keys($menu)[0];
-                    if($deepness >= $this->min && $deepness <= $this->max) {
-                        $filteredsum[$key] = $menu;
-                    }
-                }
-        
-                $last = 0;
-                foreach ($filteredsum as $title => $list) {
-                    foreach ($list as $h => $link) {
-                        if ($h > $last) {
-                            for ($i = 1; $i <= ($h - $last); $i++) {
-                                $sumstring .= '<ul>' . PHP_EOL;
-                            }
-                            $sumstring .= '<li><a href="#' . $title . '">' . $link . '</a></li>' . PHP_EOL;
-                        } elseif ($h < $last) {
-                            for ($i = 1; $i <= ($last - $h); $i++) {
-                                $sumstring .= '</ul>' . PHP_EOL;
-                            }
-                            $sumstring .= '<li><a href="#' . $title . '">' . $link . '</a></li>' . PHP_EOL;
-                        } elseif ($h = $last) {
-                            $sumstring .= '<li><a href="#' . $title . '">' . $link . '</a></li>' . PHP_EOL;
-                        }
-                        $last = $h;
-                    }
-                }
-                for ($i = 1; $i <= ($last); $i++) {
-                    $sumstring .= '</ul>' . PHP_EOL;
-                }
-
+        foreach ($this->sum as $header) {
+            if ($header->level < $this->min || $header->level > $this->max) {
+                // not in the accepted range, skiping this header.
+                continue;
+            };
+            for ($i = $header->level; $i > $prevlevel; $i--) {
+                $sumstring .= '<ul><li>';
             }
+            for ($i = $header->level; $i < $prevlevel; $i++) {
+                $sumstring .= '</li></ul>';
+            }
+            if ($header->level <= $prevlevel) {
+                $sumstring .= '</li><li>';
+            }
+            $sumstring .= "<a href=\"#$header->id\">$header->title</a>";
+            $prevlevel = $header->level;
         }
-		return $sumstring;
+        for ($i = $minlevel; $i < $prevlevel; $i++) {
+            $sumstring .= "</li></ul>";
+        }
+        return $sumstring;
     }
 
 
