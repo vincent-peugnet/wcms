@@ -18,7 +18,9 @@ if(in_array($route, ['pageedit', 'pageread', 'pageread/', 'pageadd'])) {
     echo '<input type="hidden" name="id" value="'. $id .'">';
 }
 ?>
-<input type="password" name="pass" id="loginpass" placeholder="password" autofocus>
+<form action="<?= $this->url('log') ?>" method="post" id="connect">
+<input type="text" name="user" id="loginuser" autofocus placeholder="user" >
+<input type="password" name="pass" id="loginpass" placeholder="password" >
 <input type="hidden" name="rememberme" value="0">
 <input type="checkbox" name="rememberme" id="rememberme" value="1">
 <label for="rememberme">Remember me</label>
