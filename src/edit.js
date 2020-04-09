@@ -13,12 +13,38 @@ import 'codemirror/addon/mode/overlay';
 import 'codemirror/addon/mode/simple';
 
 CodeMirror.defineSimpleMode('wcms', {
+    // detect a Wcms markup then pass to 'wcms' mode
     start: [
         {
-            regex: /%(?:HEADER|NAV|ASIDE|MAIN|FOOTER|SUMMARY|LIST|MEDIA)(?:\?(?:[^ &]+=[^ &]+&?)+)?%/,
+            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|SUMMARY|LIST|MEDIA)(\?[^\s]*)?%)/,
             token: 'wcms',
+            next: 'wcms',
         },
     ],
+    // 'wcms' mode, for each macro, if there is parameters, pass to its associated mode
+    wcms: [
+        {
+            regex: /(HEADER|NAV|ASIDE|MAIN|FOOTER)\?/,
+            token: 'wcms',
+            next: 'element',
+        },
+        { regex: /SUMMARY\?/, token: 'wcms', next: 'summary' },
+        { regex: /LIST\?/, token: 'wcms', next: 'list' },
+        { regex: /MEDIA\?/, token: 'wcms', next: 'media' },
+        { regex: /[^&]*&/, token: 'wcms', pop: true },
+        { regex: /.*%/, token: 'wcms', next: 'start' },
+    ],
+    // 'element' mode, parameters' keywords of 'element' macros
+    element: [{ regex: null, push: 'wcms' }],
+    // 'summary' mode, parameters' keywords of the 'summary' macro
+    summary: [
+        { regex: /min|max/, token: 'keyword', push: 'wcms' },
+        { regex: null, push: 'wcms' },
+    ],
+    // 'list' mode, parameters' keywords of the 'list' macro
+    list: [{ regex: null, push: 'wcms' }],
+    // 'media' mode, parameters' keywords of the 'media' macro
+    media: [{ regex: null, push: 'wcms' }],
 });
 
 CodeMirror.defineMode('wcms-markdown', (config, parserConfig) => {
