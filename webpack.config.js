@@ -6,7 +6,7 @@ module.exports = (env) => {
 		// Environment dependent
 		mode: env == 'dev' ? 'development' : 'production',
 		devtool: env == 'dev' ?
-			'cheap-eval-source-map' :
+			'eval-cheap-module-source-map' :
 			env == 'dist' ?
 				'hidden-source-map' :
 				'source-map',
