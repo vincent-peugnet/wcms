@@ -2,6 +2,7 @@
 
 namespace Wcms;
 
+use DateTime;
 use DateTimeImmutable;
 use League\Plates\Engine;
 
@@ -63,6 +64,7 @@ class Controller
         $commonsparams['user'] = $this->user;
         $commonsparams['pagelist'] = $this->pagemanager->list();
         $commonsparams['css'] = Model::csspath();
+        $commonsparams['now'] = new DateTimeImmutable();
         return $commonsparams;
     }
 

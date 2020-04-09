@@ -22,6 +22,7 @@ main {
     display: flex;
     height: 100%;
     /* width: 100%; */
+    overflow-y: auto;
 }
 
 
@@ -109,7 +110,7 @@ div#deepsearchbar {
 
 
 
-aside .submenu code {
+aside .submenu code, main.user li code {
     overflow: auto;
     display: block;
     white-space: nowrap;
@@ -269,10 +270,6 @@ ul {
 th {
     background-color: darkgrey;
     color: black;
-}
-
-main {
-    overflow-y: auto;
 }
 
 main.admin input, main.admin select, main.admin textarea {
@@ -488,6 +485,10 @@ td.code {
 }
 
 
+main.user section#pref {
+    max-width: 500px;
+}
+
 
 main.user table form {
     display: inline-block;
@@ -641,6 +642,7 @@ footer {
     }
 
 }
+
 
 
 

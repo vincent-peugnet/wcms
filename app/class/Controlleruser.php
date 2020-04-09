@@ -12,12 +12,15 @@ class Controlleruser extends Controller
     public function desktop()
     {
         if($this->user->iseditor()) {
-            $getuser = $this->usermanager->get($this->user);
+            $authtokenmanager = new Modelauthtoken();
+            $datas['tokenlist'] = $authtokenmanager->listbyuser($this->user->id());
+            $datas['getuser'] = $this->usermanager->get($this->user);
+
             if($this->user->isadmin()) {
-                $userlist = $this->usermanager->getlister();
-                $this->showtemplate('user', ['userlist' => $userlist, 'getuser' => $getuser, 'now' => $this->now->format('Y-m-d')]);
+                $datas['userlist'] = $this->usermanager->getlister();
+                $this->showtemplate('user', $datas);
             } else {
-                $this->showtemplate('user', ['getuser' => $getuser]);
+                $this->showtemplate('user', $datas);
             }
         } else {
             $this->routedirect('home');
@@ -57,6 +60,16 @@ class Controlleruser extends Controller
                 $this->routedirect('user');
             }
         }
+    }
+
+    public function token()
+    {
+        if (isset($_POST['tokendelete'])) {
+            
+            $authtokenmanager = new Modelauthtoken();
+            $authtokenmanager->delete($_POST['tokendelete']);
+        }
+        $this->routedirect('user');
     }
 
     public function update()

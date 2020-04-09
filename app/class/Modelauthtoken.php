@@ -2,6 +2,7 @@
 
 namespace Wcms;
 
+use DateTimeImmutable;
 use JamesMoss\Flywheel\Document;
 
 class Modelauthtoken extends Modeldb
@@ -26,7 +27,9 @@ class Modelauthtoken extends Modeldb
         $datas = [
             'user' => $user->id(),
             'ip' => $_SERVER['SERVER_ADDR'],
-            'creationdate' => '1'
+            'date' => new DateTimeImmutable(),
+            'conservation' => $user->cookie(),
+            'useragent' => $_SERVER['HTTP_USER_AGENT']
         ];
         $tokendata = new Document($datas);
 
@@ -49,6 +52,14 @@ class Modelauthtoken extends Modeldb
     public function delete(string $token)
     {
         return $this->repo->delete($token);
+    }
+
+    /**
+     * @param string $id user Id
+     */
+    public function listbyuser(string $id)
+    {
+        return $this->repo->query()->where('user', '==', $id)->orderBy('date')->execute();
     }
 
 }

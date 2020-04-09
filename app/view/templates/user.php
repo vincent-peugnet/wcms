@@ -10,7 +10,7 @@
 
 <main class="user">
 
-    <section>
+    <section id="pref">
         <div class="block">
 
             
@@ -36,11 +36,34 @@
                 <p>
                     <input type="number" name="cookie" value="<?= $getuser->cookie() ?>" id="cookie" min="0" max="365">
                     <label for="cookie">Cookie conservation time <i>(In days)</i></label>
+                    <p>When you tick the <em>remember-me</em> checkbox during login, you can choose how much time <strong>W</strong> will remember you.</p>
                     <input type="submit" value="submit">
                 </p>
                     
                 </form>
 
+
+
+
+                <h2>Sessions Tokens</h2>
+
+                <ul>
+
+                <?php foreach ($tokenlist as $token ) {
+                    ?>
+                    <li >
+                        <code>
+                            ip : <?= $token->ip ?> | date : <?= $token->date['date'] ?> | conservation : <?= $token->conservation ?> days | user agent : <?= $token->useragent ?>
+                        </code>
+                        <form action="<?= $this->url('usertoken') ?>" method="post">
+                        <input type="hidden" name="tokendelete" value="<?= $token->getId() ?>" >
+                        <input type="submit" value="delete">
+                        </form>
+
+                    </li>
+                <?php
+                } ?>
+                </ul>
 
             </div>
 
@@ -89,7 +112,7 @@
                         </select>
                     </td>
                     <td>
-                        <input type="date" name="expiredate" id="expiredate" min="<?= $now ?>">
+                        <input type="date" name="expiredate" id="expiredate" min="<?= $now->format('Y-m-d'); ?>">
                     </td>
                     <td>
                         <input type="submit" value="add">
@@ -136,7 +159,7 @@
 
 
                     <td>
-                        <input type="date" name="expiredate" id="expiredate"<?= $user->expiredate() !== false ?  'value="' . $user->expiredate('string') . '"' : '' ?>>
+                        <input type="date" name="expiredate" id="expiredate"<?= $user->expiredate() !== false ?  'value="' . $user->expiredate('string') . '"' : '' ?>  min="<?= $now->format('Y-m-d'); ?>">
                         <span>reset<input type="checkbox" name="expiredate" id="expiredate" value="null"></span>
                         
                     </td>

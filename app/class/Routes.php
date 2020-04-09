@@ -43,6 +43,7 @@ class Routes
             ['POST', '/!user/add', 'Controlleruser#add', 'useradd'],
             ['POST', '/!user/update', 'Controlleruser#update', 'userupdate'],
             ['POST', '/!user/pref', 'Controlleruser#pref', 'userpref'],
+            ['POST', '/!user/token', 'Controlleruser#token', 'usertoken'],
             ['GET', '/!info', 'Controllerinfo#desktop', 'info'],
             ['GET', '/!timeline', 'Controllertimeline#desktop', 'timeline'],
             ['POST', '/!timeline/add', 'Controllertimeline#add', 'timelineadd'],
