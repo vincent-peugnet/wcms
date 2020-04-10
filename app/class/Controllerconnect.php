@@ -36,8 +36,8 @@ class Controllerconnect extends Controller
 
     public function login($route, $id = null)
     {
-        if (isset($_POST['pass'])) {
-            $this->user = $this->usermanager->passwordcheck($_POST['pass']);
+        if (!empty($_POST['pass']) && !empty($_POST['user'])) {
+            $this->user = $this->usermanager->passwordcheck($_POST['user'], $_POST['pass']);
             if ($this->user != false) {
                 if ($this->user->expiredate() === false || $this->user->level() === 10 || $this->user->expiredate('date') > $this->now) {
                     $this->user->connectcounter();

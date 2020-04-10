@@ -33,6 +33,9 @@ class Controlleruser extends Controller
         if($this->user->iseditor()) {
             $user = $this->usermanager->get($this->user);
             $user->hydrate($_POST);
+            if ($_POST['passwordhash']) {
+                $user->hashpassword();
+            }
             $this->usermanager->add($user);
             $this->routedirect('user');
         } else {
@@ -50,7 +53,7 @@ class Controlleruser extends Controller
             $user = new User($_POST);
             if(empty($user->id()) || $this->usermanager->get($user)) {
                 $this->routedirectget('user', ['error' => 'wrong_id']);
-            } elseif(empty($user->password()) || $this->usermanager->passwordexist($user->password()) || !$user->validpassword()) {
+            } elseif(empty($user->password()) || !$user->validpassword()) {
                 $this->routedirectget('user', ['error' => 'change_password']);
             } else {
                 if($user->passwordhashed()) {
@@ -102,7 +105,7 @@ class Controlleruser extends Controller
                     $userupdate->hydrate($_POST);
                     if(empty($userupdate->id())) {
                         $this->routedirectget('user', ['error' => 'wrong_id']);
-                    } elseif (!empty($_POST['password']) && (empty($userupdate->password())  || $this->usermanager->passwordexist($userupdate->password()) || !$userupdate->validpassword())) {
+                    } elseif (!empty($_POST['password']) && (empty($userupdate->password())  || !$userupdate->validpassword())) {
                         $this->routedirectget('user', ['error' => 'password_unvalid']);
                     } elseif (empty($userupdate->level())) {
                         $this->routedirectget('user', ['error' => 'wrong_level']);

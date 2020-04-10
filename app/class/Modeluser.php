@@ -126,14 +126,15 @@ class Modeluser extends Modeldb
     /**
      * Check if the password is used, and return by who
      * 
+     * @param string $userid user ID
      * @param string $pass password clear
      * 
-     * @return mixed User or false
+     * @return User|bool User or false
      */
-    public function passwordcheck(string $pass)
+    public function passwordcheck(string $userid, string $pass)
     {
-        $userdatalist = $this->getlister();
-        foreach ($userdatalist as $user) {
+        $user = $this->get($userid);
+        if ($user !== false) {
             if ($user->passwordhashed()) {
                 if (password_verify($pass, $user->password())) {
                     return $user;
@@ -141,26 +142,10 @@ class Modeluser extends Modeldb
             } else {
                 if ($user->password() === $pass) {
                     return $user;
-                }
+                }        
             }
         }
         return false;
-    }
-
-    /**
-     * Return information if the password is already used or not
-     * 
-     * @param string $pass password clear
-     * 
-     * @return bool password exist or not
-     */
-    public function passwordexist(string $pass) : bool
-    {
-        if ($this->passwordcheck($pass) !== false) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**

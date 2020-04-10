@@ -129,7 +129,7 @@ class Application
         <h2>
         <label for="password">Your password</label>
         </h2>
-        <input type="password" name="userinit[password]" id="password" minlength="4" maxlength="64" required>
+        <input type="password" name="userinit[password]" id="password" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" maxlength="<?= Wcms\Model::PASSWORD_MAX_LENGTH ?>" required>
         <p><i>Your user passworder as first administrator.</i></p>
         </div>
         <input type="submit" value="set">

@@ -1,4 +1,8 @@
-<?php $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'home.css']]) ?>
+<?php
+
+use Wcms\Model;
+
+$this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'home.css']]) ?>
 
 
 <?php $this->start('page') ?>
@@ -37,7 +41,14 @@
                     <input type="number" name="cookie" value="<?= $getuser->cookie() ?>" id="cookie" min="0" max="365">
                     <label for="cookie">Cookie conservation time <i>(In days)</i></label>
                     <p>When you tick the <em>remember-me</em> checkbox during login, you can choose how much time <strong>W</strong> will remember you.</p>
-                    <input type="submit" value="submit">
+
+                    <input type="password" name="password" id="password" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" maxlength="<?= Wcms\Model::PASSWORD_MAX_LENGTH ?>">
+                    <label for="password">New password</label>
+                    
+                    <input type="hidden" name="passwordhash" value="1">
+
+                    </br>
+                    <input type="submit" value="update">
                 </p>
                     
                 </form>
@@ -91,10 +102,10 @@
                 <tr>
                     <form action="<?= $this->url('useradd') ?>" method="post">
                     <td>
-                            <input type="text" name="id" maxlength="128" required>
+                            <input type="text" name="id" maxlength="<?= Wcms\Model::MAX_ID_LENGTH ?>" required>
                     </td>
                     <td>
-                        <input type="password" name="password" minlength="4" maxlength="64" required>
+                        <input type="password" name="password" id="password" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" maxlength="<?= Wcms\Model::PASSWORD_MAX_LENGTH ?>" required>
                     </td>
 
                     <td>
@@ -140,7 +151,7 @@
                     </td>
 
                     <td>
-                    <input type="password" name="password" minlength="4" maxlength="64" >
+                    <input type="password" name="password" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" maxlength="<?= Wcms\Model::PASSWORD_MAX_LENGTH ?>" >
                     </td>
 
                     <td>
