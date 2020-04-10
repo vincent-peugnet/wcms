@@ -9,6 +9,57 @@ import 'codemirror/addon/search/searchcursor';
 import 'codemirror/addon/search/jump-to-line';
 import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/dialog/dialog.css';
+import 'codemirror/addon/mode/overlay';
+import 'codemirror/addon/mode/simple';
+
+CodeMirror.defineSimpleMode('wcms', {
+    // detect a Wcms markup then pass to 'wcms' mode
+    start: [
+        {
+            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|SUMMARY|LIST|MEDIA)(\?[^\s]*)?%)/,
+            token: 'wcms',
+            next: 'wcms',
+        },
+    ],
+    // 'wcms' mode, for each macro, if there is parameters, pass to its associated mode
+    wcms: [
+        {
+            regex: /(HEADER|NAV|ASIDE|MAIN|FOOTER)\?/,
+            token: 'wcms',
+            next: 'element',
+        },
+        { regex: /SUMMARY\?/, token: 'wcms', next: 'summary' },
+        { regex: /LIST\?/, token: 'wcms', next: 'list' },
+        { regex: /MEDIA\?/, token: 'wcms', next: 'media' },
+        { regex: /[^&]*&/, token: 'wcms', pop: true },
+        { regex: /.*%/, token: 'wcms', next: 'start' },
+    ],
+    // 'element' mode, parameters' keywords of 'element' macros
+    element: [{ regex: null, push: 'wcms' }],
+    // 'summary' mode, parameters' keywords of the 'summary' macro
+    summary: [
+        { regex: /min|max/, token: 'keyword', push: 'wcms' },
+        { regex: null, push: 'wcms' },
+    ],
+    // 'list' mode, parameters' keywords of the 'list' macro
+    list: [{ regex: null, push: 'wcms' }],
+    // 'media' mode, parameters' keywords of the 'media' macro
+    media: [{ regex: null, push: 'wcms' }],
+});
+
+CodeMirror.defineMode('wcms-markdown', (config, parserConfig) => {
+    return CodeMirror.overlayMode(
+        CodeMirror.getMode(config, parserConfig.backdrop || 'markdown'),
+        CodeMirror.getMode(config, 'wcms')
+    );
+});
+
+CodeMirror.defineMode('wcms-html', (config, parserConfig) => {
+    return CodeMirror.overlayMode(
+        CodeMirror.getMode(config, parserConfig.backdrop || 'htmlmixed'),
+        CodeMirror.getMode(config, 'wcms')
+    );
+});
 
 /** @type {HTMLFormElement} */
 let form;
@@ -39,7 +90,7 @@ window.addEventListener('load', () => {
 
     editors = [
         CodeMirror.fromTextArea(document.getElementById('editmain'), {
-            mode: 'markdown',
+            mode: 'wcms-markdown',
             lineNumbers: true,
             lineWrapping: true,
             extraKeys: { 'Alt-F': 'findPersistent' },
@@ -50,31 +101,31 @@ window.addEventListener('load', () => {
             extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editheader'), {
-            mode: 'markdown',
+            mode: 'wcms-markdown',
             lineNumbers: true,
             lineWrapping: true,
             extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editnav'), {
-            mode: 'markdown',
+            mode: 'wcms-markdown',
             lineNumbers: true,
             lineWrapping: true,
             extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editaside'), {
-            mode: 'markdown',
+            mode: 'wcms-markdown',
             lineNumbers: true,
             lineWrapping: true,
             extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editfooter'), {
-            mode: 'markdown',
+            mode: 'wcms-markdown',
             lineNumbers: true,
             lineWrapping: true,
             extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editbody'), {
-            mode: 'htmlmixed',
+            mode: 'wcms-html',
             lineNumbers: true,
             extraKeys: { 'Alt-F': 'findPersistent' },
         }),

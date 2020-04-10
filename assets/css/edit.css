@@ -379,6 +379,11 @@ div#showthumbnail img {
     cursor: text;
 }
 
+/* CodeMirror Wcms mode */
+.cm-wcms {
+    color: red;
+}
+
 
 @media (max-width: 600px) {
     .bar, .hidephone {
