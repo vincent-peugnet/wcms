@@ -208,11 +208,21 @@ class User extends Item
 
 
 
-
-    public function hashpassword()
+    /**
+     * Hash the password and set `$passwordhashed` to true.
+     * 
+     * @return bool true in cas of success, otherwise false.
+     */
+    public function hashpassword() : bool
     {
-        $this->password = password_hash($this->password, PASSWORD_DEFAULT);
-        $this->passwordhashed = true;
+        $hashedpassword = password_hash($this->password, PASSWORD_DEFAULT);
+        if (!empty($hashedpassword)) {
+            $this->password = $hashedpassword;
+            $this->passwordhashed = true;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function validpassword()

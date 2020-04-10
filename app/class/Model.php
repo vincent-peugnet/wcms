@@ -88,7 +88,6 @@ abstract class Model
 	const TEXT_ELEMENTS = ['header', 'nav', 'main', 'aside', 'footer'];
 
 	const MAX_ID_LENGTH = 64;
-	const PASSWORD_HASH = true;
 	const PASSWORD_MIN_LENGTH = 4;
 	const PASSWORD_MAX_LENGTH = 32;
 

@@ -33,6 +33,9 @@ class Controlleruser extends Controller
         if($this->user->iseditor()) {
             $user = $this->usermanager->get($this->user);
             $user->hydrate($_POST);
+            if ($_POST['passwordhash']) {
+                $user->hashpassword();
+            }
             $this->usermanager->add($user);
             $this->routedirect('user');
         } else {
