@@ -26,16 +26,14 @@ Highlights
 
 W try to help you create pages more spontaneously.
 
-- low latency page loading
-- Use markdown synthax, HTML, CSS and Javascript
-- [url based command interface](MANUAL.md#url-based-command-interface)
+- Very lightweight page loading and editor
+- Use standards to edit your pages : markdown, HTML, CSS and Javascript
 - [Media manager](MANUAL.md#media-manager)
-- Font manager
 - Multi-users
-- No hierarchy between pages
-- Configured without landing-page (by default)
-- optional javascript ergonomic enhancement (no-script proof)
-
+- Flat file database
+- Great website architecture design freedom
+- [url based command interface](MANUAL.md#url-based-command-interface)
+- works perfectly even with javascript disabled
 
 Overview
 --------
@@ -58,7 +56,18 @@ There is lot more you can by altering the `BODY`.
 
 
 
-[Old webpage of the project (in french)](http://vincent.club1.fr/w/?id=w)
+Devellopement team
+------------------
+
+W is a project created and maintained by [Vincent Peugnet](https://github.com/vincent-peugnet), an amateur computer science enthousiast who can only code in PHP. It now includes [Nicolas Peugnet](https://github.com/n-peugnet) (his brother) as JS develloper, technical advisor and every challenges that are too complicated for Vincent.
+We can also mention [Guilhem Prévost Leygonie]() as legendary number one user and now as an issue writer too.
+
+
+- [James Moss's Flywheel Database](https://github.com/jamesmoss/flywheel)
+- [Michel Fortin's Markdown Extra](https://github.com/michelf/php-markdown)
+- [Plates](https://github.com/thephpleague/plates) as template engine.
+- [Nicolas Peugnet](https://nicolas.club1.fr/) for the technical support
+
 
 
 How to install
@@ -80,13 +89,6 @@ W will ask you for the path you've installed it, if you installed it at the root
 
 
 
-### Thanks to
-
-- [James Moss's Flywheel Database](https://github.com/jamesmoss/flywheel)
-- [Michel Fortin's Markdown Extra](https://github.com/michelf/php-markdown)
-- [Plates](https://github.com/thephpleague/plates) as template engine.
-- [Nicolas Peugnet](https://nicolas.club1.fr/) for the technical support
-
 # Development informations
 
 If you want to contribute to the project.
@@ -102,7 +104,8 @@ If you want to contribute to the project.
 
     sudo apt install php php-curl php-mbstring composer nodejs
 
-## Install from sources
+Install from sources
+--------------------
 
 1.  Clone the git repository.
 2.  Install PHP dependencies.
@@ -128,13 +131,15 @@ There are 3 different build environments that `make` can use:
 
 The build environment can be set either for each `make` command by changing it in the `.env` file or on a per command basis by adding it at the end of the command (e.g. `make build ENV=prod`).
 
-## JS development
+JS development
+--------------
 
 While developing the JS sources it is useful to run webpack in watch mode so that the bundles get built at each file change. To do so, use the following command:
 
     make watch
 
-## Publish a new release
+Publish a new release
+---------------------
 
 The release process uses [release-it](https://github.com/release-it/release-it) and uploads sourcemaps to [Sentry](https://sentry.io/). So to create and publish a new release you will need two access tokens:
 -   a [GitHub personnal access token](https://github.com/settings/tokens) with `repository` access

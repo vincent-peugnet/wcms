@@ -16,7 +16,7 @@ CodeMirror.defineSimpleMode('wcms', {
     // detect a Wcms markup then pass to 'wcms' mode
     start: [
         {
-            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|SUMMARY|LIST|MEDIA)(\?[^\s]*)?%)/,
+            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|SUMMARY|LIST|MEDIA|TITLE|DESCRIPTION|DATE|TIME|THUMBNAIL)(\?[^\s]*)?%)/,
             token: 'wcms',
             next: 'wcms',
         },
@@ -35,16 +35,33 @@ CodeMirror.defineSimpleMode('wcms', {
         { regex: /.*%/, token: 'wcms', next: 'start' },
     ],
     // 'element' mode, parameters' keywords of 'element' macros
-    element: [{ regex: null, push: 'wcms' }],
+    element: [
+        {
+            regex: /id|autolink|markdown|headerid/,
+            token: 'wkeyword',
+            push: 'wcms',
+        },
+        { regex: null, push: 'wcms' },
+    ],
     // 'summary' mode, parameters' keywords of the 'summary' macro
     summary: [
-        { regex: /min|max/, token: 'keyword', push: 'wcms' },
+        { regex: /min|max|element/, token: 'wkeyword', push: 'wcms' },
         { regex: null, push: 'wcms' },
     ],
     // 'list' mode, parameters' keywords of the 'list' macro
-    list: [{ regex: null, push: 'wcms' }],
+    list: [
+        {
+            regex: /sortby|order|secure|tagcompare|authorcompare|tagfilter|authorfilter|linkto|limit|description|thumbnail|date|time|author|style/,
+            token: 'wkeyword',
+            push: 'wcms',
+        },
+        { regex: null, push: 'wcms' },
+    ],
     // 'media' mode, parameters' keywords of the 'media' macro
-    media: [{ regex: null, push: 'wcms' }],
+    media: [
+        { regex: /path|sortby|order|type/, token: 'wkeyword', push: 'wcms' },
+        { regex: null, push: 'wcms' },
+    ],
 });
 
 CodeMirror.defineMode('wcms-markdown', (config, parserConfig) => {

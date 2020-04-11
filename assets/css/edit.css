@@ -380,8 +380,13 @@ div#showthumbnail img {
 }
 
 /* CodeMirror Wcms mode */
-.cm-wcms {
-    color: red;
+.cm-wcms, .cm-wkeyword {
+    color: black;
+    background-color: #7b97b9d9;
+}
+
+span.cm-wkeyword {
+    color: white;
 }
 
 
