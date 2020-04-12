@@ -20,6 +20,7 @@ CodeMirror.defineSimpleMode('wcms', {
             token: 'wcms',
             next: 'wcms',
         },
+        { regex: /<!--/, token: 'comment', next: 'comment' },
     ],
     // 'wcms' mode, for each macro, if there is parameters, pass to its associated mode
     wcms: [
@@ -61,6 +62,10 @@ CodeMirror.defineSimpleMode('wcms', {
     media: [
         { regex: /path|sortby|order|type/, token: 'wkeyword', push: 'wcms' },
         { regex: null, push: 'wcms' },
+    ],
+    comment: [
+        { regex: /.*?-->/, token: 'comment', next: 'start' },
+        { regex: /.*/, token: 'comment' },
     ],
 });
 
