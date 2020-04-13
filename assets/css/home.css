@@ -11,6 +11,27 @@
 }
 
 
+.flashmessage {
+    color: white;
+    border: solid white 1px;
+}
+
+.flashmessage li.alert-info {
+    background-color: grey;
+}
+
+.flashmessage li.alert-warning {
+    background-color: orange;
+}
+
+.flashmessage li.alert-success {
+    background-color: green;
+}
+
+.flashmessage li.alert-error {
+    background-color: red;
+}
+
 div#options, article#main {
     min-width: 180px;
     overflow-y: auto;
@@ -642,6 +663,7 @@ footer {
     }
 
 }
+
 
 
 

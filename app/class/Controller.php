@@ -49,6 +49,7 @@ class Controller
         $this->plates->registerFunction('upage', function (string $string, string $id) use ($router) {
             return $router->generate($string, ['page' => $id]);
         });
+        $this->plates->addData(['flashmessages' => Model::getflashmessages()]);
     }
 
     public function showtemplate($template, $params)

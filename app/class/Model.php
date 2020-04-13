@@ -83,6 +83,13 @@ abstract class Model
 		'card' => 'card'
 	];
 
+	const FLASH_MESSAGE_TYPES = [
+		'info' =>'info',
+		'warning' => 'warning',
+		'success' => 'success',
+		'error' => 'error'
+	];
+
 	const COLUMNS = ['id', 'favicon', 'title', 'description', 'tag', 'date', 'datemodif', 'datecreation', 'secure', 'authors', 'linkto', 'visitcount', 'affcount', 'editcount'];
 
 	const TEXT_ELEMENTS = ['header', 'nav', 'main', 'aside', 'footer'];
@@ -180,4 +187,31 @@ abstract class Model
 		return array_unique(array_values(self::MEDIA_EXT));
 	}
 
+	public static function getflashmessages()
+	{
+		if (!empty($_SESSION['user' . Config::basepath()]['flashmessages'])) {
+			$flashmessage = $_SESSION['user' . Config::basepath()]['flashmessages'];
+			$_SESSION['user' . Config::basepath()]['flashmessages'] = [];
+			if (is_array($flashmessage)) {
+				return $flashmessage;
+			} else {
+				return [];
+			}
+			return $flashmessage;
+		}
+	}
+
+	/**
+	 * Add a message to flash message list
+	 * 
+	 * @param string $content The message content
+	 * @param string $type Message Type, can be `info|warning|success`
+	 */
+	public static function sendflashmessage(string $content, string $type = 'info')
+	{
+		if (!key_exists($type, self::FLASH_MESSAGE_TYPES)) {
+			$type = 'info';
+		}
+		$_SESSION['user' . Config::basepath()]['flashmessages'][] = ['content' => $content, 'type' => $type];
+	}
 }

@@ -224,18 +224,22 @@ class Modelmedia extends Model
 		if ($target[strlen($target) - 1] != DIRECTORY_SEPARATOR)
 			$target .= DIRECTORY_SEPARATOR;
 		$count = 0;
+		$successcount = 0;
 		foreach ($_FILES[$index]['name'] as $filename) {
 			$fileinfo = pathinfo($filename);
 			$extension = idclean($fileinfo['extension']);
 			$id = idclean($fileinfo['filename']);
 
 			$tmp = $_FILES['file']['tmp_name'][$count];
-			$count = $count + 1;
+			$count ++;
 			$temp = $target . $id . '.' . $extension;
-			move_uploaded_file($tmp, $temp);
+			if(move_uploaded_file($tmp, $temp)) {
+				$successcount ++;
+			}
 			$temp = '';
 			$tmp = '';
 		}
+		Model::sendflashmessage($successcount . ' / ' . $count . ' files have been uploaded', 'success');
 	}
 
 	public function adddir($dir, $name)
@@ -284,7 +288,7 @@ class Modelmedia extends Model
 	 */
 	public function deletefile(string $filedir)
 	{
-		if(is_file($filedir)) {
+		if(is_file($filedir) && is_writable(dirname($filedir))) {
 			return unlink($filedir);
 		} else {
 			return false;
@@ -293,14 +297,27 @@ class Modelmedia extends Model
 
 	public function multifiledelete(array $filelist)
 	{
+		$success = [];
 		foreach ($filelist as $filedir ) {
 			if(is_string($filedir)) {
-				$this->deletefile($filedir);
+				$success[] = $this->deletefile($filedir);
 			}
+		}
+		Model::sendflashmessage(array_count_values($success) . ' / ' . count($filelist) . ' files have been deleted', 'success');
+		if(in_array(false, $success)) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 
-	public function movefile(string $filedir, string $dir)
+	/**
+	 * @param string $filedir current file path
+	 * @param string $dir New directory to move file to
+	 * 
+	 * @return bool True in case of success, false if the file does not exist or if `rename()` fail
+	 */
+	public function movefile(string $filedir, string $dir) : bool
 	{
 		if(substr($dir, -1) !== '/') {
 			$dir .= '/';
@@ -313,7 +330,13 @@ class Modelmedia extends Model
 		}
 	}
 
-	public function multimovefile(array $filedirlist, string $dir)
+	/**
+	 * @param array $filedirlist Ordered array of file list
+	 * @param string $dir New directory to move file to
+	 * 
+	 * @return bool False if any of moves failed, otherwise true
+	 */
+	public function multimovefile(array $filedirlist, string $dir) : bool
 	{
 		$success = [];
 		foreach ($filedirlist as $filedir ) {
@@ -321,6 +344,7 @@ class Modelmedia extends Model
 				$success[] = $this->movefile($filedir, $dir);
 			}
 		}
+		Model::sendflashmessage(count($success) . ' / ' . count($filedirlist) . ' files have been moved', 'success');
 		if(in_array(false, $success)) {
 			return false;
 		} else {

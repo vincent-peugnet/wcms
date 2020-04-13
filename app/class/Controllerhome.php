@@ -150,6 +150,7 @@ class Controllerhome extends Controllerpage
                 $this->renderpage($page);
                 $this->pagemanager->update($page);
             }
+            Model::sendflashmessage('All pages have been rendered', 'success');
         }
         $this->routedirect('home');
     }
@@ -233,11 +234,15 @@ class Controllerhome extends Controllerpage
     {
         $pagelist = $_POST['pagesid'] ?? [];
         $pagelist = $this->pagemanager->pagelistbyid($pagelist);
+        $count = 0;
         foreach ($pagelist as $page) {
             $page = $this->renderpage($page);
-            $this->pagemanager->update($page);
-        }
+            if($this->pagemanager->update($page)) {
+                $count ++;
+            }
 
+        }
+        Model::sendflashmessage($count . ' pages have been rendered', 'success');
     }
 
     public function multidelete()

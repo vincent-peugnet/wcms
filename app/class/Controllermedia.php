@@ -103,7 +103,7 @@ class Controllermedia extends Controller
                 $this->mediamanager->multimovefile($_POST['id'], $_POST['dir']);
             }
         }
-        $this->redirect($this->router->generate('media') . '?path=' . $_POST['path']);
+        $this->redirect($this->router->generate('media') . '?path=/' . $_POST['path']);
     }
 
 

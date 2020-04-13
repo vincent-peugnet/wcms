@@ -36,6 +36,20 @@
 
 
 
+<?php
+if (!empty($flashmessages) && is_array($flashmessages)) { ?>
+    <div class="flashmessage">
+        <ul>
+            <?php foreach ($flashmessages as $flashmessage ) { ?>
+                <li class="alert alert-<?= $flashmessage['type'] ?>">
+                    <?= $flashmessage['content'] ?>
+                </li>
+            <?php } ?>
+        </ul>
+    </div>
+<?php } ?>
+
+
 <?= $this->section('page') ?>
 
 
