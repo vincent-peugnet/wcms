@@ -97,6 +97,7 @@ abstract class Model
 	const MAX_ID_LENGTH = 64;
 	const PASSWORD_MIN_LENGTH = 4;
 	const PASSWORD_MAX_LENGTH = 32;
+	const MAX_COOKIE_CONSERVATION = 365;
 
 	/** RENDER OPTIONS	 */
 	// add class in html element indicating from witch page the content come.

@@ -279,25 +279,31 @@ class Controllerpage extends Controller
     {
         $page = $this->pagemanager->getfromfile();
 
+        if($page !== false) {
         
-        if(!empty($_POST['id'])) {
-            $page->setid(idclean($_POST['id']));
-        }
-        
-        if($_POST['datecreation']) {
-            $page->setdatecreation($this->now);
-        }
-        
-        if($_POST['author']) {
-            $page->setauthors([$this->user->id()]);
-        }
-        
-        $page->setdaterender($page->datecreation('date'));
-        
-        if($page !== false) {            
-            if($_POST['erase'] || $this->pagemanager->get($page) === false) {
-                $this->pagemanager->add($page);
+            if(!empty($_POST['id'])) {
+                $page->setid(idclean($_POST['id']));
             }
+            
+            if($_POST['datecreation']) {
+                $page->setdatecreation($this->now);
+            }
+            
+            if($_POST['author']) {
+                $page->setauthors([$this->user->id()]);
+            }
+            
+            $page->setdaterender($page->datecreation('date'));
+        
+            if($_POST['erase'] || $this->pagemanager->get($page) === false) {
+                if($this->pagemanager->add($page)) {
+                    Model::sendflashmessage('Page successfully uploaded', 'success');
+                }
+            } else {
+                Model::sendflashmessage('Page ID already exist, check remplace if you want to erase it', 'warning');
+            }
+        } else {
+            Model::sendflashmessage('Error while importing page JSON', 'error');
         }
         $this->routedirect('home');
     }

@@ -6,9 +6,8 @@
 <?php $this->start('page') ?>
 
 
-<body>
 
-    <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'timeline', 'pagelist' => $pagelist]) ?>
+<?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'timeline', 'pagelist' => $pagelist]) ?>
 
 <?php if($user->iseditor()) { ?>
 
@@ -97,7 +96,6 @@ foreach ($groupedeventlist as $eventuser) {
 
 </section>
 
-</body>
 
 
 

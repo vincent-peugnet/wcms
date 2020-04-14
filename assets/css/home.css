@@ -11,24 +11,44 @@
 }
 
 
-.flashmessage {
+#flashmessage {
     color: white;
     border: solid white 1px;
+    position: fixed;
+    animation-delay: 5s;
+    animation-name: flash;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    background-color: #4d2adc;
+    max-height: 200px;
+    width: 100%;
 }
 
-.flashmessage li.alert-info {
+div#flashmessage:target {
+    display: none;
+}
+
+#flashmessage ul {
+    max-height: 200px;
+    overflow-y: auto;
+    margin: auto;
+    z-index: 5;
+}
+
+
+#flashmessage li.alert-info {
     background-color: grey;
 }
 
-.flashmessage li.alert-warning {
-    background-color: orange;
+#flashmessage li.alert-warning {
+    background-color: #FF5722;
 }
 
-.flashmessage li.alert-success {
+#flashmessage li.alert-success {
     background-color: green;
 }
 
-.flashmessage li.alert-error {
+#flashmessage li.alert-error {
     background-color: red;
 }
 
@@ -57,7 +77,6 @@ aside {
 
 
 aside details, aside span {
-    width: 100%;
     max-width: 280px;
 }
 
@@ -66,25 +85,20 @@ aside details, aside span {
 aside details .submenu, aside summary {
     background-color: darkgrey;
     border-left: 1px solid grey;
+    min-width: 100px;
 }
 
 
 aside .submenu {
     position: absolute;
     border: solid 1px dimgrey;
-    width: 20%;
-    max-width: 280px;
     max-height: 85%;
     overflow-y: auto;
 }
 
-aside .submenu * {
-    max-width: 100%;
-}
 
-
-aside summary {
-    color: black;
+.submenu h2 {
+    font-size: medium;
 }
 
 aside details > summary::-webkit-details-marker {
@@ -93,7 +107,6 @@ aside details > summary::-webkit-details-marker {
 
 
 aside summary:hover {
-    /* color: white; */
     cursor: pointer;
     background-color: lightgrey;
 }
@@ -506,8 +519,12 @@ td.code {
 }
 
 
-main.user section#pref {
+main.user section#user {
     max-width: 500px;
+}
+
+div#preferences {
+    padding: 2% 0;
 }
 
 
@@ -665,12 +682,13 @@ footer {
 }
 
 
+@keyframes flash {
+  from {
+    top: 0;
+  }
 
-
-
-
-
-
-
-
+  to {
+    top: -200px;
+  }
+}
 

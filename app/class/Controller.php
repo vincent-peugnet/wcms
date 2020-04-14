@@ -99,6 +99,20 @@ class Controller
         exit;
     }
 
+    /**
+     * 
+     */
+    public function sendstatflashmessage(int $count, int $total, string $message)
+    {
+        if ($count === $total) {
+            Model::sendflashmessage($count . ' / ' . $total . ' ' . $message, 'success');
+        } elseif ($count > 0) {
+            Model::sendflashmessage($count . ' / ' . $total . ' ' . $message, 'warning');
+        } else {
+            Model::sendflashmessage($count . ' / ' . $total . ' ' . $message, 'error');
+        }
+    }
+
 }
 
 

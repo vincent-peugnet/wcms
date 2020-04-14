@@ -7,14 +7,12 @@ $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'home.css']
 
 <?php $this->start('page') ?>
 
-<body>
-
-    <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'user', 'pagelist' => $pagelist]) ?>
+<?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'user', 'pagelist' => $pagelist]) ?>
 
 
 <main class="user">
 
-    <section id="pref">
+    <section id="user">
         <div class="block">
 
             
@@ -34,25 +32,26 @@ $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'home.css']
 
                 <h2>Preferences</h2>
 
+                <div id="preferences">
 
-                <form action="<?= $this->url('userpref') ?>" method="post">
+                    <form action="<?= $this->url('userpref') ?>" method="post">
 
-                <p>
-                    <input type="number" name="cookie" value="<?= $getuser->cookie() ?>" id="cookie" min="0" max="365">
-                    <label for="cookie">Cookie conservation time <i>(In days)</i></label>
-                    <p>When you tick the <em>remember-me</em> checkbox during login, you can choose how much time <strong>W</strong> will remember you.</p>
+                        <input type="number" name="cookie" value="<?= $getuser->cookie() ?>" id="cookie" min="0" max="<?= Model::MAX_COOKIE_CONSERVATION ?>">
+                        <label for="cookie">Cookie conservation time <i>(In days)</i></label>
+                        <p>When you tick the <em>remember-me</em> checkbox during login, you can choose how much time <strong>W</strong> will remember you.</p>
 
-                    <input type="password" name="password" id="password" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" maxlength="<?= Wcms\Model::PASSWORD_MAX_LENGTH ?>">
-                    <label for="password">New password</label>
-                    
-                    <input type="hidden" name="passwordhash" value="1">
+                        <input type="password" name="password" id="password" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" maxlength="<?= Wcms\Model::PASSWORD_MAX_LENGTH ?>">
+                        <label for="password">New password</label>
+                        
+                        <input type="hidden" name="passwordhash" value="1">
 
-                    </br>
-                    <input type="submit" value="update">
-                </p>
-                    
-                </form>
+                        <p>Password have to be between <?= Wcms\Model::PASSWORD_MIN_LENGTH ?> and <?= Wcms\Model::PASSWORD_MAX_LENGTH ?> characters long.</p>
 
+                        <input type="submit" value="update preferences">
+                        
+                    </form>
+
+                </div>
 
 
 
@@ -215,6 +214,5 @@ $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'home.css']
 
 
 </main>
-</body>
 
 <?php $this->stop('page') ?>

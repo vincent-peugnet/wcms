@@ -7,11 +7,10 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
 
 <?php $this->start('page') ?>
 
-<body>
 
-    <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'media', 'pagelist' => $pagelist]) ?>
+<?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'media', 'pagelist' => $pagelist]) ?>
 
-    <?php $this->insert('mediamenu', ['user' => $user, 'pathlist' => $pathlist, 'mediaopt' => $mediaopt]) ?>
+<?php $this->insert('mediamenu', ['user' => $user, 'pathlist' => $pathlist, 'mediaopt' => $mediaopt]) ?>
 
 <main class="media">
 
@@ -116,6 +115,5 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
 
 <script src="<?= Wcms\Model::jspath() ?>media.bundle.js"></script>
 
-</body>
 
 <?php $this->stop('page') ?>

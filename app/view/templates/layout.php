@@ -38,19 +38,23 @@
 
 <?php
 if (!empty($flashmessages) && is_array($flashmessages)) { ?>
-    <div class="flashmessage">
+<a href="#flashmessage">
+    <div class="flashmessage" id="flashmessage">
         <ul>
             <?php foreach ($flashmessages as $flashmessage ) { ?>
                 <li class="alert alert-<?= $flashmessage['type'] ?>">
                     <?= $flashmessage['content'] ?>
                 </li>
-            <?php } ?>
-        </ul>
-    </div>
+                <?php } ?>
+            </ul>
+        </div>
+    </a>
 <?php } ?>
 
+<body>
+    <?= $this->section('page') ?>
+</body>
 
-<?= $this->section('page') ?>
 
 
 </html>

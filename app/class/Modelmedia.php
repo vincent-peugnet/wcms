@@ -303,7 +303,7 @@ class Modelmedia extends Model
 				$success[] = $this->deletefile($filedir);
 			}
 		}
-		Model::sendflashmessage(array_count_values($success) . ' / ' . count($filelist) . ' files have been deleted', 'success');
+		Model::sendflashmessage(count(array_filter($success)) . ' / ' . count($filelist) . ' files have been deleted', 'success');
 		if(in_array(false, $success)) {
 			return false;
 		} else {
@@ -338,16 +338,20 @@ class Modelmedia extends Model
 	 */
 	public function multimovefile(array $filedirlist, string $dir) : bool
 	{
-		$success = [];
+		$count = 0;
 		foreach ($filedirlist as $filedir ) {
 			if(is_string($filedir)) {
-				$success[] = $this->movefile($filedir, $dir);
+				if($this->movefile($filedir, $dir)) {
+					$count ++;
+				}
 			}
 		}
-		Model::sendflashmessage(count($success) . ' / ' . count($filedirlist) . ' files have been moved', 'success');
-		if(in_array(false, $success)) {
+		$total = count($filedirlist);
+		if($count !== $total) {
+			Model::sendflashmessage($count . ' / ' . $total . ' files have been moved', 'error');
 			return false;
 		} else {
+			Model::sendflashmessage($count . ' / ' . $total . ' files have been moved', 'success');
 			return true;
 		}
 	}

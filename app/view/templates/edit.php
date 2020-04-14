@@ -7,7 +7,6 @@
 
 <style>.tabs textarea{font-size: <?= Wcms\Config::fontsize() ?>px}</style>
 
-<body>
 <main class="editor">
 
     <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'edit', 'pagelist' => $pagelist, 'pageid' => $page->id()]) ?>
@@ -32,6 +31,5 @@
     let pagetitle = '<?= $page->title() ?>';
 </script>
 <script src="<?= Wcms\Model::jspath() ?>edit.bundle.js"></script>
-</body>
 
 <?php $this->stop('page') ?>

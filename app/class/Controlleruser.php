@@ -32,7 +32,11 @@ class Controlleruser extends Controller
     {
         if($this->user->iseditor()) {
             $user = $this->usermanager->get($this->user);
-            $user->hydrate($_POST);
+            if ($user->hydrate($_POST)) {
+                Model::sendflashmessage('User preferences have been successfully updated', 'success');
+            } else {
+                Model::sendflashmessage('There was a problem when updating preferences', 'warning');
+            }
             if ($_POST['passwordhash']) {
                 $user->hashpassword();
             }

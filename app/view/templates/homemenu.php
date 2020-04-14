@@ -7,7 +7,7 @@
             <div class="submenu">
                 <h2>Import page as file</h2>
             <form action="<?= $this->url('pageupload') ?>" method="post" enctype="multipart/form-data">
-            <input type="file" name="pagefile" id="pagefile" accept=".json">
+            <input type="file" name="pagefile" id="pagefile" accept=".json" required>
             <label for="pagefile">JSON Page file</label>
             <input type="hidden" name="erase" value="0">
             <input type="hidden" name="datecreation" value="0">
@@ -38,13 +38,7 @@
         <div class="submenu">
             <i>Edit selected pages</i>
             <form action="<?= $this->url('multi') ?>" method="post" id="multi">
-            <h2>Render</h2>
-                <input type="submit" name="action" value="render">
-            <h2>Delete</h2>
-                <input type="hidden" name="confirmdelete" value="0">
-                <input type="checkbox" name="confirmdelete" id="confirmdelete" value="1">
-                <label for="confirmdelete">confirm</label>
-                <input type="submit" name="action" value="delete">
+
             <h2>Edit Meta infos</h2>
             <input type="text" name="datas[title]" id="title">
                 <label for="title">title</label>
@@ -181,6 +175,15 @@
                 </br>
                 <input type="submit" name="action" value="edit">
 
+                <h2>Render</h2>
+                <input type="submit" name="action" value="render">
+
+                <h2>Delete</h2>
+                <input type="hidden" name="confirmdelete" value="0">
+                <input type="checkbox" name="confirmdelete" id="confirmdelete" value="1">
+                <label for="confirmdelete">confirm</label>
+                <input type="submit" name="action" value="delete">
+
             </form>
         </div>
     </details>
@@ -195,7 +198,7 @@
 
 
     <details class="hidephone" id="selection" <?= !empty($optlist) ? 'open' : '' ?>>
-        <summary>Filters</summary>
+        <summary>Filter</summary>
         <div class="submenu">
         <h2>Get LIST code</h2>
         <i>Generate code to display a list of pages</i>
@@ -309,18 +312,6 @@
     <details class="hidephone" id="display">
         <summary>Display</summary>
         <div class="submenu">
-            <h2>Worksapce</h2>
-        <form action="">
-            <ul>
-            <?php foreach ($user->display() as $id => $setting) { ?>
-                <li>
-                    <input type="checkbox" name="display[<?= $id ?>]" id="display_<?= $id ?>" value="true" <?= $setting ? 'checked' : '' ?>>
-                    <label for="display_<?= $id ?>"><?= $id ?></label>
-                </li>
-            <?php } ?>
-            </ul>
-            <input type="submit" value="update display">
-        </form>
             <h2>Columns</h2>
         <form action="<?= $this->url('homecolumns') ?>" method="post">
         <ul>

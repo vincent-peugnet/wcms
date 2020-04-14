@@ -12,13 +12,21 @@ abstract class Item
 
     public function hydrate($datas = [])
     {
+		$error = 0;
         foreach ($datas as $key => $value) {
             $method = 'set' . $key;
 
             if (method_exists($this, $method)) {
-                $this->$method($value);
+                if($this->$method($value) === false) {
+					$error ++;
+				}
             }
-        }
+		}
+		if ($error > 0) {
+			return false;
+		} else {
+			return true;
+		}
     }
 
 

@@ -46,7 +46,7 @@ class Modelpage extends Modeldb
 	 * 
 	 * @param array $idlist list of ID strings
 	 * 
-	 * @return array of Page objects
+	 * @return Page[] array of Page objects
 	 */
 	public function pagelistbyid(array $idlist = []) : array
 	{
@@ -65,13 +65,14 @@ class Modelpage extends Modeldb
 	 * Store new page in the database
 	 * 
 	 * @param Page $page object
+	 * @return bool depending on database storing
 	 */
-	public function add(Page $page)
+	public function add(Page $page) : bool
 	{
 
 		$pagedata = new Document($page->dry());
 		$pagedata->setId($page->id());
-		$this->repo->store($pagedata);
+		return $this->repo->store($pagedata);
 	}
 
 	/**
@@ -395,15 +396,17 @@ class Modelpage extends Modeldb
 	 * @param array $reset
 	 * @param string $addtag
 	 * @param string $addauthor
+	 * 
+	 * @return bool Depending on update success
 	 */
-	public function pageedit($pageid, $datas, $reset, $addtag, $addauthor)
+	public function pageedit($pageid, $datas, $reset, $addtag, $addauthor) : bool
 	{
 		$page = $this->get($pageid);
 		$page = $this->reset($page, $reset);
 		$page->hydrate($datas);
 		$page->addtag($addtag);
 		$page->addauthor($addauthor);
-		$this->update($page);
+		return $this->update($page);
 	}
 
 	/**

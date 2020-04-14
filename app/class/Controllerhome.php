@@ -146,11 +146,15 @@ class Controllerhome extends Controllerpage
     {
         if ($this->user->iseditor()) {
             $pagelist = $this->modelhome->pagelist();
+            $count = 0;
             foreach ($pagelist as $page) {
-                $this->renderpage($page);
-                $this->pagemanager->update($page);
+                $page = $this->renderpage($page);
+                if ($this->pagemanager->update($page)) {
+                    $count ++;
+                }
             }
-            Model::sendflashmessage('All pages have been rendered', 'success');
+            $total = count($pagelist);
+            $this->sendstatflashmessage($count, $total, 'pages have been rendered');
         }
         $this->routedirect('home');
     }
@@ -203,36 +207,45 @@ class Controllerhome extends Controllerpage
                     $this->multidelete();
                 break;
             }
+        } else {
+            $action = $_POST['action'] ?? 'edit';
+            Model::sendflashmessage('Please select some pages to ' . $action, 'warning');
         }
         $this->routedirect('home');
     }
 
     public function multiedit()
     {
-        if (isset($_POST['pagesid'])) {
-            $datas = $_POST['datas']?? [];
-            $datas = array_filter($datas, function ($var) {
-                return $var !== "";
-            });
-            $datas = array_map(function ($value) {
-                if($value === "!") {
-                    return "";
-                } else {
-                    return $value;
-                }
-            }, $datas);
-            $reset = $_POST['reset'] ?? [];
-            $addtag = $_POST['addtag'] ?? '';
-            $addauthor = $_POST['addauthor'] ?? '';
-            foreach ($_POST['pagesid'] as $id) {
-                $this->pagemanager->pageedit($id, $datas, $reset, $addtag, $addauthor);
+        $pagelist = $_POST['pagesid'] ?? [];
+        $datas = $_POST['datas']?? [];
+        $datas = array_filter($datas, function ($var) {
+            return $var !== "";
+        });
+        $datas = array_map(function ($value) {
+            if($value === "!") {
+                return "";
+            } else {
+                return $value;
+            }
+        }, $datas);
+        $reset = $_POST['reset'] ?? [];
+        $addtag = $_POST['addtag'] ?? '';
+        $addauthor = $_POST['addauthor'] ?? '';
+        $count = 0;
+        $total = 0;
+        foreach ($pagelist as $id) {
+            $total ++;
+            if($this->pagemanager->pageedit($id, $datas, $reset, $addtag, $addauthor)) {
+                $count ++;
             }
         }
+        $this->sendstatflashmessage($count, $total, 'pages have been edited');
     }
 
     public function multirender()
     {
         $pagelist = $_POST['pagesid'] ?? [];
+        $total = count($pagelist);
         $pagelist = $this->pagemanager->pagelistbyid($pagelist);
         $count = 0;
         foreach ($pagelist as $page) {
@@ -240,19 +253,25 @@ class Controllerhome extends Controllerpage
             if($this->pagemanager->update($page)) {
                 $count ++;
             }
-
         }
-        Model::sendflashmessage($count . ' pages have been rendered', 'success');
+        $this->sendstatflashmessage($count, $total, 'pages have been rendered');
     }
 
     public function multidelete()
     {
         if(isset($_POST['confirmdelete']) && $_POST['confirmdelete']) {
             $pagelist = $_POST['pagesid'] ?? [];
+            $total = count($pagelist);
+            $count = 0;
             foreach ($pagelist as $id) {
-                $this->pagemanager->delete($id);
+                if ($this->pagemanager->delete($id)) {
+                    $count ++;
+                }
             }
-        }        
+            $this->sendstatflashmessage($count, $total, 'pages have been deleted');
+        } else {
+            Model::sendflashmessage('Confirm delete has not been cheked', 'warning');
+        }
     }
 }
 

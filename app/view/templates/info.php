@@ -3,7 +3,6 @@
 
 <?php $this->start('page') ?>
 
-<body>
 
     <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'info', 'pagelist' => $pagelist]) ?>
 
@@ -76,6 +75,5 @@
 </section>
 
 </main>
-</body>
 
 <?php $this->stop('page') ?>

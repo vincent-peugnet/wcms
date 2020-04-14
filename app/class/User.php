@@ -118,6 +118,9 @@ class User extends Item
         $id = idclean($id);
         if (strlen($id) < Model::MAX_ID_LENGTH and is_string($id)) {
             $this->id = $id;
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -132,7 +135,12 @@ class User extends Item
     public function setpassword($password)
     {
         if (!empty($password) && is_string($password)) {
-            $this->password = $password;
+            if (strlen($password) >= Model::PASSWORD_MIN_LENGTH && strlen($password) <= Model::PASSWORD_MAX_LENGTH) {
+                $this->password = $password;
+                return true;
+            } else {
+                return false;
+            }
         }
 
     }
@@ -152,9 +160,13 @@ class User extends Item
 
     public function setcookie($cookie)
     {
-        $cookie = abs(intval($cookie));
-        if($cookie >= 365) {$cookie = 365;}
-        $this->cookie = $cookie;
+        $cookie = intval($cookie);
+        if($cookie <= Model::MAX_COOKIE_CONSERVATION && $cookie >= 0) {
+            $this->cookie = $cookie;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function setcolumns($columns)
