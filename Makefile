@@ -90,6 +90,7 @@ dist/w_cms_%.zip: all
 		Makefile \
 		"package*" \
 		phpcs.xml \
+		phpunit.xml \
 		webpack.config.js
 
 # Generate the js bundles (and sourcemaps).
@@ -152,10 +153,12 @@ buildclean:
 	rm -rf $(js_srcmaps)
 	rm -rf $(build_dir)
 
+# Run all checks.
 .PHONY: check
-check:
-	@echo Running tests...
+check: $(PREV_ENV_FILE) vendor
+	@echo Running checks...
 	phpcs
+	phpunit
 
 # Touch files affected by the build environment to force the execution
 # of the corresponding targets.
