@@ -86,9 +86,10 @@ dist/w_cms_%.zip: all
 		.default.env \
 		.gitignore \
 		.release-it.json \
-		Makefile \
 		"composer*" \
+		Makefile \
 		"package*" \
+		phpcs.xml \
 		webpack.config.js
 
 # Generate the js bundles (and sourcemaps).
@@ -150,6 +151,11 @@ buildclean:
 	rm -rf $(js_bundles)
 	rm -rf $(js_srcmaps)
 	rm -rf $(build_dir)
+
+.PHONY: check
+check:
+	@echo Running tests...
+	phpcs
 
 # Touch files affected by the build environment to force the execution
 # of the corresponding targets.

@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         name="WRuleset"
+         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+    <description>The coding standard for Wcms.</description>
+
+    <!-- included files -->
+    <file>index.php</file>
+    <file>app</file>
+    <exclude-pattern>app/view/templates/*\.php$</exclude-pattern>
+
+    <!-- Add some default command line args (see help) -->
+    <arg name="basepath" value="."/>
+    <arg name="colors" />
+    <arg name="parallel" value="75" />
+    <arg value="p" />
+
+    <!-- Include the whole PSR12 standard -->
+    <rule ref="PSR12"></rule>
+
+    <!-- Add some rules -->
+    <rule ref="Generic.Metrics.NestingLevel"></rule>
+</ruleset>
