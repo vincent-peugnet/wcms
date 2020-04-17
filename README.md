@@ -138,6 +138,23 @@ While developing the JS sources it is useful to run webpack in watch mode so tha
 
     make watch
 
+Run checks
+---------
+
+Multiple tools are used to perform checks on the source code:
+
+-   **phpcs** to lint PHP code
+
+        make lint
+
+-   **phpunit** to run unit test on PHP code
+ 
+        make test
+
+All checks can be run with a single command
+
+    make check [--keep-going]
+
 Publish a new release
 ---------------------
 
