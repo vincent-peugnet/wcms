@@ -14,6 +14,7 @@
     <arg name="colors" />
     <arg name="parallel" value="75" />
     <arg value="p" />
+    <arg name="cache" value="build/phpcs/result.cache" />
 
     <!-- Include the whole PSR12 standard -->
     <rule ref="PSR12"></rule>
