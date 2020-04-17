@@ -44,7 +44,7 @@ watch:
 
 # Create a new release and upload it on GitHub.
 .PHONY: release
-release: node_modules
+release: check node_modules
 	release-it
 
 # Inform Sentry of a new release.
