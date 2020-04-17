@@ -52,7 +52,7 @@ class Colors extends Item
 
     /**
      * Transform a CSS string in a array of `tag => background-color`
-     * 
+     *
      * @return array Ouput array using TAG as key and Hex Color as value
      */
     public function parsetagcss()
@@ -111,14 +111,14 @@ class Colors extends Item
 
     public function setrawcss($rawcss)
     {
-        if(is_string($rawcss)) {
+        if (is_string($rawcss)) {
             $this->rawcss = $rawcss;
         }
     }
 
     public function settagcolor($tagcolor)
     {
-        if(is_array($tagcolor)) {
+        if (is_array($tagcolor)) {
             $this->tagcolor = $tagcolor;
         }
     }

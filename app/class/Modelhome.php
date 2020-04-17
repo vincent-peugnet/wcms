@@ -4,10 +4,11 @@ namespace Wcms;
 
 class Modelhome extends Modelpage
 {
- 	
-	public function __construct() {
-		parent::__construct();
-	}
+    
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     public function optinit($table)
     {
@@ -24,19 +25,19 @@ class Modelhome extends Modelpage
 
     
     /**
-	 * @param array  $pagelist of Pages objects as `id => Page`
+     * @param array  $pagelist of Pages objects as `id => Page`
      * @param Opt $opt
-     * 
-	 * @param string $regex Regex to match.
-	 * @param array $options Option search, could be `content` `title` `description`.
-	 * 
-	 * @return array associative array of `Page` objects     * 
+     *
+     * @param string $regex Regex to match.
+     * @param array $options Option search, could be `content` `title` `description`.
+     *
+     * @return array associative array of `Page` objects     *
      */
-    public function pagetable(array $pagelist, Opt $opt, $regex = '', $searchopt = []) : array
+    public function pagetable(array $pagelist, Opt $opt, $regex = '', $searchopt = []): array
     {
         $pagelist = $this->filter($pagelist, $opt);
-        if(!empty($regex)) {
-            $pagelist = $this->deepsearch($pagelist, $regex , $searchopt);
+        if (!empty($regex)) {
+            $pagelist = $this->deepsearch($pagelist, $regex, $searchopt);
         }
         $pagelist = $this->sort($pagelist, $opt);
 
@@ -47,14 +48,14 @@ class Modelhome extends Modelpage
 
     /**
      * Filter the pages list acording to the options and invert
-     * 
+     *
      * @param array $pagelist of `Page` objects
      * @param Opt $opt
-     * 
+     *
      * @return array of `string` pages id
      */
 
-    public function filter(array $pagelist, Opt $opt) : array
+    public function filter(array $pagelist, Opt $opt): array
     {
 
         $filtertagfilter = $this->filtertagfilter($pagelist, $opt->tagfilter(), $opt->tagcompare());
@@ -64,7 +65,7 @@ class Modelhome extends Modelpage
 
         $filter = array_intersect($filtertagfilter, $filtersecure, $filterauthorfilter, $filterlinkto);
 
-        if($opt->invert()) {
+        if ($opt->invert()) {
             $idlist = array_keys($pagelist);
             $filter = array_diff($idlist, $filter);
         }
@@ -76,17 +77,17 @@ class Modelhome extends Modelpage
 
     /**
      * Sort and limit an array of Pages
-     * 
+     *
      * @param array $pagelist of `Page` objects
      * @param Opt $opt
-     * 
-	 * @return array associative array of `Page` objects
+     *
+     * @return array associative array of `Page` objects
      */
-    public function sort(array $pagelist, Opt $opt) : array
+    public function sort(array $pagelist, Opt $opt): array
     {
         $this->pagelistsort($pagelist, $opt->sortby(), $opt->order());
 
-        if($opt->limit() !== 0) {
+        if ($opt->limit() !== 0) {
             $pagelist = array_slice($pagelist, 0, $opt->limit());
         }
 
@@ -94,68 +95,72 @@ class Modelhome extends Modelpage
     }
 
 
-	/**
-	 * Search for regex and count occurences
-	 * 
-	 * @param array $page list Array of Pages.
-	 * @param string $regex Regex to match.
-	 * @param array $options Option search, could be `content` `title` `description`.
-	 * 
-	 * @return array associative array of `Page` objects
-	 */
-	public function deepsearch(array $pagelist, string $regex, array $options) : array
-	{
-        if($options['casesensitive']) {
+    /**
+     * Search for regex and count occurences
+     *
+     * @param array $page list Array of Pages.
+     * @param string $regex Regex to match.
+     * @param array $options Option search, could be `content` `title` `description`.
+     *
+     * @return array associative array of `Page` objects
+     */
+    public function deepsearch(array $pagelist, string $regex, array $options): array
+    {
+        if ($options['casesensitive']) {
             $case = '';
         } else {
             $case = 'i';
         }
         $regex = '/' . $regex . '/' . $case;
         $pageselected = [];
-		foreach ($pagelist as $page) {
-			$count = 0;
-			if($options['content']) {
-				$count += preg_match($regex, $page->main());
-				$count += preg_match($regex, $page->nav());
-				$count += preg_match($regex, $page->aside());
-				$count += preg_match($regex, $page->header());
-				$count += preg_match($regex, $page->footer());
-			}
-			if ($options['other']) {
-				$count += preg_match($regex, $page->body());
-				$count += preg_match($regex, $page->css());
-				$count += preg_match($regex, $page->javascript());
-			}
-			if ($options['id']) {
-				$count += preg_match($regex, $page->id());
-			}
-			if ($options['title']) {
-				$count += preg_match($regex, $page->title());
-			}
-			if ($options['description']) {
-				$count += preg_match($regex, $page->description());
-			}
-			if ($count !== 0) {
-				$pageselected[$page->id()] = $page;
-			}
-		}
-		return $pageselected;
+        foreach ($pagelist as $page) {
+            $count = 0;
+            if ($options['content']) {
+                $count += preg_match($regex, $page->main());
+                $count += preg_match($regex, $page->nav());
+                $count += preg_match($regex, $page->aside());
+                $count += preg_match($regex, $page->header());
+                $count += preg_match($regex, $page->footer());
+            }
+            if ($options['other']) {
+                $count += preg_match($regex, $page->body());
+                $count += preg_match($regex, $page->css());
+                $count += preg_match($regex, $page->javascript());
+            }
+            if ($options['id']) {
+                $count += preg_match($regex, $page->id());
+            }
+            if ($options['title']) {
+                $count += preg_match($regex, $page->title());
+            }
+            if ($options['description']) {
+                $count += preg_match($regex, $page->description());
+            }
+            if ($count !== 0) {
+                $pageselected[$page->id()] = $page;
+            }
+        }
+        return $pageselected;
     }
 
 
     
     /**
      * Transform list of page into list of nodes and edges
-     * 
+     *
      * @param array $pagelist associative array of pages as `id => Page`
-     * @param string $layout 
+     * @param string $layout
      * @param bool $showorphans if `false`, remove orphans pages
      * @param bool $showredirection if `true`, add redirections
-     * 
+     *
      * @return array
      */
-    public function cytodata(array $pagelist, string $layout = 'random', bool $showorphans = false, bool $showredirection = false) : array
-    {
+    public function cytodata(
+        array $pagelist,
+        string $layout = 'random',
+        bool $showorphans = false,
+        bool $showredirection = false
+    ): array {
         $datas['elements'] = $this->mapdata($pagelist, $showorphans, $showredirection);
 
         $datas['layout'] = [
@@ -216,14 +221,14 @@ class Modelhome extends Modelpage
 
     /**
      * Transform list of Pages into cytoscape nodes and edge datas
-     * 
+     *
      * @param array $pagelist associative array of pages as `id => Page`
      * @param bool $showorphans if `false`, remove orphans pages
      * @param bool $showredirection if `true`, add redirections
      *
      * @return array of cytoscape datas
      */
-    public function mapdata(array $pagelist, bool $showorphans = true, bool $showredirection = false) : array
+    public function mapdata(array $pagelist, bool $showorphans = true, bool $showredirection = false): array
     {
         $idlist = array_keys($pagelist);
 
@@ -231,7 +236,7 @@ class Modelhome extends Modelpage
         $notorphans = [];
         foreach ($pagelist as $page) {
             foreach ($page->linkto() as $linkto) {
-                if(in_array($linkto, $idlist)) {
+                if (in_array($linkto, $idlist)) {
                     $edge['group'] = 'edges';
                     $edge['data']['id'] = $page->id() . '>' . $linkto;
                     $edge['data']['source'] = $page->id();
@@ -242,7 +247,7 @@ class Modelhome extends Modelpage
                 }
             }
             // add redirection edge
-            if($showredirection && key_exists($page->redirection(), $pagelist)) {
+            if ($showredirection && key_exists($page->redirection(), $pagelist)) {
                 $edger['group'] = 'edges';
                 $edger['data']['id'] = $page->id() . '>' . $page->redirection();
                 $edger['data']['refresh'] = $page->refresh();
@@ -259,7 +264,7 @@ class Modelhome extends Modelpage
 
         $nodes = [];
         foreach ($pagelist as $id => $page) {
-            if($showorphans || (!$showorphans && in_array($id, $notorphans))) {
+            if ($showorphans || (!$showorphans && in_array($id, $notorphans))) {
                 $node['group'] = 'nodes';
                 $node['data']['id'] = $page->id();
                 $node['data']['edit'] = $page->id() . DIRECTORY_SEPARATOR . 'edit';
@@ -270,19 +275,18 @@ class Modelhome extends Modelpage
         }
 
         return array_merge($nodes, $edges);
-
     }
 
 
     /**
      * @param array array of the columns to show from the user
-     * 
+     *
      * @return array assoc each key columns to a boolean value to show or not
      */
-    public function setcolumns(array $columns) : array
+    public function setcolumns(array $columns): array
     {
         foreach (Model::COLUMNS as $col) {
-            if(in_array($col, $columns)) {
+            if (in_array($col, $columns)) {
                 $showcols[$col] = true;
             } else {
                 $showcols[$col] = false;
@@ -291,12 +295,3 @@ class Modelhome extends Modelpage
         return $showcols;
     }
 }
-
-
-
-
-
-
-
-
-?>

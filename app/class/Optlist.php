@@ -38,9 +38,7 @@ class Optlist extends Opt
         $li = '';
 
         foreach ($pagelist as $page) {
-
             // ================= Class =============
-
             $classdata = [];
             if ($page->id() === $actualpage->id()) {
                 $classdata['actual'] = 'current_page';

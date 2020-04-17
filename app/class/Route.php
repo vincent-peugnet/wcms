@@ -9,7 +9,7 @@ class Route extends Item
     protected $action = null;
     protected $redirect = null;
 
-    const AFF = ['read', 'edit', 'admin', 'media'];
+    public const AFF = ['read', 'edit', 'admin', 'media'];
 
     public function __construct($vars)
     {
@@ -23,7 +23,7 @@ class Route extends Item
             $array[] = 'page';
         }
         if (!empty($this->aff)) {
-            $array[] = 'aff='.$this->aff;
+            $array[] = 'aff=' . $this->aff;
         }
         if (!empty($this->action)) {
             $array[] = 'action=' . $this->action;
@@ -36,7 +36,7 @@ class Route extends Item
         return $array;
     }
 
-    function tostring()
+    public function tostring()
     {
         return implode(' ', $this->toarray());
     }
@@ -51,7 +51,6 @@ class Route extends Item
     public function setaff($aff)
     {
         $this->aff = $aff;
-
     }
 
     public function setaction($action)
@@ -69,8 +68,3 @@ class Route extends Item
         return $this->id;
     }
 }
-
-
-
-
-?>

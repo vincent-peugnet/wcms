@@ -9,42 +9,37 @@ use Wcms\Flywheel\Repository;
 
 class Modeldb extends Model
 {
-	protected $database;
-	/** @var Repository */
-	protected $repo;
+    protected $database;
+    /** @var Repository */
+    protected $repo;
 
 
-	public function __construct()
-	{
-		$this->dbinit();
-	}
+    public function __construct()
+    {
+        $this->dbinit();
+    }
 
 
-	public function dbinit($dir = Model::DATABASE_DIR)
-	{
-		$this->database = new Flywheel\Config($dir , [
-			'query_class' => Query::class,
-			'formatter' => new JSON,
-		]);
-	}
+    public function dbinit($dir = Model::DATABASE_DIR)
+    {
+        $this->database = new Flywheel\Config($dir, [
+            'query_class' => Query::class,
+            'formatter' => new JSON(),
+        ]);
+    }
 
-	public function storeinit(string $repo)
-	{
-		$this->repo = new Repository($repo, $this->database);
-	}
+    public function storeinit(string $repo)
+    {
+        $this->repo = new Repository($repo, $this->database);
+    }
 
-	/**
-	 * List every IDs of a database
-	 * 
-	 * @return array of ID strings
-	 */
-	public function list() : array
-	{
-		return $this->repo->getAllIds();
-	}
-
-
-
-
-
+    /**
+     * List every IDs of a database
+     *
+     * @return array of ID strings
+     */
+    public function list(): array
+    {
+        return $this->repo->getAllIds();
+    }
 }

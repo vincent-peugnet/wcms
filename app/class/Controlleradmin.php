@@ -19,7 +19,7 @@ class Controlleradmin extends Controller
 
     public function desktop()
     {
-        if($this->user->isadmin()) {
+        if ($this->user->isadmin()) {
             $datas['pagelist'] = $this->pagemanager->list();
             $this->mediamanager = new Modelmedia();
             $datas['faviconlist'] = $this->mediamanager->listfavicon();
@@ -28,7 +28,7 @@ class Controlleradmin extends Controller
 
             $globalcssfile = Model::GLOBAL_DIR . 'global.css';
 
-            if(is_file($globalcssfile)) {
+            if (is_file($globalcssfile)) {
                 $datas['globalcss'] = file_get_contents($globalcssfile);
             } else {
                 $datas['globalcss'] = "";
@@ -44,14 +44,14 @@ class Controlleradmin extends Controller
     }
 
     public function update()
-    {        
+    {
         MODEL::dircheck(MODEL::GLOBAL_DIR);
 
         $globalcss = file_put_contents(Model::GLOBAL_DIR . 'global.css', $_POST['globalcss']);
 
         Config::hydrate($_POST);
-        if(Config::savejson() !== false && $globalcss !== false) {
-        $this->routedirect('admin');
+        if (Config::savejson() !== false && $globalcss !== false) {
+            $this->routedirect('admin');
         } else {
             echo 'Can\'t write config file or global css file';
         }
@@ -59,15 +59,15 @@ class Controlleradmin extends Controller
 
     public function database()
     {
-        if(!empty($_POST['action'])) {
+        if (!empty($_POST['action'])) {
             switch ($_POST['action']) {
                 case 'duplicate':
-                    if(!empty($_POST['dbsrc']) && !empty($_POST['dbtarget'])) {
+                    if (!empty($_POST['dbsrc']) && !empty($_POST['dbtarget'])) {
                         $this->adminmanager->copydb($_POST['dbsrc'], $_POST['dbtarget']);
                     }
-                    break;                
+                    break;
                 case 'select':
-                    if(!empty($_POST['pagetable'])) {
+                    if (!empty($_POST['pagetable'])) {
                         Config::hydrate($_POST);
                         Config::savejson();
                     }
@@ -76,10 +76,4 @@ class Controlleradmin extends Controller
         }
         $this->routedirect('admin');
     }
-
 }
-
-
-
-
-?>

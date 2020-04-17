@@ -40,11 +40,11 @@ class Summary extends Item
     }
 
 
-	/**
-	 * Generate a Summary based on header ids. Need to use `$this->headerid` before to scan text
-	 *
-	 * @return string html list with anchor link
-	 */
+    /**
+     * Generate a Summary based on header ids. Need to use `$this->headerid` before to scan text
+     *
+     * @return string html list with anchor link
+     */
     public function sumparser()
     {
         $sumstring = '';
@@ -76,7 +76,7 @@ class Summary extends Item
 
 
 
-    // __________________________________________________ G E T ____________________________________________________________
+    // ________________________________________________ G E T ________________________________________________________
 
 
     public function fullmatch()
@@ -95,7 +95,7 @@ class Summary extends Item
     }
 
 
-    // __________________________________________________ S E T ____________________________________________________________
+    // ________________________________________________ S E T ________________________________________________________
 
 
     public function setfullmatch(string $fullmatch)
@@ -114,7 +114,7 @@ class Summary extends Item
     public function setmin($min)
     {
         $min = intval($min);
-        if($min >= 1 && $min <= 6) {
+        if ($min >= 1 && $min <= 6) {
             $this->min = $min;
         }
     }
@@ -122,7 +122,7 @@ class Summary extends Item
     public function setmax($max)
     {
         $max = intval($max);
-        if($max >= 1 && $max <= 6) {
+        if ($max >= 1 && $max <= 6) {
             $this->max = $max;
         }
     }
@@ -134,9 +134,8 @@ class Summary extends Item
 
     public function setelement(string $element)
     {
-        if(in_array($element, Model::TEXT_ELEMENTS)) {
+        if (in_array($element, Model::TEXT_ELEMENTS)) {
             $this->element = $element;
         }
     }
-
 }

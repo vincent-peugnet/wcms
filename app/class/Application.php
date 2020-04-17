@@ -1,4 +1,5 @@
 <?php
+
 namespace Wcms;
 
 class Application
@@ -8,61 +9,71 @@ class Application
      */
     protected $usermanager;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->usermanager = new Modeluser();
     }
 
     public function wakeup()
     {
-        if(isset($_POST['configinit'])) {
-            if(Config::readconfig()) {
+        if (isset($_POST['configinit'])) {
+            if (Config::readconfig()) {
                 Config::createconfig($_POST['configinit']);
             } else {
                 Config::hydrate($_POST['configinit']);
             }
             Config::getdomain();
-            if(!is_dir(Model::RENDER_DIR)) {
+            if (!is_dir(Model::RENDER_DIR)) {
                 mkdir(Model::RENDER_DIR);
             }
-            if(!Config::savejson()) {
+            if (!Config::savejson()) {
                 echo 'Cant write config file';
                 exit;
-            } else{
+            } else {
                 header('Location: ./');
                 exit;
             }
-        } elseif(isset($_POST['userinit']) && !empty($_POST['userinit']['id']) && !empty($_POST['userinit']['password'])) {
+        } elseif (
+            isset($_POST['userinit'])
+            && !empty($_POST['userinit']['id'])
+            && !empty($_POST['userinit']['password'])
+        ) {
             $userdata = $_POST['userinit'];
             $userdata['level'] = 10;
             $user = new User($userdata);
             $this->usermanager->add($user);
             header('Location: ./');
             exit;
-
         } else {
-            if(Config::readconfig()) {
-                if(!Config::checkbasepath() || empty(Config::pagetable()) || !is_dir(Model::RENDER_DIR) || !Config::checkdomain() || empty(Config::secretkey())) {
+            if (Config::readconfig()) {
+                if (
+                    !Config::checkbasepath()
+                    || empty(Config::pagetable())
+                    || !is_dir(Model::RENDER_DIR)
+                    || !Config::checkdomain()
+                    || empty(Config::secretkey())
+                ) {
                     echo '<ul>';
-                    if(!Config::checkbasepath()) {
+                    if (!Config::checkbasepath()) {
                         echo '<li>Wrong path</li>';
                     }
-                    if(empty(Config::pagetable())) {
+                    if (empty(Config::pagetable())) {
                         echo '<li>Unset table name</li>';
                     }
-                    if(!Config::checkdomain()) {
+                    if (!Config::checkdomain()) {
                         echo '<li>Need to recheck the domain</li>';
                     }
-                    if(!is_dir(Model::RENDER_DIR)) {
+                    if (!is_dir(Model::RENDER_DIR)) {
                         echo '<li>Render path not existing</li>';
                     }
-                    if(!is_dir(Model::RENDER_DIR)) {
+                    if (!is_dir(Model::RENDER_DIR)) {
                         echo '<li>Secret Key not set or not valid</li>';
                     }
                     echo '</ul>';
                     $this->configform();
                     exit;
                 } else {
-                    if($this->usermanager->admincount() === 0) {
+                    if ($this->usermanager->admincount() === 0) {
                         echo 'missing admin user';
                         $this->adminform();
                         exit;
@@ -129,7 +140,7 @@ class Application
         <h2>
         <label for="password">Your password</label>
         </h2>
-        <input type="password" name="userinit[password]" id="password" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" maxlength="<?= Wcms\Model::PASSWORD_MAX_LENGTH ?>" required>
+        <input type="password" name="userinit[password]" id="password" minlength="<?= Model::PASSWORD_MIN_LENGTH ?>" maxlength="<?= Model::PASSWORD_MAX_LENGTH ?>" required>
         <p><i>Your user passworder as first administrator.</i></p>
         </div>
         <input type="submit" value="set">
@@ -137,7 +148,6 @@ class Application
 
         <?php
     }
-
 }
 
 

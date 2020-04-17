@@ -6,14 +6,14 @@ use JamesMoss\Flywheel\Document;
 
 class Modeluser extends Modeldb
 {
-    const ADMIN = 10;
-    const SUPEREDITOR = 4;
-    const EDITOR = 3;
-    const INVITE = 2;
-    const READ = 1;
-    const FREE = 0;
+    public const ADMIN = 10;
+    public const SUPEREDITOR = 4;
+    public const EDITOR = 3;
+    public const INVITE = 2;
+    public const READ = 1;
+    public const FREE = 0;
 
-    const USER_REPO_NAME = 'user';
+    public const USER_REPO_NAME = 'user';
 
     public function __construct()
     {
@@ -23,7 +23,7 @@ class Modeluser extends Modeldb
 
     /**
      * Write session cookie according to users datas and define the current authtoken being used
-     * 
+     *
      * @param User $user Current user to keep in session
      */
     public function writesession(User $user)
@@ -36,32 +36,33 @@ class Modeluser extends Modeldb
     public function readsession()
     {
         $userdatas = [];
-        if (array_key_exists('user' . Config::basepath(), $_SESSION) && isset($_SESSION['user' . Config::basepath()]['id'])) {
+        if (
+            array_key_exists('user' . Config::basepath(), $_SESSION)
+            && isset($_SESSION['user' . Config::basepath()]['id'])
+        ) {
             $userdatas = $_SESSION['user' . Config::basepath()];
             $user = new User($userdatas);
             $user = $this->get($user);
             return $user;
         }
         
-        if(isset($_COOKIE['authtoken']) && strpos($_COOKIE['authtoken'], ':')) {
+        if (isset($_COOKIE['authtoken']) && strpos($_COOKIE['authtoken'], ':')) {
             list($cookietoken, $cookiemac) = explode(':', $_COOKIE['authtoken']);
             $authtokenmanager = new Modelauthtoken();
             $dbtoken = $authtokenmanager->getbytoken($cookietoken);
 
             if ($dbtoken !== false) {
-                if(hash_equals($cookiemac, secrethash($dbtoken->getId()))) {
+                if (hash_equals($cookiemac, secrethash($dbtoken->getId()))) {
                     $user = $this->get($dbtoken->user);
                     if ($user !== false) {
                         $this->writesession($user, $_COOKIE['authtoken']);
                     }
                     return $user;
                 }
-
             }
         }
 
         return new User(['id' => '', 'level' => 0]);
-
     }
 
 
@@ -125,10 +126,10 @@ class Modeluser extends Modeldb
 
     /**
      * Check if the password is used, and return by who
-     * 
+     *
      * @param string $userid user ID
      * @param string $pass password clear
-     * 
+     *
      * @return User|bool User or false
      */
     public function passwordcheck(string $userid, string $pass)
@@ -142,7 +143,7 @@ class Modeluser extends Modeldb
             } else {
                 if ($user->password() === $pass) {
                     return $user;
-                }        
+                }
             }
         }
         return false;
@@ -150,10 +151,10 @@ class Modeluser extends Modeldb
 
     /**
      * @param User $user
-     * 
+     *
      * @return bool depending on success
      */
-    public function add(User $user) : bool
+    public function add(User $user): bool
     {
         $userdata = new Document($user->dry());
         $userdata->setId($user->id());
@@ -163,7 +164,7 @@ class Modeluser extends Modeldb
 
     /**
      * @param string|User $id Can be an User object or a string ID
-     * 
+     *
      * @return User|false User object or false in case of error
      */
     public function get($id)
@@ -187,13 +188,4 @@ class Modeluser extends Modeldb
     {
         $this->repo->delete($user->id());
     }
-
-
 }
-
-
-
-
-
-
-?>

@@ -5,16 +5,16 @@ namespace Wcms;
 class Modelfont extends Model
 {
 
-    const FONT_TYPES = ['woff2', 'woff', 'otf', 'ttf', 'eot', 'svg'];
+    protected const FONT_TYPES = ['woff2', 'woff', 'otf', 'ttf', 'eot', 'svg'];
     
-	public function fontdircheck()
-	{
-		if(!is_dir(Model::FONT_DIR)) {
-			return mkdir(Model::FONT_DIR);
-		} else {
-			return true;
-		}
-	}
+    public function fontdircheck()
+    {
+        if (!is_dir(Model::FONT_DIR)) {
+            return mkdir(Model::FONT_DIR);
+        } else {
+            return true;
+        }
+    }
 
     public function getfontlist()
     {
@@ -44,15 +44,12 @@ class Modelfont extends Model
             $list = [];
             while (false !== ($entry = readdir($handle))) {
                 if ($entry != "." && $entry != "..") {
-
                     $list[] = $entry;
-
                 }
             }
         }
 
         return $list;
-
     }
 
     public function fontlist(array $list)
@@ -82,7 +79,6 @@ class Modelfont extends Model
     {
         $write = file_put_contents(Model::GLOBAL_DIR . 'fonts.css', $fontface);
         if ($write !== false) {
-
         }
     }
 
@@ -101,9 +97,11 @@ class Modelfont extends Model
                     $id = $infosfichier['filename'];
                 }
                 if (!file_exists($this::FONT_DIR . $id . '.' . $extension_upload)) {
-
                     $extension_upload = strtolower($extension_upload);
-                    $uploadok = move_uploaded_file($file['font']['tmp_name'], $this::FONT_DIR . $id . '.' . $extension_upload);
+                    $uploadok = move_uploaded_file(
+                        $file['font']['tmp_name'],
+                        $this::FONT_DIR . $id . '.' . $extension_upload
+                    );
                     if ($uploadok) {
                         $message = true;
                     } else {
@@ -111,22 +109,11 @@ class Modelfont extends Model
                     }
                 } else {
                     $message = 'filealreadyexist';
-
                 }
             }
         } else {
             $message = 'filetoobig';
-
         }
         return $message;
     }
-
-
-
-
 }
-
-
-
-
-?>

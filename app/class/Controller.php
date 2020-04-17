@@ -25,17 +25,18 @@ class Controller
     /** @var DateTimeImmutable */
     protected $now;
 
-	public function __construct($router) {
+    public function __construct($router)
+    {
         $this->setuser();
         $this->router = $router;
         $this->pagemanager = new Modelpage();
         $this->initplates();
         $this->now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
-	}
+    }
 
     public function setuser()
     {
-        $this->usermanager = new Modeluser;
+        $this->usermanager = new Modeluser();
         $this->user = $this->usermanager->readsession();
     }
 
@@ -87,7 +88,7 @@ class Controller
     {
         $get = '?';
         foreach ($vars as $key => $value) {
-            $get .= $key .'='. $value. '&';
+            $get .= $key . '=' . $value . '&';
         }
         $get = rtrim($get, '&');
         $this->redirect($this->router->generate($route, []) . $get);
@@ -100,7 +101,7 @@ class Controller
     }
 
     /**
-     * 
+     *
      */
     public function sendstatflashmessage(int $count, int $total, string $message)
     {
@@ -112,11 +113,4 @@ class Controller
             Model::sendflashmessage($count . ' / ' . $total . ' ' . $message, 'error');
         }
     }
-
 }
-
-
-
-
-
-?>

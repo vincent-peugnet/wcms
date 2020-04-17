@@ -16,14 +16,14 @@ class Event extends Dbitem
     protected $message;
     protected $clap = 0;
 
-    const EVENT_TYPES = ['message', 'page_add', 'page_edit', 'page_delete', 'media_add', 'media_delete', 'font_add'];
-    const EVENT_BASE = ['message'];
-    const EVENT_ART = ['page_add', 'page_edit', 'page_delete'];
-    const EVENT_MEDIA = ['media_add', 'media_delete'];
-    const EVENT_FONT = ['font_add', 'font_delete'];
-    const MESSAGE_MAX_LENGTH = 2 ** 10;
+    public const EVENT_TYPES = ['message', 'page_add', 'page_edit', 'page_delete', 'media_add', 'media_delete', 'font_add'];
+    public const EVENT_BASE = ['message'];
+    public const EVENT_ART = ['page_add', 'page_edit', 'page_delete'];
+    public const EVENT_MEDIA = ['media_add', 'media_delete'];
+    public const EVENT_FONT = ['font_add', 'font_delete'];
+    public const MESSAGE_MAX_LENGTH = 2 ** 10;
 
-    const VAR_DATE = ['date'];
+    public const VAR_DATE = ['date'];
 
     public function __construct($datas)
     {

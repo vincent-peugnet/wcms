@@ -13,7 +13,7 @@ class Controllerpage extends Controller
     protected $fontmanager;
     protected $mediamanager;
 
-    const COMBINE = false;
+    public const COMBINE = false;
 
     public function __construct($router)
     {

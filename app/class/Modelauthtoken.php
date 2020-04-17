@@ -8,8 +8,8 @@ use JamesMoss\Flywheel\Document;
 class Modelauthtoken extends Modeldb
 {
 
-    const AUTHTOKEN_REPO_NAME = 'authtoken';
-    const AUTHTOKEN_ID_LENGTH = 30;
+    protected const AUTHTOKEN_REPO_NAME = 'authtoken';
+    protected const AUTHTOKEN_ID_LENGTH = 30;
 
     public function __construct()
     {
@@ -19,7 +19,7 @@ class Modelauthtoken extends Modeldb
 
     /**
      * Add a Token in the database according to the Users datas
-     * 
+     *
      * @param User $user
      */
     public function add(User $user)
@@ -41,7 +41,6 @@ class Modelauthtoken extends Modeldb
 
         $tokendata->setId($id);
         return $this->repo->store($tokendata);
-
     }
 
     public function getbytoken(string $token)
@@ -61,12 +60,4 @@ class Modelauthtoken extends Modeldb
     {
         return $this->repo->query()->where('user', '==', $id)->orderBy('date')->execute();
     }
-
 }
-
-
-
-
-
-
-?>

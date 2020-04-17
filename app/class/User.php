@@ -74,30 +74,30 @@ class User extends Item
 
     public function expiredate(string $type = 'string')
     {
-		if ($type == 'string') {
-            if(!empty($this->expiredate)) {
+        if ($type == 'string') {
+            if (!empty($this->expiredate)) {
                 return $this->expiredate->format('Y-m-d');
             } else {
                 return false;
             }
-		} elseif ($type == 'date') {
-            if(!empty($this->expiredate)) {
+        } elseif ($type == 'date') {
+            if (!empty($this->expiredate)) {
                 return $this->expiredate;
             } else {
                 return false;
             }
-		} elseif ($type == 'hrdi') {
-            if(empty($this->expiredate)) {
+        } elseif ($type == 'hrdi') {
+            if (empty($this->expiredate)) {
                 return 'never';
             } else {
                 $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
-                if($this->expiredate < $now) {
+                if ($this->expiredate < $now) {
                     return 'expired';
                 } else {
                     return hrdi($this->expiredate->diff($now));
                 }
             }
-		}
+        }
     }
 
     public function bookmark()
@@ -142,7 +142,6 @@ class User extends Item
                 return false;
             }
         }
-
     }
 
     public function setsignature(string $signature)
@@ -155,13 +154,12 @@ class User extends Item
     public function setpasswordhashed($passwordhashed)
     {
         $this->passwordhashed = boolval($passwordhashed);
-
     }
 
     public function setcookie($cookie)
     {
         $cookie = intval($cookie);
-        if($cookie <= Model::MAX_COOKIE_CONSERVATION && $cookie >= 0) {
+        if ($cookie <= Model::MAX_COOKIE_CONSERVATION && $cookie >= 0) {
             $this->cookie = $cookie;
             return true;
         } else {
@@ -171,7 +169,7 @@ class User extends Item
 
     public function setcolumns($columns)
     {
-        if(is_array($columns)) {
+        if (is_array($columns)) {
             $columns = array_filter(array_intersect(array_unique($columns), Model::COLUMNS));
             $this->columns = $columns;
         }
@@ -179,30 +177,34 @@ class User extends Item
 
     public function setconnectcount($connectcount)
     {
-        if(is_int($connectcount) && $connectcount >= 0) {
+        if (is_int($connectcount) && $connectcount >= 0) {
             $this->connectcount = $connectcount;
         }
     }
 
     public function setexpiredate($expiredate)
     {
-		if ($expiredate instanceof DateTimeImmutable) {
-			$this->expiredate = $expiredate;
-		} else {
-			$this->expiredate = DateTimeImmutable::createFromFormat('Y-m-d', $expiredate, new DateTimeZone('Europe/Paris'));
-		}
+        if ($expiredate instanceof DateTimeImmutable) {
+            $this->expiredate = $expiredate;
+        } else {
+            $this->expiredate = DateTimeImmutable::createFromFormat(
+                'Y-m-d',
+                $expiredate,
+                new DateTimeZone('Europe/Paris')
+            );
+        }
     }
 
     public function setbookmark($bookmark)
     {
-        if(is_array($bookmark)) {
+        if (is_array($bookmark)) {
             $this->bookmark = $bookmark;
         }
     }
 
     public function setdisplay($display)
     {
-        if(is_array($display)) {
+        if (is_array($display)) {
             $this->display = $display;
         }
     }
@@ -222,10 +224,10 @@ class User extends Item
 
     /**
      * Hash the password and set `$passwordhashed` to true.
-     * 
+     *
      * @return bool true in cas of success, otherwise false.
      */
-    public function hashpassword() : bool
+    public function hashpassword(): bool
     {
         $hashedpassword = password_hash($this->password, PASSWORD_DEFAULT);
         if (!empty($hashedpassword)) {
@@ -239,8 +241,11 @@ class User extends Item
 
     public function validpassword()
     {
-        if(is_string($this->password)) {
-            if(strlen($this->password) >= Model::PASSWORD_MIN_LENGTH && strlen($this->password) <= Model::PASSWORD_MAX_LENGTH) {
+        if (is_string($this->password)) {
+            if (
+                strlen($this->password) >= Model::PASSWORD_MIN_LENGTH
+                && strlen($this->password) <= Model::PASSWORD_MAX_LENGTH
+            ) {
                 return true;
             }
         }
@@ -281,24 +286,18 @@ class User extends Item
     }
 
     public function addbookmark(string $id, string $query)
-	{
-        if(!empty($id) && !empty($query)) {
+    {
+        if (!empty($id) && !empty($query)) {
             $id = idclean($id);
             $id = substr($id, 0, 16);
             $this->bookmark[$id] = $query;
         }
-	}
+    }
 
-	public function deletebookmark(string $id)
-	{
-		if(key_exists($id, $this->bookmark)) {
-			unset($this->bookmark[$id]);
-		}
-	}
-	
-
+    public function deletebookmark(string $id)
+    {
+        if (key_exists($id, $this->bookmark)) {
+            unset($this->bookmark[$id]);
+        }
+    }
 }
-
-
-
-?>

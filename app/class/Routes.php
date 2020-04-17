@@ -12,7 +12,7 @@ class Routes
     public function match()
     {
         $router = new AltoRouter();
-        if(!empty(Config::basepath())) {
+        if (!empty(Config::basepath())) {
             $router->setBasePath('/' . Config::basepath());
         }
         $router->addMatchTypes(array('cid' => '[a-zA-Z0-9-_+,\'!%@&.$€=\(\|\)]+'));
@@ -72,17 +72,10 @@ class Routes
             $methodName = $callableParts[1];
 
             $controller = new $controllerName($router);
-			
+            
             call_user_func_array(array($controller, $methodName), $match['params']);
-        }
-		//404
-        else {
-            if(!empty(Config::route404())) {
-                $controller = new Controller($router);
-                $controller->routedirect('pageread/', ['page' => Config::route404()]);
-            } else {
-                header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
-            }
+        } else {
+            header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
         }
     }
 }

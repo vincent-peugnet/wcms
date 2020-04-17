@@ -31,7 +31,7 @@ class Medialist extends Item
     /** @var string display the file name of the file */
     protected $filename = 0;
 
-    const TYPES = ['image', 'sound', 'video', 'other'];
+    public const TYPES = ['image', 'sound', 'video', 'other'];
 
 
 

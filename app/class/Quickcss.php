@@ -14,11 +14,22 @@ class Quickcss extends Item
     
     private $quickcss = [];
 
-    const COLOR = ['color', 'background-color', 'border-color', 'text-decoration-color'];
-    const SIZE = ['width', 'height', 'margin', 'padding', 'border-radius', 'border-width', 'left', 'right', 'top', 'bottom'];
-    const UNIQUE = ['background-image', 'opacity', 'font-size'];
+    public const COLOR = ['color', 'background-color', 'border-color', 'text-decoration-color'];
+    public const SIZE = [
+        'width',
+        'height',
+        'margin',
+        'padding',
+        'border-radius',
+        'border-width',
+        'left',
+        'right',
+        'top',
+        'bottom'
+    ];
+    public const UNIQUE = ['background-image', 'opacity', 'font-size'];
 
-    const OPTIONS = [
+    public const OPTIONS = [
         'text-align' => ['left', 'right', 'center', 'justify'],
         'border-style' => ['solid', 'double', 'outset', 'ridge'],
         'font-family' => ['serif', 'sans-serif', 'monospace', 'cursive', 'fantasy'],
@@ -35,18 +46,18 @@ class Quickcss extends Item
     private static function getparams()
     {
         $params = array_merge(self::COLOR, self::SIZE, self::getselect(), self::UNIQUE);
-        sort($params, SORT_STRING );
+        sort($params, SORT_STRING);
         return $params;
     }
 
     public function __construct($data)
     {
-        $this->hydrate($data);    
+        $this->hydrate($data);
     }
 
     public function calc()
     {
-        $quickcss = $this->intersect($this->values,$this->active);        
+        $quickcss = $this->intersect($this->values, $this->active);
         $quickcss = $this->merge($quickcss, $this->new);
         $quickcss = $this->addunits($quickcss, $this->units);
         $quickcss = $this->merge($this->jsoncss, $quickcss);
@@ -60,21 +71,21 @@ class Quickcss extends Item
 
     public function setvalues($data)
     {
-        if(is_array($data)) {
+        if (is_array($data)) {
             $this->values = $data;
         }
     }
 
     public function setunits($data)
     {
-        if(is_array($data)) {
+        if (is_array($data)) {
             $this->units = $data;
         }
     }
 
     public function setactive($data)
     {
-        if(is_array($data)) {
+        if (is_array($data)) {
             $this->active = $data;
         }
     }
@@ -90,9 +101,9 @@ class Quickcss extends Item
     
     public function setjson($jsoncss)
     {
-        if(!empty($jsoncss) && is_string($jsoncss)) {
+        if (!empty($jsoncss) && is_string($jsoncss)) {
             $jsoncss = json_decode($jsoncss);
-            if(is_array($jsoncss)) {
+            if (is_array($jsoncss)) {
                 $this->jsoncss = $jsoncss;
             } else {
                 $this->jsoncss = [];
@@ -165,7 +176,6 @@ class Quickcss extends Item
         $this->inputs($this->quickcss);
         echo '</br><input type="submit" value="submit">';
         echo '</form>';
-
     }
 
     public function inputs($quickcss)
@@ -175,7 +185,7 @@ class Quickcss extends Item
         echo '<input type="text" name="new[element]" list="used">';
         echo '<datalist id="used">';
         foreach (array_keys($quickcss) as $element) {
-            echo '<option value ="'.$element.'">';
+            echo '<option value ="' . $element . '">';
         }
         echo '</datalist>';
 
@@ -188,7 +198,6 @@ class Quickcss extends Item
         foreach ($quickcss as $element => $css) {
             echo '<h3>' . $element . '</h3>';
             foreach ($css as $param => $value) {
-
                 echo '<div class="quicklabel">';
                 echo '<input type="checkbox" name="active[' . $element . '][' . $param . ']" id="active[' . $element . '][' . $param . ']" checked>';
                 echo '<label for="active[' . $element . '][' . $param . ']">' . $param . '</label>';
@@ -218,8 +227,6 @@ class Quickcss extends Item
                 echo '</div>';
             }
         }
-
-
     }
 
 
@@ -240,7 +247,6 @@ class Quickcss extends Item
             <option value="%" <?= $unit == '%' ? 'selected' : '' ?>>%</option>
         </select>
         <?php
-
     }
 
     public function fontsizeinput($element, $param, $value)
@@ -254,7 +260,6 @@ class Quickcss extends Item
             <option value="em" <?= $unit == 'em' ? 'selected' : '' ?>>em</option>
         </select>
         <?php
-
     }
 
     public function opacityinput($element, $param, $value)
@@ -266,16 +271,14 @@ class Quickcss extends Item
     {
         echo '<select name="values[' . $element . '][' . $param . ']">';
         foreach (self::OPTIONS[$param] as $option) {
-            if($option == $value) {
-                echo '<option value="'.$option.'" selected>'.$option.'</option>';
+            if ($option == $value) {
+                echo '<option value="' . $option . '" selected>' . $option . '</option>';
             } else {
-                echo '<option value="'.$option.'">'.$option.'</option>';
+                echo '<option value="' . $option . '">' . $option . '</option>';
             }
         }
         echo '</select>';
     }
-
-
 }
 
 
