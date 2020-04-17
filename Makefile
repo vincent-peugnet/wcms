@@ -168,7 +168,7 @@ lint: $(phpcs_dir)
 # Test php code with phpunit.
 .PHONY: test
 test: $(phpunit_dir)
-	phpunit
+	phpunit --log-junit $(phpunit_dir)/junit.xml
 
 # Create dirs if the do not exist
 $(dirs):

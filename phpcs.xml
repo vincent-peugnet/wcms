@@ -7,6 +7,7 @@
     <!-- included files -->
     <file>index.php</file>
     <file>app</file>
+    <file>tests</file>
     <exclude-pattern>app/view/templates/*\.php$</exclude-pattern>
 
     <!-- Add some default command line args (see help) -->
