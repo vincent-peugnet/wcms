@@ -19,6 +19,9 @@ js_sources  := $(wildcard $(js_src_dir)/*.js)
 js_bundles  := $(js_sources:$(js_src_dir)/%.js=assets/js/%.bundle.js)
 js_srcmaps  := $(js_sources:$(js_src_dir)/%.js=assets/js/%.bundle.js.map)
 zip_release := dist/w_cms_$(GIT_VERSION).zip
+phpcs_dir   := $(build_dir)/phpcs
+phpunit_dir := $(build_dir)/phpunit
+dirs        := $(phpcs_dir) $(phpunit_dir)
 
 # Default target. This executes everything targets needed to get a fully
 # working development environment.
@@ -155,17 +158,27 @@ buildclean:
 
 # Run all checks.
 .PHONY: check
-check: $(PREV_ENV_FILE) vendor
-	@echo Running checks...
-	phpcs
+check: vendor lint test
+
+# Lint php code with phpcs.
+.PHONY: lint
+lint: $(phpcs_dir)
+	phpcs --report-full --report-checkstyle=$(phpcs_dir)/checkstyle.xml
+
+# Test php code with phpunit.
+.PHONY: test
+test: $(phpunit_dir)
 	phpunit
+
+# Create dirs if the do not exist
+$(dirs):
+	mkdir -p $@
 
 # Touch files affected by the build environment to force the execution
 # of the corresponding targets.
 .PHONY: touch
 touch:
-	touch $(js_sources)
-	touch composer.json
+	touch composer.json webpack.config.js
 
 # Special (fake) target to always run a target but have Make consider
 # this updated if it was actually rewritten (a .PHONY target is always
