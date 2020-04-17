@@ -14,7 +14,7 @@ class Controllerhome extends Controllerpage
     public function __construct($render)
     {
         parent::__construct($render);
-        $this->modelhome = new Modelhome;
+        $this->modelhome = new Modelhome();
     }
 
 
@@ -25,8 +25,6 @@ class Controllerhome extends Controllerpage
         if ($this->user->isvisitor() && Config::homepage() === 'redirect' && !empty(Config::homeredirect())) {
             $this->routedirect('pageread/', ['page' => Config::homeredirect()]);
         } else {
-
-
             $pagelist = $this->modelhome->pagelist();
             $this->opt = $this->modelhome->optinit($pagelist);
 
@@ -34,7 +32,12 @@ class Controllerhome extends Controllerpage
 
             $deepsearch = $this->deepsearch();
 
-            $vars['pagelistopt'] = $this->modelhome->pagetable($pagelist, $this->opt, $deepsearch['regex'], $deepsearch['searchopt']);
+            $vars['pagelistopt'] = $this->modelhome->pagetable(
+                $pagelist,
+                $this->opt,
+                $deepsearch['regex'],
+                $deepsearch['searchopt']
+            );
 
 
             $vars['columns'] = $this->modelhome->setcolumns($this->user->columns());
@@ -48,15 +51,24 @@ class Controllerhome extends Controllerpage
             $vars['searchopt'] = $deepsearch['searchopt'];
             $vars['display'] = $_GET['display'] ?? 'list';
             
-            if($vars['display'] === 'map') {
+            if ($vars['display'] === 'map') {
                 $vars['layout'] = $_GET['layout'] ?? 'cose-bilkent';
-                $vars['showorphans'] = boolval($_GET['showorphans'] ?? false); 
+                $vars['showorphans'] = boolval($_GET['showorphans'] ?? false);
                 $vars['showredirection'] = boolval($_GET['showredirection'] ?? false);
-                $datas = $this->modelhome->cytodata($vars['pagelistopt'], $vars['layout'], $vars['showorphans'], $vars['showredirection']);
+                $datas = $this->modelhome->cytodata(
+                    $vars['pagelistopt'],
+                    $vars['layout'],
+                    $vars['showorphans'],
+                    $vars['showredirection']
+                );
                 $vars['json'] = json_encode($datas, JSON_PRETTY_PRINT);
             }
 
-            $vars['footer'] = ['version' => getversion(), 'total' => count($pagelist), 'database' => Config::pagetable()];
+            $vars['footer'] = [
+                'version' => getversion(),
+                'total' => count($pagelist),
+                'database' => Config::pagetable()
+            ];
 
             $this->listquery($pagelist);
 
@@ -68,13 +80,20 @@ class Controllerhome extends Controllerpage
 
     /**
      * Look for GET deepsearch datas and transform it an array
-     * 
+     *
      * @return array containing `string $regex` and `array $searchopt`
      */
-    public function deepsearch() : array
+    public function deepsearch(): array
     {
         if (!isset($_GET['search'])) {
-            $searchopt = ['id' => 1, 'title' => 1, 'description' => 1, 'content' => 1, 'other' => 0, 'casesensitive' => 0];
+            $searchopt = [
+                'id' => 1,
+                'title' => 1,
+                'description' => 1,
+                'content' => 1,
+                'other' => 0,
+                'casesensitive' => 0
+            ];
         } else {
             $searchopt['id'] = $_GET['id'] ?? 0;
             $searchopt['title'] = $_GET['title'] ?? 0;
@@ -117,7 +136,6 @@ class Controllerhome extends Controllerpage
             $colors->writecssfile();
         }
         $this->routedirect('home');
-
     }
 
     public function search()
@@ -140,7 +158,7 @@ class Controllerhome extends Controllerpage
     }
     
     /**
-     * Render every pages in the database 
+     * Render every pages in the database
      */
     public function renderall()
     {
@@ -150,7 +168,7 @@ class Controllerhome extends Controllerpage
             foreach ($pagelist as $page) {
                 $page = $this->renderpage($page);
                 if ($this->pagemanager->update($page)) {
-                    $count ++;
+                    $count++;
                 }
             }
             $total = count($pagelist);
@@ -173,7 +191,7 @@ class Controllerhome extends Controllerpage
                     Config::savejson();
                 }
             } elseif ($_POST['action'] == 'del') {
-                if(isset($_POST['user']) && $_POST['user'] == $this->user->id()) {
+                if (isset($_POST['user']) && $_POST['user'] == $this->user->id()) {
                     $usermanager = new Modeluser();
                     $user = $usermanager->get($_POST['user']);
                     foreach ($_POST['id'] as $id) {
@@ -193,19 +211,19 @@ class Controllerhome extends Controllerpage
 
     public function multi()
     {
-        if(isset($_POST['action']) && $this->user->issupereditor() && !empty($_POST['pagesid'])) {
+        if (isset($_POST['action']) && $this->user->issupereditor() && !empty($_POST['pagesid'])) {
             switch ($_POST['action']) {
                 case 'edit':
                     $this->multiedit();
-                break;
+                    break;
 
                 case 'render':
                     $this->multirender();
-                break;
+                    break;
 
                 case 'delete':
                     $this->multidelete();
-                break;
+                    break;
             }
         } else {
             $action = $_POST['action'] ?? 'edit';
@@ -217,12 +235,12 @@ class Controllerhome extends Controllerpage
     public function multiedit()
     {
         $pagelist = $_POST['pagesid'] ?? [];
-        $datas = $_POST['datas']?? [];
+        $datas = $_POST['datas'] ?? [];
         $datas = array_filter($datas, function ($var) {
             return $var !== "";
         });
         $datas = array_map(function ($value) {
-            if($value === "!") {
+            if ($value === "!") {
                 return "";
             } else {
                 return $value;
@@ -234,9 +252,9 @@ class Controllerhome extends Controllerpage
         $count = 0;
         $total = 0;
         foreach ($pagelist as $id) {
-            $total ++;
-            if($this->pagemanager->pageedit($id, $datas, $reset, $addtag, $addauthor)) {
-                $count ++;
+            $total++;
+            if ($this->pagemanager->pageedit($id, $datas, $reset, $addtag, $addauthor)) {
+                $count++;
             }
         }
         $this->sendstatflashmessage($count, $total, 'pages have been edited');
@@ -250,8 +268,8 @@ class Controllerhome extends Controllerpage
         $count = 0;
         foreach ($pagelist as $page) {
             $page = $this->renderpage($page);
-            if($this->pagemanager->update($page)) {
-                $count ++;
+            if ($this->pagemanager->update($page)) {
+                $count++;
             }
         }
         $this->sendstatflashmessage($count, $total, 'pages have been rendered');
@@ -259,13 +277,13 @@ class Controllerhome extends Controllerpage
 
     public function multidelete()
     {
-        if(isset($_POST['confirmdelete']) && $_POST['confirmdelete']) {
+        if (isset($_POST['confirmdelete']) && $_POST['confirmdelete']) {
             $pagelist = $_POST['pagesid'] ?? [];
             $total = count($pagelist);
             $count = 0;
             foreach ($pagelist as $id) {
                 if ($this->pagemanager->delete($id)) {
-                    $count ++;
+                    $count++;
                 }
             }
             $this->sendstatflashmessage($count, $total, 'pages have been deleted');
@@ -274,5 +292,3 @@ class Controllerhome extends Controllerpage
         }
     }
 }
-
-?>

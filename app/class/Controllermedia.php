@@ -15,14 +15,12 @@ class Controllermedia extends Controller
     {
         parent::__construct($render);
 
-        $this->mediamanager = new Modelmedia;
-
+        $this->mediamanager = new Modelmedia();
     }
 
     public function desktop()
     {
         if ($this->user->iseditor()) {
-
             if (!$this->mediamanager->dircheck(Model::MEDIA_DIR)) {
                 throw new Exception("Media error : Cant create /media folder");
             }
@@ -34,11 +32,11 @@ class Controllermedia extends Controller
             }
             
             $mediaopt = new Medialist($_GET);
-            if(empty($mediaopt->path())) {
+            if (empty($mediaopt->path())) {
                 $mediaopt->setpath(DIRECTORY_SEPARATOR . Model::MEDIA_DIR);
             }
 
-            if(is_dir($mediaopt->dir())) {
+            if (is_dir($mediaopt->dir())) {
                 $medialist = $this->mediamanager->medialistopt($mediaopt);
     
                 $dirlist = $this->mediamanager->listdir(Model::MEDIA_DIR);
@@ -47,11 +45,18 @@ class Controllermedia extends Controller
                 $this->mediamanager->listpath($dirlist, '', $pathlist);
 
     
-                $this->showtemplate('media', ['medialist' => $medialist, 'dirlist' => $dirlist, 'pathlist' =>$pathlist, 'mediaopt' => $mediaopt]);
+                $this->showtemplate(
+                    'media',
+                    [
+                        'medialist' => $medialist,
+                        'dirlist' => $dirlist,
+                        'pathlist' => $pathlist,
+                        'mediaopt' => $mediaopt
+                    ]
+                );
             } else {
                 $this->routedirect('media');
             }
-
         } else {
             $this->routedirect('home');
         }
@@ -78,13 +83,12 @@ class Controllermedia extends Controller
             $this->mediamanager->adddir($dir, $name);
         }
         $this->redirect($this->router->generate('media') . '?path=/' . $dir . DIRECTORY_SEPARATOR . $name);
-
     }
 
     public function folderdelete()
     {
-        if(isset($_POST['dir'])) {
-            if(isset($_POST['deletefolder']) && intval($_POST['deletefolder']) && $this->user->issupereditor()) {
+        if (isset($_POST['dir'])) {
+            if (isset($_POST['deletefolder']) && intval($_POST['deletefolder']) && $this->user->issupereditor()) {
                 $this->mediamanager->deletedir($_POST['dir']);
             } else {
                 $this->redirect($this->router->generate('media') . '?path=/' . $_POST['dir']);
@@ -96,8 +100,8 @@ class Controllermedia extends Controller
 
     public function edit()
     {
-        if($this->user->issupereditor() && isset($_POST['action']) && isset($_POST['id'])) {
-            if($_POST['action'] == 'delete') {
+        if ($this->user->issupereditor() && isset($_POST['action']) && isset($_POST['id'])) {
+            if ($_POST['action'] == 'delete') {
                 $this->mediamanager->multifiledelete($_POST['id']);
             } elseif ($_POST['action'] == 'move' && isset($_POST['dir'])) {
                 $this->mediamanager->multimovefile($_POST['id'], $_POST['dir']);
@@ -105,9 +109,4 @@ class Controllermedia extends Controller
         }
         $this->redirect($this->router->generate('media') . '?path=/' . $_POST['path']);
     }
-
-
 }
-
-
-?>

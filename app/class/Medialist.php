@@ -35,7 +35,7 @@ class Medialist extends Item
 
 
 
-    // __________________________________________________ F U N ____________________________________________________________
+    // ______________________________________________ F U N ________________________________________________________
 
 
 
@@ -59,7 +59,6 @@ class Medialist extends Item
             $this->content = '<strong>RENDERING ERROR :</strong> path : <code>' . Model::MEDIA_DIR . $this->path . '/</code> does not exist';
             return false;
         } else {
-
             $mediamanager->medialistsort($medialist, $this->sortby, $this->order);
 
             $dirid = str_replace('/', '-', $this->path);
@@ -88,32 +87,31 @@ class Medialist extends Item
 
     /**
      * Generate link adress for table header
-     * 
-     * @param string $sortby 
+     *
+     * @param string $sortby
      * @return string link adress
      */
-    public function getsortbyadress(string $sortby) : string
+    public function getsortbyadress(string $sortby): string
     {
-        if(!in_array($sortby, Model::MEDIA_SORTBY)) {
+        if (!in_array($sortby, Model::MEDIA_SORTBY)) {
             $sortby = 'id';
         }
-		if ($this->sortby === $sortby) {
-			$order = $this->order * -1;
-		} else {
-			$order = $this->order;
-		}
+        if ($this->sortby === $sortby) {
+            $order = $this->order * -1;
+        } else {
+            $order = $this->order;
+        }
         $query = ['path' => $this->path, 'sortby' => $sortby, 'order' => $order];
-        if(array_diff( self::TYPES, $this->type) != []) {
+        if (array_diff(self::TYPES, $this->type) != []) {
             $query['type'] = $this->type;
         }
         return '?' . urldecode(http_build_query($query));
-
     }
 
-    public function getpathadress(string $path) : string
+    public function getpathadress(string $path): string
     {
         $query = ['path' => '/' . $path, 'sortby' => $this->sortby, 'order' => $this->order];
-        if(array_diff( self::TYPES, $this->type) != []) {
+        if (array_diff(self::TYPES, $this->type) != []) {
             $query['type'] = $this->type;
         }
         return '?' . urldecode(http_build_query($query));
@@ -122,14 +120,14 @@ class Medialist extends Item
     public function getquery()
     {
         $query = ['path' => $this->path, 'sortby' => $this->sortby, 'order' => $this->order];
-        if(array_diff( self::TYPES, $this->type) != []) {
+        if (array_diff(self::TYPES, $this->type) != []) {
             $query['type'] = $this->type;
         }
-        return '%MEDIA?' . urldecode(http_build_query($query)). '%';
+        return '%MEDIA?' . urldecode(http_build_query($query)) . '%';
     }
 
 
-    // __________________________________________________ G E T ____________________________________________________________
+    // ______________________________________________ G E T ________________________________________________________
 
 
     public function fullmatch()
@@ -173,7 +171,7 @@ class Medialist extends Item
         return $this->type;
     }
 
-    // __________________________________________________ S E T ____________________________________________________________
+    // ______________________________________________ S E T ________________________________________________________
 
 
     public function setfullmatch(string $fullmatch)
@@ -191,10 +189,10 @@ class Medialist extends Item
 
     public function setpath(string $path)
     {
-        if(preg_match('%^\/' . rtrim(Model::MEDIA_DIR, DIRECTORY_SEPARATOR) . '%', $path)) {
+        if (preg_match('%^\/' . rtrim(Model::MEDIA_DIR, DIRECTORY_SEPARATOR) . '%', $path)) {
             $this->path = rtrim($path, DIRECTORY_SEPARATOR);
         } elseif (!preg_match('%^\/%', $path)) {
-            $this->path = '/' . Model::MEDIA_DIR . rtrim($path, DIRECTORY_SEPARATOR); 
+            $this->path = '/' . Model::MEDIA_DIR . rtrim($path, DIRECTORY_SEPARATOR);
         }
     }
 
@@ -214,7 +212,7 @@ class Medialist extends Item
 
     public function settype($type)
     {
-        if(is_array($type)) {
+        if (is_array($type)) {
             $this->type = array_intersect(Model::mediatypes(), array_unique($type));
         }
     }

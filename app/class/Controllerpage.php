@@ -21,7 +21,6 @@ class Controllerpage extends Controller
 
         $this->fontmanager = new Modelfont();
         $this->mediamanager = new Modelmedia();
-
     }
 
     public function setpage(string $id, string $route)
@@ -48,18 +47,17 @@ class Controllerpage extends Controller
         } else {
             return false;
         }
-
     }
 
     /**
      * show credentials for unconnected editors for a specific page
-     * 
+     *
      * @param string $route direction to redirect after the connection form
      * @return void
      */
     public function pageconnect(string $route)
     {
-        if($this->user->isvisitor()) {
+        if ($this->user->isvisitor()) {
             $this->showtemplate('connect', ['route' => $route, 'id' => $this->page->id()]);
             exit;
         }
@@ -81,7 +79,7 @@ class Controllerpage extends Controller
         }
     }
 
-    function render($id)
+    public function render($id)
     {
         $this->setpage($id, 'pageupdate');
 
@@ -94,12 +92,12 @@ class Controllerpage extends Controller
 
     /**
      * Render given page
-     * 
+     *
      * @param Page $page input
-     * 
+     *
      * @return Page rendered $page
      */
-    public function renderpage(Page $page) : Page
+    public function renderpage(Page $page): Page
     {
         $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
 
@@ -110,15 +108,14 @@ class Controllerpage extends Controller
         $page->setlinkto($renderengine->linkto());
         
         return $page;
-
     }
 
     public function reccursiverender(Page $page)
     {
         $relatedpages = array_diff($page->linkto(), [$page->id()]);
-        foreach ($relatedpages as $pageid ) {
+        foreach ($relatedpages as $pageid) {
             $page = $this->pagemanager->get($pageid);
-            if($page !== false) {
+            if ($page !== false) {
                 $page = $this->renderpage($page);
                 $this->pagemanager->update($page);
             }
@@ -136,7 +133,7 @@ class Controllerpage extends Controller
             $canread = $this->user->level() >= $this->page->secure();
 
             if ($this->page->daterender() < $this->page->datemodif()) {
-                if(Config::reccursiverender()) {
+                if (Config::reccursiverender()) {
                     $this->reccursiverender($this->page);
                 }
                 $this->page = $this->renderpage($this->page);
@@ -150,9 +147,9 @@ class Controllerpage extends Controller
             $this->pagemanager->update($this->page);
         }
 
-        if($pageexist && $canread) {
+        if ($pageexist && $canread) {
             $filedir = Model::HTML_RENDER_DIR . $id . '.html';
-            if(file_exists($filedir)) {
+            if (file_exists($filedir)) {
                 $html = file_get_contents($filedir);
                 sleep($this->page->sleep());
                 echo $html;
@@ -160,7 +157,10 @@ class Controllerpage extends Controller
                 echo 'Please render this page';
             }
         } else {
-            $this->showtemplate('alert', ['page' => $this->page, 'pageexist' => $pageexist, 'canedit' => $this->canedit()]);
+            $this->showtemplate(
+                'alert',
+                ['page' => $this->page, 'pageexist' => $pageexist, 'canedit' => $this->canedit()]
+            );
         }
     }
 
@@ -172,7 +172,16 @@ class Controllerpage extends Controller
 
 
         if ($this->importpage() && $this->canedit()) {
-            $datas['tablist'] = ['main' => $this->page->main(), 'css' => $this->page->css(), 'header' => $this->page->header(), 'nav' => $this->page->nav(), 'aside' => $this->page->aside(), 'footer' => $this->page->footer(), 'body' => $this->page->body(), 'javascript' => $this->page->javascript()];
+            $datas['tablist'] = [
+                'main' => $this->page->main(),
+                'css' => $this->page->css(),
+                'header' => $this->page->header(),
+                'nav' => $this->page->nav(),
+                'aside' => $this->page->aside(),
+                'footer' => $this->page->footer(),
+                'body' => $this->page->body(),
+                'javascript' => $this->page->javascript()
+            ];
 
             $datas['faviconlist'] = $this->mediamanager->listfavicon();
             $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();
@@ -197,12 +206,11 @@ class Controllerpage extends Controller
         } else {
             $this->routedirect('pageread/', ['page' => $this->page->id()]);
         }
-
     }
 
     public function log($id)
     {
-        if($this->user->issupereditor()) {
+        if ($this->user->issupereditor()) {
             $this->setpage($id, 'pagelog');
             $this->importpage();
             var_dump($this->page);
@@ -230,7 +238,7 @@ class Controllerpage extends Controller
     public function addascopy(string $id, string $copy)
     {
         $id = idclean($id);
-        if($this->copy($copy, $id)) {
+        if ($this->copy($copy, $id)) {
             $this->routedirect('pageedit', ['page' => $this->page->id()]);
         } else {
             $this->routedirect('pageread/', ['page' => $id]);
@@ -241,9 +249,7 @@ class Controllerpage extends Controller
     {
         $this->setpage($id, 'pageconfirmdelete');
         if ($this->importpage() && ($this->user->issupereditor() || $this->page->authors() === [$this->user->id()] )) {
-
             $this->showtemplate('confirmdelete', ['page' => $this->page, 'pageexist' => true]);
-
         } else {
             $this->routedirect('pageread/', ['page' => $this->page->id()]);
         }
@@ -251,14 +257,13 @@ class Controllerpage extends Controller
 
     public function download($id)
     {
-        if($this->user->isadmin()) {
-
+        if ($this->user->isadmin()) {
             $file = Model::PAGES_DIR . Config::pagetable() . DIRECTORY_SEPARATOR . $id . '.json';
             
             if (file_exists($file)) {
                 header('Content-Description: File Transfer');
                 header('Content-Type: application/json; charset=utf-8');
-                header('Content-Disposition: attachment; filename="'.basename($file).'"');
+                header('Content-Disposition: attachment; filename="' . basename($file) . '"');
                 header('Expires: 0');
                 header('Cache-Control: must-revalidate');
                 header('Pragma: public');
@@ -278,24 +283,23 @@ class Controllerpage extends Controller
     {
         $page = $this->pagemanager->getfromfile();
 
-        if($page !== false) {
-        
-            if(!empty($_POST['id'])) {
+        if ($page !== false) {
+            if (!empty($_POST['id'])) {
                 $page->setid(idclean($_POST['id']));
             }
             
-            if($_POST['datecreation']) {
+            if ($_POST['datecreation']) {
                 $page->setdatecreation($this->now);
             }
             
-            if($_POST['author']) {
+            if ($_POST['author']) {
                 $page->setauthors([$this->user->id()]);
             }
             
             $page->setdaterender($page->datecreation('date'));
         
-            if($_POST['erase'] || $this->pagemanager->get($page) === false) {
-                if($this->pagemanager->add($page)) {
+            if ($_POST['erase'] || $this->pagemanager->get($page) === false) {
+                if ($this->pagemanager->add($page)) {
                     Model::sendflashmessage('Page successfully uploaded', 'success');
                 }
             } else {
@@ -311,7 +315,6 @@ class Controllerpage extends Controller
     {
         $this->setpage($id, 'pagedelete');
         if ($this->user->iseditor() && $this->importpage()) {
-
             $this->pagemanager->delete($this->page);
         }
         $this->routedirect('home');
@@ -324,13 +327,12 @@ class Controllerpage extends Controller
             $this->routedirect('pageread/', ['page' => $targetid]);
         } else {
             $this->routedirect('pageread/', ['page' => idclean($srcid)]);
-
         }
     }
 
     /**
      * Copy a page to a new ID
-     * 
+     *
      * @param string $srcid Source page ID
      * @param string $targetid Target page ID
      */
@@ -338,7 +340,7 @@ class Controllerpage extends Controller
     {
         if ($this->user->iseditor()) {
             $this->page = $this->pagemanager->get($srcid);
-            if($this->page !== false && $this->canedit() && $this->pagemanager->get($targetid) === false) {
+            if ($this->page !== false && $this->canedit() && $this->pagemanager->get($targetid) === false) {
                 $this->page->setid($targetid);
                 $this->page->setdatecreation(true); // Reset date of creation
                 $this->page->addauthor($this->user->id());
@@ -360,13 +362,11 @@ class Controllerpage extends Controller
 
         if ($this->importpage()) {
             if ($this->canedit()) {
-            
             // Check if someone esle edited the page during the editing.
                 $oldpage = clone $this->page;
                 $this->page->hydrate($_POST);
 
                 if (self::COMBINE && $_POST['thisdatemodif'] === $oldpage->datemodif('string')) {
-
                 }
 
                 $this->page->updateedited();
@@ -383,20 +383,19 @@ class Controllerpage extends Controller
                 $_SESSION['pageupdate']['id'] = $this->page->id();
                 $this->routedirect('connect');
             }
-
         }
         $this->routedirect('pageedit', ['page' => $this->page->id()]);
     }
 
     /**
      * This function set the actual editor of the page
-     * 
+     *
      * @param string $pageid as the page id
      */
     public function editby(string $pageid)
     {
         $this->page = new Page(['id' => $pageid]);
-        if($this->importpage($pageid)) {
+        if ($this->importpage($pageid)) {
             $this->page->addeditby($this->user->id());
             $this->pagemanager->update($this->page);
             echo json_encode(['success' => true]);
@@ -407,13 +406,13 @@ class Controllerpage extends Controller
 
     /**
      * This function remove the actual editor of the page
-     * 
+     *
      * @param string $pageid as the page id
      */
     public function removeeditby(string $pageid)
     {
         $this->page = new Page(['id' => $pageid]);
-        if($this->importpage($pageid)) {
+        if ($this->importpage($pageid)) {
             $this->page->removeeditby($this->user->id());
             $this->pagemanager->update($this->page);
             echo json_encode(['success' => true]);
@@ -442,8 +441,3 @@ class Controllerpage extends Controller
         $this->routedirect('pageread/', ['page' => idclean($id)]);
     }
 }
-
-
-
-
-?>

@@ -1,4 +1,5 @@
 <?php
+
 namespace Wcms\Flywheel\Formatter;
 
 class JSON implements \JamesMoss\Flywheel\Formatter\FormatInterface

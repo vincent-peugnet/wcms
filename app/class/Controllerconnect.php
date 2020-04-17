@@ -39,7 +39,11 @@ class Controllerconnect extends Controller
         if (!empty($_POST['pass']) && !empty($_POST['user'])) {
             $this->user = $this->usermanager->passwordcheck($_POST['user'], $_POST['pass']);
             if ($this->user != false) {
-                if ($this->user->expiredate() === false || $this->user->level() === 10 || $this->user->expiredate('date') > $this->now) {
+                if (
+                    $this->user->expiredate() === false
+                    || $this->user->level() === 10
+                    || $this->user->expiredate('date') > $this->now
+                ) {
                     $this->user->connectcounter();
                     $this->usermanager->add($this->user);
                     $this->usermanager->writesession($this->user);
@@ -52,7 +56,6 @@ class Controllerconnect extends Controller
                             $_SESSION['user' . Config::basepath()]['authtoken'] = $token;
                         }
                     }
-
                 }
             }
         }
@@ -67,7 +70,7 @@ class Controllerconnect extends Controller
     {
         $this->user = $this->usermanager->logout();
         $this->usermanager->writesession($this->user);
-        if(!empty($_SESSION['user' . Config::basepath()]['authtoken'])) {
+        if (!empty($_SESSION['user' . Config::basepath()]['authtoken'])) {
             $this->destroyauthtoken($_SESSION['user' . Config::basepath()]['authtoken']);
         }
         if ($id !== null && $route !== 'home') {
@@ -79,7 +82,7 @@ class Controllerconnect extends Controller
 
     /**
      * Create a token stored in the database and then a cookie
-     * 
+     *
      * @return string|bool Token in cas of success, otherwise, false.
      */
     public function createauthtoken()
@@ -99,10 +102,10 @@ class Controllerconnect extends Controller
 
     /**
      * Create a cookie called `authtoken`
-     * 
+     *
      * @param string $token Token string
      * @param int $conservation Time in day to keep the token
-     * 
+     *
      * @return bool True in cas of success, otherwise, false.
      */
     public function creatauthcookie(string $token, int $conservation): bool
@@ -122,5 +125,4 @@ class Controllerconnect extends Controller
 
         //deleteauthcookie
     }
-
 }

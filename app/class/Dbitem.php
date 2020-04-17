@@ -12,7 +12,7 @@ abstract class Dbitem extends Item
     {
         $array = [];
         foreach ($this as $var => $value) {
-            if($value instanceof DateTime || $value instanceof DateTimeImmutable) {
+            if ($value instanceof DateTime || $value instanceof DateTimeImmutable) {
                 $array[$var] = $this->$var('string');
             } else {
                 $array[$var] = $this->$var();
@@ -20,7 +20,4 @@ abstract class Dbitem extends Item
         }
         return $array;
     }
-
 }
-
-?>

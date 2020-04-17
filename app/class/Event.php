@@ -68,7 +68,6 @@ class Event extends Dbitem
                 $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
                 return hrdi($this->date->diff($now));
                 break;
-
         }
     }
 
@@ -147,16 +146,8 @@ class Event extends Dbitem
 
     public function setclap($clap)
     {
-        if(is_int($clap)) {
+        if (is_int($clap)) {
             $this->clap = $clap;
         }
     }
-
-
-
-
-
 }
-
-
-?>

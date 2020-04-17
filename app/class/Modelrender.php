@@ -130,7 +130,7 @@ class Modelrender extends Modelpage
         // First, analyse the synthax and call the corresponding methods
         if (isset($matches)) {
             foreach ($matches as $key => $match) {
-                $element = new Element($match, $this->page->id());
+                $element = new Element($this->page->id(), $match);
                 $element->setcontent($this->getelementcontent($element->sources(), $element->type()));
                 $element->setcontent($this->elementparser($element));
                 $element->addtags();

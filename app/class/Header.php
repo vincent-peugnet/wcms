@@ -9,16 +9,17 @@ namespace Wcms;
  */
 class Header
 {
-	/** @var string $id the id of this header. */
-	public $id;
-	/** @var int $level the level of deepness of this header. */
-	public $level;
-	/** @var string $title the title displayed by this header. */
-	public $title;
+    /** @var string $id the id of this header. */
+    public $id;
+    /** @var int $level the level of deepness of this header. */
+    public $level;
+    /** @var string $title the title displayed by this header. */
+    public $title;
 
-	public function __construct(string $id, int $level, string $title) {
-		$this->id = $id;
-		$this->level = $level;
-		$this->title = $title;
-	}
+    public function __construct(string $id, int $level, string $title)
+    {
+        $this->id = $id;
+        $this->level = $level;
+        $this->title = $title;
+    }
 }

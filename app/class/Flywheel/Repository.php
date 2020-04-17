@@ -1,4 +1,5 @@
 <?php
+
 namespace Wcms\Flywheel;
 
 class Repository extends \JamesMoss\Flywheel\Repository
@@ -23,7 +24,7 @@ class Repository extends \JamesMoss\Flywheel\Repository
     public function getAllIds()
     {
         $ext = $this->formatter->getFileExtension();
-        return array_map(function($path) use ($ext) {
+        return array_map(function ($path) use ($ext) {
             return $this->getIdFromPath($path, $ext);
         }, $this->getAllFiles());
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Wcms\Flywheel;
 
 class Query extends \JamesMoss\Flywheel\Query
