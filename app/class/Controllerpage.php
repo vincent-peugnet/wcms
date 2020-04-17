@@ -131,10 +131,9 @@ class Controllerpage extends Controller
         $this->setpage($id, 'pageread/');
 
         $pageexist = $this->importpage();
-        $canread = $this->user->level() >= $this->page->secure();
-        $page = ['head' => '', 'body' => ''];
 
         if ($pageexist) {
+            $canread = $this->user->level() >= $this->page->secure();
 
             if ($this->page->daterender() < $this->page->datemodif()) {
                 if(Config::reccursiverender()) {
@@ -376,7 +375,6 @@ class Controllerpage extends Controller
 
                 $this->pagemanager->update($this->page);
 
-                $this->routedirect('pageedit', ['page' => $this->page->id()]);
                 
             //$this->showtemplate('updatemerge', $compare);
             } else {
@@ -387,7 +385,7 @@ class Controllerpage extends Controller
             }
 
         }
-        $this->routedirect('page');
+        $this->routedirect('pageedit', ['page' => $this->page->id()]);
     }
 
     /**
