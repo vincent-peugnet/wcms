@@ -1,6 +1,5 @@
 <?php
 
-
 session_start();
 
 
@@ -31,17 +30,9 @@ if (isreportingerrors()) {
 try {
     $matchoper = new Wcms\Routes();
     $matchoper->match();
-
 } catch (Exception $e) {
     if (isreportingerrors()) {
         Sentry\captureException($e);
     }
     echo '<h1>⚠ Woops ! There is a little problem : </h1>', $e->getMessage(), "\n";
 }
-
-
-
-
-
-
-?>
