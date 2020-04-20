@@ -1,4 +1,5 @@
 includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
     - vendor/pepakriz/phpstan-exception-rules/extension.neon
 
 parameters:
