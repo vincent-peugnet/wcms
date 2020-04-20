@@ -3,11 +3,14 @@
 namespace Wcms;
 
 use AltoRouter;
+use Exception;
 
 class Routes
 {
     /**
      * Cherche une correspondance entre l'URL et les routes, et appelle la méthode appropriée
+     *
+     * @throws Exception if addRoutes fails (maybe it should be catched).
      */
     public function match()
     {

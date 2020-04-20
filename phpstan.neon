@@ -1,3 +1,6 @@
+includes:
+    - vendor/pepakriz/phpstan-exception-rules/extension.neon
+
 parameters:
     level: 5
     paths:
@@ -5,3 +8,11 @@ parameters:
         - app/fn
         - index.php
         - tests
+    exceptionRules:
+        # ignore some exceptions and their chlidrens
+        uncheckedExceptions:
+            - Error
+            - LogicException
+        # ignore all exceptions errors in tests classes
+        methodWhitelist:
+            PHPUnit\Framework\TestCase: '#.*#i'

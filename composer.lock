@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b26e62f8b85c611f3db528f8690e4dfe",
+    "content-hash": "78878874876578b163daba4b9d866b23",
     "packages": [
         {
             "name": "altorouter/altorouter",
@@ -696,6 +696,60 @@
                 "random"
             ],
             "time": "2018-07-02T15:55:56+00:00"
+        },
+        {
+            "name": "pepakriz/phpstan-exception-rules",
+            "version": "v0.10.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pepakriz/phpstan-exception-rules.git",
+                "reference": "7073711906e22509cbfacbca0a914e0f8ff2e6c8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pepakriz/phpstan-exception-rules/zipball/7073711906e22509cbfacbca0a914e0f8ff2e6c8",
+                "reference": "7073711906e22509cbfacbca0a914e0f8ff2e6c8",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1",
+                "phpstan/phpstan": "^0.12.0"
+            },
+            "require-dev": {
+                "jakub-onderka/php-console-highlighter": "0.4.0",
+                "jakub-onderka/php-parallel-lint": "1.0.0",
+                "nette/utils": "^3.0",
+                "php-coveralls/php-coveralls": "^2.1",
+                "phpstan/phpstan": "^0.12.0",
+                "phpstan/phpstan-nette": "^0.12.0",
+                "phpstan/phpstan-phpunit": "^0.12.0",
+                "phpstan/phpstan-strict-rules": "^0.12.0",
+                "phpunit/phpunit": "^7.5.6",
+                "slevomat/coding-standard": "^5.0.4",
+                "squizlabs/php_codesniffer": "~3.5.2"
+            },
+            "type": "phpstan-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.10-dev"
+                },
+                "phpstan": {
+                    "includes": [
+                        "extension.neon"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pepakriz\\PHPStanExceptionRules\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Exception rules for PHPStan",
+            "time": "2019-12-09T06:14:56+00:00"
         },
         {
             "name": "phar-io/manifest",

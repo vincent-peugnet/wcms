@@ -26,7 +26,7 @@ if (isreportingerrors()) {
 try {
     $matchoper = new Wcms\Routes();
     $matchoper->match();
-} catch (Exception $e) {
+} catch (Throwable $e) {
     if (isreportingerrors()) {
         Sentry\captureException($e);
     }
