@@ -16,7 +16,8 @@
     "autoload": {
         "psr-4": {
             "Wcms\\": "app/class"
-        }
+        },
+        "files": ["app/fn/fn.php"]
     },
     "autoload-dev": {
         "psr-4": {
