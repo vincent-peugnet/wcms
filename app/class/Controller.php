@@ -4,6 +4,8 @@ namespace Wcms;
 
 use DateTime;
 use DateTimeImmutable;
+use Exception;
+use InvalidArgumentException;
 use League\Plates\Engine;
 
 class Controller
@@ -44,11 +46,11 @@ class Controller
     {
         $router = $this->router;
         $this->plates = new Engine(Model::TEMPLATES_DIR);
-        $this->plates->registerFunction('url', function (string $string, array $vars = []) use ($router) {
-            return $router->generate($string, $vars);
+        $this->plates->registerFunction('url', function (string $string, array $vars = []) {
+            return $this->generate($string, $vars);
         });
-        $this->plates->registerFunction('upage', function (string $string, string $id) use ($router) {
-            return $router->generate($string, ['page' => $id]);
+        $this->plates->registerFunction('upage', function (string $string, string $id) {
+            return $this->generate($string, ['page' => $id]);
         });
         $this->plates->addData(['flashmessages' => Model::getflashmessages()]);
     }
@@ -72,7 +74,22 @@ class Controller
 
 
 
-
+    /**
+     * Generate the URL for a named route. Replace regexes with supplied parameters.
+     *
+     * @param string $route The name of the route.
+     * @param array $params Associative array of parameters to replace placeholders with.
+     * @return string The URL of the route with named parameters in place.
+     * @throws InvalidArgumentException If the route does not exist.
+     */
+    public function generate(string $route, array $params = []): string
+    {
+        try {
+            return $this->router->generate($route, $params);
+        } catch (Exception $e) {
+            throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
 
     public function redirect($url)
     {
@@ -81,7 +98,7 @@ class Controller
 
     public function routedirect(string $route, array $vars = [])
     {
-        $this->redirect($this->router->generate($route, $vars));
+        $this->redirect($this->generate($route, $vars));
     }
 
     public function routedirectget(string $route, array $vars = [])
@@ -91,7 +108,7 @@ class Controller
             $get .= $key . '=' . $value . '&';
         }
         $get = rtrim($get, '&');
-        $this->redirect($this->router->generate($route, []) . $get);
+        $this->redirect($this->generate($route, []) . $get);
     }
 
     public function error(int $code)
