@@ -94,6 +94,7 @@ dist/w_cms_%.zip: all
 		"package*" \
 		phpcs.xml \
 		phpunit.xml \
+		phpstan.neon \
 		webpack.config.js
 
 # Generate the js bundles (and sourcemaps).
@@ -158,12 +159,17 @@ buildclean:
 
 # Run all checks.
 .PHONY: check
-check: vendor lint test
+check: vendor lint analyse test
 
 # Lint php code with phpcs.
 .PHONY: lint
 lint: $(phpcs_dir)
 	phpcs --report-full --report-checkstyle=$(phpcs_dir)/checkstyle.xml
+
+# Analyse php code with phpstan.
+.PHONY: analyse
+analyse:
+	phpstan analyse
 
 # Test php code with phpunit.
 .PHONY: test

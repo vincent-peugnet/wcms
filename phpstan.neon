@@ -1,0 +1,7 @@
+parameters:
+    level: 5
+    paths:
+        - app/class
+        - app/fn
+        - index.php
+        - tests
