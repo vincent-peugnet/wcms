@@ -56,7 +56,7 @@ class Modelrender extends Modelpage
      */
     public function upage(string $id): string
     {
-        return $this->router->generate('pageread/', ['page' => $id]);
+        return $this->generate('pageread/', ['page' => $id]);
     }
 
 
