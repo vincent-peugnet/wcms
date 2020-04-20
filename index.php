@@ -3,10 +3,6 @@
 session_start();
 
 
-
-require('app/fn/fn.php');
-
-
 require('./vendor/autoload.php');
 
 
