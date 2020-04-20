@@ -1,5 +1,6 @@
 .vscode/*
 .env
+*.log
 *.bundle.js
 *.bundle.js.map
 assets/render/*
