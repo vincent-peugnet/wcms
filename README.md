@@ -1,5 +1,7 @@
 # W-CMS
 
+![github status] ![code style] ![phpstan level]
+
 W is a lightweight CMS tool, meant to help you design a website using a unique approach. It's targeting artists, or experimental projects.
 
 To have a better idea of what W can do, you can check out the [User manual](MANUAL.md), or dicover the [ideas](#ideas) behind this specific tool.
@@ -175,3 +177,7 @@ Then, to make the release, run the following command:
     make release
 
 To only build the release zip, simply run `make dist`. This will create a zip file in `dist/` of the current version.
+
+[github status]: https://github.com/vincent-peugnet/wcms/workflows/build/badge.svg
+[code style]: https://img.shields.io/badge/code%20style-PSR12-brightgreen
+[phpstan level]: https://img.shields.io/badge/phpstan-level%205-green

@@ -86,6 +86,8 @@ dist/w_cms_%.zip: all
 	zip -d $@ \
 		"$(js_src_dir)/*" \
 		$(js_srcmaps) \
+		".github*" \
+		tests \
 		.default.env \
 		.gitignore \
 		.release-it.json \
