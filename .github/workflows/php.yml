@@ -22,8 +22,8 @@ jobs:
 
       - name: PHPStan xml report
         if: always()
-        run: >
-          mkdir -p build/phpstan &&
+        run: |
+          mkdir -p build/phpstan
           vendor/bin/phpstan analyse --no-progress --error-format=checkstyle > build/phpstan/checkstyle.xml
 
       - name: Analysis Publisher
@@ -36,3 +36,11 @@ jobs:
             --report-type=checkstyle --path=**/build/phpcs/checkstyle.xml
             --report-type=checkstyle --path=**/build/phpstan/checkstyle.xml
             --publisher=github_check
+
+      - name: Coveralls publish
+        if: always()
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          composer require --quiet --no-interaction cedx/coveralls
+          vendor/bin/coveralls build/phpunit/cov.xml
