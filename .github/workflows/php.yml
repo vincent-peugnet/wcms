@@ -1,27 +1,38 @@
 name: build
 
 on:
-    push:
-        branches: [ master ]
-    pull_request:
-        branches: [ master ]
+  - push
+  - pull_request
 
 jobs:
-    php-build:
+  php-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
 
-        runs-on: ubuntu-latest
+      - name: Validate composer.json and composer.lock
+        run: composer validate
 
-        steps:
-            -   uses: actions/checkout@v2
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
 
-            -   name: Validate composer.json and composer.lock
-                run: composer validate
+      - name: Run test suite
+        run: make check -k
 
-            -   name: Install dependencies
-                run: composer install --prefer-dist --no-progress --no-suggest
+      - name: PHPStan xml report
+        if: always()
+        run: >
+          mkdir -p build/phpstan &&
+          vendor/bin/phpstan analyse --no-progress --error-format=checkstyle > build/phpstan/checkstyle.xml
 
-            # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-            # Docs: https://getcomposer.org/doc/articles/scripts.md
-
-            -   name: Run test suite
-                run: make check -k
+      - name: Analysis Publisher
+        uses: digirati-labs/analysis-publisher@0.0.1
+        if: failure()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: >
+            --report-type=checkstyle --path=**/build/phpcs/checkstyle.xml
+            --report-type=checkstyle --path=**/build/phpstan/checkstyle.xml
+            --publisher=github_check
