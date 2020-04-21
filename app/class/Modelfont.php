@@ -69,7 +69,10 @@ class Modelfont extends Model
     {
         $fontface = '';
         foreach ($fontlist as $font) {
-            $fontface .= '@font-face {' . PHP_EOL . 'font-family: ' . $font['id'] . ';' . PHP_EOL . ' src: url( ' . Model::fontpath() . $font['id'] . '.' . $font['ext'] . ');' . PHP_EOL . '}' . PHP_EOL . PHP_EOL;
+            $fontface .= '@font-face {\n
+                font-family: ' . $font['id'] . ';\n
+                src: url( ' . Model::fontpath() . $font['id'] . '.' . $font['ext'] . ');
+                }\n\n';
         }
         return $fontface;
     }

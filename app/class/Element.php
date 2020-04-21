@@ -46,7 +46,7 @@ class Element extends Item
 
     public function addtags()
     {
-        $this->content = PHP_EOL . '<' . $this->type() . '>' . PHP_EOL . $this->content() . PHP_EOL . '</' . $this->type() . '>' . PHP_EOL;
+        $this->content = '\n<' . $this->type() . '>\n' . $this->content() . '\n</' . $this->type() . '>\n';
     }
 
 

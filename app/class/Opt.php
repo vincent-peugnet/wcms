@@ -148,7 +148,8 @@ class Opt extends Item
     {
         $tagstring = "";
         foreach ($taglist as $tag) {
-            $tagstring .= '<a class="tag tag_' . $tag . '" href="?' . $this->getfilteradress(['tagfilter' => [$tag]]) . '" >' . $tag . '</a>' . PHP_EOL;
+            $href = $this->getfilteradress(['tagfilter' => [$tag]]);
+            $tagstring .= '<a class="tag tag_' . $tag . '" href="?' . $href . '" >' . $tag . '</a>' . PHP_EOL;
         }
         return $tagstring;
     }
@@ -163,21 +164,24 @@ class Opt extends Item
     {
         $authorstring = "";
         foreach ($authorlist as $author) {
-            $authorstring .= '<a class="author author_' . $author . '" href="?' . $this->getfilteradress(['authorfilter' => [$author]]) . '" >' . $author . '</a>' . PHP_EOL;
+            $href = $this->getfilteradress(['authorfilter' => [$author]]);
+            $authorstring .= '<a class="author author_' . $author . '" href="?' . $href . '" >' . $author . '</a>\n';
         }
         return $authorstring;
     }
 
     public function securelink(int $level, string $secure)
     {
-        return '<a class="secure ' . $secure . '" href="?' . $this->getfilteradress(['secure' => $level]) . '">' . $secure . '</a>' . PHP_EOL;
+        $href = $this->getfilteradress(['secure' => $level]);
+        return '<a class="secure ' . $secure . '" href="?' . $href . '">' . $secure . '</a>\n';
     }
 
     public function linktolink(array $linktolist)
     {
         $linktostring = "";
         foreach ($linktolist as $linkto) {
-            $linktostring .= '<a class="linkto" href="?' . $this->getfilteradress(['linkto' => $linkto]) . '" >' . $linkto . '</a>' . PHP_EOL;
+            $href = $this->getfilteradress(['linkto' => $linkto]);
+            $linktostring .= '<a class="linkto" href="?' . $href . '" >' . $linkto . '</a>\n';
         }
         return $linktostring;
     }
@@ -185,7 +189,17 @@ class Opt extends Item
 
     public function getfilteradress(array $vars = [])
     {
-        $varlist = ['sortby', 'order', 'secure', 'tagfilter', 'tagcompare', 'authorfilter', 'authorcompare', 'linkto', 'invert', 'limit'];
+        $varlist = [
+            'sortby',
+            'order',
+            'secure',
+            'tagfilter',
+            'tagcompare',
+            'authorfilter',
+            'authorcompare',
+            'linkto', 'invert',
+            'limit'
+        ];
         // array_filter($vars, function ())
         $object = $this->drylist($varlist);
         $object = array_merge($object, $vars);

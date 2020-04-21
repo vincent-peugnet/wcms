@@ -16,7 +16,15 @@ class Event extends Dbitem
     protected $message;
     protected $clap = 0;
 
-    public const EVENT_TYPES = ['message', 'page_add', 'page_edit', 'page_delete', 'media_add', 'media_delete', 'font_add'];
+    public const EVENT_TYPES = [
+        'message',
+        'page_add',
+        'page_edit',
+        'page_delete',
+        'media_add',
+        'media_delete',
+        'font_add'
+    ];
     public const EVENT_BASE = ['message'];
     public const EVENT_ART = ['page_add', 'page_edit', 'page_delete'];
     public const EVENT_MEDIA = ['media_add', 'media_delete'];
@@ -112,7 +120,11 @@ class Event extends Dbitem
         if ($date instanceof DateTimeImmutable) {
             $this->date = $date;
         } elseif (is_string($date)) {
-            $this->date = DateTimeImmutable::createFromFormat(DateTime::ISO8601, $date, new DateTimeZone('Europe/Paris'));
+            $this->date = DateTimeImmutable::createFromFormat(
+                DateTime::ISO8601,
+                $date,
+                new DateTimeZone('Europe/Paris')
+            );
         }
     }
 

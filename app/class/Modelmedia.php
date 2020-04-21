@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use phpDocumentor\Reflection\Types\Mixed_;
+
 class Modelmedia extends Model
 {
 
@@ -38,36 +40,33 @@ class Modelmedia extends Model
     }
 
     /**
-     * Display a list of media
+     * get a list of media of selected types
      *
-     * @param string $path
+     * @param string $dir Media directory ot look at
      * @param array $type
      *
-     * @return array of Media objects
+     * @return Media[]|bool of Media objects
      */
     public function getlistermedia($dir, $type = [])
     {
-        if (is_dir($dir)) {
-            if ($handle = opendir($dir)) {
-                $list = [];
-                while (false !== ($entry = readdir($handle))) {
-                    if ($entry != "." && $entry != "..") {
-                        $media = $this->getmedia($entry, $dir);
+        if (is_dir($dir) && $handle = opendir($dir)) {
+            $list = [];
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != "." && $entry != "..") {
+                    $media = $this->getmedia($entry, $dir);
 
-                        if ($media != false) {
-                            $media->analyse();
+                    if ($media != false) {
+                        $media->analyse();
 
-                            if (empty($type) || in_array($media->type(), $type)) {
-                                $list[] = $media;
-                            }
+                        if (empty($type) || in_array($media->type(), $type)) {
+                            $list[] = $media;
                         }
                     }
                 }
-                return $list;
             }
-        } else {
-            return false;
+                return $list;
         }
+        return false;
     }
 
 
@@ -313,7 +312,6 @@ class Modelmedia extends Model
                 $success[] = $this->deletefile($filedir);
             }
         }
-        Model::sendflashmessage(count(array_filter($success)) . ' / ' . count($filelist) . ' files have been deleted', 'success');
         if (in_array(false, $success)) {
             return false;
         } else {

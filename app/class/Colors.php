@@ -88,7 +88,9 @@ class Colors extends Item
     {
         $html = '<ul>';
         foreach ($this->tagcolor as $tag => $color) {
-            $html .= PHP_EOL . '<li><input type="color" name="tagcolor[' . $tag . ']" value="' . $color . '" id="color_' . $tag . '"><label for="color_' . $tag . '" >' . $tag . '</label></li>';
+            $i = '<input type="color" name="tagcolor[' . $tag . ']" value="' . $color . '" id="color_' . $tag . '">';
+            $l = '<label for="color_' . $tag . '" >' . $tag . '</label>';
+            $html .= '\n<li>' . $i . $l . '</li>';
         }
         $html .= PHP_EOL . '</ul>';
         return $html;

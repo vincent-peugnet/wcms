@@ -28,7 +28,7 @@ class Medialist extends Item
     /** @var int display download links*/
     protected $links = 0;
 
-    /** @var string display the file name of the file */
+    /** @var int display the file name of the file */
     protected $filename = 0;
 
     public const TYPES = ['image', 'sound', 'video', 'other'];
@@ -56,7 +56,6 @@ class Medialist extends Item
         $mediamanager = new Modelmedia();
         $medialist = $mediamanager->getlistermedia($this->dir(), $this->type);
         if (!$medialist) {
-            $this->content = '<strong>RENDERING ERROR :</strong> path : <code>' . Model::MEDIA_DIR . $this->path . '/</code> does not exist';
             return false;
         } else {
             $mediamanager->medialistsort($medialist, $this->sortby, $this->order);
@@ -67,14 +66,19 @@ class Medialist extends Item
 
             foreach ($medialist as $media) {
                 $div .= '<div class="content ' . $media->type() . '">';
+                $id = 'id="media_' . $media->id() . '"';
+                $path = $media->getincludepath();
+                $ext = $media->extension();
                 if ($media->type() == 'image') {
-                    $div .= '<img alt="' . $media->id() . '" id="' . $media->id() . '" src="' . $media->getincludepath() . '" >';
+                    $div .= '<img alt="' . $media->id() . '" ' . $id . ' src="' . $path . '" >';
                 } elseif ($media->type() == 'sound') {
-                    $div .= '<audio id="' . $media->id() . '" controls src="' . $media->getincludepath() . '" </audio>';
+                    $div .= '<audio ' . $id . ' controls src="' . $path . '" </audio>';
                 } elseif ($media->type() == 'video') {
-                    $div .= '<video controls><source src="' . $media->getincludepath() . '" type="video/' . $media->extension() . '"></video>';
+                    $source = '<source src="' . $path . '" type="video/' . $ext . '" ' . $id . '>';
+                    $div .= '<video controls>' . $source . '</video>';
                 } else {
-                    $div .= '<a href="' . $media->getincludepath() . '" target="_blank" class="media" >' . $media->id() . '.' . $media->extension() . '</a>';
+                    $name = $media->id() . '.' . $ext;
+                    $div .= '<a href="' . $path . '" target="_blank" class="media" ' . $id . '>' . $name . '</a>';
                 }
                 $div .= '</div>' . PHP_EOL;
             }

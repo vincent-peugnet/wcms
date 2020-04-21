@@ -84,7 +84,7 @@ class Modelrender extends Modelpage
         $body = $this->getbody($this->readbody());
         $parsebody = $this->bodyparser($body);
 
-        $html = '<!DOCTYPE html>' . PHP_EOL . '<html>' . PHP_EOL . '<head>' . PHP_EOL . $head . PHP_EOL . '</head>' . PHP_EOL . $parsebody . PHP_EOL . '</html>';
+        $html = '<!DOCTYPE html>\n<html>\n<head>\n' . $head . '\n</head>\n' . $parsebody . '\N</html>';
 
         return $html;
     }
@@ -158,10 +158,12 @@ class Modelrender extends Modelpage
                 $subcontent = $this->getpageelement($source, $type);
                 if ($subcontent !== false) {
                     if (empty($subcontent && self::RENDER_VERBOSE > 0)) {
-                        $subcontent = PHP_EOL . '<!-- The ' . strtoupper($type) . ' from page "' . $source . '" is currently empty ! -->' . PHP_EOL;
+                        $message = 'The ' . strtoupper($type) . ' from page "' . $source . '" is currently empty !';
+                        $subcontent = '\n<!-- ' . $message . ' -->\n';
                     }
                 } else {
-                    $read = '<h2>Rendering error :</h2><p>The page <strong><code>' . $source . '</code></strong>, does not exist yet.</p>';
+                    $read = '<h2>Rendering error :</h2>';
+                    $read .= '<p>The page <strong><code>' . $source . '</code></strong>, does not exist yet.</p>';
                     //throw new Exception($read);
                 }
             } else {
@@ -227,38 +229,42 @@ class Modelrender extends Modelpage
 
         $head = '';
 
-        $head .= '<meta charset="utf-8" />' . PHP_EOL;
-        $head .= '<title>' . $this->page->title() . '</title>' . PHP_EOL;
+        $head .= '<meta charset="utf-8" />\n';
+        $head .= '<title>' . $this->page->title() . '</title>\n';
         if (!empty($this->page->favicon())) {
-            $head .= '<link rel="shortcut icon" href="' . Model::faviconpath() . $this->page->favicon() . '" type="image/x-icon">';
+            $href = Model::faviconpath() . $this->page->favicon();
+            $head .= '<link rel="shortcut icon" href="' . $href . '" type="image/x-icon">';
         } elseif (!empty(Config::defaultfavicon())) {
-            $head .= '<link rel="shortcut icon" href="' . Model::faviconpath() . Config::defaultfavicon() . '" type="image/x-icon">';
+            $href = Model::faviconpath() . Config::defaultfavicon();
+            $head .= '<link rel="shortcut icon" href="' . $href . '" type="image/x-icon">';
         }
-        $head .= '<meta name="description" content="' . $this->page->description() . '" />' . PHP_EOL;
-        $head .= '<meta name="viewport" content="width=device-width" />' . PHP_EOL;
+        $head .= '<meta name="description" content="' . $this->page->description() . '" />\n';
+        $head .= '<meta name="viewport" content="width=device-width" />\n';
 
 
-        $head .= '<meta property="og:title" content="' . $this->page->title() . '">' . PHP_EOL;
-        $head .= '<meta property="og:description" content="' . $this->page->description() . '">' . PHP_EOL;
+        $head .= '<meta property="og:title" content="' . $this->page->title() . '">\n';
+        $head .= '<meta property="og:description" content="' . $this->page->description() . '">\n';
 
         if (!empty($this->page->thumbnail())) {
-            $head .= '<meta property="og:image" content="' . Config::domain() . self::thumbnailpath() . $this->page->thumbnail() . '">' . PHP_EOL;
+            $content = Config::domain() . self::thumbnailpath() . $this->page->thumbnail();
+            $head .= '<meta property="og:image" content="' . $content . '">\n';
         } elseif (!empty(Config::defaultthumbnail())) {
-            $head .= '<meta property="og:image" content="' . Config::domain() . self::thumbnailpath() . Config::defaultthumbnail() . '">' . PHP_EOL;
+            $content = Config::domain() . self::thumbnailpath() . Config::defaultthumbnail();
+            $head .= '<meta property="og:image" content="' . $content . '">\n';
         }
 
-        $head .= '<meta property="og:url" content="' . Config::url() . $this->page->id() . '/">' . PHP_EOL;
+        $head .= '<meta property="og:url" content="' . Config::url() . $this->page->id() . '/">\n';
 
 
         foreach ($this->page->externalcss() as $externalcss) {
-            $head .= '<link href="' . $externalcss . '" rel="stylesheet" />' . PHP_EOL;
+            $head .= '<link href="' . $externalcss . '" rel="stylesheet" />\n';
         }
 
         if (!empty($this->page->templatecss() && in_array('externalcss', $this->page->templateoptions()))) {
             $templatecss = $this->get($this->page->templatecss());
             if ($templatecss !== false) {
                 foreach ($templatecss->externalcss() as $externalcss) {
-                    $head .= '<link href="' . $externalcss . '" rel="stylesheet" />' . PHP_EOL;
+                    $head .= '<link href="' . $externalcss . '" rel="stylesheet" />\n';
                 }
             }
         }
@@ -266,25 +272,25 @@ class Modelrender extends Modelpage
         $head .= PHP_EOL . $this->page->customhead() . PHP_EOL;
 
 
-        $head .= '<link href="' . Model::globalpath() . 'fonts.css" rel="stylesheet" />' . PHP_EOL;
-        $head .= '<link href="' . Model::globalpath() . 'global.css" rel="stylesheet" />' . PHP_EOL;
+        $head .= '<link href="' . Model::globalpath() . 'fonts.css" rel="stylesheet" />\n';
+        $head .= '<link href="' . Model::globalpath() . 'global.css" rel="stylesheet" />\n';
 
         if (!empty($this->page->templatecss())) {
             $tempaltecsspage = $this->page->templatecss();
-            $head .= '<link href="' . Model::renderpath() . $tempaltecsspage . '.css" rel="stylesheet" />' . PHP_EOL;
+            $head .= '<link href="' . Model::renderpath() . $tempaltecsspage . '.css" rel="stylesheet" />\n';
         }
-        $head .= '<link href="' . Model::renderpath() . $this->page->id() . '.css" rel="stylesheet" />' . PHP_EOL;
+        $head .= '<link href="' . Model::renderpath() . $this->page->id() . '.css" rel="stylesheet" />\n';
 
         if (!empty($this->page->templatejavascript())) {
             $templatejspage = $this->page->templatejavascript();
-            $head .= '<script src="' . Model::renderpath() . $templatejspage . '.js" async/></script>' . PHP_EOL;
+            $head .= '<script src="' . Model::renderpath() . $templatejspage . '.js" async/></script>\n';
         }
         if (!empty($this->page->javascript())) {
-            $head .= '<script src="' . Model::renderpath() . $this->page->id() . '.js" async/></script>' . PHP_EOL;
+            $head .= '<script src="' . Model::renderpath() . $this->page->id() . '.js" async/></script>\n';
         }
 
         if (!empty(Config::analytics())) {
-            $head .= PHP_EOL . '
+            $head .= '\n
 			<!-- Global site tag (gtag.js) - Google Analytics -->
 			<script async src="https://www.googletagmanager.com/gtag/js?id=' . Config::analytics() . '"></script>
 			<script>
@@ -294,16 +300,16 @@ class Modelrender extends Modelpage
 
 			gtag(\'config\', \'' . Config::analytics() . '\');
 			</script>
-			' . PHP_EOL;
+			\n';
         }
 
         if (!empty($this->page->redirection())) {
             if (preg_match('%https?:\/\/\S*%', $this->page->redirection(), $out)) {
                 $url = $out[0];
-                $head .= PHP_EOL . '<meta http-equiv="refresh" content="' . $this->page->refresh() . '; URL=' . $url . '" />';
+                $head .= '\n<meta http-equiv="refresh" content="' . $this->page->refresh() . '; URL=' . $url . '" />';
             } elseif (key_exists($this->page->redirection(), $this->pagelist())) {
                 $url = $this->upage($this->page->redirection());
-                $head .= PHP_EOL . '<meta http-equiv="refresh" content="' . $this->page->refresh() . '; URL=' . $url . '" />';
+                $head .= '\n<meta http-equiv="refresh" content="' . $this->page->refresh() . '; URL=' . $url . '" />';
             }
         }
 
@@ -343,7 +349,8 @@ class Modelrender extends Modelpage
 
     public function media(string $text): string
     {
-        $text = preg_replace('%(src|href)="([\w-_]+(\/([\w-_])+)*\.[a-z0-9]{1,5})"%', '$1="' . Model::mediapath() . '$2" target="_blank" class="media"', $text);
+        $regex = '%(src|href)="([\w-_]+(\/([\w-_])+)*\.[a-z0-9]{1,5})"%';
+        $text = preg_replace($regex, '$1="' . Model::mediapath() . '$2" target="_blank" class="media"', $text);
         if (!is_string($text)) {
             //throw new Exception('Rendering error -> media module');
         }
@@ -381,11 +388,16 @@ class Modelrender extends Modelpage
             function ($matches) use ($rend, &$linkto) {
                 $matchpage = $rend->get($matches[1]);
                 if (!$matchpage) {
-                    $link = 'href="' . $rend->upage($matches[1]) . '"" title="' . Config::existnot() . '" class="internal existnot"' . $this->internallinkblank;
+                    $href = $rend->upage($matches[1]);
+                    $t = Config::existnot();
+                    $c = 'internal existnot"' . $this->internallinkblank;
                 } else {
+                    $href = $rend->upage($matches[1]) . $matches[2];
+                    $t = $matchpage->description();
+                    $c = 'internal exist ' . $matchpage->secure('string');
                     $linkto[] = $matchpage->id();
-                    $link =  'href="' . $rend->upage($matches[1]) . $matches[2] . '" title="' . $matchpage->description() . '" class="internal exist ' . $matchpage->secure('string') . '"' . $this->internallinkblank;
                 }
+                $link =  'href="' . $href . '" title="' . $t . '" class="' . $c . '"' . $this->internallinkblank;
                 return $link;
             },
             $text
@@ -403,11 +415,19 @@ class Modelrender extends Modelpage
             function ($matches) use ($rend, &$linkto) {
                 $matchpage = $rend->get($matches[1]);
                 if (!$matchpage) {
-                    return '<a href="' . $rend->upage($matches[1]) . '"" title="' . Config::existnot() . '" class="internal existnot" ' . $this->internallinkblank . ' >' . $matches[1] . '</a>';
+                    $href = $rend->upage($matches[1]);
+                    $t = Config::existnot();
+                    $c = 'internal existnot" ' . $this->internallinkblank;
+                    $a = $matches[1];
                 } else {
+                    $href = $rend->upage($matches[1]) . $matches[2];
+                    $t = $matchpage->description();
+                    $c = 'internal exist ' . $matchpage->secure('string');
+                    $a = $matchpage->title();
                     $linkto[] = $matchpage->id();
-                    return '<a href="' . $rend->upage($matches[1]) . $matches[2] . '" title="' . $matchpage->description() . '" class="internal exist ' . $matchpage->secure('string') . '" ' . $this->internallinkblank . ' >' . $matchpage->title() . '</a>';
                 }
+                $i = $this->internallinkblank;
+                return '<a href="' . $href . '" title="' . $t . '" class="' . $c . '" ' . $i . ' >' . $a . '</a>';
             },
             $text
         );
@@ -478,7 +498,7 @@ class Modelrender extends Modelpage
             } else {
                 $id = ' ';
             }
-            return '<article ' . $id . '  markdown="1" >' . PHP_EOL . PHP_EOL . $matches[3] . PHP_EOL . PHP_EOL . '</article>' . PHP_EOL . PHP_EOL;
+            return '<article ' . $id . '  markdown="1" >\n\n' . $matches[3] . '\n\n</article>\n\n';
         }, $text);
         $text = preg_replace('/\R\R[=]{3,}([\w-]*)\R/', '', $text);
         return $text;
@@ -591,7 +611,9 @@ class Modelrender extends Modelpage
      */
     public function thumbnail(string $text): string
     {
-        $img = '<img class="thumbnail" src="' . Model::thumbnailpath() . $this->page->thumbnail() . '" alt="' . $this->page->title() . '">';
+        $src = Model::thumbnailpath() . $this->page->thumbnail();
+        $alt = $this->page->title();
+        $img = '<img class="thumbnail" src="' . $src . '" alt="' . $alt . '">';
         $img = PHP_EOL . $img . PHP_EOL;
         $text = str_replace('%THUMBNAIL%', $img, $text);
 

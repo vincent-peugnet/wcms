@@ -199,14 +199,23 @@ class Quickcss extends Item
             echo '<h3>' . $element . '</h3>';
             foreach ($css as $param => $value) {
                 echo '<div class="quicklabel">';
-                echo '<input type="checkbox" name="active[' . $element . '][' . $param . ']" id="active[' . $element . '][' . $param . ']" checked>';
+                echo '<input
+                type="checkbox"
+                name="active[' . $element . '][' . $param . ']"
+                id="active[' . $element . '][' . $param . ']"
+                checked>';
                 echo '<label for="active[' . $element . '][' . $param . ']">' . $param . '</label>';
                 echo '</div>';
 
                 echo '<div class="quickinput">';
 
                 if (in_array($param, self::COLOR)) {
-                    echo '<input type="color" name="values[' . $element . '][' . $param . ']" value="' . $quickcss[$element][$param] . '" id="values[' . $element . '][' . $param . ']">';
+                    echo '<input
+                    type="color"
+                    name="values[' . $element . '][' . $param . ']"
+                    value="' . $quickcss[$element][$param] . '"
+                    id="values[' . $element . '][' . $param . ']"
+                    >';
                 }
 
                 if (in_array($param, self::SIZE)) {
@@ -238,7 +247,12 @@ class Quickcss extends Item
 
     public function sizeinput($element, $param, $value)
     {
-        echo '<input type="number" name="values[' . $element . '][' . $param . ']" value="' . intval($value) . '" id="values[' . $element . '][' . $param . ']">';
+        echo '<input
+        type="number"
+        name="values[' . $element . '][' . $param . ']"
+        value="' . intval($value) . '"
+        id="values[' . $element . '][' . $param . ']"
+        >';
 
         $unit = preg_replace('/\d/', '', $value);
         ?>
@@ -251,7 +265,12 @@ class Quickcss extends Item
 
     public function fontsizeinput($element, $param, $value)
     {
-        echo '<input type="number" name="values[' . $element . '][' . $param . ']" value="' . intval($value) . '" id="values[' . $element . '][' . $param . ']">';
+        echo '<input
+        type="number"
+        name="values[' . $element . '][' . $param . ']"
+        value="' . intval($value) . '"
+        id="values[' . $element . '][' . $param . ']"
+        >';
 
         $unit = preg_replace('/\d/', '', $value);
         ?>
@@ -264,7 +283,13 @@ class Quickcss extends Item
 
     public function opacityinput($element, $param, $value)
     {
-        echo '<input type="number" name="values[' . $element . '][' . $param . ']" value="' . $value . '" id="values[' . $element . '][' . $param . ']" step="0.1" min="0" max="1">';
+        echo '<input
+        type="number"
+        name="values[' . $element . '][' . $param . ']"
+        value="' . $value . '"
+        id="values[' . $element . '][' . $param . ']"
+        step="0.1" min="0" max="1"
+        >';
     }
 
     public function selectinput($element, $param, $value)

@@ -102,7 +102,10 @@ class Application
                 <label for="basepath">Path to W-CMS</label>
             </h2>
             <input type="text" name="configinit[basepath]"  value="<?= Config::basepath() ?>" id="basepath">
-            <p><i>Leave it empty if W-CMS is in your root folder, otherwise, indicate the subfolder(s) in witch you installed the CMS</i></p>
+            <p><i>
+                Leave it empty if W-CMS is in your root folder, otherwise,
+                indicate the subfolder(s) in witch you installed the CMS
+            </i></p>
         </div>
         <div>
             <h2>
@@ -115,8 +118,19 @@ class Application
             <h2>
                 <label for="secretkey">Secret Key</label>
             </h2>
-            <input type="text" name="configinit[secretkey]"  value="<?= bin2hex(random_bytes(10)) ?>" id="secretkey" minlength="16" maxlength="128" required>
-            <p><i>The secret key is used to secure cookies. There are no need to remind it. (16 to 128 characters)</i></p>
+            <input
+                type="text"
+                name="configinit[secretkey]"
+                value="<?= bin2hex(random_bytes(10)) ?>"
+                id="secretkey"
+                minlength="<?= Config::SECRET_KEY_MIN ?>"
+                maxlength="<?= Config::SECRET_KEY_MAX ?>"
+                required
+            >
+            <p><i>
+                The secret key is used to secure cookies. There are no need to remind it.
+                (16 to 128 characters)
+            </i></p>
         </div>
         <input type="submit" value="set">
         </form>
@@ -140,7 +154,14 @@ class Application
         <h2>
         <label for="password">Your password</label>
         </h2>
-        <input type="password" name="userinit[password]" id="password" minlength="<?= Model::PASSWORD_MIN_LENGTH ?>" maxlength="<?= Model::PASSWORD_MAX_LENGTH ?>" required>
+        <input
+            type="password"
+            name="userinit[password]"
+            id="password"
+            minlength="<?= Model::PASSWORD_MIN_LENGTH ?>"
+            maxlength="<?= Model::PASSWORD_MAX_LENGTH ?>"
+            required
+        >
         <p><i>Your user passworder as first administrator.</i></p>
         </div>
         <input type="submit" value="set">

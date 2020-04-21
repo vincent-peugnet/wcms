@@ -21,7 +21,7 @@ abstract class Config
     protected static $privatepass = false;
     protected static $notpublishedpass = false;
     protected static $alertcss = false;
-    protected static $defaultbody = '%HEADER%' . PHP_EOL . PHP_EOL . '%NAV%' . PHP_EOL . PHP_EOL . '%ASIDE%' . PHP_EOL . PHP_EOL . '%MAIN%' . PHP_EOL . PHP_EOL . '%FOOTER%';
+    protected static $defaultbody = '%HEADER%\n\n%NAV%\n\n%ASIDE%\n\n%MAIN%\n\n%FOOTER%';
     protected static $defaultfavicon = '';
     protected static $defaultthumbnail = '';
     protected static $analytics = '';

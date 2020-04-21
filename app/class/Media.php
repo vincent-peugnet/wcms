@@ -100,7 +100,10 @@ class Media extends Item
                 break;
                 
             case 'video':
-                    $code = '&lt;video controls=""&gt;&lt;source src="' . $this->getincludepath() . '" type="video/' . $this->extension . '"&gt;&lt;/video&gt;';
+                $src = $this->getincludepath();
+                $ext = $this->extension;
+                $code = '&lt;video controls=""&gt;';
+                $code .= '&lt;source src="' . $src . '" type="video/' . $ext . '"&gt;&lt;/video&gt;';
                 break;
 
             default:
@@ -267,14 +270,14 @@ class Media extends Item
     public function setwidth($width)
     {
         if (is_int($width)) {
-            $this->width = strip_tags(strtolower($width));
+            $this->width = $width;
         }
     }
 
     public function setheight($height)
     {
         if (is_int($height)) {
-            $this->height = strip_tags(strtolower($height));
+            $this->height = $height;
         }
     }
 

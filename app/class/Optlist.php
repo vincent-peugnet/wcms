@@ -56,16 +56,17 @@ class Optlist extends Opt
                 $content .= '<span class="description">' . $page->description() . '</span>';
             }
             if ($this->date()) {
-                $content .= '<time datetime="' . $page->date('pdate') . '">' . $page->date('pdate') . '</time>' . PHP_EOL;
+                $content .= '<time datetime="' . $page->date('pdate') . '">' . $page->date('pdate') . '</time>\n';
             }
             if ($this->time()) {
-                $content .= '<time datetime="' . $page->date('ptime') . '">' . $page->date('ptime') . '</time>' . PHP_EOL;
+                $content .= '<time datetime="' . $page->date('ptime') . '">' . $page->date('ptime') . '</time>\n';
             }
             if ($this->author()) {
                 $content .=  $page->authors('string') . PHP_EOL;
             }
             if ($this->thumbnail) {
-                $content .= '<img class="thumbnail" src="' . Model::thumbnailpath() . $page->thumbnail() . '" alt="' . $page->title() . '">';
+                $src = Model::thumbnailpath() . $page->thumbnail();
+                $content .= '<img class="thumbnail" src="' . $src . '" alt="' . $page->title() . '">';
             }
 
 
@@ -93,12 +94,12 @@ class Optlist extends Opt
 
     public function li(string $content, string $id)
     {
-        return '<li id="' . $id . '">' . PHP_EOL . $content . PHP_EOL . '</li>' . PHP_EOL;
+        return '<li id="' . $id . '">' . PHP_EOL . $content . PHP_EOL . '</li>\n';
     }
 
     public function a(string $content, string $class, string $id)
     {
-        return '<a ' . $class . ' href="' . $this->render->upage($id) . '">' . $content . '</a>' . PHP_EOL;
+        return '<a ' . $class . ' href="' . $this->render->upage($id) . '">' . $content . '</a>\n';
     }
 
     public function spandescription(Page $page)

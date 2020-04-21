@@ -253,7 +253,9 @@ function treecount(
         $folder = '├─📁' . $dirname;
     }
     echo '<tr>';
-    echo '<td><a href="' . $mediaopt->getpathadress($path) . '">' . str_repeat('&nbsp;&nbsp;', $deepness) . $folder . '</a></td>';
+    $href = $mediaopt->getpathadress($path);
+    $foldername = str_repeat('&nbsp;&nbsp;', $deepness) . $folder;
+    echo '<td><a href="' . $href . '">' . $foldername . '</a></td>';
     echo '<td>' . $dirlist['dirfilecount'] . '</td>';
     echo '</tr>';
     foreach ($dirlist as $key => $value) {
@@ -279,6 +281,7 @@ function basictree(array $dirlist, string $dirname, int $deepness, string $path,
     }
 
     if ($deepness === 1) {
+        // phpcs:ignore Generic.Files.LineLength.TooLong
         $radio = '<input type="radio" name="pagetable" value="' . $dirname . '" id="db_' . $path . '" ' . $checked . '>';
     } else {
         $radio = '';

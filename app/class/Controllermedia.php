@@ -102,7 +102,11 @@ class Controllermedia extends Controller
     {
         if ($this->user->issupereditor() && isset($_POST['action']) && isset($_POST['id'])) {
             if ($_POST['action'] == 'delete') {
-                $this->mediamanager->multifiledelete($_POST['id']);
+                if ($this->mediamanager->multifiledelete($_POST['id'])) {
+                    Model::sendflashmessage('Files deletion successfull', 'success');
+                } else {
+                    Model::sendflashmessage('Error while deleting files', 'error');
+                }
             } elseif ($_POST['action'] == 'move' && isset($_POST['dir'])) {
                 $this->mediamanager->multimovefile($_POST['id'], $_POST['dir']);
             }
