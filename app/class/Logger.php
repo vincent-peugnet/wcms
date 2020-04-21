@@ -2,6 +2,7 @@
 
 namespace Wcms;
 
+use InvalidArgumentException;
 use Throwable;
 
 /**
@@ -10,7 +11,7 @@ use Throwable;
  */
 class Logger
 {
-    private static $file = null;
+    private static $file = false;
     private static $verbosity = 4;
 
     /**
@@ -21,7 +22,18 @@ class Logger
      */
     public static function init(string $path, int $verbosity = 4)
     {
-        self::$file = fopen($path, "a") or die("Unable to open log file!");
+        if (!is_dir(dirname($path))) {
+            throw new InvalidArgumentException("Parent directory of '$path' does not exist.");
+        }
+        if (!is_writable(dirname($path))) {
+            throw new InvalidArgumentException("Parent directory of '$path' is not writable.");
+        }
+        if (is_file($path) && !is_writable($path)) {
+            throw new InvalidArgumentException("The logfile '$path' is not writable.");
+        }
+        self::$file = fopen($path, "a");
+        if (self::$file === false) {
+        }
         self::$verbosity = $verbosity;
     }
 

@@ -3,16 +3,18 @@
 namespace Wcms\Tests;
 
 use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 use Wcms\Logger;
 
-class LoggerTest extends TestCase
+class LoggerTest extends FilesTest
 {
-    protected $logfile = 'build/w_error.log';
+    protected $logfile;
 
     protected function setUp(): void
     {
+        $this->logfile = "$this->testdir/w_error.log";
         parent::setUp();
         if (file_exists($this->logfile)) {
             unlink($this->logfile);
@@ -26,7 +28,52 @@ class LoggerTest extends TestCase
     {
         Logger::init($this->logfile);
         $this->assertFileExists($this->logfile, 'Log file has not been created.');
+        $this->assertIsWritable($this->logfile);
         $this->assertEmpty(file_get_contents($this->logfile));
+    }
+
+    /**
+     * @test
+     */
+    public function initDirNotExistTest(): void
+    {
+        $dir = 'not/existing/path';
+        $file = "$dir/w_error.log";
+        $this->assertDirectoryNotExists($dir);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Parent directory of '$file' does not exist.");
+        Logger::init($file);
+        $this->assertFileNotExists($file);
+    }
+
+    /**
+     * @test
+     */
+    public function initDirNotWritableTest(): void
+    {
+        $dir = $this->notwritabledir;
+        $file = "$dir/w_error.log";
+        $this->assertDirectoryExists($dir);
+        $this->assertDirectoryNotIsWritable($dir);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Parent directory of '$file' is not writable.");
+        Logger::init($file);
+        $this->assertFileNotExists($file);
+    }
+
+    /**
+     * @test
+     */
+    public function initNotWritableTest(): void
+    {
+        $file = $this->notwritablefile;
+        $this->assertDirectoryExists(dirname($file));
+        $this->assertDirectoryIsWritable(dirname($file));
+        $this->assertNotIsWritable($file);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("The logfile '$file' is not writable.");
+        Logger::init($file);
+        $this->assertFileNotExists($file);
     }
 
     /**
@@ -53,7 +100,7 @@ class LoggerTest extends TestCase
     {
         Logger::init($this->logfile, $verbosity);
         Logger::error($msg, ...$args);
-        $expected = " [ ERROR ] tests/LoggerTest.php(55) $expected\n";
+        $expected = " [ ERROR ] tests/LoggerTest.php(102) $expected\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
@@ -91,7 +138,7 @@ class LoggerTest extends TestCase
     {
         Logger::init($this->logfile, $verbosity);
         Logger::warning($msg, ...$args);
-        $expected = " [ WARN ]  tests/LoggerTest.php(93) $expected\n";
+        $expected = " [ WARN ]  tests/LoggerTest.php(140) $expected\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
@@ -128,7 +175,7 @@ class LoggerTest extends TestCase
     {
         Logger::init($this->logfile, $verbosity);
         Logger::info($msg, ...$args);
-        $expected = " [ INFO ]  tests/LoggerTest.php(130) $expected\n";
+        $expected = " [ INFO ]  tests/LoggerTest.php(177) $expected\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
@@ -164,7 +211,7 @@ class LoggerTest extends TestCase
     {
         Logger::init($this->logfile, $verbosity);
         Logger::debug($msg, ...$args);
-        $expected = " [ DEBUG ] tests/LoggerTest.php(166) $expected\n";
+        $expected = " [ DEBUG ] tests/LoggerTest.php(213) $expected\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
@@ -199,7 +246,7 @@ class LoggerTest extends TestCase
     {
         Logger::init($this->logfile, $verbosity);
         Logger::exception($e);
-        $expected = " [ ERROR ] tests/LoggerTest.php(201) $expected\n";
+        $expected = " [ ERROR ] tests/LoggerTest.php(248) $expected\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
@@ -221,7 +268,7 @@ class LoggerTest extends TestCase
         Logger::init($this->logfile, 1);
         Logger::exception(new Exception('Error'), true);
         $content = file_get_contents($this->logfile);
-        $expected = " [ ERROR ] tests/LoggerTest.php(222) Error\n";
+        $expected = " [ ERROR ] tests/LoggerTest.php(269) Error\n";
         $this->assertEquals($expected, substr($content, 25, 43));
         $this->assertRegExp('/(#\d+ [\w\/\.]*\(\d+\): .*\)\n)+#\d+ \{main\}\n/U', substr($content, 68));
     }
