@@ -95,7 +95,7 @@ class Logger
     public static function exception(Throwable $e, bool $withtrace = false)
     {
         if (self::$verbosity > 0) {
-            $msg = $e->getMessage();
+            $msg = "{$e->getMessage()} in {$e->getFile()}({$e->getLine()})";
             if ($withtrace) {
                 // TODO: Maybe print a more beautiful stack trace.
                 $msg .= PHP_EOL . $e->getTraceAsString();
