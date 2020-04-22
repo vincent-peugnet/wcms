@@ -242,21 +242,23 @@ class LoggerTest extends FilesTest
      * @test
      * @dataProvider exceptionLoggedProvider
      */
-    public function exceptionLoggedTest(int $verbosity, Throwable $e, string $expected)
+    public function exceptionLoggedTest(int $verbosity, Throwable $e, string $expected, int $line)
     {
         Logger::init($this->logfile, $verbosity);
         Logger::exception($e);
-        $expected = " [ ERROR ] tests/LoggerTest.php(248) $expected\n";
+        $file = __FILE__;
+        $line += 258;
+        $expected = " [ ERROR ] tests/LoggerTest.php(248) $expected in $file($line)\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
     public function exceptionLoggedProvider(): array
     {
         return [
-            [1, new Exception('Test 1'), 'Test 1'],
-            [2, new Exception('Test 2'), 'Test 2'],
-            [3, new Exception('Test 3'), 'Test 3'],
-            [4, new Exception('Test 4'), 'Test 4'],
+            [1, new Exception('Test 1'), 'Test 1', 0],
+            [2, new Exception('Test 2'), 'Test 2', 1],
+            [3, new Exception('Test 3'), 'Test 3', 2],
+            [4, new Exception('Test 4'), 'Test 4', 3],
         ];
     }
 
@@ -268,8 +270,8 @@ class LoggerTest extends FilesTest
         Logger::init($this->logfile, 1);
         Logger::exception(new Exception('Error'), true);
         $content = file_get_contents($this->logfile);
-        $expected = " [ ERROR ] tests/LoggerTest.php(269) Error\n";
+        $expected = " [ ERROR ] tests/LoggerTest.php(271) Error ";
         $this->assertEquals($expected, substr($content, 25, 43));
-        $this->assertRegExp('/(#\d+ [\w\/\.]*\(\d+\): .*\)\n)+#\d+ \{main\}\n/U', substr($content, 68));
+        $this->assertRegExp('/(#\d+ [\w\/\.]*\(\d+\): .*\)\n)+#\d+ \{main\}\n/U', $content);
     }
 }
