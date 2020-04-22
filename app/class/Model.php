@@ -8,6 +8,7 @@ abstract class Model
     public const CONFIG_FILE = 'config.json';
     public const MAN_FILE = 'MANUAL.md';
     public const CSS_DIR = 'assets/css/';
+    public const COLORS_FILE = self::CSS_DIR . 'tagcolors.css';
     public const JS_DIR = 'assets/js/';
     public const ICONS_DIR = 'assets/icons/';
     public const FONT_DIR = 'fonts/';
@@ -18,6 +19,7 @@ abstract class Model
     public const RENDER_DIR = 'assets/render/';
     public const HTML_RENDER_DIR = 'render/';
     public const GLOBAL_DIR = 'assets/global/';
+    public const GLOBAL_CSS_FILE = self::GLOBAL_DIR . 'global.css';
     public const DATABASE_DIR = './database/';
     public const PAGES_DIR = self::DATABASE_DIR . 'pages/';
 
@@ -183,16 +185,17 @@ abstract class Model
      * Check if dir exist. If not, create it
      *
      * @param string $dir Directory to check
-     *
      * @return bool return true if the dir already exist or was created succesfullt. Otherwise return false
+     * @throws \InvalidArgumentException If folder creation is impossible
      */
     public static function dircheck(string $dir): bool
     {
         if (!is_dir($dir)) {
-            return mkdir($dir);
-        } else {
-            return true;
+            if (!mkdir($dir)) {
+                throw new \InvalidArgumentException("Cannot create directory : $dir");
+            }
         }
+        return true;
     }
 
     /**
@@ -203,7 +206,12 @@ abstract class Model
         return array_unique(array_values(self::MEDIA_EXT));
     }
 
-    public static function getflashmessages()
+    /**
+     * Read then empty session to get flash messages
+     *
+     * @return array ordered array containing array with content and type as keys or empty array
+     */
+    public static function getflashmessages(): array
     {
         if (!empty($_SESSION['user' . Config::basepath()]['flashmessages'])) {
             $flashmessage = $_SESSION['user' . Config::basepath()]['flashmessages'];
@@ -213,7 +221,8 @@ abstract class Model
             } else {
                 return [];
             }
-            return $flashmessage;
+        } else {
+            return [];
         }
     }
 
@@ -221,7 +230,7 @@ abstract class Model
      * Add a message to flash message list
      *
      * @param string $content The message content
-     * @param string $type Message Type, can be `info|warning|success`
+     * @param string $type Message Type, can be `info|warning|success|eror`
      */
     public static function sendflashmessage(string $content, string $type = 'info')
     {

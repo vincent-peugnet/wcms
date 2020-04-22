@@ -28,7 +28,9 @@ class Controllerhome extends Controllerpage
             $pagelist = $this->modelhome->pagelist();
             $this->opt = $this->modelhome->optinit($pagelist);
 
-            $vars['colors'] = new Colors($this->opt->taglist());
+
+            $vars['colors'] = new Colors(Model::COLORS_FILE, $this->opt->taglist());
+
 
             $deepsearch = $this->deepsearch();
 
@@ -130,10 +132,8 @@ class Controllerhome extends Controllerpage
     public function colors()
     {
         if (isset($_POST['tagcolor']) && $this->user->issupereditor()) {
-            $colors = new Colors();
-            $colors->hydrate($_POST);
-            $colors->tocss();
-            $colors->writecssfile();
+            $colors = new Colors(Model::COLORS_FILE);
+            $colors->update($_POST['tagcolor']);
         }
         $this->routedirect('home');
     }

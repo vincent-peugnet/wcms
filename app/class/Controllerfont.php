@@ -18,7 +18,7 @@ class Controllerfont extends Controller
     public function desktop()
     {
         if ($this->user->iseditor()) {
-            $this->fontmanager->fontdircheck();
+            Model::dircheck(Model::FONT_DIR);
 
             $fontlist = $this->fontmanager->getfontlist();
             

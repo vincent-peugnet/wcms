@@ -26,7 +26,7 @@ class Controlleradmin extends Controller
             $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();
             $datas['interfacecsslist'] = $this->mediamanager->listinterfacecss();
 
-            $globalcssfile = Model::GLOBAL_DIR . 'global.css';
+            $globalcssfile = Model::GLOBAL_CSS_FILE;
 
             if (is_file($globalcssfile)) {
                 $datas['globalcss'] = file_get_contents($globalcssfile);
@@ -45,9 +45,9 @@ class Controlleradmin extends Controller
 
     public function update()
     {
-        MODEL::dircheck(MODEL::GLOBAL_DIR);
+        accessfile(Model::GLOBAL_CSS_FILE);
 
-        $globalcss = file_put_contents(Model::GLOBAL_DIR . 'global.css', $_POST['globalcss']);
+        $globalcss = file_put_contents(Model::GLOBAL_CSS_FILE, $_POST['globalcss']);
 
         Config::hydrate($_POST);
         if (Config::savejson() !== false && $globalcss !== false) {

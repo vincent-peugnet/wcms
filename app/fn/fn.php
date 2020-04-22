@@ -364,3 +364,31 @@ function secrethash(string $token): string
 {
     return hash_hmac('sha256', $token, Wcms\Config::secretkey());
 }
+
+
+/**
+ * Check if a file is accessible or can be writen
+ * @param string $path file path to check
+ * @param bool $createdir create directory if does not exist
+ * @throws \InvalidArgumentException if :
+ * parent directory does not exist | is not writable | file exist and not writable
+ */
+function accessfile(string $path, bool $createdir = false)
+{
+    $dir = dirname($path);
+    if (!is_dir($dir)) {
+        if ($createdir) {
+            if (!mkdir($dir)) {
+                throw new \InvalidArgumentException("Cannot create directory : $dir");
+            }
+        } else {
+            throw new \InvalidArgumentException("Directory '$dir' does not exist.");
+        }
+    }
+    if (!is_writable($dir)) {
+        throw new \InvalidArgumentException("Directory '$dir' is not writable.");
+    }
+    if (is_file($path) && !is_writable($path)) {
+        throw new \InvalidArgumentException("The file '$path' is not writable.");
+    }
+}
