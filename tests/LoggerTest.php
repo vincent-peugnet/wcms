@@ -3,7 +3,7 @@
 namespace Wcms\Tests;
 
 use Exception;
-use InvalidArgumentException;
+use RuntimeException;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 use Wcms\Logger;
@@ -40,7 +40,7 @@ class LoggerTest extends FilesTest
         $dir = 'not/existing/path';
         $file = "$dir/w_error.log";
         $this->assertDirectoryNotExists($dir);
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage("Parent directory of '$file' does not exist.");
         Logger::init($file);
         $this->assertFileNotExists($file);
@@ -55,7 +55,7 @@ class LoggerTest extends FilesTest
         $file = "$dir/w_error.log";
         $this->assertDirectoryExists($dir);
         $this->assertDirectoryNotIsWritable($dir);
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage("Parent directory of '$file' is not writable.");
         Logger::init($file);
         $this->assertFileNotExists($file);
@@ -70,7 +70,7 @@ class LoggerTest extends FilesTest
         $this->assertDirectoryExists(dirname($file));
         $this->assertDirectoryIsWritable(dirname($file));
         $this->assertNotIsWritable($file);
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage("The logfile '$file' is not writable.");
         Logger::init($file);
         $this->assertFileNotExists($file);
@@ -224,35 +224,35 @@ class LoggerTest extends FilesTest
 
     /**
      * @test
-     * @dataProvider exceptionNotLoggedProvider
+     * @dataProvider errorexNotLoggedProvider
      */
-    public function exceptionNotLoggedTest(int $verbosity): void
+    public function errorexNotLoggedTest(int $verbosity): void
     {
         Logger::init($this->logfile, $verbosity);
-        Logger::exception(new Exception('Error'));
+        Logger::errorex(new Exception('Error'));
         $this->assertEmpty(file_get_contents($this->logfile));
     }
 
-    public function exceptionNotLoggedProvider(): array
+    public function errorexNotLoggedProvider(): array
     {
         return [[0]];
     }
 
     /**
      * @test
-     * @dataProvider exceptionLoggedProvider
+     * @dataProvider errorexLoggedProvider
      */
-    public function exceptionLoggedTest(int $verbosity, Throwable $e, string $expected, int $line)
+    public function errorexLoggedTest(int $verbosity, Throwable $e, string $expected, int $line)
     {
         Logger::init($this->logfile, $verbosity);
-        Logger::exception($e);
+        Logger::errorex($e);
         $file = __FILE__;
         $line += 258;
         $expected = " [ ERROR ] tests/LoggerTest.php(248) $expected in $file($line)\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
-    public function exceptionLoggedProvider(): array
+    public function errorexLoggedProvider(): array
     {
         return [
             [1, new Exception('Test 1'), 'Test 1', 0],
@@ -265,13 +265,127 @@ class LoggerTest extends FilesTest
     /**
      * @test
      */
-    public function exceptionBacktraceTest(): void
+    public function errorexBacktraceTest(): void
     {
         Logger::init($this->logfile, 1);
-        Logger::exception(new Exception('Error'), true);
+        Logger::errorex(new Exception('Error'), true);
         $content = file_get_contents($this->logfile);
         $expected = " [ ERROR ] tests/LoggerTest.php(271) Error ";
         $this->assertEquals($expected, substr($content, 25, 43));
         $this->assertRegExp('/(#\d+ [\w\/\.]*\(\d+\): .*\)\n)+#\d+ \{main\}\n/U', $content);
+    }
+
+    /**
+     * @test
+     * @dataProvider warningexNotLoggedProvider
+     */
+    public function warningexNotLoggedTest(int $verbosity): void
+    {
+        Logger::init($this->logfile, $verbosity);
+        Logger::warningex(new Exception('Error'));
+        $this->assertEmpty(file_get_contents($this->logfile));
+    }
+
+    public function warningexNotLoggedProvider(): array
+    {
+        return [[0],[1]];
+    }
+
+    /**
+     * @test
+     * @dataProvider warningexLoggedProvider
+     */
+    public function warningexLoggedTest(int $verbosity, Throwable $e, string $expected, int $line)
+    {
+        Logger::init($this->logfile, $verbosity);
+        Logger::warningex($e);
+        $file = __FILE__;
+        $line += 311;
+        $expected = " [ WARN ]  tests/LoggerTest.php(301) $expected in $file($line)\n";
+        $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
+    }
+
+    public function warningexLoggedProvider(): array
+    {
+        return [
+            [2, new Exception('Test 1'), 'Test 1', 0],
+            [3, new Exception('Test 2'), 'Test 2', 1],
+            [4, new Exception('Test 3'), 'Test 3', 2],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider infoexNotLoggedProvider
+     */
+    public function infoexNotLoggedTest(int $verbosity): void
+    {
+        Logger::init($this->logfile, $verbosity);
+        Logger::infoex(new Exception('Error'));
+        $this->assertEmpty(file_get_contents($this->logfile));
+    }
+
+    public function infoexNotLoggedProvider(): array
+    {
+        return [[0],[1],[2]];
+    }
+
+    /**
+     * @test
+     * @dataProvider infoexLoggedProvider
+     */
+    public function infoexLoggedTest(int $verbosity, Throwable $e, string $expected, int $line)
+    {
+        Logger::init($this->logfile, $verbosity);
+        Logger::infoex($e);
+        $file = __FILE__;
+        $line += 350;
+        $expected = " [ INFO ]  tests/LoggerTest.php(340) $expected in $file($line)\n";
+        $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
+    }
+
+    public function infoexLoggedProvider(): array
+    {
+        return [
+            [3, new Exception('Test 1'), 'Test 1', 0],
+            [4, new Exception('Test 2'), 'Test 2', 1],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider debugexNotLoggedProvider
+     */
+    public function debugexNotLoggedTest(int $verbosity): void
+    {
+        Logger::init($this->logfile, $verbosity);
+        Logger::debugex(new Exception('Error'));
+        $this->assertEmpty(file_get_contents($this->logfile));
+    }
+
+    public function debugexNotLoggedProvider(): array
+    {
+        return [[0],[1],[2],[3]];
+    }
+
+    /**
+     * @test
+     * @dataProvider debugexLoggedProvider
+     */
+    public function debugexLoggedTest(int $verbosity, Throwable $e, string $expected, int $line)
+    {
+        Logger::init($this->logfile, $verbosity);
+        Logger::debugex($e);
+        $file = __FILE__;
+        $line += 388;
+        $expected = " [ DEBUG ] tests/LoggerTest.php(378) $expected in $file($line)\n";
+        $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
+    }
+
+    public function debugexLoggedProvider(): array
+    {
+        return [
+            [4, new Exception('Test 4'), 'Test 4', 0],
+        ];
     }
 }
