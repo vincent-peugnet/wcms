@@ -1,11 +1,59 @@
-name: build
+name: checks
 
 on:
   - push
   - pull_request
 
 jobs:
-  php-build:
+  test-php:
+    name: test (php ${{ matrix.php-versions }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: ['7.2', '7.3', '7.4']
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
+        with:
+          php-version: ${{ matrix.php-versions }}
+          coverage: xdebug
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: PHPUnit
+        run: |
+          echo "::add-matcher::.github/matchers/phpunit.json"
+          make test
+          echo "::remove-matcher owner=phpunit::"
+
+      - name: Coveralls publish
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          composer require --quiet --no-interaction cedx/coveralls
+          vendor/bin/coveralls build/phpunit/cov.xml
+
+  lint:
+    name: lint
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
@@ -14,33 +62,31 @@ jobs:
       - name: Validate composer.json and composer.lock
         run: composer validate
 
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
-      - name: Run test suite
-        run: make check -k
-
-      - name: PHPStan xml report
+      - name: PHPCS
         if: always()
         run: |
-          mkdir -p build/phpstan
-          vendor/bin/phpstan analyse --no-progress --error-format=checkstyle > build/phpstan/checkstyle.xml
+          echo "::add-matcher::.github/matchers/phpcs.json"
+          vendor/bin/phpcs --report=csv
+          echo "::remove-matcher owner=phpcs::"
 
-      - name: Analysis Publisher
-        uses: digirati-labs/analysis-publisher@0.0.1
-        if: failure()
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: >
-            --report-type=checkstyle --path=**/build/phpcs/checkstyle.xml
-            --report-type=checkstyle --path=**/build/phpstan/checkstyle.xml
-            --publisher=github_check
-
-      - name: Coveralls publish
+      - name: PHPStan
         if: always()
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          composer require --quiet --no-interaction cedx/coveralls
-          vendor/bin/coveralls build/phpunit/cov.xml
+          echo "::add-matcher::.github/matchers/phpstan.json"
+          vendor/bin/phpstan analyse --error-format=raw --no-progress
+          echo "::remove-matcher owner=phpstan::"
