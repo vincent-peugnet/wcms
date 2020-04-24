@@ -40,7 +40,7 @@ class Event extends Dbitem
 
     public function stamp()
     {
-        $this->date = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+        $this->date = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
         $this->user = idclean($this->user);
         if (in_array($this->type, self::EVENT_ART)) {
             $this->target = idclean($this->target);
@@ -66,16 +66,13 @@ class Event extends Dbitem
         switch ($type) {
             case 'datetime':
                 return $this->date;
-                break;
 
             case 'string':
                 return $this->date->format(DateTime::ISO8601);
-                break;
 
             case 'hrdi':
-                $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+                $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
                 return hrdi($this->date->diff($now));
-                break;
         }
     }
 

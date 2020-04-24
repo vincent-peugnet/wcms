@@ -5,7 +5,7 @@ namespace Wcms;
 class Colors extends Item
 {
 
-    protected $file = MODEL::CSS_DIR . 'tagcolors.css';
+    protected $file = Model::CSS_DIR . 'tagcolors.css';
 
 
     protected $rawcss = "";
@@ -27,7 +27,7 @@ class Colors extends Item
 
     public function readcssfile(): bool
     {
-        if (MODEL::dircheck(MODEL::CSS_DIR) && file_exists($this->file)) {
+        if (Model::dircheck(Model::CSS_DIR) && file_exists($this->file)) {
             $this->rawcss = file_get_contents($this->file);
             return true;
         } else {
@@ -53,7 +53,7 @@ class Colors extends Item
     /**
      * Transform a CSS string in a array of `tag => background-color`
      *
-     * @return array Ouput array using TAG as key and Hex Color as value
+     * @return bool Ouput array using TAG as key and Hex Color as value
      */
     public function parsetagcss()
     {
@@ -79,7 +79,7 @@ class Colors extends Item
 
     public function writecssfile()
     {
-        if (MODEL::dircheck(MODEL::CSS_DIR)) {
+        if (Model::dircheck(Model::CSS_DIR)) {
             return file_put_contents($this->file, $this->rawcss);
         }
     }
@@ -90,7 +90,7 @@ class Colors extends Item
         foreach ($this->tagcolor as $tag => $color) {
             $i = '<input type="color" name="tagcolor[' . $tag . ']" value="' . $color . '" id="color_' . $tag . '">';
             $l = '<label for="color_' . $tag . '" >' . $tag . '</label>';
-            $html .= '\n<li>' . $i . $l . '</li>';
+            $html .= "\n<li>" . $i . $l . '</li>';
         }
         $html .= PHP_EOL . '</ul>';
         return $html;

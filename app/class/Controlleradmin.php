@@ -45,7 +45,7 @@ class Controlleradmin extends Controller
 
     public function update()
     {
-        MODEL::dircheck(MODEL::GLOBAL_DIR);
+        Model::dircheck(Model::GLOBAL_DIR);
 
         $globalcss = file_put_contents(Model::GLOBAL_DIR . 'global.css', $_POST['globalcss']);
 

@@ -99,7 +99,7 @@ class Controllerpage extends Controller
      */
     public function renderpage(Page $page): Page
     {
-        $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+        $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
 
         $renderengine = new Modelrender($this->router);
 
@@ -128,6 +128,7 @@ class Controllerpage extends Controller
         $this->setpage($id, 'pageread/');
 
         $pageexist = $this->importpage();
+        $canread = false;
 
         if ($pageexist) {
             $canread = $this->user->level() >= $this->page->secure();

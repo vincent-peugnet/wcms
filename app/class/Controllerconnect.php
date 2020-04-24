@@ -83,7 +83,7 @@ class Controllerconnect extends Controller
     /**
      * Create a token stored in the database and then a cookie
      *
-     * @return string|bool Token in cas of success, otherwise, false.
+     * @return string|false Token in cas of success, otherwise, false.
      */
     public function createauthtoken()
     {
@@ -95,9 +95,8 @@ class Controllerconnect extends Controller
             if ($cookiecreation) {
                 return $tokenid;
             }
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -112,7 +111,7 @@ class Controllerconnect extends Controller
     {
         $hash = secrethash($token);
         $cookie = $token . ':' . $hash;
-        return setcookie('authtoken', $cookie, time() + $conservation * 24 * 3600, null, null, false, true);
+        return setcookie('authtoken', $cookie, time() + $conservation * 24 * 3600, "", "", false, true);
     }
 
     /**

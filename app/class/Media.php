@@ -5,6 +5,7 @@ namespace Wcms;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
+use Exception;
 
 class Media extends Item
 {

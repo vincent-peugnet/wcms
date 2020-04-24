@@ -19,7 +19,7 @@ class Modeltimeline extends Modeldb
 
     public function get(int $id)
     {
-        $eventdata = $this->repo->findById($id);
+        $eventdata = $this->repo->findById("$id");
         if ($eventdata !== false) {
             return new Event($eventdata);
         } else {
@@ -62,7 +62,7 @@ class Modeltimeline extends Modeldb
     /**
      * Store event
      *
-     * @param Event The event to be stored in the repositery
+     * @param Event $event The event to be stored in the repositery
      *
      * @return bool retrun true if it works, false if it fails
      */
@@ -97,6 +97,7 @@ class Modeltimeline extends Modeldb
         $id = 0;
         $subid = 0;
         $lastuser = null;
+        $groupedevents = [];
         foreach ($events as $event) {
             if ($event->user() !== $lastuser) {
                 $subid = 0;

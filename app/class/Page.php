@@ -53,8 +53,7 @@ class Page extends Dbitem
     public const TABS = ['main', 'css', 'header', 'body', 'nav', 'aside', 'footer', 'javascript'];
     public const VAR_DATE = ['date', 'datecreation', 'datemodif', 'daterender'];
 
-      
-      
+
 
 // _____________________________________________________ F U N ____________________________________________________
 
@@ -71,7 +70,7 @@ class Page extends Dbitem
 
     public function reset()
     {
-        $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+        $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
 
         $this->settitle($this->id());
         $this->setdescription('');
@@ -460,7 +459,7 @@ class Page extends Dbitem
         if ($datecreation instanceof DateTimeImmutable) {
             $this->datecreation = $datecreation;
         } elseif ($datecreation === true) {
-            $this->datecreation = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+            $this->datecreation = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
         } else {
             $this->datecreation = DateTimeImmutable::createFromFormat(
                 DateTime::ISO8601,
@@ -508,7 +507,7 @@ class Page extends Dbitem
 
     public function setjavascript($javascript)
     {
-        if (strlen($javascript < self::LENTEXT && is_string($javascript))) {
+        if (strlen($javascript) < self::LENTEXT && is_string($javascript)) {
             $this->javascript = $javascript;
         }
     }
@@ -516,14 +515,14 @@ class Page extends Dbitem
 
     public function setbody($body)
     {
-        if (strlen($body < self::LENTEXT && is_string($body))) {
+        if (strlen($body) < self::LENTEXT && is_string($body)) {
             $this->body = $body;
         }
     }
 
     public function setheader($header)
     {
-        if (strlen($header < self::LENTEXT && is_string($header))) {
+        if (strlen($header) < self::LENTEXT && is_string($header)) {
             $this->header = $header;
         }
     }
@@ -756,7 +755,7 @@ class Page extends Dbitem
 
     public function updateedited()
     {
-        $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+        $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
         $this->setdatemodif($now);
         $this->addeditcount();
     }
