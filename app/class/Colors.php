@@ -5,7 +5,7 @@ namespace Wcms;
 class Colors extends Item
 {
 
-    protected $file = 'tagcolors.css';
+    protected $file = Model::CSS_DIR . 'tagcolors.css';
 
 
     protected $rawcss = "";
@@ -121,7 +121,7 @@ class Colors extends Item
         foreach ($this->tagcolor as $tag => $color) {
             $i = '<input type="color" name="tagcolor[' . $tag . ']" value="' . $color . '" id="color_' . $tag . '">';
             $l = '<label for="color_' . $tag . '" >' . $tag . '</label>';
-            $html .= '<li>' . $i . $l . '</li>';
+            $html .= "\n<li>" . $i . $l . '</li>';
         }
         $html .= PHP_EOL . '</ul>';
         return $html;

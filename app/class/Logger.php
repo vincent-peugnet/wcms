@@ -2,7 +2,7 @@
 
 namespace Wcms;
 
-use InvalidArgumentException;
+use RuntimeException;
 use Throwable;
 
 /**
@@ -19,17 +19,18 @@ class Logger
      *
      * @param string $path the logfile's path
      * @param int $verbosity 0: no log, 1: errors only, 2: add warn, 3: add info, 4: add debug.
+     * @throws RuntimeException if failed to create logfile.
      */
-    public static function init(string $path, int $verbosity = 4)
+    public static function init(string $path, int $verbosity = 4): void
     {
         if (!is_dir(dirname($path))) {
-            throw new InvalidArgumentException("Parent directory of '$path' does not exist.");
+            throw new RuntimeException("Parent directory of '$path' does not exist.");
         }
         if (!is_writable(dirname($path))) {
-            throw new InvalidArgumentException("Parent directory of '$path' is not writable.");
+            throw new RuntimeException("Parent directory of '$path' is not writable.");
         }
         if (is_file($path) && !is_writable($path)) {
-            throw new InvalidArgumentException("The logfile '$path' is not writable.");
+            throw new RuntimeException("The logfile '$path' is not writable.");
         }
         self::$file = fopen($path, "a");
         if (self::$file === false) {
@@ -49,6 +50,11 @@ class Logger
         vfprintf(self::$file, date('c') . " %-9s %s(%d) $msg\n", $args);
     }
 
+    protected static function exceptionmessage(Throwable $e): string
+    {
+        return "{$e->getMessage()} in {$e->getFile()}({$e->getLine()})";
+    }
+
     /**
      * Log an error message using printf format.
      */
@@ -60,7 +66,7 @@ class Logger
     }
 
     /**
-     * Log a xarning message using printf format.
+     * Log a warning message using printf format.
      */
     public static function warning(string $msg, ...$args)
     {
@@ -90,17 +96,47 @@ class Logger
     }
 
     /**
-     * Log an exception.
+     * Log an exception as an error.
      */
-    public static function exception(Throwable $e, bool $withtrace = false)
+    public static function errorex(Throwable $e, bool $withtrace = false)
     {
         if (self::$verbosity > 0) {
-            $msg = $e->getMessage();
+            $msg = self::exceptionmessage($e);
             if ($withtrace) {
                 // TODO: Maybe print a more beautiful stack trace.
                 $msg .= PHP_EOL . $e->getTraceAsString();
             }
             self::write('ERROR', $msg);
+        }
+    }
+
+    /**
+     * Log an exception as a warning.
+     */
+    public static function warningex(Throwable $e)
+    {
+        if (self::$verbosity > 1) {
+            self::write('WARN', self::exceptionmessage($e));
+        }
+    }
+
+    /**
+     * Log an exception as an info.
+     */
+    public static function infoex(Throwable $e)
+    {
+        if (self::$verbosity > 2) {
+            self::write('INFO', self::exceptionmessage($e));
+        }
+    }
+
+    /**
+     * Log an exception as a debug.
+     */
+    public static function debugex(Throwable $e)
+    {
+        if (self::$verbosity > 3) {
+            self::write('DEBUG', self::exceptionmessage($e));
         }
     }
 }

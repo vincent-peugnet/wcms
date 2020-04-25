@@ -18,6 +18,9 @@ class Controllermedia extends Controller
         $this->mediamanager = new Modelmedia();
     }
 
+    /**
+     * @throws Exception
+     */
     public function desktop()
     {
         if ($this->user->iseditor()) {
@@ -81,8 +84,9 @@ class Controllermedia extends Controller
             $dir = $_POST['dir'] ?? Model::MEDIA_DIR;
             $name = idclean($_POST['foldername']) ?? 'new-folder';
             $this->mediamanager->adddir($dir, $name);
+            $this->redirect($this->generate('media') . '?path=/' . $dir . DIRECTORY_SEPARATOR . $name);
         }
-        $this->redirect($this->generate('media') . '?path=/' . $dir . DIRECTORY_SEPARATOR . $name);
+        $this->routedirect('home');
     }
 
     public function folderdelete()

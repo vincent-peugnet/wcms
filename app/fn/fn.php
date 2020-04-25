@@ -24,7 +24,7 @@ function readablesize($bytes, $base = 2 ** 10)
     } elseif ($bytes < $base ** 3) {
         $num = round($bytes / $base ** 2, 1);
         $unit = 'M' . $i;
-    } elseif ($bytes < $base ** 4) {
+    } else {
         $num = round($bytes / $base ** 3, 1);
         $unit = 'G' . $i;
     }
@@ -87,7 +87,7 @@ function arrayclean($input)
     return $output;
 }
 
-function idclean(string $input)
+function idclean(string $input): string
 {
     $input = urldecode($input);
     $search =  ['é', 'à', 'è', 'ç', 'ù', 'ï', 'î', ' '];

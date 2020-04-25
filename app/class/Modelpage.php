@@ -5,6 +5,7 @@ namespace Wcms;
 use Exception;
 use JamesMoss\Flywheel\Document;
 use DateTimeImmutable;
+use LogicException;
 
 class Modelpage extends Modeldb
 {
@@ -141,7 +142,7 @@ class Modelpage extends Modeldb
     /**
      * Delete a page and it's linked rendered html and css files
      *
-     * @param Page|string $id could be an Page object or a id string
+     * @param Page|string $page could be an Page object or a id string
      *
      * @return bool true if success otherwise false
      */
@@ -421,7 +422,7 @@ class Modelpage extends Modeldb
      */
     public function reset(Page $page, array $reset): Page
     {
-        $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+        $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
         if ($reset['tag']) {
             $page->settag([]);
         }

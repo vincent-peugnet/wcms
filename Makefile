@@ -166,7 +166,7 @@ check: vendor lint analyse test
 # Lint php code with phpcs.
 .PHONY: lint
 lint: $(phpcs_dir)
-	phpcs --report-full --report-checkstyle=$(phpcs_dir)/checkstyle.xml
+	phpcs --report-full --report-summary --cache=$(phpcs_dir)/result.cache
 
 # Analyse php code with phpstan.
 .PHONY: analyse
@@ -176,7 +176,7 @@ analyse:
 # Test php code with phpunit.
 .PHONY: test
 test: $(phpunit_dir)
-	phpunit --log-junit $(phpunit_dir)/junit.xml
+	phpunit
 
 # Create dirs if the do not exist
 $(dirs):

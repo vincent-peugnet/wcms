@@ -29,7 +29,7 @@ class Modelhome extends Modelpage
      * @param Opt $opt
      *
      * @param string $regex Regex to match.
-     * @param array $options Option search, could be `content` `title` `description`.
+     * @param array $searchopt Option search, could be `content` `title` `description`.
      *
      * @return array associative array of `Page` objects     *
      */
@@ -98,7 +98,7 @@ class Modelhome extends Modelpage
     /**
      * Search for regex and count occurences
      *
-     * @param array $page list Array of Pages.
+     * @param array $pagelist list Array of Pages.
      * @param string $regex Regex to match.
      * @param array $options Option search, could be `content` `title` `description`.
      *
@@ -279,7 +279,7 @@ class Modelhome extends Modelpage
 
 
     /**
-     * @param array array of the columns to show from the user
+     * @param array $columns array of the columns to show from the user
      *
      * @return array assoc each key columns to a boolean value to show or not
      */

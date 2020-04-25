@@ -75,7 +75,7 @@ class Modelmedia extends Model
      *
      * @param array $medialist
      * @param string $sortby
-     * @param int order Can be 1 or -1
+     * @param int $order Can be 1 or -1
      */
     public function medialistsort(array &$medialist, string $sortby = 'id', int $order = 1): bool
     {

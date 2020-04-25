@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use Exception;
+use LogicException;
 use Michelf\MarkdownExtra;
 
 class Modelrender extends Modelpage
@@ -56,7 +57,11 @@ class Modelrender extends Modelpage
      */
     public function upage(string $id): string
     {
-        return $this->generate('pageread/', ['page' => $id]);
+        try {
+            return $this->router->generate('pageread/', ['page' => $id]);
+        } catch (Exception $e) {
+            throw new LogicException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
 
@@ -128,7 +133,7 @@ class Modelrender extends Modelpage
         $matches = $this->match($body, $regex);
 
         // First, analyse the synthax and call the corresponding methods
-        if (isset($matches)) {
+        if (!empty($matches)) {
             foreach ($matches as $key => $match) {
                 $element = new Element($this->page->id(), $match);
                 $element->setcontent($this->getelementcontent($element->sources(), $element->type()));
@@ -534,7 +539,7 @@ class Modelrender extends Modelpage
     {
         $matches = $this->match($text, 'MEDIA');
 
-        if (isset($matches)) {
+        if (!empty($matches)) {
             foreach ($matches as $match) {
                 $medialist = new Medialist($match);
                 $medialist->readoptions();
@@ -575,7 +580,7 @@ class Modelrender extends Modelpage
 
         $modelhome = new Modelhome();
 
-        if (isset($matches)) {
+        if (!empty($matches)) {
             foreach ($matches as $match) {
                 $optlist = new Optlist(['render' => $this]);
                 $optlist->parsehydrate($match['options']);

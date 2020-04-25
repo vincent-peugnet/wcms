@@ -33,7 +33,7 @@ abstract class Item
     public function dry()
     {
         $array = [];
-        foreach ($this as $var => $value) {
+        foreach (get_object_vars($this) as $var => $value) {
             $array[$var] = $this->$var();
         }
         return $array;
@@ -74,13 +74,13 @@ abstract class Item
             } elseif ($option == 'date' || $option == 'sort') {
                 return $this->$property;
             } elseif ($option == 'hrdi') {
-                $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+                $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
                 return hrdi($this->$property->diff($now));
             } elseif ($option == 'pdate') {
                 return $this->$property->format('Y-m-d');
             } elseif ($option == 'ptime') {
                 return $this->$property->format('H:i');
-            } elseif ($option = 'dmy') {
+            } elseif ($option == 'dmy') {
                 return $this->$property->format('d/m/Y');
             }
         } else {

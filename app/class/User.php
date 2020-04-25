@@ -90,7 +90,7 @@ class User extends Item
             if (empty($this->expiredate)) {
                 return 'never';
             } else {
-                $now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+                $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
                 if ($this->expiredate < $now) {
                     return 'expired';
                 } else {

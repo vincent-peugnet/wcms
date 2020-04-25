@@ -33,7 +33,7 @@ class Controller
         $this->router = $router;
         $this->pagemanager = new Modelpage();
         $this->initplates();
-        $this->now = new DateTimeImmutable(null, timezone_open("Europe/Paris"));
+        $this->now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
     }
 
     public function setuser()
