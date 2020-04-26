@@ -387,7 +387,7 @@ class Page extends Dbitem
 
     public function setid($id)
     {
-        if (strlen($id) <= Model::MAX_ID_LENGTH and is_string($id)) {
+        if (is_string($id) && strlen($id) <= Model::MAX_ID_LENGTH) {
             $this->id = strip_tags(strtolower(str_replace(" ", "", $id)));
         }
     }

@@ -89,7 +89,7 @@ class Modelrender extends Modelpage
         $body = $this->getbody($this->readbody());
         $parsebody = $this->bodyparser($body);
 
-        $html = '<!DOCTYPE html>\n<html>\n<head>\n' . $head . '\n</head>\n' . $parsebody . '\N</html>';
+        $html = "<!DOCTYPE html>\n<html>\n<head>\n' . $head . '\n</head>\n' . $parsebody . '\N</html>";
 
         return $html;
     }
@@ -164,7 +164,7 @@ class Modelrender extends Modelpage
                 if ($subcontent !== false) {
                     if (empty($subcontent && self::RENDER_VERBOSE > 0)) {
                         $message = 'The ' . strtoupper($type) . ' from page "' . $source . '" is currently empty !';
-                        $subcontent = '\n<!-- ' . $message . ' -->\n';
+                        $subcontent = "\n<!-- ' . $message . ' -->\n";
                     }
                 } else {
                     $read = '<h2>Rendering error :</h2>';
@@ -231,45 +231,51 @@ class Modelrender extends Modelpage
 
     public function gethead()
     {
+        $id = $this->page->id();
+        $globalpath = Model::globalpath();
+        $renderpath = Model::renderpath();
+        $description = $this->page->description();
+        $title = $this->page->title();
+        $url = Config::url();
 
         $head = '';
 
-        $head .= '<meta charset="utf-8" />\n';
-        $head .= '<title>' . $this->page->title() . '</title>\n';
+        $head .= "<meta charset=\"utf-8\" />\n";
+        $head .= "<title>$title</title>\n";
         if (!empty($this->page->favicon())) {
             $href = Model::faviconpath() . $this->page->favicon();
-            $head .= '<link rel="shortcut icon" href="' . $href . '" type="image/x-icon">';
+            $head .= "<link rel=\"shortcut icon\" href=\"$href\" type=\"image/x-icon\">";
         } elseif (!empty(Config::defaultfavicon())) {
             $href = Model::faviconpath() . Config::defaultfavicon();
-            $head .= '<link rel="shortcut icon" href="' . $href . '" type="image/x-icon">';
+            $head .= "<link rel=\"shortcut icon\" href=\"$href\" type=\"image/x-icon\">";
         }
-        $head .= '<meta name="description" content="' . $this->page->description() . '" />\n';
-        $head .= '<meta name="viewport" content="width=device-width" />\n';
+        $head .= "<meta name=\"description\" content=\"$description\" />\n";
+        $head .= "<meta name=\"viewport\" content=\"width=device-width\" />\n";
 
 
-        $head .= '<meta property="og:title" content="' . $this->page->title() . '">\n';
-        $head .= '<meta property="og:description" content="' . $this->page->description() . '">\n';
+        $head .= "<meta property=\"og:title\" content=\"$title\">\n";
+        $head .= "<meta property=\"og:description\" content=\"$description\">\n";
 
         if (!empty($this->page->thumbnail())) {
             $content = Config::domain() . self::thumbnailpath() . $this->page->thumbnail();
-            $head .= '<meta property="og:image" content="' . $content . '">\n';
+            $head .= "<meta property=\"og:image\" content=\"$content\">\n";
         } elseif (!empty(Config::defaultthumbnail())) {
             $content = Config::domain() . self::thumbnailpath() . Config::defaultthumbnail();
-            $head .= '<meta property="og:image" content="' . $content . '">\n';
+            $head .= "<meta property=\"og:image\" content=\"$content\">\n";
         }
 
-        $head .= '<meta property="og:url" content="' . Config::url() . $this->page->id() . '/">\n';
+        $head .= "<meta property=\"og:url\" content=\"$url . $id/\">\n";
 
 
         foreach ($this->page->externalcss() as $externalcss) {
-            $head .= '<link href="' . $externalcss . '" rel="stylesheet" />\n';
+            $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
         }
 
         if (!empty($this->page->templatecss() && in_array('externalcss', $this->page->templateoptions()))) {
             $templatecss = $this->get($this->page->templatecss());
             if ($templatecss !== false) {
                 foreach ($templatecss->externalcss() as $externalcss) {
-                    $head .= '<link href="' . $externalcss . '" rel="stylesheet" />\n';
+                    $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
                 }
             }
         }
@@ -277,45 +283,45 @@ class Modelrender extends Modelpage
         $head .= PHP_EOL . $this->page->customhead() . PHP_EOL;
 
 
-        $head .= '<link href="' . Model::globalpath() . 'fonts.css" rel="stylesheet" />\n';
-        $head .= '<link href="' . Model::globalpath() . 'global.css" rel="stylesheet" />\n';
+        $head .= "<link href=\"{$globalpath}fonts.css\" rel=\"stylesheet\" />\n";
+        $head .= "<link href=\"{$globalpath}global.css\" rel=\"stylesheet\" />\n";
 
         if (!empty($this->page->templatecss())) {
             $tempaltecsspage = $this->page->templatecss();
-            $head .= '<link href="' . Model::renderpath() . $tempaltecsspage . '.css" rel="stylesheet" />\n';
+            $head .= "<link href=\"$renderpath . $tempaltecsspage.css\" rel=\"stylesheet\" />\n";
         }
-        $head .= '<link href="' . Model::renderpath() . $this->page->id() . '.css" rel="stylesheet" />\n';
+        $head .= "<link href=\"$renderpath . $id.css\" rel=\"stylesheet\" />\n";
 
         if (!empty($this->page->templatejavascript())) {
             $templatejspage = $this->page->templatejavascript();
-            $head .= '<script src="' . Model::renderpath() . $templatejspage . '.js" async/></script>\n';
+            $head .= "<script src=\"$renderpath . $templatejspage.js\" async/></script>\n";
         }
         if (!empty($this->page->javascript())) {
-            $head .= '<script src="' . Model::renderpath() . $this->page->id() . '.js" async/></script>\n';
+            $head .= "<script src=\"$renderpath . $id.js\" async/></script>\n";
         }
 
         if (!empty(Config::analytics())) {
-            $head .= '\n
-			<!-- Global site tag (gtag.js) - Google Analytics -->
-			<script async src="https://www.googletagmanager.com/gtag/js?id=' . Config::analytics() . '"></script>
+            $analitycs = Config::analytics();
+            $head .= "\n
+            <!-- Global site tag (gtag.js) - Google Analytics -->
+			<script async src=\"https://www.googletagmanager.com/gtag/js?id=$analitycs\"></script>
 			<script>
 			window.dataLayer = window.dataLayer || [];
 			function gtag(){dataLayer.push(arguments);}
-			gtag(\'js\', new Date());
+			gtag('js', new Date());
 
-			gtag(\'config\', \'' . Config::analytics() . '\');
+			gtag('config', 'Config::analytics()');
 			</script>
-			\n';
+			\n";
         }
 
         if (!empty($this->page->redirection())) {
             if (preg_match('%https?:\/\/\S*%', $this->page->redirection(), $out)) {
                 $url = $out[0];
-                $head .= '\n<meta http-equiv="refresh" content="' . $this->page->refresh() . '; URL=' . $url . '" />';
             } elseif (key_exists($this->page->redirection(), $this->pagelist())) {
                 $url = $this->upage($this->page->redirection());
-                $head .= '\n<meta http-equiv="refresh" content="' . $this->page->refresh() . '; URL=' . $url . '" />';
             }
+            $head .= "\n<meta http-equiv=\"refresh\" content=\"{$this->page->refresh()}; URL=$url\" />";
         }
 
 
@@ -503,7 +509,7 @@ class Modelrender extends Modelpage
             } else {
                 $id = ' ';
             }
-            return '<article ' . $id . '  markdown="1" >\n\n' . $matches[3] . '\n\n</article>\n\n';
+            return "<article $id markdown=\"1\" >\n\n$matches[3]\n\n</article>\n\n";
         }, $text);
         $text = preg_replace('/\R\R[=]{3,}([\w-]*)\R/', '', $text);
         return $text;

@@ -30,25 +30,15 @@
     <img src="<?= Wcms\Model::iconpath() ?>media.png" alt="" class="icon">
     <span class="hidephone">media</span>
 </a>
-<?php
-if($user->isadmin()) {
-?>
-<a href="<?= $this->url('admin') ?>" <?= $tab == 'admin' ? 'class="actualpage"' : '' ?>>
-    <img src="<?= Wcms\Model::iconpath() ?>admin.png" alt="" class="icon">
-    <span class="hidephone">admin</span>
 
-</a>
-<?php
-}
-?>
-<a href="<?= $this->url('info') ?>"  <?= $tab == 'info' ? 'class="actualpage"' : '' ?>>
-    <img src="<?= Wcms\Model::iconpath() ?>info.png" alt="" class="icon">
-    <span class="hidephone">info</span>
-</a>
 </span>
 
 
-
+<span id="shortcuts" class="hidephone">
+    <?php foreach ($user->bookmark() as $bookmark) { ?>
+        <a href="<?= $this->url($bookmark->route(), $bookmark->params(), $bookmark->query()) ?>"><?= $bookmark->icon() ?> <?= $bookmark->id() ?></a>
+    <?php } ?>
+</span>
 
 
 <?php } ?>
@@ -74,6 +64,22 @@ if($user->isadmin()) {
 <?php } else { ?>  
 
 <span>
+
+<?php
+if($user->isadmin()) {
+?>
+<a href="<?= $this->url('admin') ?>" <?= $tab == 'admin' ? 'class="actualpage"' : '' ?>>
+    <img src="<?= Wcms\Model::iconpath() ?>admin.png" alt="" class="icon">
+    <span class="hidephone">admin</span>
+
+</a>
+<?php
+}
+?>
+<a href="<?= $this->url('info') ?>"  <?= $tab == 'info' ? 'class="actualpage"' : '' ?>>
+    <img src="<?= Wcms\Model::iconpath() ?>info.png" alt="" class="icon">
+    <span class="hidephone">info</span>
+</a>
 
 <a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>>
     <img src="<?= Wcms\Model::iconpath() ?>user.png" alt="" class="icon">

@@ -29,14 +29,47 @@ abstract class Item
         }
     }
 
-
     public function dry()
     {
         $array = [];
-        foreach (get_object_vars($this) as $var => $value) {
-            $array[$var] = $this->$var();
-        }
+        $array = $this->obj2array($this, $array);
         return $array;
+    }
+
+
+    public function obj2array($obj, &$arr)
+    {
+        if (!is_object($obj) && !is_array($obj)) {
+            $arr = $obj;
+            return $arr;
+        }
+        foreach ($obj as $key => $value) {
+            if (!empty($value)) {
+                $arr[$key] = array();
+                $this->obj2array($value, $arr[$key]);
+            } else {
+                $arr[$key] = $value;
+            }
+        }
+        return $arr;
+    }
+
+    public function dryold()
+    {
+        $array = [];
+        foreach (get_object_vars($this) as $var => $value) {
+            if (is_object($value) && is_subclass_of($value, get_class($this))) {
+                $array[$var] = $value->dry();
+            } else {
+                if (method_exists($this, $var)) {
+                    $array[$var] = $this->$var();
+                } else {
+                    $array[$var] = $value;
+                }
+            }
+        }
+        return get_object_vars($this);
+        // return $array;
     }
 
 

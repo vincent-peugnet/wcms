@@ -46,7 +46,7 @@ class Element extends Item
 
     public function addtags()
     {
-        $this->content = '\n<' . $this->type() . '>\n' . $this->content() . '\n</' . $this->type() . '>\n';
+        $this->content = "\n<' . $this->type() . '>\n' . $this->content() . '\n</' . $this->type() . '>\n";
     }
 
 

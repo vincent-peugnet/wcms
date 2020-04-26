@@ -165,7 +165,7 @@ class Opt extends Item
         $authorstring = "";
         foreach ($authorlist as $author) {
             $href = $this->getfilteradress(['authorfilter' => [$author]]);
-            $authorstring .= '<a class="author author_' . $author . '" href="?' . $href . '" >' . $author . '</a>\n';
+            $authorstring .= "<a class=\"author author_$author\" href=\"?$href\" >$author</a>\n";
         }
         return $authorstring;
     }
@@ -173,7 +173,7 @@ class Opt extends Item
     public function securelink(int $level, string $secure)
     {
         $href = $this->getfilteradress(['secure' => $level]);
-        return '<a class="secure ' . $secure . '" href="?' . $href . '">' . $secure . '</a>\n';
+        return "<a class=\"secure $secure\" href=\"?$href\">$secure</a>\n";
     }
 
     public function linktolink(array $linktolist)
@@ -181,7 +181,7 @@ class Opt extends Item
         $linktostring = "";
         foreach ($linktolist as $linkto) {
             $href = $this->getfilteradress(['linkto' => $linkto]);
-            $linktostring .= '<a class="linkto" href="?' . $href . '" >' . $linkto . '</a>\n';
+            $linktostring .= "<a class=\"linkto\" href=\"?$href\" >$linkto</a>\n";
         }
         return $linktostring;
     }

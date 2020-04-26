@@ -80,6 +80,12 @@ abstract class Model
         '' => 'other'
     ];
 
+    public const BOOKMARK_ICONS = [
+        '🌘', '☂️', '⭐️', '✈️', '🚲', '💡', '💾', '💿', '💎', '🎞', ' ⚒', '💊', '📜', '📌', '🔍', '📦', '🔒',
+        '📒', '🔓', '🌡', '☎️', '🖤', '✝️', '☢️', '✅', '🌐', '🌍', '✳️', '🏴', '😎', '👻', '💩', '👍', '⚡️', '🍸',
+        '🍴', '⚽️', '🏭', '🚀', '⚓️'
+    ];
+
     public const LIST_STYLES = [
         'list' => 'list',
         'card' => 'card'
@@ -115,6 +121,7 @@ abstract class Model
     public const PASSWORD_MIN_LENGTH = 4;
     public const PASSWORD_MAX_LENGTH = 32;
     public const MAX_COOKIE_CONSERVATION = 365;
+    public const MAX_QUERY_LENGH = 256;
 
     /** RENDER OPTIONS   */
     // add class in html element indicating from witch page the content come.

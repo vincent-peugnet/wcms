@@ -46,8 +46,8 @@ class Controller
     {
         $router = $this->router;
         $this->plates = new Engine(Model::TEMPLATES_DIR);
-        $this->plates->registerFunction('url', function (string $string, array $vars = []) {
-            return $this->generate($string, $vars);
+        $this->plates->registerFunction('url', function (string $string, array $vars = [], string $get = '') {
+            return $this->generate($string, $vars, $get);
         });
         $this->plates->registerFunction('upage', function (string $string, string $id) {
             return $this->generate($string, ['page' => $id]);
@@ -79,13 +79,14 @@ class Controller
      *
      * @param string $route The name of the route.
      * @param array $params Associative array of parameters to replace placeholders with.
+     * @param string $get Optionnal query GET parameters formated
      * @return string The URL of the route with named parameters in place.
      * @throws InvalidArgumentException If the route does not exist.
      */
-    public function generate(string $route, array $params = []): string
+    public function generate(string $route, array $params = [], string $get = ''): string
     {
         try {
-            return $this->router->generate($route, $params);
+            return $this->router->generate($route, $params) . $get;
         } catch (Exception $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }

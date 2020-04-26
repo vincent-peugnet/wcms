@@ -55,7 +55,7 @@ class Modeluser extends Modeldb
                 if (hash_equals($cookiemac, secrethash($dbtoken->getId()))) {
                     $user = $this->get($dbtoken->user);
                     if ($user !== false) {
-                        $this->writesession($user, $_COOKIE['authtoken']);
+                        $this->writesession($user);
                     }
                     return $user;
                 }

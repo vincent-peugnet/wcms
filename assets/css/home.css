@@ -6,11 +6,6 @@
     display: inline;
 }
 
-.floatright {
-    float: right;
-}
-
-
 #flashmessage {
     color: white;
     border: solid white 1px;

@@ -16,6 +16,7 @@ class User extends Item
     protected $columns = ['title', 'datemodif', 'datecreation', 'secure', 'visitcount'];
     protected $connectcount = 0;
     protected $expiredate = false;
+    /** @var Bookmark[] Associative array as `id => Bookmark`*/
     protected $bookmark = [];
     protected $display = ['bookmark' => false];
 
@@ -198,7 +199,15 @@ class User extends Item
     public function setbookmark($bookmark)
     {
         if (is_array($bookmark)) {
-            $this->bookmark = $bookmark;
+            $bookmark = array_map(
+                function ($datas) {
+                    if (is_array($datas) && !empty($datas)) {
+                        return new Bookmark($datas);
+                    }
+                },
+                $bookmark
+            );
+            $this->bookmark = array_filter($bookmark);
         }
     }
 
@@ -285,12 +294,10 @@ class User extends Item
         $this->connectcount ++;
     }
 
-    public function addbookmark(string $id, string $query)
+    public function addbookmark(Bookmark $bookmark)
     {
-        if (!empty($id) && !empty($query)) {
-            $id = idclean($id);
-            $id = substr($id, 0, 16);
-            $this->bookmark[$id] = $query;
+        if (!empty($bookmark->id()) && !empty($bookmark->query()) && !empty($bookmark->route())) {
+            $this->bookmark[$bookmark->id()] = $bookmark;
         }
     }
 

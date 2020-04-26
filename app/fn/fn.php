@@ -87,7 +87,13 @@ function arrayclean($input)
     return $output;
 }
 
-function idclean(string $input): string
+/**
+ * Clean string from characters outside `[0-9a-z-_]` and troncate it
+ * @param string $input
+ * @param int $max lenght to trucate id
+ * @return string output formated id
+ */
+function idclean(string $input, int $max = Wcms\Model::MAX_ID_LENGTH): string
 {
     $input = urldecode($input);
     $search =  ['é', 'à', 'è', 'ç', 'ù', 'ï', 'î', ' '];
@@ -96,7 +102,7 @@ function idclean(string $input): string
 
     $input = preg_replace('%[^a-z0-9-_+]%', '', strtolower(trim($input)));
 
-    $input = substr($input, 0, Wcms\Model::MAX_ID_LENGTH);
+    $input = substr($input, 0, $max);
 
     return $input;
 }
@@ -335,17 +341,21 @@ function recurse_copy($src, $dst)
  *
  * @param array $options as `value => title`
  * @param string|int $selected value of actualy selected option
+ * @param bool $title Use title as value. Default : false
  *
  * @return string HTML list of options
  */
-function options(array $options, $selected = null): string
+function options(array $options, $selected = null, $title = false): string
 {
     $html = '';
     foreach ($options as $value => $title) {
-        if ($value == $selected) {
+        if ($value === $selected) {
             $attribute = 'selected';
         } else {
             $attribute = '';
+        }
+        if ($title) {
+            $value = $title;
         }
         $html .= '<option value="' . $value . '" ' . $attribute . '>' . $title . '</option>' . PHP_EOL;
     }

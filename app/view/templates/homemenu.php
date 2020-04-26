@@ -266,7 +266,7 @@
             <?php } ?>
             </ul>
             <input type="hidden" name="action" value="del">
-            <input type="submit" value="delete selected" class="floatright">
+            <input type="submit" value="delete selected">
             </form>
             <?php } elseif($user->issupereditor()) { ?>
                 <p>This will store your filters settings as a Bookmark that every editors users can use.</p>
@@ -284,22 +284,25 @@
             <?php if(!empty($user->bookmark())) { ?>
             <form action="<?= $this->url('homebookmark') ?>" method="post">
             <ul>
-            <?php foreach ($user->bookmark() as $id => $query) { ?>  
+            <?php foreach ($user->bookmark() as $bookmark) { ?>
                 <li>
-                    <a href="<?= $query ?>" title="<?= $query ?>"><?= $id ?></a>
-                    <input type="checkbox" name="id[]" value="<?= $id ?>">
+                    <label for="bookmark_<?= $bookmark->id() ?>" title="<?= $bookmark->query() ?>"><?= $bookmark->id() ?></label>
+                    <input type="checkbox" name="id[]" value="<?= $bookmark->id() ?>" id="bookmark_<?= $bookmark->id() ?>">
                 </li>
             <?php } ?>
             </ul>
             <input type="hidden" name="action" value="del">
             <input type="hidden" name="user" value="<?= $user->id() ?>">
-            <input type="submit" value="delete selected" class="floatright">
+            <input type="submit" value="delete selected">
             </form>
             <?php } else { ?>
                 <p>This will store your filters settings as a Bookmark that only you can use.</p>
             <?php } ?>
             <form action="<?= $this->url('homebookmark') ?>" method="post">
-                <input type="text" name="id" placeholder="bookmark id" minlength="1" maxlength="16">
+                <select name="icon" id="icon">
+                    <?= options(Wcms\Model::BOOKMARK_ICONS, null, true) ?>
+                </select>
+                <input type="text" name="id" placeholder="bookmark id" minlength="1" maxlength="16" required>
                 <input type="hidden" name="query" value="<?= $opt->getadress() ?>">
                 <input type="hidden" name="user" value="<?= $user->id() ?>">
                 <input type="submit" name="action" value="add">
