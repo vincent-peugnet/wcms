@@ -89,7 +89,7 @@ class Modelrender extends Modelpage
         $body = $this->getbody($this->readbody());
         $parsebody = $this->bodyparser($body);
 
-        $html = "<!DOCTYPE html>\n<html>\n<head>\n' . $head . '\n</head>\n' . $parsebody . '\N</html>";
+        $html = "<!DOCTYPE html>\n<html>\n<head>\n$head\n</head>\n$parsebody\n</html>";
 
         return $html;
     }
@@ -288,16 +288,16 @@ class Modelrender extends Modelpage
 
         if (!empty($this->page->templatecss())) {
             $tempaltecsspage = $this->page->templatecss();
-            $head .= "<link href=\"$renderpath . $tempaltecsspage.css\" rel=\"stylesheet\" />\n";
+            $head .= "<link href=\"$renderpath$tempaltecsspage.css\" rel=\"stylesheet\" />\n";
         }
-        $head .= "<link href=\"$renderpath . $id.css\" rel=\"stylesheet\" />\n";
+        $head .= "<link href=\"$renderpath$id.css\" rel=\"stylesheet\" />\n";
 
         if (!empty($this->page->templatejavascript())) {
             $templatejspage = $this->page->templatejavascript();
-            $head .= "<script src=\"$renderpath . $templatejspage.js\" async/></script>\n";
+            $head .= "<script src=\"$renderpath$templatejspage.js\" async/></script>\n";
         }
         if (!empty($this->page->javascript())) {
-            $head .= "<script src=\"$renderpath . $id.js\" async/></script>\n";
+            $head .= "<script src=\"$renderpath$id.js\" async/></script>\n";
         }
 
         if (!empty(Config::analytics())) {

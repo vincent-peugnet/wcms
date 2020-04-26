@@ -127,7 +127,20 @@ class Medialist extends Item
         if (array_diff(self::TYPES, $this->type) != []) {
             $query['type'] = $this->type;
         }
-        return '%MEDIA?' . urldecode(http_build_query($query)) . '%';
+        return urldecode(http_build_query($query));
+    }
+
+    /**
+     * Get the code to insert directly
+     */
+    public function getcode(): string
+    {
+        return '%MEDIA?' . $this->getquery() . '%';
+    }
+
+    public function getadress(): string
+    {
+        return '?' . $this->getquery();
     }
 
 

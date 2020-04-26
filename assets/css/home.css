@@ -107,20 +107,6 @@ aside summary:hover {
 }
 
 
-aside.home details#bookmarks input[type="checkbox"] {
-    opacity: 0.2;
-    float: right;
-    height: 11px;
-}
-
-aside.home details#bookmarks input[type="checkbox"]:hover {
-    opacity: 1;
-}
-
-aside.home details#bookmarks ul {
-    padding: 2%;
-}
-
 aside.home #edit input[type="submit"] {
     width: 100%;
 }
@@ -674,6 +660,12 @@ footer {
         height: 23px;
     }
 
+    
+    span#shortcuts {
+        font-size: 23px;
+        line-height: 1;
+    }
+
 }
 
 
@@ -686,4 +678,5 @@ footer {
     top: -200px;
   }
 }
+
 

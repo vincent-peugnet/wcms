@@ -34,9 +34,9 @@
 </span>
 
 
-<span id="shortcuts" class="hidephone">
+<span id="shortcuts">
     <?php foreach ($user->bookmark() as $bookmark) { ?>
-        <a href="<?= $this->url($bookmark->route(), $bookmark->params(), $bookmark->query()) ?>"><?= $bookmark->icon() ?> <?= $bookmark->id() ?></a>
+        <a href="<?= $this->url($bookmark->route(), $bookmark->params(), $bookmark->query()) ?>"><?= $bookmark->icon() ?><span class="hidephone"> <?= $bookmark->id() ?></span></a>
     <?php } ?>
 </span>
 

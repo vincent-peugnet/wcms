@@ -49,6 +49,42 @@ class Controlleruser extends Controller
     }
 
 
+    public function bookmark()
+    {
+        if ($this->user->iseditor() && isset($_POST['action']) && isset($_POST['id']) && !empty($_POST['id'])) {
+            if ($_POST['action'] == 'add' && isset($_POST['query'])) {
+                if (isset($_POST['user']) && $_POST['user'] == $this->user->id()) {
+                    $bookmark = new Bookmark();
+                    $bookmark->init($_POST['id'], $_POST['route'], $_POST['query'], [], $_POST['icon']);
+                    $usermanager = new Modeluser();
+                    $user = $usermanager->get($_POST['user']);
+                    $user->addbookmark($bookmark);
+                    $usermanager->add($user);
+                } else {
+                    Config::addbookmark($_POST['id'], $_POST['query']);
+                    Config::savejson();
+                }
+            } elseif ($_POST['action'] == 'del') {
+                if (isset($_POST['user']) && $_POST['user'] == $this->user->id()) {
+                    $usermanager = new Modeluser();
+                    $user = $usermanager->get($_POST['user']);
+                    foreach ($_POST['id'] as $id) {
+                        $user->deletebookmark($id);
+                    }
+                    $usermanager->add($user);
+                } else {
+                    foreach ($_POST['id'] as $id) {
+                        Config::deletebookmark($id);
+                    }
+                    Config::savejson();
+                }
+            }
+        }
+        $this->routedirect($_POST['route']);
+    }
+
+
+
 
 
 

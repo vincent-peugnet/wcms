@@ -121,7 +121,7 @@ class Colors extends Item
         foreach ($this->tagcolor as $tag => $color) {
             $i = '<input type="color" name="tagcolor[' . $tag . ']" value="' . $color . '" id="color_' . $tag . '">';
             $l = '<label for="color_' . $tag . '" >' . $tag . '</label>';
-            $html .= "\n<li>$i . $l</li>";
+            $html .= "\n<li>$i$l</li>";
         }
         $html .= PHP_EOL . '</ul>';
         return $html;

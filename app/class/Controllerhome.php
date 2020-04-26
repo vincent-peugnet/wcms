@@ -177,40 +177,6 @@ class Controllerhome extends Controllerpage
         $this->routedirect('home');
     }
 
-    public function bookmark()
-    {
-        if ($this->user->iseditor() && isset($_POST['action']) && isset($_POST['id']) && !empty($_POST['id'])) {
-            if ($_POST['action'] == 'add' && isset($_POST['query'])) {
-                if (isset($_POST['user']) && $_POST['user'] == $this->user->id()) {
-                    $bookmark = new Bookmark($_POST);
-                    $bookmark->init($_POST['id'], 'home', $_POST['query'], [], $_POST['icon']);
-                    $usermanager = new Modeluser();
-                    $user = $usermanager->get($_POST['user']);
-                    $user->addbookmark($bookmark);
-                    $usermanager->add($user);
-                } else {
-                    Config::addbookmark($_POST['id'], $_POST['query']);
-                    Config::savejson();
-                }
-            } elseif ($_POST['action'] == 'del') {
-                if (isset($_POST['user']) && $_POST['user'] == $this->user->id()) {
-                    $usermanager = new Modeluser();
-                    $user = $usermanager->get($_POST['user']);
-                    foreach ($_POST['id'] as $id) {
-                        $user->deletebookmark($id);
-                    }
-                    $usermanager->add($user);
-                } else {
-                    foreach ($_POST['id'] as $id) {
-                        Config::deletebookmark($id);
-                    }
-                    Config::savejson();
-                }
-            }
-        }
-        $this->routedirect('home');
-    }
-
     public function multi()
     {
         if (isset($_POST['action']) && $this->user->issupereditor() && !empty($_POST['pagesid'])) {
