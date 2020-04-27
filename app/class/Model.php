@@ -119,7 +119,7 @@ abstract class Model
 
     public const MAX_ID_LENGTH = 64;
     public const PASSWORD_MIN_LENGTH = 4;
-    public const PASSWORD_MAX_LENGTH = 32;
+    public const PASSWORD_MAX_LENGTH = 64;
     public const MAX_COOKIE_CONSERVATION = 365;
     public const MAX_QUERY_LENGH = 256;
 
@@ -147,12 +147,7 @@ abstract class Model
     {
         return self::dirtopath(Model::RENDER_DIR);
     }
-
-    public static function globalpath()
-    {
-        return self::dirtopath(Model::GLOBAL_DIR);
-    }
-
+    
     public static function csspath()
     {
         return self::dirtopath(Model::CSS_DIR);

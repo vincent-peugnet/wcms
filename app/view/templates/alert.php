@@ -7,7 +7,7 @@ $this->start('head');
 ?>
 
 <head>
-    <?= Wcms\Config::alertcss() ? '<link href="' . Wcms\Model::globalpath() . 'global.css" rel="stylesheet" />' : '' ?>
+    <?= Wcms\Config::alertcss() ? '<link href="' . Wcms\Model::dirtopath(Wcms\Model::ASSETS_CSS_DIR) . 'global.css" rel="stylesheet" />' : '' ?>
 </head>
 
 

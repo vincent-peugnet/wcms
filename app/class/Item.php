@@ -5,24 +5,38 @@ namespace Wcms;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
+use InvalidArgumentException;
+use RuntimeException;
 
 abstract class Item
 {
 
-
-    public function hydrate($datas = [])
+    /**
+     * Hydrate Object with corresponding `set__VAR__`
+     * @param array|object $datas associative array using key as var name or object
+     * @param bool $sendexception throw exception if error setting variable
+     * @return bool true if no error, otherwise false
+     * @throws RuntimeException listing var settings errors
+     */
+    public function hydrate($datas = [], bool $sendexception = false): bool
     {
-        $error = 0;
-        foreach ($datas as $key => $value) {
-            $method = 'set' . $key;
-
-            if (method_exists($this, $method)) {
-                if ($this->$method($value) === false) {
-                    $error++;
+        $seterrors = [];
+        if (is_array($datas) || is_object($datas)) {
+            foreach ($datas as $key => $value) {
+                $method = 'set' . $key;
+                if (method_exists($this, $method)) {
+                    if ($this->$method($value) === false) {
+                        $seterrors[] = $key;
+                    }
                 }
             }
         }
-        if ($error > 0) {
+        if (!empty($seterrors)) {
+            if ($sendexception) {
+                $errors = implode(', ', $seterrors);
+                $class = get_class($this);
+                throw new RuntimeException("objects vars : $errors can't be set in $class object");
+            }
             return false;
         } else {
             return true;

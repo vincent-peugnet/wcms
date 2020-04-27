@@ -90,19 +90,29 @@ function arrayclean($input)
 /**
  * Clean string from characters outside `[0-9a-z-_]` and troncate it
  * @param string $input
- * @param int $max lenght to trucate id
+ * @param int $max minmum input length to trucate id
+ * @param int $min minimum output length to send error message
  * @return string output formated id
+ * @throws \RuntimeException If ID length is inverior to minimal length
  */
-function idclean(string $input, int $max = Wcms\Model::MAX_ID_LENGTH): string
+function idclean(string $input, int $max = Wcms\Model::MAX_ID_LENGTH, int $min = 0): string
 {
+    $regex = '%[^a-z0-9-_]%';
     $input = urldecode($input);
-    $search =  ['é', 'à', 'è', 'ç', 'ù', 'ï', 'î', ' '];
-    $replace = ['e', 'a', 'e', 'c', 'u', 'i', 'i', '-'];
-    $input = str_replace($search, $replace, $input);
 
-    $input = preg_replace('%[^a-z0-9-_+]%', '', strtolower(trim($input)));
+    if (preg_match($regex, $input)) {
+        $search =  ['é', 'à', 'è', 'ç', 'ù', 'ï', 'î', ' '];
+        $replace = ['e', 'a', 'e', 'c', 'u', 'i', 'i', '-'];
+        $input = str_replace($search, $replace, $input);
+        
+        $input = preg_replace($regex, '', strtolower(trim($input)));
+        
+        $input = substr($input, 0, $max);
+    }
 
-    $input = substr($input, 0, $max);
+    if (strlen($input) < $min) {
+        throw new \RuntimeException("Id length cant be inferior to $min");
+    }
 
     return $input;
 }

@@ -232,7 +232,7 @@ class Modelrender extends Modelpage
     public function gethead()
     {
         $id = $this->page->id();
-        $globalpath = Model::globalpath();
+        $globalpath = Model::dirtopath(Model::ASSETS_CSS_DIR);
         $renderpath = Model::renderpath();
         $description = $this->page->description();
         $title = $this->page->title();

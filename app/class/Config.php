@@ -314,7 +314,7 @@ abstract class Config
     public static function setalertlink($alertlink)
     {
         if (is_string($alertlink)) {
-            self::$alertlink = idclean(strip_tags($alertlink));
+            self::$alertlink = idclean($alertlink);
         }
     }
 

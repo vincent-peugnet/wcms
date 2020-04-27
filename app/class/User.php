@@ -114,15 +114,17 @@ class User extends Item
 
     // _______________________ S E T _______________________
 
-    public function setid($id)
+    public function setid($id): bool
     {
-        $id = idclean($id);
-        if (strlen($id) < Model::MAX_ID_LENGTH and is_string($id)) {
-            $this->id = $id;
+        if (is_string($id)) {
+            try {
+                $this->id = idclean($id, Model::MAX_ID_LENGTH, 1);
+            } catch (\Throwable $th) {
+                return false;
+            }
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     public function setlevel($level)
@@ -130,6 +132,9 @@ class User extends Item
         $level = intval($level);
         if ($level >= 0 && $level <= 10) {
             $this->level = $level;
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -201,8 +206,10 @@ class User extends Item
         if (is_array($bookmark)) {
             $bookmark = array_map(
                 function ($datas) {
-                    if (is_array($datas) && !empty($datas)) {
+                    try {
                         return new Bookmark($datas);
+                    } catch (\Throwable $th) {
+                        return false;
                     }
                 },
                 $bookmark

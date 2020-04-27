@@ -21,10 +21,12 @@ class Bookmark extends Item
     /** @var string $icon associated emoji */
     protected $icon = '⭐';
 
-
+    /**
+     * @throws RuntimeException
+     */
     public function __construct(array $datas = [])
     {
-        $this->hydrate($datas);
+        $this->hydrate($datas, true);
     }
 
     public function init(string $id, string $route, string $query, array $params = [], string $icon = '⭐')
@@ -69,13 +71,19 @@ class Bookmark extends Item
 
     // _____________________________ S E T __________________________________
 
-    public function setid($id)
+    public function setid($id): bool
     {
         if (is_string($id)) {
-            $this->id = idclean($id);
+            try {
+                $this->id = idclean($id, Model::MAX_ID_LENGTH, 1);
+            } catch (\Throwable $th) {
+                return false;
+            }
+            return true;
         }
+        return false;
     }
-
+ 
     public function setquery($query)
     {
         if (is_string($query)) {
@@ -87,6 +95,9 @@ class Bookmark extends Item
     {
         if ($route === 'home' || $route === 'media') {
             $this->route = $route;
+            return true;
+        } else {
+            return false;
         }
     }
 

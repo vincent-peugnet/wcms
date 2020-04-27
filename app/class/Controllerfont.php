@@ -27,7 +27,7 @@ class Controllerfont extends Controller
                 [
                     'fontlist' => $fontlist,
                     'fonttypes' => $this->fontmanager->getfonttypes(),
-                    'fontfile' => Model::globalpath() . 'fonts.css'
+                    'fontfile' => Model::dirtopath(Model::ASSETS_CSS_DIR) . 'fonts.css'
                 ]
             );
         } else {

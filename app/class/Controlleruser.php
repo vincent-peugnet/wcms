@@ -2,6 +2,9 @@
 
 namespace Wcms;
 
+use Exception;
+use Throwable;
+
 class Controlleruser extends Controller
 {
 
@@ -33,10 +36,10 @@ class Controlleruser extends Controller
     {
         if ($this->user->iseditor()) {
             $user = $this->usermanager->get($this->user);
-            if ($user->hydrate($_POST)) {
-                Model::sendflashmessage('User preferences have been successfully updated', 'success');
-            } else {
-                Model::sendflashmessage('There was a problem when updating preferences', 'warning');
+            try {
+                $user->hydrate($_POST, true);
+            } catch (\Throwable $th) {
+                Model::sendflashmessage('There was a problem when updating preferences : ' . $th->getMessage(), 'error');
             }
             if ($_POST['passwordhash']) {
                 $user->hashpassword();
@@ -54,15 +57,16 @@ class Controlleruser extends Controller
         if ($this->user->iseditor() && isset($_POST['action']) && isset($_POST['id']) && !empty($_POST['id'])) {
             if ($_POST['action'] == 'add' && isset($_POST['query'])) {
                 if (isset($_POST['user']) && $_POST['user'] == $this->user->id()) {
-                    $bookmark = new Bookmark();
-                    $bookmark->init($_POST['id'], $_POST['route'], $_POST['query'], [], $_POST['icon']);
-                    $usermanager = new Modeluser();
-                    $user = $usermanager->get($_POST['user']);
-                    $user->addbookmark($bookmark);
-                    $usermanager->add($user);
-                } else {
-                    Config::addbookmark($_POST['id'], $_POST['query']);
-                    Config::savejson();
+                    try {
+                        $bookmark = new Bookmark($_POST);
+                        $usermanager = new Modeluser();
+                        $user = $usermanager->get($_POST['user']);
+                        $user->addbookmark($bookmark);
+                        $usermanager->add($user);
+                    } catch (Throwable $th) {
+                        Logger::errorex($th, true);
+                        Model::sendflashmessage('Error while creating bookmark : ' . $th->getMessage(), 'error');
+                    }
                 }
             } elseif ($_POST['action'] == 'del') {
                 if (isset($_POST['user']) && $_POST['user'] == $this->user->id()) {
@@ -72,11 +76,6 @@ class Controlleruser extends Controller
                         $user->deletebookmark($id);
                     }
                     $usermanager->add($user);
-                } else {
-                    foreach ($_POST['id'] as $id) {
-                        Config::deletebookmark($id);
-                    }
-                    Config::savejson();
                 }
             }
         }
