@@ -435,7 +435,7 @@ abstract class Config
 
     public static function setinterfacecss($interfacecss)
     {
-        if (is_string($interfacecss) && file_exists(Model::CSS_DIR . $interfacecss)) {
+        if (is_string($interfacecss) && file_exists(Model::ASSETS_CSS_DIR . $interfacecss)) {
             self::$interfacecss = $interfacecss;
         } else {
             self::$interfacecss = null;

@@ -7,7 +7,6 @@ assets/render/*
 assets/global/*
 assets/css/tagcolors.css
 database/*
-fonts/*
 media/*
 render/
 build/

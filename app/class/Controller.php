@@ -67,7 +67,7 @@ class Controller
         $commonsparams['router'] = $this->router;
         $commonsparams['user'] = $this->user;
         $commonsparams['pagelist'] = $this->pagemanager->list();
-        $commonsparams['css'] = Model::csspath();
+        $commonsparams['css'] = Model::assetscsspath();
         $commonsparams['now'] = new DateTimeImmutable();
         return $commonsparams;
     }

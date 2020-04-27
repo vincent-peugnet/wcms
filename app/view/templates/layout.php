@@ -19,7 +19,7 @@
     
     <?php
     if (!empty(Wcms\Config::interfacecss())) {
-        echo '<link rel="stylesheet" href="' . Wcms\Model::csspath() . Wcms\Config::interfacecss() . '">';
+        echo '<link rel="stylesheet" href="' . Wcms\Model::assetscsspath() . Wcms\Config::interfacecss() . '">';
     }
     if (isreportingerrors()) {
     ?>

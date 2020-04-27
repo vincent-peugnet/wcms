@@ -117,7 +117,7 @@ class Modelmedia extends Model
 
     public function listinterfacecss()
     {
-        $listinterfacecss = $this->globlist(self::CSS_DIR, ['css']);
+        $listinterfacecss = $this->globlist(self::ASSETS_CSS_DIR, ['css']);
         $listinterfacecss = array_diff($listinterfacecss, ['edit.css', 'home.css', 'tagcolors.css']);
         return $listinterfacecss;
     }

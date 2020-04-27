@@ -7,19 +7,19 @@ abstract class Model
 
     public const CONFIG_FILE = 'config.json';
     public const MAN_FILE = 'MANUAL.md';
-    public const CSS_DIR = 'assets/css/';
-    public const COLORS_FILE = self::CSS_DIR . 'tagcolors.css';
+    public const ASSETS_CSS_DIR = 'assets/css/';
+    public const COLORS_FILE = self::ASSETS_CSS_DIR . 'tagcolors.css';
     public const JS_DIR = 'assets/js/';
     public const ICONS_DIR = 'assets/icons/';
-    public const FONT_DIR = 'fonts/';
     public const MEDIA_DIR = 'media/';
     public const FAVICON_DIR = self::MEDIA_DIR . 'favicon/';
     public const THUMBNAIL_DIR = self::MEDIA_DIR . 'thumbnail/';
+    public const FONT_DIR = self::MEDIA_DIR . 'fonts/';
+    public const CSS_DIR = self::MEDIA_DIR . 'css/';
     public const TEMPLATES_DIR = './app/view/templates/';
     public const RENDER_DIR = 'assets/render/';
     public const HTML_RENDER_DIR = 'render/';
-    public const GLOBAL_DIR = 'assets/global/';
-    public const GLOBAL_CSS_FILE = self::GLOBAL_DIR . 'global.css';
+    public const GLOBAL_CSS_FILE = self::CSS_DIR . 'global.css';
     public const DATABASE_DIR = './database/';
     public const PAGES_DIR = self::DATABASE_DIR . 'pages/';
 
@@ -81,9 +81,9 @@ abstract class Model
     ];
 
     public const BOOKMARK_ICONS = [
-        '🌘', '☂️', '⭐️', '✈️', '🚲', '💡', '💾', '💿', '💎', '🎞', ' ⚒', '💊', '📜', '📌', '🔍', '📦', '🔒',
-        '📒', '🔓', '🌡', '☎️', '🖤', '✝️', '☢️', '✅', '🌐', '🌍', '✳️', '🏴', '😎', '👻', '💩', '👍', '⚡️', '🍸',
-        '🍴', '⚽️', '🏭', '🚀', '⚓️'
+        '⭐️', '🖤', '🏴', '👍', '📌', '💡', '🌘', '☂️', '✈️', '🚲', '💾', '💿', '💎', '🎞', ' ⚒', '💊', '📜',
+        '📒', '🔓', '🌡', '☎️', '✝️', '☢️', '✅', '🌐', '🌍', '✳️', '🏴', '😎', '👻', '💩', '⚡️', '🍸', '🔍', '📦',
+        '🍴', '⚽️', '🏭', '🚀', '⚓️', '🔒'
     ];
 
     public const LIST_STYLES = [
@@ -158,6 +158,11 @@ abstract class Model
         return self::dirtopath(Model::CSS_DIR);
     }
 
+    public static function assetscsspath()
+    {
+        return self::dirtopath(Model::ASSETS_CSS_DIR);
+    }
+
     public static function jspath()
     {
         return self::dirtopath(Model::JS_DIR);
@@ -186,23 +191,6 @@ abstract class Model
     public static function iconpath()
     {
         return self::dirtopath(Model::ICONS_DIR);
-    }
-
-    /**
-     * Check if dir exist. If not, create it
-     *
-     * @param string $dir Directory to check
-     * @return bool return true if the dir already exist or was created succesfullt. Otherwise return false
-     * @throws \InvalidArgumentException If folder creation is impossible
-     */
-    public static function dircheck(string $dir): bool
-    {
-        if (!is_dir($dir)) {
-            if (!mkdir($dir)) {
-                throw new \InvalidArgumentException("Cannot create directory : $dir");
-            }
-        }
-        return true;
     }
 
     /**

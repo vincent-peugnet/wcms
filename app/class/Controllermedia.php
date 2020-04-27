@@ -2,7 +2,8 @@
 
 namespace Wcms;
 
-use Exception;
+use \Exception;
+use \LogicException;
 
 class Controllermedia extends Controller
 {
@@ -24,14 +25,13 @@ class Controllermedia extends Controller
     public function desktop()
     {
         if ($this->user->iseditor()) {
-            if (!$this->mediamanager->dircheck(Model::MEDIA_DIR)) {
-                throw new Exception("Media error : Cant create /media folder");
-            }
-            if (!$this->mediamanager->dircheck(Model::FAVICON_DIR)) {
-                throw new Exception("Media error : Cant create /media/favicon folder");
-            }
-            if (!$this->mediamanager->dircheck(Model::THUMBNAIL_DIR)) {
-                throw new Exception("Media error : Cant create /media/thumbnail folder");
+            try {
+                dircheck(Model::FONT_DIR);
+                dircheck(Model::THUMBNAIL_DIR);
+                dircheck(Model::FAVICON_DIR);
+                dircheck(Model::CSS_DIR);
+            } catch (\InvalidArgumentException $exception) {
+                throw new LogicException($exception->getMessage());
             }
             
             $mediaopt = new Medialist($_GET);

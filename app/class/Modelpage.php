@@ -17,7 +17,7 @@ class Modelpage extends Modeldb
     {
         $this->dbinit(Model::PAGES_DIR);
         $this->storeinit(Config::pagetable());
-        $this->dircheck(Model::HTML_RENDER_DIR);
+        dircheck($this::HTML_RENDER_DIR);
     }
 
     /**

@@ -377,28 +377,56 @@ function secrethash(string $token): string
 
 
 /**
- * Check if a file is accessible or can be writen
- * @param string $path file path to check
- * @param bool $createdir create directory if does not exist
- * @throws \InvalidArgumentException if :
- * parent directory does not exist | is not writable | file exist and not writable
+ * Check if dir exist. If not, create it
+ *
+ * @param string $dir Directory to check
+ * @param bool $createdir create dir in case of non existence default is true
+ * @return bool return true if the dir already exist or was created succesfullt. Otherwise return false
+ * @throws \InvalidArgumentException If folder creation is impossible or if directory doeas not exist
  */
-function accessfile(string $path, bool $createdir = false)
+function dircheck(string $dir, bool $createdir = true): bool
 {
-    $dir = dirname($path);
     if (!is_dir($dir)) {
         if ($createdir) {
-            if (!mkdir($dir)) {
-                throw new \InvalidArgumentException("Cannot create directory : $dir");
+            $parent = dirname($dir);
+            if (dircheck($parent)) {
+                if (mkdir($dir)) {
+                    return true;
+                } else {
+                    throw new \InvalidArgumentException("Cannot create directory : $dir");
+                }
+            } else {
+                return false;
             }
         } else {
             throw new \InvalidArgumentException("Directory '$dir' does not exist.");
         }
+    } else {
+        return true;
     }
-    if (!is_writable($dir)) {
-        throw new \InvalidArgumentException("Directory '$dir' is not writable.");
-    }
-    if (is_file($path) && !is_writable($path)) {
-        throw new \InvalidArgumentException("The file '$path' is not writable.");
+}
+
+
+/**
+ * Check if a file is accessible or can be writen
+ * @param string $path file path to check
+ * @param bool $createdir create directory if does not exist
+ * @return bool If no error occured
+ * @throws \InvalidArgumentException if :
+ * parent directory does not exist | is not writable | file exist and not writable
+ */
+function accessfile(string $path, bool $createdir = false): bool
+{
+    $dir = dirname($path);
+    if (dircheck($dir, $createdir)) {
+        if (!is_writable($dir)) {
+            throw new \InvalidArgumentException("Directory '$dir' is not writable.");
+        }
+        if (is_file($path) && !is_writable($path)) {
+            throw new \InvalidArgumentException("The file '$path' is not writable.");
+        }
+        return true;
+    } else {
+        return false;
     }
 }
