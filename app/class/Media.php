@@ -267,7 +267,8 @@ class Media extends Item
         $timestamp = filemtime($this->getfulldir());
         try {
             $this->date = new DateTimeImmutable("@$timestamp");
-        } catch (\Throwable $th) {
+        } catch (Exception $e) {
+            Logger::warningex($e);
             $this->date = new DateTimeImmutable();
         }
     }

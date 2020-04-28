@@ -2,8 +2,7 @@
 
 namespace Wcms;
 
-use Exception;
-use Throwable;
+use RuntimeException;
 
 class Controlleruser extends Controller
 {
@@ -38,7 +37,7 @@ class Controlleruser extends Controller
             $user = $this->usermanager->get($this->user);
             try {
                 $user->hydrateexception($_POST);
-            } catch (\Throwable $th) {
+            } catch (RuntimeException $th) {
                 Model::sendflashmessage('There was a problem when updating preference : ' . $th->getMessage(), 'error');
             }
             if ($_POST['passwordhash']) {
@@ -63,7 +62,7 @@ class Controlleruser extends Controller
                         $user = $usermanager->get($_POST['user']);
                         $user->addbookmark($bookmark);
                         $usermanager->add($user);
-                    } catch (Throwable $th) {
+                    } catch (RuntimeException $th) {
                         Logger::errorex($th, true);
                         Model::sendflashmessage('Error while creating bookmark : ' . $th->getMessage(), 'error');
                     }

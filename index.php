@@ -7,7 +7,7 @@ require('./vendor/autoload.php');
 
 try {
     Wcms\Logger::init('w_error.log', 2);
-} catch (Throwable $e) {
+} catch (RuntimeException $e) {
     die('Unable to init logs: ' . $e->getMessage());
 }
 
