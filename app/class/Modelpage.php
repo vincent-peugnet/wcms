@@ -308,7 +308,6 @@ class Modelpage extends Modeldb
     /**
      * @param array $pagelist List of Page
      * @param int $secure secure level
-     *
      * @return array $array of `string` page id
      */
 

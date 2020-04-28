@@ -264,7 +264,7 @@ class Modelhome extends Modelpage
 
         $nodes = [];
         foreach ($pagelist as $id => $page) {
-            if ($showorphans || (!$showorphans && in_array($id, $notorphans))) {
+            if ($showorphans || in_array($id, $notorphans)) {
                 $node['group'] = 'nodes';
                 $node['data']['id'] = $page->id();
                 $node['data']['edit'] = $page->id() . DIRECTORY_SEPARATOR . 'edit';

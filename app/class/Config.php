@@ -81,7 +81,7 @@ abstract class Config
 
     public static function tojson()
     {
-        $arr = get_class_vars(__class__);
+        $arr = get_class_vars(get_class());
         $json = json_encode($arr, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT);
         return $json;
     }

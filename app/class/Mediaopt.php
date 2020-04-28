@@ -2,7 +2,7 @@
 
 namespace Wcms;
 
-class Medialist extends Item
+class Mediaopt extends Item
 {
     /** @var string full regex match */
     protected $fullmatch;

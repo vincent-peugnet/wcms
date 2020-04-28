@@ -1,6 +1,6 @@
 <?php
 
-use Wcms\Medialist;
+use Wcms\Mediaopt;
 
 use function Clue\StreamFilter\fun;
 
@@ -91,11 +91,9 @@ function arrayclean($input)
  * Clean string from characters outside `[0-9a-z-_]` and troncate it
  * @param string $input
  * @param int $max minmum input length to trucate id
- * @param int $min minimum output length to send error message
  * @return string output formated id
- * @throws \RuntimeException If ID length is inverior to minimal length
  */
-function idclean(string $input, int $max = Wcms\Model::MAX_ID_LENGTH, int $min = 0): string
+function idclean(string $input, int $max = Wcms\Model::MAX_ID_LENGTH): string
 {
     $regex = '%[^a-z0-9-_]%';
     $input = urldecode($input);
@@ -109,11 +107,6 @@ function idclean(string $input, int $max = Wcms\Model::MAX_ID_LENGTH, int $min =
         
         $input = substr($input, 0, $max);
     }
-
-    if (strlen($input) < $min) {
-        throw new \RuntimeException("Id length cant be inferior to $min");
-    }
-
     return $input;
 }
 
@@ -261,7 +254,7 @@ function treecount(
     int $deepness,
     string $path,
     string $currentdir,
-    Medialist $mediaopt
+    Mediaopt $mediaopt
 ) {
     if ($path . '/' === $currentdir) {
         $folder = '├─📂<span id="currentdir">' . $dirname . '<span>';

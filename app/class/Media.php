@@ -265,7 +265,11 @@ class Media extends Item
     public function setdate()
     {
         $timestamp = filemtime($this->getfulldir());
-        $this->date = new DateTimeImmutable("@$timestamp");
+        try {
+            $this->date = new DateTimeImmutable("@$timestamp");
+        } catch (\Throwable $th) {
+            $this->date = new DateTimeImmutable();
+        }
     }
 
     public function setwidth($width)

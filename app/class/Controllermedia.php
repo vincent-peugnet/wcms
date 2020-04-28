@@ -2,8 +2,8 @@
 
 namespace Wcms;
 
-use \Exception;
-use \LogicException;
+use Exception;
+use LogicException;
 
 class Controllermedia extends Controller
 {
@@ -34,7 +34,7 @@ class Controllermedia extends Controller
                 throw new LogicException($exception->getMessage());
             }
             
-            $mediaopt = new Medialist($_GET);
+            $mediaopt = new Mediaopt($_GET);
             if (empty($mediaopt->path())) {
                 $mediaopt->setpath(DIRECTORY_SEPARATOR . Model::MEDIA_DIR);
             }

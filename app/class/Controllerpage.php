@@ -13,8 +13,6 @@ class Controllerpage extends Controller
     protected $fontmanager;
     protected $mediamanager;
 
-    public const COMBINE = false;
-
     public function __construct($router)
     {
         parent::__construct($router);
@@ -368,9 +366,6 @@ class Controllerpage extends Controller
                 $oldpage = clone $this->page;
                 $this->page->hydrate($_POST);
 
-                if (self::COMBINE && $_POST['thisdatemodif'] === $oldpage->datemodif('string')) {
-                }
-
                 $this->page->updateedited();
                 $this->page->addauthor($this->user->id());
                 $this->page->removeeditby($this->user->id());
@@ -388,41 +383,6 @@ class Controllerpage extends Controller
         }
         $this->routedirect('pageedit', ['page' => $this->page->id()]);
     }
-
-    /**
-     * This function set the actual editor of the page
-     *
-     * @param string $pageid as the page id
-     */
-    public function editby(string $pageid)
-    {
-        $this->page = new Page(['id' => $pageid]);
-        if ($this->importpage($pageid)) {
-            $this->page->addeditby($this->user->id());
-            $this->pagemanager->update($this->page);
-            echo json_encode(['success' => true]);
-        } else {
-            $this->error(400);
-        }
-    }
-
-    /**
-     * This function remove the actual editor of the page
-     *
-     * @param string $pageid as the page id
-     */
-    public function removeeditby(string $pageid)
-    {
-        $this->page = new Page(['id' => $pageid]);
-        if ($this->importpage($pageid)) {
-            $this->page->removeeditby($this->user->id());
-            $this->pagemanager->update($this->page);
-            echo json_encode(['success' => true]);
-        } else {
-            $this->error(400);
-        }
-    }
-
 
     public function movepanels()
     {

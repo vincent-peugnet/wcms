@@ -31,7 +31,7 @@ class Modelmedia extends Model
         }
     }
 
-    public function medialistopt(Medialist $mediaopt)
+    public function medialistopt(Mediaopt $mediaopt)
     {
         $medialist = $this->getlistermedia($mediaopt->dir(), $mediaopt->type());
         $this->medialistsort($medialist, $mediaopt->sortby(), $mediaopt->order());
@@ -179,6 +179,7 @@ class Modelmedia extends Model
                 $this->listpath($content, $parent . $dir . DIRECTORY_SEPARATOR, $pathlist);
             }
         }
+        return $pathlist;
     }
 
     /**

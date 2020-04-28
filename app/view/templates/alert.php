@@ -34,6 +34,7 @@ $this->stop();
 
     $form = '<p>
     <form action="' . $this->url('log') .'" method="post">
+    <input type="text" name="user" id="loginuser" autofocus placeholder="user" >
     <input type="password" name="pass" id="loginpass" placeholder="password">
     <input type="hidden" name="route" value="pageread/">
     <input type="hidden" name="id" value="' . $page->id() . '">

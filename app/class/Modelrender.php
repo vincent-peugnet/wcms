@@ -17,8 +17,6 @@ class Modelrender extends Modelpage
     protected $internallinkblank = '';
     protected $externallinkblank = '';
 
-    public const RENDER_VERBOSE = 1;
-
     public function __construct(\AltoRouter $router)
     {
         parent::__construct();
@@ -162,7 +160,7 @@ class Modelrender extends Modelpage
             if ($source !== $this->page->id()) {
                 $subcontent = $this->getpageelement($source, $type);
                 if ($subcontent !== false) {
-                    if (empty($subcontent && self::RENDER_VERBOSE > 0)) {
+                    if (empty($subcontent)) {
                         $message = 'The ' . strtoupper($type) . ' from page "' . $source . '" is currently empty !';
                         $subcontent = "\n<!-- ' . $message . ' -->\n";
                     }
@@ -216,12 +214,12 @@ class Modelrender extends Modelpage
 
     public function writetemplates()
     {
-        if (array_key_exists('css', $this->page->template('array'))) {
-            $tempaltecsspage = $this->get($this->page->template('array')['css']);
+        if (array_key_exists('css', $this->page->template())) {
+            $tempaltecsspage = $this->get($this->page->template()['css']);
             file_put_contents(Model::RENDER_DIR . $tempaltecsspage->id() . '.css', $tempaltecsspage->css());
         }
-        if (array_key_exists('javascript', $this->page->template('array'))) {
-            $templatejspage = $this->get($this->page->template('array')['javascript']);
+        if (array_key_exists('javascript', $this->page->template())) {
+            $templatejspage = $this->get($this->page->template()['javascript']);
             file_put_contents(Model::RENDER_DIR . $templatejspage->id() . '.js', $templatejspage->javascript());
         }
     }
@@ -547,7 +545,7 @@ class Modelrender extends Modelpage
 
         if (!empty($matches)) {
             foreach ($matches as $match) {
-                $medialist = new Medialist($match);
+                $medialist = new Mediaopt($match);
                 $medialist->readoptions();
                 $text = str_replace($medialist->fullmatch(), $medialist->generatecontent(), $text);
             }

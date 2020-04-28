@@ -69,7 +69,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
 
     <h2>
         /<?= $mediaopt->dir() ?>
-        <span class="right"><a href="?display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> >list</a> / <a href="?display=gallery"  <?= $display === 'gallery' ? 'style="color: white"' : '' ?>  >gallery</a></span>
+        <span class="right"><a href="<?= $mediaopt->getadress() ?>&display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> >list</a> / <a href="<?= $mediaopt->getadress() ?>&display=gallery"  <?= $display === 'gallery' ? 'style="color: white"' : '' ?>  >gallery</a></span>
     </h2>
 
     <div class="scroll">
@@ -84,8 +84,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
     <ul id="gallery">
         <?php foreach ($medialist as $media) { ?>
 
-        <li title="<?= $media->size('hr') ?> | <?= $media->uid('name') ?> | <?= $media->permissions() ?>
-        ">
+        <li title="<?= $media->size('hr') ?> | <?= $media->uid('name') ?> | <?= $media->permissions() ?>">
             <div class="thumbnail">
             <label for="media_<?= $media->id() ?>">
                 <?= $media->type() == 'image' ? '<img src="' . $media->getfullpath() . '">' : $media->getsymbol() ?>
@@ -95,6 +94,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
             <div class="meta">
                 <input type="checkbox" name="id[]" value="<?= $media->getfulldir() ?>" form="mediaedit" id="media_<?= $media->id() ?>">
                 <label for="media_<?= $media->id() ?>"><?= $media->id() ?></label>
+                <a href="<?= $media->getfullpath() ?>" target="_blank">⧉</a>
                 <code><?= $media->getcode() ?></code>
             </div>
                 

@@ -234,20 +234,9 @@ class Page extends Dbitem
             if ($this->secure == 2) {
                 $secure = 'not_published';
             }
-            return $secure;
         } else {
             return $this->secure;
         }
-    }
-
-    public function invitepassword($type = 'string')
-    {
-        return $this->invitepassword;
-    }
-
-    public function readpassword($type = 'string')
-    {
-        return $this->readpassword;
     }
 
     public function interface($type = 'string')
@@ -266,7 +255,7 @@ class Page extends Dbitem
         } elseif ($option == 'string') {
             return implode(', ', $this->linkto);
         }
-        return $linkto;
+        return $this->linkto;
     }
 
     public function templatebody($type = 'string')
@@ -573,20 +562,6 @@ class Page extends Dbitem
     {
         if ($secure >= 0 and $secure <= self::SECUREMAX) {
             $this->secure = intval($secure);
-        }
-    }
-
-    public function setinvitepassword($invitepassword)
-    {
-        if (is_string($invitepassword) && strlen($invitepassword) < self::LEN) {
-            $this->invitepassword = $invitepassword;
-        }
-    }
-
-    public function setreadpassword($readpassword)
-    {
-        if (is_string($readpassword) && strlen($readpassword) < self::LEN) {
-            $this->readpassword = $readpassword;
         }
     }
 

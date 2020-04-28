@@ -39,13 +39,9 @@ class User extends Item
         return $this->level;
     }
 
-    public function password($type = 'string')
+    public function password()
     {
-        if ($type === 'int') {
-            return strlen($this->password);
-        } elseif ($type = 'string') {
-            return $this->password;
-        }
+        return $this->password;
     }
 
     public function signature()
@@ -117,12 +113,11 @@ class User extends Item
     public function setid($id): bool
     {
         if (is_string($id)) {
-            try {
-                $this->id = idclean($id, Model::MAX_ID_LENGTH, 1);
-            } catch (\Throwable $th) {
-                return false;
+            $id = idclean($id);
+            if (!empty($id)) {
+                $this->id = $id;
+                return true;
             }
-            return true;
         }
         return false;
     }

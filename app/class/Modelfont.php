@@ -33,8 +33,8 @@ class Modelfont extends Model
 
     public function list()
     {
+        $list = [];
         if ($handle = opendir(Model::FONT_DIR)) {
-            $list = [];
             while (false !== ($entry = readdir($handle))) {
                 if ($entry != "." && $entry != "..") {
                     $list[] = $entry;
@@ -73,7 +73,7 @@ class Modelfont extends Model
 
     public function write(string $fontface)
     {
-        $write = file_put_contents(Model::GLOBAL_DIR . 'fonts.css', $fontface);
+        $write = file_put_contents(Model::ASSETS_CSS_DIR . 'fonts.css', $fontface);
         if ($write !== false) {
         }
     }
@@ -81,7 +81,7 @@ class Modelfont extends Model
     public function upload(array $file, $maxsize = 2 ** 24, $id = null)
     {
         $message = 'runing';
-        if (isset($file) and $file['font']['error'] == 0 and $file['font']['size'] < $maxsize) {
+        if ($file['font']['error'] == 0 && $file['font']['size'] < $maxsize) {
             $infosfichier = pathinfo($file['font']['name']);
             $extension_upload = $infosfichier['extension'];
             $extensions_autorisees = $this::FONT_TYPES;

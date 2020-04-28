@@ -37,9 +37,9 @@ class Controlleruser extends Controller
         if ($this->user->iseditor()) {
             $user = $this->usermanager->get($this->user);
             try {
-                $user->hydrate($_POST, true);
+                $user->hydrateexception($_POST);
             } catch (\Throwable $th) {
-                Model::sendflashmessage('There was a problem when updating preferences : ' . $th->getMessage(), 'error');
+                Model::sendflashmessage('There was a problem when updating preference : ' . $th->getMessage(), 'error');
             }
             if ($_POST['passwordhash']) {
                 $user->hashpassword();

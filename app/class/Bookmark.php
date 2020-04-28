@@ -74,12 +74,11 @@ class Bookmark extends Item
     public function setid($id): bool
     {
         if (is_string($id)) {
-            try {
-                $this->id = idclean($id, Model::MAX_ID_LENGTH, 1);
-            } catch (\Throwable $th) {
-                return false;
+            $id = idclean($id);
+            if (!empty($id)) {
+                $this->id = $id;
+                return true;
             }
-            return true;
         }
         return false;
     }
