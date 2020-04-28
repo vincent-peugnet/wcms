@@ -1,18 +1,11 @@
-import { checkallHandler, closeSubmenus, activateSelectAll } from './fn/fn';
+import {
+    activateCheckall,
+    activateCloseSubmenus,
+    activateSelectAll,
+} from './fn/fn';
 
 window.addEventListener('load', () => {
-    let checkboxes = document.getElementsByName('pagesid[]');
-    let checkall = document.getElementById('checkall');
-    if (!checkall) {
-        return;
-    }
-    let checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.addEventListener('input', checkallHandler.bind({ checkboxes }));
-    checkall.innerHTML = '';
-    checkall.appendChild(checkbox);
-
+    activateCheckall('pagesid[]', 'checkall');
     activateSelectAll();
+    activateCloseSubmenus();
 });
-
-window.addEventListener('click', closeSubmenus);
