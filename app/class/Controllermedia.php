@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use Exception;
+use InvalidArgumentException;
 use LogicException;
 
 class Controllermedia extends Controller
@@ -116,6 +117,33 @@ class Controllermedia extends Controller
                 $this->mediamanager->multimovefile($_POST['id'], $_POST['dir']);
             }
         }
-        $this->redirect($this->generate('media') . '?path=/' . $_POST['path']);
+        $this->redirect($this->generate('media') . $_POST['route']);
+    }
+
+    public function rename()
+    {
+        if (
+            $this->user->issupereditor()
+            && isset($_POST['oldid'])
+            && isset($_POST['newid'])
+            && isset($_POST['oldextension'])
+            && isset($_POST['newextension'])
+            && isset($_POST['path'])
+        ) {
+            $newid = idclean($_POST['newid']);
+            $newextension = idclean($_POST['newextension']);
+            if (!empty($newid) && !empty($newextension)) {
+                $oldname = $_POST['path'] . $_POST['oldid'] . '.' . $_POST['oldextension'];
+                $newname = $_POST['path'] . $newid . '.' . $newextension;
+                try {
+                    $this->mediamanager->rename($oldname, $newname);
+                } catch (InvalidArgumentException $e) {
+                    Model::sendflashmessage($e->getMessage(), 'error');
+                }
+            } else {
+                Model::sendflashmessage('Invalid name or extension', 'warning');
+            }
+        }
+        $this->redirect($this->generate('media') . $_POST['route']);
     }
 }

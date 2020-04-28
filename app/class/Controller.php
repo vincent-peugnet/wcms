@@ -111,6 +111,7 @@ class Controller
     public function redirect($url)
     {
         header('Location: ' . $url);
+        exit;
     }
 
     public function routedirect(string $route, array $vars = [])

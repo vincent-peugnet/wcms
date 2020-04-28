@@ -95,7 +95,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
                 <input type="checkbox" name="id[]" value="<?= $media->getfulldir() ?>" form="mediaedit" id="media_<?= $media->id() ?>">
                 <label for="media_<?= $media->id() ?>"><?= $media->id() ?></label>
                 <a href="<?= $media->getfullpath() ?>" target="_blank">⧉</a>
-                <code><?= $media->getcode() ?></code>
+                <input readonly class="code select-all" value="<?= $media->getcode() ?>" />
             </div>
                 
         </li>
@@ -130,7 +130,22 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
             ?>
             <tr>
             <td><input type="checkbox" name="id[]" value="<?= $media->getfulldir() ?>" form="mediaedit" id="media_<?= $media->id() ?>"></td>
-            <td><label for="media_<?= $media->id() ?>"><?= $media->id() ?></label></td>    
+            <td>
+                <details>
+                    <summary>
+                        <label for="newid"><?= $media->id() ?></label>
+                    </summary>
+                    <form action="<?= $this->url('mediarename') ?>" method="post">
+                        <input type="hidden" name="route" value="<?= $mediaopt->getadress() ?>">
+                        <input type="hidden" name="path" value="<?= $media->path() ?>">
+                        <input type="hidden" name="oldid" value="<?= $media->id() ?>">
+                        <input type="hidden" name="oldextension" value="<?= $media->extension() ?>">
+                        <input type="text" name="newid" value="<?= $media->id() ?>" id="newid" maxlength="<?= Wcms\Model::MAX_ID_LENGTH ?>">
+                        <input type="text" name="newextension" value="<?= $media->extension() ?>" id="" style="width: 30px" maxlength="16">
+                        <input type="submit" value="rename">
+                    </form>
+                </details>
+            </td>    
             <td><?= $media->extension() ?></td>
             <td class="nowrap"><a href="<?= $media->getfullpath() ?>" target="_blank"><?= $media->type() == 'image' ? '<span class="thumbnail">' . $media->getsymbol() . '<img src="' . $media->getfullpath() . '"></span>' : $media->getsymbol() ?></a></td>
             <td class="nowrap"><?= $media->size('hr') ?></td>

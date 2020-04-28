@@ -97,14 +97,14 @@ class Media extends Item
                 break;
                 
             case 'sound':
-                    $code = '&lt;audio controls src="' . $this->getincludepath() . '"&gt;&lt;/audio&gt;';
+                    $code = '&lt;audio controls src=&quot;' . $this->getincludepath() . '&quot;&gt;&lt;/audio&gt;';
                 break;
                 
             case 'video':
                 $src = $this->getincludepath();
                 $ext = $this->extension;
-                $code = '&lt;video controls=""&gt;';
-                $code .= '&lt;source src="' . $src . '" type="video/' . $ext . '"&gt;&lt;/video&gt;';
+                $code = '&lt;video controls=&quot;&quot;&gt;';
+                $code .= '&lt;source src=&quot;' . $src . '&quot; type="video/' . $ext . '&quot;&gt;&lt;/video&gt;';
                 break;
 
             default:

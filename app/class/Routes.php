@@ -35,6 +35,7 @@ class Routes
             ['POST', '/!media/folderadd', 'Controllermedia#folderadd', 'mediafolderadd'],
             ['POST', '/!media/folderdelete', 'Controllermedia#folderdelete', 'mediafolderdelete'],
             ['POST', '/!media/edit', 'Controllermedia#edit', 'mediaedit'],
+            ['POST', '/!media/rename', 'Controllermedia#rename', 'mediarename'],
             ['GET', '/!font', 'Controllerfont#desktop', 'font'],
             ['GET', '/!font/render', 'Controllerfont#render', 'fontrender'],
             ['POST', '/!font/add', 'Controllerfont#add', 'fontadd'],

@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use Exception;
+use InvalidArgumentException;
 use phpDocumentor\Reflection\Types\Mixed_;
 
 class Modelmedia extends Model
@@ -363,5 +365,20 @@ class Modelmedia extends Model
             Model::sendflashmessage($count . ' / ' . $total . ' files have been moved', 'success');
             return true;
         }
+    }
+
+    /**
+     * @param string $oldname
+     * @param string $newname
+     * @throws InvalidArgumentException if cant access file
+     */
+    public function rename(string $oldname, string $newname)
+    {
+        try {
+            accessfile($oldname);
+        } catch (InvalidArgumentException $e) {
+            throw new InvalidArgumentException($e->getMessage());
+        }
+        return rename($oldname, $newname);
     }
 }

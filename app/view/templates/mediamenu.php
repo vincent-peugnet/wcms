@@ -39,6 +39,7 @@
             
             <h2>Move</h2>
             <form action="<?= $this->url('mediaedit') ?>" method="post" id="mediaedit">
+                <input type="hidden" name="route" value="<?= $mediaopt->getadress() ?>">
                 <input type="hidden" name="path" value="<?= $mediaopt->dir() ?>">
                 <label for="moveto">Move selected medias to a new directory</label>
                 </br>

@@ -96,7 +96,7 @@ aside .submenu {
     font-size: medium;
 }
 
-aside details > summary::-webkit-details-marker {
+details > summary::-webkit-details-marker {
     display: none;
 }
 
