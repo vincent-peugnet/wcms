@@ -179,7 +179,7 @@ Then, to make the release, run the following command:
 To only build the release zip, simply run `make dist`. This will create a zip file in `dist/` of the current version.
 
 [github]: https://github.com/vincent-peugnet/wcms/workflows/checks/badge.svg
-[action]: https://github.com/vincent-peugnet/wcms/actions
+[action]: https://github.com/vincent-peugnet/wcms/actions?query=branch%3Amaster+workflow%3Achecks
 [codestyle]: https://img.shields.io/badge/code%20style-PSR12-brightgreen
 [phpstan]: https://img.shields.io/badge/phpstan-level%205-green
 [coverage]: https://coveralls.io/repos/github/vincent-peugnet/wcms/badge.svg?branch=master

@@ -38,5 +38,6 @@ try {
         Sentry\captureException($e);
     }
     Logger::errorex($e, true);
+    http_response_code(500);
     echo '<h1>⚠ Woops ! There is a little problem : </h1>', $e->getMessage(), "\n";
 }

@@ -158,6 +158,7 @@ class Controllerpage extends Controller
                 echo 'Please render this page';
             }
         } else {
+            http_response_code(404);
             $this->showtemplate(
                 'alert',
                 ['page' => $this->page, 'pageexist' => $pageexist, 'canedit' => $this->canedit()]
