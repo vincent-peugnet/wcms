@@ -308,7 +308,6 @@ class Modelpage extends Modeldb
     /**
      * @param array $pagelist List of Page
      * @param int $secure secure level
-     * @param string $authorcompare, can be 'OR' or 'AND', set the author filter method
      *
      * @return array $array of `string` page id
      */

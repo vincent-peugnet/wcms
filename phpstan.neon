@@ -9,6 +9,9 @@ parameters:
         - app/fn
         - index.php
         - tests
+    excludes_analyse:
+        - app/view/*
+        - vendor/*
     exceptionRules:
         ignoreDescriptiveUncheckedExceptions: true
         # ignore some exceptions and their chlidrens
