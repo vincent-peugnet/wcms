@@ -73,7 +73,7 @@
 
 
             <p>Use this code to print the content of the actual folder in a page</p>
-            <code><?= $mediaopt->getcode() ?></code>
+            <input readonly class="code select-all" value="<?= $mediaopt->getcode() ?>" />
         </div>
     </details>
 

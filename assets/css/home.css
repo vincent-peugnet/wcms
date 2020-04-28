@@ -125,7 +125,7 @@ div#deepsearchbar {
 
 
 
-aside .submenu code, main.user li code {
+aside .submenu input.code, main.user li code {
     overflow: auto;
     display: block;
     white-space: nowrap;
@@ -479,9 +479,10 @@ main.media table#medialist .thumbnail:hover img {
 
 
 
-main.media code {
+main.media code, input.code {
     color: #9cbfe8;
     background-color: darkslategrey;
+    font-family: monospace;
     font-size: small;
     padding: 1px;
 }
@@ -492,11 +493,9 @@ nav.media span#currentdir {
 
 
 
-td.code {
-    background-color: darkslategrey;
-    max-width: 250px;
-    white-space: nowrap;
-    overflow: hidden;
+input.code {
+    width: 100%;
+    border: none;
 }
 
 
@@ -599,7 +598,7 @@ main.timeline li.event {
 main section {
     display: flex;
     flex-direction: column;
-    max-width: calc(100% - 160px);
+    overflow: hidden;
 }
 
 main nav {

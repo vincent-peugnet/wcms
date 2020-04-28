@@ -28,3 +28,24 @@ export function closeSubmenus(e) {
         }
     }
 }
+
+/**
+ * Select the whole content of the clicked item.
+ * @param {MouseEvent} e
+ */
+function selectAll(e) {
+    if (e.target instanceof HTMLInputElement) {
+        e.target.select();
+        e.target.focus();
+    }
+}
+
+/**
+ * Activate "select all" feature for `input.select-all` elements.
+ */
+export function activateSelectAll() {
+    let selectAllInputs = document.querySelectorAll('input.select-all');
+    for (const selectAllInput of selectAllInputs) {
+        selectAllInput.addEventListener('click', selectAll);
+    }
+}

@@ -235,7 +235,7 @@
             <input type="submit" value="generate">
         </form>
         <?php if(!empty($optlist)) { ?>
-            <code><?= $optlist->getcode() ?></code>
+            <input readonly class="code select-all" value="<?= $optlist->getcode() ?>" />
         <?php } ?>
         </div>
         </details>

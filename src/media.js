@@ -1,4 +1,4 @@
-import { checkallHandler, closeSubmenus } from './fn/fn';
+import { checkallHandler, closeSubmenus, activateSelectAll } from './fn/fn';
 
 window.addEventListener('load', () => {
     let checkboxes = document.getElementsByName('id[]');
@@ -8,6 +8,8 @@ window.addEventListener('load', () => {
     checkbox.addEventListener('input', checkallHandler.bind({ checkboxes }));
     checkall.innerHTML = '';
     checkall.appendChild(checkbox);
+
+    activateSelectAll();
 });
 
 window.addEventListener('click', closeSubmenus);

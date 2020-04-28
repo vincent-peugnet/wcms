@@ -98,7 +98,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
             <td><?= $media->uid('name') ?></td>
             <td><code><?= $media->permissions() ?></code></td>
             <td><?= $media->surface() ?></td>
-            <td class="code"><code><?= $media->getcode() ?></code></td>
+            <td><input readonly class="code select-all" value="<?= $media->getcode() ?>" /></td>
             </tr>
             <?php
         }
