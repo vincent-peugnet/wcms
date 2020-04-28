@@ -26,7 +26,7 @@ class Bookmark extends Item
      */
     public function __construct(array $datas = [])
     {
-        $this->hydrate($datas, true);
+        $this->hydrateexception($datas);
     }
 
     public function init(string $id, string $route, string $query, array $params = [], string $icon = '⭐')

@@ -8,7 +8,7 @@ use DateTimeImmutable;
 abstract class Dbitem extends Item
 {
 
-    public function dry()
+    public function dry(): array
     {
         $array = [];
         foreach (get_object_vars($this) as $var => $value) {

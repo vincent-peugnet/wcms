@@ -47,16 +47,17 @@ class Controllermedia extends Controller
                 $pathlist = [];
                 $this->mediamanager->listpath($dirlist, '', $pathlist);
 
+                if (isset($_GET['display'])) {
+                    $this->session->addtosession('mediadisplay', $_GET['display']);
+                }
+
+                $vars['display'] = $this->session->mediadisplay;
+                $vars['medialist'] = $medialist;
+                $vars['dirlist'] = $dirlist;
+                $vars['pathlist'] = $pathlist;
+                $vars['mediaopt'] = $mediaopt;
     
-                $this->showtemplate(
-                    'media',
-                    [
-                        'medialist' => $medialist,
-                        'dirlist' => $dirlist,
-                        'pathlist' => $pathlist,
-                        'mediaopt' => $mediaopt
-                    ]
-                );
+                $this->showtemplate('media', $vars);
             } else {
                 $this->routedirect('media');
             }

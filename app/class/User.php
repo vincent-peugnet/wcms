@@ -7,7 +7,7 @@ use DateTimeZone;
 
 class User extends Item
 {
-    protected $id;
+    protected $id = '';
     protected $level = 0;
     protected $signature = '';
     protected $password;

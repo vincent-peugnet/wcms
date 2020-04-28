@@ -7,9 +7,13 @@ use DateTimeImmutable;
 use Exception;
 use InvalidArgumentException;
 use League\Plates\Engine;
+use Throwable;
 
 class Controller
 {
+    /** @var Session */
+    protected $session;
+
     /** @var User */
     protected $user;
 
@@ -29,6 +33,9 @@ class Controller
 
     public function __construct($router)
     {
+        $this->session = new Session($_SESSION['user' . Config::basepath()] ?? []);
+        $this->usermanager = new Modeluser();
+
         $this->setuser();
         $this->router = $router;
         $this->pagemanager = new Modelpage();
@@ -38,8 +45,17 @@ class Controller
 
     public function setuser()
     {
-        $this->usermanager = new Modeluser();
-        $this->user = $this->usermanager->readsession();
+        if (empty($this->session->user)) {
+            $this->user = new User();
+        } else {
+            if (!$this->user = $this->usermanager->get($this->session->user)) {
+                if (!$this->user = $this->usermanager->readcookie()) {
+                    $this->user = new User();
+                } else {
+                    $this->session->addtosession('user', $this->user->id());
+                }
+            }
+        }
     }
 
     public function initplates()

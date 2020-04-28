@@ -476,6 +476,45 @@ main.media table#medialist .thumbnail:hover img {
     display: block;
 }
 
+.media ul#gallery {
+    overflow: hidden;
+    display: inline-block;
+}
+
+#gallery li .thumbnail{
+    font-size: 8em;
+    text-align: center;
+    width: 200px;
+    height: 150px;
+}
+
+#gallery li .thumbnail img {max-width: 100%;max-height: 100%;}
+
+
+#gallery li code {
+    white-space: nowrap;
+    display: block;
+    overflow: auto;
+}
+
+#gallery li {
+    display: inline-block;
+    width: 200px;
+    overflow: hidden;
+    height: 200px;
+    margin: 0;
+    padding: 0;
+    border: solid 1px grey;
+    background-color: darkgrey;
+}
+
+
+
+#gallery li .thumbnail img {
+    width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
 
 
 
@@ -677,5 +716,7 @@ footer {
     top: -200px;
   }
 }
+
+
 
 

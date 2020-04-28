@@ -67,9 +67,49 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
 <section>
     <div class="block">
 
-    <h2>/<?= $mediaopt->dir() ?></h2>
+    <h2>
+        /<?= $mediaopt->dir() ?>
+        <span class="right"><a href="?display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> >list</a> / <a href="?display=gallery"  <?= $display === 'gallery' ? 'style="color: white"' : '' ?>  >gallery</a></span>
+    </h2>
 
     <div class="scroll">
+
+
+    <?php if($display === 'gallery') { ?>
+
+
+    <!-- ___________________ GALLERY _________________________ -->
+
+
+    <ul id="gallery">
+        <?php foreach ($medialist as $media) { ?>
+
+        <li title="<?= $media->size('hr') ?> | <?= $media->uid('name') ?> | <?= $media->permissions() ?>
+        ">
+            <div class="thumbnail">
+            <label for="media_<?= $media->id() ?>">
+                <?= $media->type() == 'image' ? '<img src="' . $media->getfullpath() . '">' : $media->getsymbol() ?>
+            </label>
+            </div>
+            
+            <div class="meta">
+                <input type="checkbox" name="id[]" value="<?= $media->getfulldir() ?>" form="mediaedit" id="media_<?= $media->id() ?>">
+                <label for="media_<?= $media->id() ?>"><?= $media->id() ?></label>
+                <code><?= $media->getcode() ?></code>
+            </div>
+                
+        </li>
+        
+        <?php } ?>
+    </ul>
+
+
+    <?php } else { ?>
+
+
+
+    <!-- ___________________ L I S T _________________________ -->
+
 
         <table id="medialist">
         <tr>
@@ -103,6 +143,8 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
             <?php
         }
         ?>
+
+    <?php } ?>
 
     </div>
 

@@ -14,11 +14,39 @@ abstract class Item
     /**
      * Hydrate Object with corresponding `set__VAR__`
      * @param array|object $datas associative array using key as var name or object
-     * @param bool $sendexception throw exception if error setting variable
      * @return bool true if no error, otherwise false
+     */
+    public function hydrate($datas = []): bool
+    {
+        $errors = $this->hydratejob($datas);
+        if (in_array(false, $errors)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Hydrate Object with corresponding `set__VAR__`
+     * @param array|object $datas associative array using key as var name or object
      * @throws RuntimeException listing var settings errors
      */
-    public function hydrate($datas = [], bool $sendexception = false): bool
+    public function hydrateexception($datas = [])
+    {
+        $errors = $this->hydratejob($datas);
+        if (!empty($errors)) {
+            $errors = implode(', ', $errors);
+            $class = get_class($this);
+            throw new RuntimeException("objects vars : $errors can't be set in $class object");
+        }
+    }
+
+    /**
+     * Concrete action of hydrate
+     * @param mixed $datas
+     * @return array associative array where key are methods and value is bool
+     */
+    public function hydratejob($datas = []): array
     {
         $seterrors = [];
         if (is_array($datas) || is_object($datas)) {
@@ -31,26 +59,23 @@ abstract class Item
                 }
             }
         }
-        if (!empty($seterrors)) {
-            if ($sendexception) {
-                $errors = implode(', ', $seterrors);
-                $class = get_class($this);
-                throw new RuntimeException("objects vars : $errors can't be set in $class object");
-            }
-            return false;
-        } else {
-            return true;
-        }
+        return $seterrors;
     }
 
-    public function dry()
+    /**
+     * Export whole object
+     * @return array Associative array
+     */
+    public function dry(): array
     {
         $array = [];
         $array = $this->obj2array($this, $array);
         return $array;
     }
 
-
+    /**
+     * Reccursive transform obj vars to array
+     */
     public function obj2array($obj, &$arr)
     {
         if (!is_object($obj) && !is_array($obj)) {
@@ -66,24 +91,6 @@ abstract class Item
             }
         }
         return $arr;
-    }
-
-    public function dryold()
-    {
-        $array = [];
-        foreach (get_object_vars($this) as $var => $value) {
-            if (is_object($value) && is_subclass_of($value, get_class($this))) {
-                $array[$var] = $value->dry();
-            } else {
-                if (method_exists($this, $var)) {
-                    $array[$var] = $this->$var();
-                } else {
-                    $array[$var] = $value;
-                }
-            }
-        }
-        return get_object_vars($this);
-        // return $array;
     }
 
 

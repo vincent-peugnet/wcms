@@ -46,9 +46,7 @@ class Controllerconnect extends Controller
                 ) {
                     $this->user->connectcounter();
                     $this->usermanager->add($this->user);
-                    $this->usermanager->writesession($this->user);
-                    $_SESSION['workspace']['showleftpanel'] = true;
-                    $_SESSION['workspace']['showrightpanel'] = false;
+                    $this->session->addtosession('user', $this->user->id());
 
                     if ($_POST['rememberme'] && $this->user->cookie() > 0) {
                         $token = $this->createauthtoken();
@@ -69,7 +67,7 @@ class Controllerconnect extends Controller
     public function logout($route, $id = null)
     {
         $this->user = $this->usermanager->logout();
-        $this->usermanager->writesession($this->user);
+        $this->session->addtosession('user', '');
         if (!empty($_SESSION['user' . Config::basepath()]['authtoken'])) {
             $this->destroyauthtoken($_SESSION['user' . Config::basepath()]['authtoken']);
         }

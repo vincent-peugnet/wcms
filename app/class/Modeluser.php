@@ -33,19 +33,9 @@ class Modeluser extends Modeldb
         $_SESSION['user' . Config::basepath()]['columns'] = $user->columns();
     }
 
-    public function readsession()
+
+    public function readcookie()
     {
-        $userdatas = [];
-        if (
-            array_key_exists('user' . Config::basepath(), $_SESSION)
-            && isset($_SESSION['user' . Config::basepath()]['id'])
-        ) {
-            $userdatas = $_SESSION['user' . Config::basepath()];
-            $user = new User($userdatas);
-            $user = $this->get($user);
-            return $user;
-        }
-        
         if (isset($_COOKIE['authtoken']) && strpos($_COOKIE['authtoken'], ':')) {
             list($cookietoken, $cookiemac) = explode(':', $_COOKIE['authtoken']);
             $authtokenmanager = new Modelauthtoken();
@@ -54,15 +44,11 @@ class Modeluser extends Modeldb
             if ($dbtoken !== false) {
                 if (hash_equals($cookiemac, secrethash($dbtoken->getId()))) {
                     $user = $this->get($dbtoken->user);
-                    if ($user !== false) {
-                        $this->writesession($user);
-                    }
                     return $user;
                 }
             }
         }
-
-        return new User(['id' => '', 'level' => 0]);
+        return false;
     }
 
 
