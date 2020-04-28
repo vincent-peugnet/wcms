@@ -225,15 +225,7 @@ class Page extends Dbitem
     public function secure($type = 'int')
     {
         if ($type == 'string') {
-            if ($this->secure == 0) {
-                $secure = 'public';
-            }
-            if ($this->secure == 1) {
-                $secure = 'private';
-            }
-            if ($this->secure == 2) {
-                $secure = 'not_published';
-            }
+            return Model::SECURE_LEVELS[$this->secure];
         } else {
             return $this->secure;
         }
