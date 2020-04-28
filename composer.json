@@ -9,6 +9,7 @@
         "michelf/php-markdown": "^1.8"
     },
     "require-dev": {
+        "filp/whoops": "^2.7",
         "pepakriz/phpstan-exception-rules": "^0.10.1",
         "phpstan/phpstan": "^0.12.19",
         "phpstan/phpstan-phpunit": "^0.12.8",

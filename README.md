@@ -58,10 +58,10 @@ There is lot more you can by altering the `BODY`.
 
 
 
-Devellopement team
+Development team
 ------------------
 
-W is a project created and maintained by [Vincent Peugnet](https://github.com/vincent-peugnet), an amateur computer science enthousiast who can only code in PHP. It now includes [Nicolas Peugnet](https://github.com/n-peugnet) (his brother) as JS develloper, technical advisor and every challenges that are too complicated for Vincent.
+W is a project created and maintained by [Vincent Peugnet](https://github.com/vincent-peugnet), an amateur computer science enthousiast who can only code in PHP. It now includes [Nicolas Peugnet](https://github.com/n-peugnet) (his brother) as JS developer, technical advisor and every challenges that are too complicated for Vincent.
 We can also mention [Guilhem Prévost Leygonie]() as legendary number one user and now as an issue writer too.
 
 
@@ -133,10 +133,15 @@ There are 3 different build environments that `make` can use:
 
 The build environment can be set either for each `make` command by changing it in the `.env` file or on a per command basis by adding it at the end of the command (e.g. `make build ENV=prod`).
 
+PHP development
+---------------
+
+There is an error reporting debug mode using [Whoops](https://github.com/filp/whoops). It can be enabled by setting the value of `debug` in `config.json` to one of [editors supported by Whoops](https://github.com/filp/whoops/blob/master/docs/Open%20Files%20In%20An%20Editor.md).
+
 JS development
 --------------
 
-While developing the JS sources it is useful to run webpack in watch mode so that the bundles get built at each file change. To do so, use the following command:
+While developing JS code it is useful to run webpack in watch mode so that the bundles get built at each file change. To do so, use the following command:
 
     make watch
 

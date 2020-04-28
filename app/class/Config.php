@@ -2,8 +2,6 @@
 
 namespace Wcms;
 
-use Http\Client\Common\Plugin\RetryPlugin;
-
 abstract class Config
 {
     protected static $pagetable = 'mystore';
@@ -35,6 +33,8 @@ abstract class Config
     protected static $bookmark = [];
     protected static $secretkey = null;
     protected static $sentrydsn = '';
+    /** @var string|false $debug */
+    protected static $debug = false;
 
     public const SECRET_KEY_MIN = 16;
     public const SECRET_KEY_MAX = 128;
@@ -271,6 +271,11 @@ abstract class Config
         return self::$sentrydsn;
     }
 
+    public static function debug()
+    {
+        return self::$debug;
+    }
+
 
     // __________________________________________ S E T ______________________________________
 
@@ -466,6 +471,13 @@ abstract class Config
     {
         if (is_string($sentrydsn)) {
             self::$sentrydsn = $sentrydsn;
+        }
+    }
+
+    public static function setdebug($debug)
+    {
+        if (is_string($debug)) {
+            self::$debug = $debug;
         }
     }
 
