@@ -4,6 +4,7 @@ namespace Wcms;
 
 use DateTimeImmutable;
 use DateTimeZone;
+use RuntimeException;
 
 class User extends Item
 {
@@ -203,7 +204,7 @@ class User extends Item
                 function ($datas) {
                     try {
                         return new Bookmark($datas);
-                    } catch (\Throwable $th) {
+                    } catch (RuntimeException $e) {
                         return false;
                     }
                 },
