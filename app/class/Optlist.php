@@ -30,8 +30,13 @@ class Optlist extends Opt
         return '%LIST?' . $this->getquery() . '%';
     }
 
-
-    public function listhtml(array $pagelist, Page $actualpage, Modelrender $render)
+    /**
+     * @param Page[] $pagelist
+     * @param Page $currentpage
+     * @param Modelrender $render
+     * @retrun string HTML formated string
+     */
+    public function listhtml(array $pagelist, Page $currentpage, Modelrender $render): string
     {
         $this->render = $render;
 
@@ -40,7 +45,7 @@ class Optlist extends Opt
         foreach ($pagelist as $page) {
             // ================= Class =============
             $classdata = [];
-            if ($page->id() === $actualpage->id()) {
+            if ($page->id() === $currentpage->id()) {
                 $classdata['actual'] = 'current_page';
             }
             $classdata['secure'] = $page->secure('string');
@@ -56,16 +61,24 @@ class Optlist extends Opt
                 $content .= '<span class="description">' . $page->description() . '</span>';
             }
             if ($this->date()) {
-                $content .= '<time datetime="' . $page->date('pdate') . '">' . $page->date('pdate') . '</time>\n';
+                $date = $page->date('pdate');
+                $content .= "<time datetime=\"$date\">$date</time>\n";
             }
             if ($this->time()) {
-                $content .= '<time datetime="' . $page->date('ptime') . '">' . $page->date('ptime') . '</time>\n';
+                $time = $page->date('ptime');
+                $content .= "<time datetime=\"$time\">$time</time>\n";
             }
             if ($this->author()) {
                 $content .=  $page->authors('string') . PHP_EOL;
             }
             if ($this->thumbnail) {
-                $src = Model::thumbnailpath() . $page->thumbnail();
+                if (!empty($page->thumbnail())) {
+                    $src = Model::thumbnailpath() . $page->thumbnail();
+                } elseif (!empty(Config::defaultthumbnail())) {
+                    $src = Model::thumbnailpath() . Config::defaultthumbnail();
+                } else {
+                    $src = "";
+                }
                 $content .= '<img class="thumbnail" src="' . $src . '" alt="' . $page->title() . '">';
             }
 
@@ -89,17 +102,17 @@ class Optlist extends Opt
 
     public function ul(string $content)
     {
-        return '<ul class="pagelist">' . PHP_EOL . $content . PHP_EOL . '</ul>';
+        return '<ul class="pagelist">' . PHP_EOL . $content . PHP_EOL . '</ul>' . PHP_EOL;
     }
 
     public function li(string $content, string $id)
     {
-        return '<li id="' . $id . '">' . PHP_EOL . $content . PHP_EOL . '</li>\n';
+        return '<li id="' . $id . '">' . PHP_EOL . $content . PHP_EOL . '</li>' . PHP_EOL;
     }
 
     public function a(string $content, string $class, string $id)
     {
-        return '<a ' . $class . ' href="' . $this->render->upage($id) . '">' . $content . '</a>\n';
+        return '<a ' . $class . ' href="' . $this->render->upage($id) . '">' . $content . '</a>';
     }
 
     public function spandescription(Page $page)
