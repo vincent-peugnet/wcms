@@ -202,9 +202,13 @@ class User extends Item
         if (is_array($bookmark)) {
             $bookmark = array_map(
                 function ($datas) {
-                    try {
-                        return new Bookmark($datas);
-                    } catch (RuntimeException $e) {
+                    if (is_array($datas)) {
+                        try {
+                            return new Bookmark($datas);
+                        } catch (RuntimeException $e) {
+                            return false;
+                        }
+                    } else {
                         return false;
                     }
                 },

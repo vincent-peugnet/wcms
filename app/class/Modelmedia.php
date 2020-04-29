@@ -376,8 +376,12 @@ class Modelmedia extends Model
     {
         try {
             accessfile($oldname);
+            accessfile($newname);
         } catch (InvalidArgumentException $e) {
             throw new InvalidArgumentException($e->getMessage());
+        }
+        if (!file_exists($oldname)) {
+            throw new InvalidArgumentException("File : $oldname does not exist");
         }
         return rename($oldname, $newname);
     }

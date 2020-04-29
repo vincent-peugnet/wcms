@@ -425,9 +425,6 @@ function accessfile(string $path, bool $createdir = false): bool
         if (!is_writable($dir)) {
             throw new \InvalidArgumentException("Directory '$dir' is not writable.");
         }
-        if (!file_exists($path)) {
-            throw new \InvalidArgumentException("The file '$path' does not exist.");
-        }
         if (is_file($path) && !is_writable($path)) {
             throw new \InvalidArgumentException("The file '$path' is not writable.");
         }

@@ -140,8 +140,8 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
                         <input type="hidden" name="path" value="<?= $media->path() ?>">
                         <input type="hidden" name="oldid" value="<?= $media->id() ?>">
                         <input type="hidden" name="oldextension" value="<?= $media->extension() ?>">
-                        <input type="text" name="newid" value="<?= $media->id() ?>" id="newid" maxlength="<?= Wcms\Model::MAX_ID_LENGTH ?>">
-                        <input type="text" name="newextension" value="<?= $media->extension() ?>" id="" style="width: 30px" maxlength="16">
+                        <input type="text" name="newid" value="<?= $media->id() ?>" id="newid" maxlength="<?= Wcms\Model::MAX_ID_LENGTH ?>" minlength="1" required>
+                        <input type="text" name="newextension" value="<?= $media->extension() ?>" id="" style="width: 30px" maxlength="16" minlength="1" required>
                         <input type="submit" value="rename">
                     </form>
                 </details>
