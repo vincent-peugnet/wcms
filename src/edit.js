@@ -93,7 +93,7 @@ let editors = [];
 let unsavedChanges = false;
 
 /** @type {InputEvent} */
-const inputEvent = new InputEvent('input');
+const inputEvent = new Event('input');
 
 window.addEventListener('load', () => {
     form = document.getElementById('update');
