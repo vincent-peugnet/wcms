@@ -388,4 +388,10 @@ class LoggerTest extends FilesTest
             [4, new Exception('Test 4'), 'Test 4', 0],
         ];
     }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        Logger::close();
+    }
 }

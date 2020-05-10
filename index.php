@@ -50,3 +50,4 @@ try {
     }
     echo '<h1>⚠ Whoops ! There is a little problem : </h1>', $e->getMessage(), "\n";
 }
+Wcms\Logger::close();
