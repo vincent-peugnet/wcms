@@ -7,7 +7,10 @@ js_src_dir := src
 
 # Misc variables.
 PATH                    := vendor/bin:node_modules/.bin:$(PATH)
-SHELL                   := PATH=$(PATH) /bin/bash
+
+ifneq ($(OS),Windows_NT) # Not for Windows
+	SHELL               := PATH=$(PATH) /bin/bash
+endif
 override GIT_VERSION    := $(shell git --no-pager describe --always --tags)
 override CUR_VERSION    := $(strip $(shell cat VERSION 2>/dev/null))
 override WEBPACK_FLAGS  += $(if $(filter $(ENV),dist),-p)
