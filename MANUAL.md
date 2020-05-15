@@ -26,7 +26,7 @@ This 4 steps tutorial will introduce you to the basic __W__ moves.
 
 The first thing you have to do before creating a page is to **choose an address** for this page. Each page have a unique address that identify it, it is the [**page id**](#page-id). You can use the address bar of your web browser to directly access, [edit](#edit) or [delete](#delete) a page.
 
-You can type anything in your address bar. If it is an already exisiting page_id, you will access a page. Otherwise, you will arrive to an empty space waiting to be filled.
+You can type anything in your address bar (after your W installation root). If it is an already exisiting page_id, you will access a page. Otherwise, you will arrive to an empty space waiting to be filled.
 
 Once you've typed an address and found nothing, if you are connected, you now have the opportunity to create a page at this address.
 
@@ -69,7 +69,7 @@ One of the most interesting things to do when you use internet publishing, is to
 
 All those methods will create a link pointing to the `<page_id>` you've given.
 
-Those kind of links are called internal links beccause they stay inside of your domain. To set a link outside of your website, simply remplace `<page_id>` by
+Those kind of links are called internal links beccause they stay inside of your domain. To set a link outside of your website, simply remplace `<page_id>` by the website adress you whant to target (ex : `https://w-cms.top`), but this won't work with the third method as it is'nt a W page.
 
 
 #### Insert images
@@ -114,7 +114,7 @@ In the home menu [super editors and above](#super-editor) can :
 - __File :__ Import pages as JSON file. (usefull for transfering pages from a W instance to another).
 - __Edit :__ Apply changes, render, or delete multiple pages at once.
 - __Filters :__ Use your [filtering options](#options) to generate a [automatic menu](#page-list) you can later include in a page.
-- __Bookmarks :__ Save your [filtering options](#options) presets here. Common and personnal storages are possible.
+- __Bookmarks :__ Create some [bookmarks](#bookmarks) to save your [filtering options](#options) as presets.
 - __Display :__ Set columns to be shown (user based) and tag colors.
 
 
@@ -134,13 +134,22 @@ Just select the options you want and press "Fitler". Use the "Reset" button to c
 
 This panel is also usefull to set up a [page list](#page-list) to include the same list of page you've filtered in any page.
 
-##### Pages
+##### list view
 
 The table is composed of [meta](#meta-infos) datas and actions links that are :
 
 __EDIT__, __READ__, __DELETE__ and __DOWNLOAD__, they are equivalent to [pages commands](#pages-commands). Don't hesitate to open edit or read links in a new tab, to keep the Home view open.
 
 To edit columns you want to see, use the [menu](#home-menu)>Display submenu.
+
+##### map view
+
+The map give you an overview of your website, showing you links between pages.
+
+By default orphans pages are hidden, but you can ajust settings to fit your needs.
+
+- left click on a page to read it
+- right click to edit it
 
 #### Edition
 
@@ -177,13 +186,38 @@ When you need to use images, sound or videos in your pages, or any other type of
 
 ##### Media menu
 
-The media menu allow you to do more powerfull function like moving medias or delete folders.
+The media menu allow you to do more powerfull function like moving medias or delete folders it is only accessible by [super editors](#super-editor) and above.
+
+- __file :__ to import new files, create or delete directories
+- __edit :__ to edit selected items
+- __filter :__ to export filter settings as [medialist](#media-list)
+- __Bookmarks :__ Create some [bookmarks](#bookmarks) to save your [filtering options](#media-filters) as presets.
+
+
+##### Explorer
+
+The explorer allow you to navigate between differents directories. It will show you the amount of files in every folder.
+
+##### Media Filters
+
+By ajusting filters, you can 
 
 #### Admin
 
 #### User manager
 
+#### Bookmarks
 
+Bookmarks can be created as shortcuts to quickly jump to a specified view.
+
+There are two kinds of bookmarks :
+
+- Home bookmarks
+- Media bookmars
+
+Each one is doing the same thing : saving a specific filter setting and allow you to access it in one click.
+
+After ajusting [home options](#options), or [media filters](#media-filters), select the bookmark menu (in the [home menu](#home-menu) or [media menu](#media-menu)), add a name and a symbol, this will add a new bookmark in the main top bar !
 
 
 
@@ -450,6 +484,10 @@ Tags can be set in the [left panel of the editor interface](#left-panel) using c
 Date and Time are just a
 
 By default, page's date and time are the same as creation date and time.
+
+##### Datemodif
+
+You can't edit manualy this date. It's just the last time the page has been edited.
 
 ##### Thumbnail
 
