@@ -4,6 +4,7 @@
     "require": {
         "php": ">=7.2.0",
         "altorouter/altorouter": "^1.2",
+        "firebase/php-jwt": "^5.2",
         "jamesmoss/flywheel": "^0.5.2",
         "league/plates": "^3.3",
         "michelf/php-markdown": "^1.8"

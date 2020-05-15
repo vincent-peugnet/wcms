@@ -19,6 +19,8 @@ class User extends Item
     protected $expiredate = false;
     /** @var Bookmark[] Associative array as `id => Bookmark`*/
     protected $bookmark = [];
+    /** @var array sessions */
+    protected $sessions = [];
     protected $display = ['bookmark' => false];
 
     public function __construct($datas = [])
@@ -101,6 +103,11 @@ class User extends Item
     public function bookmark()
     {
         return $this->bookmark;
+    }
+
+    public function sessions()
+    {
+        return $this->sessions;
     }
 
     public function display()
@@ -218,6 +225,13 @@ class User extends Item
         }
     }
 
+    public function setsessions($sessions)
+    {
+        if (is_array($sessions)) {
+            $this->sessions = $sessions;
+        }
+    }
+
     public function setdisplay($display)
     {
         if (is_array($display)) {
@@ -266,6 +280,42 @@ class User extends Item
             }
         }
         return false;
+    }
+
+    /**
+     * Generate new unique session ID
+     * @param string $info session info to store
+     * @return string session key
+     */
+    public function newsession(string $info = "no_info"): string
+    {
+        $exist = true;
+        while ($exist === true) {
+            $session = bin2hex(random_bytes(10));
+            $exist = key_exists($session, $this->sessions());
+        }
+        $this->sessions[$session] = $info;
+        return $session;
+    }
+
+    /**
+     * Remove Session from user
+     * @param string $session session ID to remove
+     * @return bool true if session exist and was destroyed, false if key does not exist
+     */
+    public function destroysession(string $session): bool
+    {
+        if (key_exists($session, $this->sessions)) {
+            unset($this->sessions[$session]);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function checksession(string $session): bool
+    {
+        return key_exists($session, $this->sessions);
     }
 
 

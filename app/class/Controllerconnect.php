@@ -2,8 +2,12 @@
 
 namespace Wcms;
 
+use RuntimeException;
+
 class Controllerconnect extends Controller
 {
+    /** @var Modelconnect */
+    protected $modelconnect;
 
     public function log()
     {
@@ -38,21 +42,36 @@ class Controllerconnect extends Controller
     {
         if (!empty($_POST['pass']) && !empty($_POST['user'])) {
             $this->user = $this->usermanager->passwordcheck($_POST['user'], $_POST['pass']);
-            if ($this->user != false) {
-                if (
+            if (
+                $this->user != false
+                && (
                     $this->user->expiredate() === false
                     || $this->user->level() === 10
                     || $this->user->expiredate('date') > $this->now
-                ) {
-                    $this->user->connectcounter();
-                    $this->usermanager->add($this->user);
-                    $this->session->addtosession('user', $this->user->id());
+                )
+            ) {
+                $this->user->connectcounter();
+                $this->usermanager->add($this->user);
+                $this->session->addtosession('user', $this->user->id());
 
-                    if ($_POST['rememberme'] && $this->user->cookie() > 0) {
-                        $token = $this->createauthtoken();
-                        if ($token) {
-                            $_SESSION['user' . Config::basepath()]['authtoken'] = $token;
+                if ($_POST['rememberme']) {
+                    if ($this->user->cookie() > 0) {
+                        try {
+                            $this->modelconnect = new Modelconnect();
+                            $wsession = $this->user->newsession();
+                            $this->modelconnect->createauthcookie(
+                                $this->user->id(),
+                                $wsession,
+                                $this->user->cookie()
+                            );
+                            $this->usermanager->add($this->user);
+                            $this->session->addtosession('wsession', $wsession);
+                        } catch (RuntimeException $e) {
+                            Model::sendflashmessage("Can't create authentification cookie : $e", "warning");
                         }
+                    } else {
+                        $message = "Can't remember you beccause user cookie conservation time is set to 0 days";
+                        Model::sendflashmessage($message, "warning");
                     }
                 }
             }
@@ -66,11 +85,11 @@ class Controllerconnect extends Controller
 
     public function logout($route, $id = null)
     {
-        $this->user = $this->usermanager->logout();
         $this->session->addtosession('user', '');
-        if (!empty($_SESSION['user' . Config::basepath()]['authtoken'])) {
-            $this->destroyauthtoken($_SESSION['user' . Config::basepath()]['authtoken']);
-        }
+        $this->user->destroysession($this->session->wsession);
+        $this->session->addtosession('wsession', '');
+        $this->usermanager->add($this->user);
+
         if ($id !== null && $route !== 'home') {
             $this->routedirect($route, ['page' => $id]);
         } else {

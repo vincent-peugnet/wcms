@@ -45,16 +45,29 @@ class Controller
 
     public function setuser()
     {
-        if (empty($this->session->user)) {
+        // check session, then cookies
+        if (!empty($this->session->user)) {
+            $user = $this->usermanager->get($this->session->user);
+        } elseif (!empty($_COOKIE['authtoken'])) {
+            try {
+                $modelconnect = new Modelconnect();
+                $datas = $modelconnect->checkcookie();
+                $user = $this->usermanager->get($datas['userid']);
+                if ($user !== false && $user->checksession($datas['wsession'])) {
+                    $this->session->addtosession("wsession", $datas['wsession']);
+                    $this->session->addtosession("user", $datas['userid']);
+                } else {
+                    $user = false;
+                }
+            } catch (Exception $e) {
+                Model::sendflashmessage("Invalid Autentification cookie exist : $e", "warning");
+            }
+        }
+        // create visitor
+        if (empty($user)) {
             $this->user = new User();
         } else {
-            if (!$this->user = $this->usermanager->get($this->session->user)) {
-                if (!$this->user = $this->usermanager->readcookie()) {
-                    $this->user = new User();
-                } else {
-                    $this->session->addtosession('user', $this->user->id());
-                }
-            }
+            $this->user = $user;
         }
     }
 

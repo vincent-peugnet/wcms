@@ -12,6 +12,7 @@ class Session extends Item
     public $showrightpanel = false;
     public $homedisplay = 'list';
     public $mediadisplay = 'list';
+    public $wsession = '';
 
     public function __construct($datas = [])
     {
@@ -77,5 +78,10 @@ class Session extends Item
         if (in_array($mediadisplay, ['list', 'gallery'])) {
             $this->mediadisplay = $mediadisplay;
         }
+    }
+
+    public function setwsession($wsession)
+    {
+        $this->wsession = $wsession;
     }
 }
