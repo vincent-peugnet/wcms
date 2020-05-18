@@ -48,6 +48,8 @@ class Controllermedia extends Controller
                 $pathlist = [];
                 $this->mediamanager->listpath($dirlist, '', $pathlist);
 
+                $vars['maxuploadsize'] = readablesize(file_upload_max_size()) . 'o';
+
                 if (isset($_GET['display'])) {
                     $this->session->addtosession('mediadisplay', $_GET['display']);
                 }

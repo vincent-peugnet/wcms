@@ -7,6 +7,11 @@
                 <form id=addmedia action="<?= $this->url('mediaupload') ?>" method="post" enctype="multipart/form-data">
                     <label for="file">🚀 Upload file(s)</label>
                     <input type='file' id="file" name='file[]' multiple required>
+
+                    <p>
+                        Max upload size : <?= $maxuploadsize ?>
+                    </p>
+
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>">
                     <input type="submit" value="upload">
                 </form>
