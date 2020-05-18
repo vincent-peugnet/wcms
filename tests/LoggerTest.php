@@ -48,6 +48,7 @@ class LoggerTest extends FilesTest
 
     /**
      * @test
+     * @requires OSFAMILY Linux
      */
     public function initDirNotWritableTest(): void
     {
@@ -100,7 +101,7 @@ class LoggerTest extends FilesTest
     {
         Logger::init($this->logfile, $verbosity);
         Logger::error($msg, ...$args);
-        $expected = " [ ERROR ] tests/LoggerTest.php(102) $expected\n";
+        $expected = " [ ERROR ] tests{$this->ds}LoggerTest.php(103) $expected\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
@@ -138,7 +139,7 @@ class LoggerTest extends FilesTest
     {
         Logger::init($this->logfile, $verbosity);
         Logger::warning($msg, ...$args);
-        $expected = " [ WARN ]  tests/LoggerTest.php(140) $expected\n";
+        $expected = " [ WARN ]  tests{$this->ds}LoggerTest.php(141) $expected\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
@@ -175,7 +176,7 @@ class LoggerTest extends FilesTest
     {
         Logger::init($this->logfile, $verbosity);
         Logger::info($msg, ...$args);
-        $expected = " [ INFO ]  tests/LoggerTest.php(177) $expected\n";
+        $expected = " [ INFO ]  tests{$this->ds}LoggerTest.php(178) $expected\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
@@ -211,7 +212,7 @@ class LoggerTest extends FilesTest
     {
         Logger::init($this->logfile, $verbosity);
         Logger::debug($msg, ...$args);
-        $expected = " [ DEBUG ] tests/LoggerTest.php(213) $expected\n";
+        $expected = " [ DEBUG ] tests{$this->ds}LoggerTest.php(214) $expected\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
@@ -247,8 +248,8 @@ class LoggerTest extends FilesTest
         Logger::init($this->logfile, $verbosity);
         Logger::errorex($e);
         $file = __FILE__;
-        $line += 258;
-        $expected = " [ ERROR ] tests/LoggerTest.php(248) $expected in $file($line)\n";
+        $line += 259;
+        $expected = " [ ERROR ] tests{$this->ds}LoggerTest.php(249) $expected in $file($line)\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
@@ -264,13 +265,14 @@ class LoggerTest extends FilesTest
 
     /**
      * @test
+     * @requires OSFAMILY Linux
      */
     public function errorexBacktraceTest(): void
     {
         Logger::init($this->logfile, 1);
         Logger::errorex(new Exception('Error'), true);
         $content = file_get_contents($this->logfile);
-        $expected = " [ ERROR ] tests/LoggerTest.php(271) Error ";
+        $expected = " [ ERROR ] tests{$this->ds}LoggerTest.php(273) Error ";
         $this->assertEquals($expected, substr($content, 25, 43));
         $this->assertRegExp('/(#\d+ [\w\/\.]*\(\d+\): .*\)\n)+#\d+ \{main\}\n/U', $content);
     }
@@ -300,8 +302,8 @@ class LoggerTest extends FilesTest
         Logger::init($this->logfile, $verbosity);
         Logger::warningex($e);
         $file = __FILE__;
-        $line += 311;
-        $expected = " [ WARN ]  tests/LoggerTest.php(301) $expected in $file($line)\n";
+        $line += 313;
+        $expected = " [ WARN ]  tests{$this->ds}LoggerTest.php(303) $expected in $file($line)\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
@@ -339,8 +341,8 @@ class LoggerTest extends FilesTest
         Logger::init($this->logfile, $verbosity);
         Logger::infoex($e);
         $file = __FILE__;
-        $line += 350;
-        $expected = " [ INFO ]  tests/LoggerTest.php(340) $expected in $file($line)\n";
+        $line += 352;
+        $expected = " [ INFO ]  tests{$this->ds}LoggerTest.php(342) $expected in $file($line)\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
@@ -377,8 +379,8 @@ class LoggerTest extends FilesTest
         Logger::init($this->logfile, $verbosity);
         Logger::debugex($e);
         $file = __FILE__;
-        $line += 388;
-        $expected = " [ DEBUG ] tests/LoggerTest.php(378) $expected in $file($line)\n";
+        $line += 390;
+        $expected = " [ DEBUG ] tests{$this->ds}LoggerTest.php(380) $expected in $file($line)\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
@@ -387,5 +389,11 @@ class LoggerTest extends FilesTest
         return [
             [4, new Exception('Test 4'), 'Test 4', 0],
         ];
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        Logger::close();
     }
 }
