@@ -38,6 +38,14 @@ class Logger
         self::$verbosity = $verbosity;
     }
 
+    public static function close()
+    {
+        if (self::$file !== false) {
+            fclose(self::$file);
+            self::$file = false;
+        }
+    }
+
     protected static function write(string $level, string $msg, array $args = [])
     {
         $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1];
