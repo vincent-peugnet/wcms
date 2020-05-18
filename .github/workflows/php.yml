@@ -45,12 +45,12 @@ jobs:
           make test
           echo "::remove-matcher owner=phpunit::"
 
-      - name: Coveralls publish
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          composer require --quiet --no-interaction cedx/coveralls
-          vendor/bin/coveralls build/phpunit/cov.xml
+      - name: Codecov upload
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./build/phpunit/cov.xml
+          flags: php
+          name: php-${{ matrix.php-versions }}
 
   lint:
     name: lint
