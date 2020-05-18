@@ -47,6 +47,7 @@ class Routes
             ['POST', '/!user/update', 'Controlleruser#update', 'userupdate'],
             ['POST', '/!user/bookmark', 'Controlleruser#bookmark', 'userbookmark'],
             ['POST', '/!user/pref', 'Controlleruser#pref', 'userpref'],
+            ['POST', '/!user/password', 'Controlleruser#password', 'userpassword'],
             ['POST', '/!user/token', 'Controlleruser#token', 'usertoken'],
             ['GET', '/!info', 'Controllerinfo#desktop', 'info'],
             ['GET', '/!timeline', 'Controllertimeline#desktop', 'timeline'],

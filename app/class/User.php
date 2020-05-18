@@ -141,16 +141,18 @@ class User extends Item
         }
     }
 
-    public function setpassword($password)
+    /**
+     * @return bool if password is compatible and set, otherwise flase
+     */
+    public function setpassword($password): bool
     {
         if (!empty($password) && is_string($password)) {
             if (strlen($password) >= Model::PASSWORD_MIN_LENGTH && strlen($password) <= Model::PASSWORD_MAX_LENGTH) {
                 $this->password = $password;
                 return true;
-            } else {
-                return false;
             }
         }
+        return false;
     }
 
     public function setsignature(string $signature)
