@@ -54,7 +54,7 @@ class Controllerconnect extends Controller
                 $this->usermanager->add($this->user);
                 $this->session->addtosession('user', $this->user->id());
 
-                if ($_POST['rememberme']) {
+                if (!empty($_POST['rememberme'])) {
                     if ($this->user->cookie() > 0) {
                         try {
                             $this->modelconnect = new Modelconnect();

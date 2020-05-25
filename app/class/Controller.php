@@ -161,4 +161,16 @@ class Controller
             Model::sendflashmessage($count . ' / ' . $total . ' ' . $message, 'error');
         }
     }
+
+    /**
+     * Destroy session and cookie token in user database
+     */
+    public function disconnect()
+    {
+        $this->session->addtosession('user', '');
+        $this->user->destroysession($this->session->wsession);
+        $this->session->addtosession('wsession', '');
+        $this->usermanager->add($this->user);
+
+    }
 }

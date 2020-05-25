@@ -311,6 +311,25 @@ class Controllerpage extends Controller
         $this->routedirect('home');
     }
 
+    public function logout(string $id)
+    {
+        if (!$this->user->isvisitor()) {
+            $this->disconnect();
+            $this->routedirect('pageread', ['page' => $id]);
+        } else {
+            $this->routedirect('pageread/', ['page' => $id]);
+        }
+    }
+
+    public function login(string $id)
+    {
+        if ($this->user->isvisitor()) {
+            $this->showtemplate('connect', ['id' => $id, 'route' => 'pageread/']);
+        } else {
+            $this->routedirect('pageread/', ['page' => $id]);
+        }
+    }
+
     public function delete($id)
     {
         $this->setpage($id, 'pagedelete');

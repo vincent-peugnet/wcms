@@ -38,6 +38,8 @@ $this->stop();
     <input type="password" name="pass" id="loginpass" placeholder="password">
     <input type="hidden" name="route" value="pageread/">
     <input type="hidden" name="id" value="' . $page->id() . '">
+    <input type="checkbox" name="rememberme" id="rememberme" value="1">
+    <label for="rememberme">Remember me</label>
     <input type="submit" name="log" value="login" id="button">
     </form>
     </p>';

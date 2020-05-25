@@ -597,6 +597,14 @@ Show a `var_dump` of the page object. This could be usefull for debbuging.
 
     <pageid>/duplicate:<newpageid>
 
+##### /login
+
+If you are not connected yet, this will ask you for credentials.
+
+
+##### /logout
+
+If you were connected, this will disconnect you.
 
 #### Home commands
 
