@@ -171,6 +171,5 @@ class Controller
         $this->user->destroysession($this->session->wsession);
         $this->session->addtosession('wsession', '');
         $this->usermanager->add($this->user);
-
     }
 }

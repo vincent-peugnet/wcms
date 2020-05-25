@@ -192,6 +192,9 @@
         <label for="refresh" title="Time before redirection (in seconds)">Refresh time</label>
         <input type="number" name="refresh" value="<?= $page->refresh() ?>" id="refresh" min="0" max="180">
 
+        <label for="password" title="specific page password protection">Password</label>
+        <input type="text" name="password" value="<?= $page->password() ?>" id="password" min="0" max="64">
+
     </fieldset>
 
     </details>

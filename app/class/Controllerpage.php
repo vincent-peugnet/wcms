@@ -131,15 +131,25 @@ class Controllerpage extends Controller
         if ($pageexist) {
             $canread = $this->user->level() >= $this->page->secure();
 
+            // Check page password
+            if (!empty($this->page->password())) {
+                if (empty($_POST['pagepassword']) || $_POST['pagepassword'] !== $this->page->password()) {
+                    $this->showtemplate('pagepassword', ['pageid' => $this->page->id()]);
+                    exit;
+                }
+            }
+
             if ($this->page->daterender() < $this->page->datemodif()) {
                 if (Config::reccursiverender()) {
                     $this->reccursiverender($this->page);
                 }
                 $this->page = $this->renderpage($this->page);
             }
+
+
             if ($canread) {
                 $this->page->addaffcount();
-                if ($this->user->level() < 2) {
+                if ($this->user->isvisitor()) {
                     $this->page->addvisitcount();
                 }
             }

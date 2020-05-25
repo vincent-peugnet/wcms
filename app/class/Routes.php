@@ -54,6 +54,7 @@ class Routes
             ['POST', '/!timeline/add', 'Controllertimeline#add', 'timelineadd'],
             ['POST', '/!timeline/clap', 'Controllertimeline#clap', 'timelineclap'],
             ['GET', '/[cid:page]/', 'Controllerpage#read', 'pageread/'],
+            ['POST', '/[cid:page]/', 'Controllerpage#read', 'pageread/post'],
             ['GET', '/[cid:page]', 'Controllerpage#read', 'pageread'],
             ['GET', '/[cid:page]/add', 'Controllerpage#add', 'pageadd'],
             ['GET', '/[cid:page]/add:[cid:copy]', 'Controllerpage#addascopy', 'pageaddascopy'],

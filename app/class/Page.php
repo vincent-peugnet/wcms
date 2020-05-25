@@ -45,6 +45,7 @@ class Page extends Dbitem
     protected $sleep;
     protected $redirection;
     protected $refresh;
+    protected $password;
 
 
     public const LEN = 255;
@@ -109,6 +110,7 @@ class Page extends Dbitem
         $this->setsleep(0);
         $this->setredirection('');
         $this->setrefresh(0);
+        $this->setpassword('');
     }
 
     // _____________________________________________________ G E T ____________________________________________________
@@ -359,6 +361,11 @@ class Page extends Dbitem
     public function refresh($type = 'int')
     {
         return $this->refresh;
+    }
+
+    public function password($type = 'string')
+    {
+        return $this->password;
     }
 
 
@@ -699,6 +706,13 @@ class Page extends Dbitem
             $refresh = 0;
         }
         $this->refresh = $refresh;
+    }
+
+    public function setpassword($password)
+    {
+        if (is_string($password) && strlen($password) > 0 && strlen($password) < 64) {
+            $this->password = $password;
+        }
     }
 
 
