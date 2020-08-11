@@ -13,7 +13,7 @@
     "css-loader": "^3.2.0",
     "prettier": "^1.18.2",
     "prettier-webpack-plugin": "^1.2.0",
-    "release-it": "^12.4.3",
+    "release-it": "^13.6.6",
     "style-loader": "^1.0.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9"
