@@ -487,7 +487,7 @@ class Page extends Dbitem
     public function setcss($css)
     {
         if (strlen($css) < self::LENTEXT and is_string($css)) {
-            $this->css = trim(strtolower($css));
+            $this->css = trim($css);
         }
     }
 
