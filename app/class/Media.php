@@ -104,7 +104,7 @@ class Media extends Item
                 $src = $this->getincludepath();
                 $ext = $this->extension;
                 $code = '&lt;video controls=&quot;&quot;&gt;';
-                $code .= '&lt;source src=&quot;' . $src . '&quot; type="video/' . $ext . '&quot;&gt;&lt;/video&gt;';
+                $code .= '&lt;source src=&quot;' . $src . '&quot; type=&quot;video/' . $ext . '&quot;&gt;&lt;/video&gt;';
                 break;
 
             default:
