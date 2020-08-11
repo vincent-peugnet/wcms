@@ -86,29 +86,33 @@ class Media extends Item
 
     /**
      * Generate html code depending on media type
-     *
+     * @param bool $fullpath option to use fullpath of file instead of W rendered one. default is false
      * @return string html code
      */
-    public function getcode(): string
+    public function getcode($fullpath = false): string
     {
+        if ($fullpath === true) {
+            $src = $this->getfullpath();
+        } else {
+            $src = $this->getincludepath();
+        }
+
         switch ($this->type) {
             case 'image':
-                $code = '![' . $this->id . '](' . $this->getincludepath() . ')';
+                $code = '![' . $this->id . '](' . $src . ')';
                 break;
                 
             case 'sound':
-                    $code = '&lt;audio controls src=&quot;' . $this->getincludepath() . '&quot;&gt;&lt;/audio&gt;';
+                    $code = '<audio controls src="' . $src . '"></audio>';
                 break;
                 
             case 'video':
-                $src = $this->getincludepath();
                 $ext = $this->extension;
-                $code = '&lt;video controls=&quot;&quot;&gt;';
-                $code .= '&lt;source src=&quot;' . $src . '&quot; type=&quot;video/' . $ext . '&quot;&gt;&lt;/video&gt;';
+                $code = '<video controls=""><source src="' . $src . '" type="video/' . $ext . '"></video>';
                 break;
 
             default:
-                    $code = '[' . $this->id . '](' . $this->getincludepath() . ')';
+                    $code = '[' . $this->id . '](' . $src . ')';
                 break;
         }
             

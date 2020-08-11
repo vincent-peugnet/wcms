@@ -87,7 +87,22 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
         <li title="<?= $media->size('hr') ?> | <?= $media->uid('name') ?> | <?= $media->permissions() ?>">
             <div class="thumbnail">
             <label for="media_<?= $media->id() ?>">
-                <?= $media->type() == 'image' ? '<img src="' . $media->getfullpath() . '">' : $media->getsymbol() ?>
+                <?php
+                switch ($media->type()) {
+                    case 'image':
+                        echo '<img src="' . $media->getfullpath() . '">';
+                        break;
+                    
+                    case 'video':
+                    case 'sound':
+                        echo $media->getcode(true);
+                        break;
+                    
+                    default:
+                        echo $media->getsymbol(true);
+                        break;
+                }
+                ?>
             </label>
             </div>
             
@@ -95,7 +110,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
                 <input type="checkbox" name="id[]" value="<?= $media->getfulldir() ?>" form="mediaedit" id="media_<?= $media->id() ?>">
                 <label for="media_<?= $media->id() ?>"><?= $media->id() ?></label>
                 <a href="<?= $media->getfullpath() ?>" target="_blank">⧉</a>
-                <input readonly class="code select-all" value="<?= $media->getcode() ?>" />
+                <input readonly class="code select-all" value="<?= $this->e($media->getcode()) ?>" />
             </div>
                 
         </li>
@@ -153,7 +168,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
             <td><?= $media->uid('name') ?></td>
             <td><code><?= $media->permissions() ?></code></td>
             <td><?= $media->surface() ?></td>
-            <td><input readonly class="code select-all" value="<?= $media->getcode() ?>" /></td>
+            <td><input readonly class="code select-all" value="<?= $this->e($media->getcode()) ?>" /></td>
             </tr>
             <?php
         }
