@@ -228,6 +228,13 @@
 
                 <h2 id="interface">Interface</h2>
 
+                <div class="checkbox">
+                    <input type="hidden" name="disablejavascript" value="0" form="admin">
+                    <input type="checkbox" name="disablejavascript" id="disablejavascript" value="1" <?= Wcms\Config::disablejavascript() ? 'checked' : '' ?> form="admin">
+                    <label for="disablejavascript">Disable javascript</label>
+                </div>
+
+
                 <p>Set interface Style</p>
 
                 <select name="interfacecss" id="interfacecss" form="admin">

@@ -1,4 +1,6 @@
-<?php $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [$css . 'edit.css'], 'favicon' => $page->favicon()]) ?>
+<?php
+
+$this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [$css . 'edit.css'], 'favicon' => $page->favicon()]) ?>
 
 
 
@@ -26,10 +28,14 @@
 
 </main>
 
+<?php if(!Wcms\Config::disablejavascript()) { ?>
+
 <script>
     const pageid = '<?= $page->id() ?>';
     let pagetitle = '<?= $page->title() ?>';
 </script>
 <script src="<?= Wcms\Model::jspath() ?>edit.bundle.js"></script>
+
+<?php } ?>
 
 <?php $this->stop('page') ?>

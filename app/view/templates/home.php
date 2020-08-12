@@ -236,7 +236,13 @@
 
 <?php $this->insert('footer', ['footer' => $footer]) ?>
 
+
+<?php if(!Wcms\Config::disablejavascript()) { ?>
+
 <script src="<?= Wcms\Model::jspath() ?>home.bundle.js"></script>
+
+<?php } ?>
+
 
 <?php } ?>
 

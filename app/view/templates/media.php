@@ -185,7 +185,12 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
 
 </main>
 
+<?php if(!Wcms\Config::disablejavascript()) { ?>
+
 <script src="<?= Wcms\Model::jspath() ?>media.bundle.js"></script>
+
+<?php } ?>
+
 
 
 <?php $this->stop('page') ?>

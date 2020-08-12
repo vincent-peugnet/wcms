@@ -39,6 +39,12 @@ abstract class Config
     /** Database config */
     protected static $markdownhardwrap = true;
 
+
+    /** Site config */
+    protected static $disablejavascript = false;
+
+
+
     public const SECRET_KEY_MIN = 16;
     public const SECRET_KEY_MAX = 128;
 
@@ -284,6 +290,11 @@ abstract class Config
         return self::$markdownhardwrap;
     }
 
+    public static function disablejavascript()
+    {
+        return self::$disablejavascript;
+    }
+
 
     // __________________________________________ S E T ______________________________________
 
@@ -494,7 +505,10 @@ abstract class Config
         self::$markdownhardwrap = boolval($markdownhardwrap);
     }
 
-
+    public static function setdisablejavascript($disablejavascript)
+    {
+        self::$disablejavascript = boolval($disablejavascript);
+    }
 
 
 
