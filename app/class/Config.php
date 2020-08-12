@@ -36,6 +36,9 @@ abstract class Config
     /** @var string|false $debug */
     protected static $debug = false;
 
+    /** Database config */
+    protected static $markdownhardwrap = true;
+
     public const SECRET_KEY_MIN = 16;
     public const SECRET_KEY_MAX = 128;
 
@@ -276,6 +279,11 @@ abstract class Config
         return self::$debug;
     }
 
+    public static function markdownhardwrap()
+    {
+        return self::$markdownhardwrap;
+    }
+
 
     // __________________________________________ S E T ______________________________________
 
@@ -479,6 +487,11 @@ abstract class Config
         if (is_string($debug)) {
             self::$debug = $debug;
         }
+    }
+
+    public static function setmarkdownhardwrap($markdownhardwrap)
+    {
+        self::$markdownhardwrap = boolval($markdownhardwrap);
     }
 
 

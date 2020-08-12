@@ -185,7 +185,17 @@
                     <label for="internallinkblank">Open internal links in new tab</label>
                 </div>
 
-                <i>(This modifications need re-rendering)</i>
+                <h4>Markdown Parser</h4>
+
+                <div class="checkbox">
+                    <input type="hidden" name="markdownhardwrap" value="0" form="admin">
+                    <input type="checkbox" name="markdownhardwrap" id="markdownhardwrap" value="1" <?= Wcms\Config::markdownhardwrap() ? 'checked' : '' ?> form="admin">
+                    <label for="markdownhardwrap" title="When activated, single line break will be rendered as &lt;br/&gt;" >Render soft-linebreaks as &lt;br/&gt;</label>
+                </div>
+
+                <p>
+                    <i>(This modifications need re-rendering)</i>
+                </p>
 
 
 

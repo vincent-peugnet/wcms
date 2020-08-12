@@ -491,7 +491,7 @@ class Modelrender extends Modelpage
         // $fortin->header_id_func = function ($header) {
         //  return preg_replace('/[^\w]/', '', strtolower($header));
         // };
-        $fortin->hard_wrap = true;
+        $fortin->hard_wrap = Config::markdownhardwrap();
         $text = $fortin->transform($text);
         return $text;
     }
