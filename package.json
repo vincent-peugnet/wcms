@@ -3,20 +3,20 @@
   "repository": "github:vincent-peugnet/wcms",
   "license": "MIT",
   "dependencies": {
-    "codemirror": "^5.56.0",
-    "cytoscape": "^3.14.1",
+    "codemirror": "^5.57.0",
+    "cytoscape": "^3.16.0",
     "cytoscape-cose-bilkent": "^4.1.0"
   },
   "devDependencies": {
-    "@sentry/browser": "^5.9.0",
-    "@sentry/cli": "^1.49.0",
-    "css-loader": "^3.2.0",
-    "prettier": "^1.18.2",
+    "@sentry/browser": "^5.23.0",
+    "@sentry/cli": "^1.57.0",
+    "css-loader": "^3.6.0",
+    "prettier": "^1.19.1",
     "prettier-webpack-plugin": "^1.2.0",
-    "release-it": "^13.6.6",
-    "style-loader": "^1.0.0",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.9"
+    "release-it": "^13.7.1",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
   "prettier": {
     "tabWidth": 4,
