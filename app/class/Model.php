@@ -40,8 +40,8 @@ abstract class Model
         'grid' => 'grid',
         'random' => 'random',
     ];
-    
-    
+
+
     public const MEDIA_EXT = [
         'jpg' => 'image',
         'jpeg' => 'image',
@@ -153,7 +153,7 @@ abstract class Model
     {
         return self::dirtopath(Model::RENDER_DIR);
     }
-    
+
     public static function csspath()
     {
         return self::dirtopath(Model::CSS_DIR);

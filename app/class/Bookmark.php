@@ -40,7 +40,7 @@ class Bookmark extends Item
 
 
 
-    
+
     // _____________________________ G E T __________________________________
 
 
@@ -82,7 +82,7 @@ class Bookmark extends Item
         }
         return false;
     }
- 
+
     public function setquery($query)
     {
         if (is_string($query)) {

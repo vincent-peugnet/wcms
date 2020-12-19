@@ -11,7 +11,7 @@ class Quickcss extends Item
     private $units = [];
     private $new = [];
     private $jsoncss = [];
-    
+
     private $quickcss = [];
 
     public const COLOR = ['color', 'background-color', 'border-color', 'text-decoration-color'];
@@ -98,7 +98,7 @@ class Quickcss extends Item
         }
     }
 
-    
+
     public function setjson($jsoncss)
     {
         if (!empty($jsoncss) && is_string($jsoncss)) {

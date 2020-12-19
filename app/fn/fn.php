@@ -102,9 +102,9 @@ function idclean(string $input, int $max = Wcms\Model::MAX_ID_LENGTH): string
         $search =  ['é', 'à', 'è', 'ç', 'ù', 'ï', 'î', ' '];
         $replace = ['e', 'a', 'e', 'c', 'u', 'i', 'i', '-'];
         $input = str_replace($search, $replace, $input);
-        
+
         $input = preg_replace($regex, '', strtolower(trim($input)));
-        
+
         $input = substr($input, 0, $max);
     }
     return $input;
@@ -439,14 +439,14 @@ function accessfile(string $path, bool $createdir = false): bool
 function file_upload_max_size()
 {
     static $max_size = -1;
-  
+
     if ($max_size < 0) {
       // Start with post_max_size.
         $post_max_size = parse_size(ini_get('post_max_size'));
         if ($post_max_size > 0) {
             $max_size = $post_max_size;
         }
-  
+
       // If upload_max_size is less, then reduce. Except if upload_max_size is
       // zero, which indicates no limit.
         $upload_max = parse_size(ini_get('upload_max_filesize'));
@@ -456,7 +456,7 @@ function file_upload_max_size()
     }
     return $max_size;
 }
-  
+
 function parse_size($size)
 {
     $unit = preg_replace('/[^bkmgtpezy]/i', '', $size); // Remove the non-unit characters from the size.

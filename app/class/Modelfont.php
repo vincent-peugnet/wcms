@@ -6,7 +6,7 @@ class Modelfont extends Model
 {
 
     protected const FONT_TYPES = ['woff2', 'woff', 'otf', 'ttf', 'eot', 'svg'];
-    
+
 
 
     public function getfontlist()

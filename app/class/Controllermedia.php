@@ -34,7 +34,7 @@ class Controllermedia extends Controller
             } catch (\InvalidArgumentException $exception) {
                 throw new LogicException($exception->getMessage());
             }
-            
+
             $mediaopt = new Mediaopt($_GET);
             if (empty($mediaopt->path())) {
                 $mediaopt->setpath(DIRECTORY_SEPARATOR . Model::MEDIA_DIR);
@@ -42,7 +42,7 @@ class Controllermedia extends Controller
 
             if (is_dir($mediaopt->dir())) {
                 $medialist = $this->mediamanager->medialistopt($mediaopt);
-    
+
                 $dirlist = $this->mediamanager->listdir(Model::MEDIA_DIR);
 
                 $pathlist = [];
@@ -59,7 +59,7 @@ class Controllermedia extends Controller
                 $vars['dirlist'] = $dirlist;
                 $vars['pathlist'] = $pathlist;
                 $vars['mediaopt'] = $mediaopt;
-    
+
                 $this->showtemplate('media', $vars);
             } else {
                 $this->routedirect('media');

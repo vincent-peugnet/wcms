@@ -110,7 +110,7 @@ abstract class Item
         }
         return $array;
     }
-    
+
 
     /**
      * Tool for accessing different view of the same DateTimeImmutable var

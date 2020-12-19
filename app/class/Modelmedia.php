@@ -85,7 +85,7 @@ class Modelmedia extends Model
         $order = ($order === 1 || $order === -1) ? $order : 1;
         return usort($medialist, $this->buildsorter($sortby, $order));
     }
-    
+
     public function buildsorter($sortby, $order)
     {
         return function ($media1, $media2) use ($sortby, $order) {

@@ -8,7 +8,7 @@ class Controllerfont extends Controller
      * @var Modelfont
      */
     protected $fontmanager;
-    
+
     public function __construct($router)
     {
         parent::__construct($router);
@@ -21,7 +21,7 @@ class Controllerfont extends Controller
             dircheck(Model::FONT_DIR);
 
             $fontlist = $this->fontmanager->getfontlist();
-            
+
             $this->showtemplate(
                 'font',
                 [
@@ -34,7 +34,7 @@ class Controllerfont extends Controller
             $this->routedirect('home');
         }
     }
-    
+
     public function render()
     {
         $this->fontmanager->renderfontface();

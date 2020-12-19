@@ -27,7 +27,7 @@ class Controller
     protected $pagemanager;
 
     protected $plates;
-    
+
     /** @var DateTimeImmutable */
     protected $now;
 

@@ -19,7 +19,7 @@ class Colors extends Item
             $this->rawcss = $this->readcssfile();
             $this->tagcolor = $this->parsetagcss($this->rawcss);
         }
-        
+
         if (!empty($taglist)) {
             $this->tagcolor = $this->removeaddtags($taglist);
             $this->rawcss = $this->tocss($this->tagcolor);

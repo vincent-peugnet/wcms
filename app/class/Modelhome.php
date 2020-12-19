@@ -4,7 +4,7 @@ namespace Wcms;
 
 class Modelhome extends Modelpage
 {
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -23,7 +23,7 @@ class Modelhome extends Modelpage
     }
 
 
-    
+
     /**
      * @param array  $pagelist of Pages objects as `id => Page`
      * @param Opt $opt
@@ -44,7 +44,7 @@ class Modelhome extends Modelpage
         return $pagelist;
     }
 
-    
+
 
     /**
      * Filter the pages list acording to the options and invert
@@ -144,7 +144,7 @@ class Modelhome extends Modelpage
     }
 
 
-    
+
     /**
      * Transform list of page into list of nodes and edges
      *
