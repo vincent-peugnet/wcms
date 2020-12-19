@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        php: ['7.2', '7.3', '7.4']
+        php: ['7.3', '7.4']
         include:
         - os: windows-latest
           php: '7.4'
@@ -44,7 +44,7 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: composer install --prefer-dist --no-progress
 
       - name: PHPUnit
         run: |
@@ -66,6 +66,11 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v2
 
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
+        with:
+          php-version: '7.4'
+
       - name: Validate composer.json and composer.lock
         run: composer validate
 
@@ -82,7 +87,7 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: composer install --prefer-dist --no-progress
 
       - name: PHPCS
         if: always()
