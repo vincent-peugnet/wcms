@@ -6,10 +6,15 @@ build_dir  := build
 js_src_dir := src
 
 # Misc variables.
-PATH                    := vendor/bin:node_modules/.bin:$(PATH)
+export PATH             := vendor/bin:node_modules/.bin:$(PATH)
 
 ifneq ($(OS),Windows_NT) # Not for Windows
-	SHELL               := PATH=$(PATH) /bin/bash
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin) # For Mac
+SHELL                   := PATH=$(PATH) /bin/bash
+else
+SHELL                   := /bin/bash
+endif
 endif
 override GIT_VERSION    := $(shell git --no-pager describe --always --tags)
 override CUR_VERSION    := $(strip $(shell cat VERSION 2>/dev/null))
