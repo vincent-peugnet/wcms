@@ -52,7 +52,7 @@ class Controllerhome extends Controllerpage
             $vars['deepsearch'] = $deepsearch['regex'];
             $vars['searchopt'] = $deepsearch['searchopt'];
             $vars['display'] = $_GET['display'] ?? 'list';
-            
+
             if ($vars['display'] === 'map') {
                 $vars['layout'] = $_GET['layout'] ?? 'cose-bilkent';
                 $vars['showorphans'] = boolval($_GET['showorphans'] ?? false);
@@ -156,7 +156,7 @@ class Controllerhome extends Controllerpage
             $this->routedirect('home');
         }
     }
-    
+
     /**
      * Render every pages in the database
      */

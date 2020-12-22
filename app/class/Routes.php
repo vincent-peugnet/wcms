@@ -80,7 +80,7 @@ class Routes
             $methodName = $callableParts[1];
 
             $controller = new $controllerName($router);
-            
+
             call_user_func_array(array($controller, $methodName), $match['params']);
         } else {
             header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');

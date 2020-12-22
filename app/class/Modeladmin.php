@@ -15,7 +15,7 @@ class Modeladmin extends Model
     {
         $dblist = glob(self::PAGES_DIR . '*', GLOB_ONLYDIR);
         $dblist = array_map('basename', $dblist);
-        
+
         return $dblist;
     }
 

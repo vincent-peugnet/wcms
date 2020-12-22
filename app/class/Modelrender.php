@@ -337,13 +337,13 @@ class Modelrender extends Modelpage
     public function bodyparser(string $text)
     {
         $text = $this->media($text);
-        
+
         $text = $this->summary($text);
 
         $text = $this->wurl($text);
         $text = $this->wikiurl($text);
-        
-        
+
+
 
         $text = str_replace('href="http', "class=\"external\" $this->externallinkblank href=\"http", $text);
 

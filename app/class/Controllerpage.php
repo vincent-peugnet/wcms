@@ -104,7 +104,7 @@ class Controllerpage extends Controller
         $renderengine->render($page);
         $page->setdaterender($now);
         $page->setlinkto($renderengine->linkto());
-        
+
         return $page;
     }
 
@@ -269,7 +269,7 @@ class Controllerpage extends Controller
     {
         if ($this->user->isadmin()) {
             $file = Model::PAGES_DIR . Config::pagetable() . DIRECTORY_SEPARATOR . $id . '.json';
-            
+
             if (file_exists($file)) {
                 header('Content-Description: File Transfer');
                 header('Content-Type: application/json; charset=utf-8');
@@ -297,17 +297,17 @@ class Controllerpage extends Controller
             if (!empty($_POST['id'])) {
                 $page->setid(idclean($_POST['id']));
             }
-            
+
             if ($_POST['datecreation']) {
                 $page->setdatecreation($this->now);
             }
-            
+
             if ($_POST['author']) {
                 $page->setauthors([$this->user->id()]);
             }
-            
+
             $page->setdaterender($page->datecreation('date'));
-        
+
             if ($_POST['erase'] || $this->pagemanager->get($page) === false) {
                 if ($this->pagemanager->add($page)) {
                     Model::sendflashmessage('Page successfully uploaded', 'success');
@@ -401,7 +401,7 @@ class Controllerpage extends Controller
 
                 $this->pagemanager->update($this->page);
 
-                
+
             //$this->showtemplate('updatemerge', $compare);
             } else {
                 // If the editor session finished during the editing, let's try to reconnect to save the editing
@@ -426,7 +426,7 @@ class Controllerpage extends Controller
             Config::savejson();
         }
     }
-    
+
     public function pagedirect($id)
     {
         $this->routedirect('pageread/', ['page' => idclean($id)]);

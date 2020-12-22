@@ -6,10 +6,15 @@ build_dir  := build
 js_src_dir := src
 
 # Misc variables.
-PATH                    := vendor/bin:node_modules/.bin:$(PATH)
+export PATH             := vendor/bin:node_modules/.bin:$(PATH)
 
 ifneq ($(OS),Windows_NT) # Not for Windows
-	SHELL               := PATH=$(PATH) /bin/bash
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin) # For Mac
+SHELL                   := PATH=$(PATH) /bin/bash
+else
+SHELL                   := /bin/bash
+endif
 endif
 override GIT_VERSION    := $(shell git --no-pager describe --always --tags)
 override CUR_VERSION    := $(strip $(shell cat VERSION 2>/dev/null))
@@ -135,6 +140,7 @@ endif
 vendor: composer.json composer.lock
 	@echo Installing PHP dependencies...
 	composer install $(COMPOSER_FLAGS)
+	touch $@
 
 # Install JS dependencies.
 node_modules: package.json package-lock.json
@@ -170,7 +176,12 @@ check: vendor lint analyse test
 # Lint php code with phpcs.
 .PHONY: lint
 lint: $(phpcs_dir)
-	phpcs --report-full --report-summary --cache=$(phpcs_dir)/result.cache
+	phpcs --report-full --report-summary --cache=$(phpcs_dir)/result.cache || printf "run 'make fix'\n\n"; exit 1
+
+# fix php code with phpcbf.
+.PHONY: fix
+fix: $(phpcs_dir)
+	phpcbf || exit 0
 
 # Analyse php code with phpstan.
 .PHONY: analyse

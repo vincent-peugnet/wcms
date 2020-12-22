@@ -101,11 +101,11 @@ class Media extends Item
             case 'image':
                 $code = '![' . $this->id . '](' . $src . ')';
                 break;
-                
+
             case 'sound':
                     $code = '<audio controls src="' . $src . '"></audio>';
                 break;
-                
+
             case 'video':
                 $ext = $this->extension;
                 $code = '<video controls=""><source src="' . $src . '" type="video/' . $ext . '"></video>';
@@ -115,7 +115,7 @@ class Media extends Item
                     $code = '[' . $this->id . '](' . $src . ')';
                 break;
         }
-            
+
         return $code;
     }
 
@@ -125,27 +125,27 @@ class Media extends Item
             case 'image':
                 $symbol = "🖼";
                 break;
-            
+
             case 'sound':
                 $symbol = "🎵";
                 break;
-            
+
             case 'video':
                 $symbol = "🎞";
                 break;
-                
+
             case 'document':
                 $symbol = "📓";
                 break;
-            
+
             case 'archive':
                 $symbol = "🗜";
                 break;
-                    
+
             case 'code':
                 $symbol = "📄";
                 break;
-                            
+
             default:
                 $symbol = "🎲";
                 break;

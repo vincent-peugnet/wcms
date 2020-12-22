@@ -153,7 +153,7 @@ class Controlleruser extends Controller
                         $this->routedirect('user');
                     }
                     break;
-                
+
                 case 'confirmdelete':
                     $user = new User($_POST);
                     $this->usermanager->delete($user);

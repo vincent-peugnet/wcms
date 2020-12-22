@@ -1,0 +1,4 @@
+comment:
+  layout: "reach, diff"
+  branches:               # branch names that can post comment
+    - "master"
