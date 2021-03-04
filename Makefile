@@ -171,26 +171,26 @@ buildclean:
 
 # Run all checks.
 .PHONY: check
-check: vendor lint analyse test
+check: lint analyse test
 
 # Lint php code with phpcs.
 .PHONY: lint
-lint: $(phpcs_dir)
-	phpcs --report-full --report-summary --cache=$(phpcs_dir)/result.cache || printf "run 'make fix'\n\n"; exit 1
+lint: $(phpcs_dir) vendor
+	phpcs --report-full --report-summary --cache=$(phpcs_dir)/result.cache || { printf "run 'make fix'\n\n"; exit 1; }
 
 # fix php code with phpcbf.
 .PHONY: fix
-fix: $(phpcs_dir)
+fix: $(phpcs_dir) vendor
 	phpcbf || exit 0
 
 # Analyse php code with phpstan.
 .PHONY: analyse
-analyse:
+analyse: vendor
 	phpstan analyse
 
 # Test php code with phpunit.
 .PHONY: test
-test: $(phpunit_dir)
+test: $(phpunit_dir) vendor
 	phpunit
 
 # Create dirs if the do not exist
