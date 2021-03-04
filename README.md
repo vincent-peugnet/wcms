@@ -114,7 +114,7 @@ Install from sources
 
         make vendor
 
-3.  _Optionnally_ install and build JS dependencies to get UI enhancements.
+3.  _Optionally_ install and build JS dependencies to get UI enhancements.
 
         make build
 
@@ -136,6 +136,10 @@ The build environment can be set either for each `make` command by changing it i
 PHP development
 ---------------
 
+You can easily run a dev server using the `serve` target:
+
+    make serve
+
 There is an error reporting debug mode using [Whoops](https://github.com/filp/whoops). It can be enabled by setting the value of `debug` in `config.json` to one of [editors supported by Whoops](https://github.com/filp/whoops/blob/master/docs/Open%20Files%20In%20An%20Editor.md).
 
 JS development
@@ -144,6 +148,10 @@ JS development
 While developing JS code it is useful to run webpack in watch mode so that the bundles get built at each file change. To do so, use the following command:
 
     make watch
+
+To run both the php dev server and webpack in watch mode, it is possible to run:
+
+    make dev
 
 Run checks
 ---------
