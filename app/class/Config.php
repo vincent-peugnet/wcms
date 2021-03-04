@@ -91,6 +91,10 @@ abstract class Config
     public static function tojson()
     {
         $arr = get_class_vars(get_class());
+        // get_class_vars returns default values, we need to update each of them with the current one
+        foreach ($arr as $key => $value) {
+            $arr[$key] = self::$$key;
+        }
         $json = json_encode($arr, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT);
         return $json;
     }
@@ -106,7 +110,7 @@ abstract class Config
      */
     public static function getdomain()
     {
-        self::$domain = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
+        self::$domain = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . '://' . $_SERVER['HTTP_HOST'];
     }
 
     /**
@@ -114,7 +118,7 @@ abstract class Config
      */
     public static function checkdomain()
     {
-        return (self::$domain === $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
+        return (self::$domain === (empty($_SERVER['HTTPS']) ? 'http' : 'https') . '://' . $_SERVER['HTTP_HOST']);
     }
 
     /**
