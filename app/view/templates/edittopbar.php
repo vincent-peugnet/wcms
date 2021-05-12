@@ -17,7 +17,7 @@
 
 
 
-    <a href="<?= $this->upage('pageread/', $page->id()) ?>" target="_blank" id="display">
+    <a href="<?= $this->upage('pageread/', $page->id()) ?>" target="<?= $page->id() ?>" id="display">
         <img src="<?= Wcms\Model::iconpath() ?>read.png" class="icon">
         <span class="hidephone">display</span>
     </a>
