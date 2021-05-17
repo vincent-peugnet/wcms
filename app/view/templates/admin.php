@@ -1,4 +1,6 @@
-<?php $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'home.css']]) ?>
+<?php
+
+$this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'home.css']]) ?>
 
 
 <?php $this->start('page') ?>
@@ -170,6 +172,9 @@
                     <label for="reccursiverender">Reccursive render</label>
                 </div>
 
+                <label for="lang">Default language</label>
+                <input type="text" name="lang" id="lang" value="<?= Wcms\Config::lang() ?>" form="admin" minlength="<?= Wcms\Config::LANG_MIN ?>" maxlength="<?= Wcms\Config::LANG_MAX ?>" required>
+
 
                 <h4>Links</h4>
 
@@ -194,7 +199,7 @@
                 </div>
 
                 <p>
-                    <i>(This modifications need re-rendering)</i>
+                    <i>(Thoses modifications need re-rendering)</i>
                 </p>
 
 

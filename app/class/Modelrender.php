@@ -87,7 +87,8 @@ class Modelrender extends Modelpage
         $body = $this->getbody($this->readbody());
         $parsebody = $this->bodyparser($body);
 
-        $html = "<!DOCTYPE html>\n<html>\n<head>\n$head\n</head>\n$parsebody\n</html>";
+        $lang = 'lang="' . Config::lang() . '"';
+        $html = "<!DOCTYPE html>\n<html $lang >\n<head>\n$head\n</head>\n$parsebody\n</html>";
 
         return $html;
     }

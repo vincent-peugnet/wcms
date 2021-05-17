@@ -41,7 +41,14 @@ abstract class Config
 
 
     /** Site config */
+
+    /** @var bool $disablejavascript */
     protected static $disablejavascript = false;
+    /** @var string $lang Default string for pages */
+    protected static $lang = "en";
+
+    public const LANG_MIN = 2;
+    public const LANG_MAX = 16;
 
 
 
@@ -294,6 +301,11 @@ abstract class Config
         return self::$markdownhardwrap;
     }
 
+    public static function lang(): string
+    {
+        return self::$lang;
+    }
+
     public static function disablejavascript()
     {
         return self::$disablejavascript;
@@ -507,6 +519,11 @@ abstract class Config
     public static function setmarkdownhardwrap($markdownhardwrap)
     {
         self::$markdownhardwrap = boolval($markdownhardwrap);
+    }
+
+    public static function setlang(string $lang)
+    {
+        self::$lang = substr(strip_tags($lang), 0, self::LANG_MAX);
     }
 
     public static function setdisablejavascript($disablejavascript)
