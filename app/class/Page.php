@@ -11,6 +11,7 @@ class Page extends Dbitem
     protected $id;
     protected $title;
     protected $description;
+    protected $lang;
     protected $tag;
     protected $date;
     protected $datecreation;
@@ -75,6 +76,7 @@ class Page extends Dbitem
 
         $this->settitle($this->id());
         $this->setdescription('');
+        $this->setlang('');
         $this->settag([]);
         $this->setdate($now);
         $this->setdatecreation($now);
@@ -136,6 +138,11 @@ class Page extends Dbitem
         } else {
             return $this->description;
         }
+    }
+
+    public function lang(): string
+    {
+        return $this->lang;
     }
 
     public function tag($option = 'array')
@@ -392,6 +399,11 @@ class Page extends Dbitem
         if (strlen($description) < self::LEN and is_string($description)) {
             $this->description = strip_tags(trim($description));
         }
+    }
+
+    public function setlang(string $lang)
+    {
+        $this->lang = substr(strip_tags($lang), 0, Config::LANG_MAX);
     }
 
     public function settag($tag)

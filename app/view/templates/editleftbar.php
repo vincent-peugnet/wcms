@@ -183,7 +183,11 @@
         <label for="customhead">Custom head</label>
         <textarea name="customhead" wrap="off" spellcheck="false" rows="<?= $page->customhead('int') ?>"><?= $page->customhead() ?></textarea>
 
-        <label for="sleep">Sleep time (seconds)</label>
+        <label for="lang">Language</label>
+        <i>(default: <?= Wcms\Config::lang() ?> )</i>
+        <input type="text" name="lang" id="lang" value="<?= $page->lang() ?>" minlength="<?= Wcms\Config::LANG_MIN ?>" maxlength="<?= Wcms\Config::LANG_MAX ?>">
+
+        <label for="sleep">Sleep time (s)</label>
         <input type="number" name="sleep" id="sleep" value="<?= $page->sleep() ?>" min="0" max="180">
 
         <label for="redirection" title="page_id or URL like https://domain.org">Redirection</label>
