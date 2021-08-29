@@ -99,8 +99,8 @@ function idclean(string $input, int $max = Wcms\Model::MAX_ID_LENGTH): string
     $input = urldecode($input);
 
     if (preg_match($regex, $input)) {
-        $search =  ['é', 'à', 'è', 'ç', 'ù', 'ï', 'î', ' '];
-        $replace = ['e', 'a', 'e', 'c', 'u', 'i', 'i', '-'];
+        $search =  ['é', 'à', 'è', 'ç', 'ù', 'ü', 'ï', 'î', ' '];
+        $replace = ['e', 'a', 'e', 'c', 'u', 'u', 'i', 'i', '-'];
         $input = str_replace($search, $replace, $input);
 
         $input = preg_replace($regex, '', strtolower(trim($input)));

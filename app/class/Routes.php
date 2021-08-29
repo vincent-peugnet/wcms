@@ -18,7 +18,7 @@ class Routes
         if (!empty(Config::basepath())) {
             $router->setBasePath('/' . Config::basepath());
         }
-        $router->addMatchTypes(array('cid' => '[a-zA-Z0-9-_+,\'!%@&.$€=\(\|\)]+'));
+        $router->addMatchTypes(array('cid' => '[^/]+'));
         $router->addRoutes([
             ['GET', '/', 'Controllerhome#desktop', 'home'],
             ['POST', '/', 'Controllerhome#desktop', 'homequery'],
