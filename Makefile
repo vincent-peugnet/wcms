@@ -106,19 +106,22 @@ dist/w_cms_%.zip: all
 	zip $@ $(shell git ls-tree -r HEAD --name-only -d)
 # Remove non-useful files.
 	zip -d $@ \
-		"$(js_src_dir)/*" \
+		$(js_src_dir)/\* \
 		$(js_srcmaps) \
-		".github*" \
-		tests \
+		.github/\* \
 		.default.env \
 		.gitignore \
 		.release-it.json \
-		"composer*" \
+		codecov.yaml \
+		composer.json \
+		composer.lock \
 		Makefile \
-		"package*" \
+		package.json \
+		package-lock.json \
 		phpcs.xml \
 		phpunit.xml \
 		phpstan.neon \
+		tests/\* \
 		webpack.config.js
 
 # Generate the js bundles (and sourcemaps).
