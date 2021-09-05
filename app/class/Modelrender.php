@@ -232,7 +232,7 @@ class Modelrender extends Modelpage
     public function gethead()
     {
         $id = $this->page->id();
-        $globalpath = Model::dirtopath(Model::ASSETS_CSS_DIR);
+        $globalpath = Model::dirtopath(Model::CSS_DIR);
         $renderpath = Model::renderpath();
         $description = $this->page->description();
         $title = $this->page->title();
@@ -242,10 +242,10 @@ class Modelrender extends Modelpage
 
         $head .= "<meta charset=\"utf-8\" />\n";
         $head .= "<title>$title</title>\n";
-        if (!empty($this->page->favicon())) {
+        if (!empty($this->page->favicon()) && file_exists(self::FAVICON_DIR . $this->page->favicon())) {
             $href = Model::faviconpath() . $this->page->favicon();
             $head .= "<link rel=\"shortcut icon\" href=\"$href\" type=\"image/x-icon\">";
-        } elseif (!empty(Config::defaultfavicon())) {
+        } elseif (!empty(Config::defaultfavicon()) && file_exists(self::FAVICON_DIR . Config::defaultfavicon())) {
             $href = Model::faviconpath() . Config::defaultfavicon();
             $head .= "<link rel=\"shortcut icon\" href=\"$href\" type=\"image/x-icon\">";
         }
@@ -282,9 +282,9 @@ class Modelrender extends Modelpage
 
         $head .= PHP_EOL . $this->page->customhead() . PHP_EOL;
 
-
-        $head .= "<link href=\"{$globalpath}fonts.css\" rel=\"stylesheet\" />\n";
-        $head .= "<link href=\"{$globalpath}global.css\" rel=\"stylesheet\" />\n";
+        if (file_exists(self::GLOBAL_CSS_FILE)) {
+            $head .= "<link href=\"{$globalpath}global.css\" rel=\"stylesheet\" />\n";
+        }
 
         if (!empty($this->page->templatecss())) {
             $tempaltecsspage = $this->page->templatecss();
