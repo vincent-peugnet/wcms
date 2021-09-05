@@ -252,7 +252,7 @@ class Modelrender extends Modelpage
         $head .= "<meta name=\"description\" content=\"$description\" />\n";
         $head .= "<meta name=\"viewport\" content=\"width=device-width\" />\n";
 
-
+        $head .= "<meta property=\"og:type\" content=\"website\" />";
         $head .= "<meta property=\"og:title\" content=\"$title\">\n";
         $head .= "<meta property=\"og:description\" content=\"$description\">\n";
 
@@ -264,7 +264,7 @@ class Modelrender extends Modelpage
             $head .= "<meta property=\"og:image\" content=\"$content\">\n";
         }
 
-        $head .= "<meta property=\"og:url\" content=\"$url . $id/\">\n";
+        $head .= "<meta property=\"og:url\" content=\"$url$id/\">\n";
 
 
         foreach ($this->page->externalcss() as $externalcss) {
