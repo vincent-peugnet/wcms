@@ -105,9 +105,9 @@ class Optlist extends Opt
         return '<ul class="pagelist">' . PHP_EOL . $content . PHP_EOL . '</ul>' . PHP_EOL;
     }
 
-    public function li(string $content, string $id)
+    public function li(string $content, string $class)
     {
-        return '<li id="' . $id . '">' . PHP_EOL . $content . PHP_EOL . '</li>' . PHP_EOL;
+        return '<li class="pagelistitem ' . $class . '">' . PHP_EOL . $content . PHP_EOL . '</li>' . PHP_EOL;
     }
 
     public function a(string $content, string $class, string $id)
