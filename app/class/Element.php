@@ -15,7 +15,7 @@ class Element extends Item
     protected $content = '';
     protected $minheaderid = 1;
     protected $maxheaderid = 6;
-    protected $headerid = 1;
+    protected $headerid = '1-6';
 
 
     // ______________________________________________ F U N ________________________________________________________
@@ -91,12 +91,12 @@ class Element extends Item
         return $this->content;
     }
 
-    public function minheaderid()
+    public function minheaderid(): int
     {
         return $this->minheaderid;
     }
 
-    public function maxheaderid()
+    public function maxheaderid(): int
     {
         return $this->maxheaderid;
     }

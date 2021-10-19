@@ -16,10 +16,10 @@ class Summary extends Item
     /** @var int Maximum summary level*/
     protected $max = 6;
 
-    /** @var Header[] Headers datas */
+    /** @var array[] Headers datas */
     protected $sum = [];
 
-    /** @var string Name of element to display */
+    /** @var string|null Name of element to display */
     protected $element = null;
 
 
@@ -47,11 +47,18 @@ class Summary extends Item
      */
     public function sumparser()
     {
+        // check if a element is specified
+        if (!is_null($this->element) && isset($this->sum[$this->element])) {
+            $headers = $this->sum[$this->element()];
+        } else {
+            $headers = flatten($this->sum);
+        }
+
         $sumstring = '';
         $minlevel = $this->min - 1;
         $prevlevel = $minlevel;
 
-        foreach ($this->sum as $header) {
+        foreach ($headers as $header) {
             if ($header->level < $this->min || $header->level > $this->max) {
                 // not in the accepted range, skiping this header.
                 continue;

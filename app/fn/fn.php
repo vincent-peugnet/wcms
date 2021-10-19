@@ -100,6 +100,7 @@ function idclean(string $input, int $max = Wcms\Model::MAX_ID_LENGTH): string
 {
     $regex = '%[^a-z0-9-_]%';
     $input = urldecode($input);
+    $input = strip_tags($input);
 
     if (preg_match($regex, $input)) {
         $search =  ['é', 'à', 'è', 'ç', 'ù', 'ü', 'ï', 'î', ' '];
@@ -497,4 +498,13 @@ function file_put_content_chmod(string $filename, $data, int $permissions): int
         }
     }
     return $length;
+}
+
+function flatten(array $array): array
+{
+    $return = array();
+    array_walk_recursive($array, function ($a) use (&$return) {
+        $return[] = $a;
+    });
+    return $return;
 }
