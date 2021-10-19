@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use RuntimeException;
+
 abstract class Model
 {
 
@@ -22,6 +24,8 @@ abstract class Model
     public const GLOBAL_CSS_FILE = self::CSS_DIR . 'global.css';
     public const DATABASE_DIR = './database/';
     public const PAGES_DIR = self::DATABASE_DIR . 'pages/';
+
+    public const PERMISSION = 0660;
 
     public const MEDIA_SORTBY = [
         'id' => 'id',
@@ -234,5 +238,38 @@ abstract class Model
             $type = 'info';
         }
         $_SESSION['user' . Config::basepath()]['flashmessages'][] = ['content' => $content, 'type' => $type];
+    }
+
+    /**
+     * @param string $filename
+     * @param mixed $data
+     * @param int $permissions optionnal permission in octal format (a zero before three numbers)
+     *
+     * @return bool False if file is not writen, otherwise true (even if permission warning)
+     *
+     * Send flash messages:
+     * - error when problem writing the file
+     * - warning when problem with permissions
+     */
+    public static function writefile(string $filename, $data, int $permissions = self::PERMISSION): bool
+    {
+        if ($permissions < 0600 || $permissions > 0777) {
+            self::sendflashmessage(
+                sprintf("Invalid permissions 0%o, using default: 0%o", $permissions, self::PERMISSION),
+                'warning'
+            );
+            $permissions = self::PERMISSION;
+        }
+        try {
+            file_put_content_chmod($filename, $data, $permissions);
+        } catch (Chmodexception $e) {
+            Logger::warning($e->getMessage());
+            self::sendflashmessage($e->getMessage(), 'warning');
+        } catch (Ioexception $e) {
+            Logger::error($e->getMessage());
+            self::sendflashmessage($e->getMessage(), 'error');
+            return false;
+        }
+        return true;
     }
 }

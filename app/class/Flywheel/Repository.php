@@ -2,6 +2,8 @@
 
 namespace Wcms\Flywheel;
 
+use Wcms\Model;
+
 class Repository extends \JamesMoss\Flywheel\Repository
 {
     /**
@@ -27,5 +29,12 @@ class Repository extends \JamesMoss\Flywheel\Repository
         return array_map(function ($path) use ($ext) {
             return $this->getIdFromPath($path, $ext);
         }, $this->getAllFiles());
+    }
+
+    protected function write($path, $contents): bool
+    {
+        $ret = parent::write($path, $contents);
+        chmod($path, Model::PERMISSION);
+        return $ret;
     }
 }

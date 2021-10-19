@@ -1,6 +1,9 @@
 <?php
 
+use Wcms\Chmodexception;
+use Wcms\Ioexception;
 use Wcms\Mediaopt;
+use Wcms\Model;
 
 use function Clue\StreamFilter\fun;
 
@@ -468,4 +471,30 @@ function parse_size($size)
     } else {
         return round($size);
     }
+}
+
+/**
+ * @param string $filename Path to the file where to write the data.
+ * @param mixed $data The data to write. Can be either a string, an array or a stream resource.
+ * @param int $permissions in octal value
+ *
+ * @throws Ioexception when file_put_contents fails
+ * @throws Chmodexception when chmod fails
+ */
+function file_put_content_chmod(string $filename, $data, int $permissions): int
+{
+    $create = !file_exists($filename);
+    $length = file_put_contents($filename, $data);
+    if ($length === false) {
+        throw new Ioexception("Error while writing $filename");
+    }
+    if ($create) {
+        if ($permissions < 0700 || $permissions > 0777) {
+            throw new Chmodexception("Incorrect value", $permissions);
+        }
+        if (!chmod($filename, $permissions)) {
+            throw new Chmodexception("Error while setting file permissions $filename", $permissions);
+        }
+    }
+    return $length;
 }

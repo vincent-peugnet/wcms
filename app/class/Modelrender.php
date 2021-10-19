@@ -206,10 +206,10 @@ class Modelrender extends Modelpage
      */
     public function write(string $html)
     {
-        file_put_contents(Model::HTML_RENDER_DIR . $this->page->id() . '.html', $html);
-        file_put_contents(Model::RENDER_DIR . $this->page->id() . '.css', $this->page->css());
-        //file_put_contents(Model::RENDER_DIR . $this->page->id() . '.quick.css', $this->page->quickcss());
-        file_put_contents(Model::RENDER_DIR . $this->page->id() . '.js', $this->page->javascript());
+        self::writefile(self::HTML_RENDER_DIR . $this->page->id() . '.html', $html);
+        self::writefile(self::RENDER_DIR . $this->page->id() . '.css', $this->page->css());
+        //self::writefile(self::RENDER_DIR . $this->page->id() . '.quick.css', $this->page->quickcss());
+        self::writefile(self::RENDER_DIR . $this->page->id() . '.js', $this->page->javascript());
     }
 
 
@@ -218,11 +218,11 @@ class Modelrender extends Modelpage
     {
         if (array_key_exists('css', $this->page->template())) {
             $tempaltecsspage = $this->get($this->page->template()['css']);
-            file_put_contents(Model::RENDER_DIR . $tempaltecsspage->id() . '.css', $tempaltecsspage->css());
+            self::writefile(Model::RENDER_DIR . $tempaltecsspage->id() . '.css', $tempaltecsspage->css());
         }
         if (array_key_exists('javascript', $this->page->template())) {
             $templatejspage = $this->get($this->page->template()['javascript']);
-            file_put_contents(Model::RENDER_DIR . $templatejspage->id() . '.js', $templatejspage->javascript());
+            self::writefile(Model::RENDER_DIR . $templatejspage->id() . '.js', $templatejspage->javascript());
         }
     }
 

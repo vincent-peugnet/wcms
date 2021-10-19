@@ -91,7 +91,8 @@ abstract class Config
     public static function savejson()
     {
         $json = self::tojson();
-        return file_put_contents(Model::CONFIG_FILE, $json);
+
+        return Model::writefile(Model::CONFIG_FILE, $json);
     }
 
 

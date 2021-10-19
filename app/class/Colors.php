@@ -94,14 +94,11 @@ class Colors extends Item
     /**
      * Write css in the file
      * @param string $rawcss
-     * @throws \InvalidArgumentException If cant create
      */
     public function writecssfile(string $file, string $rawcss)
     {
         accessfile($file, true);
-        if (!file_put_contents($file, $rawcss)) {
-            throw new \InvalidArgumentException("cant create file : $this->file", 1);
-        }
+        Model::writefile($file, $rawcss);
     }
 
     /**
