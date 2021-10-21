@@ -2,9 +2,11 @@
 
 namespace Wcms;
 
+use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
+use RuntimeException;
 
 class Controllerpage extends Controller
 {
@@ -120,7 +122,10 @@ class Controllerpage extends Controller
         }
     }
 
-
+    /**
+     * @param string $id page ID
+     * @throws RuntimeException if HTML rendered file is not found
+     */
     public function read($id)
     {
         $this->setpage($id, 'pageread/');
@@ -139,7 +144,7 @@ class Controllerpage extends Controller
                 }
             }
 
-            if ($this->page->daterender() < $this->page->datemodif()) {
+            if ($this->page->daterender() <= $this->page->datemodif()) {
                 if (Config::reccursiverender()) {
                     $this->reccursiverender($this->page);
                 }
@@ -163,7 +168,7 @@ class Controllerpage extends Controller
                 sleep($this->page->sleep());
                 echo $html;
             } else {
-                echo 'Please render this page';
+                throw new RuntimeException("html render not founded, please render this page");
             }
         } else {
             http_response_code(404);
@@ -372,6 +377,8 @@ class Controllerpage extends Controller
             if ($this->page !== false && $this->canedit() && $this->pagemanager->get($targetid) === false) {
                 $this->page->setid($targetid);
                 $this->page->setdatecreation(true); // Reset date of creation
+                $this->page->setdatemodif(new DateTimeImmutable());
+                $this->page->setdaterender(new DateTimeImmutable());
                 $this->page->addauthor($this->user->id());
                 $this->pagemanager->add($this->page);
                 return true;
