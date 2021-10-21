@@ -42,7 +42,7 @@ class Modelrender extends Modelpage
     public function rendermanual(string $text): string
     {
         $text = $this->markdown($text);
-        $text = $this->headerid($text, 1, 5, 'main');
+        $text = $this->headerid($text, 1, 5, 'main', false);
         return $text;
     }
 
@@ -194,7 +194,13 @@ class Modelrender extends Modelpage
         }
         $content = $this->desctitle($content, $this->page->description(), $this->page->title());
         if ($element->headerid()) {
-            $content = $this->headerid($content, $element->minheaderid(), $element->maxheaderid(), $element->type());
+            $content = $this->headerid(
+                $content,
+                $element->minheaderid(),
+                $element->maxheaderid(),
+                $element->type(),
+                $element->headeranchor()
+            );
         }
 
         return $content;
@@ -457,7 +463,7 @@ class Modelrender extends Modelpage
      * @return string text with id in header
      */
 
-    public function headerid(string $text, int $min, int $max, string $element): string
+    public function headerid(string $text, int $min, int $max, string $element, bool $anchor): string
     {
         if ($min > 6 || $min < 1) {
             $min = 6;
@@ -468,7 +474,7 @@ class Modelrender extends Modelpage
 
         $text = preg_replace_callback(
             "/<h([$min-$max])((.*)id=\"([^\"]*)\"(.*)|.*)>(.+)<\/h[$min-$max]>/mU",
-            function ($matches) use ($element) {
+            function ($matches) use ($element, $anchor) {
                 $level = $matches[1];
                 $beforeid = $matches[3];
                 $id = $matches[4];
@@ -479,6 +485,9 @@ class Modelrender extends Modelpage
                     $id = idclean($content);
                 }
                 $this->sum[$element][] = new Header($id, intval($level), $content);
+                if ($anchor) {
+                    $content = "<a href=\"#$id\">$content</a>";
+                }
                 return "<h$level $beforeid id=\"$id\" $afterid>$content</h$level>";
             },
             $text

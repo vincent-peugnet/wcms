@@ -407,6 +407,11 @@ By default, HTML `#id` are generated for every `<h1>` to `<h6>` headings. You ca
 You can also set `headerid=0` to totaly disable ID generation for this element.
 
 
+##### Anchor links in title
+
+    %<element>?headeranchor=(0|1)%
+
+Use this to transform headings to anchor links pointing to themself. This settings is deactivated by default.
 
 ### Templating
 

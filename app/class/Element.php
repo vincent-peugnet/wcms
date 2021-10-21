@@ -16,6 +16,7 @@ class Element extends Item
     protected $minheaderid = 1;
     protected $maxheaderid = 6;
     protected $headerid = '1-6';
+    protected bool $headeranchor = false;
 
 
     // ______________________________________________ F U N ________________________________________________________
@@ -106,6 +107,11 @@ class Element extends Item
         return $this->headerid;
     }
 
+    public function headeranchor()
+    {
+        return $this->headeranchor;
+    }
+
 
 
 
@@ -168,5 +174,10 @@ class Element extends Item
             $this->minheaderid = intval($out[1]);
             $this->maxheaderid = intval($out[2]);
         }
+    }
+
+    public function setheaderanchor($headeranchor)
+    {
+        $this->headeranchor = (bool) $headeranchor;
     }
 }
