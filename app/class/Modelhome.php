@@ -25,7 +25,7 @@ class Modelhome extends Modelpage
 
 
     /**
-     * @param array  $pagelist of Pages objects as `id => Page`
+     * @param Page[]  $pagelist of Pages objects as `id => Page`
      * @param Opt $opt
      *
      * @param string $regex Regex to match.

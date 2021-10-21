@@ -600,6 +600,7 @@ class Modelrender extends Modelpage
                 $optlist = new Optlist(['render' => $this]);
                 $optlist->parsehydrate($match['options']);
                 $pagetable = $modelhome->pagetable($this->pagelist(), $optlist, '', []);
+                $this->linkto = array_merge($this->linkto, array_keys($pagetable));
                 $content = $optlist->listhtml($pagetable, $this->page, $this);
                 $text = str_replace($match['fullmatch'], $content, $text);
             }
@@ -689,6 +690,10 @@ class Modelrender extends Modelpage
     {
         sort($this->linkto);
         $linkto = $this->linkto;
+        $key = array_search($this->page->id(), $linkto);
+        if ($key) {
+            unset($linkto[$key]);
+        }
         $this->linkto = [];
         return $linkto;
     }
