@@ -490,8 +490,8 @@ function file_put_content_chmod(string $filename, $data, int $permissions): int
         throw new Ioexception("Error while writing $filename");
     }
     if ($create) {
-        if ($permissions < 0700 || $permissions > 0777) {
-            throw new Chmodexception("Incorrect value", $permissions);
+        if ($permissions < 0600 || $permissions > 0777) {
+            throw new Chmodexception("Incorrect permissions value", $permissions);
         }
         if (!chmod($filename, $permissions)) {
             throw new Chmodexception("Error while setting file permissions $filename", $permissions);
