@@ -213,9 +213,9 @@ class Modelrender extends Modelpage
     public function write(string $html)
     {
         self::writefile(self::HTML_RENDER_DIR . $this->page->id() . '.html', $html);
-        self::writefile(self::RENDER_DIR . $this->page->id() . '.css', $this->page->css());
+        self::writefile(self::RENDER_DIR . $this->page->id() . '.css', $this->page->css(), 0664);
         //self::writefile(self::RENDER_DIR . $this->page->id() . '.quick.css', $this->page->quickcss());
-        self::writefile(self::RENDER_DIR . $this->page->id() . '.js', $this->page->javascript());
+        self::writefile(self::RENDER_DIR . $this->page->id() . '.js', $this->page->javascript(), 0664);
     }
 
 
