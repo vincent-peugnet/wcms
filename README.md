@@ -9,7 +9,7 @@ To have a better idea of what W can do, you can check out the [User manual](MANU
 If tou want to try it out, you can :
 
 - follow the [install instructions](#how-to-install) to host your own instance of W.
-- be hosted for free by [club1.fr](https://club1.fr) as an official tester (please contact [v.peugnet@free.fr](mailto:v.peugnet@free.fr) for more info).
+- be hosted for free by [club1.fr](https://club1.fr) as an official tester (please contact [vincent@club1.fr](mailto:v.peugnet@free.fr) for more info).
 - [install from sources](#install-from-sources), if you want to contribute to the code.
 
 W is a free and open source tool under the MIT License. The project was initiated in 2018 by Vincent Peugnet.
