@@ -1,5 +1,6 @@
 const path = require('path');
 const PrettierPlugin = require('prettier-webpack-plugin');
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = (env) => {
 	return {
@@ -41,6 +42,13 @@ module.exports = (env) => {
 		],
 		externals: {
 			'@sentry/browser': 'Sentry',
+		},
+		optimization: {
+			minimizer: [
+				new TerserPlugin({
+					extractComments: false,
+				}),
+			],
 		},
 	}
 };
