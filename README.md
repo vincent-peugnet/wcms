@@ -78,7 +78,7 @@ How to install
 ### Server requirements
 
 - apache server
-- PHP >=7.2.0
+- PHP >=7.4.0
 
 __W__ don't need any database manager as it use a "flat file" system.
 
@@ -97,7 +97,7 @@ If you want to contribute to the project.
 
 ## Prerequisites
 
-- PHP >=7.2.0
+- PHP >=7.4.0
 - PHP extensions : curl mbstring
 - [Composer](https://getcomposer.org/)
 - _Optionally_ [NPM](https://www.npmjs.com/get-npm)
