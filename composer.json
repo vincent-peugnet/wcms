@@ -11,11 +11,11 @@
     },
     "require-dev": {
         "filp/whoops": "^2.7",
-        "pepakriz/phpstan-exception-rules": "^0.10.1",
+        "pepakriz/phpstan-exception-rules": "^0.11.2",
         "phpstan/phpstan": "^0.12.19",
         "phpstan/phpstan-phpunit": "^0.12.8",
         "phpunit/phpunit": "^8.5",
-        "sentry/sdk": "^2.0",
+        "sentry/sdk": "^3.1",
         "squizlabs/php_codesniffer": "^3.5"
     },
     "autoload": {

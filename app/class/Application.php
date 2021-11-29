@@ -121,7 +121,7 @@ class Application
             <input
                 type="text"
                 name="configinit[secretkey]"
-                value="<?= bin2hex(random_bytes(10)) ?>"
+                value="<?= bin2hex(randombytes(10)) ?>"
                 id="secretkey"
                 minlength="<?= Config::SECRET_KEY_MIN ?>"
                 maxlength="<?= Config::SECRET_KEY_MAX ?>"

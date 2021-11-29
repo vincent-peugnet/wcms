@@ -293,7 +293,7 @@ class User extends Item
     {
         $exist = true;
         while ($exist === true) {
-            $session = bin2hex(random_bytes(10));
+            $session = bin2hex(randombytes(10));
             $exist = key_exists($session, $this->sessions());
         }
         $this->sessions[$session] = $info;

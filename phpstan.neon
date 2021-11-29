@@ -13,7 +13,6 @@ parameters:
         - app/view/*
         - vendor/*
     exceptionRules:
-        ignoreDescriptiveUncheckedExceptions: true
         # ignore some exceptions and their chlidrens
         uncheckedExceptions:
             - Error

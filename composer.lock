@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eff29147f27588c322d7cea009252b03",
+    "content-hash": "26c302b345f2fc6d235ba64647ac070d",
     "packages": [
         {
             "name": "altorouter/altorouter",
@@ -626,29 +626,32 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.8.3",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "1afdd860a2566ed3c2b0b4a3de6e23434a79ec85"
+                "reference": "089edd38f5b8abba6cb01567c2a8aaa47cec4c72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/1afdd860a2566ed3c2b0b4a3de6e23434a79ec85",
-                "reference": "1afdd860a2566ed3c2b0b4a3de6e23434a79ec85",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/089edd38f5b8abba6cb01567c2a8aaa47cec4c72",
+                "reference": "089edd38f5b8abba6cb01567c2a8aaa47cec4c72",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0",
-                "psr/http-message": "~1.0",
-                "ralouphie/getallheaders": "^2.0.5 || ^3.0.0"
+                "php": "^7.2.5 || ^8.0",
+                "psr/http-factory": "^1.0",
+                "psr/http-message": "^1.0",
+                "ralouphie/getallheaders": "^3.0"
             },
             "provide": {
+                "psr/http-factory-implementation": "1.0",
                 "psr/http-message-implementation": "1.0"
             },
             "require-dev": {
-                "ext-zlib": "*",
-                "phpunit/phpunit": "~4.8.36 || ^5.7.27 || ^6.5.14 || ^7.5.20 || ^8.5.8 || ^9.3.10"
+                "bamarni/composer-bin-plugin": "^1.4.1",
+                "http-interop/http-factory-tests": "^0.9",
+                "phpunit/phpunit": "^8.5.8 || ^9.3.10"
             },
             "suggest": {
                 "laminas/laminas-httphandlerrunner": "Emit PSR-7 responses"
@@ -656,16 +659,13 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.7-dev"
+                    "dev-master": "2.1-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
                     "GuzzleHttp\\Psr7\\": "src/"
-                },
-                "files": [
-                    "src/functions_include.php"
-                ]
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -701,6 +701,11 @@
                     "name": "Tobias Schultze",
                     "email": "webmaster@tubo-world.de",
                     "homepage": "https://github.com/Tobion"
+                },
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com",
+                    "homepage": "https://sagikazarmark.hu"
                 }
             ],
             "description": "PSR-7 message implementation that also provides common utility methods",
@@ -728,7 +733,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-10-05T13:56:00+00:00"
+            "time": "2021-10-06T17:43:30+00:00"
         },
         {
             "name": "http-interop/http-factory-guzzle",
@@ -890,40 +895,91 @@
             "time": "2020-11-13T09:40:50+00:00"
         },
         {
-            "name": "pepakriz/phpstan-exception-rules",
-            "version": "v0.10.1",
+            "name": "nikic/php-parser",
+            "version": "v4.13.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/pepakriz/phpstan-exception-rules.git",
-                "reference": "7073711906e22509cbfacbca0a914e0f8ff2e6c8"
+                "url": "https://github.com/nikic/PHP-Parser.git",
+                "reference": "63a79e8daa781cac14e5195e63ed8ae231dd10fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pepakriz/phpstan-exception-rules/zipball/7073711906e22509cbfacbca0a914e0f8ff2e6c8",
-                "reference": "7073711906e22509cbfacbca0a914e0f8ff2e6c8",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/63a79e8daa781cac14e5195e63ed8ae231dd10fd",
+                "reference": "63a79e8daa781cac14e5195e63ed8ae231dd10fd",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1",
-                "phpstan/phpstan": "^0.12.0"
+                "ext-tokenizer": "*",
+                "php": ">=7.0"
             },
             "require-dev": {
-                "jakub-onderka/php-console-highlighter": "0.4.0",
-                "jakub-onderka/php-parallel-lint": "1.0.0",
+                "ircmaxell/php-yacc": "^0.0.7",
+                "phpunit/phpunit": "^6.5 || ^7.0 || ^8.0 || ^9.0"
+            },
+            "bin": [
+                "bin/php-parse"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.9-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PhpParser\\": "lib/PhpParser"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Popov"
+                }
+            ],
+            "description": "A PHP parser written in PHP",
+            "keywords": [
+                "parser",
+                "php"
+            ],
+            "time": "2021-11-03T20:52:16+00:00"
+        },
+        {
+            "name": "pepakriz/phpstan-exception-rules",
+            "version": "v0.11.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pepakriz/phpstan-exception-rules.git",
+                "reference": "0de69d8fc6e08b6ed79986eb19b9e23355b3d0f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pepakriz/phpstan-exception-rules/zipball/0de69d8fc6e08b6ed79986eb19b9e23355b3d0f4",
+                "reference": "0de69d8fc6e08b6ed79986eb19b9e23355b3d0f4",
+                "shasum": ""
+            },
+            "require": {
+                "nikic/php-parser": "^4.4",
+                "php": ">=7.1",
+                "phpstan/phpstan": "^0.12.26"
+            },
+            "require-dev": {
                 "nette/utils": "^3.0",
-                "php-coveralls/php-coveralls": "^2.1",
-                "phpstan/phpstan": "^0.12.0",
+                "php-parallel-lint/php-console-highlighter": "^0.4.0",
+                "php-parallel-lint/php-parallel-lint": "^1.2.0",
                 "phpstan/phpstan-nette": "^0.12.0",
                 "phpstan/phpstan-phpunit": "^0.12.0",
                 "phpstan/phpstan-strict-rules": "^0.12.0",
-                "phpunit/phpunit": "^7.5.6",
-                "slevomat/coding-standard": "^5.0.4",
+                "phpunit/phpunit": "^7.5.6 || ^9.4.2",
+                "slevomat/coding-standard": "^6.4.1",
                 "squizlabs/php_codesniffer": "~3.5.2"
             },
             "type": "phpstan-extension",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.10-dev"
+                    "dev-master": "0.11-dev"
                 },
                 "phpstan": {
                     "includes": [
@@ -941,7 +997,7 @@
                 "MIT"
             ],
             "description": "Exception rules for PHPStan",
-            "time": "2019-12-09T06:14:56+00:00"
+            "time": "2021-05-05T06:07:22+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -3068,21 +3124,21 @@
         },
         {
             "name": "sentry/sdk",
-            "version": "2.2.0",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getsentry/sentry-php-sdk.git",
-                "reference": "089858b1b27d3705a5fd1c32d8d10beb55980190"
+                "reference": "f03133b067fdf03fed09ff03daf3f1d68f5f3673"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getsentry/sentry-php-sdk/zipball/089858b1b27d3705a5fd1c32d8d10beb55980190",
-                "reference": "089858b1b27d3705a5fd1c32d8d10beb55980190",
+                "url": "https://api.github.com/repos/getsentry/sentry-php-sdk/zipball/f03133b067fdf03fed09ff03daf3f1d68f5f3673",
+                "reference": "f03133b067fdf03fed09ff03daf3f1d68f5f3673",
                 "shasum": ""
             },
             "require": {
                 "http-interop/http-factory-guzzle": "^1.0",
-                "sentry/sentry": "^2.5",
+                "sentry/sentry": "^3.1",
                 "symfony/http-client": "^4.3|^5.0"
             },
             "type": "metapackage",
@@ -3117,29 +3173,29 @@
                     "type": "custom"
                 }
             ],
-            "time": "2020-09-14T09:30:55+00:00"
+            "time": "2020-12-01T10:31:45+00:00"
         },
         {
             "name": "sentry/sentry",
-            "version": "2.5.2",
+            "version": "3.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getsentry/sentry-php.git",
-                "reference": "ce63f13e2cf9f72ec169413545a3f7312b2e45e3"
+                "reference": "ecbd09ea5d053a202cf773cb24ab28af820831bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/ce63f13e2cf9f72ec169413545a3f7312b2e45e3",
-                "reference": "ce63f13e2cf9f72ec169413545a3f7312b2e45e3",
+                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/ecbd09ea5d053a202cf773cb24ab28af820831bd",
+                "reference": "ecbd09ea5d053a202cf773cb24ab28af820831bd",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-mbstring": "*",
-                "guzzlehttp/promises": "^1.3",
-                "guzzlehttp/psr7": "^1.7",
+                "guzzlehttp/promises": "^1.4",
+                "guzzlehttp/psr7": "^1.7|^2.0",
                 "jean85/pretty-package-versions": "^1.5|^2.0.1",
-                "php": "^7.1",
+                "php": "^7.2|^8.0",
                 "php-http/async-client-implementation": "^1.0",
                 "php-http/client-common": "^1.5|^2.0",
                 "php-http/discovery": "^1.6.1",
@@ -3147,8 +3203,9 @@
                 "php-http/message": "^1.5",
                 "psr/http-factory": "^1.0",
                 "psr/http-message-implementation": "^1.0",
-                "psr/log": "^1.0",
-                "symfony/options-resolver": "^2.7|^3.0|^4.0|^5.0",
+                "psr/log": "^1.0|^2.0|^3.0",
+                "symfony/options-resolver": "^3.4.43|^4.4.30|^5.0.11|^6.0",
+                "symfony/polyfill-php80": "^1.17",
                 "symfony/polyfill-uuid": "^1.13.1"
             },
             "conflict": {
@@ -3156,14 +3213,16 @@
                 "raven/raven": "*"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.16",
+                "friendsofphp/php-cs-fixer": "^2.17",
+                "http-interop/http-factory-guzzle": "^1.0",
                 "monolog/monolog": "^1.3|^2.0",
-                "php-http/mock-client": "^1.4",
+                "nikic/php-parser": "^4.10.3",
+                "php-http/mock-client": "^1.3",
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^0.12",
                 "phpstan/phpstan-phpunit": "^0.12",
-                "phpunit/phpunit": "^7.5.20",
-                "symfony/phpunit-bridge": "^5.2",
+                "phpunit/phpunit": "^8.5.14|^9.4",
+                "symfony/phpunit-bridge": "^5.2|^6.0",
                 "vimeo/psalm": "^4.2"
             },
             "suggest": {
@@ -3172,7 +3231,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5.x-dev"
+                    "dev-master": "3.3.x-dev"
                 }
             },
             "autoload": {
@@ -3214,7 +3273,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2021-02-02T08:58:09+00:00"
+            "time": "2021-11-08T08:44:00+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",

@@ -35,7 +35,7 @@ class Modelauthtoken extends Modeldb
 
         $exist = true;
         while ($exist !== false) {
-            $id = bin2hex(random_bytes(self::AUTHTOKEN_ID_LENGTH));
+            $id = bin2hex(randombytes(self::AUTHTOKEN_ID_LENGTH));
             $exist = $this->repo->findById($id);
         }
 

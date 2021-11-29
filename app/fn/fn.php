@@ -5,8 +5,6 @@ use Wcms\Ioexception;
 use Wcms\Mediaopt;
 use Wcms\Model;
 
-use function Clue\StreamFilter\fun;
-
 function readablesize($bytes, $base = 2 ** 10)
 {
     $format = ' %d %s';
@@ -507,4 +505,13 @@ function flatten(array $array): array
         $return[] = $a;
     });
     return $return;
+}
+
+function randombytes(int $seed): string
+{
+    try {
+        return random_bytes($seed);
+    } catch (Exception $e) {
+        throw new \LogicException("random_bytes failed", 0, $e);
+    }
 }
