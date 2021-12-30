@@ -98,7 +98,7 @@ class Colors extends Item
     public function writecssfile(string $file, string $rawcss)
     {
         accessfile($file, true);
-        Model::writefile($file, $rawcss);
+        Model::writefile($file, $rawcss, 0664);
     }
 
     /**
