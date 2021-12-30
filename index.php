@@ -26,7 +26,6 @@ if (isreportingerrors()) {
     Sentry\init([
         'dsn' => Wcms\Config::sentrydsn(),
         'release' => getversion(),
-        'project_root' => 'app',
     ]);
     Sentry\configureScope(function ($scope) {
         $scope->setUser([
