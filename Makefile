@@ -18,7 +18,6 @@ endif
 endif
 override GIT_VERSION    := $(shell git --no-pager describe --always --tags)
 override CUR_VERSION    := $(strip $(shell cat VERSION 2>/dev/null))
-override WEBPACK_FLAGS  += $(if $(filter $(ENV),dist),-p)
 override COMPOSER_FLAGS += $(if $(filter $(ENV),dist),--no-dev --prefer-dist)
 PREV_ENV_FILE           := $(build_dir)/prev_env
 PREV_ENV                := $(strip $(shell cat $(PREV_ENV_FILE) 2>/dev/null))
