@@ -74,7 +74,7 @@ abstract class Item
     }
 
     /**
-     * Reccursive transform obj vars to array
+     * recursive transform obj vars to array
      */
     public function obj2array($obj, &$arr)
     {

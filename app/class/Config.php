@@ -25,7 +25,7 @@ abstract class Config
     protected static $analytics = '';
     protected static $externallinkblank = true;
     protected static $internallinkblank = false;
-    protected static $reccursiverender = true;
+    protected static $recursiverender = true;
     protected static $defaultprivacy = 0;
     protected static $homepage = 'default';
     protected static $homeredirect = null;
@@ -252,9 +252,9 @@ abstract class Config
         return self::$internallinkblank;
     }
 
-    public static function reccursiverender()
+    public static function recursiverender()
     {
-        return self::$reccursiverender;
+        return self::$recursiverender;
     }
 
     public static function defaultprivacy()
@@ -445,9 +445,9 @@ abstract class Config
         self::$internallinkblank = boolval($internallinkblank);
     }
 
-    public static function setreccursiverender($reccursiverender)
+    public static function setrecursiverender($recursiverender)
     {
-        self::$reccursiverender = boolval($reccursiverender);
+        self::$recursiverender = boolval($recursiverender);
     }
 
     public static function setdefaultprivacy($defaultprivacy)

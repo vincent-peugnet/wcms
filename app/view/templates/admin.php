@@ -167,9 +167,9 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'home.css'
                 <h2 id="render">Render</h2>
 
                 <div class="checkbox">
-                    <input type="hidden" name="reccursiverender" value="0" form="admin">
-                    <input type="checkbox" name="reccursiverender" id="reccursiverender" value="1" <?= Wcms\Config::reccursiverender() ? 'checked' : '' ?> form="admin">
-                    <label for="reccursiverender">Reccursive render</label>
+                    <input type="hidden" name="recursiverender" value="0" form="admin">
+                    <input type="checkbox" name="recursiverender" id="recursiverender" value="1" <?= Wcms\Config::recursiverender() ? 'checked' : '' ?> form="admin">
+                    <label for="recursiverender">recursive render</label>
                 </div>
 
                 <label for="lang">Default language</label>

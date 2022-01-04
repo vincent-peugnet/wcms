@@ -118,8 +118,8 @@
             </select>
 
                 <div class="subtemplate">
-                <input type="checkbox" name="templateoptions[]" id="oreccursivecss" value="reccursivecss" <?= in_array('reccursivecss', $page->templateoptions()) ? 'checked' : '' ?>>
-                <label for="oreccursivecss">Reccursive template</label>
+                <input type="checkbox" name="templateoptions[]" id="orecursivecss" value="recursivecss" <?= in_array('recursivecss', $page->templateoptions()) ? 'checked' : '' ?>>
+                <label for="orecursivecss">recursive template</label>
                 </div>
                 <div class="subtemplate">
                 <input type="checkbox" name="templateoptions[]" id="oexternalcss" value="externalcss" <?= in_array('externalcss', $page->templateoptions()) ? 'checked' : '' ?>>

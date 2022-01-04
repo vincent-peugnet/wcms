@@ -110,7 +110,7 @@ class Controllerpage extends Controller
         return $page;
     }
 
-    public function reccursiverender(Page $page)
+    public function recursiverender(Page $page)
     {
         $relatedpages = array_diff($page->linkto(), [$page->id()]);
         foreach ($relatedpages as $pageid) {
@@ -145,8 +145,8 @@ class Controllerpage extends Controller
             }
 
             if ($this->page->daterender() <= $this->page->datemodif()) {
-                if (Config::reccursiverender()) {
-                    $this->reccursiverender($this->page);
+                if (Config::recursiverender()) {
+                    $this->recursiverender($this->page);
                 }
                 $this->page = $this->renderpage($this->page);
             }

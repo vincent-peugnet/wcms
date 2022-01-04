@@ -99,7 +99,7 @@ class Page extends Dbitem
         $this->settemplatebody('');
         $this->settemplatecss('');
         $this->settemplatejavascript('');
-        $this->settemplateoptions(['externalcss', 'externaljavascript', 'favicon', 'thumbnail', 'reccursivecss']);
+        $this->settemplateoptions(['externalcss', 'externaljavascript', 'favicon', 'thumbnail', 'recursivecss']);
         $this->setfavicon('');
         $this->setthumbnail('');
         $this->setauthors([]);
@@ -280,7 +280,7 @@ class Page extends Dbitem
         $template['css'] = $this->templatecss;
         $template['javascript'] = $this->templatejavascript;
 
-        $template['cssreccursive'] = $this->checkoption('reccursive');
+        $template['cssrecursive'] = $this->checkoption('recursive');
         $template['externalcss'] = $this->checkoption('externalcss');
         $template['cssfavicon'] = $this->checkoption('favicon');
         $template['cssthumbnail'] = $this->checkoption('thumbnail');

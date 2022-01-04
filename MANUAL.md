@@ -428,10 +428,10 @@ CSS template allow you to link another page's stylesheet to your page.
 
 Options are :
 
-##### Reccursive template
+##### Recursive template
 
 If templated page is already templating another page, this will add it to the stylesheet links.
-If you don't want this reccursivity, uncheck the option.
+If you don't want this recursivity, uncheck the option.
 
 This option is checked by default.
 
