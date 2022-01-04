@@ -286,16 +286,11 @@ class Modelrender extends Modelpage
             }
         }
 
-        $head .= PHP_EOL . $this->page->customhead() . PHP_EOL;
-
         if (file_exists(self::GLOBAL_CSS_FILE)) {
             $head .= "<link href=\"{$globalpath}global.css\" rel=\"stylesheet\" />\n";
         }
 
-        if (!empty($this->page->templatecss())) {
-            $tempaltecsspage = $this->page->templatecss();
-            $head .= "<link href=\"$renderpath$tempaltecsspage.css\" rel=\"stylesheet\" />\n";
-        }
+        $head .= $this->recursivecss($this->page);
         $head .= "<link href=\"$renderpath$id.css\" rel=\"stylesheet\" />\n";
 
         if (!empty($this->page->templatejavascript())) {
@@ -321,6 +316,8 @@ class Modelrender extends Modelpage
 			\n";
         }
 
+        $head .= PHP_EOL . $this->page->customhead() . PHP_EOL;
+
         if (!empty($this->page->redirection())) {
             if (preg_match('%https?:\/\/\S*%', $this->page->redirection(), $out)) {
                 $url = $out[0];
@@ -331,6 +328,27 @@ class Modelrender extends Modelpage
         }
 
 
+        return $head;
+    }
+
+    /**
+     * This create a HTML link for every stylsheet that are templated
+     *
+     * @param Page $page Page being rendered
+     * @param string $head used to transfert head in recursivity
+     * @return string HTML to insert into <head> of page
+     */
+    public function recursivecss(Page $page, string $head = ''): string
+    {
+        $renderpath = Model::renderpath();
+        if (!empty($page->templatecss()) && $page->templatecss() !== $page->id()) {
+            $tempaltecsspageid = $page->templatecss();
+            $head .= "<link href=\"$renderpath$tempaltecsspageid.css\" rel=\"stylesheet\" />\n";
+            if (in_array('recursivecss', $page->templateoptions())) {
+                $templatecsspage = $this->get($tempaltecsspageid);
+                $head .= $this->recursivecss($templatecsspage, $head);
+            }
+        }
         return $head;
     }
 

@@ -274,7 +274,7 @@ class Page extends Dbitem
         return $this->templatejavascript;
     }
 
-    public function template()
+    public function template(): array
     {
         $template['body'] = $this->templatebody;
         $template['css'] = $this->templatecss;
@@ -290,7 +290,7 @@ class Page extends Dbitem
         return $template;
     }
 
-    public function templateoptions($type = 'array')
+    public function templateoptions(): array
     {
         return $this->templateoptions;
     }
