@@ -13,6 +13,7 @@
     <?php } ?>
     <title><?= $title ?></title>
 
+    <link rel="stylesheet" href="<?= Wcms\Model::assetscsspath() ?>fork-awesome.css">
     <?php foreach ($stylesheets as $stylsheet) { ?>
         <link rel="stylesheet" href="<?= $stylsheet ?>">
     <?php } ?>

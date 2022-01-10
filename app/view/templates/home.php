@@ -96,11 +96,11 @@
                                 <th class="favicon"><a href="<?= $opt->sortbyorder('favicon') ?>">ico</a></th>
                             <?php } ?>
                             <th class="id"><a href="<?= $opt->sortbyorder('id') ?>">id</a></th>
-                            <th>edit</th>
-                            <th>see</th>
-                            <th class="delete" title="delete page">del</th>
+                            <th></th>
+                            <th></th>
+                            <th class="delete" title="delete page"></th>
                             <?php if ($user->issupereditor()) { ?>
-                            <th class="download hidephone" title="download page as json">dl</th>
+                            <th class="download hidephone" title="download page as json"></th>
                             <?php }
                                 if ($columns['tag']) { ?>
                             <th class="tag"><a href="<?= $opt->sortbyorder('tag') ?>">tag</a></th>
@@ -148,11 +148,31 @@
                                 <td class="favicon"><img class="favicon" src="<?= Wcms\Model::faviconpath() . $item->favicon() ?>" alt="<?= $item->favicon() ?>" title="<?= $item->favicon() ?>"></td>
                             <?php } ?>
                             <td class="id"><label title="<?= $item->title() ?>" for="id_<?= $item->id() ?>"><?= $item->id() ?></label></td>
-                            <td><?php if($user->issupereditor() || in_array($user->id(), $item->authors())) { ?><a href="<?= $this->upage('pageedit', $item->id()) ?>"><img src="<?= Wcms\Model::iconpath() ?>edit.png" class="icon"></a><?php } ?></td>
-                            <td><a href="<?= $this->upage('pageread/', $item->id()) ?>" target="_blank"><img src="<?= Wcms\Model::iconpath() ?>read.png" class="icon"></a></td>
-                        <td class="delete"><?php if($user->issupereditor() || $item->authors() === [$user->id()]) { ?><a href="<?= $this->upage('pagedelete', $item->id()) ?>">✖</a><?php } ?></td>
+                            <td>
+                                <?php if($user->issupereditor() || in_array($user->id(), $item->authors())) { ?>
+                                    <a href="<?= $this->upage('pageedit', $item->id()) ?>">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <?php } ?>
+                            </td>
+                            <td>
+                                <a href="<?= $this->upage('pageread/', $item->id()) ?>" target="<?= $item->id() ?>">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </td>
+                            <td class="delete">
+                                <?php if($user->issupereditor() || $item->authors() === [$user->id()]) { ?>
+                                    <a href="<?= $this->upage('pagedelete', $item->id()) ?>">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                <?php } ?>
+                            </td>
                             <?php if ($user->issupereditor()) { ?>
-                            <td class="hidephone"><a href="<?= $this->upage('pagedownload', $item->id()) ?>" download><img src="<?= Wcms\Model::iconpath() ?>download.png" class="icon"></a></td>
+                            <td class="hidephone">
+                                <a href="<?= $this->upage('pagedownload', $item->id()) ?>" download>
+                                    <i class="fa fa-download"></i>
+                                </a>
+                            </td>
                             <?php }
                                     if ($columns['tag']) { ?>
                             <td class="tag"><?= $opt->taglinks($item->tag('array')) ?></td>

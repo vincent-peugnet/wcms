@@ -23,11 +23,11 @@
 
 <span id="menu">
 <a href="<?= $this->url('home') ?>" <?= $tab == 'home' ? 'class="actualpage"' : '' ?>>
-    <img src="<?= Wcms\Model::iconpath() ?>home.png" alt="" class="icon">
+    <i class="fa fa-home"></i>
     <span class="hidephone">home</span>
 </a>
 <a href="<?= $this->url('media') ?>" <?= $tab == 'media' ? 'class="actualpage"' : '' ?>>
-    <img src="<?= Wcms\Model::iconpath() ?>media.png" alt="" class="icon">
+    <i class="fa fa-link"></i>
     <span class="hidephone">media</span>
 </a>
 
@@ -69,7 +69,7 @@
 if($user->isadmin()) {
 ?>
 <a href="<?= $this->url('admin') ?>" <?= $tab == 'admin' ? 'class="actualpage"' : '' ?>>
-    <img src="<?= Wcms\Model::iconpath() ?>admin.png" alt="" class="icon">
+    <i class="fa fa-cog"></i>
     <span class="hidephone">admin</span>
 
 </a>
@@ -77,12 +77,12 @@ if($user->isadmin()) {
 }
 ?>
 <a href="<?= $this->url('info') ?>"  <?= $tab == 'info' ? 'class="actualpage"' : '' ?>>
-    <img src="<?= Wcms\Model::iconpath() ?>info.png" alt="" class="icon">
+    <i class="fa fa-question-circle"></i>
     <span class="hidephone">info</span>
 </a>
 
 <a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>>
-    <img src="<?= Wcms\Model::iconpath() ?>user.png" alt="" class="icon">
+    <i class="fa fa-user"></i>
     <span class="hidephone"><?= $user->id() ?></span>
 </a>
 <i><?= $user->level() ?></i>

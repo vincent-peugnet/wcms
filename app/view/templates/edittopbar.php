@@ -18,7 +18,7 @@
 
 
     <a href="<?= $this->upage('pageread/', $page->id()) ?>" target="<?= $page->id() ?>" id="display">
-        <img src="<?= Wcms\Model::iconpath() ?>read.png" class="icon">
+        <i class="fa fa-eye"></i>
         <span class="hidephone">display</span>
     </a>
     <span id="headid"><?= $page->id() ?></span>
@@ -31,12 +31,18 @@
 </span>
 
 <span id="download" class="hidephone">
-        <a href="<?= $this->upage('pagedownload', $page->id()) ?>"><img src="<?= Wcms\Model::iconpath() ?>download.png" class="icon"><span class="text">download</span></a>
+        <a href="<?= $this->upage('pagedownload', $page->id()) ?>">
+            <i class="fa fa-download"></i>
+            <span class="text">download</span>
+        </a>
 </span>
 
 
 <span id="delete" class="hidephone">
-        <a href="<?= $this->upage('pageconfirmdelete', $page->id()) ?>"><span class="symbol">✖</span><span class="text">delete</span></a>
+        <a href="<?= $this->upage('pageconfirmdelete', $page->id()) ?>">
+            <i class="fa fa-trash"></i>
+            <span class="text">delete</span>
+        </a>
 </span>
 
 </div>
