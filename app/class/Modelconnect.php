@@ -8,7 +8,6 @@ use Exception;
 
 class Modelconnect extends Model
 {
-
     /**
      * @param string $userid
      * @param string $wsession

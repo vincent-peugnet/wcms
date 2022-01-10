@@ -4,7 +4,6 @@ namespace Wcms;
 
 class Modelhome extends Modelpage
 {
-
     public function __construct()
     {
         parent::__construct();

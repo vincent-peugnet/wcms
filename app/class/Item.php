@@ -10,7 +10,6 @@ use RuntimeException;
 
 abstract class Item
 {
-
     /**
      * Hydrate Object with corresponding `set__VAR__`
      * @param array|object $datas associative array using key as var name or object

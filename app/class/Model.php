@@ -6,7 +6,6 @@ use RuntimeException;
 
 abstract class Model
 {
-
     public const CONFIG_FILE = 'config.json';
     public const MAN_FILE = 'MANUAL.md';
     public const ASSETS_CSS_DIR = 'assets/css/';

@@ -8,7 +8,6 @@ use phpDocumentor\Reflection\Types\Mixed_;
 
 class Modelmedia extends Model
 {
-
     /**
      * Get the Media Object
      *

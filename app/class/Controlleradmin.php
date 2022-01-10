@@ -4,7 +4,6 @@ namespace Wcms;
 
 class Controlleradmin extends Controller
 {
-
     /** @var Modelmedia $mediamanager */
     protected $mediamanager;
     /** @var Modeladmin */

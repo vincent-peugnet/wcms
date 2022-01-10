@@ -7,7 +7,6 @@ use JamesMoss\Flywheel\Document;
 
 class Modelauthtoken extends Modeldb
 {
-
     protected const AUTHTOKEN_REPO_NAME = 'authtoken';
     protected const AUTHTOKEN_ID_LENGTH = 30;
 

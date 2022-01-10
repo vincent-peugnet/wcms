@@ -6,7 +6,6 @@ use RuntimeException;
 
 class Controlleruser extends Controller
 {
-
     public function __construct($router)
     {
         parent::__construct($router);

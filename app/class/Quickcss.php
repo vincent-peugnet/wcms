@@ -4,8 +4,6 @@ namespace Wcms;
 
 class Quickcss extends Item
 {
-
-
     private $active = [];
     private $values = [];
     private $units = [];

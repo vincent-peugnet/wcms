@@ -4,7 +4,6 @@ namespace Wcms;
 
 class Colors extends Item
 {
-
     protected $file = Model::ASSETS_CSS_DIR . 'tagcolors.css';
 
 

@@ -4,8 +4,6 @@ namespace Wcms;
 
 class Modeladmin extends Model
 {
-
-
     /**
      * List all availalble pages databases
      *

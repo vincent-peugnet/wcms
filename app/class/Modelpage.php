@@ -9,7 +9,6 @@ use LogicException;
 
 class Modelpage extends Modeldb
 {
-
     protected $pagelist = [];
 
 

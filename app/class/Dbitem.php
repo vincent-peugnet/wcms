@@ -7,7 +7,6 @@ use DateTimeImmutable;
 
 abstract class Dbitem extends Item
 {
-
     public function dry(): array
     {
         $array = [];
