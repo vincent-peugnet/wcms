@@ -54,6 +54,7 @@ abstract class Model
         'ico' => 'image',
         'tiff' => 'image',
         'bmp' => 'image',
+        'svg' => 'image',
         'mp3' => 'sound',
         'opus' => 'sound',
         'wav' => 'sound',
