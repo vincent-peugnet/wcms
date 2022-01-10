@@ -54,6 +54,7 @@ class Page extends Dbitem
     public const SECUREMAX = 2;
     public const TABS = ['main', 'css', 'header', 'body', 'nav', 'aside', 'footer', 'javascript'];
     public const VAR_DATE = ['date', 'datecreation', 'datemodif', 'daterender'];
+    public const TEMPLATE_OPTIONS = ['externalcss', 'externaljavascript', 'favicon', 'thumbnail', 'recursivecss'];
 
 
 
@@ -99,7 +100,7 @@ class Page extends Dbitem
         $this->settemplatebody('');
         $this->settemplatecss('');
         $this->settemplatejavascript('');
-        $this->settemplateoptions(['externalcss', 'externaljavascript', 'favicon', 'thumbnail', 'recursivecss']);
+        $this->settemplateoptions(self::TEMPLATE_OPTIONS);
         $this->setfavicon('');
         $this->setthumbnail('');
         $this->setauthors([]);
@@ -290,6 +291,9 @@ class Page extends Dbitem
         return $template;
     }
 
+    /**
+     * @return string[] where options are : 'externalcss', 'externaljavascript', 'favicon', 'thumbnail', 'recursivecss'
+     */
     public function templateoptions(): array
     {
         return $this->templateoptions;

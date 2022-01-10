@@ -277,15 +277,6 @@ class Modelrender extends Modelpage
             $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
         }
 
-        if (!empty($this->page->templatecss() && in_array('externalcss', $this->page->templateoptions()))) {
-            $templatecss = $this->get($this->page->templatecss());
-            if ($templatecss !== false) {
-                foreach ($templatecss->externalcss() as $externalcss) {
-                    $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
-                }
-            }
-        }
-
         if (file_exists(self::GLOBAL_CSS_FILE)) {
             $head .= "<link href=\"{$globalpath}global.css\" rel=\"stylesheet\" />\n";
         }
@@ -335,21 +326,32 @@ class Modelrender extends Modelpage
      * This create a HTML link for every stylsheet that are templated
      *
      * @param Page $page Page being rendered
-     * @param string $head used to transfert head in recursivity
      * @return string HTML to insert into <head> of page
      */
-    public function recursivecss(Page $page, string $head = ''): string
+    public function recursivecss(Page $page): string
     {
-        $renderpath = Model::renderpath();
+        $head = "";
         if (!empty($page->templatecss()) && $page->templatecss() !== $page->id()) {
-            $tempaltecsspageid = $page->templatecss();
-            $head .= "<link href=\"$renderpath$tempaltecsspageid.css\" rel=\"stylesheet\" />\n";
-            if (in_array('recursivecss', $page->templateoptions())) {
-                $templatecsspage = $this->get($tempaltecsspageid);
-                $head .= $this->recursivecss($templatecsspage, $head);
+            $template = $this->get($page->templatecss());
+            if ($template !== false) {
+                if (in_array('externalcss', $page->templateoptions())) {
+                    foreach ($template->externalcss() as $externalcss) {
+                        $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
+                    }
+                }
+                $head .= '<link href="' . Model::renderpath() . $page->templatecss() . '.css" rel="stylesheet" />';
+                $head .= "\n";
+                if (in_array('recursivecss', $page->templateoptions())) {
+                    $head = $this->recursivecss($template) . $head;
+                }
             }
         }
         return $head;
+    }
+
+    public function reccursiveexternalcss(Page $page, string $hea)
+    {
+        # code...
     }
 
     public function desctitle($text, $desc, $title)
