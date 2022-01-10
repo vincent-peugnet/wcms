@@ -124,7 +124,6 @@ class Controllerpage extends Controller
 
     /**
      * @param string $id page ID
-     * @throws RuntimeException if HTML rendered file is not found
      */
     public function read($id)
     {
@@ -163,13 +162,12 @@ class Controllerpage extends Controller
 
         if ($pageexist && $canread) {
             $filedir = Model::HTML_RENDER_DIR . $id . '.html';
-            if (file_exists($filedir)) {
-                $html = file_get_contents($filedir);
-                sleep($this->page->sleep());
-                echo $html;
-            } else {
-                throw new RuntimeException("html render not founded, please render this page");
+            if (!file_exists($filedir)) {
+                $this->page = $this->renderpage($this->page);
             }
+            $html = file_get_contents($filedir);
+            sleep($this->page->sleep());
+            echo $html;
         } else {
             http_response_code(404);
             $this->showtemplate(
