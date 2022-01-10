@@ -127,6 +127,7 @@ dist/w_cms_%.zip: all
 assets/js/%.bundle.js assets/js/%.bundle.js.map: $(js_src_dir)/%.js node_modules webpack.config.js $(PREV_ENV_FILE) | assets/js
 	@echo Building JS Bundles...
 	webpack --entry=./$< --output-path=$(@D) --output-filename=$(@F) --env=$(ENV) $(WEBPACK_FLAGS)
+	touch $@
 
 assets/js:
 	mkdir -p $@
