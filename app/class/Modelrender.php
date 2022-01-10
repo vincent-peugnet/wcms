@@ -349,11 +349,6 @@ class Modelrender extends Modelpage
         return $head;
     }
 
-    public function reccursiveexternalcss(Page $page, string $hea)
-    {
-        # code...
-    }
-
     public function desctitle($text, $desc, $title)
     {
         $text = str_replace('%TITLE%', $title, $text);
