@@ -187,10 +187,10 @@ function keyboardHandler(e) {
                     break;
                 // ctrl + d
                 case 'd':
-                    const url = document
-                        .getElementById('update')
-                        .getAttribute('href');
-                    window.open(url);
+                    const a = document.getElementById('display');
+                    const href = a.getAttribute('href');
+                    const target = a.getAttribute('target');
+                    window.open(href, target);
                     break;
                 default:
                     return true;
