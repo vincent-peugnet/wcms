@@ -2,9 +2,11 @@
 
 namespace Wcms;
 
+use ErrorException;
 use Exception;
 use InvalidArgumentException;
 use phpDocumentor\Reflection\Types\Mixed_;
+use RuntimeException;
 
 class Modelmedia extends Model
 {
@@ -221,6 +223,37 @@ class Modelmedia extends Model
         }
         //Move to dir
         return move_uploaded_file($_FILES[$index]['tmp_name'], $destination);
+    }
+
+    public function urlupload(string $url, string $target)
+    {
+        $url = filter_var($url, FILTER_SANITIZE_URL);
+        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+            Model::sendflashmessage('invalid url: ' . strip_tags($url), 'error');
+            return false;
+        }
+        if (!strstr(get_headers($url)[0], "200 OK")) {
+            Model::sendflashmessage(get_headers($url)[0], 'error');
+            return false;
+        }
+
+        try {
+            curl_download($url);
+        } catch (ErrorException $e) {
+            $file = fopen($url, 'r');
+            if ($file !== false) {
+                if ($target[strlen($target) - 1] != DIRECTORY_SEPARATOR) {
+                    $target .= DIRECTORY_SEPARATOR;
+                }
+                $filename = idclean(basename($url), 64);
+                if (self::writefile($target . basename($url), $file, 0664)) {
+                    Model::sendflashmessage('file ' . $filename . ' has been uploaded', 'success');
+                    return true;
+                }
+            }
+        } catch (RuntimeException $e) {
+            return false;
+        }
     }
 
     /**

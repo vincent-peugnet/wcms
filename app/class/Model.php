@@ -230,7 +230,7 @@ abstract class Model
      * Add a message to flash message list
      *
      * @param string $content The message content
-     * @param string $type Message Type, can be `info|warning|success|eror`
+     * @param string $type Message Type, can be `info|warning|success|error`
      */
     public static function sendflashmessage(string $content, string $type = 'info')
     {

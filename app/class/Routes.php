@@ -32,6 +32,7 @@ class Routes
             ['POST', '/!search', 'Controllerhome#search', 'search'],
             ['GET', '/!media', 'Controllermedia#desktop', 'media'],
             ['POST', '/!media/upload', 'Controllermedia#upload', 'mediaupload'],
+            ['POST', '/!media/urlupload', 'Controllermedia#urlupload', 'mediaurlupload'],
             ['POST', '/!media/folderadd', 'Controllermedia#folderadd', 'mediafolderadd'],
             ['POST', '/!media/folderdelete', 'Controllermedia#folderdelete', 'mediafolderdelete'],
             ['POST', '/!media/edit', 'Controllermedia#edit', 'mediaedit'],

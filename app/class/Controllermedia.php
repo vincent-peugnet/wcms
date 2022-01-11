@@ -82,6 +82,19 @@ class Controllermedia extends Controller
         }
     }
 
+    public function urlupload()
+    {
+        if ($this->user->iseditor()) {
+            $target = $_POST['dir'] ?? Model::MEDIA_DIR;
+            if (!empty($_POST['url'])) {
+                $this->mediamanager->urlupload($_POST['url'], $target);
+            }
+                $this->redirect($this->generate('media') . '?path=/' . $target);
+        } else {
+            $this->routedirect('home');
+        }
+    }
+
     public function folderadd()
     {
         if ($this->user->iseditor()) {

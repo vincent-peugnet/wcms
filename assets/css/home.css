@@ -96,6 +96,13 @@ aside .submenu {
     font-size: medium;
 }
 
+.submenu h3 {
+    margin: 0;
+    font-size: medium;
+    margin-top: 5px;
+    font-weight: inherit;
+  }
+
 details > summary::-webkit-details-marker {
     display: none;
 }

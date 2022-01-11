@@ -3,15 +3,21 @@
     <details>
         <summary>File</summary>
             <div class="submenu">
-                <h2>Upload File(s)</h2>
+                <h2>Upload file(s)</h2>
+                <h3>
+                    <label for="file"><i class="fa fa-upload"></i> Upload from computer</label>
+                </h3>
                 <form id=addmedia action="<?= $this->url('mediaupload') ?>" method="post" enctype="multipart/form-data">
-                    <label for="file">🚀 Upload file(s)</label>
                     <input type='file' id="file" name='file[]' multiple required>
 
-                    <p>
-                        Max upload size : <?= $maxuploadsize ?>
-                    </p>
-
+                    <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>">
+                    <input type="submit" value="upload">
+                </form>
+                <h3>
+                    <label for="url"><i class="fa fa-cloud-upload"></i> Upload from URL</label>
+                </h3>
+                <form id="addurlmedia" action="<?= $this->url('mediaurlupload') ?>" method="post">
+                    <input type="text" name="url" id="url" placeholder="paste url here">
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>">
                     <input type="submit" value="upload">
                 </form>
