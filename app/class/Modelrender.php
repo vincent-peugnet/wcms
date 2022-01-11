@@ -272,6 +272,7 @@ class Modelrender extends Modelpage
 
         $head .= "<meta property=\"og:url\" content=\"$url$id/\">\n";
 
+        $head .= PHP_EOL . $this->page->customhead() . PHP_EOL;
 
         foreach ($this->page->externalcss() as $externalcss) {
             $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
@@ -306,8 +307,6 @@ class Modelrender extends Modelpage
 			</script>
 			\n";
         }
-
-        $head .= PHP_EOL . $this->page->customhead() . PHP_EOL;
 
         if (!empty($this->page->redirection())) {
             if (preg_match('%https?:\/\/\S*%', $this->page->redirection(), $out)) {
