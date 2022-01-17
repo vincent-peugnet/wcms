@@ -1,5 +1,6 @@
 <?php
 
+use Http\Discovery\Exception\NotFoundException;
 use Symfony\Component\OptionsResolver\Exception\AccessException;
 use Wcms\Chmodexception;
 use Wcms\Ioexception;
@@ -94,6 +95,7 @@ function arrayclean($input)
  * @param string $input
  * @param int $max minmum input length to trucate id
  * @return string output formated id
+ * @todo transfert as Model function and store Regex as const
  */
 function idclean(string $input, int $max = Wcms\Model::MAX_ID_LENGTH): string
 {
@@ -111,6 +113,16 @@ function idclean(string $input, int $max = Wcms\Model::MAX_ID_LENGTH): string
         $input = substr($input, 0, $max);
     }
     return $input;
+}
+
+/**
+ * @return bool true if valid ID otherwise false
+ * @todo transfert to Model function and use same Regex as idclean
+ */
+function idcheck(string $id): bool
+{
+    $regex = '%[^a-z0-9-_]%';
+    return !(bool) (preg_match($regex, $id));
 }
 
 function isreportingerrors()
@@ -545,5 +557,21 @@ function curl_download(string $url): string
         throw new RuntimeException("CURL error");
     } else {
         return $output;
+    }
+}
+
+
+
+/**
+ * @param string $input string to be checked
+ * @return string first occurence of url in input string
+ * @throws NotFoundException when no string is founded
+ */
+function getfirsturl(string $input): string
+{
+    if (preg_match('%https?:\/\/\S*%', $input, $out)) {
+        return $out[0];
+    } else {
+        throw new NotFoundException("no url in string: $input");
     }
 }

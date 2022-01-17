@@ -96,11 +96,16 @@ abstract class Model
     ];
 
     public const FLASH_MESSAGE_TYPES = [
-        'info' => 'info',
-        'warning' => 'warning',
-        'success' => 'success',
-        'error' => 'error'
+        self::FLASH_INFO    => 1,
+        self::FLASH_WARNING => 2,
+        self::FLASH_SUCCESS => 3,
+        self::FLASH_ERROR   => 4,
     ];
+
+    public const FLASH_INFO     = 'info';
+    public const FLASH_WARNING  = 'warning';
+    public const FLASH_SUCCESS  = 'success';
+    public const FLASH_ERROR    = 'error';
 
     public const SECURE_LEVELS = [
         0 => 'public',
@@ -232,10 +237,10 @@ abstract class Model
      * @param string $content The message content
      * @param string $type Message Type, can be `info|warning|success|error`
      */
-    public static function sendflashmessage(string $content, string $type = 'info')
+    public static function sendflashmessage(string $content, string $type = self::FLASH_INFO)
     {
         if (!key_exists($type, self::FLASH_MESSAGE_TYPES)) {
-            $type = 'info';
+            $type = self::FLASH_INFO;
         }
         $_SESSION['user' . Config::basepath()]['flashmessages'][] = ['content' => $content, 'type' => $type];
     }

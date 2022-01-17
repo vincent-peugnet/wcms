@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use RuntimeException;
+
 class Controllerhome extends Controllerpage
 {
     /** @var Modelhome */

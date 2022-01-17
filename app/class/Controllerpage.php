@@ -110,7 +110,10 @@ class Controllerpage extends Controller
         return $page;
     }
 
-    public function recursiverender(Page $page)
+    /**
+     * Render all other pages that link to this page
+     */
+    public function recursiverender(Page $page): void
     {
         $relatedpages = array_diff($page->linkto(), [$page->id()]);
         foreach ($relatedpages as $pageid) {
@@ -131,6 +134,7 @@ class Controllerpage extends Controller
 
         $pageexist = $this->importpage();
         $canread = false;
+        $filedir = Model::HTML_RENDER_DIR . $id . '.html';
 
         if ($pageexist) {
             $canread = $this->user->level() >= $this->page->secure();
@@ -143,7 +147,7 @@ class Controllerpage extends Controller
                 }
             }
 
-            if ($this->page->daterender() <= $this->page->datemodif()) {
+            if ($this->page->daterender() <= $this->page->datemodif() || !file_exists($filedir)) {
                 if (Config::recursiverender()) {
                     $this->recursiverender($this->page);
                 }
@@ -156,19 +160,29 @@ class Controllerpage extends Controller
                 if ($this->user->isvisitor()) {
                     $this->page->addvisitcount();
                 }
+
+                // redirection using Location and 302
+                if (!empty($this->page->redirection()) && $this->page->refresh() === 0 && $this->page->sleep() === 0) {
+                    try {
+                        if (idcheck($this->page->redirection())) {
+                            $this->routedirect('pageread/', ['page' => $this->page->redirection()]);
+                        } else {
+                            $url = getfirsturl($this->page->redirection());
+                            $this->redirect($url);
+                        }
+                    } catch (RuntimeException $e) {
+                        // TODO : send synthax error to editor
+                    }
+                }
+
+                $html = file_get_contents($filedir);
+                sleep($this->page->sleep());
+                echo $html;
             }
             $this->pagemanager->update($this->page);
         }
 
-        if ($pageexist && $canread) {
-            $filedir = Model::HTML_RENDER_DIR . $id . '.html';
-            if (!file_exists($filedir)) {
-                $this->page = $this->renderpage($this->page);
-            }
-            $html = file_get_contents($filedir);
-            sleep($this->page->sleep());
-            echo $html;
-        } else {
+        if (!$canread || !$pageexist) {
             http_response_code(404);
             $this->showtemplate(
                 'alert',

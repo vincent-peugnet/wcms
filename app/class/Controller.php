@@ -121,7 +121,11 @@ class Controller
         }
     }
 
-    public function redirect($url)
+    /**
+     * Redirect to URL and send 302 code
+     * @param string $url to redirect to
+     */
+    public function redirect(string $url): void
     {
         header('Location: ' . $url);
         exit;
@@ -154,11 +158,11 @@ class Controller
     public function sendstatflashmessage(int $count, int $total, string $message)
     {
         if ($count === $total) {
-            Model::sendflashmessage($count . ' / ' . $total . ' ' . $message, 'success');
+            Model::sendflashmessage($count . ' / ' . $total . ' ' . $message, Model::FLASH_SUCCESS);
         } elseif ($count > 0) {
-            Model::sendflashmessage($count . ' / ' . $total . ' ' . $message, 'warning');
+            Model::sendflashmessage($count . ' / ' . $total . ' ' . $message, Model::FLASH_WARNING);
         } else {
-            Model::sendflashmessage($count . ' / ' . $total . ' ' . $message, 'error');
+            Model::sendflashmessage($count . ' / ' . $total . ' ' . $message, Model::FLASH_ERROR);
         }
     }
 

@@ -234,7 +234,9 @@ class Modelrender extends Modelpage
 
 
 
-
+    /**
+     * Return HEAD html element of a page
+     */
     public function gethead()
     {
         $id = $this->page->id();
@@ -245,6 +247,20 @@ class Modelrender extends Modelpage
         $url = Config::url();
 
         $head = '';
+
+        // redirection
+        if (!empty($this->page->redirection())) {
+            try {
+                if (idcheck($this->page->redirection())) {
+                    $url = $this->upage($this->page->redirection());
+                } else {
+                    $url = getfirsturl($this->page->redirection());
+                }
+                $head .= "\n<meta http-equiv=\"refresh\" content=\"{$this->page->refresh()}; URL=$url\" />";
+            } catch (\Exception $e) {
+                // TODO : send render error
+            }
+        }
 
         $head .= "<meta charset=\"utf-8\" />\n";
         $head .= "<title>$title</title>\n";
@@ -307,17 +323,6 @@ class Modelrender extends Modelpage
 			</script>
 			\n";
         }
-
-        if (!empty($this->page->redirection())) {
-            if (preg_match('%https?:\/\/\S*%', $this->page->redirection(), $out)) {
-                $url = $out[0];
-            } elseif (key_exists($this->page->redirection(), $this->pagelist())) {
-                $url = $this->upage($this->page->redirection());
-            }
-            $head .= "\n<meta http-equiv=\"refresh\" content=\"{$this->page->refresh()}; URL=$url\" />";
-        }
-
-
         return $head;
     }
 
