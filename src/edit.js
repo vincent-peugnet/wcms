@@ -242,10 +242,14 @@ function submitHandler(form) {
     var fd = new FormData(form);
 
     xhr.addEventListener('load', function(event) {
-        saved();
+        if (httpOk(xhr.status)) {
+            saved();
+        } else {
+            alert('Error while trying to update: ' + xhr.statusText);
+        }
     });
     xhr.addEventListener('error', function(event) {
-        alert('Error while trying to update.');
+        alert('Network error while trying to update.');
     });
     xhr.open(form.method, form.action);
     xhr.send(fd);
@@ -271,4 +275,12 @@ function saved() {
     unsavedChanges = false;
     document.title = '✏ ' + pagetitle;
     document.getElementById('headid').innerHTML = pageid;
+}
+
+/**
+ * Check if an HTTP response status indicates a success.
+ * @param {number} status
+ */
+function httpOk(status) {
+    return status >= 200 && status < 300;
 }
