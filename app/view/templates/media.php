@@ -109,7 +109,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
             <div class="meta">
                 <input type="checkbox" name="id[]" value="<?= $media->getfulldir() ?>" form="mediaedit" id="media_<?= $media->id() ?>">
                 <label for="media_<?= $media->id() ?>"><?= $media->id() ?></label>
-                <a href="<?= $media->getfullpath() ?>" target="_blank">⧉</a>
+                <a href="<?= $media->getfullpath() ?>" target="_blank"><i class="fa fa-external-link"></i></a>
                 <input readonly class="code select-all" value="<?= $this->e($media->getcode()) ?>" />
             </div>
                 
