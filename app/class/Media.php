@@ -21,13 +21,6 @@ class Media extends Item
     protected $uid;
     protected $permissions;
 
-    public const IMAGE = array('jpg', 'jpeg', 'gif', 'png');
-    public const SOUND = array('mp3', 'flac', 'wav', 'ogg');
-    public const VIDEO = array('mp4', 'mov', 'avi', 'mkv');
-    public const ARCHIVE = array('zip', 'rar');
-
-
-
 // _____________________________________________________ F U N ____________________________________________________
 
     public function __construct(array $donnees)

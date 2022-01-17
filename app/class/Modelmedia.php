@@ -238,21 +238,25 @@ class Modelmedia extends Model
         }
 
         try {
-            curl_download($url);
+            $file = curl_download($url);
         } catch (ErrorException $e) {
-            $file = fopen($url, 'r');
-            if ($file !== false) {
-                if ($target[strlen($target) - 1] != DIRECTORY_SEPARATOR) {
-                    $target .= DIRECTORY_SEPARATOR;
-                }
-                $filename = idclean(basename($url), 64);
-                if (self::writefile($target . basename($url), $file, 0664)) {
-                    Model::sendflashmessage('file ' . $filename . ' has been uploaded', 'success');
-                    return true;
-                }
-            }
-        } catch (RuntimeException $e) {
+            Model::sendflashmessage('file not uploaded beccause : ' . $e->getMessage(), Model::FLASH_ERROR);
+            // TODO : switch to fopen mothod if CURL is not installed
+            // $file = fopen($data, 'r');
+            // if ($file !== false) {
+            //     if ($target[strlen($target) - 1] != DIRECTORY_SEPARATOR) {
+            //         $target .= DIRECTORY_SEPARATOR;
+            //     }
+            // }
             return false;
+        } catch (RuntimeException $r) {
+            Model::sendflashmessage('file not uploaded beccause : ' . $r->getMessage(), Model::FLASH_ERROR);
+            return false;
+        }
+        $filename = idclean(basename($url), 64);
+        if (self::writefile($target . basename($url), $file, 0664)) {
+            Model::sendflashmessage('file ' . $filename . ' has been uploaded', 'success');
+            return true;
         }
     }
 

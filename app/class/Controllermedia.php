@@ -89,7 +89,7 @@ class Controllermedia extends Controller
             if (!empty($_POST['url'])) {
                 $this->mediamanager->urlupload($_POST['url'], $target);
             }
-                $this->redirect($this->generate('media') . '?path=/' . $target);
+            $this->redirect($this->generate('media') . '?path=/' . $target);
         } else {
             $this->routedirect('home');
         }
