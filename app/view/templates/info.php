@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => 'info', 'stylesheets' => [$css . 'home.css']]) ?>
+<?php $this->layout('layout', ['title' => 'Documentation', 'stylesheets' => [$css . 'home.css']]) ?>
 
 
 <?php $this->start('page') ?>
@@ -37,7 +37,7 @@
 <section class="info">
 
     <div class="block">
-        <h1>Info</h1>
+        <h1>Documentation</h1>
         <div class="scroll">
             <article>
 

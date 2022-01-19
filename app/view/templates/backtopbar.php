@@ -77,8 +77,8 @@ if($user->isadmin()) {
 }
 ?>
 <a href="<?= $this->url('info') ?>"  <?= $tab == 'info' ? 'class="actualpage"' : '' ?>>
-    <i class="fa fa-question-circle"></i>
-    <span class="hidephone">info</span>
+    <i class="fa fa-book"></i>
+    <span class="hidephone">documentation</span>
 </a>
 
 <a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>>
