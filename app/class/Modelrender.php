@@ -251,7 +251,7 @@ class Modelrender extends Modelpage
         // redirection
         if (!empty($this->page->redirection())) {
             try {
-                if (idcheck($this->page->redirection())) {
+                if (Model::idcheck($this->page->redirection())) {
                     $url = $this->upage($this->page->redirection());
                 } else {
                     $url = getfirsturl($this->page->redirection());
@@ -501,7 +501,7 @@ class Modelrender extends Modelpage
                 $content = $matches[6];
                 // if no custom id is defined, use idclean of the content as id
                 if (empty($id)) {
-                    $id = idclean($content);
+                    $id = self::idclean($content);
                 }
                 $this->sum[$element][] = new Header($id, intval($level), $content);
                 if ($anchor) {
@@ -671,7 +671,7 @@ class Modelrender extends Modelpage
     {
         $regex = '~([\w-_éêèùïüîçà]{' . $limit . ',})(?![^<]*>|[^<>]*<\/)~';
         $text = preg_replace_callback($regex, function ($matches) {
-            return '<a href="' . idclean($matches[1]) . '">' . $matches[1] . '</a>';
+            return '<a href="' . self::idclean($matches[1]) . '">' . $matches[1] . '</a>';
         }, $text);
         return $text;
     }

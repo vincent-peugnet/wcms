@@ -25,7 +25,7 @@ class Controllerpage extends Controller
 
     public function setpage(string $id, string $route)
     {
-        $cleanid = idclean($id);
+        $cleanid = Model::idclean($id);
         if ($cleanid !== $id) {
             $this->routedirect($route, ['page' => $cleanid]);
         } else {
@@ -164,7 +164,7 @@ class Controllerpage extends Controller
                 // redirection using Location and 302
                 if (!empty($this->page->redirection()) && $this->page->refresh() === 0 && $this->page->sleep() === 0) {
                     try {
-                        if (idcheck($this->page->redirection())) {
+                        if (Model::idcheck($this->page->redirection())) {
                             $this->routedirect('pageread/', ['page' => $this->page->redirection()]);
                         } else {
                             $url = getfirsturl($this->page->redirection());
@@ -264,7 +264,7 @@ class Controllerpage extends Controller
 
     public function addascopy(string $id, string $copy)
     {
-        $id = idclean($id);
+        $id = Model::idclean($id);
         if ($this->copy($copy, $id)) {
             $this->routedirect('pageedit', ['page' => $this->page->id()]);
         } else {
@@ -312,7 +312,7 @@ class Controllerpage extends Controller
 
         if ($page !== false) {
             if (!empty($_POST['id'])) {
-                $page->setid(idclean($_POST['id']));
+                $page->setid(Model::idclean($_POST['id']));
             }
 
             if ($_POST['datecreation']) {
@@ -368,11 +368,11 @@ class Controllerpage extends Controller
 
     public function duplicate(string $srcid, string $targetid)
     {
-        $targetid = idclean($targetid);
+        $targetid = Model::idclean($targetid);
         if ($this->copy($srcid, $targetid)) {
             $this->routedirect('pageread/', ['page' => $targetid]);
         } else {
-            $this->routedirect('pageread/', ['page' => idclean($srcid)]);
+            $this->routedirect('pageread/', ['page' => Model::idclean($srcid)]);
         }
     }
 
@@ -448,6 +448,6 @@ class Controllerpage extends Controller
 
     public function pagedirect($id)
     {
-        $this->routedirect('pageread/', ['page' => idclean($id)]);
+        $this->routedirect('pageread/', ['page' => Model::idclean($id)]);
     }
 }

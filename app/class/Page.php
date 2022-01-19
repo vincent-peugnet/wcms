@@ -416,7 +416,9 @@ class Page extends Dbitem
                 $tag = $this->tagtoarray($tag);
         }
         if (is_array($tag)) {
-            $tag = array_map('idclean', $tag);
+            $tag = array_map(function ($id) {
+                return Model::idclean($id);
+            }, $tag);
             $tag = array_filter($tag);
             $this->tag = $tag;
         }
@@ -705,7 +707,7 @@ class Page extends Dbitem
             if (preg_match('%https?:\/\/\S*%', $redirection, $out)) {
                 $this->redirection = $out[0];
             } else {
-                $redirection = idclean($redirection);
+                $redirection = Model::idclean($redirection);
                 if ($redirection !== $this->id) {
                     $this->redirection = $redirection;
                 }
@@ -800,7 +802,9 @@ class Page extends Dbitem
                 $tag = $this->tagtoarray($tag);
         }
         if (is_array($tag)) {
-            $tag = array_map('idclean', $tag);
+            $tag = array_map(function ($id) {
+                return Model::idclean($id);
+            }, $tag);
             $tag = array_filter($tag);
             $this->tag = array_unique(array_merge($this->tag, $tag));
         }

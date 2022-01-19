@@ -132,11 +132,12 @@ abstract class Model
 
     public const TEXT_ELEMENTS = ['header', 'nav', 'main', 'aside', 'footer'];
 
-    public const MAX_ID_LENGTH = 64;
-    public const PASSWORD_MIN_LENGTH = 4;
-    public const PASSWORD_MAX_LENGTH = 64;
-    public const MAX_COOKIE_CONSERVATION = 365;
-    public const MAX_QUERY_LENGH = 256;
+    public const ID_REGEX                   = "%[^a-z0-9-_]%";
+    public const MAX_ID_LENGTH              = 64;
+    public const PASSWORD_MIN_LENGTH        = 4;
+    public const PASSWORD_MAX_LENGTH        = 64;
+    public const MAX_COOKIE_CONSERVATION    = 365;
+    public const MAX_QUERY_LENGH            = 256;
 
     /** RENDER OPTIONS   */
     // add class in html element indicating from witch page the content come.
@@ -276,5 +277,40 @@ abstract class Model
             return false;
         }
         return true;
+    }
+
+
+
+    /**
+     * Clean string from characters outside authorized ID characters and troncate it
+     * @param string $input
+     * @param int $max minmum input length to trucate id
+     * @return string output formated id
+     */
+    public static function idclean(string $input, int $max = self::MAX_ID_LENGTH): string
+    {
+        if (!self::idcheck($input, $max)) {
+            $input = urldecode($input);
+            $input = trim($input);
+
+            $search =  ['é', 'à', 'è', 'ç', 'ù', 'ü', 'ï', 'î', ' '];
+            $replace = ['e', 'a', 'e', 'c', 'u', 'u', 'i', 'i', '-'];
+            $input = str_replace($search, $replace, $input);
+
+            $input = preg_replace(self::ID_REGEX, '', strtolower(trim($input)));
+            $input = substr($input, 0, $max);
+        }
+        return $input;
+    }
+
+    /**
+     * @return bool true if valid ID otherwise false
+     */
+    public static function idcheck(string $id, int $max = self::MAX_ID_LENGTH): bool
+    {
+        return (
+            !((bool) preg_match(self::ID_REGEX, $id))
+            && strlen($id) <= $max
+        );
     }
 }

@@ -90,41 +90,6 @@ function arrayclean($input)
     return $output;
 }
 
-/**
- * Clean string from characters outside `[0-9a-z-_]` and troncate it
- * @param string $input
- * @param int $max minmum input length to trucate id
- * @return string output formated id
- * @todo transfert as Model function and store Regex as const
- */
-function idclean(string $input, int $max = Wcms\Model::MAX_ID_LENGTH): string
-{
-    $regex = '%[^a-z0-9-_]%';
-    $input = urldecode($input);
-    $input = strip_tags($input);
-
-    if (preg_match($regex, $input)) {
-        $search =  ['é', 'à', 'è', 'ç', 'ù', 'ü', 'ï', 'î', ' '];
-        $replace = ['e', 'a', 'e', 'c', 'u', 'u', 'i', 'i', '-'];
-        $input = str_replace($search, $replace, $input);
-
-        $input = preg_replace($regex, '', strtolower(trim($input)));
-
-        $input = substr($input, 0, $max);
-    }
-    return $input;
-}
-
-/**
- * @return bool true if valid ID otherwise false
- * @todo transfert to Model function and use same Regex as idclean
- */
-function idcheck(string $id): bool
-{
-    $regex = '%[^a-z0-9-_]%';
-    return !(bool) (preg_match($regex, $id));
-}
-
 function isreportingerrors()
 {
     return function_exists('Sentry\init') && !empty(Wcms\Config::sentrydsn());

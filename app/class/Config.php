@@ -341,7 +341,7 @@ abstract class Config
     public static function setroute404($id)
     {
         if (is_string($id)) {
-            self::$route404 = idclean($id);
+            self::$route404 = Model::idclean($id);
         }
     }
 
@@ -355,7 +355,7 @@ abstract class Config
     public static function setalertlink($alertlink)
     {
         if (is_string($alertlink)) {
-            self::$alertlink = idclean($alertlink);
+            self::$alertlink = Model::idclean($alertlink);
         }
     }
 
@@ -468,7 +468,7 @@ abstract class Config
     public static function sethomeredirect($homeredirect)
     {
         if (is_string($homeredirect) && strlen($homeredirect) > 0) {
-            self::$homeredirect = idclean($homeredirect);
+            self::$homeredirect = Model::idclean($homeredirect);
         } else {
             self::$homeredirect = null;
         }
@@ -540,7 +540,7 @@ abstract class Config
     public static function addbookmark(string $id, string $query)
     {
         if (!empty($id) && !empty($query)) {
-            $id = idclean($id);
+            $id = Model::idclean($id);
             $id = substr($id, 0, 16);
             self::$bookmark[$id] = $query;
         }

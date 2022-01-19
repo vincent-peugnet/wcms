@@ -378,10 +378,10 @@ class Opt extends Item
     {
         if (is_string($linkto)) {
             if (empty($this->pageidlist)) {
-                $this->linkto = idclean($linkto);
+                $this->linkto = Model::idclean($linkto);
                 return true;
             } elseif (in_array($linkto, $this->pageidlist)) {
-                $this->linkto = idclean($linkto);
+                $this->linkto = Model::idclean($linkto);
                 return true;
             } else {
                 return false;

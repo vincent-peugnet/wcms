@@ -99,7 +99,7 @@ class Controllermedia extends Controller
     {
         if ($this->user->iseditor()) {
             $dir = $_POST['dir'] ?? Model::MEDIA_DIR;
-            $name = idclean($_POST['foldername']) ?? 'new-folder';
+            $name = Model::idclean($_POST['foldername']) ?? 'new-folder';
             $this->mediamanager->adddir($dir, $name);
             $this->redirect($this->generate('media') . '?path=/' . $dir . DIRECTORY_SEPARATOR . $name);
         }
@@ -145,8 +145,8 @@ class Controllermedia extends Controller
             && isset($_POST['newextension'])
             && isset($_POST['path'])
         ) {
-            $newid = idclean($_POST['newid']);
-            $newextension = idclean($_POST['newextension']);
+            $newid = Model::idclean($_POST['newid']);
+            $newextension = Model::idclean($_POST['newextension']);
             if (!empty($newid) && !empty($newextension)) {
                 $oldname = $_POST['path'] . $_POST['oldid'] . '.' . $_POST['oldextension'];
                 $newname = $_POST['path'] . $newid . '.' . $newextension;

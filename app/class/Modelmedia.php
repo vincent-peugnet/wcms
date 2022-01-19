@@ -253,7 +253,7 @@ class Modelmedia extends Model
             Model::sendflashmessage('file not uploaded beccause : ' . $r->getMessage(), Model::FLASH_ERROR);
             return false;
         }
-        $filename = idclean(basename($url), 64);
+        $filename = self::idclean(basename($url), 64);
         if (self::writefile($target . basename($url), $file, 0664)) {
             Model::sendflashmessage('file ' . $filename . ' has been uploaded', 'success');
             return true;
@@ -275,8 +275,8 @@ class Modelmedia extends Model
         $successcount = 0;
         foreach ($_FILES[$index]['name'] as $filename) {
             $fileinfo = pathinfo($filename);
-            $extension = idclean($fileinfo['extension']);
-            $id = idclean($fileinfo['filename']);
+            $extension = self::idclean($fileinfo['extension']);
+            $id = self::idclean($fileinfo['filename']);
 
             $tmp = $_FILES['file']['tmp_name'][$count];
             $count++;

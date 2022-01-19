@@ -121,7 +121,7 @@ class User extends Item
     public function setid($id): bool
     {
         if (is_string($id)) {
-            $id = idclean($id);
+            $id = Model::idclean($id);
             if (!empty($id)) {
                 $this->id = $id;
                 return true;

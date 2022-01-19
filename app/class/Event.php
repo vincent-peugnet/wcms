@@ -41,9 +41,9 @@ class Event extends Dbitem
     public function stamp()
     {
         $this->date = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
-        $this->user = idclean($this->user);
+        $this->user = Model::idclean($this->user);
         if (in_array($this->type, self::EVENT_ART)) {
-            $this->target = idclean($this->target);
+            $this->target = Model::idclean($this->target);
         } elseif ($this->type === 'message') {
             $this->message = htmlspecialchars($this->message);
         }
