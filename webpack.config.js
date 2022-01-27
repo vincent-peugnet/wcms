@@ -12,6 +12,16 @@ module.exports = (env) => {
 				'hidden-source-map' :
 				'source-map',
 		// Constant
+		stats: {
+			all: false,
+			colors: true,
+			performance: true,
+			assets: true,
+			warnings: true,
+			cachedModules: true,
+			errors: true,
+			errorDetails: true,
+		},
 		entry: {
 			edit: './src/edit.js',
 			home: './src/home.js',
@@ -48,6 +58,9 @@ module.exports = (env) => {
 					extractComments: false,
 				}),
 			],
+		},
+		performance: {
+			hints: false,
 		},
 	}
 };
