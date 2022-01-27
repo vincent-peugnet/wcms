@@ -59,6 +59,27 @@ jobs:
           flags: php
           name: php-${{ matrix.php }}-${{ matrix.os }}
 
+  build-js:
+    name: build js
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: make node_modules
+
+      - name: Build
+        run: make build
+
   lint:
     name: lint
     runs-on: ubuntu-latest
