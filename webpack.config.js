@@ -5,14 +5,12 @@ const TerserPlugin = require("terser-webpack-plugin");
 module.exports = (env) => {
 	return {
 		// Environment dependent
-		mode: env == 'dev' ? 'development' : 'production',
-		devtool: env == 'dev' ?
+		mode: env.dev ? 'development' : 'production',
+		devtool: env.dev ?
 			'eval-cheap-module-source-map' :
-			env == 'dist' ?
+			env.dist ?
 				'hidden-source-map' :
 				'source-map',
-		stats: env == 'dev' ? {} : { warnings: false },
-
 		// Constant
 		entry: {
 			edit: './src/edit.js',
