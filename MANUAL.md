@@ -282,6 +282,12 @@ This will include the page [description](#description).
 
     %THUMBNAIL%
 
+##### ID inclusion
+
+    %PAGEID% | %ID%
+
+You have two options to print the page ID.
+
 ##### Login inclusion
 
     %CONNECT%

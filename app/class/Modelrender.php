@@ -186,6 +186,7 @@ class Modelrender extends Modelpage
         $content = $this->pageoptlist($content);
         $content = $this->date($content);
         $content = $this->thumbnail($content);
+        $content = $this->pageid($content);
         if ($element->autolink()) {
             $content = $this->everylink($content, $element->autolink());
         }
@@ -658,6 +659,16 @@ class Modelrender extends Modelpage
         $text = str_replace('%THUMBNAIL%', $img, $text);
 
         return $text;
+    }
+
+    /**
+     * Replace each occurence of `%PAGEID%` or %`ID`% with page ID
+     * @param string $text input text
+     * @return string output text with replaced elements
+     */
+    public function pageid(string $text): string
+    {
+        return str_replace(['%PAGEID%', '%ID%'], $this->page->id(), $text);
     }
 
     /**
