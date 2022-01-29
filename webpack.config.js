@@ -5,15 +5,23 @@ const TerserPlugin = require("terser-webpack-plugin");
 module.exports = (env) => {
 	return {
 		// Environment dependent
-		mode: env == 'dev' ? 'development' : 'production',
-		devtool: env == 'dev' ?
+		mode: env.dev ? 'development' : 'production',
+		devtool: env.dev ?
 			'eval-cheap-module-source-map' :
-			env == 'dist' ?
+			env.dist ?
 				'hidden-source-map' :
 				'source-map',
-		stats: env == 'dev' ? {} : { warnings: false },
-
 		// Constant
+		stats: {
+			all: false,
+			colors: true,
+			performance: true,
+			assets: true,
+			warnings: true,
+			cachedModules: true,
+			errors: true,
+			errorDetails: true,
+		},
 		entry: {
 			edit: './src/edit.js',
 			home: './src/home.js',
@@ -24,6 +32,7 @@ module.exports = (env) => {
 		output: {
 			filename: '[name].bundle.js',
 			path: path.resolve(__dirname, 'assets', 'js'),
+			compareBeforeEmit: false,
 			libraryTarget: 'window'
 		},
 		module: {
@@ -49,6 +58,9 @@ module.exports = (env) => {
 					extractComments: false,
 				}),
 			],
+		},
+		performance: {
+			hints: false,
 		},
 	}
 };
