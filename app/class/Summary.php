@@ -64,7 +64,8 @@ class Summary extends Item
                 continue;
             };
             for ($i = $header->level; $i > $prevlevel; $i--) {
-                $sumstring .= '<ul><li>';
+                $class = $i === $this->min ? ' class="summary"' : '';
+                $sumstring .= "<ul$class><li>";
             }
             for ($i = $header->level; $i < $prevlevel; $i++) {
                 $sumstring .= '</li></ul>';

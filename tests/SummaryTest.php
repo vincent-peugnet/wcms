@@ -28,7 +28,8 @@ class SummaryTest extends TestCase
                         new Header('test-1-2', 2, 'Test 1.2')
                     ]
                 ],
-                '<ul><li><a href="#test-1">Test 1</a><ul><li><a href="#test-1-2">Test 1.2</a></li></ul></li></ul>'
+                // phpcs:ignore Generic.Files.LineLength.TooLong
+                '<ul class="summary"><li><a href="#test-1">Test 1</a><ul><li><a href="#test-1-2">Test 1.2</a></li></ul></li></ul>'
             ],
             [
                 [
@@ -38,7 +39,7 @@ class SummaryTest extends TestCase
                     ],
                     'options' => 'min=2'
                 ],
-                '<ul><li><a href="#test-1-2">Test 1.2</a></li></ul>'
+                '<ul class="summary"><li><a href="#test-1-2">Test 1.2</a></li></ul>'
             ],
             [
                 [
@@ -48,7 +49,7 @@ class SummaryTest extends TestCase
                     ],
                     'options' => 'max=1'
                 ],
-                '<ul><li><a href="#test-1">Test 1</a></li></ul>'
+                '<ul class="summary"><li><a href="#test-1">Test 1</a></li></ul>'
             ]
         ];
     }
