@@ -96,7 +96,7 @@ body {
 
 .editor #workspace {
     display: flex;
-    height: calc(100% - 50px);
+    height: 93%;
     position: relative;
     width: 100%;
 }
@@ -175,7 +175,7 @@ html {
 }
 
 .editor #edittopbar {
-    height: 24px;
+    /* height: 24px; */
     background-color: #a9a9a9;
     line-height: 18px;
     border-bottom: grey solid 1px;
@@ -251,7 +251,6 @@ a:hover {
 
 
 #topbar span#menu {
-    display: inline-block;
     margin: 0 1%;
 }
 
@@ -391,8 +390,20 @@ span.cm-wkeyword {
 
 
 @media (max-width: 600px) {
-    .bar, .hidephone {
+    .bar, span#headid{
         display: none;
+    }
+
+    body {
+        font-size: 1.1em;
+    }
+
+    header a span {
+        display: none;
+    }
+
+    header a {
+        font-size: 2em;
     }
 
     span#fontsize {
@@ -409,7 +420,6 @@ span.cm-wkeyword {
 
         
     span#shortcuts {
-        font-size: 23px;
         line-height: 1;
     }
     

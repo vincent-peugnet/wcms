@@ -299,13 +299,9 @@ class Page extends Dbitem
         return $this->templateoptions;
     }
 
-    public function checkoption($option)
+    public function checkoption(string $option)
     {
-        if (in_array($option, $this->templateoptions)) {
-            return true;
-        } else {
-            return false;
-        }
+        return (in_array($option, $this->templateoptions));
     }
 
     public function favicon($type = 'string')

@@ -1,4 +1,4 @@
-<aside class="media hidephone">
+<aside class="media">
 
     <details>
         <summary>File</summary>
@@ -39,7 +39,7 @@
             <?php if($user->issupereditor()) { ?>
 
             <h2>Folder</h2>
-            <form action="<?= $this->url('mediafolderdelete') ?>" id="deletefolder" method="post" class="hidephone">
+            <form action="<?= $this->url('mediafolderdelete') ?>" id="deletefolder" method="post">
                 <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>/">
                 <input type="checkbox" name="deletefolder" id="confirmdeletefolder" value="1">
                 <label for="confirmdeletefolder">Delete actual folder and all it's content</label>
@@ -95,7 +95,7 @@
 
 
 
-    <details class="hidephone" id="bookmarks">
+    <details id="bookmarks">
         <summary>Bookmarks</summary>
         <div class="submenu">
             <h2>Personnal</h2>

@@ -29,7 +29,7 @@
 
         <div class="block">
 
-            <h2 class="hidephone">Pages (<?= count($pagelistopt) ?>) <span class="right"><a href="?display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> >list</a> / <a href="?display=map"  <?= $display === 'map' ? 'style="color: white"' : '' ?>  >map</a></span> </h2>
+            <h2>Pages (<?= count($pagelistopt) ?>) <span class="right"><a href="?display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> >list</a> / <a href="?display=map"  <?= $display === 'map' ? 'style="color: white"' : '' ?>  >map</a></span> </h2>
 
             <?php if($display === 'map') { ?>
 
@@ -63,7 +63,7 @@
 
             <!-- ___________________ D E E P _________________________ -->
 
-            <div id="deepsearchbar" class="hidephone">
+            <div id="deepsearchbar">
                 <form action="<?= $this->url('home') ?>" method="get">
                     <input type="text" name="search" value="<?= $deepsearch ?>" id="deepsearch" placeholder="deep search">
                     <input type="checkbox" name="id" id="deepid" value="1" <?= $searchopt['id'] ? 'checked' : '' ?>>
@@ -91,16 +91,16 @@
                 <table id="home2table">
                     <thead>
                         <tr>
-                            <?php if($user->issupereditor()) { ?><th id="checkall" class="hidephone">x</th> <?php } ?>
+                            <?php if($user->issupereditor()) { ?><th id="checkall">x</th> <?php } ?>
                             <?php if($columns['favicon']) { ?>
                                 <th class="favicon"><a href="<?= $opt->sortbyorder('favicon') ?>">ico</a></th>
                             <?php } ?>
                             <th class="id"><a href="<?= $opt->sortbyorder('id') ?>">id</a></th>
-                            <th></th>
-                            <th></th>
+                            <th class="edit"></th>
+                            <th class="read"></th>
                             <th class="delete" title="delete page"></th>
                             <?php if ($user->issupereditor()) { ?>
-                            <th class="download hidephone" title="download page as json"></th>
+                            <th class="download" title="download page as json"></th>
                             <?php }
                                 if ($columns['tag']) { ?>
                             <th class="tag"><a href="<?= $opt->sortbyorder('tag') ?>">tag</a></th>
@@ -143,19 +143,19 @@
                     <tbody>
                         <?php foreach ($pagelistopt as $item) { ?>
                         <tr>
-                            <?php if($user->issupereditor()) { ?><td class="hidephone"><input type="checkbox" name="pagesid[]" value="<?= $item->id() ?>" id="id_<?= $item->id() ?>" form="multi"></td><?php } ?>
+                            <?php if($user->issupereditor()) { ?><td><input type="checkbox" name="pagesid[]" value="<?= $item->id() ?>" id="id_<?= $item->id() ?>" form="multi"></td><?php } ?>
                             <?php if($columns['favicon']) { ?>
                                 <td class="favicon"><img class="favicon" src="<?= Wcms\Model::faviconpath() . $item->favicon() ?>" alt="<?= $item->favicon() ?>" title="<?= $item->favicon() ?>"></td>
                             <?php } ?>
                             <td class="id"><label title="<?= $item->title() ?>" for="id_<?= $item->id() ?>"><?= $item->id() ?></label></td>
-                            <td>
+                            <td class="edit">
                                 <?php if($user->issupereditor() || in_array($user->id(), $item->authors())) { ?>
                                     <a href="<?= $this->upage('pageedit', $item->id()) ?>">
                                         <i class="fa fa-pencil"></i>
                                     </a>
                                     <?php } ?>
                             </td>
-                            <td>
+                            <td class="read">
                                 <a href="<?= $this->upage('pageread/', $item->id()) ?>" target="<?= $item->id() ?>">
                                     <i class="fa fa-eye"></i>
                                 </a>
@@ -168,7 +168,7 @@
                                 <?php } ?>
                             </td>
                             <?php if ($user->issupereditor()) { ?>
-                            <td class="hidephone">
+                            <td class="download">
                                 <a href="<?= $this->upage('pagedownload', $item->id()) ?>" download>
                                     <i class="fa fa-download"></i>
                                 </a>
@@ -226,7 +226,7 @@
 
     <?php if($user->display()['bookmark'] && (!empty(Wcms\Config::bookmark()) || !empty($user->bookmark()))) { ?>
 
-    <section class="hidephone" id="bookmark">
+    <section id="bookmark">
         <div class="block">
             <h2>Bookmarks</h2>
             <div class="scroll">

@@ -690,7 +690,7 @@ footer {
         font-size: 1.1em;
     }
 
-    header a span {
+    header a span, footer {
         display: none;
     }
 
@@ -725,6 +725,10 @@ footer {
     #gallery li div.thumbnail {
         font-size: 4em;
     }
+    
+    td.edit, td.read, td.delete, td.download {
+        font-size: 1.4em;
+    }
 
 }
 
@@ -738,6 +742,7 @@ footer {
     top: -200px;
   }
 }
+
 
 
 

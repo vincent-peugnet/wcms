@@ -2,7 +2,7 @@
 
 
 <?php if($user->issupereditor()) { ?>
-    <details class="hidephone" id="json">
+    <details id="json">
         <summary>File</summary>
             <div class="submenu">
                 <h2>Import page as file</h2>
@@ -33,7 +33,7 @@
 
 
 
-    <details class="hidephone" id="edit">
+    <details id="edit">
         <summary>Edit</summary>
         <div class="submenu">
             <i>Edit selected pages</i>
@@ -197,7 +197,7 @@
 
 
 
-    <details class="hidephone" id="selection" <?= !empty($optlist) ? 'open' : '' ?>>
+    <details id="selection" <?= !empty($optlist) ? 'open' : '' ?>>
         <summary>Filter</summary>
         <div class="submenu">
         <h2>Get LIST code</h2>
@@ -247,7 +247,7 @@
 
 
 
-    <details class="hidephone" id="bookmarks">
+    <details id="bookmarks">
         <summary>Bookmarks</summary>
         <div class="submenu">
             <h2>Personnal</h2>
@@ -286,7 +286,7 @@
 
 
 
-    <details class="hidephone" id="display">
+    <details id="display">
         <summary>Display</summary>
         <div class="submenu">
             <h2>Columns</h2>

@@ -47,7 +47,7 @@
             <label for="thumbnail">Thumbnail</label>
             <select name="thumbnail" id="thumbnail">
             <?php
-            if(!empty($page->templatebody()) && $page->template()['thumbnail']) {
+            if(!empty($page->templatebody()) && $page->template()['cssthumbnail']) {
                 ?>
                 <option value="<?= $page->thumbnail() ?>">--using template thumbnail--</option>
                 <?php

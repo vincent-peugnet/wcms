@@ -1,6 +1,6 @@
 <header id="topbar">
 
-<span id="search" class="hidephone">
+<span id="search">
 <form action="<?= $this->url('search') ?>" method="post">
 <input type="text" list="searchdatalist" name="id" id="search" placeholder="page id" required <?= $tab !== 'edit' && !$user->isvisitor() ? 'autofocus' : '' ?>>
 <input type="submit" name="action" value="read">
@@ -24,11 +24,11 @@
 <span id="menu">
 <a href="<?= $this->url('home') ?>" <?= $tab == 'home' ? 'class="actualpage"' : '' ?>>
     <i class="fa fa-home"></i>
-    <span class="hidephone">home</span>
+    <span>home</span>
 </a>
 <a href="<?= $this->url('media') ?>" <?= $tab == 'media' ? 'class="actualpage"' : '' ?>>
     <i class="fa fa-link"></i>
-    <span class="hidephone">media</span>
+    <span>media</span>
 </a>
 
 </span>
@@ -36,7 +36,7 @@
 
 <span id="shortcuts">
     <?php foreach ($user->bookmark() as $bookmark) { ?>
-        <a href="<?= $this->url($bookmark->route(), $bookmark->params(), $bookmark->query()) ?>"><?= $bookmark->icon() ?><span class="hidephone"> <?= $bookmark->id() ?></span></a>
+        <a href="<?= $this->url($bookmark->route(), $bookmark->params(), $bookmark->query()) ?>"><?= $bookmark->icon() ?><span> <?= $bookmark->id() ?></span></a>
     <?php } ?>
 </span>
 
@@ -70,7 +70,7 @@ if($user->isadmin()) {
 ?>
 <a href="<?= $this->url('admin') ?>" <?= $tab == 'admin' ? 'class="actualpage"' : '' ?>>
     <i class="fa fa-cog"></i>
-    <span class="hidephone">admin</span>
+    <span>admin</span>
 
 </a>
 <?php
@@ -78,12 +78,12 @@ if($user->isadmin()) {
 ?>
 <a href="<?= $this->url('info') ?>"  <?= $tab == 'info' ? 'class="actualpage"' : '' ?>>
     <i class="fa fa-book"></i>
-    <span class="hidephone">documentation</span>
+    <span>documentation</span>
 </a>
 
 <a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>>
     <i class="fa fa-user"></i>
-    <span class="hidephone"><?= $user->id() ?></span>
+    <span><?= $user->id() ?></span>
 </a>
 <i><?= $user->level() ?></i>
 </span>
