@@ -278,6 +278,9 @@ This will include the page [description](#description).
 
     %DATE%
 
+##### Thumbnail inclusion
+
+    %THUMBNAIL%
 
 ##### Login inclusion
 
