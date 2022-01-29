@@ -288,6 +288,18 @@ This will include the page [description](#description).
 
 You have two options to print the page ID.
 
+##### path inclusion
+
+    %PATH%
+
+Include the page absolute path, including potential subfolders after domain.
+
+##### url inclusion
+
+    %URL%
+
+Include the page exact URL.
+
 ##### Login inclusion
 
     %CONNECT%

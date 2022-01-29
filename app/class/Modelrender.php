@@ -187,6 +187,8 @@ class Modelrender extends Modelpage
         $content = $this->date($content);
         $content = $this->thumbnail($content);
         $content = $this->pageid($content);
+        $content = $this->url($content);
+        $content = $this->path($content);
         if ($element->autolink()) {
             $content = $this->everylink($content, $element->autolink());
         }
@@ -662,13 +664,33 @@ class Modelrender extends Modelpage
     }
 
     /**
-     * Replace each occurence of `%PAGEID%` or %`ID`% with page ID
+     * Replace each occurence of `%PAGEID%` or `%ID%` with page ID
      * @param string $text input text
      * @return string output text with replaced elements
      */
     public function pageid(string $text): string
     {
         return str_replace(['%PAGEID%', '%ID%'], $this->page->id(), $text);
+    }
+
+    /**
+     * Replace each occurence of `%URL%` with page ID
+     * @param string $text input text
+     * @return string output text with replaced elements
+     */
+    public function url(string $text): string
+    {
+        return str_replace('%URL%', Config::domain() . $this->upage($this->page->id()), $text);
+    }
+
+    /**
+     * Replace each occurence of `%PATH%` with page ID
+     * @param string $text input text
+     * @return string output text with replaced elements
+     */
+    public function path(string $text): string
+    {
+        return str_replace('%PATH%', $this->upage($this->page->id()), $text);
     }
 
     /**
