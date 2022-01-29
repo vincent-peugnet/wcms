@@ -23,7 +23,7 @@
 
                 <ul>
                 <li><a href="https://github.com/vincent-peugnet/wcms" target="_blank">🐱‍👤 Github</a></li>
-                <li><a href="https://w-cms.top" target="_blank">🌵 Website</a></li>
+                <li><a href="https://w.club1.fr" target="_blank">🌵 Website</a></li>
                 </ul>
 
                 <h2>Manual Summary</h2>

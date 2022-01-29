@@ -42,19 +42,19 @@ Overview
 
 You can access your home following the root folder you've instaled **W**. After connecting, you can see your editor interface.
 
-![home](https://w-cms.top/gif/home.jpg)
+![home](https://w.club1.fr/gif/home.jpg)
 
 Quickly edit pages as if you where taking notes. You need to connect as editor, then just type `../edit` at the end of the page you want to edit ot use the menu.
 
-![edit](https://w-cms.top/gif/edit.jpg)
+![edit](https://w.club1.fr/gif/edit.jpg)
 
 Then you can se the result.
 
-![read](https://w-cms.top/gif/read.jpg)
+![read](https://w.club1.fr/gif/read.jpg)
 
 There is lot more you can by altering the `BODY`.
 
-![advanced](https://w-cms.top/gif/advanced.jpg)
+![advanced](https://w.club1.fr/gif/advanced.jpg)
 
 
 

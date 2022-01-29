@@ -69,7 +69,7 @@ One of the most interesting things to do when you use internet publishing, is to
 
 All those methods will create a link pointing to the `<page_id>` you've given.
 
-Those kind of links are called internal links beccause they stay inside of your domain. To set a link outside of your website, simply remplace `<page_id>` by the website adress you whant to target (ex : `https://w-cms.top`), but this won't work with the third method as it is'nt a W page.
+Those kind of links are called internal links beccause they stay inside of your domain. To set a link outside of your website, simply remplace `<page_id>` by the website adress you whant to target (ex : `https://w.club1.fr`), but this won't work with the third method as it is'nt a W page.
 
 
 #### Insert images
