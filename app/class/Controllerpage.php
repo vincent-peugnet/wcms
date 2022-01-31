@@ -79,9 +79,9 @@ class Controllerpage extends Controller
         }
     }
 
-    public function render($id)
+    public function render($page)
     {
-        $this->setpage($id, 'pageupdate');
+        $this->setpage($page, 'pageupdate');
 
         if ($this->importpage() && $this->user->iseditor()) {
             $this->page = $this->renderpage($this->page);
@@ -126,15 +126,15 @@ class Controllerpage extends Controller
     }
 
     /**
-     * @param string $id page ID
+     * @param string $page page ID
      */
-    public function read($id)
+    public function read($page)
     {
-        $this->setpage($id, 'pageread/');
+        $this->setpage($page, 'pageread/');
 
         $pageexist = $this->importpage();
         $canread = false;
-        $filedir = Model::HTML_RENDER_DIR . $id . '.html';
+        $filedir = Model::HTML_RENDER_DIR . $page . '.html';
 
         if ($pageexist) {
             $canread = $this->user->level() >= $this->page->secure();
@@ -191,9 +191,9 @@ class Controllerpage extends Controller
         }
     }
 
-    public function edit($id)
+    public function edit($page)
     {
-        $this->setpage($id, 'pageedit');
+        $this->setpage($page, 'pageedit');
 
         $this->pageconnect('pageedit');
 
@@ -235,20 +235,20 @@ class Controllerpage extends Controller
         }
     }
 
-    public function log($id)
+    public function log($page)
     {
         if ($this->user->issupereditor()) {
-            $this->setpage($id, 'pagelog');
+            $this->setpage($page, 'pagelog');
             $this->importpage();
             var_dump($this->page);
         } else {
-            $this->routedirect('pageread/', ['page' => $id]);
+            $this->routedirect('pageread/', ['page' => $page]);
         }
     }
 
-    public function add($id)
+    public function add($page)
     {
-        $this->setpage($id, 'pageadd');
+        $this->setpage($page, 'pageadd');
 
         $this->pageconnect('pageadd');
 
@@ -262,19 +262,19 @@ class Controllerpage extends Controller
         }
     }
 
-    public function addascopy(string $id, string $copy)
+    public function addascopy(string $page, string $copy)
     {
-        $id = Model::idclean($id);
-        if ($this->copy($copy, $id)) {
+        $page = Model::idclean($page);
+        if ($this->copy($copy, $page)) {
             $this->routedirect('pageedit', ['page' => $this->page->id()]);
         } else {
-            $this->routedirect('pageread/', ['page' => $id]);
+            $this->routedirect('pageread/', ['page' => $page]);
         }
     }
 
-    public function confirmdelete($id)
+    public function confirmdelete($page)
     {
-        $this->setpage($id, 'pageconfirmdelete');
+        $this->setpage($page, 'pageconfirmdelete');
         if ($this->importpage() && ($this->user->issupereditor() || $this->page->authors() === [$this->user->id()] )) {
             $this->showtemplate('confirmdelete', ['page' => $this->page, 'pageexist' => true]);
         } else {
@@ -282,10 +282,10 @@ class Controllerpage extends Controller
         }
     }
 
-    public function download($id)
+    public function download($page)
     {
         if ($this->user->isadmin()) {
-            $file = Model::PAGES_DIR . Config::pagetable() . DIRECTORY_SEPARATOR . $id . '.json';
+            $file = Model::PAGES_DIR . Config::pagetable() . DIRECTORY_SEPARATOR . $page . '.json';
 
             if (file_exists($file)) {
                 header('Content-Description: File Transfer');
@@ -299,7 +299,7 @@ class Controllerpage extends Controller
                 exit;
             }
         } else {
-            $this->routedirect('pageread/', ['page' => $id]);
+            $this->routedirect('pageread/', ['page' => $page]);
         }
     }
 
@@ -338,41 +338,41 @@ class Controllerpage extends Controller
         $this->routedirect('home');
     }
 
-    public function logout(string $id)
+    public function logout(string $page)
     {
         if (!$this->user->isvisitor()) {
             $this->disconnect();
-            $this->routedirect('pageread', ['page' => $id]);
+            $this->routedirect('pageread', ['page' => $page]);
         } else {
-            $this->routedirect('pageread/', ['page' => $id]);
+            $this->routedirect('pageread/', ['page' => $page]);
         }
     }
 
-    public function login(string $id)
+    public function login(string $page)
     {
         if ($this->user->isvisitor()) {
-            $this->showtemplate('connect', ['id' => $id, 'route' => 'pageread/']);
+            $this->showtemplate('connect', ['id' => $page, 'route' => 'pageread/']);
         } else {
-            $this->routedirect('pageread/', ['page' => $id]);
+            $this->routedirect('pageread/', ['page' => $page]);
         }
     }
 
-    public function delete($id)
+    public function delete($page)
     {
-        $this->setpage($id, 'pagedelete');
+        $this->setpage($page, 'pagedelete');
         if ($this->user->iseditor() && $this->importpage()) {
             $this->pagemanager->delete($this->page);
         }
         $this->routedirect('home');
     }
 
-    public function duplicate(string $srcid, string $targetid)
+    public function duplicate(string $page, string $target)
     {
-        $targetid = Model::idclean($targetid);
-        if ($this->copy($srcid, $targetid)) {
-            $this->routedirect('pageread/', ['page' => $targetid]);
+        $target = Model::idclean($target);
+        if ($this->copy($page, $target)) {
+            $this->routedirect('pageread/', ['page' => $target]);
         } else {
-            $this->routedirect('pageread/', ['page' => Model::idclean($srcid)]);
+            $this->routedirect('pageread/', ['page' => Model::idclean($page)]);
         }
     }
 
@@ -399,9 +399,9 @@ class Controllerpage extends Controller
         return false;
     }
 
-    public function update($id)
+    public function update($page)
     {
-        $this->setpage($id, 'pageupdate');
+        $this->setpage($page, 'pageupdate');
 
         $this->movepanels();
         $this->fontsize();
@@ -446,8 +446,8 @@ class Controllerpage extends Controller
         }
     }
 
-    public function pagedirect($id)
+    public function pagedirect($page)
     {
-        $this->routedirect('pageread/', ['page' => Model::idclean($id)]);
+        $this->routedirect('pageread/', ['page' => Model::idclean($page)]);
     }
 }
