@@ -119,7 +119,4 @@ jobs:
 
       - name: PHPStan
         if: always()
-        run: |
-          echo "::add-matcher::.github/matchers/phpstan.json"
-          vendor/bin/phpstan analyse --error-format=raw --no-progress
-          echo "::remove-matcher owner=phpstan::"
+        run: vendor/bin/phpstan analyse --no-progress
