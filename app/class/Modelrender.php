@@ -389,7 +389,7 @@ class Modelrender extends Modelpage
     public function media(string $text): string
     {
         $regex = '%(src|href)="([\w\-]+(\/([\w\-])+)*\.[a-z0-9]{1,5})"%';
-        $text = preg_replace($regex, '$1="' . Model::mediapath() . '$2" target="_blank"', $text);
+        $text = preg_replace($regex, '$1="' . Model::mediapath() . '$2"', $text);
         if (!is_string($text)) {
             //throw new Exception('Rendering error -> media module');
         }
