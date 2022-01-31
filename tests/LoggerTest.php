@@ -39,7 +39,7 @@ class LoggerTest extends FilesTest
     {
         $dir = 'not/existing/path';
         $file = "$dir/w_error.log";
-        $this->assertDirectoryNotExists($dir);
+        $this->assertDirectoryDoesNotExist($dir);
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage("Parent directory of '$file' does not exist.");
         Logger::init($file);
@@ -55,7 +55,7 @@ class LoggerTest extends FilesTest
         $dir = $this->notwritabledir;
         $file = "$dir/w_error.log";
         $this->assertDirectoryExists($dir);
-        $this->assertDirectoryNotIsWritable($dir);
+        $this->assertDirectoryIsNotWritable($dir);
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage("Parent directory of '$file' is not writable.");
         Logger::init($file);
@@ -70,7 +70,7 @@ class LoggerTest extends FilesTest
         $file = $this->notwritablefile;
         $this->assertDirectoryExists(dirname($file));
         $this->assertDirectoryIsWritable(dirname($file));
-        $this->assertNotIsWritable($file);
+        $this->assertIsNotWritable($file);
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage("The logfile '$file' is not writable.");
         Logger::init($file);
@@ -274,7 +274,7 @@ class LoggerTest extends FilesTest
         $content = file_get_contents($this->logfile);
         $expected = " [ ERROR ] tests{$this->ds}LoggerTest.php(273) Error ";
         $this->assertEquals($expected, substr($content, 25, 43));
-        $this->assertRegExp('/(#\d+ [\w\/\.]*\(\d+\): .*\)\n)+#\d+ \{main\}\n/U', $content);
+        $this->assertMatchesRegularExpression('/(#\d+ [\w\/\.]*\(\d+\): .*\)\n)+#\d+ \{main\}\n/U', $content);
     }
 
     /**
