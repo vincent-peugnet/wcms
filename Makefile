@@ -50,6 +50,7 @@ dev:
 	$(MAKE) serve .watch ENV=$(ENV)
 
 .PHONY: serve
+serve: XDEBUG_MODE=debug
 serve: vendor VERSION
 	php -S $(HOST):$(PORT) -t ./ $(PHP_FLAGS)
 
