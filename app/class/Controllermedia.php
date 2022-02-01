@@ -104,7 +104,10 @@ class Controllermedia extends Controller
     {
         if ($this->user->iseditor()) {
             $dir = $_POST['dir'] ?? Model::MEDIA_DIR;
-            $name = Model::idclean($_POST['foldername']) ?? 'new-folder';
+            $name = Model::idclean($_POST['foldername']);
+            if ($name == "") {
+                $name = 'new-folder';
+            }
             $this->mediamanager->adddir($dir, $name);
             $this->redirect($this->generate('media') . '?path=/' . $dir . $name);
         }
