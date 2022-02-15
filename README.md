@@ -98,13 +98,13 @@ If you want to contribute to the project.
 ## Prerequisites
 
 - PHP >=7.4.0
-- PHP extensions : curl mbstring
+- PHP extensions : curl mbstring xml
 - [Composer](https://getcomposer.org/)
 - _Optionally_ [NPM](https://www.npmjs.com/get-npm)
 
 ### Debian and derivatives
 
-    sudo apt install php php-curl php-mbstring composer nodejs
+    sudo apt install php php-curl php-mbstring php-xml composer nodejs
 
 Install from sources
 --------------------
