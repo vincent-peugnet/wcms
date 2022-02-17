@@ -82,7 +82,21 @@ $this->stop();
 
     if ($canedit) {
         ?>
-        <p><a href="<?= $this->upage('pageadd', $page->id()) ?>">⭐ Create</a></p>            
+        <style>
+            code {
+                font-size: 1.1em;
+                border: 1px solid grey;
+                padding: 2px 4px;
+                margin: 0 5px;
+            }
+        </style>
+        <p><a href="<?= $this->upage('pageadd', $page->id()) ?>">⭐ Create</a></p>
+
+        <p>
+            💡 To create a page in one command, you can type
+            <code><?= $this->upage('pageadd', $page->id()) ?></code>
+            directly in your address bar.
+        </p>
         <?php
         } elseif(!empty(Wcms\Config::alertlink())) {
             ?>
