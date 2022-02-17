@@ -461,7 +461,7 @@ class Modelpage extends Modeldb
 
     /**
      * Check if a page need to be rendered
-     * 
+     *
      * @return bool true if the page need to be rendered otherwise false
      */
     public function needtoberendered(Page $page): bool

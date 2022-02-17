@@ -130,17 +130,24 @@ class Controllerpage extends Controller
     }
 
     /**
-     * Render all page templated if they need to
+     * Render all page templates if they need to
      *
      * @param Page $page page to check templates
      */
     public function templaterender(Page $page)
     {
-        $relatedpages = $this->pagemanager->getpagecsstemplates($page);
-        foreach ($relatedpages as $page) {
+        $templates = $this->pagemanager->getpagecsstemplates($page);
+        foreach ($templates as $page) {
             if ($this->pagemanager->needtoberendered($page)) {
                 $page = $this->renderpage($page);
                 $this->pagemanager->update($page);
+            }
+        }
+        if (!empty($page->templatejavascript())) {
+            $templatejs = $this->pagemanager->get($page->templatejavascript());
+            if ($templatejs && $this->pagemanager->needtoberendered($templatejs)) {
+                $templatejs = $this->renderpage($templatejs);
+                $this->pagemanager->update($templatejs);
             }
         }
     }
