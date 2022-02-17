@@ -203,6 +203,7 @@ analyse: vendor
 
 # Test php code with phpunit.
 .PHONY: test
+test: XDEBUG_MODE=coverage
 test: $(phpunit_dir) vendor
 	phpunit
 
