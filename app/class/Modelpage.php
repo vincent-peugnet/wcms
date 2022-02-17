@@ -139,6 +139,27 @@ class Modelpage extends Modeldb
     }
 
     /**
+     * Get all the pages that are called in css templating
+     *
+     * @param Page $page page to retrieve css templates
+     * @return Page[] array of pages with ID as index
+     */
+    public function getpagecsstemplates(Page $page): array
+    {
+        $templates = [];
+        if (!empty($page->templatecss()) && $page->templatecss() !== $page->id()) {
+            $template = $this->get($page->templatecss());
+            if ($template !== false) {
+                $templates[$template->id()] = $template;
+                if (in_array('recursivecss', $page->templateoptions())) {
+                    $templates = array_merge($this->getpagecsstemplates($template), $templates);
+                }
+            }
+        }
+        return $templates;
+    }
+
+    /**
      * Delete a page and it's linked rendered html and css files
      *
      * @param Page|string $page could be an Page object or a id string
@@ -436,5 +457,20 @@ class Modelpage extends Modeldb
             $page->setdatemodif($now);
         }
         return $page;
+    }
+
+    /**
+     * Check if a page need to be rendered
+     * 
+     * @return bool true if the page need to be rendered otherwise false
+     */
+    public function needtoberendered(Page $page): bool
+    {
+        return (
+            $page->daterender() <= $page->datemodif() ||
+            !file_exists(self::HTML_RENDER_DIR . $page->id() . '.html') ||
+            !file_exists(self::RENDER_DIR . $page->id() . '.css') ||
+            !file_exists(self::RENDER_DIR . $page->id() . '.js')
+        );
     }
 }

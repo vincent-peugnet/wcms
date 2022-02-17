@@ -84,8 +84,12 @@ class Controllerpage extends Controller
         $this->setpage($page, 'pageupdate');
 
         if ($this->importpage() && $this->user->iseditor()) {
+            if (Config::recursiverender()) {
+                $this->recursiverender($this->page);
+            }
             $this->page = $this->renderpage($this->page);
             $this->pagemanager->update($this->page);
+            $this->templaterender($this->page);
         }
         $this->routedirect('pageread/', ['page' => $this->page->id()]);
     }
@@ -111,14 +115,30 @@ class Controllerpage extends Controller
     }
 
     /**
-     * Render all other pages that link to this page
+     * Render all other pages that are linked from this page
      */
     public function recursiverender(Page $page): void
     {
         $relatedpages = array_diff($page->linkto(), [$page->id()]);
         foreach ($relatedpages as $pageid) {
             $page = $this->pagemanager->get($pageid);
-            if ($page !== false) {
+            if ($page !== false && $this->pagemanager->needtoberendered($page)) {
+                $page = $this->renderpage($page);
+                $this->pagemanager->update($page);
+            }
+        }
+    }
+
+    /**
+     * Render all page templated if they need to
+     *
+     * @param Page $page page to check templates
+     */
+    public function templaterender(Page $page)
+    {
+        $relatedpages = $this->pagemanager->getpagecsstemplates($page);
+        foreach ($relatedpages as $page) {
+            if ($this->pagemanager->needtoberendered($page)) {
                 $page = $this->renderpage($page);
                 $this->pagemanager->update($page);
             }
@@ -147,12 +167,13 @@ class Controllerpage extends Controller
                 }
             }
 
-            if ($this->page->daterender() <= $this->page->datemodif() || !file_exists($filedir)) {
+            if ($this->pagemanager->needtoberendered($this->page)) {
                 if (Config::recursiverender()) {
                     $this->recursiverender($this->page);
                 }
                 $this->page = $this->renderpage($this->page);
             }
+            $this->templaterender($this->page);
 
 
             if ($canread) {
