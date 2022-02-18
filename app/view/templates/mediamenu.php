@@ -81,7 +81,14 @@
         <summary>Filter</summary>
         <div class="submenu">
             <h2>Print folder content</h2>
-            
+            <form action="" method="post">
+                <input type="hidden" name="query" value="1">
+                <input type="hidden" name="filename" value="0">
+                <input type="checkbox" name="filename" id="filename" value="1" <?= $mediaopt->filename() ? "checked" : "" ?> >
+                <label for="filename">add filenames under images, sounds and videos</label>
+                <br>
+                <input type="submit" value="generate">
+            </form>
 
 
             <p>Use this code to print the content of the actual folder in a page</p>

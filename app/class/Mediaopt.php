@@ -29,7 +29,7 @@ class Mediaopt extends Item
     protected $links = 0;
 
     /** @var int display the file name of the file */
-    protected $filename = 0;
+    protected int $filename = 0;
 
     public const TYPES = ['image', 'sound', 'video', 'other'];
 
@@ -69,6 +69,7 @@ class Mediaopt extends Item
                 $id = 'id="media_' . $media->id() . '"';
                 $path = $media->getincludepath();
                 $ext = $media->extension();
+                $filename = $media->id() . '.' . $ext;
                 if ($media->type() == 'image') {
                     $div .= '<img alt="' . $media->id() . '" ' . $id . ' src="' . $path . '" >';
                 } elseif ($media->type() == 'sound') {
@@ -77,8 +78,10 @@ class Mediaopt extends Item
                     $source = '<source src="' . $path . '" type="video/' . $ext . '" ' . $id . '>';
                     $div .= '<video controls>' . $source . '</video>';
                 } else {
-                    $name = $media->id() . '.' . $ext;
-                    $div .= '<a href="' . $path . '" target="_blank" class="media" ' . $id . '>' . $name . '</a>';
+                    $div .= '<a href="' . $path . '" target="_blank" class="media" ' . $id . '>' . $filename . '</a>';
+                }
+                if ($this->filename && in_array($media->type(), ['image', 'sound', 'video'])) {
+                    $div .= "<div class=\"filename\">$filename</div>";
                 }
                 $div .= '</div>' . PHP_EOL;
             }
@@ -123,8 +126,8 @@ class Mediaopt extends Item
 
     public function getquery()
     {
-        $query = ['path' => $this->path, 'sortby' => $this->sortby, 'order' => $this->order];
-        if (array_diff(self::TYPES, $this->type) != []) {
+        $query = ['path' => $this->path, 'sortby' => $this->sortby, 'order' => $this->order, 'filename' => $this->filename];
+        if (array_diff(self::TYPES, $this->type) !== []) {
             $query['type'] = $this->type;
         }
         return urldecode(http_build_query($query));
@@ -188,6 +191,11 @@ class Mediaopt extends Item
         return $this->type;
     }
 
+    public function filename(): int
+    {
+        return $this->filename;
+    }
+
     // ______________________________________________ S E T ________________________________________________________
 
 
@@ -232,5 +240,10 @@ class Mediaopt extends Item
         if (is_array($type)) {
             $this->type = array_intersect(Model::mediatypes(), array_unique($type));
         }
+    }
+
+    public function setfilename($filename)
+    {
+        $this->filename = (int) (bool) $filename;
     }
 }

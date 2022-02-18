@@ -34,8 +34,13 @@ class Controllermedia extends Controller
             } catch (\InvalidArgumentException $exception) {
                 throw new LogicException($exception->getMessage());
             }
+            if (isset($_POST['query']) && $this->user->iseditor()) {
+                $datas = array_merge($_GET, $_POST);
+            } else {
+                $datas = $_GET;
+            }
 
-            $mediaopt = new Mediaopt($_GET);
+            $mediaopt = new Mediaopt($datas);
             if (empty($mediaopt->path())) {
                 $mediaopt->setpath(DIRECTORY_SEPARATOR . Model::MEDIA_DIR);
             }
