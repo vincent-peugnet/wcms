@@ -20,6 +20,7 @@ class Routes
         }
         $router->addMatchTypes(array('cid' => '[^/]+'));
         $router->addRoutes([
+            ['GET', '/api/v1/[cid:page]/access', 'Controllerapipage#access', 'apipageaccess'],
             ['GET', '/', 'Controllerhome#desktop', 'home'],
             ['POST', '/', 'Controllerhome#desktop', 'homequery'],
             ['POST', '/columns', 'Controllerhome#columns', 'homecolumns'],

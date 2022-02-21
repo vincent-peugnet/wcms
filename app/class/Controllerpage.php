@@ -10,6 +10,8 @@ use RuntimeException;
 
 class Controllerpage extends Controller
 {
+    use Voterpage;
+
     /** @var Page */
     protected $page;
     protected $fontmanager;
@@ -60,22 +62,6 @@ class Controllerpage extends Controller
         if ($this->user->isvisitor()) {
             $this->showtemplate('connect', ['route' => $route, 'id' => $this->page->id()]);
             exit;
-        }
-    }
-
-
-    public function canedit()
-    {
-        if ($this->user->issupereditor()) {
-            return true;
-        } elseif ($this->user->isinvite() || $this->user->iseditor()) {
-            if (in_array($this->user->id(), $this->page->authors())) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
         }
     }
 
