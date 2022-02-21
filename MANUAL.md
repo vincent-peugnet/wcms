@@ -642,3 +642,16 @@ Render all pages in the database
 
 
 
+### API
+
+A JSON REST API
+#### page related api
+
+##### access
+
+To access a page means to get the full JSON page object. User needs to be allowed to edit the coresponding page in order to access it.
+
+```
+/api/v1/<page_id>/access
+```
+

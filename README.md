@@ -57,6 +57,10 @@ There is lot more you can by altering the `BODY`.
 ![advanced](https://w.club1.fr/gif/advanced.jpg)
 
 
+API
+---
+
+An API exist. Find more info [in the documentation](MANUAL.md#api)
 
 Development team
 ------------------
