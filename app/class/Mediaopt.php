@@ -126,7 +126,12 @@ class Mediaopt extends Item
 
     public function getquery()
     {
-        $query = ['path' => $this->path, 'sortby' => $this->sortby, 'order' => $this->order, 'filename' => $this->filename];
+        $query = [
+            'path' => $this->path,
+            'sortby' => $this->sortby,
+            'order' => $this->order,
+            'filename' => $this->filename
+        ];
         if (array_diff(self::TYPES, $this->type) !== []) {
             $query['type'] = $this->type;
         }
