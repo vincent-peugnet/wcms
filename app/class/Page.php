@@ -47,6 +47,7 @@ class Page extends Dbitem
     protected $redirection;
     protected $refresh;
     protected $password;
+    protected string $rss = "";
 
 
     public const LEN = 255;
@@ -373,6 +374,11 @@ class Page extends Dbitem
     public function password($type = 'string')
     {
         return $this->password;
+    }
+
+    public function rss(): string
+    {
+        return $this->rss;
     }
 
 
@@ -726,6 +732,13 @@ class Page extends Dbitem
     {
         if (is_string($password) && strlen($password) > 0 && strlen($password) < 64) {
             $this->password = $password;
+        }
+    }
+
+    public function setrss($rss)
+    {
+        if (is_string($rss) && strlen($rss) <= self::LEN) {
+            $this->rss = trim(strip_tags($rss));
         }
     }
 

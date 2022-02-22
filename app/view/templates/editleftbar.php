@@ -199,6 +199,9 @@
         <label for="password" title="specific page password protection">Password</label>
         <input type="text" name="password" value="<?= $page->password() ?>" id="password" min="0" max="64">
 
+        <label for="rss" title="copy here RSS code">RSS</label>
+        <input type="text" name="rss" id="rss" value="<?= $page->rss() ?>" min="0" max="<?= Wcms\Page::LEN ?>">
+
     </fieldset>
 
     </details>
