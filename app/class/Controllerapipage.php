@@ -60,6 +60,8 @@ class Controllerapipage extends Controllerapi
                     $this->page->addauthor($this->user->id());
                     if ($this->pagemanager->update($this->page)) {
                         http_response_code(200);
+                        header('Content-type: application/json; charset=utf-8');
+                        echo json_encode($this->page->dry(), JSON_PRETTY_PRINT);
                     } else {
                         http_response_code(500);
                     }

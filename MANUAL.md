@@ -658,6 +658,7 @@ GET     /api/v1/<page_id>/access
 ##### update
 
 To update a page, you'll have to provide it with POST datas.
+In case of success, you will get a `200` HTTP CODE and recieve the full JSON page object.
 
 ```
 POST    /api/v1/<page_id>/update
