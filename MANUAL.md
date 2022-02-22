@@ -652,6 +652,14 @@ A JSON REST API
 To access a page means to get the full JSON page object. User needs to be allowed to edit the coresponding page in order to access it.
 
 ```
-/api/v1/<page_id>/access
+GET     /api/v1/<page_id>/access
+```
+
+##### update
+
+To update a page, you'll have to provide it with POST datas.
+
+```
+POST    /api/v1/<page_id>/update
 ```
 
