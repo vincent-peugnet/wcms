@@ -35,9 +35,9 @@ class Controllerpage extends Controller
         }
     }
 
-    public function importpage()
+    public function importpage(): bool
     {
-        if (isset($_SESSION['pageupdate']) && $_SESSION['pageupdate']['id'] == $this->page->id()) {
+        if (isset($_SESSION['pageupdate']['id']) && $_SESSION['pageupdate']['id'] == $this->page->id()) {
             $page = new Page($_SESSION['pageupdate']);
             unset($_SESSION['pageupdate']);
         } else {
@@ -428,11 +428,18 @@ class Controllerpage extends Controller
                 $oldpage = clone $this->page;
                 $this->page->hydrate($_POST);
 
-                $this->page->updateedited();
-                $this->page->addauthor($this->user->id());
-                $this->page->removeeditby($this->user->id());
+                if ($oldpage->datemodif() != $this->page->datemodif()) {
+                    Model::sendflashmessage("Page has been modified by someone else", Model::FLASH_WARNING);
+                    $_SESSION['pageupdate'] = $_POST;
+                    $_SESSION['pageupdate']['id'] = $this->page->id();
+                    $this->routedirect('pageedit', ['page' => $this->page->id()]);
+                } else {
+                    $this->page->updateedited();
+                    $this->page->addauthor($this->user->id());
+                    $this->page->removeeditby($this->user->id());
 
-                $this->pagemanager->update($this->page);
+                    $this->pagemanager->update($this->page);
+                }
 
 
             //$this->showtemplate('updatemerge', $compare);

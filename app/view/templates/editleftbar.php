@@ -3,7 +3,7 @@
     <label for="showleftpanel" class="toogle">◧</label>
     <div id="leftbarpanel" class="panel">
 
-    <input type="hidden" name="thisdatemodif" value="<?= $page->datemodif('string') ?>">
+    <input type="hidden" name="datemodif" value="<?= $page->datemodif('string') ?>">
 
     <details id="editinfo" open>
         <summary>Infos</summary>

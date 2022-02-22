@@ -24,9 +24,9 @@ class Modelpage extends Modeldb
      * If a scan has already been perform, it will just
      * read `pagelist` Propriety
      *
-     * @return array of Pages objects as `id => Page`
+     * @return Page[] of Pages objects as `id => Page`
      */
-    public function pagelist()
+    public function pagelist(): array
     {
         if (empty($this->pagelist)) {
             $list = $this->repo->findAll();
