@@ -197,11 +197,12 @@
 
 
 
-    <details id="selection" <?= !empty($optlist) ? 'open' : '' ?>>
+    <details id="selection" <?= !empty($optlist) || !empty($optrss) ? 'open' : '' ?>>
         <summary>Filter</summary>
         <div class="submenu">
-        <h2>Get LIST code</h2>
-        <i>Generate code to display a list of pages</i>
+        <h2>filters</h2>
+        <h3>LIST</h3>
+        <i>Generate code to display a list of pages based on filters</i>
         <form action="<?= $this->url('homequery') ?>" method="post">
             <input type="hidden" name="query" value="1">
 
@@ -236,6 +237,15 @@
         </form>
         <?php if(!empty($optlist)) { ?>
             <input readonly class="code select-all" value="<?= $optlist->getcode() ?>" />
+        <?php } ?>
+        <h3>RSS</h3>
+        <i>generate a code to add RSS to a page based on filters</i>
+        <form action="<?php $this->url('homequery') ?>" method="post">
+        <input type="hidden" name="rss" value="1">
+            <input type="submit" value="generate">
+        </form>
+        <?php if(!empty($optrss)) { ?>
+            <input readonly class="code select-all" value="<?= $optrss->getcode() ?>" />
         <?php } ?>
         </div>
         </details>

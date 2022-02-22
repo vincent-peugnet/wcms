@@ -15,7 +15,7 @@
 
 <?php
     $optlist = $optlist ?? null;
-    $this->insert('homemenu', ['user' => $user, 'opt' => $opt, 'optlist' => $optlist, 'pagelist' => $pagelist, 'faviconlist' => $faviconlist, 'thumbnaillist' => $thumbnaillist, 'editorlist' => $editorlist, 'colors' => $colors]);
+    $this->insert('homemenu', ['user' => $user, 'opt' => $opt, 'optlist' => $optlist, 'optrss' => $optrss, 'pagelist' => $pagelist, 'faviconlist' => $faviconlist, 'thumbnaillist' => $thumbnaillist, 'editorlist' => $editorlist, 'colors' => $colors]);
 ?>
 
 
@@ -95,47 +95,39 @@
                             <?php if($columns['favicon']) { ?>
                                 <th class="favicon"><a href="<?= $opt->sortbyorder('favicon') ?>">ico</a></th>
                             <?php } ?>
-                            <th class="id"><a href="<?= $opt->sortbyorder('id') ?>">id</a></th>
-                            <th class="edit"></th>
-                            <th class="read"></th>
-                            <th class="delete" title="delete page"></th>
+                                <th class="id"><a href="<?= $opt->sortbyorder('id') ?>">id</a></th>
+                                <th class="edit"></th>
+                                <th class="read"></th>
+                                <th class="delete" title="delete page"></th>
                             <?php if ($user->issupereditor()) { ?>
-                            <th class="download" title="download page as json"></th>
-                            <?php }
-                                if ($columns['tag']) { ?>
-                            <th class="tag"><a href="<?= $opt->sortbyorder('tag') ?>">tag</a></th>
-                            <?php }
-                                if ($columns['title']) { ?>
-                            <th class="title"><a href="<?= $opt->sortbyorder('title') ?>">title</a></th>
-                            <?php }
-                                if ($columns['description']) { ?>
-                            <th class="summary">summary</th>
-                            <?php }
-                                if ($columns['linkto']) { ?>
-                            <th class="linkto"><a href="<?= $opt->sortbyorder('linkto') ?>">linkto</a></th>
-                            <?php }
-                                if ($columns['datemodif']) { ?>
-                            <th class="datemodif"><a href="<?= $opt->sortbyorder('datemodif') ?>">last modification</a></th>
-                            <?php }
-                                if ($columns['datecreation']) { ?>
-                            <th class="datecreation"><a href="<?= $opt->sortbyorder('datecreation') ?>">date of creation</a></th>
-                            <?php }
-                                if ($columns['date']) { ?>
-                            <th class="date"><a href="<?= $opt->sortbyorder('date') ?>">date</a></th>
-                            <?php }
-                                if ($columns['secure']) { ?>
-                            <th class="secure"><a href="<?= $opt->sortbyorder('secure') ?>">privacy</a></th>
-                            <?php }
-                                if ($columns['authors']) { ?>
-                                    <th class="authors"><a href="<?= $opt->sortbyorder('authors') ?>">authors</a></th>
-                                    <?php }
-                                if ($columns['visitcount']) { ?>
+                                <th class="download" title="download page as json"></th>
+                            <?php } if ($columns['tag']) { ?>
+                                <th class="tag"><a href="<?= $opt->sortbyorder('tag') ?>">tag</a></th>
+                            <?php } if ($columns['title']) { ?>
+                                <th class="title"><a href="<?= $opt->sortbyorder('title') ?>">title</a></th>
+                            <?php } if ($columns['description']) { ?>
+                                <th class="summary">summary</th>
+                            <?php } if ($columns['linkto']) { ?>
+                                <th class="linkto"><a href="<?= $opt->sortbyorder('linkto') ?>">linkto</a></th>
+                            <?php } if ($columns['datemodif']) { ?>
+                                <th class="datemodif"><a href="<?= $opt->sortbyorder('datemodif') ?>">last modification</a></th>
+                            <?php } if ($columns['datecreation']) { ?>
+                                <th class="datecreation"><a href="<?= $opt->sortbyorder('datecreation') ?>">date of creation</a></th>
+                            <?php } if ($columns['date']) { ?>
+                                <th class="date"><a href="<?= $opt->sortbyorder('date') ?>">date</a></th>
+                            <?php } if ($columns['secure']) { ?>
+                                <th class="secure"><a href="<?= $opt->sortbyorder('secure') ?>">privacy</a></th>
+                            <?php } if ($columns['authors']) { ?>
+                                <th class="authors"><a href="<?= $opt->sortbyorder('authors') ?>">authors</a></th>
+                            <?php } if ($columns['rss']) { ?>
+                                <th class="rss">
+                                    <a href="<?= $opt->sortbyorder('rss') ?>">rss</a>
+                                </th>
+                            <?php } if ($columns['visitcount']) { ?>
                             <th class="visitcount"><a href="<?= $opt->sortbyorder('visitcount') ?>">visit</a></th>
-                            <?php }
-                                if ($columns['editcount']) { ?>
+                            <?php } if ($columns['editcount']) { ?>
                             <th class="editcount"><a href="<?= $opt->sortbyorder('editcount') ?>">edit</a></th>
-                            <?php }
-                                if ($columns['affcount']) { ?>
+                            <?php } if ($columns['affcount']) { ?>
                             <th class="affcount"><a href="<?= $opt->sortbyorder('affcount') ?>">aff</a></th>
                             <?php } ?>
                         </tr>
@@ -173,42 +165,34 @@
                                     <i class="fa fa-download"></i>
                                 </a>
                             </td>
-                            <?php }
-                                    if ($columns['tag']) { ?>
-                            <td class="tag"><?= $opt->taglinks($item->tag('array')) ?></td>
-                            <?php }
-                                    if ($columns['title']) { ?>
-                            <td class="title" title="<?= $item->title() ?>"><label for="id_<?= $item->id() ?>"><?= $item->title() ?></label></td>
-                            <?php }
-                                    if ($columns['description']) { ?>
-                            <td class="summary" title="<?= $item->description() ?>"><?= $item->description('short') ?></td>
-                            <?php }
-                                    if ($columns['linkto']) { ?>
-                            <td class="linkto"><?= $opt->linktolink($item->linkto('array')) ?></td>
-                            <?php }
-                                    if ($columns['datemodif']) { ?>
-                            <td class="datemodif" <?= $item->datemodif('dmy') ?> <?= $item->datemodif('ptime') ?>><time datetime="<?= $item->datemodif('string') ?>" title="<?= $item->datemodif('dmy') . ' ' . $item->datemodif('ptime') ?>"><?= $item->datemodif('hrdi') ?></time></td>
-                            <?php }
-                                    if ($columns['datecreation']) { ?>
-                            <td class="datecreation" <?= $item->datecreation('dmy') ?> <?= $item->datecreation('ptime') ?>><time datetime="<?= $item->datecreation('string') ?>" title="<?= $item->datecreation('dmy') . ' ' . $item->datecreation('ptime') ?>"><?= $item->datecreation('hrdi') ?></time></td>
-                            <?php }
-                                    if ($columns['date']) { ?>
-                            <td class="date" <?= $item->date('dmy') ?> <?= $item->date('ptime') ?>><time datetime="<?= $item->date('string') ?>" title="<?= $item->date('dmy') . ' ' . $item->date('ptime') ?>"><?= $item->date('dmy') ?></time></td>
-                            <?php }
-                                    if ($columns['secure']) { ?>
-                            <td class="secure"><?= $opt->securelink($item->secure('int') , $item->secure('string')) ?></td>
-                            <?php }
-                                    if ($columns['authors']) { ?>
-                            <td class="authors"><?= $opt->authorlinks($item->authors('array')) ?></td>
-                            <?php }
-                                    if ($columns['visitcount']) { ?>
-                            <td class="visitcount"><?= $item->visitcount() ?></td>
-                            <?php }
-                                    if ($columns['editcount']) { ?>
-                            <td class="editcount"><?= $item->editcount() ?></td>
-                            <?php }
-                                    if ($columns['affcount']) { ?>
-                            <td class="affcount"><?= $item->affcount() ?></td>
+                            <?php } if ($columns['tag']) { ?>
+                                <td class="tag"><?= $opt->taglinks($item->tag('array')) ?></td>
+                            <?php } if ($columns['title']) { ?>
+                                <td class="title" title="<?= $item->title() ?>"><label for="id_<?= $item->id() ?>"><?= $item->title() ?></label></td>
+                            <?php } if ($columns['description']) { ?>
+                                <td class="summary" title="<?= $item->description() ?>"><?= $item->description('short') ?></td>
+                            <?php } if ($columns['linkto']) { ?>
+                                <td class="linkto"><?= $opt->linktolink($item->linkto('array')) ?></td>
+                            <?php } if ($columns['datemodif']) { ?>
+                                <td class="datemodif" <?= $item->datemodif('dmy') ?> <?= $item->datemodif('ptime') ?>><time datetime="<?= $item->datemodif('string') ?>" title="<?= $item->datemodif('dmy') . ' ' . $item->datemodif('ptime') ?>"><?= $item->datemodif('hrdi') ?></time></td>
+                            <?php } if ($columns['datecreation']) { ?>
+                                <td class="datecreation" <?= $item->datecreation('dmy') ?> <?= $item->datecreation('ptime') ?>><time datetime="<?= $item->datecreation('string') ?>" title="<?= $item->datecreation('dmy') . ' ' . $item->datecreation('ptime') ?>"><?= $item->datecreation('hrdi') ?></time></td>
+                            <?php } if ($columns['date']) { ?>
+                                <td class="date" <?= $item->date('dmy') ?> <?= $item->date('ptime') ?>><time datetime="<?= $item->date('string') ?>" title="<?= $item->date('dmy') . ' ' . $item->date('ptime') ?>"><?= $item->date('dmy') ?></time></td>
+                            <?php } if ($columns['secure']) { ?>
+                                <td class="secure"><?= $opt->securelink($item->secure('int') , $item->secure('string')) ?></td>
+                            <?php } if ($columns['authors']) { ?>
+                                <td class="authors"><?= $opt->authorlinks($item->authors('array')) ?></td>
+                            <?php } if ($columns['rss']) { ?>
+                                <td class="rss">
+                                    <?= !empty($item->rss()) ? '<i class="fa fa-rss" title="' . $item->rss() . '">' : '' ?>
+                                </td>
+                            <?php } if ($columns['visitcount']) { ?>
+                                <td class="visitcount"><?= $item->visitcount() ?></td>
+                            <?php } if ($columns['editcount']) { ?>
+                                <td class="editcount"><?= $item->editcount() ?></td>
+                            <?php } if ($columns['affcount']) { ?>
+                                <td class="affcount"><?= $item->affcount() ?></td>
                             <?php } ?>
                         </tr>
 

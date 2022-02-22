@@ -23,9 +23,9 @@ class Opt extends Item
 
     public function __construct(array $data = [])
     {
-        $this->hydrate($data);
         $page = new Page();
         $this->pagevarlist = ($page->getobjectvars());
+        $this->hydrate($data);
     }
 
 

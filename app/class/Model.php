@@ -127,7 +127,8 @@ abstract class Model
         'linkto',
         'visitcount',
         'affcount',
-        'editcount'
+        'editcount',
+        'rss',
     ];
 
     public const TEXT_ELEMENTS = ['header', 'nav', 'main', 'aside', 'footer'];

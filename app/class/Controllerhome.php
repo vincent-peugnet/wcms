@@ -12,6 +12,8 @@ class Controllerhome extends Controllerpage
     protected $opt;
     /** @var Optlist */
     protected $optlist;
+    /** @var Optrss */
+    protected $optrss;
 
     public function __construct($render)
     {
@@ -74,9 +76,11 @@ class Controllerhome extends Controllerpage
                 'database' => Config::pagetable()
             ];
 
-            $this->listquery($pagelist);
+            $this->listquery();
+            $this->rssquery();
 
             $vars['optlist'] = $this->optlist ?? null;
+            $vars['optrss'] = $this->optrss ?? null;
 
             $this->showtemplate('home', $vars);
         }
@@ -110,13 +114,19 @@ class Controllerhome extends Controllerpage
         return ['regex' => $regex, 'searchopt' => $searchopt];
     }
 
-    public function listquery(array $pagelist)
+    public function listquery(): void
     {
         if (isset($_POST['query']) && $this->user->iseditor()) {
             $datas = array_merge($_POST, $_SESSION['opt']);
-            $this->optlist = new Optlist();
-            $this->optlist->hydrate($datas);
-            $vars['optlist'] = $this->optlist;
+            $this->optlist = new Optlist($datas);
+        }
+    }
+
+    public function rssquery(): void
+    {
+        if (isset($_POST['rss']) && $this->user->iseditor()) {
+            $datas = array_merge($_POST, $_SESSION['opt']);
+            $this->optrss = new Optrss($datas);
         }
     }
 
