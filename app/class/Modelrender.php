@@ -10,6 +10,8 @@ class Modelrender extends Modelpage
 {
     /** @var \AltoRouter */
     protected $router;
+    /** @var Modelhome */
+    protected $modelhome;
     /** @var Page Actual page being rendered*/
     protected $page;
     protected $linkto = [];
@@ -22,6 +24,7 @@ class Modelrender extends Modelpage
         parent::__construct();
 
         $this->router = $router;
+        $this->modelhome = new Modelhome();
         $this->pagelist = $this->pagelist();
 
         if (Config::internallinkblank()) {
@@ -219,22 +222,18 @@ class Modelrender extends Modelpage
         self::writefile(self::RENDER_DIR . $this->page->id() . '.css', $this->page->css(), 0664);
         //self::writefile(self::RENDER_DIR . $this->page->id() . '.quick.css', $this->page->quickcss());
         self::writefile(self::RENDER_DIR . $this->page->id() . '.js', $this->page->javascript(), 0664);
+        self::writefile(self::RENDER_DIR . $this->page->id() . '.atom', $this->rss(), 0664);
     }
 
-
-
-    public function writetemplates()
+    public function rss(): string
     {
-        if (array_key_exists('css', $this->page->template())) {
-            $tempaltecsspage = $this->get($this->page->template()['css']);
-            self::writefile(Model::RENDER_DIR . $tempaltecsspage->id() . '.css', $tempaltecsspage->css());
-        }
-        if (array_key_exists('javascript', $this->page->template())) {
-            $templatejspage = $this->get($this->page->template()['javascript']);
-            self::writefile(Model::RENDER_DIR . $templatejspage->id() . '.js', $templatejspage->javascript());
+        if(!empty($this->page->rss())) {
+            $rss = new Optrss();
+            $rss->parsehydrate($this->page->rss());
+            $pagetable = $this->modelhome->pagetable($this->pagelist(), $rss, '', []);
+            return $rss->render($pagetable);
         }
     }
-
 
 
     /**
@@ -611,13 +610,11 @@ class Modelrender extends Modelpage
     {
         $matches = $this->match($text, 'LIST');
 
-        $modelhome = new Modelhome();
-
         if (!empty($matches)) {
             foreach ($matches as $match) {
-                $optlist = new Optlist(['render' => $this]);
+                $optlist = new Optlist();
                 $optlist->parsehydrate($match['options']);
-                $pagetable = $modelhome->pagetable($this->pagelist(), $optlist, '', []);
+                $pagetable = $this->modelhome->pagetable($this->pagelist(), $optlist, '', []);
                 $this->linkto = array_merge($this->linkto, array_keys($pagetable));
                 $content = $optlist->listhtml($pagetable, $this->page, $this);
                 $text = str_replace($match['fullmatch'], $content, $text);

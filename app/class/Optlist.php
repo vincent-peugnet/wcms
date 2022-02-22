@@ -16,10 +16,8 @@ class Optlist extends Opt
 
     public function parsehydrate(string $encoded)
     {
-        if (is_string($encoded)) {
-            parse_str($encoded, $datas);
-            $this->hydrate($datas);
-        }
+        parse_str($encoded, $datas);
+        $this->hydrate($datas);
     }
 
     /**
