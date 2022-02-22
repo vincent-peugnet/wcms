@@ -251,7 +251,7 @@ function submitHandler(form) {
     xhr.addEventListener('error', function(event) {
         alert('Network error while trying to update.');
     });
-    xhr.open(form.method, form.action);
+    xhr.open(form.method, form.dataset.api);
     xhr.send(fd);
 }
 

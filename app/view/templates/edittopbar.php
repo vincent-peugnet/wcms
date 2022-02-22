@@ -2,7 +2,12 @@
 
 
 
-    <form action="<?= $this->upage('pageupdate', $page->id()) ?>" method="post" id="update">
+    <form
+        action="<?= $this->upage('pageupdate', $page->id()) ?>"
+        method="post"
+        id="update"
+        data-api="<?= $this->upage('apipageupdate', $page->id()) ?>"
+    >
 
     <div id="editmenu">
 
