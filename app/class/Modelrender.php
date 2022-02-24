@@ -54,14 +54,17 @@ class Modelrender extends Modelpage
      * Generate page relative link for given page_id including basepath
      *
      * @param string $id given page ID
-     * @return string Relative URL
+     *
+     * @return string Relative URL with trailing slash
+     *
+     * @throws LogicException if route name does not match an existing one
      */
     public function upage(string $id): string
     {
         try {
             return $this->router->generate('pageread/', ['page' => $id]);
         } catch (Exception $e) {
-            throw new LogicException($e->getMessage(), $e->getCode(), $e);
+            throw new LogicException($e->getMessage() . ' for page ID : ' . $id, $e->getCode(), $e);
         }
     }
 
@@ -222,16 +225,26 @@ class Modelrender extends Modelpage
         self::writefile(self::RENDER_DIR . $this->page->id() . '.css', $this->page->css(), 0664);
         //self::writefile(self::RENDER_DIR . $this->page->id() . '.quick.css', $this->page->quickcss());
         self::writefile(self::RENDER_DIR . $this->page->id() . '.js', $this->page->javascript(), 0664);
-        self::writefile(self::RENDER_DIR . $this->page->id() . '.atom', $this->rss(), 0664);
+        if (!empty($this->page->rss())) {
+            self::writefile(self::RENDER_DIR . $this->page->id() . '.xml', $this->rss(), 0664);
+        }
     }
 
+    /**
+     * Generate the RSS file associated to a page
+     *
+     * @return string XML file
+     */
     public function rss(): string
     {
-        if(!empty($this->page->rss())) {
-            $rss = new Optrss();
-            $rss->parsehydrate($this->page->rss());
-            $pagetable = $this->modelhome->pagetable($this->pagelist(), $rss, '', []);
-            return $rss->render($pagetable);
+        $rss = new Optrss();
+        $rss->parsehydrate($this->page->rss());
+        $pagetable = $this->modelhome->pagetable($this->pagelist(), $rss, '', []);
+        try {
+            return $rss->render($pagetable, $this->page, $this);
+        } catch (Exception $e) {
+            self::sendflashmessage('Error while creating RSS XML file: ' . $e->getMessage(), self::FLASH_ERROR);
+            return "";
         }
     }
 
@@ -254,11 +267,11 @@ class Modelrender extends Modelpage
         if (!empty($this->page->redirection())) {
             try {
                 if (Model::idcheck($this->page->redirection())) {
-                    $url = $this->upage($this->page->redirection());
+                    $targeturl = $this->upage($this->page->redirection());
                 } else {
-                    $url = getfirsturl($this->page->redirection());
+                    $targeturl = getfirsturl($this->page->redirection());
                 }
-                $head .= "\n<meta http-equiv=\"refresh\" content=\"{$this->page->refresh()}; URL=$url\" />";
+                $head .= "\n<meta http-equiv=\"refresh\" content=\"{$this->page->refresh()}; URL=$targeturl\" />";
             } catch (\Exception $e) {
                 // TODO : send render error
             }
@@ -309,6 +322,12 @@ class Modelrender extends Modelpage
         }
         if (!empty($this->page->javascript())) {
             $head .= "<script src=\"$renderpath$id.js\" async/></script>\n";
+        }
+
+        if (!empty($this->page->rss())) {
+            $rss = $renderpath . $this->page->id() . '.xml';
+            $title = $this->page->title();
+            $head .= "<link href=\"$rss\" type=\"application/atom+xml\" rel=\"alternate\" title=\"$title\" />";
         }
 
         if (!empty(Config::analytics())) {

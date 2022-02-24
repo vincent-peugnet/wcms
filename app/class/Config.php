@@ -131,11 +131,13 @@ abstract class Config
 
     /**
      * Generate full url adress where W is installed
-     * @return string url adress finished by a slash "/"
+     *
+     * @param bool $trailingslash If you want the trailing slash to be outputed or not
+     * @return string url adress finished by a trailing slash `/`
      */
-    public static function url($endslash = true): string
+    public static function url(bool $trailingslash = true): string
     {
-        return self::$domain . (!empty(self::$basepath) ? '/' . self::$basepath : "") . ($endslash ? '/' : '');
+        return self::$domain . (!empty(self::$basepath) ? '/' . self::$basepath : "") . ($trailingslash ? '/' : '');
     }
 
     // ________________________________________ G E T _______________________________________
