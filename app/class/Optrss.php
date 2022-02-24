@@ -53,23 +53,24 @@ class Optrss extends Opt
         $feed = $xml->createElement('feed');
         $feed->setAttribute("xmlns", "http://www.w3.org/2005/Atom");
 
-            $title = $xml->createElement("title", $page->title());
-            $feed->appendChild($title);
+        $title = $xml->createElement("title", $page->title());
+        $feed->appendChild($title);
 
-            $subtitle = $xml->createElement("subtitle", $page->description());
-            $feed->appendChild($subtitle);
+        $subtitle = $xml->createElement("subtitle", $page->description());
+        $feed->appendChild($subtitle);
 
-            $linkrss = $xml->createElement("link");
-            $linkrss->setAttribute("href", Config::domain() . Model::renderpath() . $page->id() . '.xml');
-            $linkrss->setAttribute("rel", "self");
-            $feed->appendChild($linkrss);
+        $linkrss = $xml->createElement("link");
+        $linkrss->setAttribute("href", Config::domain() . Model::renderpath() . $page->id() . '.xml');
+        $linkrss->setAttribute("rel", "self");
+        $feed->appendChild($linkrss);
 
-            $link = $xml->createElement("link");
-            $link->setAttribute("href", $this->href($page));
-            $feed->appendChild($link);
+        $link = $xml->createElement("link");
+        $link->setAttribute("href", $this->href($page));
+        $link->setAttribute("hreflang", !empty($page->lang()) ? $page->lang() : Config::lang());
+        $feed->appendChild($link);
 
-            $updated = $xml->createElement("updated", $page->daterender('string'));
-            $feed->appendChild($updated);
+        $updated = $xml->createElement("updated", $page->daterender('string'));
+        $feed->appendChild($updated);
 
         foreach ($pagelist as $page) {
             $entry = $xml->createElement("entry");
@@ -80,9 +81,10 @@ class Optrss extends Opt
 
             $link = $xml->createElement("link");
             $link->setAttribute("href", $this->href($page));
+            $link->setAttribute("hreflang", !empty($page->lang()) ? $page->lang() : Config::lang());
             $entry->appendChild($link);
 
-            $published = $xml->createElement("published", $page->daterender('string'));
+            $published = $xml->createElement("published", $page->date('string'));
             $entry->appendChild($published);
 
             $updated = $xml->createElement("updated", $page->daterender('string'));

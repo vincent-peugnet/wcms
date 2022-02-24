@@ -526,7 +526,11 @@ abstract class Config
 
     public static function setlang(string $lang)
     {
-        self::$lang = substr(strip_tags($lang), 0, self::LANG_MAX);
+        $lang = strip_tags($lang);
+        $length = strlen($lang);
+        if ($length >= self::LANG_MIN && $length <= self::LANG_MAX) {
+            self::$lang = $lang;
+        }
     }
 
     public static function setdisablejavascript($disablejavascript)
