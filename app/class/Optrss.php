@@ -105,6 +105,6 @@ class Optrss extends Opt
      */
     public function href(Page $page): string
     {
-        return Config::url(false) . $this->render->upage($page->id());
+        return Config::domain(false) . $this->render->upage($page->id());
     }
 }
