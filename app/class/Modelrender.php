@@ -5,10 +5,11 @@ namespace Wcms;
 use Exception;
 use LogicException;
 use Michelf\MarkdownExtra;
+use AltoRouter;
 
 class Modelrender extends Modelpage
 {
-    /** @var \AltoRouter */
+    /** @var AltoRouter */
     protected $router;
     /** @var Modelhome */
     protected $modelhome;
@@ -19,13 +20,22 @@ class Modelrender extends Modelpage
     protected $internallinkblank = '';
     protected $externallinkblank = '';
 
-    public function __construct(\AltoRouter $router)
+    /**
+     * @param AltoRouter $router The initialized router
+     * @param Page[] $pagelist using ID as key and Page as value.
+     * Use this paramter if it has already been retrieved somewhere else.
+     */
+    public function __construct(AltoRouter $router, array $pagelist = [])
     {
         parent::__construct();
 
         $this->router = $router;
         $this->modelhome = new Modelhome();
-        $this->pagelist = $this->pagelist();
+        if (!empty($pagelist)) {
+            $this->pagelist = $pagelist;
+        } else {
+            $this->pagelist();
+        }
 
         if (Config::internallinkblank()) {
             $this->internallinkblank = ' target="_blank" ';
@@ -185,7 +195,10 @@ class Modelrender extends Modelpage
         return $content . $subseparator;
     }
 
-    public function elementparser(Element $element)
+    /**
+     * @return string HML formated string
+     */
+    public function elementparser(Element $element): string
     {
         $content = $this->article($element->content());
         $content = $this->automedialist($content);
@@ -237,7 +250,7 @@ class Modelrender extends Modelpage
      */
     public function rss(): string
     {
-        $rss = new Optrss();
+        $rss = new Optrss(['pagelist' => $this->pagelist]);
         $rss->parsehydrate($this->page->rss());
         $pagetable = $this->modelhome->pagetable($this->pagelist(), $rss, '', []);
         try {

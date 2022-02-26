@@ -35,7 +35,7 @@ class Optrss extends Opt
     }
 
     /**
-     * @param Page[] $pagelist
+     * @param Page[] $pagelist sorted and filtered list of page that will be in the RSS feed
      * @param Page $page The actual page from which the RSS is linked
      * @param Modelrender $render the Rendering engine to generate links
      *
@@ -92,6 +92,10 @@ class Optrss extends Opt
 
             $summary = $xml->createElement("summary", $page->description());
             $entry->appendChild($summary);
+
+            $content = $xml->createElement("content", $this->mainhtml($page));
+            $content->setAttribute("type", "hmtl");
+            $entry->appendChild($content);
         }
         return $xml->saveXML($feed);
     }
@@ -108,5 +112,19 @@ class Optrss extends Opt
     public function href(Page $page): string
     {
         return Config::domain() . $this->render->upage($page->id());
+    }
+
+    /**
+     * Get the HTML output of a page
+     *
+     * @param Page $page
+     * @return string HTML content parsed from page MAIN
+     */
+    public function mainhtml(Page $page): string
+    {
+        $element = new Element($page->id(), ['content' => $page->main(), 'type' => "main"]);
+        // Clone render engine to protect from adding too much links in `linkto` property
+        $render = clone $this->render;
+        return $render->elementparser($element);
     }
 }

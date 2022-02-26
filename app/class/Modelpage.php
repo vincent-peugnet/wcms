@@ -20,7 +20,7 @@ class Modelpage extends Modeldb
     }
 
     /**
-     * Scan library for all pages as objects.
+     * Scan library for all pages as objects and store them in `$this->pagelist` property.
      * If a scan has already been perform, it will just
      * read `pagelist` Propriety
      *
