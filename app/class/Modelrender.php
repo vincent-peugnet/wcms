@@ -413,6 +413,9 @@ class Modelrender extends Modelpage
         return $text;
     }
 
+    /**
+     * @todo add option to render media links as absolute urls
+     */
     public function media(string $text): string
     {
         $regex = '%(src|href)="([\w\-]+(\/([\w\-])+)*\.[a-z0-9]{1,5})"%';
@@ -776,10 +779,30 @@ class Modelrender extends Modelpage
     }
 
 
+    // _________________________ R S S ___________________________________
+
+    /**
+     * @return string HTML Parsed MAIN content of a page
+     * @todo render absolute media links
+     */
+    public function rsscontent(Page $page): string
+    {
+        $this->page = $page;
+        $element = new Element($page->id(), ['content' => $page->main(), 'type' => "main"]);
+        $html = $this->elementparser($element);
+        return $this->bodyparser($html);
+    }
+
+
     // _________________________ G E T ___________________________________
 
     public function sum()
     {
         return $this->sum;
+    }
+
+    public function router(): AltoRouter
+    {
+        return $this->router;
     }
 }

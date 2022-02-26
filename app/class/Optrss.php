@@ -122,10 +122,7 @@ class Optrss extends Opt
      */
     public function mainhtml(Page $page): string
     {
-        $element = new Element($page->id(), ['content' => $page->main(), 'type' => "main"]);
-        // Clone render engine to protect from adding too much links in `linkto` property
-        $render = clone $this->render;
-        $html = $render->elementparser($element);
-        return $render->bodyparser($html);
+        $render = new Modelrender($this->render->router(), $this->render->pagelist());
+        return $render->rsscontent($page);
     }
 }
