@@ -219,6 +219,8 @@ class Mediaopt extends Item
 
     public function setpath(string $path)
     {
+        // gather nested slashs
+        $path = preg_replace("%\/{2,}%", "/", $path);
         if (preg_match('%^\/' . rtrim(Model::MEDIA_DIR, DIRECTORY_SEPARATOR) . '%', $path)) {
             $this->path = rtrim($path, DIRECTORY_SEPARATOR);
         } elseif (!preg_match('%^\/%', $path)) {

@@ -106,7 +106,7 @@ class Controllermedia extends Controller
             $dir = $_POST['dir'] ?? Model::MEDIA_DIR;
             $name = Model::idclean($_POST['foldername']) ?? 'new-folder';
             $this->mediamanager->adddir($dir, $name);
-            $this->redirect($this->generate('media') . '?path=/' . $dir . DIRECTORY_SEPARATOR . $name);
+            $this->redirect($this->generate('media') . '?path=/' . $dir . $name);
         }
         $this->routedirect('home');
     }
