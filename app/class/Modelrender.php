@@ -15,10 +15,12 @@ class Modelrender extends Modelpage
     protected $modelhome;
     /** @var Page Actual page being rendered*/
     protected $page;
-    protected $linkto = [];
-    protected $sum = [];
-    protected $internallinkblank = '';
-    protected $externallinkblank = '';
+    protected array $linkto = [];
+    protected array $sum = [];
+    protected string $internallinkblank = '';
+    protected string $externallinkblank = '';
+    /** @var bool $absolutepath If true, render paths as absoltue path for links or medias */
+    protected bool $absolutepath = false;
 
     /**
      * @param AltoRouter $router The initialized router
@@ -414,12 +416,18 @@ class Modelrender extends Modelpage
     }
 
     /**
-     * @todo add option to render media links as absolute urls
+     * Render links and image src.
+     * If `$this->absolutepath` property is set to true,
+     * paths will be absolutes, otherwise, there will be relatives.
+     *
+     * @param string $text HTML
+     * @return string HTML
      */
     public function media(string $text): string
     {
+        $path = $this->absolutepath ? Config::domain() . Model::mediapath() : Model::mediapath();
         $regex = '%(src|href)="([\w\-]+(\/([\w\-])+)*\.[a-z0-9]{1,5})"%';
-        $text = preg_replace($regex, '$1="' . Model::mediapath() . '$2" target="_blank"', $text);
+        $text = preg_replace($regex, '$1="' . $path . '$2" target="_blank"', $text);
         if (!is_string($text)) {
             //throw new Exception('Rendering error -> media module');
         }

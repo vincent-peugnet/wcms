@@ -239,13 +239,16 @@
             <input readonly class="code select-all" value="<?= $optlist->getcode() ?>" />
         <?php } ?>
         <h3>RSS</h3>
-        <i>generate a code to add RSS to a page based on filters</i>
+        <i>generate a code to add an RSS feed to a page based on filters</i>
         <form action="<?php $this->url('homequery') ?>" method="post">
-        <input type="hidden" name="rss" value="1">
+            <input type="hidden" name="rss" value="1">
             <input type="submit" value="generate">
         </form>
         <?php if(!empty($optrss)) { ?>
             <input readonly class="code select-all" value="<?= $optrss->getcode() ?>" />
+            <p>
+                Paste it in <em>Page > advanced > RSS</em>
+            </p>
         <?php } ?>
         </div>
         </details>
