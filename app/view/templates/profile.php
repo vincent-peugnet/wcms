@@ -46,11 +46,16 @@ $this->layout('layout', ['title' => 'profile', 'stylesheets' => [$css . 'home.cs
                     <form action="<?= $this->url('profilepassword') ?>" method="post">
                         <h3>Password</h3>
 
-                        <label for="password1">Type your new password</label>
+                        <label for="actualpassword">Actual password</label>
+                        </br>
+                        <input type="password" name="actualpassword" id="actualpassword" required>
+                        </br>
+
+                        <label for="password1">New password</label>
                         </br>
                         <input type="password" name="password1" id="password1" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" required>
                         </br>
-                        <label for="password2">Confirm password</label>
+                        <label for="password2">Confirm new password</label>
                         </br>
                         <input type="password" name="password2" id="password2" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" required>
 

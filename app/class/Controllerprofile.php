@@ -36,6 +36,14 @@ class Controllerprofile extends Controller
     {
         if ($this->user->isinvite()) {
             if (
+                !isset($_POST['actualpassword']) ||
+                !$this->usermanager->passwordcheck($this->user->id(), $_POST['actualpassword'])
+            ) {
+                Model::sendflashmessage("wrong actual password", 'error');
+                $this->routedirect('profile');
+            }
+
+            if (
                 !empty($_POST['password1']) &&
                 !empty($_POST['password2']) &&
                 $_POST['password1'] === $_POST['password2']

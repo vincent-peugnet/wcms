@@ -13,14 +13,24 @@ class User extends Item
     protected $signature = '';
     protected $password;
     protected $passwordhashed = false;
-    protected $cookie = 0;
-    protected $columns = ['title', 'datemodif', 'datecreation', 'secure', 'visitcount'];
-    protected $connectcount = 0;
+
+    /** @var int $cookie Conservation time */
+    protected int $cookie = 0;
+
+    /** @var string[] $columns List of displayed columns */
+    protected array $columns = ['title', 'datemodif', 'datecreation', 'secure', 'visitcount'];
+
+    /** @var int $connectcount Connections counter */
+    protected int $connectcount = 0;
+
     protected $expiredate = false;
+
     /** @var Bookmark[] Associative array as `id => Bookmark`*/
     protected $bookmark = [];
+
     /** @var array sessions */
     protected $sessions = [];
+
     protected $display = ['bookmark' => false];
 
     public function __construct($datas = [])
