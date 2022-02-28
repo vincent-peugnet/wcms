@@ -96,49 +96,4 @@ class Controllerconnect extends Controller
             $this->routedirect($route);
         }
     }
-
-    /**
-     * Create a token stored in the database and then a cookie
-     *
-     * @return string|false Token in cas of success, otherwise, false.
-     */
-    public function createauthtoken()
-    {
-        $authtoken = new Modelauthtoken();
-        $tokenid = $authtoken->add($this->user);
-
-        if ($tokenid !== false) {
-            $cookiecreation = $this->creatauthcookie($tokenid, $this->user->cookie());
-            if ($cookiecreation) {
-                return $tokenid;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Create a cookie called `authtoken`
-     *
-     * @param string $token Token string
-     * @param int $conservation Time in day to keep the token
-     *
-     * @return bool True in cas of success, otherwise, false.
-     */
-    public function creatauthcookie(string $token, int $conservation): bool
-    {
-        $hash = secrethash($token);
-        $cookie = $token . ':' . $hash;
-        return setcookie('authtoken', $cookie, time() + $conservation * 24 * 3600, "", "", false, true);
-    }
-
-    /**
-     * Destroy the current token
-     */
-    public function destroyauthtoken(string $id)
-    {
-        $authtoken = new Modelauthtoken();
-        $dbdelete = $authtoken->delete($id);
-
-        //deleteauthcookie
-    }
 }

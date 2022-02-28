@@ -22,7 +22,7 @@ class Modeluser extends Modeldb
     }
 
     /**
-     * Write session cookie according to users datas and define the current authtoken being used
+     * Write session cookie according to users datas
      *
      * @param User $user Current user to keep in session
      */
@@ -31,24 +31,6 @@ class Modeluser extends Modeldb
         $_SESSION['user' . Config::basepath()]['level'] = $user->level();
         $_SESSION['user' . Config::basepath()]['id'] = $user->id();
         $_SESSION['user' . Config::basepath()]['columns'] = $user->columns();
-    }
-
-
-    public function readcookie()
-    {
-        if (isset($_COOKIE['authtoken']) && strpos($_COOKIE['authtoken'], ':')) {
-            list($cookietoken, $cookiemac) = explode(':', $_COOKIE['authtoken']);
-            $authtokenmanager = new Modelauthtoken();
-            $dbtoken = $authtokenmanager->getbytoken($cookietoken);
-
-            if ($dbtoken !== false) {
-                if (hash_equals($cookiemac, secrethash($dbtoken->getId()))) {
-                    $user = $this->get($dbtoken->user);
-                    return $user;
-                }
-            }
-        }
-        return false;
     }
 
 
