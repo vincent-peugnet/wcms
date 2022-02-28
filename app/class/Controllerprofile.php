@@ -18,7 +18,7 @@ class Controllerprofile extends Controller
 
     public function update()
     {
-        if ($this->user->iseditor()) {
+        if ($this->user->isinvite()) {
             $user = $this->usermanager->get($this->user);
             try {
                 $user->hydrateexception($_POST);
