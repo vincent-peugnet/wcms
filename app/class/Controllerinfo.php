@@ -13,7 +13,7 @@ class Controllerinfo extends Controller
 
     public function desktop()
     {
-        if ($this->user->iseditor()) {
+        if ($this->user->isinvite()) {
             if (file_exists(Model::MAN_FILE)) {
                 $render = new Modelrender($this->router);
                 $htmlman = file_get_contents(Model::MAN_FILE);

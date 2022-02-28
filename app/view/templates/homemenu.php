@@ -252,7 +252,7 @@
         <div class="submenu">
             <h2>Personnal</h2>
             <?php if(!empty($user->bookmark())) { ?>
-            <form action="<?= $this->url('userbookmark') ?>" method="post">
+            <form action="<?= $this->url('profilebookmark') ?>" method="post">
             <ul>
             <?php foreach ($user->bookmark() as $bookmark) { ?>
                 <?php if($bookmark->route() === 'home') { ?>
@@ -271,7 +271,7 @@
             <?php } else { ?>
                 <p>This will store your filters settings as a Bookmark that only you can use.</p>
             <?php } ?>
-            <form action="<?= $this->url('userbookmark') ?>" method="post">
+            <form action="<?= $this->url('profilebookmark') ?>" method="post">
                 <select name="icon" id="icon">
                     <?= options(Wcms\Model::BOOKMARK_ICONS, null, true) ?>
                 </select>

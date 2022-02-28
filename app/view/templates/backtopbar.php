@@ -68,6 +68,12 @@
 <?php
 if($user->isadmin()) {
 ?>
+
+<a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>>
+    <i class="fa fa-users"></i>
+    <span>users</span>
+</a>
+
 <a href="<?= $this->url('admin') ?>" <?= $tab == 'admin' ? 'class="actualpage"' : '' ?>>
     <i class="fa fa-cog"></i>
     <span>admin</span>
@@ -81,7 +87,11 @@ if($user->isadmin()) {
     <span>documentation</span>
 </a>
 
-<a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>>
+<a
+    href="<?= $this->url('profile') ?>"
+    title="Edit my profile"
+    <?= $tab == 'profile' ? 'class="actualpage"' : '' ?>
+>
     <i class="fa fa-user"></i>
     <span><?= $user->id() ?></span>
 </a>
