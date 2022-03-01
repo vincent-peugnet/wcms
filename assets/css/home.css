@@ -342,7 +342,7 @@ main.font table#fontlist {
 }
 
 
-#topbar a.actualpage {
+#topbar a.currentpage {
     text-decoration: underline;
 }
 

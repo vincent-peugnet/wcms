@@ -85,10 +85,7 @@ class Controllerconnect extends Controller
 
     public function logout($route, $id = null)
     {
-        $this->session->addtosession('user', '');
-        $this->user->destroysession($this->session->wsession);
-        $this->session->addtosession('wsession', '');
-        $this->usermanager->add($this->user);
+        $this->disconnect();
 
         if ($id !== null && $route !== 'home') {
             $this->routedirect($route, ['page' => $id]);

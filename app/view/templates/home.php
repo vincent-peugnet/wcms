@@ -240,9 +240,9 @@
                 </ul>
                 <strong><?= $user->id() ?></strong>
                 <ul>
-                    <?php foreach ($user->bookmark() as $id => $query) { ?>
+                    <?php foreach ($user->bookmark() as $id => $bookmark) { ?>
                         <li>
-                            <a href="<?= $query ?>"><?= $id ?></a>
+                            <a href="<?= $bookmark->query() ?>"><?= $bookmark->icon() ?><?= $bookmark->id() ?></a>
                         </li>
                     <?php } ?>
                 </ul>

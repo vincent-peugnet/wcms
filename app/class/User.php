@@ -29,9 +29,10 @@ class User extends Item
     protected $bookmark = [];
 
     /** @var array sessions */
-    protected $sessions = [];
+    protected array $sessions = [];
 
-    protected $display = ['bookmark' => false];
+    /** @var bool[] $display interface display options */
+    protected array $display = ['bookmark' => false];
 
     public function __construct($datas = [])
     {
@@ -295,7 +296,7 @@ class User extends Item
     }
 
     /**
-     * Generate new unique session ID
+     * Generate new unique session ID and store it
      * @param string $info session info to store
      * @return string session key
      */

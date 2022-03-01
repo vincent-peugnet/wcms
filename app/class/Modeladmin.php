@@ -18,7 +18,7 @@ class Modeladmin extends Model
     }
 
     /**
-     * Duplicate actual page database using new name
+     * Duplicate current page database using new name
      *
      * @param string $name of the new database
      */

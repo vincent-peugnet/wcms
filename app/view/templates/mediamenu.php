@@ -42,7 +42,7 @@
             <form action="<?= $this->url('mediafolderdelete') ?>" id="deletefolder" method="post">
                 <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>/">
                 <input type="checkbox" name="deletefolder" id="confirmdeletefolder" value="1">
-                <label for="confirmdeletefolder">Delete actual folder and all it's content</label>
+                <label for="confirmdeletefolder">Delete current folder and all it's content</label>
                 </br>
                 <input type="submit" value="delete folder" >
             </form>
@@ -91,7 +91,7 @@
             </form>
 
 
-            <p>Use this code to print the content of the actual folder in a page</p>
+            <p>Use this code to print the content of the current folder in a page</p>
             <input readonly class="code select-all" value="<?= $mediaopt->getcode() ?>" />
         </div>
     </details>

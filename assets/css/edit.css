@@ -266,7 +266,7 @@ main.media table#medialist {
     max-width: 960px;
 }
 
-#topbar a.actualpage {
+#topbar a.currentpage {
     text-decoration: underline;
 }
 

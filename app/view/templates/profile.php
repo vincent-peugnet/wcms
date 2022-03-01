@@ -46,9 +46,9 @@ $this->layout('layout', ['title' => 'profile', 'stylesheets' => [$css . 'home.cs
                     <form action="<?= $this->url('profilepassword') ?>" method="post">
                         <h3>Password</h3>
 
-                        <label for="actualpassword">Actual password</label>
+                        <label for="currentpassword">Actual password</label>
                         </br>
-                        <input type="password" name="actualpassword" id="actualpassword" required>
+                        <input type="password" name="currentpassword" id="currentpassword" required>
                         </br>
 
                         <label for="password1">New password</label>

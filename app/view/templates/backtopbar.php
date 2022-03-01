@@ -22,11 +22,11 @@
 <?php if($user->iseditor()) { ?>
 
 <span id="menu">
-<a href="<?= $this->url('home') ?>" <?= $tab == 'home' ? 'class="actualpage"' : '' ?>>
+<a href="<?= $this->url('home') ?>" <?= $tab == 'home' ? 'class="currentpage"' : '' ?>>
     <i class="fa fa-home"></i>
     <span>home</span>
 </a>
-<a href="<?= $this->url('media') ?>" <?= $tab == 'media' ? 'class="actualpage"' : '' ?>>
+<a href="<?= $this->url('media') ?>" <?= $tab == 'media' ? 'class="currentpage"' : '' ?>>
     <i class="fa fa-link"></i>
     <span>media</span>
 </a>
@@ -69,12 +69,12 @@
 if($user->isadmin()) {
 ?>
 
-<a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="actualpage"' : '' ?>>
+<a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="currentpage"' : '' ?>>
     <i class="fa fa-users"></i>
     <span>users</span>
 </a>
 
-<a href="<?= $this->url('admin') ?>" <?= $tab == 'admin' ? 'class="actualpage"' : '' ?>>
+<a href="<?= $this->url('admin') ?>" <?= $tab == 'admin' ? 'class="currentpage"' : '' ?>>
     <i class="fa fa-cog"></i>
     <span>admin</span>
 
@@ -82,7 +82,7 @@ if($user->isadmin()) {
 <?php
 }
 ?>
-<a href="<?= $this->url('info') ?>"  <?= $tab == 'info' ? 'class="actualpage"' : '' ?>>
+<a href="<?= $this->url('info') ?>"  <?= $tab == 'info' ? 'class="currentpage"' : '' ?>>
     <i class="fa fa-book"></i>
     <span>documentation</span>
 </a>
@@ -90,7 +90,7 @@ if($user->isadmin()) {
 <a
     href="<?= $this->url('profile') ?>"
     title="Edit my profile"
-    <?= $tab == 'profile' ? 'class="actualpage"' : '' ?>
+    <?= $tab == 'profile' ? 'class="currentpage"' : '' ?>
 >
     <i class="fa fa-user"></i>
     <span><?= $user->id() ?></span>
