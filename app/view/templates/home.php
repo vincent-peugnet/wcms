@@ -196,7 +196,10 @@
                             <td class="date" <?= $item->date('dmy') ?> <?= $item->date('ptime') ?>><time datetime="<?= $item->date('string') ?>" title="<?= $item->date('dmy') . ' ' . $item->date('ptime') ?>"><?= $item->date('dmy') ?></time></td>
                             <?php }
                                     if ($columns['secure']) { ?>
-                            <td class="secure"><?= $opt->securelink($item->secure('int') , $item->secure('string')) ?></td>
+                            <td class="secure">
+                                <?= $opt->securelink($item->secure('int') , $item->secure('string')) ?>
+                                <?= !empty($item->password()) ? '<i class="fa fa-lock" title="This page is password protected"></i>' : '' ?>
+                            </td>
                             <?php }
                                     if ($columns['authors']) { ?>
                             <td class="authors"><?= $opt->authorlinks($item->authors('array')) ?></td>
