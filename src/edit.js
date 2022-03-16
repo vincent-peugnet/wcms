@@ -243,7 +243,7 @@ function submitHandler(form) {
 
     xhr.addEventListener('load', function(event) {
         if (httpOk(xhr.status)) {
-            saved();
+            saved(JSON.parse(xhr.response));
         } else {
             alert('Error while trying to update: ' + xhr.statusText);
         }
@@ -271,10 +271,11 @@ function changed() {
     document.getElementById('headid').innerHTML = '*' + pageid;
 }
 
-function saved() {
+function saved(data) {
     unsavedChanges = false;
     document.title = '✏ ' + pagetitle;
     document.getElementById('headid').innerHTML = pageid;
+    document.querySelector('input[name="datemodif"]').value = data.datemodif;
 }
 
 /**
