@@ -29,7 +29,17 @@
 
         <div class="block">
 
-            <h2>Pages (<?= count($pagelistopt) ?>) <span class="right"><a href="?display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> >list</a> / <a href="?display=map"  <?= $display === 'map' ? 'style="color: white"' : '' ?>  >map</a></span> </h2>
+            <h2>
+                Pages (<?= count($pagelistopt) ?>)
+                <?php if($opt->isfiltered()) { ?>
+                    <i class="fa fa-filter" title="There are active filters"></i>
+                <?php } ?>
+                <span class="right">
+                    <a href="?display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> >list</a>
+                    /
+                    <a href="?display=map"  <?= $display === 'map' ? 'style="color: white"' : '' ?>  >map</a>
+                </span>
+            </h2>
 
             <?php if($display === 'map') { ?>
 
@@ -93,9 +103,15 @@
                         <tr>
                             <?php if($user->issupereditor()) { ?><th id="checkall">x</th> <?php } ?>
                             <?php if($columns['favicon']) { ?>
-                                <th class="favicon"><a href="<?= $opt->sortbyorder('favicon') ?>">ico</a></th>
+                                <th class="favicon">
+                                    <a href="<?= $opt->sortbyorder('favicon') ?>">ico</a>
+                                    <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'favicon']) ?>
+                                </th>
                             <?php } ?>
-                            <th class="id"><a href="<?= $opt->sortbyorder('id') ?>">id</a></th>
+                            <th class="id">
+                                <a href="<?= $opt->sortbyorder('id') ?>">id</a>
+                                <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'id']) ?>
+                            </th>
                             <th class="edit"></th>
                             <th class="read"></th>
                             <th class="delete" title="delete page"></th>
@@ -103,40 +119,74 @@
                             <th class="download" title="download page as json"></th>
                             <?php }
                                 if ($columns['tag']) { ?>
-                            <th class="tag"><a href="<?= $opt->sortbyorder('tag') ?>">tag</a></th>
+                            <th class="tag">
+                                <a href="<?= $opt->sortbyorder('tag') ?>">tag</a>
+                                <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'tag']) ?>
+                            </th>
                             <?php }
                                 if ($columns['title']) { ?>
-                            <th class="title"><a href="<?= $opt->sortbyorder('title') ?>">title</a></th>
+                            <th class="title">
+                                <a href="<?= $opt->sortbyorder('title') ?>">title</a>
+                                <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'title']) ?>
+                            </th>
                             <?php }
                                 if ($columns['description']) { ?>
                             <th class="summary">summary</th>
                             <?php }
                                 if ($columns['linkto']) { ?>
-                            <th class="linkto"><a href="<?= $opt->sortbyorder('linkto') ?>">linkto</a></th>
+                            <th class="linkto">
+                                <a href="<?= $opt->sortbyorder('linkto') ?>">linkto</a>
+                                <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'linkto']) ?>
+                                
+                            </th>
                             <?php }
                                 if ($columns['datemodif']) { ?>
-                            <th class="datemodif"><a href="<?= $opt->sortbyorder('datemodif') ?>">last modification</a></th>
+                            <th class="datemodif">
+                                <a href="<?= $opt->sortbyorder('datemodif') ?>">last modification</a>
+                                <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'datemodif']) ?>
+                            </th>
                             <?php }
                                 if ($columns['datecreation']) { ?>
-                            <th class="datecreation"><a href="<?= $opt->sortbyorder('datecreation') ?>">date of creation</a></th>
+                            <th class="datecreation">
+                                <a href="<?= $opt->sortbyorder('datecreation') ?>">date of creation</a>
+                                <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'datecreation']) ?>
+                            </th>
                             <?php }
                                 if ($columns['date']) { ?>
-                            <th class="date"><a href="<?= $opt->sortbyorder('date') ?>">date</a></th>
+                            <th class="date">
+                                <a href="<?= $opt->sortbyorder('date') ?>">date</a>
+                                <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'date']) ?>
+                            </th>
                             <?php }
                                 if ($columns['secure']) { ?>
-                            <th class="secure"><a href="<?= $opt->sortbyorder('secure') ?>">privacy</a></th>
+                            <th class="secure">
+                                <a href="<?= $opt->sortbyorder('secure') ?>">privacy</a>
+                                <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'secure']) ?>
+                            </th>
                             <?php }
                                 if ($columns['authors']) { ?>
-                                    <th class="authors"><a href="<?= $opt->sortbyorder('authors') ?>">authors</a></th>
+                                    <th class="authors">
+                                        <a href="<?= $opt->sortbyorder('authors') ?>">authors</a>
+                                <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'authors']) ?>
+                                    </th>
                                     <?php }
                                 if ($columns['visitcount']) { ?>
-                            <th class="visitcount"><a href="<?= $opt->sortbyorder('visitcount') ?>">visit</a></th>
+                            <th class="visitcount">
+                                <a href="<?= $opt->sortbyorder('visitcount') ?>">visit</a>
+                                <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'visitcount']) ?>
+                            </th>
                             <?php }
                                 if ($columns['editcount']) { ?>
-                            <th class="editcount"><a href="<?= $opt->sortbyorder('editcount') ?>">edit</a></th>
+                            <th class="editcount">
+                                <a href="<?= $opt->sortbyorder('editcount') ?>">edit</a>
+                                <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'editcount']) ?>
+                            </th>
                             <?php }
                                 if ($columns['affcount']) { ?>
-                            <th class="affcount"><a href="<?= $opt->sortbyorder('affcount') ?>">aff</a></th>
+                            <th class="affcount">
+                                <a href="<?= $opt->sortbyorder('affcount') ?>">aff</a>
+                                <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'affcount']) ?>
+                            </th>
                             <?php } ?>
                         </tr>
                     </thead>

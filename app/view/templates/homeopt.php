@@ -28,7 +28,7 @@
 
                     </fieldset>
 
-                    <fieldset>
+                    <fieldset data-default="<?= $opt->isdefault('secure') ? '1' : '0' ?>">
                         <legend>Privacy</legend>
                         <ul>
                             <li><input type="radio" id="4" name="secure" value="4" <?= $opt->secure() == 4 ? "checked" : "" ?> /><label for="4">all</label></li>
@@ -38,7 +38,7 @@
                         </ul>
                     </fieldset>
 
-                    <fieldset>
+                    <fieldset data-default="<?= $opt->isdefault('tagfilter') ? '1' : '0' ?>">
                         <legend>Tag</legend>
 
                         <ul>
@@ -77,7 +77,7 @@
 
                 </fieldset>
 
-                <fieldset>
+                <fieldset data-default="<?= $opt->isdefault('authorfilter') ? '1' : '0' ?>">
                     <legend>Author(s)</legend>
                             
                     <ul>
@@ -116,7 +116,7 @@
 
                     </fieldset>
 
-                    <fieldset>
+                    <fieldset data-default="<?= $opt->isdefault('linkto') ? '1' : '0' ?>">
                         <legend>Link to</legend>
 
                     <label for="linkto" title="filter pages that have links pointing to the following selected page">Link pointing to</label>
@@ -139,7 +139,7 @@
 
                     
 
-                    <fieldset>
+                    <fieldset data-default="<?= $opt->isdefault('invert') && $opt->isdefault('limit') ? '1' : '0' ?>">
                         <legend>Other</legend>
 
                         

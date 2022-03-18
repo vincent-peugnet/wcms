@@ -2,24 +2,45 @@
 
 namespace Wcms;
 
+use Exception;
+
 class Opt extends Item
 {
-    protected $sortby = 'id';
-    protected $order = 1;
-    protected $tagfilter = [];
-    protected $tagcompare = 'AND';
-    protected $authorfilter = [];
-    protected $authorcompare = 'AND';
-    protected $secure = 4;
-    protected $linkto = '';
-    protected $taglist = [];
-    protected $authorlist = [];
-    protected $invert = 0;
-    protected $limit = 0;
+    protected string $sortby = 'id';
+    protected int $order = 1;
+    protected array $tagfilter = [];
+    protected string $tagcompare = 'AND';
+    protected array $authorfilter = [];
+    protected string $authorcompare = 'AND';
+    protected int $secure = 4;
+    protected string $linkto = '';
+    protected array $taglist = [];
+    protected array $authorlist = [];
+    protected int $invert = 0;
+    protected int $limit = 0;
 
     protected $pageidlist = [];
 
-    protected $pagevarlist;
+    /** @var array $pagevarlist List fo every properties of an Page object */
+    protected array $pagevarlist = [];
+
+    protected const SORTLIST = [
+        'sortby',
+        'order',
+    ];
+
+    protected const FILTERLIST = [
+        'secure',
+        'tagfilter',
+        'tagcompare',
+        'authorfilter',
+        'authorcompare',
+        'linkto',
+        'invert',
+        'limit'
+    ];
+
+    protected const DATALIST = [...self::SORTLIST, ...self::FILTERLIST];
 
     public function __construct(array $data = [])
     {
@@ -31,8 +52,10 @@ class Opt extends Item
 
 
 
-
-    public function resetall()
+    /**
+     * Reset all properties to default value
+     */
+    public function resetall(): void
     {
         $varlist = get_class_vars(self::class);
 
@@ -42,7 +65,40 @@ class Opt extends Item
         }
     }
 
-    public function reset($var)
+    /**
+     * @return bool indicating if any filters are actives
+     */
+    public function isfiltered(): bool
+    {
+        $defaultvarlist = get_class_vars(self::class);
+        foreach (self::FILTERLIST as $var) {
+            if ($this->$var !== $defaultvarlist[$var]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param string $var Opt property
+     * @throws Exception if $var isn't a Opt property
+     * @return bool true if propery is set to default value, otherwhise : false
+     */
+    public function isdefault(string $var): bool
+    {
+        $defaultvarlist = get_class_vars(self::class);
+        if (!isset($defaultvarlist[$var])) {
+            throw new Exception("$var is not an Opt Class property");
+        }
+        return ($defaultvarlist[$var] === $this->$var);
+    }
+
+    /**
+     * Reset specific default for specified object property
+     *
+     *  @param string $var
+     */
+    public function reset(string $var): void
     {
         $varlist = get_class_vars(self::class);
         if (in_array($var, $varlist)) {
@@ -65,20 +121,7 @@ class Opt extends Item
 
     public function getall()
     {
-        $optlist = [
-            'sortby',
-            'order',
-            'secure',
-            'tagcompare',
-            'tagfilter',
-            'authorcompare',
-            'authorfilter',
-            'limit',
-            'invert',
-            'linkto'
-        ];
-
-        foreach ($optlist as $method) {
+        foreach (self::DATALIST as $method) {
             if (method_exists($this, $method)) {
                 if (isset($_GET[$method])) {
                     $setmethod = 'set' . $method;
@@ -100,17 +143,7 @@ class Opt extends Item
 
     public function getadress()
     {
-        $object = $this->drylist([
-            'sortby',
-            'order',
-            'secure',
-            'tagfilter',
-            'tagcompare',
-            'authorfilter',
-            'authorcompare',
-            'invert',
-            'limit'
-        ]);
+        $object = $this->drylist(self::DATALIST);
         $object['submit'] = 'filter';
 
         return '?' . urldecode(http_build_query($object));
@@ -118,17 +151,7 @@ class Opt extends Item
 
     public function sortbyorder($sortby = "")
     {
-        $object = $this->drylist([
-            'sortby',
-            'order',
-            'secure',
-            'tagfilter',
-            'tagcompare',
-            'authorfilter',
-            'authorcompare',
-            'invert',
-            'limit'
-        ]);
+        $object = $this->drylist(self::DATALIST);
         if (!empty($sortby)) {
             $object['sortby'] = $sortby;
         }
@@ -148,7 +171,7 @@ class Opt extends Item
     {
         $tagstring = "";
         foreach ($taglist as $tag) {
-            $href = $this->getfilteradress(['tagfilter' => [$tag]]);
+            $href = $this->getfilteraddress(['tagfilter' => [$tag]]);
             $tagstring .= '<a class="tag tag_' . $tag . '" href="?' . $href . '" >' . $tag . '</a>' . PHP_EOL;
         }
         return $tagstring;
@@ -164,7 +187,7 @@ class Opt extends Item
     {
         $authorstring = "";
         foreach ($authorlist as $author) {
-            $href = $this->getfilteradress(['authorfilter' => [$author]]);
+            $href = $this->getfilteraddress(['authorfilter' => [$author]]);
             $authorstring .= "<a class=\"author author_$author\" href=\"?$href\" >$author</a>\n";
         }
         return $authorstring;
@@ -172,7 +195,7 @@ class Opt extends Item
 
     public function securelink(int $level, string $secure)
     {
-        $href = $this->getfilteradress(['secure' => $level]);
+        $href = $this->getfilteraddress(['secure' => $level]);
         return "<a class=\"secure $secure\" href=\"?$href\">$secure</a>\n";
     }
 
@@ -180,28 +203,17 @@ class Opt extends Item
     {
         $linktostring = "";
         foreach ($linktolist as $linkto) {
-            $href = $this->getfilteradress(['linkto' => $linkto]);
+            $href = $this->getfilteraddress(['linkto' => $linkto]);
             $linktostring .= "<a class=\"linkto\" href=\"?$href\" >$linkto</a>\n";
         }
         return $linktostring;
     }
 
 
-    public function getfilteradress(array $vars = [])
+    public function getfilteraddress(array $vars = [])
     {
-        $varlist = [
-            'sortby',
-            'order',
-            'secure',
-            'tagfilter',
-            'tagcompare',
-            'authorfilter',
-            'authorcompare',
-            'linkto', 'invert',
-            'limit'
-        ];
         // array_filter($vars, function ())
-        $object = $this->drylist($varlist);
+        $object = $this->drylist(self::DATALIST);
         $object = array_merge($object, $vars);
         $object['submit'] = 'filter';
         return urldecode(http_build_query($object));

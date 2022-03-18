@@ -157,9 +157,21 @@ main.home div#graph {
     width: 800px;
 }
 
-main.home table .id {
+main.home table td.id {
     font-family: monospace;
     font-size: medium;
+}
+
+main.home nav select {
+    width: 100%;
+}
+
+main.home nav fieldset[data-default="0"] {
+    background: darkgrey;
+}
+
+main.home nav legend {
+    font-weight: bold;
 }
 
 #home2table a.linkto {
