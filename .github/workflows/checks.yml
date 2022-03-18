@@ -44,7 +44,7 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+        run: make vendor
 
       - name: PHPUnit
         run: |
@@ -108,7 +108,7 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+        run: make vendor
 
       - name: PHPCS
         if: always()
@@ -119,4 +119,4 @@ jobs:
 
       - name: PHPStan
         if: always()
-        run: vendor/bin/phpstan analyse --no-progress
+        run: make analyse
