@@ -68,6 +68,10 @@ aside {
     border-bottom: 1px solid grey;
 }
 
+input[type="submit"], input[type="text"],input[type="number"], input[type="password"], input[type="date"], input[type="checkbox"], select {
+    border: solid 1px #cbcbcb;
+    border-radius: 4px;
+}
 
 
 aside details, aside span {
@@ -88,6 +92,7 @@ aside .submenu {
     border: solid 1px dimgrey;
     max-height: 85%;
     overflow-y: auto;
+    z-index: 10;
 }
 
 
@@ -102,13 +107,15 @@ aside .submenu {
     font-weight: inherit;
   }
 
-details > summary::-webkit-details-marker {
-    display: none;
+summary {
+    white-space: nowrap;
 }
 
+summary:hover {
+    cursor: pointer;
+}
 
 aside summary:hover {
-    cursor: pointer;
     background-color: lightgrey;
 }
 
@@ -719,7 +726,7 @@ footer {
     }
 
     header a {
-        font-size: 2em;
+        font-size: 1.3em;
     }
 
     aside {
@@ -751,7 +758,7 @@ footer {
     }
     
     td.edit, td.read, td.delete, td.download {
-        font-size: 1.4em;
+        font-size: 1.3em;
     }
 
 }

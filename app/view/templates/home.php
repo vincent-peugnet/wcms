@@ -35,9 +35,9 @@
                     <i class="fa fa-filter" title="There are active filters"></i>
                 <?php } ?>
                 <span class="right">
-                    <a href="?display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> >list</a>
+                    <a href="?display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> ><i class="fa fa-th-list"></i></a>
                     /
-                    <a href="?display=map"  <?= $display === 'map' ? 'style="color: white"' : '' ?>  >map</a>
+                    <a href="?display=map"  <?= $display === 'map' ? 'style="color: white"' : '' ?>  ><i class="fa fa-sitemap"></i></a>
                 </span>
             </h2>
 

@@ -67,6 +67,7 @@ abstract class Model
         'mov' => 'video',
         'wmv' => 'video',
         'm4v' => 'video',
+        'webm' => 'video',
         'zip' => 'archive',
         '7zip' => 'archive',
         'pdf' => 'document',

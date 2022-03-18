@@ -1,8 +1,9 @@
 <nav>
 
-    <div class="block">
-
-        <h2>Options</h2>
+    <details class="block" open>
+        <summary>
+            Options
+        </summary>
 
         <div class="scroll">
 
@@ -169,6 +170,6 @@
 
         </div>
 
-    </div>
+    </details>
 
 </nav>

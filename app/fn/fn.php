@@ -237,9 +237,9 @@ function treecount(
     Mediaopt $mediaopt
 ) {
     if ($path . '/' === $currentdir) {
-        $folder = '├─📂<span id="currentdir">' . $dirname . '<span>';
+        $folder = '├─<i class="fa fa-folder-open-o"></i> <span id="currentdir">' . $dirname . '<span>';
     } else {
-        $folder = '├─📁' . $dirname;
+        $folder = '├─<i class="fa fa-folder-o"></i> ' . $dirname;
     }
     echo '<tr>';
     $href = $mediaopt->getpathadress($path);
@@ -262,10 +262,10 @@ function basictree(array $dirlist, string $dirname, int $deepness, string $path,
 {
 
     if ($path === $currentdir) {
-        $folder = '├─📂<span id="currentdir">' . $dirname . '<span>';
+        $folder = '├─<i class="fa fa-folder-open-o"></i> <span id="currentdir">' . $dirname . '<span>';
         $checked = 'checked';
     } else {
-        $folder = '├─📁' . $dirname;
+        $folder = '├─<i class="fa fa-folder-o"></i> ' . $dirname;
         $checked = '';
     }
 

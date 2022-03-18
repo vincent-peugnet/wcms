@@ -23,7 +23,7 @@
                 </form>
                 <h2>Folder</h2>
                 <form id="folderadd" action="<?= $this->url('mediafolderadd') ?>" method="post">
-                    <label for="foldername">📂 New folder</label>
+                    <label for="foldername"><i class="fa fa-folder"></i>  New folder</label>
                     <input type="text" name="foldername" id="foldername" placeholder="folder name" required>
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>">
                 <input type="submit" value="create folder">

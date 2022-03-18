@@ -402,8 +402,12 @@ span.cm-wkeyword {
         display: none;
     }
 
+    header span#search {
+        display: none;
+    }
+
     header a {
-        font-size: 2em;
+        font-size: 1.3em;
     }
 
     span#fontsize {

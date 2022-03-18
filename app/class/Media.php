@@ -116,31 +116,31 @@ class Media extends Item
     {
         switch ($this->type) {
             case 'image':
-                $symbol = "🖼";
+                $symbol = 'picture-o';
                 break;
 
             case 'sound':
-                $symbol = "🎵";
+                $symbol = "sound-o";
                 break;
 
             case 'video':
-                $symbol = "🎞";
+                $symbol = "movie-o";
                 break;
 
             case 'document':
-                $symbol = "📓";
+                $symbol = "pdf-o";
                 break;
 
             case 'archive':
-                $symbol = "🗜";
+                $symbol = "archive-o";
                 break;
 
             case 'code':
-                $symbol = "📄";
+                $symbol = "code-o";
                 break;
 
             default:
-                $symbol = "🎲";
+                $symbol = "o";
                 break;
         }
         return $symbol;
