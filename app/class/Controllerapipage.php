@@ -16,7 +16,7 @@ class Controllerapipage extends Controllerapi
      * - Send `406` Error code in case of invalid ID
      * - Send `404` Error code if page is not found
      *
-     * @var string $id Page ID to look for
+     * @param string $id Page ID to look for
      * @return bool in case of success or failure
      */
     public function importpage(string $id): bool

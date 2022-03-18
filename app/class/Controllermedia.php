@@ -34,7 +34,7 @@ class Controllermedia extends Controller
             } catch (\InvalidArgumentException $exception) {
                 throw new LogicException($exception->getMessage());
             }
-            if (isset($_POST['query']) && $this->user->iseditor()) {
+            if (isset($_POST['query'])) {
                 $datas = array_merge($_GET, $_POST);
             } else {
                 $datas = $_GET;
