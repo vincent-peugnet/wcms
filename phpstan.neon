@@ -9,7 +9,7 @@ parameters:
         - app/fn
         - index.php
         - tests
-    excludes_analyse:
+    excludePaths:
         - app/view/*
         - vendor/*
     exceptionRules:
@@ -20,3 +20,4 @@ parameters:
         # ignore all exceptions errors in tests classes
         methodWhitelist:
             PHPUnit\Framework\TestCase: '#.*#i'
+    tmpDir: build/phpstan

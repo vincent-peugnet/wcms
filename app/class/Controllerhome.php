@@ -76,7 +76,7 @@ class Controllerhome extends Controllerpage
 
             $this->listquery($pagelist);
 
-            $vars['optlist'] = $this->optlist ?? null;
+            $vars['optlist'] = $this->optlist;
 
             $this->showtemplate('home', $vars);
         }
