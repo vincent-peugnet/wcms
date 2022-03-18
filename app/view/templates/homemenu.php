@@ -276,7 +276,7 @@
                     <?= options(Wcms\Model::BOOKMARK_ICONS, null, true) ?>
                 </select>
                 <input type="text" name="id" placeholder="bookmark id" minlength="1" maxlength="16" required>
-                <input type="hidden" name="query" value="<?= $opt->getadress() ?>">
+                <input type="hidden" name="query" value="<?= $queryaddress ?>">
                 <input type="hidden" name="route" value="home">
                 <input type="hidden" name="user" value="<?= $user->id() ?>">
                 <input type="submit" name="action" value="add">

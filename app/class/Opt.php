@@ -141,7 +141,10 @@ class Opt extends Item
         }
     }
 
-    public function getadress()
+    /**
+     * @return string http encoded query
+     */
+    public function getaddress(): string
     {
         $object = $this->drylist(self::DATALIST);
         $object['submit'] = 'filter';

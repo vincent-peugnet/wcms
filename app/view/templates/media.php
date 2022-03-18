@@ -69,7 +69,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
 
     <h2>
         /<?= $mediaopt->dir() ?>
-        <span class="right"><a href="<?= $mediaopt->getadress() ?>&display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> >list</a> / <a href="<?= $mediaopt->getadress() ?>&display=gallery"  <?= $display === 'gallery' ? 'style="color: white"' : '' ?>  >gallery</a></span>
+        <span class="right"><a href="<?= $mediaopt->getaddress() ?>&display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> >list</a> / <a href="<?= $mediaopt->getaddress() ?>&display=gallery"  <?= $display === 'gallery' ? 'style="color: white"' : '' ?>  >gallery</a></span>
     </h2>
 
     <div class="scroll">
@@ -151,7 +151,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
                         <label for="newid"><?= $media->id() ?></label>
                     </summary>
                     <form action="<?= $this->url('mediarename') ?>" method="post">
-                        <input type="hidden" name="route" value="<?= $mediaopt->getadress() ?>">
+                        <input type="hidden" name="route" value="<?= $mediaopt->getaddress() ?>">
                         <input type="hidden" name="path" value="<?= $media->path() ?>">
                         <input type="hidden" name="oldid" value="<?= $media->id() ?>">
                         <input type="hidden" name="oldextension" value="<?= $media->extension() ?>">

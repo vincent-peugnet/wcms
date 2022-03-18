@@ -146,7 +146,7 @@ class Mediaopt extends Item
         return '%MEDIA?' . $this->getquery() . '%';
     }
 
-    public function getadress(): string
+    public function getaddress(): string
     {
         return '?' . $this->getquery();
     }

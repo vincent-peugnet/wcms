@@ -358,6 +358,17 @@ main.font table#fontlist {
     text-decoration: underline;
 }
 
+#topbar a.bookmark[data-current="1"] {
+    background: #ababab6b;
+    border-color: #b3b3b3;
+}
+
+#topbar a.bookmark {
+    border-radius: 15px;
+    padding: 1px 5px;
+    border: 1px solid #ff000000;
+}
+
 
 
 img.icon {

@@ -54,6 +54,7 @@ class Controllerhome extends Controllerpage
             $vars['deepsearch'] = $deepsearch['regex'];
             $vars['searchopt'] = $deepsearch['searchopt'];
             $vars['display'] = $_GET['display'] ?? 'list';
+            $vars['queryaddress'] = $this->opt->getaddress();
 
             if ($vars['display'] === 'map') {
                 $vars['layout'] = $_GET['layout'] ?? 'cose-bilkent';

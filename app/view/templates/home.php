@@ -7,7 +7,7 @@
 
 
 
-<?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'home', 'pagelist' => $pagelist]) ?>
+<?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'home', 'pagelist' => $pagelist, 'queryaddress' => $queryaddress]) ?>
 
 <?php if ($user->iseditor()) { ?>
 
@@ -15,7 +15,7 @@
 
 <?php
     $optlist = $optlist ?? null;
-    $this->insert('homemenu', ['user' => $user, 'opt' => $opt, 'optlist' => $optlist, 'pagelist' => $pagelist, 'faviconlist' => $faviconlist, 'thumbnaillist' => $thumbnaillist, 'editorlist' => $editorlist, 'colors' => $colors]);
+    $this->insert('homemenu', ['user' => $user, 'opt' => $opt, 'optlist' => $optlist, 'pagelist' => $pagelist, 'faviconlist' => $faviconlist, 'thumbnaillist' => $thumbnaillist, 'editorlist' => $editorlist, 'colors' => $colors, 'queryaddress' => $queryaddress]);
 ?>
 
 
