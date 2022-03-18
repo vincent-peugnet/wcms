@@ -5,13 +5,11 @@ includes:
 parameters:
     level: 5
     paths:
-        - app/class
-        - app/fn
+        - app
         - index.php
         - tests
     excludePaths:
         - app/view/*
-        - vendor/*
     exceptionRules:
         # ignore some exceptions and their chlidrens
         uncheckedExceptions:
