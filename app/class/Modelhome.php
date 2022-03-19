@@ -48,21 +48,27 @@ class Modelhome extends Modelpage
     /**
      * Filter the pages list acording to the options and invert
      *
-     * @param array $pagelist of `Page` objects
+     * @param Page[] $pagelist          list of `Page` objects
      * @param Opt $opt
      *
-     * @return array of `string` pages id
+     * @return Page[]                   Filtered list of pages
      */
 
     public function filter(array $pagelist, Opt $opt): array
     {
-
-        $filtertagfilter = $this->filtertagfilter($pagelist, $opt->tagfilter(), $opt->tagcompare());
-        $filterauthorfilter = $this->filterauthorfilter($pagelist, $opt->authorfilter(), $opt->authorcompare());
-        $filtersecure = $this->filtersecure($pagelist, $opt->secure());
-        $filterlinkto = $this->filterlinkto($pagelist, $opt->linkto());
-
-        $filter = array_intersect($filtertagfilter, $filtersecure, $filterauthorfilter, $filterlinkto);
+        $filter = [];
+        foreach ($pagelist as $page) {
+            if (
+                $this->ftag($page, $opt->tagfilter(), $opt->tagcompare()) &&
+                $this->fauthor($page, $opt->authorfilter(), $opt->authorcompare()) &&
+                $this->fsecure($page, $opt->secure()) &&
+                $this->flinkto($page, $opt->linkto()) &&
+                $this->fsince($page, $opt->since()) &&
+                $this->funtil($page, $opt->until())
+            ) {
+                $filter[] = $page->id();
+            }
+        }
 
         if ($opt->invert()) {
             $idlist = array_keys($pagelist);

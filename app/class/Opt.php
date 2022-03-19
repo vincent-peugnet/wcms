@@ -274,82 +274,88 @@ class Opt extends Item
 
     // _______________________________________________ G E T _______________________________________________
 
-    public function sortby()
+    public function sortby(): string
     {
         return $this->sortby;
     }
 
-    public function order()
+    public function order(): int
     {
         return $this->order;
     }
 
-    public function secure()
+    public function secure(): int
     {
         return $this->secure;
     }
 
-    public function tagfilter($type = 'array')
+    public function tagfilter(): array
     {
         return $this->tagfilter;
     }
 
-    public function tagcompare()
+    public function tagcompare(): string
     {
         return $this->tagcompare;
     }
 
-    public function authorfilter($type = 'array')
+    public function authorfilter(): array
     {
         return $this->authorfilter;
     }
 
-    public function authorcompare()
+    public function authorcompare(): string
     {
         return $this->authorcompare;
     }
 
-    public function linkto($type = 'string')
+    public function linkto(): string
     {
         return $this->linkto;
     }
 
-    public function taglist()
+    public function taglist(): array
     {
         return $this->taglist;
     }
 
-    public function authorlist()
+    public function authorlist(): array
     {
         return $this->authorlist;
     }
 
+    /**
+     * @return DateTimeImmutable|string|null
+     */
     public function since($option = "date")
     {
         return $this->datetransform('since', $option);
     }
 
+    /**
+     * @return DateTimeImmutable|string|null
+     */
     public function until($option = "date")
     {
         return $this->datetransform('until', $option);
     }
 
-    public function invert()
+    public function invert(): int
     {
         return $this->invert;
     }
 
-    public function limit()
+    public function limit(): int
     {
         return $this->limit;
     }
 
-    public function pagevarlist()
+    public function pagevarlist(): array
     {
         return $this->pagevarlist;
     }
 
-    public function pageidlist()
+    public function pageidlist(): array
     {
         return $this->pageidlist;
     }

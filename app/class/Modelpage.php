@@ -5,6 +5,7 @@ namespace Wcms;
 use Exception;
 use JamesMoss\Flywheel\Document;
 use DateTimeImmutable;
+use DateTimeInterface;
 use LogicException;
 
 class Modelpage extends Modeldb
@@ -262,31 +263,19 @@ class Modelpage extends Modeldb
 
 
     /**
-     * @param array $pagelist List of Page
-     * @param array $tagchecked list of tags
-     * @param string $tagcompare string, can be 'OR' or 'AND', set the tag filter method
+     * @param Page[] $pagelist          List of Page
+     * @param string[] $tagchecked      List of tags
+     * @param string $tagcompare        Can be 'OR' or 'AND', set the tag filter method
      *
      * @return array $array of `string` page id
      */
-
     public function filtertagfilter(array $pagelist, array $tagchecked, $tagcompare = 'OR')
     {
 
         $filteredlist = [];
         foreach ($pagelist as $page) {
-            if (empty($tagchecked)) {
+            if ($this->ftag($page, $tagchecked, $tagcompare)) {
                 $filteredlist[] = $page->id();
-            } else {
-                $inter = (array_intersect($page->tag('array'), $tagchecked));
-                if ($tagcompare == 'OR') {
-                    if (!empty($inter)) {
-                        $filteredlist[] = $page->id();
-                    }
-                } elseif ($tagcompare == 'AND') {
-                    if (!array_diff($tagchecked, $page->tag('array'))) {
-                        $filteredlist[] = $page->id();
-                    }
-                }
             }
         }
         return $filteredlist;
@@ -295,70 +284,109 @@ class Modelpage extends Modeldb
 
 
     /**
-     * @param array $pagelist List of Page
-     * @param array $authorchecked list of authors
-     * @param string $authorcompare, can be 'OR' or 'AND', set the author filter method
+     * @param Page $page                Page
+     * @param string[] $tagchecked      list of tags
+     * @param string $tagcompare        can be 'OR' or 'AND', set the tag filter method
      *
-     * @return array $array of `string` page id
+     * @return bool                     true if Page pass test, otherwise false
      */
-
-    public function filterauthorfilter(array $pagelist, array $authorchecked, $authorcompare = 'OR')
+    public function ftag(Page $page, array $tagchecked, string $tagcompare = "OR"): bool
     {
+        if (empty($tagchecked)) {
+            return true;
+        } else {
+            if ($tagcompare == 'OR') {
+                $inter = (array_intersect($page->tag('array'), $tagchecked));
+                return (!empty($inter));
+            } elseif ($tagcompare == 'AND') {
+                return (!array_diff($tagchecked, $page->tag('array')));
+            }
+            return false;
+        }
+    }
 
-        $filteredlist = [];
-        foreach ($pagelist as $page) {
-            if (empty($authorchecked)) {
-                $filteredlist[] = $page->id();
-            } else {
+
+    /**
+     * @param Page $page                Page
+     * @param string[] $authorchecked   List of authors
+     * @param string $authorcompare     Cab be 'OR' or 'AND', set the author filter method
+     *
+     * @return bool                     true if Page pass test, otherwise false
+     */
+    public function fauthor(Page $page, array $authorchecked, string $authorcompare = "OR"): bool
+    {
+        if (empty($authorchecked)) {
+            return true;
+        } else {
+            if ($authorcompare == 'OR') {
                 $inter = (array_intersect($page->authors('array'), $authorchecked));
-                if ($authorcompare == 'OR') {
-                    if (!empty($inter)) {
-                        $filteredlist[] = $page->id();
-                    }
-                } elseif ($authorcompare == 'AND') {
-                    if (!array_diff($authorchecked, $page->authors('array'))) {
-                        $filteredlist[] = $page->id();
-                    }
-                }
+                return (!empty($inter));
+            } elseif ($authorcompare == 'AND') {
+                return (!array_diff($authorchecked, $page->authors('array')));
             }
+            return false;
         }
-        return $filteredlist;
     }
 
-    /**
-     * @param array $pagelist List of Page
-     * @param int $secure secure level
-     * @return array $array of `string` page id
-     */
 
-    public function filtersecure(array $pagelist, int $secure): array
+    /**
+     * @param Page $page                Page
+     * @param int $secure               Secure level
+     *
+     * @return bool                     true if Page pass test, otherwise false
+     */
+    public function fsecure(Page $page, int $secure): bool
     {
-        $filteredlist = [];
-        foreach ($pagelist as $page) {
-            if ($page->secure() == intval($secure)) {
-                $filteredlist[] = $page->id();
-            } elseif (intval($secure) >= 4) {
-                $filteredlist[] = $page->id();
-            }
+        if ($page->secure() === intval($secure)) {
+            return true;
+        } elseif (intval($secure) >= 4) {
+            return true;
         }
-        return $filteredlist;
+        return false;
     }
 
+
     /**
-     * @param array $pagelist Array of Page object
-     * @param string $linkto
+     * @param Page $page                Page
+     * @param string $linkto            Page id used as linkto
+     *
+     * @return bool                     true if Page pass test, otherwise false
      */
-    public function filterlinkto(array $pagelist, string $linkto): array
+    public function flinkto(Page $page, string $linkto): bool
     {
-        $filteredlist = [];
-        foreach ($pagelist as $page) {
-            if (in_array($linkto, $page->linkto('array'))) {
-                $filteredlist[] = $page->id();
-            } elseif (empty($linkto)) {
-                $filteredlist[] = $page->id();
-            }
+        return (empty($linkto) || in_array($linkto, $page->linkto('array')));
+    }
+
+
+    /**
+     * @param Page $page                Page
+     * @param ?DateTimeInterface $since Minimum date for validatation
+     *
+     * @return bool
+     */
+    public function fsince(Page $page, ?DateTimeInterface $since): bool
+    {
+        if (is_null($since)) {
+            return true;
+        } else {
+            return ($page->date() >= $since);
         }
-        return $filteredlist;
+    }
+
+
+    /**
+     * @param Page $page                Page
+     * @param ?DateTimeInterface $until Minimum date for validatation
+     *
+     * @return bool
+     */
+    public function funtil(Page $page, ?DateTimeInterface $until): bool
+    {
+        if (is_null($until)) {
+            return true;
+        } else {
+            return ($page->date() <= $until);
+        }
     }
 
 
