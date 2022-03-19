@@ -68,7 +68,7 @@ aside {
     border-bottom: 1px solid grey;
 }
 
-input[type="submit"], input[type="text"],input[type="number"], input[type="password"], input[type="date"], input[type="checkbox"], select {
+input[type="submit"], input[type="text"], input[type="number"], input[type="password"], input[type="date"], input[type="checkbox"], input[type="datetime-local"], select {
     border: solid 1px #cbcbcb;
     border-radius: 4px;
 }
@@ -169,9 +169,11 @@ main.home table td.id {
     font-size: medium;
 }
 
-main.home nav select {
+
+main.home nav select, main.home nav input[type="datetime-local"] {
     width: 100%;
 }
+
 
 main.home nav fieldset[data-default="0"] {
     background: darkgrey;
@@ -684,7 +686,6 @@ main section {
 main nav {
     display: flex;
     flex-direction: column;
-    min-width: 160px;
 }
 
 

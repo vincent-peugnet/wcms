@@ -2,7 +2,9 @@
 
 namespace Wcms;
 
-use Exception;
+use DateTimeImmutable;
+use DateTimeZone;
+use InvalidArgumentException;
 
 class Opt extends Item
 {
@@ -18,6 +20,10 @@ class Opt extends Item
     protected array $authorlist = [];
     protected int $invert = 0;
     protected int $limit = 0;
+    /** @var DateTimeImmutable $since */
+    protected ?DateTimeImmutable $since = null;
+    /** @var DateTimeImmutable $until */
+    protected ?DateTimeImmutable $until = null;
 
     protected $pageidlist = [];
 
@@ -36,6 +42,8 @@ class Opt extends Item
         'authorfilter',
         'authorcompare',
         'linkto',
+        'since',
+        'until',
         'invert',
         'limit'
     ];
@@ -81,14 +89,14 @@ class Opt extends Item
 
     /**
      * @param string $var Opt property
-     * @throws Exception if $var isn't a Opt property
+     * @throws InvalidArgumentException if $var isn't a Opt property
      * @return bool true if propery is set to default value, otherwhise : false
      */
     public function isdefault(string $var): bool
     {
         $defaultvarlist = get_class_vars(self::class);
-        if (!isset($defaultvarlist[$var])) {
-            throw new Exception("$var is not an Opt Class property");
+        if (!key_exists($var, $defaultvarlist)) {
+            throw new InvalidArgumentException("$var is not an " . get_class($this) . " Class property");
         }
         return ($defaultvarlist[$var] === $this->$var);
     }
@@ -146,7 +154,7 @@ class Opt extends Item
      */
     public function getaddress(): string
     {
-        $object = $this->drylist(self::DATALIST);
+        $object = $this->drylist(self::DATALIST, self::HTML_DATETIME_LOCAL);
         $object['submit'] = 'filter';
 
         return '?' . urldecode(http_build_query($object));
@@ -154,7 +162,7 @@ class Opt extends Item
 
     public function sortbyorder($sortby = "")
     {
-        $object = $this->drylist(self::DATALIST);
+        $object = $this->drylist(self::DATALIST, self::HTML_DATETIME_LOCAL);
         if (!empty($sortby)) {
             $object['sortby'] = $sortby;
         }
@@ -216,7 +224,7 @@ class Opt extends Item
     public function getfilteraddress(array $vars = [])
     {
         // array_filter($vars, function ())
-        $object = $this->drylist(self::DATALIST);
+        $object = $this->drylist(self::DATALIST, self::HTML_DATETIME_LOCAL);
         $object = array_merge($object, $vars);
         $object['submit'] = 'filter';
         return urldecode(http_build_query($object));
@@ -232,7 +240,7 @@ class Opt extends Item
     public function getquery(): string
     {
         $class = get_class_vars(get_class($this));
-        $object = get_object_vars($this);
+        $object = $this->dry(self::HTML_DATETIME_LOCAL);
         $class['pagevarlist'] = $object['pagevarlist'];
         $class['taglist'] = $object['taglist'];
         $class['authorlist'] = $object['authorlist'];
@@ -316,19 +324,29 @@ class Opt extends Item
         return $this->authorlist;
     }
 
+    public function since($option = "date")
+    {
+        return $this->datetransform('since', $option);
+    }
+
+    public function until($option = "date")
+    {
+        return $this->datetransform('until', $option);
+    }
+
     public function invert()
     {
         return $this->invert;
     }
 
-    public function pagevarlist()
-    {
-        return $this->pagevarlist;
-    }
-
     public function limit()
     {
         return $this->limit;
+    }
+
+    public function pagevarlist()
+    {
+        return $this->pagevarlist;
     }
 
     public function pageidlist()
@@ -436,6 +454,46 @@ class Opt extends Item
         }
         $authorlistsorted = arsort($authorlist);
         $this->authorlist = $authorlist;
+    }
+
+    /**
+     * @param DateTimeImmutable|string $since
+     */
+    public function setsince($since): void
+    {
+        if ($since instanceof DateTimeImmutable) {
+            $this->since = $since;
+        } elseif (is_string($since)) {
+            if (empty($since)) {
+                $this->since = null;
+            } else {
+                $this->since = DateTimeImmutable::createFromFormat(
+                    self::HTML_DATETIME_LOCAL,
+                    $since,
+                    new DateTimeZone('Europe/Paris')
+                );
+            }
+        }
+    }
+
+    /**
+     * @param DateTimeImmutable|string $until
+     */
+    public function setuntil($until): void
+    {
+        if ($until instanceof DateTimeImmutable) {
+            $this->until = $until;
+        } elseif (is_string($until)) {
+            if (empty($until)) {
+                $this->until = null;
+            } else {
+                $this->until = DateTimeImmutable::createFromFormat(
+                    self::HTML_DATETIME_LOCAL,
+                    $until,
+                    new DateTimeZone('Europe/Paris')
+                );
+            }
+        }
     }
 
     public function setinvert(int $invert)

@@ -6,7 +6,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 
-class Event extends Dbitem
+class Event extends Item
 {
     protected $id;
     protected $date;

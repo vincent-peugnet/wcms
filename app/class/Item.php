@@ -4,12 +4,15 @@ namespace Wcms;
 
 use DateTime;
 use DateTimeImmutable;
-use DateTimeZone;
+use DateTimeInterface;
 use InvalidArgumentException;
 use RuntimeException;
 
 abstract class Item
 {
+    /** DateTime format used by HTML datetime-local input  */
+    protected const HTML_DATETIME_LOCAL = "Y-m-d\TH:i";
+
     /**
      * Hydrate Object with corresponding `set__VAR__`
      * @param array|object $datas associative array using key as var name or object
@@ -62,49 +65,76 @@ abstract class Item
     }
 
     /**
-     * Export whole object
-     * @return array Associative array
+     * Export Item Object as an array in order to store it in the database
+     *
+     * @param string $dateformat        Date formating for DateTime properties {@see Item::datetransform()}
+     * @return array                    Item as an associative array
      */
-    public function dry(): array
+    public function dry(string $dateformat = "string"): array
     {
         $array = [];
-        $array = $this->obj2array($this, $array);
+        foreach (get_object_vars($this) as $var => $value) {
+            if ($value instanceof DateTimeInterface) {
+                $array[$var] = $this->$var($dateformat);
+            } elseif (is_object($value) && $value instanceof self) {
+                $array[$var] = $value->dry($dateformat);
+            } elseif (is_array($value)) {
+                $array[$var] = $this->aa($value, $dateformat);
+            } elseif (method_exists($this, $var)) {
+                $array[$var] = $this->$var();
+            }
+        }
         return $array;
     }
 
     /**
-     * recursive transform obj vars to array
+     * Recursive function used to walk into array in search for Objects to converts
+     * Only used with self::dry()
+     *
+     * @param array $arr                Associative array of datas
+     * @param string $dateformat        Date formating for DateTime properties {@see Item::datetransform()}
      */
-    public function obj2array($obj, &$arr)
+    public function aa(array $arr, string $dateformat): array
     {
-        if (!is_object($obj) && !is_array($obj)) {
-            $arr = $obj;
-            return $arr;
-        }
-        foreach ($obj as $key => $value) {
-            if (!empty($value)) {
-                $arr[$key] = array();
-                $this->obj2array($value, $arr[$key]);
+        $ret = [];
+        foreach ($arr as $key => $value) {
+            if (is_object($value) && $value instanceof self) {
+                $ret[$key] = $value->dry($dateformat);
+            } elseif (is_array($value)) {
+                $ret[$key] = $this->aa($value, $dateformat);
             } else {
-                $arr[$key] = $value;
+                $ret[$key] = $value;
             }
         }
-        return $arr;
+        return $ret;
     }
-
 
     /**
      * Return any asked vars and their values of an object as associative array
      *
-     * @param array $vars list of vars
-     * @return array Associative array `$var => $value`
+     * @param string[]                  $vars list of vars
+     * @param string $dateformat        Date formating for DateTime properties {@see Item::datetransform()}
+     * @throws InvalidArgumentException if a listed property does not exist or is an object or array
+     * @return array                    Associative array `$var => $value`
      */
-    public function drylist(array $vars): array
+    public function drylist(array $vars, string $dateformat = "string"): array
     {
         $array = [];
         foreach ($vars as $var) {
             if (property_exists($this, $var)) {
-                $array[$var] = $this->$var;
+                if ($this->$var instanceof DateTimeInterface) {
+                    $array[$var] = $this->$var($dateformat);
+                } elseif (!is_object($this->$var)) {
+                    $array[$var] = $this->$var();
+                } else {
+                    throw new InvalidArgumentException(
+                        "$var property of " . get_class($this) . " should not be used with " . __FUNCTION__ . "()"
+                    );
+                }
+            } else {
+                throw new InvalidArgumentException(
+                    "$var property does not exist in Object of class " . get_class($this)
+                );
             }
         }
         return $array;
@@ -116,6 +146,7 @@ abstract class Item
      *
      * @param string $property DateTimeImmutable var to access
      * @param string $option
+     * @throws InvalidArgumentException if property does not exist
      *
      * @return mixed string or false if propriety does not exist
      */
@@ -135,9 +166,13 @@ abstract class Item
                 return $this->$property->format('H:i');
             } elseif ($option == 'dmy') {
                 return $this->$property->format('d/m/Y');
+            } elseif ($option == self::HTML_DATETIME_LOCAL) {
+                return $this->$property->format(self::HTML_DATETIME_LOCAL);
+            } else {
+                throw new InvalidArgumentException("$option format for datetransform does not exist");
             }
         } else {
-            return false;
+            throw new InvalidArgumentException("Property $property does not exist in " . get_class($this));
         }
     }
 }

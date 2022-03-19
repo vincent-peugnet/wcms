@@ -12,7 +12,7 @@ class Optlist extends Opt
     protected $author = 0;
     protected $style = 'list';
 
-    protected $render;
+    private $render;
 
     public function parsehydrate(string $encoded)
     {

@@ -6,7 +6,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 
-class Page extends Dbitem
+class Page extends Item
 {
     protected $id;
     protected $title;
@@ -424,7 +424,7 @@ class Page extends Dbitem
     {
         if ($date instanceof DateTimeImmutable) {
             $this->date = $date;
-        } else {
+        } elseif (is_string($date)) {
             $this->date = DateTimeImmutable::createFromFormat(
                 DateTime::ISO8601,
                 $date,
@@ -462,7 +462,7 @@ class Page extends Dbitem
             $this->datecreation = $datecreation;
         } elseif ($datecreation === true) {
             $this->datecreation = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
-        } else {
+        } elseif (is_string($datecreation)) {
             $this->datecreation = DateTimeImmutable::createFromFormat(
                 DateTime::ISO8601,
                 $datecreation,
@@ -475,7 +475,7 @@ class Page extends Dbitem
     {
         if ($datemodif instanceof DateTimeImmutable) {
             $this->datemodif = $datemodif;
-        } else {
+        } elseif (is_string($datemodif)) {
             $this->datemodif = DateTimeImmutable::createFromFormat(
                 DateTime::ISO8601,
                 $datemodif,
@@ -488,7 +488,7 @@ class Page extends Dbitem
     {
         if ($daterender instanceof DateTimeImmutable) {
             $this->daterender = $daterender;
-        } else {
+        } elseif (is_string($daterender)) {
             $this->daterender = DateTimeImmutable::createFromFormat(
                 DateTime::ISO8601,
                 $daterender,

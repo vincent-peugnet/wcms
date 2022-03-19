@@ -117,6 +117,16 @@
 
                     </fieldset>
 
+                    <fieldset data-default="<?= $opt->isdefault('since') && $opt->isdefault('until') ? '1' : '0' ?>">
+                        <legend>Date & time</legend>
+                        <label for="since">since</label>
+                        </br>
+                        <input type="datetime-local" name="since" id="since" value="<?= !is_null($opt->since()) ? $opt->since('Y-m-d\TH:i') : "" ?>">
+                        <label for="until">until</label>
+                        </br>
+                        <input type="datetime-local" name="until" id="until" value="<?= !is_null($opt->until()) ? $opt->until('Y-m-d\TH:i') : "" ?>">
+                    </fieldset>
+
                     <fieldset data-default="<?= $opt->isdefault('linkto') ? '1' : '0' ?>">
                         <legend>Link to</legend>
 
