@@ -30,6 +30,8 @@ class Opt extends Item
     /** @var array $pagevarlist List fo every properties of an Page object */
     protected array $pagevarlist = [];
 
+    public const TAG_COMPARE = ['OR', 'AND', 'EMPTY'];
+
     protected const SORTLIST = [
         'sortby',
         'order',
@@ -387,7 +389,7 @@ class Opt extends Item
 
     public function settagcompare($tagcompare)
     {
-        if (in_array($tagcompare, ['OR', 'AND'])) {
+        if (in_array($tagcompare, self::TAG_COMPARE)) {
             $this->tagcompare = $tagcompare;
         }
     }

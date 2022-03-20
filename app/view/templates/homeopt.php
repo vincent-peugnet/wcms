@@ -53,7 +53,7 @@
 
 
 
-                        <fieldset data-default="<?= $opt->isdefault('tagfilter') ? '1' : '0' ?>">
+                        <fieldset data-default="<?= $opt->isdefault('tagfilter') && $opt->tagcompare() != 'EMPTY' ? '1' : '0' ?>">
                             <legend>Tag</legend>
 
                             
@@ -61,6 +61,8 @@
                             <label for="tag_OR">OR</label>
                             <input type="radio" id="tag_AND" name="tagcompare" value="AND" <?= $opt->tagcompare() == "AND" ? "checked" : "" ?>>
                             <label for="tag_AND">AND</label>
+                            <input type="radio" id="tag_EMPTY" name="tagcompare" value="EMPTY" <?= $opt->tagcompare() == "EMPTY" ? "checked" : "" ?>>
+                            <label for="tag_EMPTY">EMPTY</label>
                             
                             <ul>
                                 <?php foreach ($opt->taglist() as $tagfilter => $count) { ?>
@@ -73,7 +75,7 @@
                                             <?= in_array($tagfilter, $opt->tagfilter()) ? 'checked' : '' ?>
                                         />
                                         <label for="tag_<?= $tagfilter ?>">
-                                            <?= $tagfilter ?>
+                                            <span class="list-label"><?= $tagfilter ?></span>
                                             <span class="counter tag_<?= $tagfilter ?>"><?= $count ?></span>
                                         </label>
                                     </li>
@@ -103,7 +105,10 @@
                                             value="<?= $authorfilter ?>"
                                             <?= in_array($authorfilter, $opt->authorfilter()) ? 'checked' : '' ?>
                                         />
-                                        <label for="author_<?= $authorfilter ?>"><?= $authorfilter ?> (<?= $count ?>)</label>
+                                        <label for="author_<?= $authorfilter ?>">
+                                            <span class="list-label"><?= $authorfilter ?></span>
+                                            (<?= $count ?>)
+                                        </label>
                                     </li>
                                 <?php } ?>
                             </ul>

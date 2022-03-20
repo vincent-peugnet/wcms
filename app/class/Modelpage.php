@@ -292,6 +292,9 @@ class Modelpage extends Modeldb
      */
     public function ftag(Page $page, array $tagchecked, string $tagcompare = "OR"): bool
     {
+        if ($tagcompare == 'EMPTY') {
+            return empty($page->tag());
+        }
         if (empty($tagchecked)) {
             return true;
         } else {
@@ -299,7 +302,8 @@ class Modelpage extends Modeldb
                 $inter = (array_intersect($page->tag('array'), $tagchecked));
                 return (!empty($inter));
             } elseif ($tagcompare == 'AND') {
-                return (!array_diff($tagchecked, $page->tag('array')));
+                $diff = !array_diff($tagchecked, $page->tag('array'));
+                return !empty($diff);
             }
             return false;
         }

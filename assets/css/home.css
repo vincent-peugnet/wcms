@@ -189,6 +189,14 @@ main.home nav legend {
     background-color: #7b97b9;
 }
 
+nav span.list-label {
+    width: 73%;
+    text-overflow: ellipsis;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: text-bottom;
+}
+
 nav span.counter {
     border-radius: 100%;
     width: 17px;
