@@ -202,6 +202,15 @@ The explorer allow you to navigate between differents directories. It will show 
 
 By ajusting filters, you can 
 
+#### Profile
+
+The profile allow you to edit some user related preferences.
+
+##### name and URL
+
+Your __display name__ ande __url__ are used in case of an [authors inclusion](#authors-inclusion) or a [page list](#page-list) inclusion with `authors=1`.
+
+
 #### Admin
 
 #### User manager
@@ -282,6 +291,18 @@ This will include the page [description](#description).
 
     %THUMBNAIL%
 
+##### Authors inclusion
+
+    %AUTHORS%
+
+This will print a HTML list of every [authors](#authors) of the page. If they have a specified URL or display name set in their profile, it will be rendered as well.
+
+```html
+<ul class="userlist">
+    <li><span class="user user-ID"><a href="URL">NAME</a></span>
+</ul>
+```
+
 ##### ID inclusion
 
     %PAGEID% | %ID%
@@ -340,6 +361,7 @@ Display options are :
 - thumbnail : display the [thumnail](#thumbnail) of the page.
 - date : display the [date](#date) of the page.
 - time : display the [time](#time) of the page.
+- author: display the [authors](#authors)
 
 Generate :
 

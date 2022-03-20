@@ -487,7 +487,7 @@ article#manual a:hover {
 
 
 
-main.info pre {width: fit-content;padding: 1%;background-color: hsla(213, 31%, 20%, 1);white-space: pre-wrap;margin: 1%;}
+main.info pre {padding: 1%;background-color: hsla(213, 31%, 20%, 1);white-space: pre-wrap;margin: 1%;}
 
 main.info blockquote {
     padding: 6px 12px;
