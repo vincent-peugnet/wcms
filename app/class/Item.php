@@ -12,6 +12,10 @@ abstract class Item
 {
     /** DateTime format used by HTML datetime-local input  */
     protected const HTML_DATETIME_LOCAL = "Y-m-d\TH:i";
+    /** Length of short text such as Page title, description, etc... */
+    public const LENGTH_SHORT_TEXT = 255;
+    /** Length of long text such as Page elements */
+    public const LENGTH_LONG_TEXT = 2 ** 20;
 
     /**
      * Hydrate Object with corresponding `set__VAR__`

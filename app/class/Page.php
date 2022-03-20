@@ -48,9 +48,6 @@ class Page extends Item
     protected $refresh;
     protected $password;
 
-
-    public const LEN = 255;
-    public const LENTEXT = 2 ** 20;
     public const SECUREMAX = 2;
     public const TABS = ['main', 'css', 'header', 'body', 'nav', 'aside', 'footer', 'javascript'];
     public const VAR_DATE = ['date', 'datecreation', 'datemodif', 'daterender'];
@@ -389,14 +386,14 @@ class Page extends Item
 
     public function settitle($title)
     {
-        if (strlen($title) < self::LEN and is_string($title)) {
+        if (strlen($title) < self::LENGTH_SHORT_TEXT and is_string($title)) {
             $this->title = strip_tags(trim($title));
         }
     }
 
     public function setdescription($description)
     {
-        if (strlen($description) < self::LEN and is_string($description)) {
+        if (strlen($description) < self::LENGTH_SHORT_TEXT and is_string($description)) {
             $this->description = strip_tags(trim($description));
         }
     }
@@ -408,7 +405,7 @@ class Page extends Item
 
     public function settag($tag)
     {
-        if (is_string($tag) && strlen($tag) < self::LEN) {
+        if (is_string($tag) && strlen($tag) < self::LENGTH_SHORT_TEXT) {
                 $tag = $this->tagtoarray($tag);
         }
         if (is_array($tag)) {
@@ -500,7 +497,7 @@ class Page extends Item
 
     public function setcss($css)
     {
-        if (strlen($css) < self::LENTEXT and is_string($css)) {
+        if (strlen($css) < self::LENGTH_LONG_TEXT and is_string($css)) {
             $this->css = trim($css);
         }
     }
@@ -509,7 +506,7 @@ class Page extends Item
 
     public function setjavascript($javascript)
     {
-        if (strlen($javascript) < self::LENTEXT && is_string($javascript)) {
+        if (strlen($javascript) < self::LENGTH_LONG_TEXT && is_string($javascript)) {
             $this->javascript = $javascript;
         }
     }
@@ -517,35 +514,35 @@ class Page extends Item
 
     public function setbody($body)
     {
-        if (strlen($body) < self::LENTEXT && is_string($body)) {
+        if (strlen($body) < self::LENGTH_LONG_TEXT && is_string($body)) {
             $this->body = $body;
         }
     }
 
     public function setheader($header)
     {
-        if (strlen($header) < self::LENTEXT && is_string($header)) {
+        if (strlen($header) < self::LENGTH_LONG_TEXT && is_string($header)) {
             $this->header = $header;
         }
     }
 
     public function setmain($main)
     {
-        if (strlen($main) < self::LENTEXT and is_string($main)) {
+        if (strlen($main) < self::LENGTH_LONG_TEXT and is_string($main)) {
             $this->main = $main;
         }
     }
 
     public function setnav($nav)
     {
-        if (strlen($nav) < self::LENTEXT and is_string($nav)) {
+        if (strlen($nav) < self::LENGTH_LONG_TEXT and is_string($nav)) {
             $this->nav = $nav;
         }
     }
 
     public function setaside($aside)
     {
-        if (strlen($aside) < self::LENTEXT and is_string($aside)) {
+        if (strlen($aside) < self::LENGTH_LONG_TEXT and is_string($aside)) {
             $this->aside = $aside;
         }
     }
@@ -566,7 +563,7 @@ class Page extends Item
 
     public function setfooter($footer)
     {
-        if (strlen($footer) < self::LENTEXT and is_string($footer)) {
+        if (strlen($footer) < self::LENGTH_LONG_TEXT and is_string($footer)) {
             $this->footer = $footer;
         }
     }

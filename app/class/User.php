@@ -14,6 +14,12 @@ class User extends Item
     protected $password;
     protected $passwordhashed = false;
 
+    /** @var string $name Displayed name */
+    protected string $name = "";
+
+    /** @var string $url Account associated URL */
+    protected string $url = "";
+
     /** @var int $cookie Conservation time */
     protected int $cookie = 0;
 
@@ -66,6 +72,16 @@ class User extends Item
     public function passwordhashed()
     {
         return $this->passwordhashed;
+    }
+
+    public function name(): string
+    {
+        return $this->name;
+    }
+
+    public function url(): string
+    {
+        return $this->url;
     }
 
     public function cookie()
@@ -176,6 +192,20 @@ class User extends Item
     public function setpasswordhashed($passwordhashed)
     {
         $this->passwordhashed = boolval($passwordhashed);
+    }
+
+    public function setname($name): void
+    {
+        if (is_string($name) && strlen($name) < self::LENGTH_SHORT_TEXT) {
+            $this->name = strip_tags(trim($name));
+        }
+    }
+
+    public function seturl($url): void
+    {
+        if (is_string($url) && strlen($url) < self::LENGTH_SHORT_TEXT) {
+            $this->url = strip_tags(trim($url));
+        }
     }
 
     public function setcookie($cookie)

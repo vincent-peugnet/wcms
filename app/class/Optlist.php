@@ -69,7 +69,13 @@ class Optlist extends Opt
                 $content .= "<time datetime=\"$time\">$time</time>\n";
             }
             if ($this->author()) {
-                $content .=  $page->authors('string') . PHP_EOL;
+                $usermanager = new Modeluser();
+                foreach ($page->authors() as $author) {
+                    $user = $usermanager->get($author);
+                    if ($user) {
+                        $content .= PHP_EOL . $this->render->user($user) . PHP_EOL;
+                    }
+                }
             }
             if ($this->thumbnail) {
                 if (!empty($page->thumbnail())) {

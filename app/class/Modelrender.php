@@ -2,14 +2,16 @@
 
 namespace Wcms;
 
+use AltoRouter;
 use Exception;
+use Http\Discovery\Exception\NotFoundException;
 use LogicException;
 use Michelf\MarkdownExtra;
 
 class Modelrender extends Modelpage
 {
     /** @var \AltoRouter */
-    protected $router;
+    protected ?AltoRouter $router;
     /** @var Page Actual page being rendered*/
     protected $page;
     protected $linkto = [];
@@ -680,7 +682,7 @@ class Modelrender extends Modelpage
     }
 
     /**
-     * Replace each occurence of `%PATH%` with page ID
+     * Replace each occurence of `%PATH%` with page path
      * @param string $text input text
      * @return string output text with replaced elements
      */
@@ -729,6 +731,27 @@ class Modelrender extends Modelpage
             return $form;
         }, $text);
         return $text;
+    }
+
+    /**
+     * Render an user as a <span> HTML element
+     * A HTML link is added inside if user have a specified URL property
+     *
+     * @param User $user        User to render
+     * @return string           HTML rendered <span> element
+     */
+    public function user(User $user): string
+    {
+        $name   = !empty($user->name()) ? $user->name() : $user->id();
+        $id     = $user->id();
+        if (!empty($user->url())) {
+            $url = $user->url();
+            $html = "<a href=\"$url\">$name</a>";
+        } else {
+            $html = $name;
+        }
+        $html = "<span class=\"user user-$id\" data-user-id=\"$id\">$html</span>";
+        return $html;
     }
 
 
