@@ -147,6 +147,7 @@ class Controllerpage extends Controller
 
         $pageexist = $this->importpage();
         $canread = false;
+        $needtoberendered = false;
         $filedir = Model::HTML_RENDER_DIR . $page . '.html';
 
         if ($pageexist) {
@@ -161,10 +162,8 @@ class Controllerpage extends Controller
             }
 
             if ($this->pagemanager->needtoberendered($this->page)) {
-                if (Config::recursiverender()) {
-                    $this->recursiverender($this->page);
-                }
                 $this->page = $this->renderpage($this->page);
+                $needtoberendered = true;
             }
             $this->templaterender($this->page);
 
@@ -194,6 +193,10 @@ class Controllerpage extends Controller
                 echo $html;
             }
             $this->pagemanager->update($this->page);
+
+            if ($needtoberendered && Config::recursiverender()) {
+                $this->recursiverender($this->page);
+            }
         }
 
         if (!$canread || !$pageexist) {

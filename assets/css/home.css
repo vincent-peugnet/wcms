@@ -287,7 +287,7 @@ tr:hover {
 #topbar {
     background-color: #7b97b9;
     width: 100%;
-    padding: 3px 0.5%;
+    padding: 3px 3px;
 }
 
 #topbar form {
@@ -571,6 +571,10 @@ main.media code, input.code {
 
 nav.media span#currentdir {
     color: hsla(213, 70%, 40%, 1);
+}
+
+.media nav a {
+    white-space: nowrap;
 }
 
 
