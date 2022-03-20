@@ -181,6 +181,8 @@ main.home nav fieldset[data-default="0"] {
 
 main.home nav legend {
     font-weight: bold;
+    width: 100%;
+    background-color: #bdbdbd;
 }
 
 #home2table a.linkto {
@@ -189,8 +191,19 @@ main.home nav legend {
     background-color: #7b97b9;
 }
 
+nav li {
+    max-width: 210px;
+}
+
+nav fieldset {
+    padding: 0;
+    margin: 5px;
+    border: none;
+    margin: 15px 0;
+}
+
 nav span.list-label {
-    width: 73%;
+    width: 74%;
     text-overflow: ellipsis;
     display: inline-block;
     overflow: hidden;
@@ -698,6 +711,7 @@ main section {
 main nav {
     display: flex;
     flex-direction: column;
+    width: 230px;
 }
 
 
@@ -772,6 +786,10 @@ footer {
     
     td.edit, td.read, td.delete, td.download {
         font-size: 1.3em;
+    }
+
+    main nav {
+        width: 100%;
     }
 
 }

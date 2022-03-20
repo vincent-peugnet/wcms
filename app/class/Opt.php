@@ -10,15 +10,23 @@ class Opt extends Item
 {
     protected string $sortby = 'id';
     protected int $order = 1;
+
+    /** @var string[] $tagfilter    List of tags as string */
     protected array $tagfilter = [];
+
+    /** @var string $tagcompare     Can be OR, AND or EMPTY */
     protected string $tagcompare = 'AND';
+
+    /**  */
+    protected bool $tagnot = false;
+
     protected array $authorfilter = [];
     protected string $authorcompare = 'AND';
     protected int $secure = 4;
     protected string $linkto = '';
     protected array $taglist = [];
     protected array $authorlist = [];
-    protected int $invert = 0;
+    protected bool $invert = false;
     protected int $limit = 0;
     /** @var DateTimeImmutable $since */
     protected ?DateTimeImmutable $since = null;
@@ -30,7 +38,10 @@ class Opt extends Item
     /** @var array $pagevarlist List fo every properties of an Page object */
     protected array $pagevarlist = [];
 
-    public const TAG_COMPARE = ['OR', 'AND', 'EMPTY'];
+    public const OR             = 'OR';
+    public const AND            = 'AND';
+    public const EMPTY          = 'EMPTY';
+    public const COMPARE    = [self::OR, self::AND, self::EMPTY];
 
     protected const SORTLIST = [
         'sortby',
@@ -41,6 +52,7 @@ class Opt extends Item
         'secure',
         'tagfilter',
         'tagcompare',
+        'tagnot',
         'authorfilter',
         'authorcompare',
         'linkto',
@@ -301,6 +313,11 @@ class Opt extends Item
         return $this->tagcompare;
     }
 
+    public function tagnot()
+    {
+        return $this->tagnot;
+    }
+
     public function authorfilter(): array
     {
         return $this->authorfilter;
@@ -342,7 +359,7 @@ class Opt extends Item
         return $this->datetransform('until', $option);
     }
 
-    public function invert(): int
+    public function invert(): bool
     {
         return $this->invert;
     }
@@ -389,9 +406,14 @@ class Opt extends Item
 
     public function settagcompare($tagcompare)
     {
-        if (in_array($tagcompare, self::TAG_COMPARE)) {
+        if (in_array($tagcompare, self::COMPARE)) {
             $this->tagcompare = $tagcompare;
         }
+    }
+
+    public function settagnot($tagnot)
+    {
+        $this->tagnot = boolval($tagnot);
     }
 
     public function setauthorfilter($authorfilter)
@@ -403,7 +425,7 @@ class Opt extends Item
 
     public function setauthorcompare($authorcompare)
     {
-        if (in_array($authorcompare, ['OR', 'AND'])) {
+        if (in_array($authorcompare, self::COMPARE)) {
             $this->authorcompare = $authorcompare;
         }
     }
@@ -504,13 +526,9 @@ class Opt extends Item
         }
     }
 
-    public function setinvert(int $invert)
+    public function setinvert($invert)
     {
-        if ($invert == 0 || $invert == 1) {
-            $this->invert = $invert;
-        } else {
-            $this->invert = 0;
-        }
+        $this->invert = boolval($invert);
     }
 
     public function setlimit($limit)

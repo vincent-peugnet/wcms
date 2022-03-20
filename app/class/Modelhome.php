@@ -59,7 +59,7 @@ class Modelhome extends Modelpage
         $filter = [];
         foreach ($pagelist as $page) {
             if (
-                $this->ftag($page, $opt->tagfilter(), $opt->tagcompare()) &&
+                $this->ftag($page, $opt->tagfilter(), $opt->tagcompare(), $opt->tagnot()) &&
                 $this->fauthor($page, $opt->authorfilter(), $opt->authorcompare()) &&
                 $this->fsecure($page, $opt->secure()) &&
                 $this->flinkto($page, $opt->linkto()) &&
