@@ -31,8 +31,8 @@ $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [$cs
 <?php if(!Wcms\Config::disablejavascript()) { ?>
 
 <script>
-    const pageid = '<?= $page->id() ?>';
-    let pagetitle = '<?= $page->title() ?>';
+    const pageid = '<?= $this->e($page->id()) ?>';
+    let pagetitle = '<?= $this->e($page->title()) ?>';
 </script>
 <script src="<?= Wcms\Model::jspath() ?>edit.bundle.js"></script>
 
