@@ -76,30 +76,33 @@ We can also mention [Guilhem Prévost Leygonie]() as legendary number one user a
 
 
 
-How to install
---------------
 
-### Server requirements
+
+How to install
+==============
+
+__Server requirements__
 
 - apache server
-- PHP >=7.4.0
+- PHP >=7.4.0 and the following extensions: `curl mbstring xml`
 
 __W__ don't need any database manager as it use a "flat file" system.
 
 
-### Installation guide
+Installation guide
+------------------
 
 Simply download the [latest realease](https://github.com/vincent-peugnet/wcms/releases/latest) from github, and unzip it in your hosted folder. You can put W at the root of your domain, or in subfolders. Then access the adress in your browser and follow the differents steps.
 
 W will ask you for the path you've installed it, if you installed it at the root, leave this field blank, otherwise, indiquate the subfolders like `path/to/wcms`.
 
-
-
-# Development informations
+Development informations
+========================
 
 If you want to contribute to the project.
 
-## Prerequisites
+Prerequisites
+-------------
 
 - PHP >=7.4.0
 - PHP extensions : curl mbstring xml
@@ -108,7 +111,7 @@ If you want to contribute to the project.
 
 ### Debian and derivatives
 
-    sudo apt install php php-curl php-mbstring php-xml composer nodejs
+    sudo apt install php php-curl php-mbstring php-xml composer nodejs npm
 
 Install from sources
 --------------------

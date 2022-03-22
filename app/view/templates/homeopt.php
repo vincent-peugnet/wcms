@@ -21,7 +21,7 @@
 
 
 
-                        <fieldset>
+                        <fieldset data-default="<?= $opt->isdefault('limit') ? '1' : '0' ?>">
                             <legend>Sort</legend>
                             <select name="sortby" id="sortby">
                                 <?php
@@ -34,6 +34,9 @@
                             <input type="radio" id="asc" name="order" value="1" <?= $opt->order() == '1' ? "checked" : "" ?> /><label for="asc">ascending</label>
                             </br>
                             <input type="radio" id="desc" name="order" value="-1" <?= $opt->order() == '-1' ? "checked" : "" ?> /><label for="desc">descending</label>
+                            <br>
+                            <input type="number" name="limit" id="limit" value="<?= $opt->limit() ?>" min="0" max="9999">
+                            <label for="limit">limit</label>
 
                         </fieldset>
 
@@ -53,15 +56,24 @@
 
 
 
-                        <fieldset data-default="<?= $opt->isdefault('tagfilter') ? '1' : '0' ?>">
+                        <fieldset data-default="<?= $opt->isdefault('tagfilter') && $opt->tagcompare() != 'EMPTY' ? '1' : '0' ?>">
                             <legend>Tag</legend>
+
+                            <input type="hidden" name="tagnot" value="0" <?= !$opt->tagnot() ? "checked" : '' ?>>
+                            <input type="checkbox" name="tagnot" id="tagnot" value="1" <?= $opt->tagnot() ? "checked" : '' ?>>
+                            <label for="tagnot">NOT</label>
+                            <br>
 
                             
                             <input type="radio" id="tag_OR" name="tagcompare" value="OR" ' . <?= $opt->tagcompare() == "OR" ? "checked" : "" ?> >
                             <label for="tag_OR">OR</label>
                             <input type="radio" id="tag_AND" name="tagcompare" value="AND" <?= $opt->tagcompare() == "AND" ? "checked" : "" ?>>
                             <label for="tag_AND">AND</label>
+                            <input type="radio" id="tag_EMPTY" name="tagcompare" value="EMPTY" <?= $opt->tagcompare() == "EMPTY" ? "checked" : "" ?>>
+                            <label for="tag_EMPTY">EMPTY</label>
                             
+                            <hr>
+
                             <ul>
                                 <?php foreach ($opt->taglist() as $tagfilter => $count) { ?>
                                     <li>
@@ -73,7 +85,7 @@
                                             <?= in_array($tagfilter, $opt->tagfilter()) ? 'checked' : '' ?>
                                         />
                                         <label for="tag_<?= $tagfilter ?>">
-                                            <?= $tagfilter ?>
+                                            <span class="list-label"><?= $tagfilter ?></span>
                                             <span class="counter tag_<?= $tagfilter ?>"><?= $count ?></span>
                                         </label>
                                     </li>
@@ -85,12 +97,16 @@
 
 
 
-                        <fieldset data-default="<?= $opt->isdefault('authorfilter') ? '1' : '0' ?>">
+                        <fieldset data-default="<?= $opt->isdefault('authorfilter') && $opt->authorcompare() !== 'EMPTY' ? '1' : '0' ?>">
                             <legend>Author(s)</legend>
                                     
                             
-                            <input type="radio" id="author_OR" name="authorcompare" value="OR" ' . <?= $opt->authorcompare() == "OR" ? "checked" : "" ?>><label for="author_OR">OR</label>
-                            <input type="radio" id="author_AND" name="authorcompare" value="AND" <?= $opt->authorcompare() == "AND" ? "checked" : "" ?>><label for="author_AND">AND</label>
+                            <input type="radio" id="author_OR" name="authorcompare" value="OR" ' . <?= $opt->authorcompare() == "OR" ? "checked" : "" ?>>
+                            <label for="author_OR">OR</label>
+                            <input type="radio" id="author_AND" name="authorcompare" value="AND" <?= $opt->authorcompare() == "AND" ? "checked" : "" ?>>
+                            <label for="author_AND">AND</label>
+                            <input type="radio" id="author_EMPTY" name="authorcompare" value="EMPTY" <?= $opt->authorcompare() == "EMPTY" ? "checked" : "" ?>>
+                            <label for="author_EMPTY">EMPTY</label>
                             
                             <ul>
                                 <?php foreach ($opt->authorlist() as $authorfilter => $count) { ?>
@@ -103,7 +119,10 @@
                                             value="<?= $authorfilter ?>"
                                             <?= in_array($authorfilter, $opt->authorfilter()) ? 'checked' : '' ?>
                                         />
-                                        <label for="author_<?= $authorfilter ?>"><?= $authorfilter ?> (<?= $count ?>)</label>
+                                        <label for="author_<?= $authorfilter ?>">
+                                            <span class="list-label"><?= $authorfilter ?></span>
+                                            <span class="counter"><?= $count ?></span>
+                                        </label>
                                     </li>
                                 <?php } ?>
                             </ul>
@@ -146,21 +165,17 @@
 
                         
 
-                        <fieldset data-default="<?= $opt->isdefault('invert') && $opt->isdefault('limit') ? '1' : '0' ?>">
+                        <fieldset data-default="<?= $opt->isdefault('invert') ? '1' : '0' ?>">
                             <legend>Other</legend>
 
                             
 
-                        <?php
-                        if ($opt->invert() == 1) {
-                            echo '<input type="checkbox" name="invert" value="1" id="invert" checked>';
-                        } else {
-                            echo '<input type="checkbox" name="invert" value="1" id="invert">';
-                        }
-                        echo '<label for="invert">invert</></br>';
-                        ?>
-                            <input type="number" name="limit" id="limit" value="<?= $opt->limit() ?>" min="0" max="9999">
-                            <label for="limit">limit</label>
+                        <input type="hidden" name="invert" value="0" <?= !$opt->invert() ? 'checked' : '' ?>>
+                        <input type="checkbox" name="invert" value="1" id="invert" <?= $opt->invert() ? 'checked' : '' ?>>
+
+                        <label for="invert">invert</></br>
+
+
                             
                         </fieldset>
 

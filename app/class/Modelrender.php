@@ -367,7 +367,7 @@ class Modelrender extends Modelpage
         $text = $this->media($text);
 
         $text = $this->summary($text);
-
+        $text = $this->authors($text);
         $text = $this->wurl($text);
         $text = $this->wikiurl($text);
 
@@ -550,7 +550,7 @@ class Modelrender extends Modelpage
      * @param string $text Input text to scan
      * @param string $include word to match
      *
-     * @return array $matches Ordered array containing an array of `fullmatch` and `filter`
+     * @return array Ordered array containing an array of `fullmatch` and `filter`
      */
     public function match(string $text, string $include): array
     {
@@ -692,6 +692,19 @@ class Modelrender extends Modelpage
     }
 
     /**
+     * Replace `%AUTHORS%` with a rendered list of authors
+     */
+    public function authors(string $text): string
+    {
+        $page = $this->page;
+        return preg_replace_callback("~\%AUTHORS\%~", function () use ($page) {
+            $usermanager = new Modeluser();
+            $users = $usermanager->userlistbyid($page->authors());
+            return $this->userlist($users);
+        }, $text);
+    }
+
+    /**
      * Autolink Function : transform every word of more than $limit characters in internal link
      *
      * @param string $text The input text to be converted
@@ -752,6 +765,21 @@ class Modelrender extends Modelpage
         }
         $html = "<span class=\"user user-$id\" data-user-id=\"$id\">$html</span>";
         return $html;
+    }
+
+    /**
+     * Render a list of Users as a HTML <ul> that may contain links
+     *
+     * @param User[] $users     List of User
+     * @return string           List of user in HTML
+     */
+    public function userlist(array $users): string
+    {
+        $html = "";
+        foreach ($users as $user) {
+            $html .= "<li>\n" . $this->user($user) . "\n</li>";
+        }
+        return "<ul class=\"userlist\">\n$html\n</ul>";
     }
 
 

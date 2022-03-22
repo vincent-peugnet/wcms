@@ -290,16 +290,20 @@ class Modelpage extends Modeldb
      *
      * @return bool                     true if Page pass test, otherwise false
      */
-    public function ftag(Page $page, array $tagchecked, string $tagcompare = "OR"): bool
+    public function ftag(Page $page, array $tagchecked, string $tagcompare = Opt::OR, bool $tagnot = false): bool
     {
+        if ($tagcompare === Opt::EMPTY) {
+            return $tagnot xor empty($page->tag());
+        }
         if (empty($tagchecked)) {
             return true;
         } else {
-            if ($tagcompare == 'OR') {
+            if ($tagcompare === Opt::OR) {
                 $inter = (array_intersect($page->tag('array'), $tagchecked));
-                return (!empty($inter));
-            } elseif ($tagcompare == 'AND') {
-                return (!array_diff($tagchecked, $page->tag('array')));
+                return $tagnot xor !empty($inter);
+            } elseif ($tagcompare === Opt::AND) {
+                $diff = !array_diff($tagchecked, $page->tag('array'));
+                return $tagnot xor !empty($diff);
             }
             return false;
         }
@@ -313,15 +317,18 @@ class Modelpage extends Modeldb
      *
      * @return bool                     true if Page pass test, otherwise false
      */
-    public function fauthor(Page $page, array $authorchecked, string $authorcompare = "OR"): bool
+    public function fauthor(Page $page, array $authorchecked, string $authorcompare = Opt::OR): bool
     {
+        if ($authorcompare === Opt::EMPTY) {
+            return empty($page->authors());
+        }
         if (empty($authorchecked)) {
             return true;
         } else {
-            if ($authorcompare == 'OR') {
+            if ($authorcompare === Opt::OR) {
                 $inter = (array_intersect($page->authors('array'), $authorchecked));
                 return (!empty($inter));
-            } elseif ($authorcompare == 'AND') {
+            } elseif ($authorcompare === Opt::AND) {
                 return (!array_diff($authorchecked, $page->authors('array')));
             }
             return false;

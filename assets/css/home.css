@@ -181,12 +181,33 @@ main.home nav fieldset[data-default="0"] {
 
 main.home nav legend {
     font-weight: bold;
+    width: 100%;
+    background-color: #bdbdbd;
 }
 
 #home2table a.linkto {
     font-family: monospace;
     font-size: medium;
     background-color: #7b97b9;
+}
+
+nav li {
+    max-width: 210px;
+}
+
+nav fieldset {
+    padding: 0;
+    margin: 5px;
+    border: none;
+    margin: 15px 0;
+}
+
+nav span.list-label {
+    width: 74%;
+    text-overflow: ellipsis;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: text-bottom;
 }
 
 nav span.counter {
@@ -487,7 +508,7 @@ article#manual a:hover {
 
 
 
-main.info pre {width: fit-content;padding: 1%;background-color: hsla(213, 31%, 20%, 1);white-space: pre-wrap;margin: 1%;}
+main.info pre {padding: 1%;background-color: hsla(213, 31%, 20%, 1);white-space: pre-wrap;margin: 1%;}
 
 main.info blockquote {
     padding: 6px 12px;
@@ -690,6 +711,7 @@ main section {
 main nav {
     display: flex;
     flex-direction: column;
+    width: 230px;
 }
 
 
@@ -764,6 +786,10 @@ footer {
     
     td.edit, td.read, td.delete, td.download {
         font-size: 1.3em;
+    }
+
+    main nav {
+        width: 100%;
     }
 
 }

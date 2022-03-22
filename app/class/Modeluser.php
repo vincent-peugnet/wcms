@@ -55,8 +55,11 @@ class Modeluser extends Modeldb
         return $userlist;
     }
 
-
-    public function pagelistbyid(array $idlist = [])
+    /**
+     * @param string[] $idlist      List of user ID
+     * @return User[]               List of User
+     */
+    public function userlistbyid(array $idlist = []): array
     {
         $userdatalist = $this->repo->query()
             ->where('__id', 'IN', $idlist)
