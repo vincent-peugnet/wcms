@@ -136,7 +136,7 @@ abstract class Model
     public const ID_REGEX                   = "%[^a-z0-9-_]%";
     public const MAX_ID_LENGTH              = 64;
     public const PASSWORD_MIN_LENGTH        = 4;
-    public const PASSWORD_MAX_LENGTH        = 64;
+    public const PASSWORD_MAX_LENGTH        = 128;
     public const MAX_COOKIE_CONSERVATION    = 365;
     public const MAX_QUERY_LENGH            = 256;
 
