@@ -191,6 +191,15 @@ main.home nav legend {
     background-color: #7b97b9;
 }
 
+main.home a.bookmark[data-current="1"] {
+    background-color: darkgrey;
+}
+
+main.home a.bookmark {
+    display: block;
+}
+
+
 nav li {
     max-width: 210px;
 }
@@ -387,19 +396,6 @@ main.font table#fontlist {
 #topbar a.currentpage {
     text-decoration: underline;
 }
-
-#topbar a.bookmark[data-current="1"] {
-    background: #ababab6b;
-    border-color: #b3b3b3;
-}
-
-#topbar a.bookmark {
-    border-radius: 15px;
-    padding: 1px 5px;
-    border: 1px solid #ff000000;
-}
-
-
 
 img.icon {
     height: 12px;

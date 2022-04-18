@@ -250,36 +250,24 @@
     <details id="bookmarks">
         <summary>Bookmarks</summary>
         <div class="submenu">
-            <h2>Personnal</h2>
-            <?php if(!empty($user->bookmark())) { ?>
-            <form action="<?= $this->url('profilebookmark') ?>" method="post">
-            <ul>
-            <?php foreach ($user->bookmark() as $bookmark) { ?>
-                <?php if($bookmark->route() === 'home') { ?>
-                <li>
-                    <input type="checkbox" name="id[]" value="<?= $bookmark->id() ?>" id="bookmark_<?= $bookmark->id() ?>">
-                    <label for="bookmark_<?= $bookmark->id() ?>" title="<?= $bookmark->query() ?>"><?= $bookmark->id() ?></label>
-                </li>
-                <?php } ?>
-            <?php } ?>
-            </ul>
-            <input type="hidden" name="action" value="del">
-            <input type="hidden" name="route" value="home">
-            <input type="hidden" name="user" value="<?= $user->id() ?>">
-            <input type="submit" value="delete selected">
-            </form>
-            <?php } else { ?>
-                <p>This will store your filters settings as a Bookmark that only you can use.</p>
-            <?php } ?>
-            <form action="<?= $this->url('profilebookmark') ?>" method="post">
-                <select name="icon" id="icon">
-                    <?= options(Wcms\Model::BOOKMARK_ICONS, null, true) ?>
-                </select>
-                <input type="text" name="id" placeholder="bookmark id" minlength="1" maxlength="16" required>
-                <input type="hidden" name="query" value="<?= $queryaddress ?>">
+            <h2>New bookmark</h2>
+            <form action="<?= $this->url('bookmarkadd') ?>" method="post">
+                <p>
+                    Save those filters as a bookmark
+                </p>
                 <input type="hidden" name="route" value="home">
-                <input type="hidden" name="user" value="<?= $user->id() ?>">
-                <input type="submit" name="action" value="add">
+                <input type="hidden" name="query" value="<?= $queryaddress ?>">
+                <input type="text" name="id" id="bookmarkid">
+                <label for="bookmarkid">id</label>
+                <br>
+                <select name="icon" id="bookmarkicon">
+                    <?php foreach (Wcms\Model::BOOKMARK_ICONS as $icon) { ?>
+                        <option value="<?= $icon ?>"><?= $icon ?></option>
+                    <?php } ?>
+                </select>
+                <label for="bookmarkicon">icon</label>
+                <br>
+                <input type="submit" value="create">
             </form>
         </div>
     </details>

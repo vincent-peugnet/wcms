@@ -30,7 +30,6 @@ abstract class Config
     protected static $homepage = 'default';
     protected static $homeredirect = null;
     protected static $interfacecss = null;
-    protected static $bookmark = [];
     protected static $secretkey = null;
     protected static $sentrydsn = '';
     /** @var string|false $debug */
@@ -277,11 +276,6 @@ abstract class Config
         return self::$interfacecss;
     }
 
-    public static function bookmark()
-    {
-        return self::$bookmark;
-    }
-
     public static function secretkey()
     {
         return self::$secretkey;
@@ -483,13 +477,6 @@ abstract class Config
         }
     }
 
-    public static function setbookmark($bookmark)
-    {
-        if (is_array($bookmark)) {
-            self::$bookmark = $bookmark;
-        }
-    }
-
     public static function setsecretkey($secretkey)
     {
         if (is_string($secretkey)) {
@@ -530,26 +517,5 @@ abstract class Config
     public static function setdisablejavascript($disablejavascript)
     {
         self::$disablejavascript = boolval($disablejavascript);
-    }
-
-
-
-
-    // ______________________________________ F U N _________________________________________
-
-    public static function addbookmark(string $id, string $query)
-    {
-        if (!empty($id) && !empty($query)) {
-            $id = Model::idclean($id);
-            $id = substr($id, 0, 16);
-            self::$bookmark[$id] = $query;
-        }
-    }
-
-    public static function deletebookmark(string $id)
-    {
-        if (key_exists($id, self::$bookmark)) {
-            unset(self::$bookmark[$id]);
-        }
     }
 }

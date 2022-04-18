@@ -31,9 +31,6 @@ class User extends Item
 
     protected $expiredate = false;
 
-    /** @var Bookmark[] Associative array as `id => Bookmark`*/
-    protected $bookmark = [];
-
     /** @var array sessions */
     protected array $sessions = [];
 
@@ -125,11 +122,6 @@ class User extends Item
                 }
             }
         }
-    }
-
-    public function bookmark()
-    {
-        return $this->bookmark;
     }
 
     public function sessions()
@@ -244,27 +236,6 @@ class User extends Item
                 $expiredate,
                 new DateTimeZone('Europe/Paris')
             );
-        }
-    }
-
-    public function setbookmark($bookmark)
-    {
-        if (is_array($bookmark)) {
-            $bookmark = array_map(
-                function ($datas) {
-                    if (is_array($datas)) {
-                        try {
-                            return new Bookmark($datas);
-                        } catch (RuntimeException $e) {
-                            return false;
-                        }
-                    } else {
-                        return false;
-                    }
-                },
-                $bookmark
-            );
-            $this->bookmark = array_filter($bookmark);
         }
     }
 
@@ -392,19 +363,5 @@ class User extends Item
     public function connectcounter()
     {
         $this->connectcount ++;
-    }
-
-    public function addbookmark(Bookmark $bookmark)
-    {
-        if (!empty($bookmark->id()) && !empty($bookmark->query()) && !empty($bookmark->route())) {
-            $this->bookmark[$bookmark->id()] = $bookmark;
-        }
-    }
-
-    public function deletebookmark(string $id)
-    {
-        if (key_exists($id, $this->bookmark)) {
-            unset($this->bookmark[$id]);
-        }
     }
 }

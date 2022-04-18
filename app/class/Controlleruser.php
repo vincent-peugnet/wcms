@@ -2,8 +2,6 @@
 
 namespace Wcms;
 
-use RuntimeException;
-
 class Controlleruser extends Controller
 {
     public function __construct($router)
@@ -23,7 +21,7 @@ class Controlleruser extends Controller
 
     public function add()
     {
-        if (isset($_POST['id'])) {
+        if ($this->user->isadmin() && isset($_POST['id'])) {
             $user = new User($_POST);
             if (empty($user->id()) || $this->usermanager->get($user)) {
                 $this->routedirectget('user', ['error' => 'wrong_id']);

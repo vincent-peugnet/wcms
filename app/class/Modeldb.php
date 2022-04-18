@@ -36,7 +36,7 @@ class Modeldb extends Model
     /**
      * List every IDs of a database
      *
-     * @return array of ID strings
+     * @return string[] array of ID strings
      */
     public function list(): array
     {

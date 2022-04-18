@@ -2,11 +2,9 @@
 
 namespace Wcms;
 
-use Exception;
 use JamesMoss\Flywheel\Document;
 use DateTimeImmutable;
 use DateTimeInterface;
-use LogicException;
 
 class Modelpage extends Modeldb
 {

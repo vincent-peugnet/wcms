@@ -34,19 +34,6 @@
 </span>
 
 
-<span id="shortcuts">
-    <?php foreach ($user->bookmark() as $bookmark) { ?>
-        <a
-            href="<?= $this->url($bookmark->route(), $bookmark->params(), $bookmark->query()) ?>"
-            data-current="<?= isset($queryaddress) && $bookmark->query() === $queryaddress ? '1' : '0' ?>"
-            class="bookmark"
-        >
-            <?= $bookmark->icon() ?>
-            <span> <?= $bookmark->id() ?></span>
-        </a>
-    <?php } ?>
-</span>
-
 
 <?php } ?>
 

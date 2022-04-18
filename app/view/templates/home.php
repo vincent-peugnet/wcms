@@ -22,6 +22,8 @@
 
 <main class="home">
 
+    <?php $this->insert('homebookmark', ['bookmarks' => $bookmarks, 'queryaddress' => $queryaddress]) ?>
+
 
     <?php $this->insert('homeopt', ['opt' => $opt, 'user' => $user, 'display' => $display]) ?>
 
@@ -275,35 +277,6 @@
         </div>
 
     </section>
-
-
-    <?php if($user->display()['bookmark'] && (!empty(Wcms\Config::bookmark()) || !empty($user->bookmark()))) { ?>
-
-    <section id="bookmark">
-        <div class="block">
-            <h2>Bookmarks</h2>
-            <div class="scroll">
-                <strong>Public</strong>
-                <ul>
-                    <?php foreach (Wcms\Config::bookmark() as $id => $query) { ?>
-                        <li>
-                            <a href="<?= $query ?>"><?= $id ?></a>
-                        </li>
-                    <?php } ?>
-                </ul>
-                <strong><?= $user->id() ?></strong>
-                <ul>
-                    <?php foreach ($user->bookmark() as $id => $bookmark) { ?>
-                        <li>
-                            <a href="<?= $bookmark->query() ?>"><?= $bookmark->icon() ?><?= $bookmark->id() ?></a>
-                        </li>
-                    <?php } ?>
-                </ul>
-            </section>
-        </div>
-    </nav>
-
-    <?php } ?>
 
 </main>
 

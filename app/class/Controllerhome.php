@@ -12,11 +12,14 @@ class Controllerhome extends Controllerpage
     protected $opt;
     /** @var Optlist */
     protected $optlist;
+    /** @var Modelbookmark */
+    protected $bookmarkmanager;
 
     public function __construct($render)
     {
         parent::__construct($render);
         $this->modelhome = new Modelhome();
+        $this->bookmarkmanager = new Modelbookmark();
     }
 
 
@@ -45,6 +48,8 @@ class Controllerhome extends Controllerpage
 
 
             $vars['columns'] = $this->modelhome->setcolumns($this->user->columns());
+
+            $vars['bookmarks'] = $this->bookmarkmanager->getlister();
 
             $vars['faviconlist'] = $this->mediamanager->listfavicon();
             $vars['thumbnaillist'] = $this->mediamanager->listthumbnail();

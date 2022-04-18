@@ -10,7 +10,7 @@ class Bookmark extends Item
     protected $id;
     /** @var string $query */
     protected $query = '';
-    /** @var string $route Can be `page|media` */
+    /** @var string $route Can be `home|media` */
     protected $route;
     /** @var array $params*/
     protected $params = [];
@@ -20,7 +20,7 @@ class Bookmark extends Item
     /**
      * @throws RuntimeException
      */
-    public function __construct(array $datas = [])
+    public function __construct($datas = [])
     {
         $this->hydrateexception($datas);
     }
