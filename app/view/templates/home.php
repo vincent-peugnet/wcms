@@ -22,7 +22,7 @@
 
 <main class="home">
 
-    <?php $this->insert('homebookmark', ['bookmarks' => $bookmarks, 'queryaddress' => $queryaddress]) ?>
+    <?php $this->insert('homebookmark', ['publicbookmarks' => $publicbookmarks, 'personalbookmarks' => $personalbookmarks, 'queryaddress' => $queryaddress]) ?>
 
 
     <?php $this->insert('homeopt', ['opt' => $opt, 'user' => $user, 'display' => $display]) ?>

@@ -303,12 +303,22 @@ class Modelhome extends Modelpage
     /**
      * @param Bookmark[] $bookmarks     List of bookmarks objects
      * @param string $query             Query address to compare
+     * @param User $user                User browsing home
      * @return Bookmark[]               List of all bookmarks that match query
      */
-    public function matchedbookmarks(array $bookmarks, string $query): array
+    public function matchedbookmarks(array $bookmarks, string $query, User $user): array
     {
-        return array_filter($bookmarks, function (Bookmark $bookmark) use ($query) {
-            return $bookmark->query() === $query;
+        return array_filter($bookmarks, function (Bookmark $bookmark) use ($query, $user) {
+            return (
+                $bookmark->query() === $query &&
+                (
+                    !$bookmark->ispublic() &&
+                    $bookmark->user() === $user->id()
+                    ||
+                    $user->isadmin() &&
+                    $bookmark->ispublic()
+                )
+                );
         });
     }
 }

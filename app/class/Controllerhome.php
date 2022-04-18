@@ -36,12 +36,15 @@ class Controllerhome extends Controllerpage
 
             $vars['colors'] = new Colors(Model::COLORS_FILE, $this->opt->taglist());
 
-            $bookmarks = $this->bookmarkmanager->getlister();
+            $publicbookmarks = $this->bookmarkmanager->getlisterpublic();
+            $personalbookmarks = $this->bookmarkmanager->getlisterbyuser($this->user);
             $queryaddress = $this->opt->getaddress();
+            $bookmarks = array_merge($publicbookmarks, $personalbookmarks);
 
-            $vars['bookmarks'] = $bookmarks;
+            $vars['publicbookmarks'] = $publicbookmarks;
+            $vars['personalbookmarks'] = $personalbookmarks;
             $vars['queryaddress'] = $queryaddress;
-            $vars['matchedbookmarks'] = $this->modelhome->matchedbookmarks($bookmarks, $queryaddress);
+            $vars['matchedbookmarks'] = $this->modelhome->matchedbookmarks($bookmarks, $queryaddress, $this->user);
 
             $deepsearch = $this->deepsearch();
 

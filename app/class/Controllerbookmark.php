@@ -16,15 +16,19 @@ class Controllerbookmark extends Controller
 
     public function add()
     {
-        if ($this->user->isadmin() && isset($_POST['id'])) {
+        if ($this->user->iseditor() && isset($_POST['id'])) {
             try {
                 $bookmark = new Bookmark($_POST);
-                $bookmark->setname($_POST['id']);
-                $this->bookmarkmanager->add($bookmark);
-                Model::sendflashmessage(
-                    "Bookmark \"" . $bookmark->id() . "\" succesfully created",
-                    Model::FLASH_SUCCESS
-                );
+                if ($this->bookmarkmanager->exist($bookmark)) {
+                }
+                if (!$bookmark->ispublic() && $this->user->id() === $bookmark->user() || $this->user->isadmin()) {
+                    $bookmark->setname($_POST['id']);
+                    $this->bookmarkmanager->add($bookmark);
+                    Model::sendflashmessage(
+                        "Bookmark \"" . $bookmark->id() . "\" succesfully created",
+                        Model::FLASH_SUCCESS
+                    );
+                }
             } catch (RuntimeException $e) {
                 Model::sendflashmessage("Error while creating bookmark : " . $e->getMessage(), Model::FLASH_ERROR);
             }
@@ -34,13 +38,16 @@ class Controllerbookmark extends Controller
 
     public function delete()
     {
-        if ($this->user->isadmin() && isset($_POST['id'])) {
+        if ($this->user->iseditor() && isset($_POST['id'])) {
             if (!$_POST['confirmdelete']) {
                 Model::sendflashmessage("Confirm delete has not been checked", Model::FLASH_WARNING);
             } else {
                 try {
                     $bookmark = $this->bookmarkmanager->get($_POST['id']);
-                    $this->bookmarkmanager->delete($bookmark);
+                    if (!$bookmark->ispublic() && $this->user->id() === $bookmark->user() || $this->user->isadmin()) {
+                        $this->bookmarkmanager->delete($bookmark);
+                        Model::sendflashmessage("Bookmark successfully deleted", Model::FLASH_SUCCESS);
+                    }
                 } catch (RuntimeException $e) {
                     Model::sendflashmessage(
                         "Error while trying to delete bookmark: " . $e->getMessage(),
@@ -54,14 +61,16 @@ class Controllerbookmark extends Controller
 
     public function update()
     {
-        if ($this->user->isadmin() && isset($_POST['id'])) {
+        if ($this->user->iseditor() && isset($_POST['id'])) {
             try {
                 $bookmark = $this->bookmarkmanager->get($_POST['id']);
-                $bookmark->hydrateexception($_POST);
-                $this->bookmarkmanager->add($bookmark);
-                Model::sendflashmessage("Bookmark successfully updated", Model::FLASH_SUCCESS);
+                if (!$bookmark->ispublic() && $this->user->id() === $bookmark->user() || $this->user->isadmin()) {
+                    $bookmark->hydrateexception($_POST);
+                    $this->bookmarkmanager->update($bookmark);
+                    Model::sendflashmessage("Bookmark successfully updated", Model::FLASH_SUCCESS);
+                }
             } catch (RuntimeException $e) {
-                Model::sendflashmessage("Impossible to edit bookmark: " . $e->getMessage());
+                Model::sendflashmessage("Impossible to update bookmark: " . $e->getMessage());
             }
         }
         $this->routedirect($_POST['route'] ?? 'home');

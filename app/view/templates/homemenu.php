@@ -268,6 +268,13 @@
                 </select>
                 <label for="bookmark_icon">icon</label>
                 <br>
+                <select name="user" id="bookmark_type">
+                    <?php if($user->isadmin()) { ?>
+                        <option value="">public</option>
+                    <?php } ?>
+                    <option value="<?= $user->id() ?>">personal</option>
+                </select>
+                <br>
                 <input type="submit" value="create">
             </form>
             <?php } else { ?>

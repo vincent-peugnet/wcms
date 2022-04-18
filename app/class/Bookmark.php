@@ -20,6 +20,8 @@ class Bookmark extends Item
     protected $params = [];
     /** @var string $icon associated emoji */
     protected $icon = '⭐';
+    /** @var string $user user owning the bookmark */
+    protected string $user = '';
 
     /**
      * @throws RuntimeException
@@ -36,6 +38,11 @@ class Bookmark extends Item
         $this->setquery($query);
         $this->setparams($params);
         $this->seticon($icon);
+    }
+
+    public function ispublic(): bool
+    {
+        return empty($this->user);
     }
 
 
@@ -77,6 +84,11 @@ class Bookmark extends Item
     public function icon()
     {
         return $this->icon;
+    }
+
+    public function user(): string
+    {
+        return $this->user;
     }
 
     // _____________________________ S E T __________________________________
@@ -142,5 +154,14 @@ class Bookmark extends Item
         if (is_string($icon)) {
             $this->icon = substr(strip_tags($icon), 0, 16);
         }
+    }
+
+    public function setuser($user)
+    {
+        if (is_string($user)) {
+            $this->user = Model::idclean($user);
+            return true;
+        }
+        return false;
     }
 }
