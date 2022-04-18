@@ -8,6 +8,10 @@ class Bookmark extends Item
 {
     /** @var string $id Bookmark ID */
     protected $id;
+    /** @var string $name Name to be displayed */
+    protected string $name = '';
+    /** @var string $description used in title */
+    protected string $description = '';
     /** @var string $query */
     protected $query = '';
     /** @var string $route Can be `home|media` */
@@ -45,6 +49,16 @@ class Bookmark extends Item
         return $this->id;
     }
 
+    public function name(): string
+    {
+        return $this->name;
+    }
+
+    public function description(): string
+    {
+        return $this->description;
+    }
+
     public function query()
     {
         return $this->query;
@@ -77,6 +91,26 @@ class Bookmark extends Item
             }
         }
         return false;
+    }
+
+    public function setname(string $name): bool
+    {
+        if (strlen($name) < self::LENGTH_SHORT_TEXT) {
+            $this->name = strip_tags(trim($name));
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function setdescription(string $description): bool
+    {
+        if (strlen($description) < self::LENGTH_SHORT_TEXT) {
+            $this->description = strip_tags(trim($description));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function setquery($query)

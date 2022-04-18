@@ -12,8 +12,9 @@
                         href="<?= $this->url($bookmark->route(), $bookmark->params(), $bookmark->query()) ?>"
                         data-current="<?= isset($queryaddress) && $bookmark->query() === $queryaddress ? '1' : '0' ?>"
                         class="bookmark"
+                        title="<?= $bookmark->description() ?>"
                     >
-                    <?= $bookmark->icon() ?> <?= $bookmark->id() ?>
+                    <?= $bookmark->icon() ?> <?= empty($bookmark->name()) ? $bookmark->id() : $bookmark->name() ?>
                     </a>
                 </li>
             <?php } ?>

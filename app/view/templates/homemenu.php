@@ -276,9 +276,10 @@
                     <strong>
                         <?= $bookmark->id() ?>
                     </strong>
-                    <h2>Edit</h2>
-                    <form action="<?= $this->url('bookmarkedit') ?>">
+                    <h2>Update</h2>
+                    <form action="<?= $this->url('bookmarkupdate') ?>" method="post">
                         <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
+                        <input type="hidden" name="route" value="<?= $bookmark->route() ?>">
                         <select name="icon" id="bookmark_icon">
                             <?php foreach (Wcms\Model::BOOKMARK_ICONS as $icon) { ?>
                                 <option value="<?= $icon ?>" <?= $icon === $bookmark->icon() ? 'selected' : '' ?>><?= $icon ?></option>
@@ -286,13 +287,13 @@
                         </select>
                         <label for="bookmark_icon">icon</label>
                         <br>
-                        <input type="text" name="name" id="bookmark_name">
+                        <input type="text" name="name" id="bookmark_name" value="<?= $bookmark->name() ?>" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>">
                         <label for="bookmark_name">name</label>
                         <br>
-                        <input type="text" name="name" id="bookmark_description">
+                        <input type="text" name="description" id="bookmark_description" value="<?= $bookmark->description() ?>" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>">
                         <label for="bookmark_description">description</label>
                         <br>
-                        <input type="submit" value="edit">
+                        <input type="submit" value="update">
                     </form>
                     <h2>Delete</h2>
                     <form action="<?= $this->url('bookmarkdelete') ?>" method="post">

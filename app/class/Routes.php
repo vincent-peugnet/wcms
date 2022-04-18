@@ -27,7 +27,7 @@ class Routes
             ['POST', '/columns', 'Controllerhome#columns', 'homecolumns'],
             ['POST', '/colors', 'Controllerhome#colors', 'homecolors'],
             ['POST', '/bookmark/add', 'Controllerbookmark#add', 'bookmarkadd'],
-            ['POST', '/bookmark/edit', 'Controllerbookmark#edit', 'bookmarkedit'],
+            ['POST', '/bookmark/update', 'Controllerbookmark#update', 'bookmarkupdate'],
             ['POST', '/bookmark/delete', 'Controllerbookmark#delete', 'bookmarkdelete'],
             ['GET', '//renderall', 'Controllerhome#renderall', 'homerenderall'],
             ['POST', '/multi', 'Controllerhome#multi', 'multi'],

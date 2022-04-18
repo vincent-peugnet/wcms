@@ -19,6 +19,7 @@ class Controllerbookmark extends Controller
         if ($this->user->isadmin() && isset($_POST['id'])) {
             try {
                 $bookmark = new Bookmark($_POST);
+                $bookmark->setname($_POST['id']);
                 $this->bookmarkmanager->add($bookmark);
                 Model::sendflashmessage(
                     "Bookmark \"" . $bookmark->id() . "\" succesfully created",
@@ -48,6 +49,21 @@ class Controllerbookmark extends Controller
                 }
             }
         }
-        $this->routedirect($_POST['route']);
+        $this->routedirect($_POST['route'] ?? 'home');
+    }
+
+    public function update()
+    {
+        if ($this->user->isadmin() && isset($_POST['id'])) {
+            try {
+                $bookmark = $this->bookmarkmanager->get($_POST['id']);
+                $bookmark->hydrateexception($_POST);
+                $this->bookmarkmanager->add($bookmark);
+                Model::sendflashmessage("Bookmark successfully updated", Model::FLASH_SUCCESS);
+            } catch (RuntimeException $e) {
+                Model::sendflashmessage("Impossible to edit bookmark: " . $e->getMessage());
+            }
+        }
+        $this->routedirect($_POST['route'] ?? 'home');
     }
 }
