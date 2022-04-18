@@ -36,6 +36,12 @@ class Controllerhome extends Controllerpage
 
             $vars['colors'] = new Colors(Model::COLORS_FILE, $this->opt->taglist());
 
+            $bookmarks = $this->bookmarkmanager->getlister();
+            $queryaddress = $this->opt->getaddress();
+
+            $vars['bookmarks'] = $bookmarks;
+            $vars['queryaddress'] = $queryaddress;
+            $vars['matchedbookmarks'] = $this->modelhome->matchedbookmarks($bookmarks, $queryaddress);
 
             $deepsearch = $this->deepsearch();
 
@@ -49,7 +55,6 @@ class Controllerhome extends Controllerpage
 
             $vars['columns'] = $this->modelhome->setcolumns($this->user->columns());
 
-            $vars['bookmarks'] = $this->bookmarkmanager->getlister();
 
             $vars['faviconlist'] = $this->mediamanager->listfavicon();
             $vars['thumbnaillist'] = $this->mediamanager->listthumbnail();
@@ -59,7 +64,6 @@ class Controllerhome extends Controllerpage
             $vars['deepsearch'] = $deepsearch['regex'];
             $vars['searchopt'] = $deepsearch['searchopt'];
             $vars['display'] = $_GET['display'] ?? 'list';
-            $vars['queryaddress'] = $this->opt->getaddress();
 
             if ($vars['display'] === 'map') {
                 $vars['layout'] = $_GET['layout'] ?? 'cose-bilkent';

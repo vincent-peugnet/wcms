@@ -299,4 +299,16 @@ class Modelhome extends Modelpage
         }
         return $showcols;
     }
+
+    /**
+     * @param Bookmark[] $bookmarks     List of bookmarks objects
+     * @param string $query             Query address to compare
+     * @return Bookmark[]               List of all bookmarks that match query
+     */
+    public function matchedbookmarks(array $bookmarks, string $query): array
+    {
+        return array_filter($bookmarks, function (Bookmark $bookmark) use ($query) {
+            return $bookmark->query() === $query;
+        });
+    }
 }

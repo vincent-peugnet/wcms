@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use JamesMoss\Flywheel\Document;
+use RuntimeException;
 
 class Modeluser extends Modeldb
 {

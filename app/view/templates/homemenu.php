@@ -247,9 +247,10 @@
 
 
 
-    <details id="bookmarks">
-        <summary>Bookmarks</summary>
+    <details id="bookmark">
+        <summary>Bookmark</summary>
         <div class="submenu">
+            <?php if(empty($matchedbookmarks)) { ?>
             <h2>New bookmark</h2>
             <form action="<?= $this->url('bookmarkadd') ?>" method="post">
                 <p>
@@ -257,18 +258,54 @@
                 </p>
                 <input type="hidden" name="route" value="home">
                 <input type="hidden" name="query" value="<?= $queryaddress ?>">
-                <input type="text" name="id" id="bookmarkid">
-                <label for="bookmarkid">id</label>
+                <input type="text" name="id" id="bookmark_id">
+                <label for="bookmark_id">id</label>
                 <br>
-                <select name="icon" id="bookmarkicon">
+                <select name="icon" id="bookmark_icon">
                     <?php foreach (Wcms\Model::BOOKMARK_ICONS as $icon) { ?>
                         <option value="<?= $icon ?>"><?= $icon ?></option>
                     <?php } ?>
                 </select>
-                <label for="bookmarkicon">icon</label>
+                <label for="bookmark_icon">icon</label>
                 <br>
                 <input type="submit" value="create">
             </form>
+            <?php } else { ?>
+                <?php foreach ($matchedbookmarks as $bookmark) { ?>
+                    <?= $bookmark->icon() ?>
+                    <strong>
+                        <?= $bookmark->id() ?>
+                    </strong>
+                    <h2>Edit</h2>
+                    <form action="<?= $this->url('bookmarkedit') ?>">
+                        <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
+                        <select name="icon" id="bookmark_icon">
+                            <?php foreach (Wcms\Model::BOOKMARK_ICONS as $icon) { ?>
+                                <option value="<?= $icon ?>" <?= $icon === $bookmark->icon() ? 'selected' : '' ?>><?= $icon ?></option>
+                            <?php } ?>
+                        </select>
+                        <label for="bookmark_icon">icon</label>
+                        <br>
+                        <input type="text" name="name" id="bookmark_name">
+                        <label for="bookmark_name">name</label>
+                        <br>
+                        <input type="text" name="name" id="bookmark_description">
+                        <label for="bookmark_description">description</label>
+                        <br>
+                        <input type="submit" value="edit">
+                    </form>
+                    <h2>Delete</h2>
+                    <form action="<?= $this->url('bookmarkdelete') ?>" method="post">
+                        <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
+                        <input type="hidden" name="route" value="<?= $bookmark->route() ?>">
+                        <input type="hidden" name="confirmdelete" value="0">
+                        <input type="checkbox" name="confirmdelete" id="bookmark_confirmdelete" value="1">
+                        <label for="bookmark_confirmdelete">confirm</label>
+                        <br>
+                        <input type="submit" value="delete">
+                    </form>
+                <?php } ?>
+            <?php } ?>
         </div>
     </details>
 
