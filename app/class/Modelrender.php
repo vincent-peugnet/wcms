@@ -3,10 +3,12 @@
 namespace Wcms;
 
 use AltoRouter;
+use DOMDocument;
 use Exception;
 use Http\Discovery\Exception\NotFoundException;
 use LogicException;
 use Michelf\MarkdownExtra;
+use RuntimeException;
 
 class Modelrender extends Modelpage
 {
@@ -372,9 +374,7 @@ class Modelrender extends Modelpage
         $text = $this->wurl($text);
         $text = $this->wikiurl($text);
 
-
-
-        $text = str_replace('href="http', "class=\"external\" $this->externallinkblank href=\"http", $text);
+        $text = $this->externallink($text);
 
         $text = $this->shortenurl($text);
 
@@ -382,6 +382,56 @@ class Modelrender extends Modelpage
 
         $text = $this->authenticate($text);
 
+        return $text;
+    }
+
+    /**
+     * Analyse and convert external links
+     */
+    public function externallink(string $text): string
+    {
+        $rich = true;
+        $text = preg_replace_callback('~href="(https?:\/\/(\S*))"~mU', function ($matches) use ($rich) {
+            $url = parse_url($matches[1]);
+            $scheme = $url['scheme'] ?? "";
+            $host = $url['host'] ?? "";
+            preg_match('~[^ .]+\.[^ .]+$~U', $host, $d);
+            $domain = $d[0] ?? "";
+            $site = "data-site=\"$domain\"";
+            $target = $this->externallinkblank;
+            $class = "\nclass=\"external\"\n";
+            $richdata = "";
+            if ($rich) {
+                try {
+                    $html = file_get_contents($matches[1]);
+                    
+                    preg_match('~<html[^<>]+lang="([a-zA-Z\-]{2,6})"~mU', $html, $l);
+                    $lang = $l[1] ?? "";
+                    preg_match('~<title>(.*)<\/title>~mU', $html, $t);
+                    $title = $t[1] ?? "";
+                    preg_match('~<link rel=".*icon.*".*href="(\S*)"~mU', $html, $f);
+                    $favicon = $f[1] ?? "";
+                    if (!empty($favicon) && !strstr($favicon, $scheme)) {
+                        $favicon = ltrim($favicon, "/");
+                        $favicon = $scheme . "://" . $host . "/" . $favicon;
+                    }
+                    preg_match('~<meta\s*name="description".*content="(.*)"~mU', $html, $d);
+                    $description = $d[1] ?? "";
+                    
+                    try {
+                        $flag = countryflag($lang);
+                    } catch (RuntimeException $e) {
+                        $flag = "";
+                    }
+                    $title = " title=\"$title\n$description\n$domain $flag\" ";
+                    $richdata = "data-description=\"$description\" $title data-icon=\"$favicon\" data-lang=\"$lang\" data-flag=\"$flag\" ";
+                } catch (Exception $e) {
+                    // abort
+                }
+            }
+            return "$target $class $site $richdata $matches[0]";
+        }, $text);
+        
         return $text;
     }
 
