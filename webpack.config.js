@@ -1,5 +1,4 @@
 const path = require('path');
-const PrettierPlugin = require('prettier-webpack-plugin');
 const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = (env) => {
@@ -47,7 +46,6 @@ module.exports = (env) => {
 			],
 		},
 		plugins: [
-			new PrettierPlugin(),
 		],
 		externals: {
 			'@sentry/browser': 'Sentry',
