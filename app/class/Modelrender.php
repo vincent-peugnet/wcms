@@ -737,7 +737,8 @@ class Modelrender extends Modelpage
                 $id = $matches[2];
             }
             $form = '<form action="' . $this->dirtopath('!co') . '" method="post">
-			<input type="password" name="pass" id="loginpass" placeholder="password">
+            <input type="text" name="user" id="loginuser" autofocus placeholder="user" required>
+			<input type="password" name="pass" id="loginpass" placeholder="password" required>
 			<input type="hidden" name="route" value="pageread/">
 			<input type="hidden" name="id" value="' . $id . '">
 			<input type="submit" name="log" value="login" id="button">

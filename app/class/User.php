@@ -21,7 +21,7 @@ class User extends Item
     protected string $url = "";
 
     /** @var int $cookie Conservation time */
-    protected int $cookie = 0;
+    protected int $cookie = 30;
 
     /** @var string[] $columns List of displayed columns */
     protected array $columns = ['title', 'datemodif', 'datecreation', 'secure', 'visitcount'];

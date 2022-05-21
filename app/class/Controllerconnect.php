@@ -42,17 +42,19 @@ class Controllerconnect extends Controller
     {
         if (!empty($_POST['pass']) && !empty($_POST['user'])) {
             $this->user = $this->usermanager->passwordcheck($_POST['user'], $_POST['pass']);
-            if (
-                $this->user != false
-                && (
-                    $this->user->expiredate() === false
-                    || $this->user->level() === 10
-                    || $this->user->expiredate('date') > $this->now
-                )
+            if ($this->user === false) {
+                Model::sendflashmessage("Wrong credentials", Model::FLASH_ERROR);
+            } elseif (
+                $this->user->expiredate() !== false &&
+                $this->user->expiredate('date') < $this->now &&
+                $this->user->level() < 10
             ) {
+                Model::sendflashmessage("Account expired", Model::FLASH_ERROR);
+            } else {
                 $this->user->connectcounter();
                 $this->usermanager->add($this->user);
                 $this->session->addtosession('user', $this->user->id());
+                Model::sendflashmessage("Successfully logged in as " . $this->user->id(), Model::FLASH_SUCCESS);
 
                 if (!empty($_POST['rememberme'])) {
                     if ($this->user->cookie() > 0) {

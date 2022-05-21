@@ -45,8 +45,8 @@
 
 
 <form action="<?= $this->url('log') ?>" method="post" id="connect">
-<input type="text" name="user" id="loginuser" autofocus placeholder="user" >
-<input type="password" name="pass" id="loginpass" placeholder="password" >
+<input type="text" name="user" id="loginuser" autofocus placeholder="user" required>
+<input type="password" name="pass" id="loginpass" placeholder="password" required>
 <input type="hidden" name="route" value="home">
 <input type="hidden" name="rememberme" value="0">
 <input type="checkbox" name="rememberme" id="rememberme" value="1">
