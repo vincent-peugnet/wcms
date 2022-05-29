@@ -8,8 +8,8 @@ class Session extends Item
 {
     public $visitor = false;
     public $user = '';
-    public $showleftpanel = true;
-    public $showrightpanel = false;
+    public $showeditorleftpanel = true;
+    public $showeditorrightpanel = false;
     public $homedisplay = 'list';
     public $mediadisplay = 'list';
     public $wsession = '';
@@ -56,14 +56,14 @@ class Session extends Item
         }
     }
 
-    public function setshowleftpanel($showleftpanel)
+    public function setshoweditorleftpanel($showeditorleftpanel)
     {
-        $this->showleftpanel = boolval($showleftpanel);
+        $this->showeditorleftpanel = boolval($showeditorleftpanel);
     }
 
-    public function setshowrightpanel($showrightpanel)
+    public function setshoweditorrightpanel($showeditorrightpanel)
     {
-        $this->showrightpanel = boolval($showrightpanel);
+        $this->showeditorrightpanel = boolval($showeditorrightpanel);
     }
 
     public function sethomedisplay($homedisplay)

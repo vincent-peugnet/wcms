@@ -18,13 +18,11 @@ $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [$cs
 
     <div id="workspace">
 
-    <?php $this->insert('editleftbar', ['page' => $page, 'tablist' => $tablist, 'pagelist' => $pagelist, 'showleftpanel' => $showleftpanel, 'faviconlist' => $faviconlist, 'thumbnaillist' => $thumbnaillist]) ?>
+    <?php $this->insert('editleftbar', ['page' => $page, 'tablist' => $tablist, 'pagelist' => $pagelist, 'showeditorleftpanel' => $showeditorleftpanel, 'faviconlist' => $faviconlist, 'thumbnaillist' => $thumbnaillist]) ?>
     <?php $this->insert('edittabs', ['tablist' => $tablist, 'opentab' => $page->interface(), 'templates' => $page->template()]) ?>
-    <?php $this->insert('editrightbar', ['page' => $page, 'pagelist' => $pagelist, 'showrightpanel' => $showrightpanel, 'templates' => $page->template(), 'tagpagelist' => $tagpagelist, 'lasteditedpagelist' => $lasteditedpagelist, 'editorlist' => $editorlist, 'user' => $user]) ?>
+    <?php $this->insert('editrightbar', ['page' => $page, 'pagelist' => $pagelist, 'showeditorrightpanel' => $showeditorrightpanel, 'templates' => $page->template(), 'tagpagelist' => $tagpagelist, 'lasteditedpagelist' => $lasteditedpagelist, 'editorlist' => $editorlist, 'user' => $user]) ?>
 
     </div>
-
-</form>
 
 </main>
 

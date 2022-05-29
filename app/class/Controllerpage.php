@@ -239,11 +239,11 @@ class Controllerpage extends Controller
             $datas['editorlist'] = $this->usermanager->getlisterbylevel(2, '>=');
 
             if (isset($_SESSION['workspace'])) {
-                $datas['showleftpanel'] = $_SESSION['workspace']['showleftpanel'];
-                $datas['showrightpanel'] = $_SESSION['workspace']['showrightpanel'];
+                $datas['showeditorleftpanel'] = $_SESSION['workspace']['showeditorleftpanel'];
+                $datas['showeditorrightpanel'] = $_SESSION['workspace']['showeditorrightpanel'];
             } else {
-                $datas['showleftpanel'] = false;
-                $datas['showrightpanel'] = false;
+                $datas['showeditorleftpanel'] = false;
+                $datas['showeditorrightpanel'] = false;
             }
             $datas = array_merge($datas, ['page' => $this->page, 'pageexist' => true, 'user' => $this->user]);
             $this->showtemplate('edit', $datas);
@@ -458,8 +458,8 @@ class Controllerpage extends Controller
 
     public function movepanels()
     {
-        $_SESSION['workspace']['showrightpanel'] = isset($_POST['workspace']['showrightpanel']);
-        $_SESSION['workspace']['showleftpanel'] = isset($_POST['workspace']['showleftpanel']);
+        $_SESSION['workspace']['showeditorrightpanel'] = isset($_POST['workspace']['showeditorrightpanel']);
+        $_SESSION['workspace']['showeditorleftpanel'] = isset($_POST['workspace']['showeditorleftpanel']);
     }
 
     public function fontsize()

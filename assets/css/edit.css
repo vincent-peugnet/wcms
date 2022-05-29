@@ -41,13 +41,13 @@ body {
     overflow-y: auto;
 }
 
-.editor #showleftpanel:checked ~ #leftbarpanel {
+.editor #showeditorleftpanel:checked ~ #leftbarpanel {
     display: block;
     overflow-y: auto;
     height: 100%;
 }
 
-.editor #showrightpanel:checked ~ #rightbarpanel {
+.editor #showeditorrightpanel:checked ~ #rightbarpanel {
     display: block;
 }
 
@@ -181,6 +181,10 @@ html {
     border-bottom: grey solid 1px;
 }
 
+input#editfontsize {
+    width: 3em;
+}
+
 
 .editor div#editmenu {
     /* height: 25px; */
@@ -243,7 +247,7 @@ a:hover {
     width: 100%;
     padding: 3px 0.5%;
     border-bottom: solid 1px dimgrey;
-}
+display: flex;justify-content: space-between;}
 
 #topbar form {
     display: inline;
@@ -406,11 +410,11 @@ span.cm-wkeyword {
         display: none;
     }
 
-    header a {
+    header, #edittopbar {
         font-size: 1.3em;
     }
 
-    span#fontsize {
+    span#fontsize, span#save-workspace {
         display: none;
     }
 

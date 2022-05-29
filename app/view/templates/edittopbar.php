@@ -1,39 +1,31 @@
 <div id="edittopbar">
 
-
-
-    <form
-        action="<?= $this->upage('pageupdate', $page->id()) ?>"
-        method="post"
-        id="update"
-        data-api="<?= $this->upage('apipageupdate', $page->id()) ?>"
-    >
-
     <div id="editmenu">
+        <span>
+            <form
+                action="<?= $this->upage('pageupdate', $page->id()) ?>"
+                method="post"
+                id="update"
+                data-api="<?= $this->upage('apipageupdate', $page->id()) ?>"
+            >
+                <button type="submit" accesskey="s" >
+                    <i class="fa fa-save"></i>
+                    <span class="text">update</span>
+                </button>
+            </form>
+        </span>
 
-
+        <span id="headid">
+            <?= $page->id() ?>
+        </span>
 
         <span>
-
-        <input type="submit" value="update" accesskey="s" form="update">
-
-
-
-
-
-
-        <a href="<?= $this->upage('pageread/', $page->id()) ?>" target="<?= $page->id() ?>" id="display">
-            <i class="fa fa-eye"></i>
-            <span>display</span>
-        </a>
-        <span id="headid"><?= $page->id() ?></span>
+            <a href="<?= $this->upage('pageread/', $page->id()) ?>" target="<?= $page->id() ?>" id="display">
+                <i class="fa fa-eye"></i>
+                <span class="text">display</span>
+            </a>
         </span>
 
-        <span id="fontsize">
-            
-            <label for="fontsize">Font-size</label>
-            <input type="number" name="fontsize" value="<?= Wcms\Config::fontsize() ?>" id="editfontsize" min="5" max="99">
-        </span>
 
         <span id="download">
                 <a href="<?= $this->upage('pagedownload', $page->id()) ?>">
@@ -48,6 +40,23 @@
                     <i class="fa fa-trash"></i>
                     <span class="text">delete</span>
                 </a>
+        </span>
+
+        <span id="fontsize">
+            <label for="fontsize">
+                <i class="fa fa-text-height"></i>
+            </label>
+            <input type="number" name="fontsize" value="<?= Wcms\Config::fontsize() ?>" id="editfontsize" min="5" max="99" form="workspace">
+        </span>
+
+        <span id="save-workspace">
+
+            <form action="" method="post" id="workspace">
+                <button type="submit">
+                    <i class="fa fa-edit"></i>
+                    <span class="text">save workspace</span>
+                </button>
+            </form>
         </span>
 
     </div>

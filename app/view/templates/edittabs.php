@@ -15,6 +15,7 @@
                   autocorrect="off"
                   autocapitalize="off"
                   spellcheck="false"
+                  form="update"
                   <?= $key == $opentab ? 'autofocus' : '' ?>
         ><?= $this->e($value) ?></textarea>
     </div>

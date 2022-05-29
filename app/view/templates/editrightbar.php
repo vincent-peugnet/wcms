@@ -1,6 +1,14 @@
 <div id="rightbar" class="bar">
-    <input id="showrightpanel" name="workspace[showrightpanel]" value="1" class="toggle" type="checkbox"  <?= $showrightpanel == true ? 'checked' : '' ?>>
-    <label for="showrightpanel" class="toogle">◧</label>
+    <input
+        id="showeditorrightpanel"
+        name="workspace[showeditorrightpanel]"
+        value="1"
+        class="toggle"
+        type="checkbox"
+        form="workspace"
+        <?= $showeditorrightpanel == true ? 'checked' : '' ?>
+    >
+    <label for="showeditorrightpanel" class="toogle">◧</label>
     <div id="rightbarpanel" class="panel">
     
 
@@ -71,16 +79,15 @@
 
 
     <label for="authors">Invites editors</label>
-    <select name="authors[]" id="authors">
-    <option value="" selected>--add author--</option>
-    <?php
-    $notyetauthorlist = array_diff($editorlist, $page->authors());
-        foreach ($notyetauthorlist as $author) {
-            echo '<option value="'.$author.'" >'.$author.'</option>';
+    <select name="authors[]" id="authors" form="update">
+        <option value="" selected>--add author--</option>
+        <?php
+        $notyetauthorlist = array_diff($editorlist, $page->authors());
+            foreach ($notyetauthorlist as $author) {
+                echo '<option value="'.$author.'" >'.$author.'</option>';
+            }
         }
-    }
-    ?>
-
+        ?>
     </select>
     <?php
         $alreadyauthorlist = array_intersect($editorlist, $page->authors());
@@ -88,7 +95,7 @@
             ?>
             <div class="checkexternal">
             <?php if($user->level() >= 4) { ?>
-            <input type="checkbox" name="authors[]" id="<?= $author ?>" value="<?= $author ?>" checked>
+            <input type="checkbox" name="authors[]" id="<?= $author ?>" value="<?= $author ?>" form="update" checked>
             <?php } ?>
             <label for="<?= $author ?>" >⬗ <?= $author ?></label>
             </div>
