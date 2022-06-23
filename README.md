@@ -35,7 +35,7 @@ W try to help you create pages more spontaneously.
 - Flat file database
 - Great website architecture design freedom
 - [url based command interface](MANUAL.md#url-based-command-interface)
-- works perfectly even with javascript disabled
+- 100% functionnal even without javascript
 
 Overview
 --------
@@ -60,7 +60,7 @@ There is lot more you can by altering the `BODY`.
 API
 ---
 
-An API exist. Find more info [in the documentation](MANUAL.md#api)
+An API exist. Find more info [in the API documentation](API.md)
 
 Development team
 ------------------

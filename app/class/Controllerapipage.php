@@ -35,6 +35,9 @@ class Controllerapipage extends Controllerapi
         }
     }
 
+    /**
+     * - Send `401` if user can't edit page
+     */
     public function access(string $page)
     {
         if ($this->importpage($page)) {
@@ -48,6 +51,11 @@ class Controllerapipage extends Controllerapi
         }
     }
 
+    /**
+     * - Send `401` if user can't edit page
+     * - Send `409` in case of conflict
+     * - Send `500`
+     */
     public function update(string $page)
     {
         if ($this->importpage($page)) {
@@ -68,6 +76,8 @@ class Controllerapipage extends Controllerapi
                 } else {
                     http_response_code(409);
                 }
+            } else {
+                http_response_code(401);
             }
         }
     }

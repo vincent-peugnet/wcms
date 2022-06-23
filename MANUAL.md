@@ -664,25 +664,3 @@ Render all pages in the database
 
 
 
-### API
-
-A JSON REST API
-#### page related api
-
-##### access
-
-To access a page means to get the full JSON page object. User needs to be allowed to edit the coresponding page in order to access it.
-
-```
-GET     /api/v1/<page_id>/access
-```
-
-##### update
-
-To update a page, you'll have to provide it with POST datas.
-In case of success, you will get a `200` HTTP CODE and recieve the full JSON page object.
-
-```
-POST    /api/v1/<page_id>/update
-```
-
