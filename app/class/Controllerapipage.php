@@ -81,4 +81,28 @@ class Controllerapipage extends Controllerapi
             }
         }
     }
+
+    public function add(string $page)
+    {
+        if (!Model::idcheck($page)) {
+            http_response_code(406);
+            exit;
+        }
+        if (!$this->user->iseditor()) {
+            http_response_code(401);
+            exit;
+        }
+        if ($this->pagemanager->get($page)) {
+            http_response_code(405);
+            exit;
+        }
+        $this->page = new Page(["id" => $page]);
+        $this->page->reset();
+        $this->page->addauthor($this->user->id());
+        if ($this->pagemanager->add($this->page)) {
+            http_response_code(200);
+        } else {
+            http_response_code(500);
+        }
+    }
 }

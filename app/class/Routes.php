@@ -22,6 +22,7 @@ class Routes
         $router->addRoutes([
             ['GET', '/api/v1/[cid:page]/access', 'Controllerapipage#access', 'apipageaccess'],
             ['POST', '/api/v1/[cid:page]/update', 'Controllerapipage#update', 'apipageupdate'],
+            ['PUT', '/api/v1/[cid:page]/add', 'Controllerapipage#add', 'apipageadd'],
             ['GET', '/', 'Controllerhome#desktop', 'home'],
             ['POST', '/', 'Controllerhome#desktop', 'homequery'],
             ['POST', '/columns', 'Controllerhome#columns', 'homecolumns'],

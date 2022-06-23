@@ -77,9 +77,7 @@ Page related api
 
 To access a page means to get the full JSON page object. User needs to be allowed to edit the coresponding page in order to access it.
 
-```
-GET     /api/v1/<page_id>/access
-```
+    GET     /api/v1/<page_id>/access
 
 possible error codes:
 
@@ -92,9 +90,7 @@ possible error codes:
 To update a page, you'll have to provide it with POST datas.
 In case of success, you will get a `200` HTTP CODE and recieve the full JSON page object.
 
-```
-POST    /api/v1/<page_id>/update
-```
+    POST    /api/v1/<page_id>/update
 
 possible error codes:
 
@@ -102,5 +98,19 @@ possible error codes:
 - `404` if page is not found
 - `406` in case of invalid ID
 - `409` in case of conflict (someone or something else updated the page before you)
+_ `500` server error
 
 
+
+### add
+
+To create a page, just send this request using the desired page ID.
+
+    PUT     /api/v1/<page_id>/add
+
+possibles error codes:
+
+- `406` in case of invalid ID
+- `401` if user does'nt have the rights to update the page
+- `405` if page already exist with this ID
+- `500` server error
