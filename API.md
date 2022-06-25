@@ -1,9 +1,5 @@
-API documentation
+Wcms API documentation
 =================
-
-A JSON REST API for W
-
-
 
 
 Page related api
@@ -77,7 +73,7 @@ Page related api
 
 To access a page means to get the full JSON page object. User needs to be allowed to edit the coresponding page in order to access it.
 
-    GET     /api/v1/<page_id>/access
+    GET     /api/v1/<page_id>
 
 possible error codes:
 
@@ -106,11 +102,26 @@ _ `500` server error
 
 To create a page, just send this request using the desired page ID.
 
-    PUT     /api/v1/<page_id>/add
+    POST    /api/v1/<page_id>/add
 
 possibles error codes:
 
-- `406` in case of invalid ID
 - `401` if user does'nt have the rights to update the page
 - `405` if page already exist with this ID
+- `406` in case of invalid ID
+- `500` server error
+
+
+
+### delete
+
+To delete a page, just send this request using the desired page ID.
+
+    DELETE  /api/v1/<page_id>
+
+possibles error codes:
+
+- `401` if user does'nt have the rights to delete the page
+- `404` if page is not found
+- `406` in case of invalid ID
 - `500` server error

@@ -105,4 +105,19 @@ class Controllerapipage extends Controllerapi
             http_response_code(500);
         }
     }
+
+    public function delete(string $page)
+    {
+        if ($this->importpage($page)) {
+            if ($this->user->issupereditor() || $this->page->authors() === [$this->user->id()] ) {
+                if ($this->pagemanager->delete($this->page)) {
+                    http_response_code(200);
+                } else {
+                    http_response_code(500);
+                }
+            } else {
+                http_response_code(401);
+            }
+        }
+    }
 }
