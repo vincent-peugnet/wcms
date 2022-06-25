@@ -2,10 +2,23 @@
 
 namespace Wcms\Flywheel;
 
+use JamesMoss\Flywheel\Config;
+use RuntimeException;
 use Wcms\Model;
 
 class Repository extends \JamesMoss\Flywheel\Repository
 {
+    /**
+     * @throws RuntimeException when error in writing repo folder
+     */
+    public function __construct($name, Config $config)
+    {
+        parent::__construct($name, $config);
+        if (!chmod($this->path, Model::FOLDER_PERMISSION)) {
+            throw new RuntimeException("error while trying to change permission of database folder: " . $this->path);
+        }
+    }
+
     /**
      * Get an array containing the path of all files in this repository
      *
@@ -34,7 +47,7 @@ class Repository extends \JamesMoss\Flywheel\Repository
     protected function write($path, $contents): bool
     {
         $ret = parent::write($path, $contents);
-        chmod($path, Model::PERMISSION);
+        chmod($path, Model::FILE_PERMISSION);
         return $ret;
     }
 }

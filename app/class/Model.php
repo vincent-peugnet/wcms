@@ -24,7 +24,8 @@ abstract class Model
     public const DATABASE_DIR = './database/';
     public const PAGES_DIR = self::DATABASE_DIR . 'pages/';
 
-    public const PERMISSION = 0660;
+    public const FILE_PERMISSION    = 0660;
+    public const FOLDER_PERMISSION  = 0770;
 
     public const MEDIA_SORTBY = [
         'id' => 'id',
@@ -258,14 +259,14 @@ abstract class Model
      * - error when problem writing the file
      * - warning when problem with permissions
      */
-    public static function writefile(string $filename, $data, int $permissions = self::PERMISSION): bool
+    public static function writefile(string $filename, $data, int $permissions = self::FILE_PERMISSION): bool
     {
         if ($permissions < 0600 || $permissions > 0777) {
             self::sendflashmessage(
-                sprintf("Invalid permissions 0%o, using default: 0%o", $permissions, self::PERMISSION),
+                sprintf("Invalid permissions 0%o, using default: 0%o", $permissions, self::FILE_PERMISSION),
                 'warning'
             );
-            $permissions = self::PERMISSION;
+            $permissions = self::FILE_PERMISSION;
         }
         try {
             file_put_content_chmod($filename, $data, $permissions);
@@ -278,6 +279,29 @@ abstract class Model
             return false;
         }
         return true;
+    }
+
+    /**
+     * Copy folder folder files and subbfolders recursively
+     *
+     * @param string $src source folder
+     * @param string $dst destination folder
+     * @param int $perm OPTIONNAL permission in octal format.
+     */
+    public static function recurse_copy($src, $dst, $perm = Model::FOLDER_PERMISSION)
+    {
+        $dir = opendir($src);
+        mkdir($dst, $perm);
+        while (false !== ( $file = readdir($dir))) {
+            if (( $file != '.' ) && ( $file != '..' )) {
+                if (is_dir($src . '/' . $file)) {
+                    self::recurse_copy($src . '/' . $file, $dst . '/' . $file, $perm);
+                } else {
+                    copy($src . '/' . $file, $dst . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
     }
 
 
