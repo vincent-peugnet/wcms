@@ -288,14 +288,14 @@ abstract class Model
      * @param string $dst destination folder
      * @param int $perm OPTIONNAL permission in octal format.
      */
-    public static function recurse_copy($src, $dst, $perm = Model::FOLDER_PERMISSION)
+    public static function recursecopy($src, $dst, $perm = Model::FOLDER_PERMISSION)
     {
         $dir = opendir($src);
         mkdir($dst, $perm);
         while (false !== ( $file = readdir($dir))) {
             if (( $file != '.' ) && ( $file != '..' )) {
                 if (is_dir($src . '/' . $file)) {
-                    self::recurse_copy($src . '/' . $file, $dst . '/' . $file, $perm);
+                    self::recursecopy($src . '/' . $file, $dst . '/' . $file, $perm);
                 } else {
                     copy($src . '/' . $file, $dst . '/' . $file);
                 }

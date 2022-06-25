@@ -38,7 +38,7 @@ class Modeladmin extends Model
         $dbdir = self::PAGES_DIR . $db;
         $newdbdir = self::PAGES_DIR . Model::idclean($name);
         if (is_dir($dbdir) && !is_dir($newdbdir)) {
-            self::recurse_copy($dbdir, $newdbdir);
+            self::recursecopy($dbdir, $newdbdir);
         }
     }
 }

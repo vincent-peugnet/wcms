@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use JamesMoss\Flywheel;
+use RuntimeException;
 use Wcms\Flywheel\Formatter\JSON;
 use Wcms\Flywheel\Query;
 use Wcms\Flywheel\Repository;
@@ -30,7 +31,11 @@ class Modeldb extends Model
 
     public function storeinit(string $repo)
     {
-        $this->repo = new Repository($repo, $this->database);
+        try {
+            $this->repo = new Repository($repo, $this->database);
+        } catch (RuntimeException $e) {
+            self::sendflashmessage("error while database initialisation: " . $e->getMessage(), self::FLASH_ERROR);
+        }
     }
 
     /**
