@@ -34,7 +34,7 @@ Page related api
     "footer": "",
     "externalcss": [],
     "customhead": "",
-    "secure": 1,        // can be 0 is public, 1 is private, 2 is not published
+    "secure": 1,
     "interface": "main",
     "linkto": [],
     "templatebody": "",
@@ -125,3 +125,21 @@ possibles error codes:
 - `404` if page is not found
 - `406` in case of invalid ID
 - `500` server error
+
+
+Usages example
+--------------
+
+Get a page and then update the MAIN element.
+
+```js
+obj = await fetch('http://localhost:8080/api/v1/jardin')
+    .then(res => res.json());
+obj.main += "foobar";
+fetch('http://localhost:8080/api/v1/jardin/update', {
+    method: "POST",
+    body: JSON.stringify(obj),
+})
+    .then(res => res.text())
+    .then(console.log);
+```
