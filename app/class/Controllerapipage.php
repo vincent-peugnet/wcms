@@ -2,6 +2,9 @@
 
 namespace Wcms;
 
+use JsonException;
+use RuntimeException;
+
 class Controllerapipage extends Controllerapi
 {
     use Voterpage;
@@ -19,7 +22,7 @@ class Controllerapipage extends Controllerapi
      * @param string $id Page ID to look for
      * @return bool in case of success or failure
      */
-    public function importpage(string $id): bool
+    protected function importpage(string $id): bool
     {
         if (!Model::idcheck($id)) {
             http_response_code(406);
@@ -52,6 +55,10 @@ class Controllerapipage extends Controllerapi
     }
 
     /**
+     * update a page
+     * Check datas in request body first, then check POST datas
+     *
+     * - Send `400` if no datas are send
      * - Send `401` if user can't edit page
      * - Send `409` in case of conflict
      * - Send `500`
@@ -61,7 +68,21 @@ class Controllerapipage extends Controllerapi
         if ($this->importpage($page)) {
             if ($this->canedit()) {
                 $oldpage = clone $this->page;
-                $this->page->hydrate($_POST);
+                $json = $this->getrequestbody();
+                var_export($json);
+                if (!empty($json)) {
+                    try {
+                        $datas = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+                    } catch (JsonException $e) {
+                        $this->shortresponse(400, "Json decoding error: " . $e->getMessage());
+                    }
+                } elseif (!empty($_POST)) {
+                    $datas = $_POST;
+                } else {
+                    http_response_code(400);
+                    exit;
+                }
+                $this->page->hydrate($datas);
 
                 if ($this->page->datemodif() == $oldpage->datemodif()) {
                     $this->page->updateedited();
