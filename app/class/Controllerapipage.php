@@ -77,7 +77,8 @@ class Controllerapipage extends Controllerapi
                     }
                 } elseif (!empty($_POST)) {
                     $datas = $_POST;
-                } else {;
+                } else {
+                    ;
                     $this->shortresponse(400, "No POST or JSON datas recieved");
                 }
                 $update = new Page($datas);
