@@ -69,7 +69,6 @@ class Controllerapipage extends Controllerapi
             if ($this->canedit()) {
                 $oldpage = clone $this->page;
                 $json = $this->getrequestbody();
-                var_export($json);
                 if (!empty($json)) {
                     try {
                         $datas = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
@@ -78,9 +77,12 @@ class Controllerapipage extends Controllerapi
                     }
                 } elseif (!empty($_POST)) {
                     $datas = $_POST;
-                } else {
-                    http_response_code(400);
-                    exit;
+                } else {;
+                    $this->shortresponse(400, "No POST or JSON datas recieved");
+                }
+                $update = new Page($datas);
+                if (!is_null($update->id()) && $update->id() !== $this->page->id()) {
+                    $this->shortresponse(400, "Page ID and datas ID does'nt match");
                 }
                 $this->page->hydrate($datas);
 
@@ -92,13 +94,14 @@ class Controllerapipage extends Controllerapi
                         header('Content-type: application/json; charset=utf-8');
                         echo json_encode($this->page->dry(), JSON_PRETTY_PRINT);
                     } else {
-                        http_response_code(500);
+                        $this->shortresponse(500, "Error while trying to save page in database");
                     }
                 } else {
-                    http_response_code(409);
+                    $this->shortresponse(500, "Conflict : A more recent version of the page is stored in the database");
                 }
             } else {
                 http_response_code(401);
+                $this->shortresponse(401, "You are not alowed to edit this page");
             }
         }
     }
