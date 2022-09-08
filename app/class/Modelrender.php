@@ -422,7 +422,7 @@ class Modelrender extends Modelpage
         $linkto = [];
         $rend = $this;
         $text = preg_replace_callback(
-            '%href="([\w-]+)\/?(#?[a-z-_]*)"%',
+            '%href="([\w-]+)\/?(#?[\w-]*)"%',
             function ($matches) use ($rend, &$linkto) {
                 $matchpage = $rend->get($matches[1]);
                 if (!$matchpage) {
