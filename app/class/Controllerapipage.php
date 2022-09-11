@@ -98,7 +98,7 @@ class Controllerapipage extends Controllerapi
                         $this->shortresponse(500, "Error while trying to save page in database");
                     }
                 } else {
-                    $this->shortresponse(500, "Conflict : A more recent version of the page is stored in the database");
+                    $this->shortresponse(409, "Conflict : A more recent version of the page is stored in the database");
                 }
             } else {
                 http_response_code(401);

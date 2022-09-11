@@ -11,7 +11,7 @@
     <label for="showeditorleftpanel" class="toogle">◧</label>
     <div id="leftbarpanel" class="panel">
 
-    <input type="hidden" name="datemodif" value="<?= $page->datemodif('string') ?>">
+    <input type="hidden" name="datemodif" value="<?= $page->datemodif('string') ?>" form="update">
 
     <details id="editinfo" open>
         <summary>Infos</summary>
