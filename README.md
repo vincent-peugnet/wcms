@@ -37,24 +37,30 @@ W try to help you create pages more spontaneously.
 - [url based command interface](MANUAL.md#url-based-command-interface)
 - 100% functionnal even without javascript
 
-Overview
---------
+Screenshots
+-----------
 
-You can access your home following the root folder you've instaled **W**. After connecting, you can see your editor interface.
+Homepage, showing your pages database.
 
-![home](https://w.club1.fr/gif/home.jpg)
+![home](https://w.club1.fr/images/10.png)
 
 Quickly edit pages as if you where taking notes. You need to connect as editor, then just type `../edit` at the end of the page you want to edit ot use the menu.
 
-![edit](https://w.club1.fr/gif/edit.jpg)
+![edit](https://w.club1.fr/images/13.png)
 
-Then you can se the result.
+Edit metadata on the left panel.
 
-![read](https://w.club1.fr/gif/read.jpg)
+![advanced edit](https://w.club1.fr/images/14.png)
 
-There is lot more you can by altering the `BODY`.
+Manage your assets using the media manager.
 
-![advanced](https://w.club1.fr/gif/advanced.jpg)
+![media manager](https://w.club1.fr/images/12.png)
+
+You can even view a map of links.
+
+![map](https://w.club1.fr/images/11.png)
+
+
 
 
 API
@@ -89,12 +95,20 @@ __Server requirements__
 __W__ don't need any database manager as it use a "flat file" system.
 
 
-Installation guide
-------------------
+Install the latest release
+--------------------------
 
 Simply download the [latest realease](https://github.com/vincent-peugnet/wcms/releases/latest) from github, and unzip it in your hosted folder. You can put W at the root of your domain, or in subfolders. Then access the adress in your browser and follow the differents steps.
 
 W will ask you for the path you've installed it, if you installed it at the root, leave this field blank, otherwise, indiquate the subfolders like `path/to/wcms`.
+
+
+Install using git
+-----------------
+
+If you have a SSH access to your server, you can install W from sources by following thoses [three steps](#install-from-sources).
+
+To update, type `git pull` to update Git files from repo, then type `make` to build the JS files.
 
 Development informations
 ========================
