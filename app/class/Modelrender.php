@@ -385,13 +385,16 @@ class Modelrender extends Modelpage
         return $text;
     }
 
+    /**
+     * Search and replace referenced media code by full absolute address.
+     * Add a target="_blank" attribute to link pointing to media.
+     */
     public function media(string $text): string
     {
-        $regex = '%(src|href)="([\w\-]+(\/([\w\-])+)*\.[a-z0-9]{1,5})"%';
-        $text = preg_replace($regex, '$1="' . Model::mediapath() . '$2" target="_blank"', $text);
-        if (!is_string($text)) {
-            //throw new Exception('Rendering error -> media module');
-        }
+        $regex = '%href="([\w\-]+(\/([\w\-])+)*\.[a-z0-9]{1,5})"%';
+        $text = preg_replace($regex, 'href="' . Model::mediapath() . '$1" target="_blank"', $text);
+        $regex = '%src="([\w\-]+(\/([\w\-])+)*\.[a-z0-9]{1,5})"%';
+        $text = preg_replace($regex, 'src="' . Model::mediapath() . '$1"', $text);
         return $text;
     }
 

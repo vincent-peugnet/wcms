@@ -65,7 +65,7 @@ class Page extends Item
 
     /**
      * Return a list of all object vars name as strings
-     * 
+     *
      * @return string[]
      */
     public function getobjectvars(): array
