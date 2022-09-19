@@ -36,7 +36,7 @@ $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'home.css']
 
                     <td>
                     <input type="hidden" name="passwordhashed" value="0">
-                    <input type="checkbox" name="passwordhashed" value="1">
+                    <input type="checkbox" name="passwordhashed" value="1" checked>
                     </td>
 
                     <td>
