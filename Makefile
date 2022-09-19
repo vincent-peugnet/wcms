@@ -23,7 +23,7 @@ PREV_ENV_FILE           := $(build_dir)/prev_env
 PREV_ENV                := $(strip $(shell cat $(PREV_ENV_FILE) 2>/dev/null))
 HOST                    := localhost
 PORT                    := 8080
-PHP_FLAGS               += $(and $(XDEBUG3),-d xdebug.start_with_request=yes)
+PHP_FLAGS               += -d xdebug.start_with_request=yes
 PHPSTAN_FLAGS           += $(and $(CI),--no-progress)
 COMPOSER_FLAGS          += $(and $(CI),--prefer-dist --no-progress)
 
