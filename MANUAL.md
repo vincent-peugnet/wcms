@@ -217,16 +217,10 @@ Your __display name__ ande __url__ are used in case of an [authors inclusion](#a
 
 #### Bookmarks
 
-Bookmarks can be created as shortcuts to quickly jump to a specified view.
+A bookmark store page filters settings.
 
-There are two kinds of bookmarks :
 
-- Home bookmarks
-- Media bookmars
-
-Each one is doing the same thing : saving a specific filter setting and allow you to access it in one click.
-
-After ajusting [home options](#options), or [media filters](#media-filters), select the bookmark menu (in the [home menu](#home-menu) or [media menu](#media-menu)), add a name and a symbol, this will add a new bookmark in the main top bar !
+After ajusting [home options](#options), select the bookmark menu in the [home menu](#home-menu), add a name and a symbol, this will add a new bookmark on the left side of the home view !
 
 
 
