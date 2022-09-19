@@ -2,6 +2,11 @@
 
 namespace Wcms;
 
+/**
+ * Not used anymore, need refactoring
+ * @see https://github.com/vincent-peugnet/wcms/issues/217
+ */
+
 class Modelfont extends Model
 {
     protected const FONT_TYPES = ['woff2', 'woff', 'otf', 'ttf', 'eot', 'svg'];

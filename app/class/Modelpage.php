@@ -23,7 +23,7 @@ class Modelpage extends Modeldb
      * If a scan has already been perform, it will just
      * read `pagelist` Propriety
      *
-     * @return Page[] of Pages objects as `id => Page`
+     * @return Page[]                       of Pages objects as `id => Page`
      */
     public function pagelist(): array
     {
@@ -40,9 +40,9 @@ class Modelpage extends Modeldb
     /**
      * Scan database for specific pages IDs and return array of Pages objects
      *
-     * @param array $idlist list of ID strings
+     * @param string[] $idlist                 list of ID strings
      *
-     * @return Page[] array of Page objects
+     * @return Page[]                           array of Page objects
      */
     public function pagelistbyid(array $idlist = []): array
     {
@@ -60,8 +60,8 @@ class Modelpage extends Modeldb
     /**
      * Store new page in the database
      *
-     * @param Page $page object
-     * @return bool depending on database storing
+     * @param Page $page                    Page object
+     * @return bool                         depending on database storing
      */
     public function add(Page $page): bool
     {
@@ -74,9 +74,9 @@ class Modelpage extends Modeldb
     /**
      * Obtain a page object from the database
      *
-     * @param Page|string $id could be an Page object or a id string
+     * @param Page|string $id               could be an Page object or a id string
      *
-     * @return Page|false The Page object or false if it does not exist.
+     * @return Page|false                   The Page object or false if it does not exist.
      */
     public function get($id)
     {
@@ -140,8 +140,8 @@ class Modelpage extends Modeldb
     /**
      * Get all the pages that are called in css templating
      *
-     * @param Page $page page to retrieve css templates
-     * @return Page[] array of pages with ID as index
+     * @param Page $page                    page to retrieve css templates
+     * @return Page[]                       array of pages with ID as index
      */
     public function getpagecsstemplates(Page $page): array
     {
@@ -161,9 +161,9 @@ class Modelpage extends Modeldb
     /**
      * Delete a page and it's linked rendered html and css files
      *
-     * @param Page|string $page could be an Page object or a id string
+     * @param Page|string $page             could be an Page object or a id string
      *
-     * @return bool true if success otherwise false
+     * @return bool                         true if success otherwise false
      */
     public function delete($page): bool
     {
@@ -180,6 +180,8 @@ class Modelpage extends Modeldb
 
     /**
      * Delete rendered CSS and HTML files
+     *
+     * @param string $pageid
      */
     public function unlink(string $pageid)
     {
@@ -199,9 +201,9 @@ class Modelpage extends Modeldb
      *
      * @todo Check if page already exist before updating ?
      *
-     * @param Page $page The page that is going to be updated
+     * @param Page $page                    The page that is going to be updated
      *
-     * @return bool True if success otherwise, false
+     * @return bool                         True if success otherwise, false
      *
      */
     public function update(Page $page)
@@ -261,13 +263,13 @@ class Modelpage extends Modeldb
 
 
     /**
-     * @param Page[] $pagelist          List of Page
-     * @param string[] $tagchecked      List of tags
-     * @param string $tagcompare        Can be 'OR' or 'AND', set the tag filter method
+     * @param Page[] $pagelist              List of Page
+     * @param string[] $tagchecked          List of tags
+     * @param string $tagcompare            Can be 'OR' or 'AND', set the tag filter method
      *
-     * @return array $array of `string` page id
+     * @return string[]                     array of `string` page id
      */
-    public function filtertagfilter(array $pagelist, array $tagchecked, $tagcompare = 'OR')
+    public function filtertagfilter(array $pagelist, array $tagchecked, $tagcompare = 'OR'): array
     {
 
         $filteredlist = [];
@@ -282,11 +284,11 @@ class Modelpage extends Modeldb
 
 
     /**
-     * @param Page $page                Page
-     * @param string[] $tagchecked      list of tags
-     * @param string $tagcompare        can be 'OR' or 'AND', set the tag filter method
+     * @param Page $page                    Page
+     * @param string[] $tagchecked          list of tags
+     * @param string $tagcompare            can be 'OR' or 'AND', set the tag filter method
      *
-     * @return bool                     true if Page pass test, otherwise false
+     * @return bool                         true if Page pass test, otherwise false
      */
     public function ftag(Page $page, array $tagchecked, string $tagcompare = Opt::OR, bool $tagnot = false): bool
     {
@@ -309,11 +311,11 @@ class Modelpage extends Modeldb
 
 
     /**
-     * @param Page $page                Page
-     * @param string[] $authorchecked   List of authors
-     * @param string $authorcompare     Cab be 'OR' or 'AND', set the author filter method
+     * @param Page $page                    Page
+     * @param string[] $authorchecked       List of authors
+     * @param string $authorcompare         Cab be 'OR' or 'AND', set the author filter method
      *
-     * @return bool                     true if Page pass test, otherwise false
+     * @return bool                         true if Page pass test, otherwise false
      */
     public function fauthor(Page $page, array $authorchecked, string $authorcompare = Opt::OR): bool
     {
@@ -335,10 +337,10 @@ class Modelpage extends Modeldb
 
 
     /**
-     * @param Page $page                Page
-     * @param int $secure               Secure level
+     * @param Page $page                    Page
+     * @param int $secure                   Secure level
      *
-     * @return bool                     true if Page pass test, otherwise false
+     * @return bool                         true if Page pass test, otherwise false
      */
     public function fsecure(Page $page, int $secure): bool
     {
@@ -352,10 +354,10 @@ class Modelpage extends Modeldb
 
 
     /**
-     * @param Page $page                Page
-     * @param string $linkto            Page id used as linkto
+     * @param Page $page                    Page
+     * @param string $linkto                Page id used as linkto
      *
-     * @return bool                     true if Page pass test, otherwise false
+     * @return bool                         true if Page pass test, otherwise false
      */
     public function flinkto(Page $page, string $linkto): bool
     {
@@ -364,8 +366,8 @@ class Modelpage extends Modeldb
 
 
     /**
-     * @param Page $page                Page
-     * @param ?DateTimeInterface $since Minimum date for validatation
+     * @param Page $page                    Page
+     * @param ?DateTimeInterface $since     Minimum date for validatation
      *
      * @return bool
      */
@@ -380,8 +382,8 @@ class Modelpage extends Modeldb
 
 
     /**
-     * @param Page $page                Page
-     * @param ?DateTimeInterface $until Minimum date for validatation
+     * @param Page $page                    Page
+     * @param ?DateTimeInterface $until     Minimum date for validatation
      *
      * @return bool
      */
@@ -395,7 +397,7 @@ class Modelpage extends Modeldb
     }
 
 
-    public function tag(array $pagelist, $tagchecked)
+    public function tag(array $pagelist, $tagchecked): array
     {
         $pagecheckedlist = [];
         foreach ($pagelist as $page) {
@@ -406,7 +408,7 @@ class Modelpage extends Modeldb
         return $pagecheckedlist;
     }
 
-    public function taglist(array $pagelist, array $tagcheckedlist)
+    public function taglist(array $pagelist, array $tagcheckedlist): array
     {
         $taglist = [];
         foreach ($tagcheckedlist as $tag) {
@@ -416,13 +418,13 @@ class Modelpage extends Modeldb
     }
 
     /**
-     * @param array $taglist list of tags
-     * @param array $pagelist list of Page
+     * @param string[] $taglist             list of tags
+     * @param Page[] $pagelist              list of Page
      *
-     * @return array list of tags each containing list of id
+     * @return array                        list of tags each containing list of id
      */
 
-    public function tagpagelist(array $taglist, array $pagelist)
+    public function tagpagelist(array $taglist, array $pagelist): array
     {
         $tagpagelist = [];
         foreach ($taglist as $tag) {
@@ -451,9 +453,9 @@ class Modelpage extends Modeldb
      * @param string $addtag
      * @param string $addauthor
      *
-     * @return bool Depending on update success
+     * @return bool                         Depending on update success
      */
-    public function pageedit($pageid, $datas, $reset, $addtag, $addauthor): bool
+    public function pageedit(string $pageid, array $datas, array $reset, string $addtag, string $addauthor): bool
     {
         $page = $this->get($pageid);
         $page = $this->reset($page, $reset);
@@ -466,10 +468,10 @@ class Modelpage extends Modeldb
     /**
      * Reset values of a page
      *
-     * @param Page $page Page object to be reseted
-     * @param array $reset List of parameters needing reset
+     * @param Page $page                    Page object to be reseted
+     * @param array $reset                  List of parameters needing reset
      *
-     * @return Page The reseted page object
+     * @return Page                         The reseted page object
      */
     public function reset(Page $page, array $reset): Page
     {
@@ -495,7 +497,9 @@ class Modelpage extends Modeldb
     /**
      * Check if a page need to be rendered
      *
-     * @return bool true if the page need to be rendered otherwise false
+     * @param Page $page                    Page to be checked
+     *
+     * @return bool                         true if the page need to be rendered otherwise false
      */
     public function needtoberendered(Page $page): bool
     {

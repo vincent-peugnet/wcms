@@ -88,7 +88,7 @@ class Modelbookmark extends Modeldb
      * @param string|Bookmark $id           Can be an User object or a string ID
      * @throws RuntimeException             If Bookmark cant be founded
      *
-     * @return Bookmark                     User object or false in case of error
+     * @return Bookmark                     Bookmark object or false in case of error
      */
     public function get($id): Bookmark
     {

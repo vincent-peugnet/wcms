@@ -22,7 +22,7 @@ class Modeladmin extends Model
      *
      * @param string $name of the new database
      */
-    public function duplicate(string $name)
+    public function duplicate(string $name): void
     {
         $this->copydb(Config::pagetable(), $name);
     }
@@ -33,7 +33,7 @@ class Modeladmin extends Model
      * @param string $db name of source page database to copy
      * @param string $name of the destination database
      */
-    public function copydb(string $db, string $name)
+    public function copydb(string $db, string $name): void
     {
         $dbdir = self::PAGES_DIR . $db;
         $newdbdir = self::PAGES_DIR . Model::idclean($name);

@@ -29,7 +29,7 @@ class Modeldb extends Model
         ]);
     }
 
-    public function storeinit(string $repo)
+    public function storeinit(string $repo): void
     {
         try {
             $this->repo = new Repository($repo, $this->database);
@@ -41,7 +41,7 @@ class Modeldb extends Model
     /**
      * List every IDs of a database
      *
-     * @return string[] array of ID strings
+     * @return string[]                     array of ID strings
      */
     public function list(): array
     {

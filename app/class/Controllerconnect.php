@@ -9,7 +9,7 @@ class Controllerconnect extends Controller
     /** @var Modelconnect */
     protected $modelconnect;
 
-    public function log()
+    public function log(): void
     {
         if (isset($_POST['log'])) {
             $id = $_POST['id'] ?? null;
@@ -23,7 +23,7 @@ class Controllerconnect extends Controller
     }
 
 
-    public function connect()
+    public function connect(): void
     {
         if (isset($_SESSION['pageupdate'])) {
             $pageupdate['route'] = 'pageedit';
@@ -37,8 +37,13 @@ class Controllerconnect extends Controller
 
 
 
-
-    public function login($route, $id = null)
+    /**
+     * Will login an user using POST datas and redirect
+     *
+     * @param string $route     For redirection
+     * @param ?string $id       For redirection (optionnal)
+     */
+    public function login(string $route, ?string $id = null): void
     {
         if (!empty($_POST['pass']) && !empty($_POST['user'])) {
             $this->user = $this->usermanager->passwordcheck($_POST['user'], $_POST['pass']);
@@ -85,7 +90,7 @@ class Controllerconnect extends Controller
         }
     }
 
-    public function logout($route, $id = null)
+    public function logout($route, $id = null): void
     {
         $this->disconnect();
 

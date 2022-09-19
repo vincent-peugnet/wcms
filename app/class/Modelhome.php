@@ -24,13 +24,13 @@ class Modelhome extends Modelpage
 
 
     /**
-     * @param Page[]  $pagelist of Pages objects as `id => Page`
+     * @param Page[]  $pagelist             of Pages objects as `id => Page`
      * @param Opt $opt
      *
-     * @param string $regex Regex to match.
-     * @param array $searchopt Option search, could be `content` `title` `description`.
+     * @param string $regex                 Regex to match.
+     * @param array $searchopt              Option search, could be `content` `title` `description`.
      *
-     * @return Page[] associative array of `Page` objects     *
+     * @return Page[]                       associative array of `Page` objects     *
      */
     public function pagetable(array $pagelist, Opt $opt, $regex = '', $searchopt = []): array
     {
@@ -48,10 +48,10 @@ class Modelhome extends Modelpage
     /**
      * Filter the pages list acording to the options and invert
      *
-     * @param Page[] $pagelist          list of `Page` objects
+     * @param Page[] $pagelist              list of `Page` objects
      * @param Opt $opt
      *
-     * @return Page[]                   Filtered list of pages
+     * @return Page[]                       Filtered list of pages
      */
 
     public function filter(array $pagelist, Opt $opt): array
@@ -83,10 +83,10 @@ class Modelhome extends Modelpage
     /**
      * Sort and limit an array of Pages
      *
-     * @param array $pagelist of `Page` objects
+     * @param Page[] $pagelist              array of `Page` objects
      * @param Opt $opt
      *
-     * @return array associative array of `Page` objects
+     * @return Page[]                       associative array of `Page` objects
      */
     public function sort(array $pagelist, Opt $opt): array
     {
@@ -103,9 +103,9 @@ class Modelhome extends Modelpage
     /**
      * Search for regex and count occurences
      *
-     * @param array $pagelist list Array of Pages.
-     * @param string $regex Regex to match.
-     * @param array $options Option search, could be `content` `title` `description`.
+     * @param Page[] $pagelist              list Array of Pages.
+     * @param string $regex                 Regex to match.
+     * @param string[] $options             Option search, could be `content` `title` `description`.
      *
      * @return array associative array of `Page` objects
      */

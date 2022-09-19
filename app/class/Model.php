@@ -240,7 +240,7 @@ abstract class Model
      * @param string $content The message content
      * @param string $type Message Type, can be `info|warning|success|error`
      */
-    public static function sendflashmessage(string $content, string $type = self::FLASH_INFO)
+    public static function sendflashmessage(string $content, string $type = self::FLASH_INFO): void
     {
         if (!key_exists($type, self::FLASH_MESSAGE_TYPES)) {
             $type = self::FLASH_INFO;
@@ -288,7 +288,7 @@ abstract class Model
      * @param string $dst destination folder
      * @param int $perm OPTIONNAL permission in octal format.
      */
-    public static function recursecopy($src, $dst, $perm = Model::FOLDER_PERMISSION)
+    public static function recursecopy($src, $dst, $perm = Model::FOLDER_PERMISSION): void
     {
         $dir = opendir($src);
         mkdir($dst, $perm);
