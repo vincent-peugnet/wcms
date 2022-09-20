@@ -258,7 +258,7 @@
                 </p>
                 <input type="hidden" name="route" value="home">
                 <input type="hidden" name="query" value="<?= $queryaddress ?>">
-                <input type="text" name="id" id="bookmark_id">
+                <input type="text" name="id" id="bookmark_id" required minlength="3">
                 <label for="bookmark_id">id</label>
                 <br>
                 <select name="icon" id="bookmark_icon">
@@ -302,6 +302,9 @@
                         <br>
                         <input type="submit" value="update">
                     </form>
+                    <h2>use as RSS stream</h2>
+                        copy and paste this code in any page
+                        <input readonly class="code select-all" value="%RSS?bookmark=<?= $bookmark->id() ?>%">
                     <h2>Delete</h2>
                     <form action="<?= $this->url('bookmarkdelete') ?>" method="post">
                         <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
