@@ -83,36 +83,23 @@ class Controllerbookmark extends Controller
      *
      * @param string $bookmark              Id of the bookmark
      */
-    public function publish(string $bookmark)
+    public function publish(string $bookmark): void
     {
         if ($this->user->issupereditor()) {
             try {
                 $bookmark = $this->bookmarkmanager->get($bookmark);
-            } catch (RuntimeException $e) {
-                Model::sendflashmessage($e, Model::FLASH_ERROR);
-                $this->routedirect('home');
-            }
-            if ($bookmark->ispublic()) {
-                $rss = new Optrss();
-                $rss->parsehydrate($bookmark->query());
+                if ($bookmark->ispublic()) {
+                    $rss = new Servicerss($this->router);
+                    $rss->publishbookmark($bookmark);
 
-                $pagelist = $this->pagemanager->pagelist();
-                $pagetable = $this->pagemanager->pagetable($pagelist, $rss, '', []);
+                    $bookmark->setpublished(true);
+                    $this->bookmarkmanager->update($bookmark);
 
-                $render = new Modelrender($this->router);
-
-                try {
-                    $xml = $rss->render($pagetable, $bookmark, $render);
-                    Model::writefile(Model::ASSETS_ATOM_DIR . $bookmark->id() . '.xml', $xml);
-                } catch (DOMException $e) {
-                    Model::sendflashmessage(
-                        'Error while creating RSS XML file: ' . $e->getMessage(),
-                        Model::FLASH_ERROR
-                    );
+                    Model::sendflashmessage('RSS feed successfully published', Model::FLASH_SUCCESS);
                 }
+            } catch (RuntimeException | DOMException $e) {
+                Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
             }
-        } else {
-            // throw a 403 forbiden
         }
         $this->routedirect('home');
     }

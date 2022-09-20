@@ -2,41 +2,69 @@
 
 namespace Wcms;
 
+use AltoRouter;
 use DateTime;
 use DOMDocument;
 use DOMException;
 use LogicException;
+use RuntimeException;
 
-class Optrss extends Opt
+class Servicerss
 {
-    /** @var Modelrender $render */
-    protected $render;
+    protected AltoRouter $router;
+    protected Modelrender $render;
+    protected Modelpage $pagemanager;
+    protected Modelbookmark $bookmarkmanager;
+
+    public function __construct(AltoRouter $router)
+    {
+        $this->router = $router;
+        $this->render = new Modelrender($this->router);
+        $this->pagemanager = new Modelpage();
+        $this->bookmarkmanager = new Modelbookmark();
+    }
+
+    /**
+     * @param Bookmark $bookmark
+     *
+     * @throws DOMException
+     */
+    public function publishbookmark(Bookmark $bookmark): bool
+    {
+        $opt = $this->parsehydrate($bookmark->query());
+
+        $pagelist = $this->pagemanager->pagelist();
+        $pagetable = $this->pagemanager->pagetable($pagelist, $opt, '', []);
+
+        $xml = $this->render($pagetable, $bookmark);
+        return (Model::writefile(Model::ASSETS_ATOM_DIR . $bookmark->id() . '.xml', $xml));
+    }
+
+
 
     /**
      * Hydrate code into Object properties
      *
      * @param string $encoded Encoded datas in code (can start with a `?` or not)
      *
-     * @return bool indicating the success of hydrating protocol
+     * @return Opt
      */
-    public function parsehydrate(string $encoded): bool
+    protected function parsehydrate(string $encoded): Opt
     {
         parse_str(ltrim($encoded, "?"), $datas);
-        return $this->hydrate($datas);
+        return new Opt($datas);
     }
 
     /**
      * @param Page[] $pagelist              sorted and filtered list of page that will be in the RSS feed
      * @param Bookmark $bookmark            The actual page from which the RSS is linked
-     * @param Modelrender $render           the Rendering engine to generate links
      *
      * @return string                       the RSS/Atom 1 as XML
      *
      * @throws DOMException                 if XML fail to build
      */
-    public function render(array $pagelist, Bookmark $bookmark, Modelrender $render): string
+    protected function render(array $pagelist, Bookmark $bookmark): string
     {
-        $this->render = $render;
         $now = new DateTime();
 
         $xml = new DOMDocument('1.0', 'utf-8');
@@ -56,6 +84,8 @@ class Optrss extends Opt
         $linkrss->setAttribute("rel", "self");
         $feed->appendChild($linkrss);
 
+        // link to reference page
+        //
         // $link = $xml->createElement("link");
         // $link->setAttribute("href", $this->href($page));
         // $link->setAttribute("hreflang", !empty($page->lang()) ? $page->lang() : Config::lang());
@@ -101,7 +131,7 @@ class Optrss extends Opt
      *
      * @throws LogicException               if router fail to generate route
      */
-    public function href(Page $page): string
+    protected function href(Page $page): string
     {
         return Config::domain() . $this->render->upage($page->id());
     }
@@ -112,7 +142,7 @@ class Optrss extends Opt
      * @param Page $page
      * @return string                       HTML content parsed from page MAIN
      */
-    public function mainhtml(Page $page): string
+    protected function mainhtml(Page $page): string
     {
         $render = new Modelrender($this->render->router(), $this->render->pagelist());
         return $render->rsscontent($page);

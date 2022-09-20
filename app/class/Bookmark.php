@@ -31,8 +31,9 @@ class Bookmark extends Item
     /** @var string $user user owning the bookmark */
     protected string $user = '';
 
-    /** @var bool $rss Indicate if the bookmark is also a RSS feed */
-    protected bool $rss = false;
+    /** @var bool $published Indicate if the bookmark is also a RSS feed */
+    protected bool $published = false;
+
     /**
      * @throws RuntimeException
      */
@@ -55,7 +56,10 @@ class Bookmark extends Item
         return empty($this->user);
     }
 
-
+    public function ispublished(): bool
+    {
+        return $this->published;
+    }
 
 
     // _____________________________ G E T __________________________________
@@ -101,9 +105,9 @@ class Bookmark extends Item
         return $this->user;
     }
 
-    public function rss(): bool
+    public function published(): bool
     {
-        return $this->rss;
+        return $this->published;
     }
 
     // _____________________________ S E T __________________________________
@@ -180,8 +184,8 @@ class Bookmark extends Item
         return false;
     }
 
-    public function setrss(bool $rss)
+    public function setpublished(bool $published)
     {
-        $this->rss = $rss;
+        $this->published = $published;
     }
 }

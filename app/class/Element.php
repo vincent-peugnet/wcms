@@ -4,6 +4,9 @@ namespace Wcms;
 
 use Exception;
 
+/**
+ * HTML Element used in pages
+ */
 class Element extends Item
 {
     protected $fullmatch;
@@ -128,7 +131,7 @@ class Element extends Item
     public function settype(string $type)
     {
         $type = strtolower($type);
-        if (in_array($type, Model::TEXT_ELEMENTS)) {
+        if (in_array($type, Model::HTML_ELEMENTS)) {
             $this->type = $type;
         }
     }

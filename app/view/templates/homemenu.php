@@ -302,10 +302,13 @@
                         <br>
                         <input type="submit" value="update">
                     </form>
-                    <h2>use as RSS stream</h2>
-                        copy and paste this code in any page
-                        <input readonly class="code select-all" value="%RSS?bookmark=<?= $bookmark->id() ?>%">
-                        <a href="<?= $this->ubookmark('bookmarkpublish', $bookmark->id()) ?>">publish !</a>
+                    <h2>use as RSS feed</h2>
+                        <?php if ($bookmark->ispublished()) { ?>
+                            copy and paste this code in any page
+                            <input readonly class="code select-all" value="%RSS?bookmark=<?= $bookmark->id() ?>%">
+                        <?php } else { ?>
+                            <a href="<?= $this->ubookmark('bookmarkpublish', $bookmark->id()) ?>">publish !</a>
+                        <?php } ?>
                     <h2>Delete</h2>
                     <form action="<?= $this->url('bookmarkdelete') ?>" method="post">
                         <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
