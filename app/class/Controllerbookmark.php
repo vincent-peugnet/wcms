@@ -75,4 +75,17 @@ class Controllerbookmark extends Controller
         }
         $this->routedirect($_POST['route'] ?? 'home');
     }
+
+    /**
+     * Publish RSS atom file associated to the bookmark
+     */
+    public function publish()
+    {
+        if ($this->user->issupereditor() && isset($_POST['id'])) {
+            $bookmark = $this->bookmarkmanager->get($_POST['id']);
+            if ($bookmark->ispublic()) {
+                // generate atom file
+            }
+        }
+    }
 }

@@ -2,27 +2,37 @@
 
 namespace Wcms;
 
+use DateTimeImmutable;
 use RuntimeException;
 
 class Bookmark extends Item
 {
     /** @var string $id Bookmark ID */
     protected $id;
+
     /** @var string $name Name to be displayed */
     protected string $name = '';
+
     /** @var string $description used in title */
     protected string $description = '';
+
     /** @var string $query */
     protected $query = '';
+
     /** @var string $route Can be `home|media` */
     protected $route;
+
     /** @var array $params*/
     protected $params = [];
+
     /** @var string $icon associated emoji */
     protected $icon = '⭐';
+
     /** @var string $user user owning the bookmark */
     protected string $user = '';
 
+    /** @var bool $rss Indicate if the bookmark is also a RSS feed */
+    protected bool $rss = false;
     /**
      * @throws RuntimeException
      */
@@ -89,6 +99,11 @@ class Bookmark extends Item
     public function user(): string
     {
         return $this->user;
+    }
+
+    public function rss(): bool
+    {
+        return $this->rss;
     }
 
     // _____________________________ S E T __________________________________
@@ -163,5 +178,10 @@ class Bookmark extends Item
             return true;
         }
         return false;
+    }
+
+    public function setrss(bool $rss)
+    {
+        $this->rss = $rss;
     }
 }

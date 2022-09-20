@@ -149,7 +149,7 @@ abstract class Item
      * Tool for accessing different view of the same DateTimeImmutable var
      *
      * @param string $property DateTimeImmutable var to access
-     * @param string $option
+     * @param string $option Can be date|string|hrdi|pdate|ptime|dmy|self::HTML_DATETIME_LOCAL
      * @throws InvalidArgumentException if property does not exist
      *
      * @return mixed string or false if propriety does not exist
