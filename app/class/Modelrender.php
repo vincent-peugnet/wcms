@@ -28,7 +28,7 @@ class Modelrender extends Modelpage
         parent::__construct();
 
         $this->router = $router;
-        $this->pagelist = empty($pagelist) ? $this->pagelist() : $pagelist;
+        $this->pagelist = empty($pagelist) ? [] : $pagelist;
 
         if (Config::internallinkblank()) {
             $this->internallinkblank = ' target="_blank" ';

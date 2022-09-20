@@ -156,7 +156,7 @@ class Controller
     }
 
     /**
-     *
+     * Used to display a count / total stat
      */
     public function sendstatflashmessage(int $count, int $total, string $message)
     {

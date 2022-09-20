@@ -127,7 +127,7 @@ class Modelpage extends Modeldb
 
     public function getpageelement($id, $element)
     {
-        if (in_array($element, Model::TEXT_ELEMENTS)) {
+        if (in_array($element, Model::HTML_ELEMENTS)) {
             $page = $this->get($id);
             if ($page !== false) {
                 return $page->$element();

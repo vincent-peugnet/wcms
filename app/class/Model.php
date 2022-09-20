@@ -2,8 +2,6 @@
 
 namespace Wcms;
 
-use RuntimeException;
-
 abstract class Model
 {
     public const CONFIG_FILE = 'config.json';
@@ -133,7 +131,7 @@ abstract class Model
         'editcount'
     ];
 
-    public const TEXT_ELEMENTS = ['header', 'nav', 'main', 'aside', 'footer'];
+    public const HTML_ELEMENTS = ['header', 'nav', 'main', 'aside', 'footer'];
 
     public const ID_REGEX                   = "%[^a-z0-9-_]%";
     public const MAX_ID_LENGTH              = 64;

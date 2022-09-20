@@ -2,6 +2,7 @@
 
 namespace Wcms;
 
+use AltoRouter;
 use InvalidArgumentException;
 use JamesMoss\Flywheel\Document;
 use RuntimeException;
@@ -140,14 +141,21 @@ class Modelbookmark extends Modeldb
     }
 
     /**
+     * Delete bookmark and it's associated RSS xml file if published
+     *
      * @param Bookmark $bookmark            Bookmark to be deleted
-     * @throws RuntimeException             when removing bookmark failed
+     * @throws RuntimeException             when removing bookmark or deleting RSS failed
      */
     public function delete(Bookmark $bookmark): void
     {
         $success = $this->repo->delete($bookmark->id());
         if (!$success) {
             throw new RuntimeException("Bookmark \"" . $bookmark->id() . "\" could not be deleted ");
+        }
+        if ($bookmark->ispublished()) {
+            if (!unlink(Model::ASSETS_ATOM_DIR . $bookmark->id() . 'xml')) {
+                throw new RuntimeException("Bookmark's RSS feed \"" . $bookmark->id() . "\" could not be deleted ");
+            }
         }
     }
 
