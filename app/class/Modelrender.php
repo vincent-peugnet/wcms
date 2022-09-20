@@ -617,13 +617,11 @@ class Modelrender extends Modelpage
     {
         $matches = $this->match($text, 'LIST');
 
-        $modelhome = new Modelhome();
-
         if (!empty($matches)) {
             foreach ($matches as $match) {
                 $optlist = new Optlist(['render' => $this]);
                 $optlist->parsehydrate($match['options']);
-                $pagetable = $modelhome->pagetable($this->pagelist(), $optlist, '', []);
+                $pagetable = $this->pagetable($this->pagelist(), $optlist, '', []);
                 $this->linkto = array_merge($this->linkto, array_keys($pagetable));
                 $content = $optlist->listhtml($pagetable, $this->page, $this);
                 $text = str_replace($match['fullmatch'], $content, $text);
