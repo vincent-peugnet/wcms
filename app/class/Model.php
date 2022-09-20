@@ -9,6 +9,7 @@ abstract class Model
     public const CONFIG_FILE = 'config.json';
     public const MAN_FILE = 'MANUAL.md';
     public const ASSETS_CSS_DIR = 'assets/css/';
+    public const ASSETS_ATOM_DIR = 'assets/atom/';
     public const COLORS_FILE = self::ASSETS_CSS_DIR . 'tagcolors.css';
     public const JS_DIR = 'assets/js/';
     public const ICONS_DIR = 'assets/icons/';

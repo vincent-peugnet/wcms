@@ -22,53 +22,6 @@ class Modelhome extends Modelpage
     }
 
 
-    /**
-     * Search for regex and count occurences
-     *
-     * @param Page[] $pagelist              list Array of Pages.
-     * @param string $regex                 Regex to match.
-     * @param string[] $options             Option search, could be `content` `title` `description`.
-     *
-     * @return array associative array of `Page` objects
-     */
-    public function deepsearch(array $pagelist, string $regex, array $options): array
-    {
-        if ($options['casesensitive']) {
-            $case = '';
-        } else {
-            $case = 'i';
-        }
-        $regex = '/' . $regex . '/' . $case;
-        $pageselected = [];
-        foreach ($pagelist as $page) {
-            $count = 0;
-            if ($options['content']) {
-                $count += preg_match($regex, $page->main());
-                $count += preg_match($regex, $page->nav());
-                $count += preg_match($regex, $page->aside());
-                $count += preg_match($regex, $page->header());
-                $count += preg_match($regex, $page->footer());
-            }
-            if ($options['other']) {
-                $count += preg_match($regex, $page->body());
-                $count += preg_match($regex, $page->css());
-                $count += preg_match($regex, $page->javascript());
-            }
-            if ($options['id']) {
-                $count += preg_match($regex, $page->id());
-            }
-            if ($options['title']) {
-                $count += preg_match($regex, $page->title());
-            }
-            if ($options['description']) {
-                $count += preg_match($regex, $page->description());
-            }
-            if ($count !== 0) {
-                $pageselected[$page->id()] = $page;
-            }
-        }
-        return $pageselected;
-    }
 
 
 
