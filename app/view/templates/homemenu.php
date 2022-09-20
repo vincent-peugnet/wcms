@@ -305,6 +305,7 @@
                     <h2>use as RSS stream</h2>
                         copy and paste this code in any page
                         <input readonly class="code select-all" value="%RSS?bookmark=<?= $bookmark->id() ?>%">
+                        <a href="<?= $this->ubookmark('bookmarkpublish', $bookmark->id()) ?>">publish !</a>
                     <h2>Delete</h2>
                     <form action="<?= $this->url('bookmarkdelete') ?>" method="post">
                         <input type="hidden" name="id" value="<?= $bookmark->id() ?>">

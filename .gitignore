@@ -3,6 +3,7 @@
 *.log
 *.bundle.js
 *.bundle.js.map
+assets/atom/*
 assets/render/*
 assets/global/*
 assets/css/tagcolors.css

@@ -81,6 +81,9 @@ class Controller
         $this->plates->registerFunction('upage', function (string $string, string $id) {
             return $this->generate($string, ['page' => $id]);
         });
+        $this->plates->registerFunction('ubookmark', function (string $string, string $id) {
+            return $this->generate($string, ['bookmark' => $id]);
+        });
         $this->plates->addData(['flashmessages' => Model::getflashmessages()]);
     }
 

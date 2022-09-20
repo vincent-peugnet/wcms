@@ -10,7 +10,7 @@ use Michelf\MarkdownExtra;
 
 class Modelrender extends Modelpage
 {
-    /** @var \AltoRouter */
+    /** @var AltoRouter */
     protected ?AltoRouter $router;
     /** @var Page Actual page being rendered*/
     protected $page;
@@ -19,12 +19,16 @@ class Modelrender extends Modelpage
     protected $internallinkblank = '';
     protected $externallinkblank = '';
 
-    public function __construct(\AltoRouter $router)
+    /**
+     * @param AltoRouter $router            Router used to generate urls
+     * @param Page[] $pagelist              Optionnal : if pagelist already exist, feed it with it
+     */
+    public function __construct(AltoRouter $router, array $pagelist = [])
     {
         parent::__construct();
 
         $this->router = $router;
-        $this->pagelist = $this->pagelist();
+        $this->pagelist = empty($pagelist) ? $this->pagelist() : $pagelist;
 
         if (Config::internallinkblank()) {
             $this->internallinkblank = ' target="_blank" ';
@@ -52,8 +56,9 @@ class Modelrender extends Modelpage
     /**
      * Generate page relative link for given page_id including basepath
      *
-     * @param string $id given page ID
-     * @return string Relative URL
+     * @param string $id                    given page ID
+     * @return string                       Relative URL
+     * @throws LogicException               if router fail to generate route
      */
     public function upage(string $id): string
     {
@@ -801,10 +806,30 @@ class Modelrender extends Modelpage
     }
 
 
+    // _________________________ R S S ___________________________________
+
+    /**
+     * @return string HTML Parsed MAIN content of a page
+     * @todo render absolute media links
+     */
+    public function rsscontent(Page $page): string
+    {
+        $this->page = $page;
+        $element = new Element($page->id(), ['content' => $page->main(), 'type' => "main"]);
+        $html = $this->elementparser($element);
+        return $this->bodyparser($html);
+    }
+
+
     // _________________________ G E T ___________________________________
 
     public function sum()
     {
         return $this->sum;
+    }
+
+    public function router(): AltoRouter
+    {
+        return $this->router;
     }
 }
