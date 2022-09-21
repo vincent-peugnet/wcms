@@ -7,17 +7,27 @@ use Exception;
 use Http\Discovery\Exception\NotFoundException;
 use LogicException;
 use Michelf\MarkdownExtra;
+use RuntimeException;
 
 class Modelrender extends Modelpage
 {
     /** @var AltoRouter */
     protected ?AltoRouter $router;
-    /** @var Page Actual page being rendered*/
+
+    /**
+     * @var Page                            Actual page being rendered
+     * */
     protected $page;
+
     protected $linkto = [];
     protected $sum = [];
     protected $internallinkblank = '';
     protected $externallinkblank = '';
+
+    /**
+     * @var Bookmark[]                      Associative array of Bookmarks using fullmatch as key
+     * */
+    protected $rsslist = [];
 
     /**
      * @param AltoRouter $router            Router used to generate urls
@@ -90,9 +100,9 @@ class Modelrender extends Modelpage
     public function gethmtl()
     {
 
-        $head = $this->gethead();
         $body = $this->getbody($this->readbody());
         $parsebody = $this->bodyparser($body);
+        $head = $this->gethead();
 
         $lang = !empty($this->page->lang()) ? $this->page->lang() : Config::lang();
         $langproperty = 'lang="' . $lang . '"';
@@ -247,7 +257,7 @@ class Modelrender extends Modelpage
     /**
      * Return HEAD html element of a page
      */
-    public function gethead()
+    public function gethead(): string
     {
         $id = $this->page->id();
         $globalpath = Model::dirtopath(Model::CSS_DIR);
@@ -298,6 +308,12 @@ class Modelrender extends Modelpage
         }
 
         $head .= "<meta property=\"og:url\" content=\"$url$id/\">\n";
+
+        foreach ($this->rsslist as $bookmark) {
+            $atompath = Servicerss::atompath($bookmark->id());
+            $title = $bookmark->name();
+            $head .= "<link href=\"$atompath\" type=\"application/atom+xml\" rel=\"alternate\" title=\"$title\" />";
+        }
 
         $head .= PHP_EOL . $this->page->customhead() . PHP_EOL;
 
@@ -373,6 +389,9 @@ class Modelrender extends Modelpage
         $text = $this->media($text);
 
         $text = $this->summary($text);
+
+        $text = $this->rss($text);
+
         $text = $this->authors($text);
         $text = $this->wurl($text);
         $text = $this->wikiurl($text);
@@ -559,7 +578,7 @@ class Modelrender extends Modelpage
      * @param string $text Input text to scan
      * @param string $include word to match
      *
-     * @return array Ordered array containing an array of `fullmatch` and `filter`
+     * @return array Ordered array containing an array of `fullmatch` and `options`
      */
     public function match(string $text, string $include): array
     {
@@ -633,6 +652,52 @@ class Modelrender extends Modelpage
             }
         }
         return $text;
+    }
+
+    /**
+     * Replace RSS inclusions with links and store Bookmarks in `rsslist` property
+     *
+     * @param string $text                  Input text to analyse
+     *
+     * @return string                       Text with replaced valid %RSS% inclusions
+     */
+    public function rss(string $text): string
+    {
+        $this->rsslist = $this->rssmatch($text);
+        foreach ($this->rsslist as $fullmatch => $bookmark) {
+            $atompath = Servicerss::atompath($bookmark->id());
+            $link = "<a href=\"$atompath\">RSS feed</a>";
+            return str_replace($fullmatch, $link, $text);
+        }
+        return $text;
+    }
+
+    /**
+     * Identify all RSS inclusion in text, that have a valid and bublished bookmark associated
+     *
+     * @param string $text                  Text to analyse
+     *
+     * @return Bookmark[]                   Associative array of bookmarks, using fullmatch as key
+     */
+    public function rssmatch(string $text): array
+    {
+        $rsslist = [];
+        $matches = $this->match($text, "RSS");
+        foreach ($matches as $match) {
+            parse_str($match['options'], $datas);
+            if (isset($datas['bookmark'])) {
+                $bookmarkmanager = new Modelbookmark();
+                try {
+                    $bookmark = $bookmarkmanager->get($datas['bookmark']);
+                    if ($bookmark->ispublished()) {
+                        $rsslist[$match['fullmatch']] = $bookmark;
+                    }
+                } catch (RuntimeException $e) {
+                    // log a render error
+                }
+            }
+        }
+        return $rsslist;
     }
 
 
