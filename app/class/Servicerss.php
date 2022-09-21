@@ -175,4 +175,9 @@ class Servicerss
     {
         return Model::ASSETS_ATOM_DIR . $id . '.xml';
     }
+
+    public static function atompath(string $id): string
+    {
+        return Model::dirtopath(self::atomfile($id));
+    }
 }

@@ -16,7 +16,7 @@ CodeMirror.defineSimpleMode('wcms', {
     // detect a Wcms markup then pass to 'wcms' mode
     start: [
         {
-            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|SUMMARY|LIST|MEDIA|TITLE|DESCRIPTION|DATE|TIME|THUMBNAIL)(\?[^\s]*)?%)/,
+            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|SUMMARY|LIST|MEDIA|TITLE|DESCRIPTION|DATE|TIME|THUMBNAIL|RSS)(\?[^\s]*)?%)/,
             token: 'wcms',
             next: 'wcms',
         },
@@ -32,6 +32,7 @@ CodeMirror.defineSimpleMode('wcms', {
         { regex: /SUMMARY\?/, token: 'wcms', next: 'summary' },
         { regex: /LIST\?/, token: 'wcms', next: 'list' },
         { regex: /MEDIA\?/, token: 'wcms', next: 'media' },
+        { regex: /RSS\?/, token: 'wcms', next: 'rss' },
         { regex: /[^&]*&/, token: 'wcms', pop: true },
         { regex: /.*%/, token: 'wcms', next: 'start' },
     ],
@@ -61,6 +62,11 @@ CodeMirror.defineSimpleMode('wcms', {
     // 'media' mode, parameters' keywords of the 'media' macro
     media: [
         { regex: /path|sortby|order|type/, token: 'wkeyword', push: 'wcms' },
+        { regex: null, push: 'wcms' },
+    ],
+    // 'rss' mode, parameters' keywords of the 'rss' macro
+    rss: [
+        { regex: /bookmark/, token: 'wkeyword', push: 'wcms' },
         { regex: null, push: 'wcms' },
     ],
     comment: [
