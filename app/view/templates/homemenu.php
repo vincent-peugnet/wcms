@@ -306,8 +306,13 @@
                         <?php if ($bookmark->ispublished()) { ?>
                             copy and paste this code in any page
                             <input readonly class="code select-all" value="%RSS?bookmark=<?= $bookmark->id() ?>%">
+                            <a href="<?= $this->ubookmark('bookmarkunpublish', $bookmark->id()) ?>">
+                                <i class="fa fa-ban"></i> stop publishing
+                            </a>
                         <?php } else { ?>
-                            <a href="<?= $this->ubookmark('bookmarkpublish', $bookmark->id()) ?>">publish !</a>
+                            <a href="<?= $this->ubookmark('bookmarkpublish', $bookmark->id()) ?>">
+                                <i class="fa fa-rss"></i> publish !
+                            </a>
                         <?php } ?>
                     <h2>Delete</h2>
                     <form action="<?= $this->url('bookmarkdelete') ?>" method="post">

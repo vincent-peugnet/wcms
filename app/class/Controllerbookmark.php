@@ -3,7 +3,6 @@
 namespace Wcms;
 
 use DOMException;
-use Exception;
 use RuntimeException;
 
 class Controllerbookmark extends Controller
@@ -98,6 +97,24 @@ class Controllerbookmark extends Controller
                     Model::sendflashmessage('RSS feed successfully published', Model::FLASH_SUCCESS);
                 }
             } catch (RuntimeException | DOMException $e) {
+                Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+            }
+        }
+        $this->routedirect('home');
+    }
+
+    public function unpublish(string $bookmark): void
+    {
+        if ($this->user->issupereditor()) {
+            try {
+                $bookmark = $this->bookmarkmanager->get($bookmark);
+                if ($bookmark->ispublished()) {
+                    Servicerss::removeatom($bookmark->id());
+                    $bookmark->setpublished(false);
+                    Model::sendflashmessage("Bookmark is not published anymore", Model::FLASH_SUCCESS);
+                }
+                $this->bookmarkmanager->update($bookmark);
+            } catch (RuntimeException $e) {
                 Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
             }
         }

@@ -8,6 +8,7 @@ use DOMDocument;
 use DOMException;
 use LogicException;
 use RuntimeException;
+use Throwable;
 
 class Servicerss
 {
@@ -27,7 +28,7 @@ class Servicerss
     /**
      * @param Bookmark $bookmark
      *
-     * @throws DOMException
+     * @throws DOMException                 in case of XML render errors
      */
     public function publishbookmark(Bookmark $bookmark): bool
     {
@@ -45,7 +46,7 @@ class Servicerss
     /**
      * Hydrate code into Object properties
      *
-     * @param string $encoded Encoded datas in code (can start with a `?` or not)
+     * @param string $encoded               Encoded datas in code (can start with a `?` or not)
      *
      * @return Opt
      */
@@ -149,6 +150,25 @@ class Servicerss
     }
 
     /**
+     * Remove Atom file if it exist
+     *
+     * @throws RuntimeException             If PHP unlink function fails
+     */
+    public static function removeatom(string $id): void
+    {
+        try {
+            delete(self::atomfile($id));
+        } catch (Notfoundexception $e) {
+            // do nothing, this means file is already deleted
+        } catch (Unlinkexception $e) {
+            throw new RuntimeException("RSS atom file deletion error", 0, $e);
+        }
+    }
+
+    /**
+     * Get the atom File location
+     *
+     * @param string $id                    Bookmark Id
      * @return string                       Atom file location
      */
     public static function atomfile(string $id): string
