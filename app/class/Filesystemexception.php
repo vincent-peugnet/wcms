@@ -4,6 +4,6 @@ namespace Wcms;
 
 use RuntimeException;
 
-class Ioexception extends RuntimeException
+class Filesystemexception extends RuntimeException
 {
 }

@@ -257,6 +257,8 @@ abstract class Model
      * Send flash messages:
      * - error when problem writing the file
      * - warning when problem with permissions
+     *
+     * @todo Remove flash messages from here, send FilesystemException instead
      */
     public static function writefile(string $filename, $data, int $permissions = self::FILE_PERMISSION): bool
     {
@@ -272,7 +274,7 @@ abstract class Model
         } catch (Chmodexception $e) {
             Logger::warning($e->getMessage());
             self::sendflashmessage($e->getMessage(), 'warning');
-        } catch (Ioexception $e) {
+        } catch (Filesystemexception $e) {
             Logger::error($e->getMessage());
             self::sendflashmessage($e->getMessage(), 'error');
             return false;

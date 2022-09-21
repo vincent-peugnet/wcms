@@ -2,7 +2,7 @@
 
 namespace Wcms;
 
-class Chmodexception extends Ioexception
+class Chmodexception extends Filesystemexception
 {
     public function __construct(
         string $message,

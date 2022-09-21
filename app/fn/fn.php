@@ -1,11 +1,10 @@
 <?php
 
-use Http\Discovery\Exception\NotFoundException;
-use Symfony\Component\OptionsResolver\Exception\AccessException;
 use Wcms\Chmodexception;
-use Wcms\Ioexception;
+use Wcms\Filesystemexception;
 use Wcms\Mediaopt;
-use Wcms\Model;
+use Wcms\Notfoundexception;
+use Wcms\Unlinkexception;
 
 function readablesize($bytes, $base = 2 ** 10)
 {
@@ -439,7 +438,7 @@ function parse_size($size)
  * @param mixed $data The data to write. Can be either a string, an array or a stream resource.
  * @param int $permissions in octal value
  *
- * @throws Ioexception when file_put_contents fails
+ * @throws Filesystemexception when file_put_contents fails
  * @throws Chmodexception when chmod fails
  */
 function file_put_content_chmod(string $filename, $data, int $permissions): int
@@ -447,7 +446,7 @@ function file_put_content_chmod(string $filename, $data, int $permissions): int
     $create = !file_exists($filename);
     $length = file_put_contents($filename, $data);
     if ($length === false) {
-        throw new Ioexception("Error while writing $filename");
+        throw new Filesystemexception("Error while writing $filename");
     }
     if ($create) {
         if ($permissions < 0600 || $permissions > 0777) {
@@ -512,15 +511,33 @@ function curl_download(string $url): string
 
 
 /**
- * @param string $input string to be checked
- * @return string first occurence of url in input string
- * @throws NotFoundException when no string is founded
+ * @param string $input                     string to be checked
+ * @return string                           first occurence of url in input string
+ * @throws RangeException                   when no string is founded
  */
 function getfirsturl(string $input): string
 {
     if (preg_match('%https?:\/\/\S*%', $input, $out)) {
         return $out[0];
     } else {
-        throw new NotFoundException("no url in string: $input");
+        throw new RangeException("no url in string: $input");
+    }
+}
+
+/**
+ * Delete a file from the filesystem
+ *
+ * @param string $file                      Filename to delete
+ *
+ * @throws Notfoundexception                If file does not exist
+ * @throws Unlinkexception                  If PHP unlink function fails
+ */
+function delete(string $file): void
+{
+    if (!file_exists($file)) {
+        throw new Notfoundexception($file);
+    }
+    if (!unlink($file)) {
+        throw new Unlinkexception($file);
     }
 }
