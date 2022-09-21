@@ -153,7 +153,7 @@ class Modelbookmark extends Modeldb
             throw new RuntimeException("Bookmark \"" . $bookmark->id() . "\" could not be deleted ");
         }
         if ($bookmark->ispublished()) {
-            if (!unlink(Model::ASSETS_ATOM_DIR . $bookmark->id() . 'xml')) {
+            if (!unlink(Servicerss::atomfile($bookmark->id()))) {
                 throw new RuntimeException("Bookmark's RSS feed \"" . $bookmark->id() . "\" could not be deleted ");
             }
         }

@@ -37,7 +37,7 @@ class Servicerss
         $pagetable = $this->pagemanager->pagetable($pagelist, $opt, '', []);
 
         $xml = $this->render($pagetable, $bookmark);
-        return (Model::writefile(Model::ASSETS_ATOM_DIR . $bookmark->id() . '.xml', $xml));
+        return (Model::writefile(self::atomfile($bookmark->id()), $xml));
     }
 
 
@@ -146,5 +146,13 @@ class Servicerss
     {
         $render = new Modelrender($this->render->router(), $this->render->pagelist());
         return $render->rsscontent($page);
+    }
+
+    /**
+     * @return string                       Atom file location
+     */
+    public static function atomfile(string $id): string
+    {
+        return Model::ASSETS_ATOM_DIR . $id . '.xml';
     }
 }
