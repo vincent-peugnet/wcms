@@ -30,8 +30,14 @@ class Controllerhome extends Controllerpage
         if ($this->user->isvisitor() && Config::homepage() === 'redirect' && !empty(Config::homeredirect())) {
             $this->routedirect('pageread/', ['page' => Config::homeredirect()]);
         } else {
-            $pagelist = $this->modelhome->pagelist();
-            $this->opt = $this->modelhome->optinit($pagelist);
+            $pagelist = $this->pagemanager->pagelist();
+
+
+            $this->opt = new Opt();
+            $this->opt->settaglist($pagelist);
+            $this->opt->setauthorlist($pagelist);
+            $this->opt->setpageidlist($pagelist);
+            $this->opt->submit();
 
             try {
                 $vars['colors'] = new Colors(Model::COLORS_FILE, $this->opt->taglist());
@@ -51,7 +57,7 @@ class Controllerhome extends Controllerpage
 
             $deepsearch = $this->deepsearch();
 
-            $vars['pagelistopt'] = $this->modelhome->pagetable(
+            $vars['pagelistopt'] = $this->pagemanager->pagetable(
                 $pagelist,
                 $this->opt,
                 $deepsearch['regex'],
@@ -185,7 +191,7 @@ class Controllerhome extends Controllerpage
     public function renderall()
     {
         if ($this->user->iseditor()) {
-            $pagelist = $this->modelhome->pagelist();
+            $pagelist = $this->pagemanager->pagelist();
             $count = 0;
             foreach ($pagelist as $page) {
                 $page = $this->renderpage($page);

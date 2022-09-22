@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Exception;
 use InvalidArgumentException;
 use League\Plates\Engine;
+use RuntimeException;
 use Throwable;
 
 class Controller

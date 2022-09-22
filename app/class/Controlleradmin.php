@@ -46,9 +46,8 @@ class Controlleradmin extends Controller
 
     public function update()
     {
-        accessfile(Model::GLOBAL_CSS_FILE, true);
-
         try {
+            Fs::accessfile(Model::GLOBAL_CSS_FILE, true);
             Fs::writefile(Model::GLOBAL_CSS_FILE, $_POST['globalcss']);
             Config::hydrate($_POST);
             Config::savejson();
