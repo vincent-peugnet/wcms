@@ -262,7 +262,7 @@
                 <label for="bookmark_id">id</label>
                 <br>
                 <select name="icon" id="bookmark_icon">
-                    <?php foreach (Wcms\Model::BOOKMARK_ICONS as $icon) { ?>
+                    <?php foreach (Wcms\Modelbookmark::BOOKMARK_ICONS as $icon) { ?>
                         <option value="<?= $icon ?>"><?= $icon ?></option>
                     <?php } ?>
                 </select>
@@ -288,7 +288,7 @@
                         <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
                         <input type="hidden" name="route" value="<?= $bookmark->route() ?>">
                         <select name="icon" id="bookmark_icon">
-                            <?php foreach (Wcms\Model::BOOKMARK_ICONS as $icon) { ?>
+                            <?php foreach (Wcms\Modelbookmark::BOOKMARK_ICONS as $icon) { ?>
                                 <option value="<?= $icon ?>" <?= $icon === $bookmark->icon() ? 'selected' : '' ?>><?= $icon ?></option>
                             <?php } ?>
                         </select>

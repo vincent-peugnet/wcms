@@ -55,7 +55,7 @@
                     <input type="checkbox" name="showredirection" value="1" id="showredirection" <?= $showredirection ? 'checked' : '' ?>>
                     <label for="showredirection">show redirections</label>
                     <select name="layout" id="layout">
-                        <?= options(Wcms\Model::MAP_LAYOUTS, $layout) ?>
+                        <?= options(Wcms\Modelhome::MAP_LAYOUTS, $layout) ?>
                     </select>
                     <label for="layout">graph layout</label>
                     <input type="submit" value="update">
