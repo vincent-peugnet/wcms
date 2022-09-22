@@ -42,12 +42,12 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
             <form action="" method="get">
                 <fieldset>
                     <legend>Type</legend>
-                    <?= checkboxes('type', Model::mediatypes(), $mediaopt->type()) ?>
+                    <?= checkboxes('type', Modelmedia::mediatypes(), $mediaopt->type()) ?>
                 </fieldset>
                 <fieldset>
                     <legend>Sort</legend>
                     <select name="sortby" id="sortby">
-                        <?= options(Model::MEDIA_SORTBY, $mediaopt->sortby()) ?>
+                        <?= options(Modelmedia::MEDIA_SORTBY, $mediaopt->sortby()) ?>
                     </select>
                     </br>
                     <input type="radio" name="order" id="asc" value="1" <?= $mediaopt->order() == 1 ? 'checked' : '' ?>><label for="asc">ascending</label>

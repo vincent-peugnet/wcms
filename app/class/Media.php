@@ -245,8 +245,8 @@ class Media extends Item
 
     public function settype()
     {
-        if (!empty($this->extension) && isset(Model::MEDIA_EXT[$this->extension])) {
-            $this->type = Model::MEDIA_EXT[$this->extension];
+        if (!empty($this->extension) && isset(Modelmedia::MEDIA_EXT[$this->extension])) {
+            $this->type = Modelmedia::MEDIA_EXT[$this->extension];
         } else {
             $this->type = 'other';
         }

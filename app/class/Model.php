@@ -26,14 +26,6 @@ abstract class Model
     public const FILE_PERMISSION    = 0660;
     public const FOLDER_PERMISSION  = 0770;
 
-    public const MEDIA_SORTBY = [
-        'id' => 'id',
-        'size' => 'size',
-        'type' => 'type',
-        'date' => 'date',
-        'extension' => 'extension'
-    ];
-
     public const MAP_LAYOUTS = [
         'cose' => 'cose',
         'cose-bilkent' => 'cose-bilkent',
@@ -42,47 +34,6 @@ abstract class Model
         'concentric' => 'concentric',
         'grid' => 'grid',
         'random' => 'random',
-    ];
-
-
-    public const MEDIA_EXT = [
-        'jpg' => 'image',
-        'jpeg' => 'image',
-        'png' => 'image',
-        'gif' => 'image',
-        'ico' => 'image',
-        'tiff' => 'image',
-        'bmp' => 'image',
-        'svg' => 'image',
-        'mp3' => 'sound',
-        'opus' => 'sound',
-        'wav' => 'sound',
-        'ogg' => 'sound',
-        'flac' => 'sound',
-        'aiff' => 'sound',
-        'm4a' => 'sound',
-        'mp4' => 'video',
-        'mkv' => 'video',
-        'avi' => 'video',
-        'mov' => 'video',
-        'wmv' => 'video',
-        'm4v' => 'video',
-        'webm' => 'video',
-        'zip' => 'archive',
-        '7zip' => 'archive',
-        'pdf' => 'document',
-        'odt' => 'document',
-        'doc' => 'document',
-        'docx' => 'document',
-        'woff' => 'font',
-        'woff2' => 'font',
-        'otf' => 'font',
-        'ttf' => 'font',
-        'js' => 'code',
-        'html' => 'code',
-        'css' => 'code',
-        'php' => 'code',
-        '' => 'other'
     ];
 
     public const BOOKMARK_ICONS = [
@@ -203,14 +154,6 @@ abstract class Model
     public static function iconpath()
     {
         return self::dirtopath(Model::ICONS_DIR);
-    }
-
-    /**
-     *
-     */
-    public static function mediatypes()
-    {
-        return array_unique(array_values(self::MEDIA_EXT));
     }
 
     /**
