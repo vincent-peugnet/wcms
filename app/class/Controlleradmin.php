@@ -46,7 +46,7 @@ class Controlleradmin extends Controller
     {
         accessfile(Model::GLOBAL_CSS_FILE, true);
 
-        $globalcss = Model::writefile(Model::GLOBAL_CSS_FILE, $_POST['globalcss']);
+        $globalcss = Fs::writefile(Model::GLOBAL_CSS_FILE, $_POST['globalcss']);
 
         Config::hydrate($_POST);
         if (Config::savejson() !== false && $globalcss !== false) {

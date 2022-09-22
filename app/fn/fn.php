@@ -523,21 +523,3 @@ function getfirsturl(string $input): string
         throw new RangeException("no url in string: $input");
     }
 }
-
-/**
- * Delete a file from the filesystem
- *
- * @param string $file                      Filename to delete
- *
- * @throws Notfoundexception                If file does not exist
- * @throws Unlinkexception                  If PHP unlink function fails
- */
-function delete(string $file): void
-{
-    if (!file_exists($file)) {
-        throw new Notfoundexception($file);
-    }
-    if (!unlink($file)) {
-        throw new Unlinkexception($file);
-    }
-}

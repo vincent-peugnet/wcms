@@ -77,7 +77,7 @@ class Modelfont extends Model
 
     public function write(string $fontface): bool
     {
-        return self::writefile(self::ASSETS_CSS_DIR . 'fonts.css', $fontface);
+        return Fs::writefile(self::ASSETS_CSS_DIR . 'fonts.css', $fontface);
     }
 
     public function upload(array $file, $maxsize = 2 ** 24, $id = null)
