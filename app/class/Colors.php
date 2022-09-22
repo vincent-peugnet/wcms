@@ -10,7 +10,9 @@ class Colors extends Item
     protected $rawcss = "";
     protected $tagcolor = [];
 
-
+    /**
+     * @throws Filesystemexception
+     */
     public function __construct(string $file = 'tagcolors.css', array $taglist = [])
     {
         $this->setfile($file);
@@ -78,8 +80,9 @@ class Colors extends Item
 
     /**
      * Generate CSS string from datas
-     * @param array $tagcolor associative array of `tag => background-color`
-     * @return string CSS
+     *
+     * @param array $tagcolor               associative array of `tag => background-color`
+     * @return string                       CSS
      */
     public function tocss(array $tagcolor): string
     {
@@ -92,7 +95,10 @@ class Colors extends Item
 
     /**
      * Write css in the file
+     *
      * @param string $rawcss
+     *
+     * @throws FilesystemException
      */
     public function writecssfile(string $file, string $rawcss)
     {
@@ -102,7 +108,10 @@ class Colors extends Item
 
     /**
      * Update tagcolors based on datas
-     * @param array $tagcolor associative array of `tag => background-color`
+     *
+     * @param array $tagcolor               associative array of `tag => background-color`
+     *
+     * @throws FilesystemException
      */
     public function update(array $tagcolor)
     {

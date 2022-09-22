@@ -29,8 +29,9 @@ class Servicerss
      * @param Bookmark $bookmark
      *
      * @throws DOMException                 in case of XML render errors
+     * @throws Filesystemexception          in case of file writing error
      */
-    public function publishbookmark(Bookmark $bookmark): bool
+    public function publishbookmark(Bookmark $bookmark): void
     {
         $opt = $this->parsehydrate($bookmark->query());
 
@@ -38,7 +39,7 @@ class Servicerss
         $pagetable = $this->pagemanager->pagetable($pagelist, $opt, '', []);
 
         $xml = $this->render($pagetable, $bookmark);
-        return (Fs::writefile(self::atomfile($bookmark->id()), $xml));
+        Fs::writefile(self::atomfile($bookmark->id()), $xml);
     }
 
 

@@ -84,6 +84,8 @@ class Modelrender extends Modelpage
      * Main function
      *
      * @param Page $page page to render
+     *
+     * @throws Filesystemexception          If wrinting render files fails
      */
     public function render(Page $page)
     {
@@ -229,6 +231,8 @@ class Modelrender extends Modelpage
 
     /**
      * Write css javascript and html as files in the assets folder
+     *
+     * @throws Filesystemexception
      */
     public function write(string $html)
     {
@@ -239,7 +243,9 @@ class Modelrender extends Modelpage
     }
 
 
-
+    /**
+     * @throws Filesystemexception
+     */
     public function writetemplates()
     {
         if (array_key_exists('css', $this->page->template())) {

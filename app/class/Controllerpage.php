@@ -93,7 +93,11 @@ class Controllerpage extends Controller
 
         $renderengine = new Modelrender($this->router);
 
-        $renderengine->render($page);
+        try {
+            $renderengine->render($page);
+        } catch (RuntimeException $e) {
+            Model::sendflashmessage("Error while saving render files", Model::FLASH_ERROR);
+        }
         $page->setdaterender($now);
         $page->setlinkto($renderengine->linkto());
 
@@ -466,7 +470,11 @@ class Controllerpage extends Controller
     {
         if (!empty($_POST['fontsize']) && $_POST['fontsize'] !== Config::fontsize()) {
             Config::setfontsize($_POST['fontsize']);
-            Config::savejson();
+            try {
+                Config::savejson();
+            } catch (RuntimeException $e) {
+                Model::sendflashmessage("Error while saving font size inf Config file", Model::FLASH_ERROR);
+            }
         }
     }
 

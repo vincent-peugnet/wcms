@@ -26,6 +26,9 @@ class Modelfont extends Model
         return implode(', ', $fonttypes);
     }
 
+    /**
+     * @throws Filesystemexception
+     */
     public function renderfontface()
     {
         $list = $this->list();
@@ -74,7 +77,9 @@ class Modelfont extends Model
         return $fontface;
     }
 
-
+    /**
+     * @throws Filesystemexception
+     */
     public function write(string $fontface): bool
     {
         return Fs::writefile(self::ASSETS_CSS_DIR . 'fonts.css', $fontface);

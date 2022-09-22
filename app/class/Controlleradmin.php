@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use RuntimeException;
+
 class Controlleradmin extends Controller
 {
     /** @var Modelmedia $mediamanager */
@@ -46,13 +48,14 @@ class Controlleradmin extends Controller
     {
         accessfile(Model::GLOBAL_CSS_FILE, true);
 
-        $globalcss = Fs::writefile(Model::GLOBAL_CSS_FILE, $_POST['globalcss']);
-
-        Config::hydrate($_POST);
-        if (Config::savejson() !== false && $globalcss !== false) {
+        try {
+            Fs::writefile(Model::GLOBAL_CSS_FILE, $_POST['globalcss']);
+            Config::hydrate($_POST);
+            Config::savejson();
+            Model::sendflashmessage("Configuration succesfully updated", Model::FLASH_SUCCESS);
             $this->routedirect('admin');
-        } else {
-            echo 'Can\'t write config file or global css file';
+        } catch (Filesystemexception $e) {
+            Model::sendflashmessage("Can't write config file or global css file", Model::FLASH_ERROR);
         }
     }
 
@@ -68,7 +71,14 @@ class Controlleradmin extends Controller
                 case 'select':
                     if (!empty($_POST['pagetable'])) {
                         Config::hydrate($_POST);
-                        Config::savejson();
+                        try {
+                            Config::savejson();
+                        } catch (RuntimeException $e) {
+                            Model::sendflashmessage(
+                                'Cannot update Config file : ' . $e->getMessage(),
+                                Model::FLASH_ERROR
+                            );
+                        }
                     }
                     break;
             }
