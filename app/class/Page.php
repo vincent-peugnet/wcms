@@ -237,7 +237,7 @@ class Page extends Item
     public function secure($type = 'int')
     {
         if ($type == 'string') {
-            return Model::SECURE_LEVELS[$this->secure];
+            return Modelpage::SECURE_LEVELS[$this->secure];
         } else {
             return $this->secure;
         }

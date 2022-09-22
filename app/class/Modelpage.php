@@ -8,6 +8,12 @@ use DateTimeInterface;
 
 class Modelpage extends Modeldb
 {
+    public const SECURE_LEVELS = [
+        0 => 'public',
+        1 => 'private',
+        2 => 'not_published'
+    ];
+
     protected $pagelist = [];
 
 

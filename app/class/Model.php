@@ -26,22 +26,6 @@ abstract class Model
     public const FILE_PERMISSION    = 0660;
     public const FOLDER_PERMISSION  = 0770;
 
-    public const MAP_LAYOUTS = [
-        'cose' => 'cose',
-        'cose-bilkent' => 'cose-bilkent',
-        'circle' => 'circle',
-        'breadthfirst' => 'breadthfirst',
-        'concentric' => 'concentric',
-        'grid' => 'grid',
-        'random' => 'random',
-    ];
-
-    public const BOOKMARK_ICONS = [
-        '⭐️', '🖤', '🏴', '👍', '📌', '💡', '🌘', '☂️', '✈️', '🚲', '💾', '💿', '💎', '🎞', ' ⚒', '💊', '📜',
-        '📒', '🔓', '🌡', '☎️', '✝️', '☢️', '✅', '🌐', '🌍', '✳️', '🏴', '😎', '👻', '💩', '⚡️', '🍸', '🔍', '📦',
-        '🍴', '⚽️', '🏭', '🚀', '⚓️', '🔒'
-    ];
-
     public const LIST_STYLES = [
         'list' => 'list',
         'card' => 'card'
@@ -58,12 +42,6 @@ abstract class Model
     public const FLASH_WARNING  = 'warning';
     public const FLASH_SUCCESS  = 'success';
     public const FLASH_ERROR    = 'error';
-
-    public const SECURE_LEVELS = [
-        0 => 'public',
-        1 => 'private',
-        2 => 'not_published'
-    ];
 
     public const COLUMNS = [
         'id',
