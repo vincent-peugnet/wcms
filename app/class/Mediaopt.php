@@ -41,7 +41,7 @@ class Mediaopt extends Item
 
     public function __construct(array $datas = [])
     {
-        $this->type = Model::mediatypes();
+        $this->type = Modelmedia::mediatypes();
         $this->hydrate($datas);
     }
 
@@ -100,7 +100,7 @@ class Mediaopt extends Item
      */
     public function getsortbyadress(string $sortby): string
     {
-        if (!in_array($sortby, Model::MEDIA_SORTBY)) {
+        if (!in_array($sortby, Modelmedia::MEDIA_SORTBY)) {
             $sortby = 'id';
         }
         if ($this->sortby === $sortby) {
@@ -230,7 +230,7 @@ class Mediaopt extends Item
 
     public function setsortby(string $sortby)
     {
-        if (in_array($sortby, Model::MEDIA_SORTBY)) {
+        if (in_array($sortby, Modelmedia::MEDIA_SORTBY)) {
             $this->sortby = $sortby;
         }
     }
@@ -245,7 +245,7 @@ class Mediaopt extends Item
     public function settype($type)
     {
         if (is_array($type)) {
-            $this->type = array_intersect(Model::mediatypes(), array_unique($type));
+            $this->type = array_intersect(Modelmedia::mediatypes(), array_unique($type));
         }
     }
 
