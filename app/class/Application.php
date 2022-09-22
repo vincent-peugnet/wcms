@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use RuntimeException;
+
 class Application
 {
     /**
@@ -26,13 +28,12 @@ class Application
             if (!is_dir(Model::RENDER_DIR)) {
                 mkdir(Model::RENDER_DIR);
             }
-            if (!Config::savejson()) {
-                echo 'Cant write config file';
-                exit;
-            } else {
-                header('Location: ./');
-                exit;
+            try {
+                Config::savejson();
+            } catch (RuntimeException $e) {
+                echo 'Cant write config file : ' . $e->getMessage();
             }
+            header('Location: ./');
         } elseif (
             isset($_POST['userinit'])
             && !empty($_POST['userinit']['id'])

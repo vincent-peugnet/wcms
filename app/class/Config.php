@@ -86,7 +86,9 @@ abstract class Config
         self::hydrate($datas);
     }
 
-
+    /**
+     * @throws Filesystemexception          If file cant be saved
+     */
     public static function savejson()
     {
         $json = self::tojson();

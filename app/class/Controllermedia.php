@@ -5,6 +5,7 @@ namespace Wcms;
 use Exception;
 use InvalidArgumentException;
 use LogicException;
+use RuntimeException;
 
 class Controllermedia extends Controller
 {
@@ -92,7 +93,11 @@ class Controllermedia extends Controller
         if ($this->user->iseditor()) {
             $target = $_POST['dir'] ?? Model::MEDIA_DIR;
             if (!empty($_POST['url'])) {
-                $this->mediamanager->urlupload($_POST['url'], $target);
+                try {
+                    $this->mediamanager->urlupload($_POST['url'], $target);
+                } catch (RuntimeException $e) {
+                    Model::sendflashmessage('Error while uploading : ' . $e->getMessage(), Model::FLASH_ERROR);
+                }
             }
             $this->redirect($this->generate('media') . '?path=/' . $target);
         } else {

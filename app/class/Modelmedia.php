@@ -281,38 +281,35 @@ class Modelmedia extends Model
         return move_uploaded_file($_FILES[$index]['tmp_name'], $destination);
     }
 
-    public function urlupload(string $url, string $target)
+    /**
+     * @throws RuntimeException             If CURL execution failed
+     * @throws Filesystemexception          If writing file failed
+     *
+     * @todo clean ID of a file
+     * @todo switch to fopen mothod if CURL is not installed
+     */
+    public function urlupload(string $url, string $target): void
     {
         $url = filter_var($url, FILTER_SANITIZE_URL);
         if (filter_var($url, FILTER_VALIDATE_URL) === false) {
             Model::sendflashmessage('invalid url: ' . strip_tags($url), 'error');
-            return false;
         }
         if (!strstr(get_headers($url)[0], "200 OK")) {
             Model::sendflashmessage(get_headers($url)[0], 'error');
-            return false;
         }
 
         try {
             $file = curl_download($url);
+            Fs::writefile($target . basename($url), $file, 0664);
         } catch (ErrorException $e) {
             Model::sendflashmessage('file not uploaded beccause : ' . $e->getMessage(), Model::FLASH_ERROR);
-            // TODO : switch to fopen mothod if CURL is not installed
+            // switch to fopen mothod if CURL is not installed
             // $file = fopen($data, 'r');
             // if ($file !== false) {
             //     if ($target[strlen($target) - 1] != DIRECTORY_SEPARATOR) {
             //         $target .= DIRECTORY_SEPARATOR;
             //     }
             // }
-            return false;
-        } catch (RuntimeException $r) {
-            Model::sendflashmessage('file not uploaded beccause : ' . $r->getMessage(), Model::FLASH_ERROR);
-            return false;
-        }
-        $filename = self::idclean(basename($url), 64);
-        if (Fs::writefile($target . basename($url), $file, 0664)) {
-            Model::sendflashmessage('file ' . $filename . ' has been uploaded', 'success');
-            return true;
         }
     }
 

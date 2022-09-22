@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use RuntimeException;
+
 class Controllerfont extends Controller
 {
     /**
@@ -37,7 +39,11 @@ class Controllerfont extends Controller
 
     public function render()
     {
-        $this->fontmanager->renderfontface();
+        try {
+            $this->fontmanager->renderfontface();
+        } catch (RuntimeException $e) {
+            Model::sendflashmessage("Error while rendering font file", Model::FLASH_ERROR);
+        }
         $this->routedirect('font');
     }
 

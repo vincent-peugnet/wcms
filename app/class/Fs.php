@@ -13,35 +13,22 @@ class Fs
     /**
      * @param string $filename
      * @param mixed $data
-     * @param int $permissions optionnal permission in octal format (a zero before three numbers)
+     * @param int $permissions              [optionnal] permission in octal format (a zero before three numbers)
      *
-     * @return bool False if file is not writen, otherwise true (even if permission warning)
+     * @return bool                         False if file is not writen, otherwise true (even if permission warning)
      *
-     * Send flash messages:
-     * - error when problem writing the file
-     * - warning when problem with permissions
+     * @throws Filesystemexception          If an error occured
      *
      * @todo Remove flash messages from here, send FilesystemException instead
+     * @todo Verify if the folder exist before writing file. If not, send a specific exception
+     * @todo Add a $erase parameter with default true.
+     * If set to true, this will protect file overwriting if it already exists.
+     * @todo return void instead of bool to force update old verification system
      */
     public static function writefile(string $filename, $data, int $permissions = self::FILE_PERMISSION): bool
     {
-        if ($permissions < 0600 || $permissions > 0777) {
-            Model::sendflashmessage(
-                sprintf("Invalid permissions 0%o, using default: 0%o", $permissions, self::FILE_PERMISSION),
-                'warning'
-            );
-            $permissions = self::FILE_PERMISSION;
-        }
-        try {
-            file_put_content_chmod($filename, $data, $permissions);
-        } catch (Chmodexception $e) {
-            Logger::warning($e->getMessage());
-            Model::sendflashmessage($e->getMessage(), 'warning');
-        } catch (Filesystemexception $e) {
-            Logger::error($e->getMessage());
-            Model::sendflashmessage($e->getMessage(), 'error');
-            return false;
-        }
+        file_put_content_chmod($filename, $data, $permissions);
+
         return true;
     }
 

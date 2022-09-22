@@ -33,8 +33,11 @@ class Controllerhome extends Controllerpage
             $pagelist = $this->modelhome->pagelist();
             $this->opt = $this->modelhome->optinit($pagelist);
 
-
-            $vars['colors'] = new Colors(Model::COLORS_FILE, $this->opt->taglist());
+            try {
+                $vars['colors'] = new Colors(Model::COLORS_FILE, $this->opt->taglist());
+            } catch (RuntimeException $e) {
+                Model::sendflashmessage("Error while generating display colors", Model::FLASH_ERROR);
+            }
 
             $publicbookmarks = $this->bookmarkmanager->getlisterpublic();
             $personalbookmarks = $this->bookmarkmanager->getlisterbyuser($this->user);
@@ -147,8 +150,12 @@ class Controllerhome extends Controllerpage
     public function colors()
     {
         if (isset($_POST['tagcolor']) && $this->user->issupereditor()) {
-            $colors = new Colors(Model::COLORS_FILE);
-            $colors->update($_POST['tagcolor']);
+            try {
+                $colors = new Colors(Model::COLORS_FILE);
+                $colors->update($_POST['tagcolor']);
+            } catch (RuntimeException $e) {
+                Model::sendflashmessage("Error while saving display colors", Model::FLASH_ERROR);
+            }
         }
         $this->routedirect('home');
     }

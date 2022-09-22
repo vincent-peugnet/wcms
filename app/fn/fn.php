@@ -348,7 +348,9 @@ function secrethash(string $token): string
  * @param string $dir Directory to check
  * @param bool $createdir create dir in case of non existence default is true
  * @return bool return true if the dir already exist or was created succesfullt. Otherwise return false
- * @throws \InvalidArgumentException If folder creation is impossible or if directory doeas not exist
+ * @throws \InvalidArgumentException If folder creation is impossible or if directory does not exist
+ *
+ * @todo This function should send Runtime errors insted of LogicError
  */
 function dircheck(string $dir, bool $createdir = true): bool
 {
@@ -375,11 +377,14 @@ function dircheck(string $dir, bool $createdir = true): bool
 
 /**
  * Check if a file is accessible or can be writen
- * @param string $path file path to check
- * @param bool $createdir create directory if does not exist
- * @return bool If no error occured
+ *
+ * @param string $path                      file path to check
+ * @param bool $createdir                   create directory if does not exist
+ * @return bool                             If no error occured
  * @throws \InvalidArgumentException if :
  * parent directory does not exist | is not writable | file exist and not writable
+ *
+ * @todo This function should send Runtime errors insted of LogicError
  */
 function accessfile(string $path, bool $createdir = false): bool
 {
@@ -434,29 +439,30 @@ function parse_size($size)
 }
 
 /**
- * @param string $filename Path to the file where to write the data.
- * @param mixed $data The data to write. Can be either a string, an array or a stream resource.
- * @param int $permissions in octal value
+ * @param string $filename                  Path to the file where to write the data.
+ * @param mixed $data                       The data to write. Can be either a string, an array or a stream resource.
+ * @param int $permissions                  in octal value
  *
- * @throws Filesystemexception when file_put_contents fails
- * @throws Chmodexception when chmod fails
+ * @return bool                             Indicate if the file is new
+ *
+ * @throws Filesystemexception              when file_put_contents fails
+ * @throws DomainException                  If permissions are not valid
+ * @throws Chmodexception                   when chmod fails
  */
-function file_put_content_chmod(string $filename, $data, int $permissions): int
+function file_put_content_chmod(string $filename, $data, int $permissions): bool
 {
-    $create = !file_exists($filename);
+    if ($permissions < 0600 || $permissions > 0777) {
+        throw new DomainException("$permissions is an incorrect permissions value");
+    }
+    $new = !file_exists($filename);
     $length = file_put_contents($filename, $data);
     if ($length === false) {
         throw new Filesystemexception("Error while writing $filename");
     }
-    if ($create) {
-        if ($permissions < 0600 || $permissions > 0777) {
-            throw new Chmodexception("Incorrect permissions value", $permissions);
-        }
-        if (!chmod($filename, $permissions)) {
-            throw new Chmodexception("Error while setting file permissions $filename", $permissions);
-        }
+    if (!chmod($filename, $permissions)) {
+        throw new Chmodexception("Error while setting file permissions $filename", $permissions);
     }
-    return $length;
+    return $new;
 }
 
 function flatten(array $array): array
