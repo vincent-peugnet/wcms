@@ -1,11 +1,5 @@
 <?php
 
-use Wcms\Chmodexception;
-use Wcms\Filesystemexception;
-use Wcms\Mediaopt;
-use Wcms\Notfoundexception;
-use Wcms\Unlinkexception;
-
 function readablesize($bytes, $base = 2 ** 10)
 {
     $format = ' %d %s';
@@ -233,7 +227,7 @@ function treecount(
     int $deepness,
     string $path,
     string $currentdir,
-    Mediaopt $mediaopt
+    Wcms\Mediaopt $mediaopt
 ) {
     if ($path . '/' === $currentdir) {
         $folder = '├─<i class="fa fa-folder-open-o"></i> <span id="currentdir">' . $dirname . '<span>';
@@ -342,66 +336,6 @@ function secrethash(string $token): string
 }
 
 
-/**
- * Check if dir exist. If not, create it
- *
- * @param string $dir Directory to check
- * @param bool $createdir create dir in case of non existence default is true
- * @return bool return true if the dir already exist or was created succesfullt. Otherwise return false
- * @throws \InvalidArgumentException If folder creation is impossible or if directory does not exist
- *
- * @todo This function should send Runtime errors insted of LogicError
- */
-function dircheck(string $dir, bool $createdir = true): bool
-{
-    if (!is_dir($dir)) {
-        if ($createdir) {
-            $parent = dirname($dir);
-            if (dircheck($parent)) {
-                if (mkdir($dir)) {
-                    return true;
-                } else {
-                    throw new \InvalidArgumentException("Cannot create directory : $dir");
-                }
-            } else {
-                return false;
-            }
-        } else {
-            throw new \InvalidArgumentException("Directory '$dir' does not exist.");
-        }
-    } else {
-        return true;
-    }
-}
-
-
-/**
- * Check if a file is accessible or can be writen
- *
- * @param string $path                      file path to check
- * @param bool $createdir                   create directory if does not exist
- * @return bool                             If no error occured
- * @throws \InvalidArgumentException if :
- * parent directory does not exist | is not writable | file exist and not writable
- *
- * @todo This function should send Runtime errors insted of LogicError
- */
-function accessfile(string $path, bool $createdir = false): bool
-{
-    $dir = dirname($path);
-    if (dircheck($dir, $createdir)) {
-        if (!is_writable($dir)) {
-            throw new \InvalidArgumentException("Directory '$dir' is not writable.");
-        }
-        if (is_file($path) && !is_writable($path)) {
-            throw new \InvalidArgumentException("The file '$path' is not writable.");
-        }
-        return true;
-    } else {
-        return false;
-    }
-}
-
 // Returns a file size limit in bytes based on the PHP upload_max_filesize
 // and post_max_size
 function file_upload_max_size()
@@ -436,33 +370,6 @@ function parse_size($size)
     } else {
         return round($size);
     }
-}
-
-/**
- * @param string $filename                  Path to the file where to write the data.
- * @param mixed $data                       The data to write. Can be either a string, an array or a stream resource.
- * @param int $permissions                  in octal value
- *
- * @return bool                             Indicate if the file is new
- *
- * @throws Filesystemexception              when file_put_contents fails
- * @throws DomainException                  If permissions are not valid
- * @throws Chmodexception                   when chmod fails
- */
-function file_put_content_chmod(string $filename, $data, int $permissions): bool
-{
-    if ($permissions < 0600 || $permissions > 0777) {
-        throw new DomainException("$permissions is an incorrect permissions value");
-    }
-    $new = !file_exists($filename);
-    $length = file_put_contents($filename, $data);
-    if ($length === false) {
-        throw new Filesystemexception("Error while writing $filename");
-    }
-    if (!chmod($filename, $permissions)) {
-        throw new Chmodexception("Error while setting file permissions $filename", $permissions);
-    }
-    return $new;
 }
 
 function flatten(array $array): array

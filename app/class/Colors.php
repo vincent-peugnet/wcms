@@ -102,7 +102,7 @@ class Colors extends Item
      */
     public function writecssfile(string $file, string $rawcss)
     {
-        accessfile($file, true);
+        Fs::accessfile($file, true);
         Fs::writefile($file, $rawcss, 0664);
     }
 
@@ -148,11 +148,11 @@ class Colors extends Item
     // _______________________ S E T _________________________
 
     /**
-     * @throws \InvalidArgumentException If cant access file
+     * @throws Filesystemexception          If cant access file
      */
     public function setfile(string $path)
     {
-        accessfile($path);
+        Fs::accessfile($path);
         $this->file = $path;
     }
 

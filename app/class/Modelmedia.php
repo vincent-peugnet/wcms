@@ -459,18 +459,16 @@ class Modelmedia extends Model
     /**
      * @param string $oldname
      * @param string $newname
-     * @throws InvalidArgumentException if cant access file
+     *
+     * @throws Filesystemexception          if cant access file
      */
     public function rename(string $oldname, string $newname)
     {
-        try {
-            accessfile($oldname);
-            accessfile($newname);
-        } catch (InvalidArgumentException $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
+        Fs::accessfile($oldname);
+        Fs::accessfile($newname);
+
         if (!file_exists($oldname)) {
-            throw new InvalidArgumentException("File : $oldname does not exist");
+            throw new Fileexception("File : $oldname does not exist");
         }
         return rename($oldname, $newname);
     }

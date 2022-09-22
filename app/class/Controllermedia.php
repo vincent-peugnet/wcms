@@ -21,19 +21,18 @@ class Controllermedia extends Controller
         $this->mediamanager = new Modelmedia();
     }
 
-    /**
-     * @throws Exception
-     */
+
+
     public function desktop()
     {
         if ($this->user->iseditor()) {
             try {
-                dircheck(Model::FONT_DIR);
-                dircheck(Model::THUMBNAIL_DIR);
-                dircheck(Model::FAVICON_DIR);
-                dircheck(Model::CSS_DIR);
-            } catch (\InvalidArgumentException $exception) {
-                throw new LogicException($exception->getMessage());
+                Fs::dircheck(Model::FONT_DIR);
+                Fs::dircheck(Model::THUMBNAIL_DIR);
+                Fs::dircheck(Model::FAVICON_DIR);
+                Fs::dircheck(Model::CSS_DIR);
+            } catch (RuntimeException $e) {
+                Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
             }
             if (isset($_POST['query'])) {
                 $datas = array_merge($_GET, $_POST);
@@ -165,7 +164,7 @@ class Controllermedia extends Controller
                 $newname = $_POST['path'] . $newid . '.' . $newextension;
                 try {
                     $this->mediamanager->rename($oldname, $newname);
-                } catch (InvalidArgumentException $e) {
+                } catch (RuntimeException $e) {
                     Model::sendflashmessage($e->getMessage(), 'error');
                 }
             } else {

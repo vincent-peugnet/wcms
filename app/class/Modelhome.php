@@ -2,7 +2,7 @@
 
 namespace Wcms;
 
-class Modelhome extends Modelpage
+class Modelhome extends Model
 {
     public const MAP_LAYOUTS = [
         'cose' => 'cose',
@@ -13,27 +13,6 @@ class Modelhome extends Modelpage
         'grid' => 'grid',
         'random' => 'random',
     ];
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    public function optinit($table)
-    {
-
-        $opt = new Opt();
-        $opt->settaglist($table);
-        $opt->setauthorlist($table);
-        $opt->setpageidlist($table);
-        $opt->submit();
-
-        return $opt;
-    }
-
-
-
-
 
     /**
      * Transform list of page into list of nodes and edges

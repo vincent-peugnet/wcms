@@ -20,7 +20,11 @@ class Controllerfont extends Controller
     public function desktop()
     {
         if ($this->user->iseditor()) {
-            dircheck(Model::FONT_DIR);
+            try {
+                Fs::dircheck(Model::FONT_DIR);
+            } catch (RuntimeException $e) {
+                Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+            }
 
             $fontlist = $this->fontmanager->getfontlist();
 

@@ -16,12 +16,18 @@ class Modelpage extends Modeldb
 
     protected $pagelist = [];
 
-
+    /**
+     * @todo Maybe this is not the place to check for render dir
+     */
     public function __construct()
     {
         $this->dbinit(Model::PAGES_DIR);
         $this->storeinit(Config::pagetable());
-        dircheck($this::HTML_RENDER_DIR);
+        try {
+            Fs::dircheck($this::HTML_RENDER_DIR);
+        } catch (Folderexception $e) {
+            // Catch silently as this should not be here
+        }
     }
 
     /**
