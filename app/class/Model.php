@@ -168,64 +168,6 @@ abstract class Model
         $_SESSION['user' . Config::basepath()]['flashmessages'][] = ['content' => $content, 'type' => $type];
     }
 
-    /**
-     * @param string $filename
-     * @param mixed $data
-     * @param int $permissions optionnal permission in octal format (a zero before three numbers)
-     *
-     * @return bool False if file is not writen, otherwise true (even if permission warning)
-     *
-     * Send flash messages:
-     * - error when problem writing the file
-     * - warning when problem with permissions
-     *
-     * @todo Remove flash messages from here, send FilesystemException instead
-     */
-    public static function writefile(string $filename, $data, int $permissions = self::FILE_PERMISSION): bool
-    {
-        if ($permissions < 0600 || $permissions > 0777) {
-            self::sendflashmessage(
-                sprintf("Invalid permissions 0%o, using default: 0%o", $permissions, self::FILE_PERMISSION),
-                'warning'
-            );
-            $permissions = self::FILE_PERMISSION;
-        }
-        try {
-            file_put_content_chmod($filename, $data, $permissions);
-        } catch (Chmodexception $e) {
-            Logger::warning($e->getMessage());
-            self::sendflashmessage($e->getMessage(), 'warning');
-        } catch (Filesystemexception $e) {
-            Logger::error($e->getMessage());
-            self::sendflashmessage($e->getMessage(), 'error');
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Copy folder folder files and subbfolders recursively
-     *
-     * @param string $src source folder
-     * @param string $dst destination folder
-     * @param int $perm OPTIONNAL permission in octal format.
-     */
-    public static function recursecopy($src, $dst, $perm = Model::FOLDER_PERMISSION): void
-    {
-        $dir = opendir($src);
-        mkdir($dst, $perm);
-        while (false !== ( $file = readdir($dir))) {
-            if (( $file != '.' ) && ( $file != '..' )) {
-                if (is_dir($src . '/' . $file)) {
-                    self::recursecopy($src . '/' . $file, $dst . '/' . $file, $perm);
-                } else {
-                    copy($src . '/' . $file, $dst . '/' . $file);
-                }
-            }
-        }
-        closedir($dir);
-    }
-
 
 
     /**

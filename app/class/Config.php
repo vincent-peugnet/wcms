@@ -91,7 +91,7 @@ abstract class Config
     {
         $json = self::tojson();
 
-        return Model::writefile(Model::CONFIG_FILE, $json);
+        return Fs::writefile(Model::CONFIG_FILE, $json);
     }
 
 

@@ -310,7 +310,7 @@ class Modelmedia extends Model
             return false;
         }
         $filename = self::idclean(basename($url), 64);
-        if (self::writefile($target . basename($url), $file, 0664)) {
+        if (Fs::writefile($target . basename($url), $file, 0664)) {
             Model::sendflashmessage('file ' . $filename . ' has been uploaded', 'success');
             return true;
         }

@@ -38,7 +38,7 @@ class Servicerss
         $pagetable = $this->pagemanager->pagetable($pagelist, $opt, '', []);
 
         $xml = $this->render($pagetable, $bookmark);
-        return (Model::writefile(self::atomfile($bookmark->id()), $xml));
+        return (Fs::writefile(self::atomfile($bookmark->id()), $xml));
     }
 
 
@@ -157,7 +157,7 @@ class Servicerss
     public static function removeatom(string $id): void
     {
         try {
-            delete(self::atomfile($id));
+            Fs::delete(self::atomfile($id));
         } catch (Notfoundexception $e) {
             // do nothing, this means file is already deleted
         } catch (Unlinkexception $e) {

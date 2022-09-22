@@ -1,6 +1,5 @@
 <?php
 
-use Wcms\Model;
 
 $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css']]) ?>
 
@@ -42,12 +41,12 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
             <form action="" method="get">
                 <fieldset>
                     <legend>Type</legend>
-                    <?= checkboxes('type', Modelmedia::mediatypes(), $mediaopt->type()) ?>
+                    <?= checkboxes('type', Wcms\Modelmedia::mediatypes(), $mediaopt->type()) ?>
                 </fieldset>
                 <fieldset>
                     <legend>Sort</legend>
                     <select name="sortby" id="sortby">
-                        <?= options(Modelmedia::MEDIA_SORTBY, $mediaopt->sortby()) ?>
+                        <?= options(Wcms\Modelmedia::MEDIA_SORTBY, $mediaopt->sortby()) ?>
                     </select>
                     </br>
                     <input type="radio" name="order" id="asc" value="1" <?= $mediaopt->order() == 1 ? 'checked' : '' ?>><label for="asc">ascending</label>
