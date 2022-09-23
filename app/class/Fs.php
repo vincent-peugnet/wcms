@@ -23,8 +23,6 @@ abstract class Fs
      *
      * @throws Filesystemexception          If an error occured
      *
-     * @todo Remove flash messages from here, send FilesystemException instead
-     * @todo Verify if the folder exist before writing file. If not, send a specific exception
      * @todo Add a $erase parameter with default true.
      * If set to true, this will protect file overwriting if it already exists.
      * @todo return void instead of bool to force update old verification system
@@ -77,7 +75,7 @@ abstract class Fs
      * @return bool                             return true if the dir already exist or was created succesfullt.
      *                                          Otherwise return false
      *
-     * @throws Folderexception If folder creation is impossible or if directory does not exist
+     * @throws Folderexception If folder creation is impossible
      */
     public static function dircheck(string $dir): bool
     {

@@ -39,7 +39,7 @@ class Servicerss
         $pagetable = $this->pagemanager->pagetable($pagelist, $opt, '', []);
 
         $xml = $this->render($pagetable, $bookmark);
-        Fs::writefile(self::atomfile($bookmark->id()), $xml);
+        $this->writeatom($bookmark->id(), $xml);
     }
 
 
@@ -163,6 +163,23 @@ class Servicerss
             // do nothing, this means file is already deleted
         } catch (Unlinkexception $e) {
             throw new RuntimeException("RSS atom file deletion error", 0, $e);
+        }
+    }
+
+    /**
+     * @param string $id                    Id of atom file
+     * @param string $xml                   Atom file content
+     *
+     * @throws Filesystemexception
+     */
+    protected function writeatom(string $id, string $xml): void
+    {
+        $filename = self::atomfile($id);
+        try {
+            Fs::writefile($filename, $xml, 0664);
+        } catch (Folderexception) {
+            Fs::dircheck(dirname($filename));
+            Fs::writefile($filename, $xml, 0664);
         }
     }
 
