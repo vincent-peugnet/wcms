@@ -177,7 +177,7 @@ class Servicerss
         $filename = self::atomfile($id);
         try {
             Fs::writefile($filename, $xml, 0664);
-        } catch (Folderexception) {
+        } catch (Folderexception $e) {
             Fs::dircheck(dirname($filename));
             Fs::writefile($filename, $xml, 0664);
         }
