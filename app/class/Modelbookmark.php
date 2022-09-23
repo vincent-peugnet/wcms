@@ -2,8 +2,6 @@
 
 namespace Wcms;
 
-use AltoRouter;
-use InvalidArgumentException;
 use JamesMoss\Flywheel\Document;
 use RuntimeException;
 
