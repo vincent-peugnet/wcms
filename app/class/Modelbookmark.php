@@ -2,7 +2,9 @@
 
 namespace Wcms;
 
+use InvalidArgumentException;
 use JamesMoss\Flywheel\Document;
+use PhpParser\Node\Expr\Instanceof_;
 use RuntimeException;
 
 class Modelbookmark extends Modeldb
@@ -188,9 +190,10 @@ class Modelbookmark extends Modeldb
     {
         if ($id instanceof Bookmark) {
             return $id->id();
-        }
-        if (is_string($id)) {
+        } elseif (is_string($id)) {
             return $id;
+        } else {
+            throw new InvalidArgumentException("ID input should be a string or an instance of Bookmark");
         }
     }
 }

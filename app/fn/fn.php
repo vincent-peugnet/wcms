@@ -89,7 +89,7 @@ function isreportingerrors()
 }
 
 
-function getversion()
+function getversion(): string
 {
     if (file_exists('VERSION')) {
         $version = trim(file_get_contents('VERSION'));
@@ -435,4 +435,27 @@ function getfirsturl(string $input): string
     } else {
         throw new RangeException("no url in string: $input");
     }
+}
+
+/**
+ * Format URN
+ *
+ * @param string|array $nid                       NID: Namespace Identifier
+ * @param string $nss                       NSS: Namespace Specific String
+ *
+ * @return string                           formated URN
+ *
+ * @throws InvalidArgumentException
+ *
+ * @see https://www.rfc-editor.org/rfc/rfc2141.html
+ */
+function urn($nid, string $nss): string
+{
+    if (!is_string($nid) && !is_array($nid)) {
+        throw new InvalidArgumentException("NID input should be a string or an array");
+    }
+    if (is_array($nid)) {
+        $nid = implode(":", $nid);
+    }
+    return "urn:$nid:$nss";
 }

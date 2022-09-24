@@ -139,6 +139,20 @@ abstract class Config
         return self::$domain . (!empty(self::$basepath) ? '/' . self::$basepath : "") . ($endslash ? '/' : '');
     }
 
+    /**
+     * Generate a NID, used for URN, based on domain + basepath
+     *
+     * @return string                       domain + basepath name without non-compatible characters
+     *
+     * @see https://www.rfc-editor.org/rfc/rfc2141.html
+     */
+    public static function nid(): string
+    {
+        $nid = strtolower($_SERVER['HTTP_HOST'] . self::$basepath);
+        $nid = preg_replace("%[^a-z0-9]%", "", $nid);
+        return substr($nid, 0, 31);
+    }
+
     // ________________________________________ G E T _______________________________________
 
     public static function pagetable()

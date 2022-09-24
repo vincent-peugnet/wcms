@@ -78,13 +78,23 @@ class Servicerss
         $title = $xml->createElement("title", $bookmark->name());
         $feed->appendChild($title);
 
-        $subtitle = $xml->createElement("subtitle", $bookmark->description());
-        $feed->appendChild($subtitle);
+        $id = $xml->createElement("id", urn([Config::nid(), "feed"], $bookmark->id()));
+        $feed->appendChild($id);
+
+        if (!empty($bookmark->description())) {
+            $subtitle = $xml->createElement("subtitle", $bookmark->description());
+            $feed->appendChild($subtitle);
+        }
 
         $linkrss = $xml->createElement("link");
-        $linkrss->setAttribute("href", Config::domain() . Model::renderpath() . $bookmark->id() . '.xml');
+        $linkrss->setAttribute("href", Config::domain() . self::atompath($bookmark->id()));
         $linkrss->setAttribute("rel", "self");
         $feed->appendChild($linkrss);
+
+        $generator = $xml->createElement("generator", "W-cms");
+        $generator->setAttribute("uri", "https://w.club1.fr");
+        $generator->setAttribute("version", getversion());
+        $feed->appendChild($generator);
 
         // link to reference page
         //
@@ -93,7 +103,7 @@ class Servicerss
         // $link->setAttribute("hreflang", !empty($page->lang()) ? $page->lang() : Config::lang());
         // $feed->appendChild($link);
 
-        $updated = $xml->createElement("updated", $now->format(DateTime::ISO8601));
+        $updated = $xml->createElement("updated", $now->format(DateTime::RFC3339));
         $feed->appendChild($updated);
 
         foreach ($pagelist as $page) {
@@ -103,22 +113,25 @@ class Servicerss
             $title = $xml->createElement("title", $page->title());
             $entry->appendChild($title);
 
+            $id = $xml->createElement("id", urn(Config::nid(), $page->id()));
+            $entry->appendChild($id);
+
             $link = $xml->createElement("link");
             $link->setAttribute("href", $this->href($page));
             $link->setAttribute("hreflang", !empty($page->lang()) ? $page->lang() : Config::lang());
             $entry->appendChild($link);
 
-            $published = $xml->createElement("published", $page->date('string'));
+            $published = $xml->createElement("published", $page->date()->format(DateTime::RFC3339));
             $entry->appendChild($published);
 
-            $updated = $xml->createElement("updated", $page->daterender('string'));
+            $updated = $xml->createElement("updated", $page->daterender()->format(DateTime::RFC3339));
             $entry->appendChild($updated);
 
             $summary = $xml->createElement("summary", $page->description());
             $entry->appendChild($summary);
 
             $content = $xml->createElement("content", $this->mainhtml($page));
-            $content->setAttribute("type", "hmtl");
+            $content->setAttribute("type", "html");
             $entry->appendChild($content);
         }
         return $xml->saveXML($feed);
@@ -194,6 +207,9 @@ class Servicerss
         return Model::ASSETS_ATOM_DIR . $id . '.xml';
     }
 
+    /**
+     * @return string                       Path to atome file including basepath
+     */
     public static function atompath(string $id): string
     {
         return Model::dirtopath(self::atomfile($id));
