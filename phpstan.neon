@@ -19,3 +19,4 @@ parameters:
         methodWhitelist:
             PHPUnit\Framework\TestCase: '#.*#i'
     tmpDir: build/phpstan
+    treatPhpDocTypesAsCertain: false
