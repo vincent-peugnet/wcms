@@ -127,6 +127,18 @@ class Servicerss
             $updated = $xml->createElement("updated", $page->daterender()->format(DateTime::RFC3339));
             $entry->appendChild($updated);
 
+            $usermanager = new Modeluser();
+            foreach ($page->authors() as $author) {
+                $user = $usermanager->get($author);
+
+                if ($user !== false) {
+                    $author = $xml->createElement("author");
+                    $name = $xml->createElement("name", empty($user->name()) ? $user->id() : $user->name());
+                    $author->appendChild($name);
+                    $entry->appendChild($author);
+                }
+            }
+
             $summary = $xml->createElement("summary", $page->description());
             $entry->appendChild($summary);
 
