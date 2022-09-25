@@ -444,7 +444,18 @@ function getfirsturl(string $input): string
  */
 function issecure(): bool
 {
-    return
-        (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        || $_SERVER['SERVER_PORT'] == 443;
-  }
+    $https =
+        $_SERVER['HTTPS']
+        ?? $_SERVER['REQUEST_SCHEME']
+        ?? $_SERVER['HTTP_X_FORWARDED_PROTO']
+        ?? null
+    ;
+
+    $https =
+        $https && (
+            strcasecmp('on', $https) == 0
+            || strcasecmp('https', $https) == 0
+        )
+    ;
+    return $https;
+}
