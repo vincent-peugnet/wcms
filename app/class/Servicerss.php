@@ -97,12 +97,12 @@ class Servicerss
         $feed->appendChild($generator);
 
         if (!empty(Config::defaultfavicon())) {
-            $icon = $xml->createElement("icon", Config::url() . Model::faviconpath() . Config::defaultfavicon());
+            $icon = $xml->createElement("icon", Config::domain() . Model::faviconpath() . Config::defaultfavicon());
             $feed->appendChild($icon);
         }
 
         if (!empty(Config::defaultthumbnail())) {
-            $logo = $xml->createElement("icon", Config::url() . Model::thumbnailpath() . Config::defaultthumbnail());
+            $logo = $xml->createElement("icon", Config::domain() . Model::thumbnailpath() . Config::defaultthumbnail());
             $feed->appendChild($logo);
         }
 
