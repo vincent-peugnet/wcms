@@ -124,7 +124,7 @@ class Servicerss
             $published = $xml->createElement("published", $page->date()->format(DateTime::RFC3339));
             $entry->appendChild($published);
 
-            $updated = $xml->createElement("updated", $page->daterender()->format(DateTime::RFC3339));
+            $updated = $xml->createElement("updated", $page->datemodif()->format(DateTime::RFC3339));
             $entry->appendChild($updated);
 
             $usermanager = new Modeluser();
@@ -139,8 +139,10 @@ class Servicerss
                 }
             }
 
-            $summary = $xml->createElement("summary", $page->description());
-            $entry->appendChild($summary);
+            if (!empty($page->description())) {
+                $summary = $xml->createElement("summary", $page->description());
+                $entry->appendChild($summary);
+            }
 
             $content = $xml->createElement("content", $this->mainhtml($page));
             $content->setAttribute("type", "html");

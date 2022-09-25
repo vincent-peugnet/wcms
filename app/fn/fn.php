@@ -436,3 +436,15 @@ function getfirsturl(string $input): string
         throw new RangeException("no url in string: $input");
     }
 }
+
+/**
+ * Check if connection is through a HTTPS connection or basic HTTP
+ *
+ * @return bool                             True if HTTPS, otherwise false
+ */
+function issecure(): bool
+{
+    return
+        (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || $_SERVER['SERVER_PORT'] == 443;
+  }

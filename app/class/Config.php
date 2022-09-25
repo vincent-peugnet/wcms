@@ -119,15 +119,17 @@ abstract class Config
      */
     public static function getdomain()
     {
-        self::$domain = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . '://' . $_SERVER['HTTP_HOST'];
+        self::$domain = 'http' . (issecure() ? 's' : '') . '://' . $_SERVER['HTTP_HOST'];
     }
 
     /**
      * Verify Domain name
+     *
+     * @return bool                         True if domain is the currently used domain
      */
-    public static function checkdomain()
+    public static function checkdomain(): bool
     {
-        return (self::$domain === (empty($_SERVER['HTTPS']) ? 'http' : 'https') . '://' . $_SERVER['HTTP_HOST']);
+        return (self::$domain === 'http' . (issecure() ? 's' : '') . '://' . $_SERVER['HTTP_HOST']);
     }
 
     /**
