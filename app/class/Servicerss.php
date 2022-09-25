@@ -78,7 +78,7 @@ class Servicerss
         $title = $xml->createElement("title", $bookmark->name());
         $feed->appendChild($title);
 
-        $id = $xml->createElement("id", urn([Config::nid(), "feed"], $bookmark->id()));
+        $id = $xml->createElement("id", Config::domain() . self::atompath($bookmark->id()));
         $feed->appendChild($id);
 
         if (!empty($bookmark->description())) {
@@ -113,7 +113,7 @@ class Servicerss
             $title = $xml->createElement("title", $page->title());
             $entry->appendChild($title);
 
-            $id = $xml->createElement("id", urn(Config::nid(), $page->id()));
+            $id = $xml->createElement("id", $this->href($page));
             $entry->appendChild($id);
 
             $link = $xml->createElement("link");
