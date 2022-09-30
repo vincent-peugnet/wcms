@@ -283,7 +283,7 @@
                     <strong>
                         <?= $bookmark->id() ?>
                     </strong>
-                    <h2>Update</h2>
+                    <h2>Infos</h2>
                     <form action="<?= $this->url('bookmarkupdate') ?>" method="post">
                         <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
                         <input type="hidden" name="route" value="<?= $bookmark->route() ?>">
@@ -302,10 +302,14 @@
                         <br>
                         <input type="submit" value="update">
                     </form>
-                    <h2>use as RSS feed</h2>
+                    <?php if($bookmark->ispublic()) { ?>
+                        <h2 title="you can use public bookmarks as RSS feeds">RSS feed</h2>
                         <?php if ($bookmark->ispublished()) { ?>
                             copy and paste this code in any page
                             <input readonly class="code select-all" value="%RSS?bookmark=<?= $bookmark->id() ?>%">
+                            <a href="<?= $this->ubookmark('bookmarkpublish', $bookmark->id()) ?>" title="update the RSS feed">
+                                <i class="fa fa-refresh"></i> refresh
+                            </a>
                             <a href="<?= $this->ubookmark('bookmarkunpublish', $bookmark->id()) ?>">
                                 <i class="fa fa-ban"></i> stop publishing
                             </a>
@@ -314,6 +318,7 @@
                                 <i class="fa fa-rss"></i> publish !
                             </a>
                         <?php } ?>
+                    <?php } ?>
                     <h2>Delete</h2>
                     <form action="<?= $this->url('bookmarkdelete') ?>" method="post">
                         <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
