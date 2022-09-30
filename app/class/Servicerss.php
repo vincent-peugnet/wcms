@@ -6,6 +6,7 @@ use AltoRouter;
 use DateTime;
 use DOMDocument;
 use DOMException;
+use DOMText;
 use LogicException;
 use RuntimeException;
 use Throwable;
@@ -75,14 +76,16 @@ class Servicerss
         $feed = $xml->createElement('feed');
         $feed->setAttribute("xmlns", "http://www.w3.org/2005/Atom");
 
-        $title = $xml->createElement("title", $bookmark->name());
+        $title = $xml->createElement("title");
+        $title->appendChild(new DOMText($bookmark->name()));
         $feed->appendChild($title);
 
         $id = $xml->createElement("id", Config::domain() . self::atompath($bookmark->id()));
         $feed->appendChild($id);
 
         if (!empty($bookmark->description())) {
-            $subtitle = $xml->createElement("subtitle", $bookmark->description());
+            $subtitle = $xml->createElement("subtitle");
+            $subtitle->appendChild(new DOMText($bookmark->description()));
             $feed->appendChild($subtitle);
         }
 
@@ -120,7 +123,8 @@ class Servicerss
             $entry = $xml->createElement("entry");
             $feed->appendChild($entry);
 
-            $title = $xml->createElement("title", $page->title());
+            $title = $xml->createElement("title");
+            $title->appendChild(new DOMText($page->title()));
             $entry->appendChild($title);
 
             $id = $xml->createElement("id", $this->href($page));
@@ -143,18 +147,21 @@ class Servicerss
 
                 if ($user !== false) {
                     $author = $xml->createElement("author");
-                    $name = $xml->createElement("name", empty($user->name()) ? $user->id() : $user->name());
+                    $name = $xml->createElement("name");
+                    $name->appendChild(new DOMText(empty($user->name()) ? $user->id() : $user->name()));
                     $author->appendChild($name);
                     $entry->appendChild($author);
                 }
             }
 
             if (!empty($page->description())) {
-                $summary = $xml->createElement("summary", $page->description());
+                $summary = $xml->createElement("summary");
+                $summary->appendChild(new DOMText($page->description()));
                 $entry->appendChild($summary);
             }
 
-            $content = $xml->createElement("content", html_entity_decode($this->mainhtml($page), ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8"));
+            $content = $xml->createElement("content");
+            $content->appendChild(new DOMText(html_entity_decode($this->mainhtml($page), ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8")));
             $content->setAttribute("type", "html");
             $entry->appendChild($content);
         }
