@@ -69,7 +69,7 @@ class Servicerss
     {
         $now = new DateTime();
 
-        $xml = new DOMDocument('1.0', 'utf-8');
+        $xml = new DOMDocument('1.0', 'UTF-8');
         $xml->formatOutput = true;
 
         $feed = $xml->createElement('feed');
@@ -154,11 +154,12 @@ class Servicerss
                 $entry->appendChild($summary);
             }
 
-            $content = $xml->createElement("content", $this->mainhtml($page));
+            $content = $xml->createElement("content", html_entity_decode($this->mainhtml($page), ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8"));
             $content->setAttribute("type", "html");
             $entry->appendChild($content);
         }
-        return $xml->saveXML($feed);
+        $xml->appendChild($feed);
+        return $xml->saveXML();
     }
 
     /**
