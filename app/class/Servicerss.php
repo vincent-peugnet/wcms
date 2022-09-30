@@ -161,7 +161,9 @@ class Servicerss
             }
 
             $content = $xml->createElement("content");
-            $content->appendChild(new DOMText(html_entity_decode($this->mainhtml($page), ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8")));
+            $content->appendChild(
+                new DOMText(html_entity_decode($this->mainhtml($page), ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8"))
+            );
             $content->setAttribute("type", "html");
             $entry->appendChild($content);
         }
