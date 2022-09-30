@@ -8,7 +8,10 @@
 
         <table>
             <tbody>
-                <?php foreach ($publicbookmarks as $bookmark) { ?>
+                <?php
+
+
+ foreach ($publicbookmarks as $bookmark) { ?>
                 <tr>
                         <td>
                             <a
@@ -21,7 +24,11 @@
                             </a>
                         </td>
                         <td>
-                            <?= $bookmark->ispublished() ? '<i class="fa fa-rss"></i>' : "" ?>
+                            <?php if($bookmark->ispublished()){ ?>
+                                <a href="<?= Wcms\Servicerss::atomfile($bookmark->id()) ?>" target="_blank" title="show Atom XML file">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            <?php } ?>
                         </td>
                     </tr>
                 <?php } ?>
@@ -42,9 +49,6 @@
                         >
                         <?= $bookmark->icon() ?> <?= empty($bookmark->name()) ? $bookmark->id() : $bookmark->name() ?>
                         </a>
-                    </td>
-                    <td>
-                        <?= $bookmark->ispublished() ? '<i class="fa fa-rss"></i>' : "" ?>
                     </td>
                 </tr>
             <?php } ?>
