@@ -134,7 +134,7 @@ class Servicerss
             $published = $xml->createElement("published", $page->date()->format(DateTime::RFC3339));
             $entry->appendChild($published);
 
-            $updated = $xml->createElement("updated", $page->datemodif()->format(DateTime::RFC3339));
+            $updated = $xml->createElement("updated", $page->date()->format(DateTime::RFC3339));
             $entry->appendChild($updated);
 
             $usermanager = new Modeluser();
