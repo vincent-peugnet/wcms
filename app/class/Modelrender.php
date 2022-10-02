@@ -154,7 +154,7 @@ class Modelrender extends Modelpage
 
         // First, analyse the synthax and call the corresponding methods
         if (!empty($matches)) {
-            foreach ($matches as $key => $match) {
+            foreach ($matches as $match) {
                 $element = new Element($this->page->id(), $match);
                 $element->setcontent($this->getelementcontent($element->sources(), $element->type()));
                 $element->setcontent($this->elementparser($element));
@@ -188,8 +188,10 @@ class Modelrender extends Modelpage
                 } catch (RuntimeException $e) {
                     $subcontent = $this->page->$type();
                 }
-                $content .= $subseparator . $subcontent;
+            } else {
+                $subcontent = $this->page->$type();
             }
+            $content .= $subseparator . $subcontent;
         }
         return $content . $subseparator;
     }
