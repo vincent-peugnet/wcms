@@ -93,9 +93,11 @@ class Modelbookmark extends Modeldb
 
     /**
      * @param string|Bookmark $id           Can be an User object or a string ID
-     * @throws RuntimeException             If Bookmark cant be founded
      *
      * @return Bookmark                     Bookmark object or false in case of error
+     *
+     * @throws RuntimeException             If Bookmark cant be founded
+     * @throws InvalidArgumentException     If $id param is not a string or a Bookmark
      */
     public function get($id): Bookmark
     {
@@ -174,6 +176,12 @@ class Modelbookmark extends Modeldb
     {
         $oldbookmark = $this->get($bookmark);
         $bookmark->setuser($oldbookmark->user());
+
+        if (!empty($bookmark->ref())) {
+            $pagemanager = new Modelpage();
+            $pagemanager->get($bookmark->ref());
+        }
+
         $bookmarkdata = new Document($bookmark->dry());
         $bookmarkdata->setId($bookmark->id());
         $success = $this->repo->store($bookmarkdata);
@@ -185,6 +193,8 @@ class Modelbookmark extends Modeldb
 
     /**
      * @param Bookmark|string $id           string ID or bookmark
+     *
+     * @throws InvalidArgumentException     if $id is not a string or a Bookmark
      */
     private function id($id): string
     {

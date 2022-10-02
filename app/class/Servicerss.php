@@ -9,7 +9,6 @@ use DOMException;
 use DOMText;
 use LogicException;
 use RuntimeException;
-use Throwable;
 
 class Servicerss
 {
@@ -31,6 +30,7 @@ class Servicerss
      *
      * @throws DOMException                 in case of XML render errors
      * @throws Filesystemexception          in case of file writing error
+     * @throws RuntimeException             if Ref page is not found
      */
     public function publishbookmark(Bookmark $bookmark): void
     {
@@ -65,6 +65,7 @@ class Servicerss
      * @return string                       the RSS/Atom 1 as XML
      *
      * @throws DOMException                 if XML fail to build
+     * @throws RuntimeException             if Ref page is not found
      */
     protected function render(array $pagelist, Bookmark $bookmark): string
     {
@@ -94,6 +95,18 @@ class Servicerss
         $linkrss->setAttribute("rel", "self");
         $feed->appendChild($linkrss);
 
+        if (!empty($bookmark->ref())) {
+            $ref = $this->pagemanager->get($bookmark->ref());
+            $link = $xml->createElement("link");
+            $link->setAttribute("href", $this->href($ref));
+            $link->setAttribute("hreflang", !empty($ref->lang()) ? $ref->lang() : Config::lang());
+            $link->setAttribute("rel", "alternate");
+            if (!empty($ref->description())) {
+                $link->setAttribute("title", $ref->description());
+            }
+            $feed->appendChild($link);
+        }
+
         $generator = $xml->createElement("generator", "W-cms");
         $generator->setAttribute("uri", "https://w.club1.fr");
         $generator->setAttribute("version", getversion());
@@ -105,16 +118,10 @@ class Servicerss
         }
 
         if (!empty(Config::defaultthumbnail())) {
-            $logo = $xml->createElement("icon", Config::domain() . Model::thumbnailpath() . Config::defaultthumbnail());
+            $logo = $xml->createElement("logo", Config::domain() . Model::thumbnailpath() . Config::defaultthumbnail());
             $feed->appendChild($logo);
         }
 
-        // link to reference page
-        //
-        // $link = $xml->createElement("link");
-        // $link->setAttribute("href", $this->href($page));
-        // $link->setAttribute("hreflang", !empty($page->lang()) ? $page->lang() : Config::lang());
-        // $feed->appendChild($link);
 
         $updated = $xml->createElement("updated", $now->format(DateTime::RFC3339));
         $feed->appendChild($updated);

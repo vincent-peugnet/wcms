@@ -3,7 +3,10 @@
 namespace Wcms;
 
 use DateTimeImmutable;
+use InvalidArgumentException;
+use RangeException;
 use RuntimeException;
+use UnexpectedValueException;
 
 class Bookmark extends Item
 {
@@ -33,6 +36,9 @@ class Bookmark extends Item
 
     /** @var bool $published Indicate if the bookmark is also a RSS feed */
     protected bool $published = false;
+
+    /** @var string ID of reference page */
+    protected string $ref = "";
 
     /**
      * @throws RuntimeException
@@ -108,6 +114,11 @@ class Bookmark extends Item
     public function published(): bool
     {
         return $this->published;
+    }
+
+    public function ref(): ?string
+    {
+        return $this->ref;
     }
 
     // _____________________________ S E T __________________________________
@@ -187,5 +198,16 @@ class Bookmark extends Item
     public function setpublished(bool $published)
     {
         $this->published = $published;
+    }
+
+    /**
+     * @param string $id                    ID of reference page
+     */
+    public function setref(string $id): void
+    {
+        if (!empty($id) && !Model::idcheck($id)) {
+            $this->ref = "";
+        }
+        $this->ref = $id;
     }
 }

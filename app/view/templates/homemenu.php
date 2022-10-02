@@ -300,6 +300,16 @@
                         <input type="text" name="description" id="bookmark_description" value="<?= $bookmark->description() ?>" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>">
                         <label for="bookmark_description">description</label>
                         <br>
+                        <?php if ($bookmark->ispublished()) { ?>
+                            <select name="ref" id="bookmark_ref">
+                                <option value="">--no ref page--</option>
+                                <?php foreach ($pagelist as $page) { ?>
+                                    <option value="<?= $page ?>" <?= $bookmark->ref() === $page ? 'selected' : '' ?>><?= $page ?></option>
+                                <?php } ?>
+                            </select>
+                            <label for="bookmark_ref">reference page</label>
+                            <br>
+                        <?php } ?>
                         <input type="submit" value="update">
                     </form>
                     <?php if($bookmark->ispublic()) { ?>
