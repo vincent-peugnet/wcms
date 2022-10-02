@@ -35,19 +35,24 @@ class Controllerpage extends Controller
         }
     }
 
+    /**
+     * Try yo import by multiple way the called page
+     *
+     * @return bool                         If a page is found and stored in `$this->page`
+     */
     public function importpage(): bool
     {
         if (isset($_SESSION['pageupdate']['id']) && $_SESSION['pageupdate']['id'] == $this->page->id()) {
-            $page = new Page($_SESSION['pageupdate']);
+            $this->page = new Page($_SESSION['pageupdate']);
             unset($_SESSION['pageupdate']);
-        } else {
-            $page = $this->pagemanager->get($this->page);
-        }
-        if ($page !== false) {
-            $this->page = $page;
             return true;
         } else {
-            return false;
+            try {
+                $this->page = $this->pagemanager->get($this->page);
+                return true;
+            } catch (RuntimeException $e) {
+                return false;
+            }
         }
     }
 
@@ -111,10 +116,12 @@ class Controllerpage extends Controller
     {
         $relatedpages = array_diff($page->linkto(), [$page->id()]);
         foreach ($relatedpages as $pageid) {
-            $page = $this->pagemanager->get($pageid);
-            if ($page !== false && $this->pagemanager->needtoberendered($page)) {
+            try {
+                $page = $this->pagemanager->get($pageid);
                 $page = $this->renderpage($page);
                 $this->pagemanager->update($page);
+            } catch (RuntimeException $e) {
+                Logger::errorex($e, true);
             }
         }
     }
@@ -124,20 +131,28 @@ class Controllerpage extends Controller
      *
      * @param Page $page page to check templates
      */
-    public function templaterender(Page $page)
+    private function templaterender(Page $page)
     {
-        $templates = $this->pagemanager->getpagecsstemplates($page);
-        foreach ($templates as $page) {
-            if ($this->pagemanager->needtoberendered($page)) {
-                $page = $this->renderpage($page);
-                $this->pagemanager->update($page);
+        try {
+            $templates = $this->pagemanager->getpagecsstemplates($page);
+            foreach ($templates as $page) {
+                if ($this->pagemanager->needtoberendered($page)) {
+                    $page = $this->renderpage($page);
+                    $this->pagemanager->update($page);
+                }
             }
+        } catch (RuntimeException $e) {
+            Logger::errorex($e);
         }
         if (!empty($page->templatejavascript())) {
-            $templatejs = $this->pagemanager->get($page->templatejavascript());
-            if ($templatejs && $this->pagemanager->needtoberendered($templatejs)) {
-                $templatejs = $this->renderpage($templatejs);
-                $this->pagemanager->update($templatejs);
+            try {
+                $templatejs = $this->pagemanager->get($page->templatejavascript());
+                if ($this->pagemanager->needtoberendered($templatejs)) {
+                    $templatejs = $this->renderpage($templatejs);
+                    $this->pagemanager->update($templatejs);
+                }
+            } catch (RuntimeException $e) {
+                Logger::errorex($e, true);
             }
         }
     }
@@ -346,7 +361,7 @@ class Controllerpage extends Controller
 
             $page->setdaterender($page->datecreation('date'));
 
-            if ($_POST['erase'] || $this->pagemanager->get($page) === false) {
+            if ($_POST['erase'] || !$this->pagemanager->exist($page)) {
                 if ($this->pagemanager->add($page)) {
                     Model::sendflashmessage('Page successfully uploaded', 'success');
                 }
@@ -406,15 +421,19 @@ class Controllerpage extends Controller
     public function copy(string $srcid, string $targetid)
     {
         if ($this->user->iseditor()) {
-            $this->page = $this->pagemanager->get($srcid);
-            if ($this->page !== false && $this->canedit() && $this->pagemanager->get($targetid) === false) {
-                $this->page->setid($targetid);
-                $this->page->setdatecreation(true); // Reset date of creation
-                $this->page->setdatemodif(new DateTimeImmutable());
-                $this->page->setdaterender(new DateTimeImmutable());
-                $this->page->addauthor($this->user->id());
-                $this->pagemanager->add($this->page);
-                return true;
+            try {
+                $this->page = $this->pagemanager->get($srcid);
+                if ($this->canedit() && !$this->pagemanager->exist($targetid)) {
+                    $this->page->setid($targetid);
+                    $this->page->setdatecreation(true); // Reset date of creation
+                    $this->page->setdatemodif(new DateTimeImmutable());
+                    $this->page->setdaterender(new DateTimeImmutable());
+                    $this->page->addauthor($this->user->id());
+                    $this->pagemanager->add($this->page);
+                    return true;
+                }
+            } catch (RuntimeException $e) {
+                Logger::errorex($e, true);
             }
         }
         return false;

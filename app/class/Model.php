@@ -200,6 +200,7 @@ abstract class Model
         return (
             !((bool) preg_match(self::ID_REGEX, $id))
             && strlen($id) <= $max
+            && strlen($id) > 0
         );
     }
 }

@@ -28,13 +28,13 @@ class Controllerapipage extends Controllerapi
             http_response_code(406);
             return false;
         } else {
-            $this->page = $this->pagemanager->get($id);
-            if ($this->page === false) {
+            try {
+                $this->page = $this->pagemanager->get($id);
+            } catch (RuntimeException $e) {
                 http_response_code(404);
                 return false;
-            } else {
-                return true;
             }
+            return true;
         }
     }
 
@@ -117,7 +117,7 @@ class Controllerapipage extends Controllerapi
             http_response_code(401);
             exit;
         }
-        if ($this->pagemanager->get($page)) {
+        if ($this->pagemanager->exist($page)) {
             http_response_code(405);
             exit;
         }

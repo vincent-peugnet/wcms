@@ -3,6 +3,8 @@
 namespace Wcms;
 
 use Exception;
+use InvalidArgumentException;
+use RangeException;
 
 /**
  * HTML Element used in pages
@@ -10,7 +12,7 @@ use Exception;
 class Element extends Item
 {
     protected $fullmatch;
-    protected $type;
+    protected ?string $type;
     protected $options;
     protected $sources = [];
     protected $autolink = 0;
@@ -128,11 +130,16 @@ class Element extends Item
         $this->fullmatch = $fullmatch;
     }
 
+    /**
+     * @todo throw RangeException if type is invalid
+     */
     public function settype(string $type)
     {
         $type = strtolower($type);
         if (in_array($type, Model::HTML_ELEMENTS)) {
             $this->type = $type;
+        } else {
+            // throw new RangeException("$type is not a valid Page HTML Element Type");
         }
     }
 

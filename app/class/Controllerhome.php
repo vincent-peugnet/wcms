@@ -249,8 +249,11 @@ class Controllerhome extends Controllerpage
         $total = 0;
         foreach ($pagelist as $id) {
             $total++;
-            if ($this->pagemanager->pageedit($id, $datas, $reset, $addtag, $addauthor)) {
+            try {
+                $this->pagemanager->pageedit($id, $datas, $reset, $addtag, $addauthor);
                 $count++;
+            } catch (RuntimeException $e) {
+                Logger::error($e);
             }
         }
         $this->sendstatflashmessage($count, $total, 'pages have been edited');

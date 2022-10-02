@@ -5,6 +5,8 @@ namespace Wcms;
 use JamesMoss\Flywheel\Document;
 use DateTimeImmutable;
 use DateTimeInterface;
+use InvalidArgumentException;
+use RuntimeException;
 
 class Modelpage extends Modeldb
 {
@@ -88,9 +90,12 @@ class Modelpage extends Modeldb
      *
      * @param Page|string $id               could be an Page object or a id string
      *
-     * @return Page|false                   The Page object or false if it does not exist.
+     * @return Page                         The Page object
+     *
+     * @throws InvalidArgumentException     If $id argument is not a string or a Page
+     * @throws RuntimeException             If page is'nt found
      */
-    public function get($id)
+    public function get($id): Page
     {
         if ($id instanceof Page) {
             $id = $id->id();
@@ -100,9 +105,26 @@ class Modelpage extends Modeldb
             if ($pagedata !== false) {
                 return new Page($pagedata);
             } else {
-                return false;
+                throw new RuntimeException("Could not find Page with the following ID: \"$id\"");
             }
         } else {
+            throw new InvalidArgumentException("argument of Modelpage->get() should be a ID string or Page");
+        }
+    }
+
+    /**
+     * Check if a page exist or not
+     *
+     * @param Page|string $id               Could be an Page object or a id string
+     *
+     * @return bool                         True if page exists otherwise False
+     */
+    public function exist($id): bool
+    {
+        try {
+            $this->get($id);
+            return true;
+        } catch (RuntimeException $e) {
             return false;
         }
     }
@@ -137,34 +159,22 @@ class Modelpage extends Modeldb
         return $page;
     }
 
-    public function getpageelement($id, $element)
-    {
-        if (in_array($element, Model::HTML_ELEMENTS)) {
-            $page = $this->get($id);
-            if ($page !== false) {
-                return $page->$element();
-            } else {
-                return false;
-            }
-        }
-    }
-
     /**
      * Get all the pages that are called in css templating
      *
      * @param Page $page                    page to retrieve css templates
      * @return Page[]                       array of pages with ID as index
+     *
+     * @throws RuntimeException             If css template is not found in database
      */
     public function getpagecsstemplates(Page $page): array
     {
         $templates = [];
         if (!empty($page->templatecss()) && $page->templatecss() !== $page->id()) {
             $template = $this->get($page->templatecss());
-            if ($template !== false) {
-                $templates[$template->id()] = $template;
-                if (in_array('recursivecss', $page->templateoptions())) {
-                    $templates = array_merge($this->getpagecsstemplates($template), $templates);
-                }
+            $templates[$template->id()] = $template;
+            if (in_array('recursivecss', $page->templateoptions())) {
+                $templates = array_merge($this->getpagecsstemplates($template), $templates);
             }
         }
         return $templates;
@@ -212,6 +222,7 @@ class Modelpage extends Modeldb
      * Update a page in the database
      *
      * @todo Check if page already exist before updating ?
+     * @todo Use Exceptions instead of returning bool
      *
      * @param Page $page                    The page that is going to be updated
      *
@@ -251,6 +262,188 @@ class Modelpage extends Modeldb
     //  }
     //  return $diff;
     // }
+
+    /**
+     * @param string[] $taglist             list of tags
+     * @param Page[] $pagelist              list of Page
+     *
+     * @return array                        list of tags each containing list of id
+     */
+    public function tagpagelist(array $taglist, array $pagelist): array
+    {
+        $tagpagelist = [];
+        foreach ($taglist as $tag) {
+            $tagpagelist[$tag] = $this->filtertagfilter($pagelist, [$tag]);
+        }
+        return $tagpagelist;
+    }
+
+    public function lasteditedpagelist(int $last, array $pagelist)
+    {
+        $this->pagelistsort($pagelist, 'datemodif', -1);
+        $pagelist = array_slice($pagelist, 0, $last);
+        $idlist = [];
+        foreach ($pagelist as $page) {
+            $idlist[] = $page->id();
+        }
+        return $idlist;
+    }
+
+    /**
+     * Edit a page based on meta infos
+     *
+     * @param string $pageid
+     * @param array $datas
+     * @param array $reset
+     * @param string $addtag
+     * @param string $addauthor
+     *
+     * @throws RuntimeException             When page is not found in the database or update failed
+     */
+    public function pageedit(string $pageid, array $datas, array $reset, string $addtag, string $addauthor)
+    {
+        $page = $this->get($pageid);
+        $page = $this->reset($page, $reset);
+        $page->hydrate($datas);
+        $page->addtag($addtag);
+        $page->addauthor($addauthor);
+        if ($this->update($page)) {
+            throw new RuntimeException("Error while trying to update page $pageid");
+        }
+    }
+
+    /**
+     * Reset values of a page
+     *
+     * @param Page $page                    Page object to be reseted
+     * @param array $reset                  List of parameters needing reset
+     *
+     * @return Page                         The reseted page object
+     */
+    public function reset(Page $page, array $reset): Page
+    {
+        $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
+        if ($reset['tag']) {
+            $page->settag([]);
+        }
+        if ($reset['author']) {
+            $page->setauthors([]);
+        }
+        if ($reset['redirection']) {
+            $page->setredirection('');
+        }
+        if ($reset['date']) {
+            $page->setdate($now);
+        }
+        if ($reset['datemodif']) {
+            $page->setdatemodif($now);
+        }
+        return $page;
+    }
+
+    /**
+     * Check if a page need to be rendered
+     *
+     * @param Page $page                    Page to be checked
+     *
+     * @return bool                         true if the page need to be rendered otherwise false
+     */
+    public function needtoberendered(Page $page): bool
+    {
+        return (
+            $page->daterender() <= $page->datemodif() ||
+            !file_exists(self::HTML_RENDER_DIR . $page->id() . '.html') ||
+            !file_exists(self::RENDER_DIR . $page->id() . '.css') ||
+            !file_exists(self::RENDER_DIR . $page->id() . '.js')
+        );
+    }
+
+
+
+
+
+
+
+
+    // _____________________________ FILTERING & SORTING _____________________________
+
+
+    /**
+     * @param Page[]  $pagelist             of Pages objects as `id => Page`
+     * @param Opt $opt
+     *
+     * @param string $regex                 Regex to match.
+     * @param array $searchopt              Option search, could be `content` `title` `description`.
+     *
+     * @return Page[]                       associative array of `Page` objects     *
+     */
+    public function pagetable(array $pagelist, Opt $opt, $regex = '', $searchopt = []): array
+    {
+        $pagelist = $this->filter($pagelist, $opt);
+        if (!empty($regex)) {
+            $pagelist = $this->deepsearch($pagelist, $regex, $searchopt);
+        }
+        $pagelist = $this->sort($pagelist, $opt);
+
+        return $pagelist;
+    }
+
+
+
+    /**
+     * Filter the pages list acording to the options and invert
+     *
+     * @param Page[] $pagelist              list of `Page` objects
+     * @param Opt $opt
+     *
+     * @return Page[]                       Filtered list of pages
+     */
+
+    public function filter(array $pagelist, Opt $opt): array
+    {
+        $filter = [];
+        foreach ($pagelist as $page) {
+            if (
+                $this->ftag($page, $opt->tagfilter(), $opt->tagcompare(), $opt->tagnot()) &&
+                $this->fauthor($page, $opt->authorfilter(), $opt->authorcompare()) &&
+                $this->fsecure($page, $opt->secure()) &&
+                $this->flinkto($page, $opt->linkto()) &&
+                $this->fsince($page, $opt->since()) &&
+                $this->funtil($page, $opt->until())
+            ) {
+                $filter[] = $page->id();
+            }
+        }
+
+        if ($opt->invert()) {
+            $idlist = array_keys($pagelist);
+            $filter = array_diff($idlist, $filter);
+        }
+
+        return array_intersect_key($pagelist, array_flip($filter));
+    }
+
+
+
+    /**
+     * Sort and limit an array of Pages
+     *
+     * @param Page[] $pagelist              array of `Page` objects
+     * @param Opt $opt
+     *
+     * @return Page[]                       associative array of `Page` objects
+     */
+    public function sort(array $pagelist, Opt $opt): array
+    {
+        $this->pagelistsort($pagelist, $opt->sortby(), $opt->order());
+
+        if ($opt->limit() !== 0) {
+            $pagelist = array_slice($pagelist, 0, $opt->limit());
+        }
+
+        return $pagelist;
+    }
+
 
     public function pagecompare($page1, $page2, $method = 'id', $order = 1)
     {
@@ -406,207 +599,6 @@ class Modelpage extends Modeldb
         } else {
             return ($page->date() <= $until);
         }
-    }
-
-
-    public function tag(array $pagelist, $tagchecked): array
-    {
-        $pagecheckedlist = [];
-        foreach ($pagelist as $page) {
-            if (in_array($tagchecked, $page->tag('array'))) {
-                $pagecheckedlist[] = $page;
-            }
-        }
-        return $pagecheckedlist;
-    }
-
-    public function taglist(array $pagelist, array $tagcheckedlist): array
-    {
-        $taglist = [];
-        foreach ($tagcheckedlist as $tag) {
-            $taglist[$tag] = $this->tag($pagelist, $tag);
-        }
-        return $taglist;
-    }
-
-    /**
-     * @param string[] $taglist             list of tags
-     * @param Page[] $pagelist              list of Page
-     *
-     * @return array                        list of tags each containing list of id
-     */
-
-    public function tagpagelist(array $taglist, array $pagelist): array
-    {
-        $tagpagelist = [];
-        foreach ($taglist as $tag) {
-            $tagpagelist[$tag] = $this->filtertagfilter($pagelist, [$tag]);
-        }
-        return $tagpagelist;
-    }
-
-    public function lasteditedpagelist(int $last, array $pagelist)
-    {
-        $this->pagelistsort($pagelist, 'datemodif', -1);
-        $pagelist = array_slice($pagelist, 0, $last);
-        $idlist = [];
-        foreach ($pagelist as $page) {
-            $idlist[] = $page->id();
-        }
-        return $idlist;
-    }
-
-    /**
-     * Edit a page based on meta infos
-     *
-     * @param string $pageid
-     * @param array $datas
-     * @param array $reset
-     * @param string $addtag
-     * @param string $addauthor
-     *
-     * @return bool                         Depending on update success
-     */
-    public function pageedit(string $pageid, array $datas, array $reset, string $addtag, string $addauthor): bool
-    {
-        $page = $this->get($pageid);
-        $page = $this->reset($page, $reset);
-        $page->hydrate($datas);
-        $page->addtag($addtag);
-        $page->addauthor($addauthor);
-        return $this->update($page);
-    }
-
-    /**
-     * Reset values of a page
-     *
-     * @param Page $page                    Page object to be reseted
-     * @param array $reset                  List of parameters needing reset
-     *
-     * @return Page                         The reseted page object
-     */
-    public function reset(Page $page, array $reset): Page
-    {
-        $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
-        if ($reset['tag']) {
-            $page->settag([]);
-        }
-        if ($reset['author']) {
-            $page->setauthors([]);
-        }
-        if ($reset['redirection']) {
-            $page->setredirection('');
-        }
-        if ($reset['date']) {
-            $page->setdate($now);
-        }
-        if ($reset['datemodif']) {
-            $page->setdatemodif($now);
-        }
-        return $page;
-    }
-
-    /**
-     * Check if a page need to be rendered
-     *
-     * @param Page $page                    Page to be checked
-     *
-     * @return bool                         true if the page need to be rendered otherwise false
-     */
-    public function needtoberendered(Page $page): bool
-    {
-        return (
-            $page->daterender() <= $page->datemodif() ||
-            !file_exists(self::HTML_RENDER_DIR . $page->id() . '.html') ||
-            !file_exists(self::RENDER_DIR . $page->id() . '.css') ||
-            !file_exists(self::RENDER_DIR . $page->id() . '.js')
-        );
-    }
-
-
-
-
-
-
-
-
-    // _____________________________ FILTERING & SORTING _____________________________
-
-
-    /**
-     * @param Page[]  $pagelist             of Pages objects as `id => Page`
-     * @param Opt $opt
-     *
-     * @param string $regex                 Regex to match.
-     * @param array $searchopt              Option search, could be `content` `title` `description`.
-     *
-     * @return Page[]                       associative array of `Page` objects     *
-     */
-    public function pagetable(array $pagelist, Opt $opt, $regex = '', $searchopt = []): array
-    {
-        $pagelist = $this->filter($pagelist, $opt);
-        if (!empty($regex)) {
-            $pagelist = $this->deepsearch($pagelist, $regex, $searchopt);
-        }
-        $pagelist = $this->sort($pagelist, $opt);
-
-        return $pagelist;
-    }
-
-
-
-    /**
-     * Filter the pages list acording to the options and invert
-     *
-     * @param Page[] $pagelist              list of `Page` objects
-     * @param Opt $opt
-     *
-     * @return Page[]                       Filtered list of pages
-     */
-
-    public function filter(array $pagelist, Opt $opt): array
-    {
-        $filter = [];
-        foreach ($pagelist as $page) {
-            if (
-                $this->ftag($page, $opt->tagfilter(), $opt->tagcompare(), $opt->tagnot()) &&
-                $this->fauthor($page, $opt->authorfilter(), $opt->authorcompare()) &&
-                $this->fsecure($page, $opt->secure()) &&
-                $this->flinkto($page, $opt->linkto()) &&
-                $this->fsince($page, $opt->since()) &&
-                $this->funtil($page, $opt->until())
-            ) {
-                $filter[] = $page->id();
-            }
-        }
-
-        if ($opt->invert()) {
-            $idlist = array_keys($pagelist);
-            $filter = array_diff($idlist, $filter);
-        }
-
-        return array_intersect_key($pagelist, array_flip($filter));
-    }
-
-
-
-    /**
-     * Sort and limit an array of Pages
-     *
-     * @param Page[] $pagelist              array of `Page` objects
-     * @param Opt $opt
-     *
-     * @return Page[]                       associative array of `Page` objects
-     */
-    public function sort(array $pagelist, Opt $opt): array
-    {
-        $this->pagelistsort($pagelist, $opt->sortby(), $opt->order());
-
-        if ($opt->limit() !== 0) {
-            $pagelist = array_slice($pagelist, 0, $opt->limit());
-        }
-
-        return $pagelist;
     }
 
 

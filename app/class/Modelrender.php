@@ -5,6 +5,7 @@ namespace Wcms;
 use AltoRouter;
 use Exception;
 use Http\Discovery\Exception\NotFoundException;
+use InvalidArgumentException;
 use LogicException;
 use Michelf\MarkdownExtra;
 use RuntimeException;
@@ -99,7 +100,7 @@ class Modelrender extends Modelpage
      *
      * @return string html string
      */
-    public function gethmtl()
+    private function gethmtl()
     {
 
         $body = $this->getbody($this->readbody());
@@ -114,14 +115,14 @@ class Modelrender extends Modelpage
     }
 
 
-    public function readbody()
+    private function readbody()
     {
         if (!empty($this->page->templatebody())) {
             $templateid = $this->page->templatebody();
-            $templatepage = $this->get($templateid);
-            if ($templatepage !== false) {
-                $body = $templatepage->body();
-            } else {
+            try {
+                $body = $this->get($templateid)->body();
+            } catch (RuntimeException $e) {
+                Logger::errorex($e);
                 $body = $this->page->body();
                 $this->page->settemplatebody('');
             }
@@ -141,10 +142,10 @@ class Modelrender extends Modelpage
      *
      * @return string as the full rendered BODY of the page
      */
-    public function getbody(string $body): string
+    private function getbody(string $body): string
     {
         // Elements that can be detected
-        $types = ['HEADER', 'NAV', 'MAIN', 'ASIDE', 'FOOTER'];
+        $types = array_map("strtoupper", Model::HTML_ELEMENTS);
 
         // First level regex
         $regex = implode("|", $types);
@@ -170,35 +171,30 @@ class Modelrender extends Modelpage
     /**
      * Foreach $sources (pages), this will get the corresponding $type element content
      *
-     * @param array $sources Array of pages ID
-     * @param string $type Type of element
+     * @param string[] $sources             Array of pages ID
+     * @param string $type                  Type of element
      */
-    public function getelementcontent(array $sources, string $type)
+    private function getelementcontent(array $sources, string $type)
     {
+        if (!in_array($type, Model::HTML_ELEMENTS)) {
+            throw new InvalidArgumentException();
+        }
         $content = '';
         $subseparator = PHP_EOL . PHP_EOL;
         foreach ($sources as $source) {
             if ($source !== $this->page->id()) {
-                $subcontent = $this->getpageelement($source, $type);
-                if ($subcontent !== false) {
-                    if (empty($subcontent)) {
-                        $message = 'The ' . strtoupper($type) . ' from page "' . $source . '" is currently empty !';
-                        $subcontent = "\n<!-- ' . $message . ' -->\n";
-                    }
-                } else {
-                    $read = '<h2>Rendering error :</h2>';
-                    $read .= '<p>The page <strong><code>' . $source . '</code></strong>, does not exist yet.</p>';
-                    //throw new Exception($read);
+                try {
+                    $subcontent = $this->get($source)->$type();
+                } catch (RuntimeException $e) {
+                    $subcontent = $this->page->$type();
                 }
-            } else {
-                $subcontent = $this->page->$type();
+                $content .= $subseparator . $subcontent;
             }
-            $content .= $subseparator . $subcontent;
         }
         return $content . $subseparator;
     }
 
-    public function elementparser(Element $element)
+    private function elementparser(Element $element)
     {
         $content = $this->article($element->content());
         $content = $this->automedialist($content);
@@ -234,7 +230,7 @@ class Modelrender extends Modelpage
      *
      * @throws Filesystemexception
      */
-    public function write(string $html)
+    private function write(string $html)
     {
         Fs::writefile(self::HTML_RENDER_DIR . $this->page->id() . '.html', $html);
         Fs::writefile(self::RENDER_DIR . $this->page->id() . '.css', $this->page->css(), 0664);
@@ -243,27 +239,11 @@ class Modelrender extends Modelpage
     }
 
 
-    /**
-     * @throws Filesystemexception
-     */
-    public function writetemplates()
-    {
-        if (array_key_exists('css', $this->page->template())) {
-            $tempaltecsspage = $this->get($this->page->template()['css']);
-            Fs::writefile(Model::RENDER_DIR . $tempaltecsspage->id() . '.css', $tempaltecsspage->css());
-        }
-        if (array_key_exists('javascript', $this->page->template())) {
-            $templatejspage = $this->get($this->page->template()['javascript']);
-            Fs::writefile(Model::RENDER_DIR . $templatejspage->id() . '.js', $templatejspage->javascript());
-        }
-    }
-
-
 
     /**
      * Return HEAD html element of a page
      */
-    public function gethead(): string
+    private function gethead(): string
     {
         $id = $this->page->id();
         $globalpath = Model::dirtopath(Model::CSS_DIR);
@@ -362,27 +342,30 @@ class Modelrender extends Modelpage
     /**
      * This create a HTML link for every stylsheet that are templated
      *
-     * @param Page $page Page being rendered
-     * @return string HTML to insert into <head> of page
+     * @param Page $page                    Page being rendered
+     * @return string                       HTML to insert into <head> of page
      */
-    public function recursivecss(Page $page): string
+    private function recursivecss(Page $page): string
     {
         $head = "";
-        $templates = $this->getpagecsstemplates($page);
-        // array_reverse($templates, true);
-        foreach ($templates as $template) {
-            if (in_array('externalcss', $template->templateoptions())) {
-                foreach ($template->externalcss() as $externalcss) {
-                    $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
+        try {
+            $templates = $this->getpagecsstemplates($page);
+            foreach ($templates as $template) {
+                if (in_array('externalcss', $template->templateoptions())) {
+                    foreach ($template->externalcss() as $externalcss) {
+                        $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
+                    }
                 }
+                $head .= '<link href="' . Model::renderpath() . $template->id() . '.css" rel="stylesheet" />';
+                $head .= "\n";
             }
-            $head .= '<link href="' . Model::renderpath() . $template->id() . '.css" rel="stylesheet" />';
-            $head .= "\n";
+        } catch (RuntimeException $e) {
+            Logger::errorex($e);
         }
         return $head;
     }
 
-    public function desctitle($text, $desc, $title)
+    private function desctitle($text, $desc, $title)
     {
         $text = str_replace('%TITLE%', $title, $text);
         $text = str_replace('%DESCRIPTION%', $desc, $text);
@@ -390,7 +373,7 @@ class Modelrender extends Modelpage
     }
 
 
-    public function bodyparser(string $text)
+    private function bodyparser(string $text)
     {
         $text = $this->media($text);
 
@@ -419,7 +402,7 @@ class Modelrender extends Modelpage
      * Search and replace referenced media code by full absolute address.
      * Add a target="_blank" attribute to link pointing to media.
      */
-    public function media(string $text): string
+    private function media(string $text): string
     {
         $regex = '%href="([\w\-]+(\/([\w\-])+)*\.[a-z0-9]{1,5})"%';
         $text = preg_replace($regex, 'href="' . Model::mediapath() . '$1" target="_blank"', $text);
@@ -433,14 +416,14 @@ class Modelrender extends Modelpage
      *
      * @param string $text the page text as html
      */
-    public function shortenurl(string $text): string
+    private function shortenurl(string $text): string
     {
         $text = preg_replace('#<a(.*href="(https?:\/\/(.+))".*)>\2</a>#', "<a$1>$3</a>", $text);
         return $text;
     }
 
 
-    public function autourl($text)
+    private function autourl($text)
     {
         $text = preg_replace(
             '#( |\R|(>)|(&lt;))(https?:\/\/(\S+\.[^< ]+))(((?(3)&gt;|))(?(2)</[^a]|))#',
@@ -450,23 +433,23 @@ class Modelrender extends Modelpage
         return $text;
     }
 
-    public function wurl(string $text)
+    private function wurl(string $text)
     {
         $linkto = [];
         $rend = $this;
         $text = preg_replace_callback(
             '%href="([\w-]+)\/?(#?[\w-]*)"%',
             function ($matches) use ($rend, &$linkto) {
-                $matchpage = $rend->get($matches[1]);
-                if (!$matchpage) {
-                    $href = $rend->upage($matches[1]);
-                    $t = Config::existnot();
-                    $c = 'internal existnot"' . $this->internallinkblank;
-                } else {
+                try {
+                    $matchpage = $rend->get($matches[1]);
                     $href = $rend->upage($matches[1]) . $matches[2];
                     $t = $matchpage->description();
                     $c = 'internal exist ' . $matchpage->secure('string');
                     $linkto[] = $matchpage->id();
+                } catch (RuntimeException $e) {
+                    $href = $rend->upage($matches[1]);
+                    $t = Config::existnot();
+                    $c = 'internal existnot"' . $this->internallinkblank;
                 }
                 $link =  'href="' . $href . '" title="' . $t . '" class="' . $c . '"' . $this->internallinkblank;
                 return $link;
@@ -477,25 +460,25 @@ class Modelrender extends Modelpage
         return $text;
     }
 
-    public function wikiurl(string $text)
+    private function wikiurl(string $text)
     {
         $linkto = [];
         $rend = $this;
         $text = preg_replace_callback(
             '%\[([\w-]+)\/?#?([a-z-_]*)\]%',
             function ($matches) use ($rend, &$linkto) {
-                $matchpage = $rend->get($matches[1]);
-                if (!$matchpage) {
-                    $href = $rend->upage($matches[1]);
-                    $t = Config::existnot();
-                    $c = 'internal existnot" ' . $this->internallinkblank;
-                    $a = $matches[1];
-                } else {
+                try {
+                    $matchpage = $rend->get($matches[1]);
                     $href = $rend->upage($matches[1]) . $matches[2];
                     $t = $matchpage->description();
                     $c = 'internal exist ' . $matchpage->secure('string');
                     $a = $matchpage->title();
                     $linkto[] = $matchpage->id();
+                } catch (RuntimeException $e) {
+                    $href = $rend->upage($matches[1]);
+                    $t = Config::existnot();
+                    $c = 'internal existnot" ' . $this->internallinkblank;
+                    $a = $matches[1];
                 }
                 $i = $this->internallinkblank;
                 return '<a href="' . $href . '" title="' . $t . '" class="' . $c . '" ' . $i . ' >' . $a . '</a>';
@@ -517,7 +500,7 @@ class Modelrender extends Modelpage
      * @return string text with id in header
      */
 
-    public function headerid(string $text, int $min, int $max, string $element, bool $anchor): string
+    private function headerid(string $text, int $min, int $max, string $element, bool $anchor): string
     {
         if ($min > 6 || $min < 1) {
             $min = 6;
@@ -549,7 +532,7 @@ class Modelrender extends Modelpage
         return $text;
     }
 
-    public function markdown($text)
+    private function markdown($text)
     {
         $fortin = new MarkdownExtra();
         // id in headers
@@ -563,7 +546,7 @@ class Modelrender extends Modelpage
 
 
 
-    public function article($text)
+    private function article($text)
     {
         $pattern = '/(\R\R|^\R|^)[=]{3,}([\w-]*)\R\R(.*)(?=\R\R[=]{3,}[\w-]*\R)/sUm';
         $text = preg_replace_callback($pattern, function ($matches) {
@@ -586,7 +569,7 @@ class Modelrender extends Modelpage
      *
      * @return array Ordered array containing an array of `fullmatch` and `options`
      */
-    public function match(string $text, string $include): array
+    private function match(string $text, string $include): array
     {
         preg_match_all('~\%(' . $include . ')(\?([a-zA-Z0-9:\[\]\&=\-_\/\%\+\*\;]*))?\%~', $text, $out);
 
@@ -604,7 +587,7 @@ class Modelrender extends Modelpage
      *
      * @return string Output text
      */
-    public function automedialist(string $text): string
+    private function automedialist(string $text): string
     {
         $matches = $this->match($text, 'MEDIA');
 
@@ -624,7 +607,7 @@ class Modelrender extends Modelpage
      *
      * @return string Output text
      */
-    public function summary(string $text): string
+    private function summary(string $text): string
     {
         $matches = $this->match($text, 'SUMMARY');
 
@@ -643,7 +626,7 @@ class Modelrender extends Modelpage
     /**
      * Render pages list
      */
-    public function pageoptlist(string $text): string
+    private function pageoptlist(string $text): string
     {
         $matches = $this->match($text, 'LIST');
 
@@ -667,7 +650,7 @@ class Modelrender extends Modelpage
      *
      * @return string                       Text with replaced valid %RSS% inclusions
      */
-    public function rss(string $text): string
+    private function rss(string $text): string
     {
         $this->rsslist = $this->rssmatch($text);
         foreach ($this->rsslist as $fullmatch => $bookmark) {
@@ -685,7 +668,7 @@ class Modelrender extends Modelpage
      *
      * @return Bookmark[]                   Associative array of bookmarks, using fullmatch as key
      */
-    public function rssmatch(string $text): array
+    private function rssmatch(string $text): array
     {
         $rsslist = [];
         $matches = $this->match($text, "RSS");
@@ -708,7 +691,7 @@ class Modelrender extends Modelpage
 
 
 
-    public function date(string $text): string
+    private function date(string $text): string
     {
         $page = $this->page;
         $text = preg_replace_callback('~\%DATE\%~', function ($matches) use ($page) {
@@ -728,7 +711,7 @@ class Modelrender extends Modelpage
      *
      * @return string The rendered output
      */
-    public function thumbnail(string $text): string
+    private function thumbnail(string $text): string
     {
         $src = Model::thumbnailpath() . $this->page->thumbnail();
         $alt = $this->page->title();
@@ -744,7 +727,7 @@ class Modelrender extends Modelpage
      * @param string $text input text
      * @return string output text with replaced elements
      */
-    public function pageid(string $text): string
+    private function pageid(string $text): string
     {
         return str_replace(['%PAGEID%', '%ID%'], $this->page->id(), $text);
     }
@@ -754,7 +737,7 @@ class Modelrender extends Modelpage
      * @param string $text input text
      * @return string output text with replaced elements
      */
-    public function url(string $text): string
+    private function url(string $text): string
     {
         return str_replace('%URL%', Config::domain() . $this->upage($this->page->id()), $text);
     }
@@ -764,7 +747,7 @@ class Modelrender extends Modelpage
      * @param string $text input text
      * @return string output text with replaced elements
      */
-    public function path(string $text): string
+    private function path(string $text): string
     {
         return str_replace('%PATH%', $this->upage($this->page->id()), $text);
     }
@@ -772,7 +755,7 @@ class Modelrender extends Modelpage
     /**
      * Replace `%AUTHORS%` with a rendered list of authors
      */
-    public function authors(string $text): string
+    private function authors(string $text): string
     {
         $page = $this->page;
         return preg_replace_callback("~\%AUTHORS\%~", function () use ($page) {
@@ -789,7 +772,7 @@ class Modelrender extends Modelpage
      *
      * @return string Conversion output
      */
-    public function everylink(string $text, int $limit): string
+    private function everylink(string $text, int $limit): string
     {
         $regex = '~([\w-_éêèùïüîçà]{' . $limit . ',})(?![^<]*>|[^<>]*<\/)~';
         $text = preg_replace_callback($regex, function ($matches) {
@@ -805,7 +788,7 @@ class Modelrender extends Modelpage
      *
      * @return string text ouput
      */
-    public function authenticate(string $text): string
+    private function authenticate(string $text): string
     {
         $id = $this->page->id();
         $regex = '~\%CONNECT(\?dir=([a-zA-Z0-9-_]+))?\%~';
@@ -852,7 +835,7 @@ class Modelrender extends Modelpage
      * @param User[] $users     List of User
      * @return string           List of user in HTML
      */
-    public function userlist(array $users): string
+    private function userlist(array $users): string
     {
         $html = "";
         foreach ($users as $user) {
