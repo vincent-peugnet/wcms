@@ -12,14 +12,15 @@ class Optlist extends Opt
     protected $author = 0;
     protected $style = 'list';
 
-    private $render;
+    private Modelrender $render;
+
+    /** @var string $bookmark Associated bookmark ID */
+    protected string $bookmark = "";
 
     public function parsehydrate(string $encoded)
     {
-        if (is_string($encoded)) {
-            parse_str($encoded, $datas);
-            $this->hydrate($datas);
-        }
+        parse_str($encoded, $datas);
+        $this->hydrate($datas);
     }
 
     /**
@@ -106,28 +107,19 @@ class Optlist extends Opt
         return $html;
     }
 
-    public function ul(string $content)
+    private function ul(string $content)
     {
         return '<ul class="pagelist">' . PHP_EOL . $content . PHP_EOL . '</ul>' . PHP_EOL;
     }
 
-    public function li(string $content, string $class)
+    private function li(string $content, string $class)
     {
         return '<li class="pagelistitem ' . $class . '">' . PHP_EOL . $content . PHP_EOL . '</li>' . PHP_EOL;
     }
 
-    public function a(string $content, string $class, string $id)
+    private function a(string $content, string $class, string $id)
     {
         return '<a ' . $class . ' href="' . $this->render->upage($id) . '">' . $content . '</a>';
-    }
-
-    public function spandescription(Page $page)
-    {
-        if ($this->description) {
-            return '<span class="description">' . $page->description() . '</span>';
-        } else {
-            return '';
-        }
     }
 
 
@@ -171,6 +163,11 @@ class Optlist extends Opt
         return $this->style;
     }
 
+    public function bookmark()
+    {
+        return $this->bookmark;
+    }
+
 
     // _______________________________________ S E T _____________________________________
 
@@ -208,6 +205,18 @@ class Optlist extends Opt
     {
         if (is_string($style) && key_exists($style, Model::LIST_STYLES)) {
             $this->style = $style;
+        }
+    }
+
+    /**
+     * @param string $bookmark              Bookmark ID
+     */
+    public function setbookmark(string $bookmark)
+    {
+        if (Model::idcheck($bookmark)) {
+            $this->bookmark = $bookmark;
+        } else {
+            $this->bookmark = "";
         }
     }
 }

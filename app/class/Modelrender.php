@@ -634,9 +634,22 @@ class Modelrender extends Modelpage
 
         if (!empty($matches)) {
             foreach ($matches as $match) {
-                $optlist = new Optlist(['render' => $this]);
+                $optlist = new Optlist();
                 $optlist->parsehydrate($match['options']);
-                $pagetable = $this->pagetable($this->pagelist(), $optlist, '', []);
+
+                if (!empty($optlist->bookmark())) {
+                    try {
+                        $bookmarkmanager = new Modelbookmark();
+                        $bookmark = $bookmarkmanager->get($optlist->bookmark());
+                        $optlist = new Optlist();
+                        $optlist->parsehydrate($bookmark->query());
+                        $optlist->parsehydrate($match['options']); // Erase bookmark options with LIST ones
+                    } catch (RuntimeException $e) {
+                        Logger::errorex($e);
+                    }
+                }
+
+                $pagetable = $this->pagetable($this->pagelist(), $optlist);
                 $this->linkto = array_merge($this->linkto, array_keys($pagetable));
                 $content = $optlist->listhtml($pagetable, $this->page, $this);
                 $text = str_replace($match['fullmatch'], $content, $text);

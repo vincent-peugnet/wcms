@@ -369,7 +369,9 @@ class Modelpage extends Modeldb
 
 
     /**
-     * @param Page[]  $pagelist             of Pages objects as `id => Page`
+     * Main page list filtering and sorting tool
+     *
+     * @param Page[] $pagelist             of Pages objects as `id => Page`
      * @param Opt $opt
      *
      * @param string $regex                 Regex to match.

@@ -28,8 +28,10 @@ class Opt extends Item
     protected array $authorlist = [];
     protected bool $invert = false;
     protected int $limit = 0;
+
     /** @var DateTimeImmutable $since */
     protected ?DateTimeImmutable $since = null;
+
     /** @var DateTimeImmutable $until */
     protected ?DateTimeImmutable $until = null;
 
