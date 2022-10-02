@@ -646,7 +646,7 @@ class Modelrender extends Modelpage
     }
 
     /**
-     * Replace RSS inclusions with links and store Bookmarks in `rsslist` property
+     * Replace RSS inclusions with atom paths and store Bookmarks in `rsslist` property
      *
      * @param string $text                  Input text to analyse
      *
@@ -657,8 +657,7 @@ class Modelrender extends Modelpage
         $this->rsslist = $this->rssmatch($text);
         foreach ($this->rsslist as $fullmatch => $bookmark) {
             $atompath = Servicerss::atompath($bookmark->id());
-            $link = "<a href=\"$atompath\">RSS feed</a>";
-            return str_replace($fullmatch, $link, $text);
+            return str_replace($fullmatch, $atompath, $text);
         }
         return $text;
     }

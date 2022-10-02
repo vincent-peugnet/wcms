@@ -97,9 +97,24 @@ To add the image on your page, the simplest method is to copy the Makdown genera
 *For bigger files transfer, you can always use FTP or SSH connections to add, delete, move files by accessing the `/media` directory of your W installation folder*
 
 
+
+
+
+
+
+
+
+
+
+
 ### Navigation
 
 Discover the differents interfaces of __W__.
+
+
+
+
+
 
 #### Home
 
@@ -118,13 +133,11 @@ In the home menu [super editors and above](#super-editor) can :
 - __Display :__ Set columns to be shown (user based) and tag colors.
 
 
-##### Deep Search Bar
+##### Bookmark panel
 
-The Deep Search bar help you to look for words or regular expressions in your pages.
-
-By default, searching only look in [title](#page-title), [description](#description) and [contents (markdown elements)](#markdown-elements), but the "other" checkbox will allow you to look up in [css](#css), [javascript](#javascript) and [BODY](#body) contents.
-
-Unlike the [filterings options](#options) below, searches can't be saved or used for [page lists](#page-list).
+This panel list public and personnal [bookmarks](#bookmarks).
+Select a bookmark to apply preset filters and sortings options.
+If your filters and sort options match an existing bookmark, it will be highlighted.
 
 ##### Options
 
@@ -133,6 +146,14 @@ The option panel contains multiples options for sorting and filtering your pages
 Just select the options you want and press "Fitler". Use the "Reset" button to come back to the default settings. W will keep the settings for the SESSION time.
 
 This panel is also usefull to set up a [page list](#page-list) to include the same list of page you've filtered in any page.
+##### Deep Search Bar
+
+The Deep Search bar help you to look for words or regular expressions in your pages.
+
+By default, searching only look in [title](#page-title), [description](#description) and [contents (markdown elements)](#markdown-elements), but the "other" checkbox will allow you to look up in [css](#css), [javascript](#javascript) and [BODY](#body) contents.
+
+Unlike the [filterings options](#options) below, searches can't be saved or used for [page lists](#page-list).
+
 
 ##### list view
 
@@ -150,6 +171,13 @@ By default orphans pages are hidden, but you can ajust settings to fit your need
 
 - left click on a page to read it
 - right click to edit it
+
+
+
+
+
+
+
 
 #### Edition
 
@@ -178,6 +206,16 @@ Note that the MAIN tab is the default opened tab, this is meant to be the most s
 
 ##### right panel
 
+
+
+
+
+
+
+
+
+
+
 #### Media manager
 
 When you need to use images, sound or videos in your pages, or any other type of files, you can use the media manager to host them before including them in your pages.
@@ -200,7 +238,21 @@ The explorer allow you to navigate between differents directories. It will show 
 
 ##### Media Filters
 
-By ajusting filters, you can 
+Filters and sorting options can be set by choosing wich types of files to show and how to sort them. They can be used to filter and sort a [medialist](#media-list) using the __filter__ tab in the [media menu](#media-menu).
+
+File types are determined by their file extention. The association table is hardcoded in W's code and can be found [here](https://github.com/vincent-peugnet/wcms/blob/master/app/class/Modelmedia.php#L13).
+
+
+
+
+
+
+
+
+
+
+
+
 
 #### Profile
 
@@ -211,16 +263,64 @@ The profile allow you to edit some user related preferences.
 Your __display name__ ande __url__ are used in case of an [authors inclusion](#authors-inclusion) or a [page list](#page-list) inclusion with `authors=1`.
 
 
+
+
+
+
+
+
 #### Admin
+
+
+
+
+
+
 
 #### User manager
 
+
+
+
+
+
+
 #### Bookmarks
 
-A bookmark store page filters settings.
+A bookmark is usefull to store a preset of pages filters and sorting settings.
 
 
-After ajusting [home options](#options), select the bookmark menu in the [home menu](#home-menu), add a name and a symbol, this will add a new bookmark on the left side of the home view !
+To create a bookmark, after ajusting [filters and sorting options](#options), select the bookmark menu in the [home menu](#home-menu), add a name and a symbol. This will add a new bookmark on the left side of the home view !
+
+You can ajust bookmarks infos more precisely later : select a bookmark in the [bookmark panel](#bookmark-panel), then click on the bookmark tab in the [home menu](#home-menu). **Title** and **description** can be edited.
+
+There are two kinds of bookmarks:
+
+- **public bookmark** Can only be created and edited by [super editor](#super-editor) and above. Every users that can access home view will be able to see and use them.
+- **private bookmark** Can be created by [editor](#editor) and above. They are user specific. Personnal bookmarks can only be accessed by their owners.
+
+##### Publish a RSS feed
+
+__Public__ bookmarks can be used to publish a RSS feed.
+
+After selecting a bookmark in the panel, open the bookmark menu and select "publish". This will generate an XML Atom file in the `assets` folder. You can see this file by clicking on the RSS symbol <i class="fa fa-rss"></i>, next to a published bookmark.
+
+To help visitor access this RSS feed, you can copy and paste a piece of [code to include in pages](#rss-link).
+
+When you update or add pages in the bookmark's scope, you need to manually refresh the RSS feed by clicking the refresh <i class="fa fa-refresh"></i> button.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -261,7 +361,33 @@ Where [PAGE_DESCRIPTION](#description) and [PAGE_TITLE](page-title) are the [pag
 
 Note that the `.internal` class have been added to the `a` html link, allowing you to differenciate internal link styling from `.external`.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### Inclusions
+
+
+
+
 
 #### Basic inclusions
 
@@ -326,6 +452,13 @@ This will include a connection form, redirecting to the actual page.
 This will include a connection form, redirecting to a specified page. Where `<page_id>` is the [ID](#page-id) of the page.
 
 
+
+
+
+
+
+
+
 ##### Summary
 
     %SUMMARY%
@@ -339,6 +472,13 @@ Where `<min>` and `<max>` are integers beetwen `1` to `6`.
 You can set `<min>` and `<max>` values to filters beetwen `<h*>` and `<h*>` headlines to take care of.
 
 You can specify an [element](#markdown-elements) to target with the `element` parameter. The summary will only refer to this `element` headlines.
+
+
+
+
+
+
+
 
 #### Page list
 
@@ -367,7 +507,7 @@ Generate :
 
 ##### styling
 
-Some `.class` and `#id` are generated to optimize styling.
+Some `.class` and `#id` are generated to help styling.
 
 `.public`, `.private`, `not_published` are used to define the privacity level of pages.
 
@@ -375,9 +515,38 @@ Some `.class` and `#id` are generated to optimize styling.
 
 `#<pageid>` is set to each item to allow selective styling.
 
+
+
+
+
+
+
+
 #### Media list
 
 Just like [page lists](#page-list), media list are used to generate a list of media based on filters.
+
+
+
+
+
+
+
+#### RSS link
+
+This code will generate a path to the corresponding [bookmark](#bookmarks) RSS feed XML file. And it will __reference the feed in the page `<head>`__.
+
+    %RSS?id=<bookmark_id>%
+
+The most common usage is tu use it as a link `href`. For example, with a published bookmark called `my-blog` and using [markdown](#markdown):
+
+    [RSS feed of my blog](%RSS?id=my-blog%)
+
+
+
+
+
+
 
 
 
