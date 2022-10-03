@@ -200,11 +200,24 @@
     <details id="selection" <?= !empty($optlist) ? 'open' : '' ?>>
         <summary>Filter</summary>
         <div class="submenu">
-        <h2>Get LIST code</h2>
+        <h2>List menu</h2>
         <i>Generate code to display a list of pages</i>
         <form action="<?= $this->url('homequery') ?>" method="post">
             <input type="hidden" name="query" value="1">
 
+            <select name="bookmark" id="list_bookmark">
+                <option value="">--no bookmark--</option>
+                <?php foreach ($matchedbookmarks as $bookmark) { ?>
+                    <option
+                        value="<?= $bookmark->id() ?>"
+                        <?= !empty($optlist) && $optlist->bookmark() === $bookmark->id() ? 'selected' : '' ?>
+                    >
+                        <?= $bookmark->name() ?>
+                    </option>
+                <?php } ?>
+            </select>
+            <label for="list_bookmark" title="use bookmark instead of filters">bookmark</label>
+            </br>
             <input type="hidden" name="title" value="0">
             <input type="checkbox" name="title" id="list_title" value="1" <?= !empty($optlist) && !$optlist->title() ? '' : 'checked' ?>>
             <label for="list_title">Show title</label>
@@ -232,6 +245,8 @@
             <select name="style" id="list_style">
                 <?= options(Wcms\Model::LIST_STYLES , !empty($optlist) ? $optlist->style() : null) ?>
             </select>
+            <label for="list_style">style</label>
+            </br>
             <input type="submit" value="generate">
         </form>
         <?php if(!empty($optlist)) { ?>

@@ -53,7 +53,7 @@ class Controllerhome extends Controllerpage
             $vars['publicbookmarks'] = $publicbookmarks;
             $vars['personalbookmarks'] = $personalbookmarks;
             $vars['queryaddress'] = $queryaddress;
-            $vars['matchedbookmarks'] = $this->modelhome->matchedbookmarks($bookmarks, $queryaddress, $this->user);
+            $vars['matchedbookmarks'] = $this->modelhome->matchedbookmarks($bookmarks, $queryaddress);
 
             $deepsearch = $this->deepsearch();
 
@@ -96,7 +96,7 @@ class Controllerhome extends Controllerpage
                 'database' => Config::pagetable()
             ];
 
-            $this->listquery($pagelist);
+            $this->listquery();
 
             $vars['optlist'] = $this->optlist;
 
@@ -132,13 +132,16 @@ class Controllerhome extends Controllerpage
         return ['regex' => $regex, 'searchopt' => $searchopt];
     }
 
-    public function listquery(array $pagelist)
+    public function listquery()
     {
         if (isset($_POST['query']) && $this->user->iseditor()) {
             $datas = array_merge($_POST, $_SESSION['opt']);
             $this->optlist = new Optlist();
             $this->optlist->hydrate($datas);
-            $vars['optlist'] = $this->optlist;
+            if (!empty($this->optlist->bookmark())) {
+                $this->optlist->resetall();
+            }
+            $coucou = $this->optlist;
         }
     }
 

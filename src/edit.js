@@ -53,7 +53,7 @@ CodeMirror.defineSimpleMode('wcms', {
     // 'list' mode, parameters' keywords of the 'list' macro
     list: [
         {
-            regex: /sortby|order|secure|tagcompare|authorcompare|tagfilter|authorfilter|linkto|limit|description|thumbnail|since|until|author|style/,
+            regex: /sortby|order|secure|tagcompare|authorcompare|tagfilter|authorfilter|linkto|limit|description|thumbnail|date|time|since|until|author|style|bookmark/,
             token: 'wkeyword',
             push: 'wcms',
         },

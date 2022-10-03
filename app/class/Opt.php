@@ -77,15 +77,17 @@ class Opt extends Item
 
 
     /**
-     * Reset all properties to default value
+     * Reset filters and sort properties to default value
      */
     public function resetall(): void
     {
         $varlist = get_class_vars(self::class);
 
         foreach ($varlist as $var => $default) {
-            $method = 'set' . $var;
-            $this->$method($default);
+            if (in_array($var, self::DATALIST)) {
+                $method = 'set' . $var;
+                $this->$method($default);
+            }
         }
     }
 
@@ -176,6 +178,9 @@ class Opt extends Item
         return '?' . urldecode(http_build_query($object));
     }
 
+    /**
+     * Used to generate links in home table header
+     */
     public function sortbyorder($sortby = "")
     {
         $object = $this->drylist(self::DATALIST, self::HTML_DATETIME_LOCAL);
@@ -263,28 +268,6 @@ class Opt extends Item
         $query = array_diff_assoc_recursive($object, $class);
 
         return urldecode(http_build_query($query));
-    }
-
-    public function parsetagcss(string $cssstring)
-    {
-        $classprefix = 'tag';
-        $pattern = '%a\.' . $classprefix . '\_([a-z0-9\-\_]*)\s*\{\s*(background-color):\s*(#[A-F0-6]{6})\;\s*\}%';
-        preg_match($pattern, $cssstring, $matches);
-        foreach ($matches as $value) {
-        }
-    }
-
-    public function tocss($cssdatas)
-    {
-        $string = '';
-        foreach ($cssdatas as $element => $css) {
-            $string .= PHP_EOL . $element . ' {';
-            foreach ($css as $param => $value) {
-                $string .= PHP_EOL . '    ' . $param . ': ' . $value . ';';
-            }
-            $string .= PHP_EOL . '}' . PHP_EOL;
-        }
-        return $string;
     }
 
 
@@ -401,7 +384,7 @@ class Opt extends Item
 
     public function settagfilter($tagfilter)
     {
-        if (!empty($tagfilter) && is_array($tagfilter)) {
+        if (is_array($tagfilter)) {
             $this->tagfilter = $tagfilter;
         }
     }
@@ -420,7 +403,7 @@ class Opt extends Item
 
     public function setauthorfilter($authorfilter)
     {
-        if (!empty($authorfilter) && is_array($authorfilter)) {
+        if (is_array($authorfilter)) {
             $this->authorfilter = $authorfilter;
         }
     }
@@ -505,6 +488,8 @@ class Opt extends Item
                     new DateTimeZone('Europe/Paris')
                 );
             }
+        } else {
+            $this->since = null;
         }
     }
 
@@ -525,6 +510,8 @@ class Opt extends Item
                     new DateTimeZone('Europe/Paris')
                 );
             }
+        } else {
+            $this->until = null;
         }
     }
 
