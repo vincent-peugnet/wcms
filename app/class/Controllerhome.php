@@ -50,6 +50,10 @@ class Controllerhome extends Controllerpage
             $queryaddress = $this->opt->getaddress();
             $bookmarks = array_merge($publicbookmarks, $personalbookmarks);
 
+            $vars['editablebookmarks'] = $personalbookmarks;
+            if ($this->user->isadmin()) {
+                $vars['editablebookmarks'] += $publicbookmarks;
+            }
             $vars['publicbookmarks'] = $publicbookmarks;
             $vars['personalbookmarks'] = $personalbookmarks;
             $vars['queryaddress'] = $queryaddress;

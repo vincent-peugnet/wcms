@@ -266,32 +266,47 @@
         <summary>Bookmark</summary>
         <div class="submenu">
             <?php if(empty($matchedbookmarks)) { ?>
-            <h2>New bookmark</h2>
-            <form action="<?= $this->url('bookmarkadd') ?>" method="post">
-                <p>
-                    Save those filters as a bookmark
-                </p>
-                <input type="hidden" name="route" value="home">
-                <input type="hidden" name="query" value="<?= $queryaddress ?>">
-                <input type="text" name="id" id="bookmark_id" required minlength="3">
-                <label for="bookmark_id">id</label>
-                <br>
-                <select name="icon" id="bookmark_icon">
-                    <?php foreach (Wcms\Modelbookmark::BOOKMARK_ICONS as $icon) { ?>
-                        <option value="<?= $icon ?>"><?= $icon ?></option>
-                    <?php } ?>
-                </select>
-                <label for="bookmark_icon">icon</label>
-                <br>
-                <select name="user" id="bookmark_type">
-                    <?php if($user->isadmin()) { ?>
-                        <option value="">public</option>
-                    <?php } ?>
-                    <option value="<?= $user->id() ?>">personal</option>
-                </select>
-                <br>
-                <input type="submit" value="create">
-            </form>
+                <h2>New bookmark</h2>
+                <form action="<?= $this->url('bookmarkadd') ?>" method="post">
+                    <p>
+                        Save those filters as a bookmark
+                    </p>
+                    <input type="hidden" name="route" value="home">
+                    <input type="hidden" name="query" value="<?= $queryaddress ?>">
+                    <input type="text" name="id" id="bookmark_id" required minlength="3">
+                    <label for="bookmark_id">id</label>
+                    <br>
+                    <select name="icon" id="bookmark_icon">
+                        <?php foreach (Wcms\Modelbookmark::BOOKMARK_ICONS as $icon) { ?>
+                            <option value="<?= $icon ?>"><?= $icon ?></option>
+                        <?php } ?>
+                    </select>
+                    <label for="bookmark_icon">icon</label>
+                    <br>
+                    <select name="user" id="bookmark_type">
+                        <?php if($user->isadmin()) { ?>
+                            <option value="">public</option>
+                        <?php } ?>
+                        <option value="<?= $user->id() ?>">personal</option>
+                    </select>
+                    <br>
+                    <input type="submit" value="create">
+                </form>
+                <?php if(!empty($editablebookmarks)) { ?>
+                    <h2>Update existing bookmark</h2>
+                    <form action="<?= $this->url('bookmarkupdate') ?>" method="post">
+                        <input type="hidden" name="query" value="<?= $queryaddress ?>">
+                        <select name="id" id="bookmark_id" required>
+                            <option value="" selected>--choose a bookmark--</option>
+                            <?php foreach ($editablebookmarks as $id => $bookmark) { ?>
+                                <option value="<?= $bookmark->id() ?>"><?= $bookmark->name() ?></option>
+                            <?php } ?>
+                        </select>
+                        <label for="bookmark_id">bookmark</label>
+                        </br>
+                        <input type="submit" value="update">
+                    </form>
+                <?php } ?>
             <?php } else { ?>
                 <?php foreach ($matchedbookmarks as $bookmark) { ?>
                     <?= $bookmark->icon() ?>
@@ -301,7 +316,6 @@
                     <h2>Infos</h2>
                     <form action="<?= $this->url('bookmarkupdate') ?>" method="post">
                         <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
-                        <input type="hidden" name="route" value="<?= $bookmark->route() ?>">
                         <select name="icon" id="bookmark_icon">
                             <?php foreach (Wcms\Modelbookmark::BOOKMARK_ICONS as $icon) { ?>
                                 <option value="<?= $icon ?>" <?= $icon === $bookmark->icon() ? 'selected' : '' ?>><?= $icon ?></option>

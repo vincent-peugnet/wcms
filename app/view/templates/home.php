@@ -15,7 +15,19 @@
 
 <?php
     $optlist = $optlist ?? null;
-    $this->insert('homemenu', ['user' => $user, 'opt' => $opt, 'optlist' => $optlist, 'pagelist' => $pagelist, 'faviconlist' => $faviconlist, 'thumbnaillist' => $thumbnaillist, 'editorlist' => $editorlist, 'colors' => $colors, 'queryaddress' => $queryaddress, 'matchedbookmarks' => $matchedbookmarks]);
+    $this->insert('homemenu', [
+        'user' => $user,
+        'opt' => $opt,
+        'optlist' => $optlist,
+        'pagelist' => $pagelist,
+        'faviconlist' => $faviconlist,
+        'thumbnaillist' => $thumbnaillist,
+        'editorlist' => $editorlist,
+        'colors' => $colors,
+        'queryaddress' => $queryaddress,
+        'matchedbookmarks' => $matchedbookmarks,
+        'editablebookmarks' => $editablebookmarks
+    ]);
 ?>
 
 
