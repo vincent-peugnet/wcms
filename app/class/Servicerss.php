@@ -76,6 +76,7 @@ class Servicerss
 
         $feed = $xml->createElement('feed');
         $feed->setAttribute("xmlns", "http://www.w3.org/2005/Atom");
+        $feed->setAttribute('xml:lang', Config::lang());
 
         $title = $xml->createElement("title");
         $title->appendChild(new DOMText($bookmark->name()));
@@ -128,6 +129,9 @@ class Servicerss
 
         foreach ($pagelist as $page) {
             $entry = $xml->createElement("entry");
+            if (!empty($page->lang())) {
+                $entry->setAttribute('xml:lang', $page->lang());
+            }
             $feed->appendChild($entry);
 
             $title = $xml->createElement("title");
