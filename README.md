@@ -194,7 +194,9 @@ All checks can be run with a single command
 Publish a new release
 ---------------------
 
-The release process uses [release-it](https://github.com/release-it/release-it) and uploads sourcemaps to [Sentry](https://sentry.io/). So to create and publish a new release you will need two access tokens:
+The release process uses GitHub's CLI so you will need to have it installed (`sudo apt install gh`).
+It also uploads sourcemaps to [Sentry](https://sentry.io/).
+So to create and publish a new release you will need two access tokens:
 -   a [GitHub personnal access token](https://github.com/settings/tokens) with `repository` access
 -   a [Sentry authentification token](https://sentry.io/settings/account/api/auth-tokens/) with `project:read`, `project:releases` and `org:read` access
 
@@ -206,9 +208,11 @@ GITHUB_TOKEN='<github token value>'
 SENTRY_AUTH_TOKEN='<sentry token value>'
 ```
 
-Then, to make the release, run the following command:
+Then, to make the release, run one of the following command:
 
-    make release
+    make release-patch
+    make release-minor
+    make release-major
 
 To only build the release zip, simply run `make dist`. This will create a zip file in `dist/` of the current version.
 
