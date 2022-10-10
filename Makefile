@@ -67,16 +67,17 @@ watch:
 	webpack --env $(ENV) --watch
 
 # Create a new release and upload it on GitHub.
-.PHONY: release
-release: check node_modules
-	release-it
+.PHONY: release-patch release-minor release-major
+release-%: TAG = v$(shell semver -i $* `git describe --tags --abbrev=0`)
+release-patch release-minor release-major: release-%: check node_modules
+	git tag $(TAG)
+	$(MAKE) dist
+	git push --tags
+	gh release create $(TAG)
+	gh release upload $(TAG) dist/*.zip
+	$(MAKE) .sentryrelease ENV=dist
 
 # Inform Sentry of a new release.
-.PHONY: sentryrelease
-sentryrelease: ENV := dist
-sentryrelease:
-	$(MAKE) .sentryrelease ENV=$(ENV)
-
 .PHONY: .sentryrelease
 .sentryrelease: build $(js_srcmaps)
 	sentry-cli releases new $(GIT_VERSION)
