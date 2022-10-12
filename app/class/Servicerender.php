@@ -4,16 +4,18 @@ namespace Wcms;
 
 use AltoRouter;
 use Exception;
-use Http\Discovery\Exception\NotFoundException;
 use InvalidArgumentException;
 use LogicException;
 use Michelf\MarkdownExtra;
 use RuntimeException;
 
-class Modelrender extends Modelpage
+class Servicerender
 {
     /** @var AltoRouter */
     protected ?AltoRouter $router;
+
+    /** @var Modelpage */
+    protected Modelpage $pagemanager;
 
     /**
      * @var Page                            Actual page being rendered
@@ -32,14 +34,12 @@ class Modelrender extends Modelpage
 
     /**
      * @param AltoRouter $router            Router used to generate urls
-     * @param Page[] $pagelist              Optionnal : if pagelist already exist, feed it with it
+     * @param Modelpage $pagemanager        [optionnal] can be usefull if a pagemanager already store a page list
      */
-    public function __construct(AltoRouter $router, array $pagelist = [])
+    public function __construct(AltoRouter $router, ?Modelpage $pagemanager = null)
     {
-        parent::__construct();
-
         $this->router = $router;
-        $this->pagelist = empty($pagelist) ? [] : $pagelist;
+        $this->pagemanager = !is_null($pagemanager) ? $pagemanager : new Modelpage();
 
         if (Config::internallinkblank()) {
             $this->internallinkblank = ' target="_blank" ';
@@ -48,6 +48,38 @@ class Modelrender extends Modelpage
         if (Config::externallinkblank()) {
             $this->externallinkblank = ' target="_blank" ';
         }
+    }
+
+
+    /**
+     * Render a full page as HTML
+     *
+     * @param Page $page                    page to render
+     *
+     * @return string                       HTML render of the page
+     */
+    public function render(Page $page): string
+    {
+        $this->page = $page;
+
+        return $this->gethmtl();
+    }
+
+    /**
+     * Render a page MAIN content to be used in RSS feed
+     *
+     * @param Page $page                    Page to render
+     *
+     * @return string                       HTML Parsed MAIN content of a page
+     *
+     * @todo                                render absolute media links
+     */
+    public function rendermain(Page $page): string
+    {
+        $this->page = $page;
+        $element = new Element($page->id(), ['content' => $page->main(), 'type' => "main"]);
+        $html = $this->elementparser($element);
+        return $this->bodyparser($html);
     }
 
     /**
@@ -63,37 +95,6 @@ class Modelrender extends Modelpage
         return $text;
     }
 
-
-    /**
-     * Generate page relative link for given page_id including basepath
-     *
-     * @param string $id                    given page ID
-     * @return string                       Relative URL
-     * @throws LogicException               if router fail to generate route
-     */
-    public function upage(string $id): string
-    {
-        try {
-            return $this->router->generate('pageread/', ['page' => $id]);
-        } catch (Exception $e) {
-            throw new LogicException($e->getMessage(), $e->getCode(), $e);
-        }
-    }
-
-
-    /**
-     * Main function
-     *
-     * @param Page $page page to render
-     *
-     * @throws Filesystemexception          If wrinting render files fails
-     */
-    public function render(Page $page)
-    {
-        $this->page = $page;
-
-        $this->write($this->gethmtl());
-    }
 
     /**
      * Combine body and head to create html file
@@ -120,7 +121,7 @@ class Modelrender extends Modelpage
         if (!empty($this->page->templatebody())) {
             $templateid = $this->page->templatebody();
             try {
-                $body = $this->get($templateid)->body();
+                $body = $this->pagemanager->get($templateid)->body();
             } catch (RuntimeException $e) {
                 Logger::errorex($e);
                 $body = $this->page->body();
@@ -163,10 +164,134 @@ class Modelrender extends Modelpage
             }
         }
 
-
-
         return $body;
     }
+
+    /**
+     * Return HEAD html element of a page
+     */
+    private function gethead(): string
+    {
+        $id = $this->page->id();
+        $globalpath = Model::dirtopath(Model::CSS_DIR);
+        $renderpath = Model::renderpath();
+        $description = $this->page->description();
+        $title = $this->page->title();
+        $url = Config::url();
+
+        $head = '';
+
+        // redirection
+        if (!empty($this->page->redirection())) {
+            try {
+                if (Model::idcheck($this->page->redirection())) {
+                    $url = $this->upage($this->page->redirection());
+                } else {
+                    $url = getfirsturl($this->page->redirection());
+                }
+                $head .= "\n<meta http-equiv=\"refresh\" content=\"{$this->page->refresh()}; URL=$url\" />";
+            } catch (\Exception $e) {
+                // TODO : send render error
+            }
+        }
+
+        $head .= "<meta charset=\"utf-8\" />\n";
+        $head .= "<title>$title</title>\n";
+        if (!empty($this->page->favicon()) && file_exists(Model::FAVICON_DIR . $this->page->favicon())) {
+            $href = Model::faviconpath() . $this->page->favicon();
+            $head .= "<link rel=\"shortcut icon\" href=\"$href\" type=\"image/x-icon\">";
+        } elseif (!empty(Config::defaultfavicon()) && file_exists(Model::FAVICON_DIR . Config::defaultfavicon())) {
+            $href = Model::faviconpath() . Config::defaultfavicon();
+            $head .= "<link rel=\"shortcut icon\" href=\"$href\" type=\"image/x-icon\">";
+        }
+        $head .= "<meta name=\"description\" content=\"$description\" />\n";
+        $head .= "<meta name=\"viewport\" content=\"width=device-width\" />\n";
+        $head .= "<meta name=\"generator\" content=\"W-cms\" />\n";
+
+        $head .= "<meta property=\"og:type\" content=\"website\" />";
+        $head .= "<meta property=\"og:title\" content=\"$title\">\n";
+        $head .= "<meta property=\"og:description\" content=\"$description\">\n";
+
+        if (!empty($this->page->thumbnail())) {
+            $content = Config::domain() . Model::thumbnailpath() . $this->page->thumbnail();
+            $head .= "<meta property=\"og:image\" content=\"$content\">\n";
+        } elseif (!empty(Config::defaultthumbnail())) {
+            $content = Config::domain() . Model::thumbnailpath() . Config::defaultthumbnail();
+            $head .= "<meta property=\"og:image\" content=\"$content\">\n";
+        }
+
+        $head .= "<meta property=\"og:url\" content=\"$url$id/\">\n";
+
+        foreach ($this->rsslist as $bookmark) {
+            $atompath = Servicerss::atompath($bookmark->id());
+            $title = $bookmark->name();
+            $head .= "<link href=\"$atompath\" type=\"application/atom+xml\" rel=\"alternate\" title=\"$title\" />";
+        }
+
+        $head .= PHP_EOL . $this->page->customhead() . PHP_EOL;
+
+        foreach ($this->page->externalcss() as $externalcss) {
+            $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
+        }
+
+        if (file_exists(Model::GLOBAL_CSS_FILE)) {
+            $head .= "<link href=\"{$globalpath}global.css\" rel=\"stylesheet\" />\n";
+        }
+
+        $head .= $this->recursivecss($this->page);
+        $head .= "<link href=\"$renderpath$id.css\" rel=\"stylesheet\" />\n";
+
+        if (!empty($this->page->templatejavascript())) {
+            $templatejspage = $this->page->templatejavascript();
+            $head .= "<script src=\"$renderpath$templatejspage.js\" async/></script>\n";
+        }
+        if (!empty($this->page->javascript())) {
+            $head .= "<script src=\"$renderpath$id.js\" async/></script>\n";
+        }
+
+        if (!empty(Config::analytics())) {
+            $analitycs = Config::analytics();
+            $head .= "\n
+            <!-- Global site tag (gtag.js) - Google Analytics -->
+			<script async src=\"https://www.googletagmanager.com/gtag/js?id=$analitycs\"></script>
+			<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'Config::analytics()');
+			</script>
+			\n";
+        }
+        return $head;
+    }
+
+    /**
+     * This create a HTML link for every stylsheet that are templated
+     *
+     * @param Page $page                    Page being rendered
+     * @return string                       HTML to insert into <head> of page
+     */
+    private function recursivecss(Page $page): string
+    {
+        $head = "";
+        try {
+            $templates = $this->pagemanager->getpagecsstemplates($page);
+            foreach ($templates as $template) {
+                if (in_array('externalcss', $template->templateoptions())) {
+                    foreach ($template->externalcss() as $externalcss) {
+                        $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
+                    }
+                }
+                $head .= '<link href="' . Model::renderpath() . $template->id() . '.css" rel="stylesheet" />';
+                $head .= "\n";
+            }
+        } catch (RuntimeException $e) {
+            Logger::errorex($e);
+        }
+        return $head;
+    }
+
 
     /**
      * Foreach $sources (pages), this will get the corresponding $type element content
@@ -184,7 +309,7 @@ class Modelrender extends Modelpage
         foreach ($sources as $source) {
             if ($source !== $this->page->id()) {
                 try {
-                    $subcontent = $this->get($source)->$type();
+                    $subcontent = $this->pagemanager->get($source)->$type();
                 } catch (RuntimeException $e) {
                     $subcontent = $this->page->$type();
                 }
@@ -227,154 +352,6 @@ class Modelrender extends Modelpage
     }
 
 
-    /**
-     * Write css javascript and html as files in the assets folder
-     *
-     * @throws Filesystemexception
-     */
-    private function write(string $html)
-    {
-        Fs::writefile(self::HTML_RENDER_DIR . $this->page->id() . '.html', $html);
-        Fs::writefile(self::RENDER_DIR . $this->page->id() . '.css', $this->page->css(), 0664);
-        //Fs::writefile(self::RENDER_DIR . $this->page->id() . '.quick.css', $this->page->quickcss());
-        Fs::writefile(self::RENDER_DIR . $this->page->id() . '.js', $this->page->javascript(), 0664);
-    }
-
-
-
-    /**
-     * Return HEAD html element of a page
-     */
-    private function gethead(): string
-    {
-        $id = $this->page->id();
-        $globalpath = Model::dirtopath(Model::CSS_DIR);
-        $renderpath = Model::renderpath();
-        $description = $this->page->description();
-        $title = $this->page->title();
-        $url = Config::url();
-
-        $head = '';
-
-        // redirection
-        if (!empty($this->page->redirection())) {
-            try {
-                if (Model::idcheck($this->page->redirection())) {
-                    $url = $this->upage($this->page->redirection());
-                } else {
-                    $url = getfirsturl($this->page->redirection());
-                }
-                $head .= "\n<meta http-equiv=\"refresh\" content=\"{$this->page->refresh()}; URL=$url\" />";
-            } catch (\Exception $e) {
-                // TODO : send render error
-            }
-        }
-
-        $head .= "<meta charset=\"utf-8\" />\n";
-        $head .= "<title>$title</title>\n";
-        if (!empty($this->page->favicon()) && file_exists(self::FAVICON_DIR . $this->page->favicon())) {
-            $href = Model::faviconpath() . $this->page->favicon();
-            $head .= "<link rel=\"shortcut icon\" href=\"$href\" type=\"image/x-icon\">";
-        } elseif (!empty(Config::defaultfavicon()) && file_exists(self::FAVICON_DIR . Config::defaultfavicon())) {
-            $href = Model::faviconpath() . Config::defaultfavicon();
-            $head .= "<link rel=\"shortcut icon\" href=\"$href\" type=\"image/x-icon\">";
-        }
-        $head .= "<meta name=\"description\" content=\"$description\" />\n";
-        $head .= "<meta name=\"viewport\" content=\"width=device-width\" />\n";
-        $head .= "<meta name=\"generator\" content=\"W-cms\" />\n";
-
-        $head .= "<meta property=\"og:type\" content=\"website\" />";
-        $head .= "<meta property=\"og:title\" content=\"$title\">\n";
-        $head .= "<meta property=\"og:description\" content=\"$description\">\n";
-
-        if (!empty($this->page->thumbnail())) {
-            $content = Config::domain() . self::thumbnailpath() . $this->page->thumbnail();
-            $head .= "<meta property=\"og:image\" content=\"$content\">\n";
-        } elseif (!empty(Config::defaultthumbnail())) {
-            $content = Config::domain() . self::thumbnailpath() . Config::defaultthumbnail();
-            $head .= "<meta property=\"og:image\" content=\"$content\">\n";
-        }
-
-        $head .= "<meta property=\"og:url\" content=\"$url$id/\">\n";
-
-        foreach ($this->rsslist as $bookmark) {
-            $atompath = Servicerss::atompath($bookmark->id());
-            $title = $bookmark->name();
-            $head .= "<link href=\"$atompath\" type=\"application/atom+xml\" rel=\"alternate\" title=\"$title\" />";
-        }
-
-        $head .= PHP_EOL . $this->page->customhead() . PHP_EOL;
-
-        foreach ($this->page->externalcss() as $externalcss) {
-            $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
-        }
-
-        if (file_exists(self::GLOBAL_CSS_FILE)) {
-            $head .= "<link href=\"{$globalpath}global.css\" rel=\"stylesheet\" />\n";
-        }
-
-        $head .= $this->recursivecss($this->page);
-        $head .= "<link href=\"$renderpath$id.css\" rel=\"stylesheet\" />\n";
-
-        if (!empty($this->page->templatejavascript())) {
-            $templatejspage = $this->page->templatejavascript();
-            $head .= "<script src=\"$renderpath$templatejspage.js\" async/></script>\n";
-        }
-        if (!empty($this->page->javascript())) {
-            $head .= "<script src=\"$renderpath$id.js\" async/></script>\n";
-        }
-
-        if (!empty(Config::analytics())) {
-            $analitycs = Config::analytics();
-            $head .= "\n
-            <!-- Global site tag (gtag.js) - Google Analytics -->
-			<script async src=\"https://www.googletagmanager.com/gtag/js?id=$analitycs\"></script>
-			<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-
-			gtag('config', 'Config::analytics()');
-			</script>
-			\n";
-        }
-        return $head;
-    }
-
-    /**
-     * This create a HTML link for every stylsheet that are templated
-     *
-     * @param Page $page                    Page being rendered
-     * @return string                       HTML to insert into <head> of page
-     */
-    private function recursivecss(Page $page): string
-    {
-        $head = "";
-        try {
-            $templates = $this->getpagecsstemplates($page);
-            foreach ($templates as $template) {
-                if (in_array('externalcss', $template->templateoptions())) {
-                    foreach ($template->externalcss() as $externalcss) {
-                        $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
-                    }
-                }
-                $head .= '<link href="' . Model::renderpath() . $template->id() . '.css" rel="stylesheet" />';
-                $head .= "\n";
-            }
-        } catch (RuntimeException $e) {
-            Logger::errorex($e);
-        }
-        return $head;
-    }
-
-    private function desctitle($text, $desc, $title)
-    {
-        $text = str_replace('%TITLE%', $title, $text);
-        $text = str_replace('%DESCRIPTION%', $desc, $text);
-        return $text;
-    }
-
-
     private function bodyparser(string $text)
     {
         $text = $this->media($text);
@@ -400,6 +377,12 @@ class Modelrender extends Modelpage
         return $text;
     }
 
+    private function desctitle($text, $desc, $title)
+    {
+        $text = str_replace('%TITLE%', $title, $text);
+        $text = str_replace('%DESCRIPTION%', $desc, $text);
+        return $text;
+    }
     /**
      * Search and replace referenced media code by full absolute address.
      * Add a target="_blank" attribute to link pointing to media.
@@ -435,6 +418,22 @@ class Modelrender extends Modelpage
         return $text;
     }
 
+    /**
+     * Generate page relative link for given page_id including basepath
+     *
+     * @param string $id                    given page ID
+     * @return string                       Relative URL
+     * @throws LogicException               if router fail to generate route
+     */
+    public function upage(string $id): string
+    {
+        try {
+            return $this->router->generate('pageread/', ['page' => $id]);
+        } catch (Exception $e) {
+            throw new LogicException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
     private function wurl(string $text)
     {
         $linkto = [];
@@ -443,7 +442,7 @@ class Modelrender extends Modelpage
             '%href="([\w-]+)\/?(#?[\w-]*)"%',
             function ($matches) use ($rend, &$linkto) {
                 try {
-                    $matchpage = $rend->get($matches[1]);
+                    $matchpage = $rend->pagemanager->get($matches[1]);
                     $href = $rend->upage($matches[1]) . $matches[2];
                     $t = $matchpage->description();
                     $c = 'internal exist ' . $matchpage->secure('string');
@@ -470,7 +469,7 @@ class Modelrender extends Modelpage
             '%\[([\w-]+)\/?#?([a-z-_]*)\]%',
             function ($matches) use ($rend, &$linkto) {
                 try {
-                    $matchpage = $rend->get($matches[1]);
+                    $matchpage = $rend->pagemanager->get($matches[1]);
                     $href = $rend->upage($matches[1]) . $matches[2];
                     $t = $matchpage->description();
                     $c = 'internal exist ' . $matchpage->secure('string');
@@ -521,7 +520,7 @@ class Modelrender extends Modelpage
                 $content = $matches[6];
                 // if no custom id is defined, use idclean of the content as id
                 if (empty($id)) {
-                    $id = self::idclean($content);
+                    $id = Model::idclean($content);
                 }
                 $this->sum[$element][] = new Header($id, intval($level), $content);
                 if ($anchor) {
@@ -646,7 +645,7 @@ class Modelrender extends Modelpage
                         $optlist->parsehydrate($match['options']); // Erase bookmark options with LIST ones
                     }
 
-                    $pagetable = $this->pagetable($this->pagelist(), $optlist);
+                    $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optlist);
                     $this->linkto = array_merge($this->linkto, array_keys($pagetable));
                     $content = $optlist->listhtml($pagetable, $this->page, $this);
                     $text = str_replace($match['fullmatch'], $content, $text);
@@ -790,7 +789,7 @@ class Modelrender extends Modelpage
     {
         $regex = '~([\w-_éêèùïüîçà]{' . $limit . ',})(?![^<]*>|[^<>]*<\/)~';
         $text = preg_replace_callback($regex, function ($matches) {
-            return '<a href="' . self::idclean($matches[1]) . '">' . $matches[1] . '</a>';
+            return '<a href="' . Model::idclean($matches[1]) . '">' . $matches[1] . '</a>';
         }, $text);
         return $text;
     }
@@ -810,7 +809,7 @@ class Modelrender extends Modelpage
             if (isset($matches[2])) {
                 $id = $matches[2];
             }
-            $form = '<form action="' . $this->dirtopath('!co') . '" method="post">
+            $form = '<form action="' . Model::dirtopath('!co') . '" method="post">
             <input type="text" name="user" id="loginuser" autofocus placeholder="user" required>
 			<input type="password" name="pass" id="loginpass" placeholder="password" required>
 			<input type="hidden" name="route" value="pageread/">
@@ -861,6 +860,13 @@ class Modelrender extends Modelpage
 
 
 
+    // _________________________ G E T ___________________________________
+
+    public function sum()
+    {
+        return $this->sum;
+    }
+
     public function linkto()
     {
         sort($this->linkto);
@@ -871,33 +877,5 @@ class Modelrender extends Modelpage
         }
         $this->linkto = [];
         return $linkto;
-    }
-
-
-    // _________________________ R S S ___________________________________
-
-    /**
-     * @return string HTML Parsed MAIN content of a page
-     * @todo render absolute media links
-     */
-    public function rsscontent(Page $page): string
-    {
-        $this->page = $page;
-        $element = new Element($page->id(), ['content' => $page->main(), 'type' => "main"]);
-        $html = $this->elementparser($element);
-        return $this->bodyparser($html);
-    }
-
-
-    // _________________________ G E T ___________________________________
-
-    public function sum()
-    {
-        return $this->sum;
-    }
-
-    public function router(): AltoRouter
-    {
-        return $this->router;
     }
 }

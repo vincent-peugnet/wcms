@@ -96,15 +96,19 @@ class Controllerpage extends Controller
     {
         $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
 
-        $renderengine = new Modelrender($this->router);
+        $renderengine = new Servicerender($this->router, $this->pagemanager);
 
         try {
-            $renderengine->render($page);
+            $html = $renderengine->render($page);
+            Fs::writefile(Model::HTML_RENDER_DIR . $this->page->id() . '.html', $html);
+            Fs::writefile(Model::RENDER_DIR . $this->page->id() . '.css', $this->page->css(), 0664);
+            Fs::writefile(Model::RENDER_DIR . $this->page->id() . '.js', $this->page->javascript(), 0664);
+
+            $page->setdaterender($now);
+            $page->setlinkto($renderengine->linkto());
         } catch (RuntimeException $e) {
             Model::sendflashmessage("Error while saving render files", Model::FLASH_ERROR);
         }
-        $page->setdaterender($now);
-        $page->setlinkto($renderengine->linkto());
 
         return $page;
     }
@@ -311,7 +315,7 @@ class Controllerpage extends Controller
     public function confirmdelete($page)
     {
         $this->setpage($page, 'pageconfirmdelete');
-        if ($this->importpage() && ($this->user->issupereditor() || $this->page->authors() === [$this->user->id()] )) {
+        if ($this->importpage() && ($this->user->issupereditor() || $this->page->authors() === [$this->user->id()])) {
             $this->showtemplate('confirmdelete', ['page' => $this->page, 'pageexist' => true]);
         } else {
             $this->routedirect('pageread/', ['page' => $this->page->id()]);
@@ -450,7 +454,7 @@ class Controllerpage extends Controller
 
         if ($this->importpage()) {
             if ($this->canedit()) {
-            // Check if someone esle edited the page during the editing.
+                // Check if someone esle edited the page during the editing.
                 $oldpage = clone $this->page;
                 $this->page->hydrate($_POST);
 
@@ -468,7 +472,7 @@ class Controllerpage extends Controller
                 }
 
 
-            //$this->showtemplate('updatemerge', $compare);
+                //$this->showtemplate('updatemerge', $compare);
             } else {
                 // If the editor session finished during the editing, let's try to reconnect to save the editing
                 $_SESSION['pageupdate'] = $_POST;

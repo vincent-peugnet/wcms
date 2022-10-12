@@ -13,14 +13,14 @@ use RuntimeException;
 class Servicerss
 {
     protected AltoRouter $router;
-    protected Modelrender $render;
+    protected Servicerender $render;
     protected Modelpage $pagemanager;
     protected Modelbookmark $bookmarkmanager;
 
     public function __construct(AltoRouter $router)
     {
         $this->router = $router;
-        $this->render = new Modelrender($this->router);
+        $this->render = new Servicerender($this->router);
         $this->pagemanager = new Modelpage();
         $this->bookmarkmanager = new Modelbookmark();
     }
@@ -204,8 +204,8 @@ class Servicerss
      */
     protected function mainhtml(Page $page): string
     {
-        $render = new Modelrender($this->render->router(), $this->render->pagelist());
-        return $render->rsscontent($page);
+        $render = new Servicerender($this->router, $this->pagemanager);
+        return $render->rendermain($page);
     }
 
     /**

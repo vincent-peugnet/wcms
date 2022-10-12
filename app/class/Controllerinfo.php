@@ -16,7 +16,7 @@ class Controllerinfo extends Controller
     {
         if ($this->user->isinvite()) {
             if (file_exists(Model::MAN_FILE)) {
-                $render = new Modelrender($this->router);
+                $render = new Servicerender($this->router, $this->pagemanager);
                 $htmlman = file_get_contents(Model::MAN_FILE);
                 $htmlman = $render->rendermanual($htmlman);
 

@@ -12,7 +12,7 @@ class Optlist extends Opt
     protected $author = 0;
     protected $style = 'list';
 
-    private Modelrender $render;
+    private Servicerender $render;
 
     /** @var string $bookmark Associated bookmark ID */
     protected string $bookmark = "";
@@ -34,10 +34,10 @@ class Optlist extends Opt
     /**
      * @param Page[] $pagelist
      * @param Page $currentpage
-     * @param Modelrender $render
+     * @param Servicerender $render
      * @retrun string HTML formated string
      */
-    public function listhtml(array $pagelist, Page $currentpage, Modelrender $render): string
+    public function listhtml(array $pagelist, Page $currentpage, Servicerender $render): string
     {
         $this->render = $render;
 
