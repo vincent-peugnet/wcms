@@ -27,7 +27,8 @@
     "autoload-dev": {
         "psr-4": {
             "Wcms\\Tests\\": "tests"
-        }
+        },
+        "files": ["tests/fn.php"]
     },
     "config": {
         "platform": {
