@@ -59,6 +59,7 @@ class ServicerenderTest extends TestCase
         return [
             ['empty-test'],
             ['markdown-test'],
+            ['markdown-test-2'],
             ['body-test'],
         ];
     }
