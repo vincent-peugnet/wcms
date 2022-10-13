@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+<meta charset="utf-8" />
+<title>body-test</title>
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width" />
+<meta name="generator" content="W-cms" />
+<meta property="og:type" content="website" /><meta property="og:title" content="body-test">
+<meta property="og:description" content="">
+<meta property="og:url" content="/body-test/">
+
+
+<link href="/assets/render/body-test.css" rel="stylesheet" />
+
+</head>
+## Test multiple BODY functions ##
+
+<br>
+<br>
+Markfown *should* not be rendered in BODY
+
+<br>
+
+<code>
+  
+  Content of HEADER element should not be printed
+  
+</code>
+
+<br>
+
+<hr>
+
+
+<nav>
+
+
+This `Nav` Element should have markdown disabled
+<br>
+<br>
+## This is not a title
+<br>
+<br>
+[this will stay as a text and will not become a link](not-an url)
+
+
+</nav>
+
+
+<hr>
+
+
+<aside>
+<pre><code>    Aside should apear normally with markdown and everything
+</code></pre>
+
+<p>%HEADER% >>>> should not call <code>HEADER</code> Element</p>
+
+</aside>
+
+
+
+
+<main>
+<hr />
+
+<p>Titles should be transformet to links</p>
+
+<h1  id="my-first-title" ><a href="#my-first-title">my first title</a></h1>
+
+<h2  id="my-second-title" ><a href="#my-second-title">my second title</a></h2>
+
+<h2  id="this-is-another-title-again-and-again-but-this-one-is-looooooooo" ><a href="#this-is-another-title-again-and-again-but-this-one-is-looooooooo">This is another title again and again, but this one is loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooonnnnnnnnger with lot of words</a></h2>
+
+</main>
+
+
+<hr>
+
+
+<footer>
+<h1>heading 01</h1>
+
+<p>should have no ID</p>
+
+<h2  id="heading-02" >heading 02</h2>
+
+<p>should have an ID</p>
+
+<h3  id="heading-03" >heading 03</h3>
+
+<p>should have an ID</p>
+
+<h4  id="heading-04" >heading 04</h4>
+
+<p>should have an ID</p>
+
+<h5  id="heading-05" >heading 05</h5>
+
+<p>should have an ID</p>
+
+<h6>heading 06</h6>
+
+<p>should have no ID</p>
+
+</footer>
+
+
+<hr>
+
+<h1>This should not work</h1>
+
+%HEADER %
+
+%FDS%
+</html>
