@@ -62,7 +62,7 @@ class Mediaopt extends Item
 
             $dirid = str_replace('/', '-', $this->path);
 
-            $div = '<div class="medialist" id="' . $dirid . '">' . PHP_EOL;
+            $div = "<div class=\"medialist\" id=\"$dirid\">\n";
 
             foreach ($medialist as $media) {
                 $div .= '<div class="content ' . $media->type() . '">';
@@ -83,10 +83,10 @@ class Mediaopt extends Item
                 if ($this->filename && in_array($media->type(), ['image', 'sound', 'video'])) {
                     $div .= "<div class=\"filename\">$filename</div>";
                 }
-                $div .= '</div>' . PHP_EOL;
+                $div .= "</div>\n";
             }
 
-            $div .= '</div>' . PHP_EOL;
+            $div .= "</div>\n";
 
             return $div;
         }

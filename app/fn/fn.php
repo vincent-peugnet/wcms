@@ -143,8 +143,8 @@ function changekey($array, $oldkey, $newkey)
 
 function compare($stringa, $stringb)
 {
-    $arraya = explode(PHP_EOL, $stringa);
-    $arrayb = explode(PHP_EOL, $stringb);
+    $arraya = explode("\n", $stringa);
+    $arrayb = explode("\n", $stringb);
 
     $lnb = -1;
     $commonlines = [];
@@ -181,7 +181,7 @@ function compare($stringa, $stringb)
         }
     }
 
-    return implode(PHP_EOL, $merge);
+    return implode("\n", $merge);
 }
 
 
@@ -289,10 +289,9 @@ function checkboxes(string $name, array $optionlist = [], array $checkedlist = [
         if (in_array($option, $checkedlist)) {
             $checkboxes .= ' checked';
         }
-        $checkboxes .= '><label for="' . $option . '">' . $option . '</label></li>';
-        $checkboxes .= PHP_EOL;
+        $checkboxes .= "><label for=\"$option\">$option</label></li>\n";
     }
-    return '<ul>' . PHP_EOL . $checkboxes . PHP_EOL . '</ul>';
+    return "<ul>$checkboxes</ul>";
 }
 
 
@@ -317,7 +316,7 @@ function options(array $options, $selected = null, $title = false): string
         if ($title) {
             $value = $title;
         }
-        $html .= '<option value="' . $value . '" ' . $attribute . '>' . $title . '</option>' . PHP_EOL;
+        $html .= "<option value=\"$value\" $attribute>$title</option>\n";
     }
     return $html;
 }

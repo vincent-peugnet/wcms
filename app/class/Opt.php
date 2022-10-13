@@ -204,7 +204,7 @@ class Opt extends Item
         $tagstring = "";
         foreach ($taglist as $tag) {
             $href = $this->getfilteraddress(['tagfilter' => [$tag]]);
-            $tagstring .= '<a class="tag tag_' . $tag . '" href="?' . $href . '" >' . $tag . '</a>' . PHP_EOL;
+            $tagstring .= "<a class=\"tag tag_$tag\" href=\"?$href\" >$tag</a>\n";
         }
         return $tagstring;
     }

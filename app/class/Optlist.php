@@ -74,7 +74,7 @@ class Optlist extends Opt
                 foreach ($page->authors() as $author) {
                     $user = $usermanager->get($author);
                     if ($user) {
-                        $content .= PHP_EOL . $this->render->user($user) . PHP_EOL;
+                        $content .= "\n" . $this->render->user($user) . "\n";
                     }
                 }
             }
@@ -109,12 +109,12 @@ class Optlist extends Opt
 
     private function ul(string $content)
     {
-        return '<ul class="pagelist">' . PHP_EOL . $content . PHP_EOL . '</ul>' . PHP_EOL;
+        return "<ul class=\"pagelist\">\n$content\n</ul>\n";
     }
 
     private function li(string $content, string $class)
     {
-        return '<li class="pagelistitem ' . $class . '">' . PHP_EOL . $content . PHP_EOL . '</li>' . PHP_EOL;
+        return "<li class=\"pagelistitem $class\">\n$content\n</li>\n";
     }
 
     private function a(string $content, string $class, string $id)

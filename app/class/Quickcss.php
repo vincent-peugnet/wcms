@@ -148,11 +148,11 @@ class Quickcss extends Item
     {
         $string = '';
         foreach ($this->quickcss as $element => $css) {
-            $string .= PHP_EOL . $element . ' {';
+            $string .= "\n$element {";
             foreach ($css as $param => $value) {
-                $string .= PHP_EOL . '    ' . $param . ': ' . $value . ';';
+                $string .= "\n    $param: $value;";
             }
-            $string .= PHP_EOL . '}' . PHP_EOL;
+            $string .= "\n}\n";
         }
         return $string;
     }

@@ -225,7 +225,7 @@ class Page extends Item
         if ($type === 'string') {
             return $this->customhead;
         } elseif ($type === 'int') {
-            return substr_count($this->customhead, PHP_EOL) + 1;
+            return substr_count($this->customhead, "\n") + 1;
         }
     }
 

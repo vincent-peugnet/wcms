@@ -228,7 +228,7 @@ class Servicerender
             $head .= "<link href=\"$atompath\" type=\"application/atom+xml\" rel=\"alternate\" title=\"$title\" />";
         }
 
-        $head .= PHP_EOL . $this->page->customhead() . PHP_EOL;
+        $head .= "\n" . $this->page->customhead() . "\n";
 
         foreach ($this->page->externalcss() as $externalcss) {
             $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
@@ -305,7 +305,7 @@ class Servicerender
             throw new InvalidArgumentException();
         }
         $content = '';
-        $subseparator = PHP_EOL . PHP_EOL;
+        $subseparator = "\n\n";
         foreach ($sources as $source) {
             if ($source !== $this->page->id()) {
                 try {
@@ -729,7 +729,7 @@ class Servicerender
         $src = Model::thumbnailpath() . $this->page->thumbnail();
         $alt = $this->page->title();
         $img = '<img class="thumbnail" src="' . $src . '" alt="' . $alt . '">';
-        $img = PHP_EOL . $img . PHP_EOL;
+        $img = "\n$img\n";
         $text = str_replace('%THUMBNAIL%', $img, $text);
 
         return $text;

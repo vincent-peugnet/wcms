@@ -88,7 +88,7 @@ class Colors extends Item
     {
         $css = "";
         foreach ($tagcolor as $tag => $color) {
-            $css .= PHP_EOL  . '.tag_' . $tag . ' { background-color: ' . $color . '; }';
+            $css .= "\n.tag_$tag { background-color: $color; }";
         }
         return $css;
     }
@@ -128,7 +128,7 @@ class Colors extends Item
             $l = '<label for="color_' . $tag . '" >' . $tag . '</label>';
             $html .= "\n<li>$i$l</li>";
         }
-        $html .= PHP_EOL . '</ul>';
+        $html .= "\n</ul>";
         return $html;
     }
 
