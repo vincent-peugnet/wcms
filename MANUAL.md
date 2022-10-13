@@ -65,7 +65,7 @@ One of the most interesting things to do when you use internet publishing, is to
 
 1. Using classic HTML : `<a href="<page_id>">click here</a>`
 2. Using Markdown :  `[click here](<page_id>)`
-3. Using W quick synthax : `[<page_id>]`
+3. Using wiki synthax : `[[<page_id>]]`
 
 All those methods will create a link pointing to the `<page_id>` you've given.
 
@@ -351,7 +351,7 @@ Note that the `.external` class have been added.
 
 ##### Quick links
 
-    [<page_id>]
+    [[<page_id>]]
 
 Will generate :
 

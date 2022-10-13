@@ -466,7 +466,7 @@ class Servicerender
         $linkto = [];
         $rend = $this;
         $text = preg_replace_callback(
-            '%\[([\w-]+)\/?#?([a-z-_]*)\]%',
+            '%\[\[([\w-]+)\/?#?([a-z-_]*)\]\]%',
             function ($matches) use ($rend, &$linkto) {
                 try {
                     $matchpage = $rend->pagemanager->get($matches[1]);

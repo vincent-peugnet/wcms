@@ -19,7 +19,7 @@ Ideas
 
 **W** was first a tool, based on my way of thinking, as a protesis, to write on ideas and create a self explorating text point n' click game.
 
-It's a mix between a drive, wikipedia and a personnal blog. You can create page very quickly and share them with other people or keep them for you and restricted people.  
+It's a mix between a drive, a wiki and a personnal blog. You can create page very quickly and share them with other people or keep them for you and restricted people.  
 There is no boundaries beetween taking notes and creating a website. When you create a page, you create a space in internet, a place, that can be public or private. Then, you decide to link it or not with the others places you've created before.
 There is a lots of possibilites of creations, for people who need to create multi-aspect labyrinth websites, to use a half public/private mindmap, or even interactives fictions.
 
