@@ -104,7 +104,7 @@ abstract class Config
         foreach ($arr as $key => $value) {
             $arr[$key] = self::$$key;
         }
-        $json = json_encode($arr, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT);
+        $json = json_encode($arr, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT | JSON_UNESCAPED_LINE_TERMINATORS);
         return $json;
     }
 

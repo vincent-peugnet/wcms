@@ -11,14 +11,12 @@ use Wcms\Page;
 class ServicerenderTest extends TestCase
 {
     protected string $cwd;
-    protected string $tmpdir;
+    protected static string $tmpdir;
     protected Servicerender $renderengine;
 
-    public function __construct(?string $name = null, array $data = [], $dataName = '')
+    public static function setUpBeforeClass(): void
     {
-        parent::__construct($name, $data, $dataName);
-
-        $this->tmpdir = mktempdir("w-cms-test-servicerender");
+        self::$tmpdir = mktempdir("w-cms-test-servicerender");
     }
 
     public function setUp(): void
@@ -41,16 +39,16 @@ class ServicerenderTest extends TestCase
 
     /**
      * @test
-     * @requires OSFAMILY Linux
      * @dataProvider renderProvider
      */
-    public function renderTest(string $name, array $pagedata): void
+    public function renderTest(string $name): void
     {
+        $pagedata = json_decode(file_get_contents(__DIR__ . "/data/ServicerenderTest/$name.json"), true);
         $page = new Page($pagedata);
         $html = $this->renderengine->render($page);
 
         $expected = __DIR__ . "/data/ServicerenderTest/$name.html";
-        $actual = "$this->tmpdir/$name.html";
+        $actual = self::$tmpdir . "/$name.html";
         Fs::writefile($actual, $html);
 
         $this->assertFileEquals($expected, $actual, "$actual render does not match expected $expected");
@@ -59,7 +57,7 @@ class ServicerenderTest extends TestCase
     public function renderProvider(): array
     {
         return [
-            ['empty-test', ['id' => 'empty-test']],
+            ['empty-test'],
         ];
     }
 }
