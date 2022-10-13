@@ -406,11 +406,11 @@ class Controllerpage extends Controller
         $this->routedirect('home');
     }
 
-    public function duplicate(string $page, string $target)
+    public function duplicate(string $page, string $duplicate)
     {
-        $target = Model::idclean($target);
-        if ($this->copy($page, $target)) {
-            $this->routedirect('pageread/', ['page' => $target]);
+        $duplicate = Model::idclean($duplicate);
+        if ($this->copy($page, $duplicate)) {
+            $this->routedirect('pageread/', ['page' => $duplicate]);
         } else {
             $this->routedirect('pageread/', ['page' => Model::idclean($page)]);
         }
