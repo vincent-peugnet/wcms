@@ -520,6 +520,7 @@ class Page extends Item
     public function setbody($body)
     {
         if (strlen($body) < self::LENGTH_LONG_TEXT && is_string($body)) {
+            $body = crlf2lf($body);
             $this->body = $body;
         }
     }
@@ -527,6 +528,7 @@ class Page extends Item
     public function setheader($header)
     {
         if (strlen($header) < self::LENGTH_LONG_TEXT && is_string($header)) {
+            $header = crlf2lf($header);
             $this->header = $header;
         }
     }
@@ -534,6 +536,7 @@ class Page extends Item
     public function setmain($main)
     {
         if (strlen($main) < self::LENGTH_LONG_TEXT and is_string($main)) {
+            $main = crlf2lf($main);
             $this->main = $main;
         }
     }
@@ -541,6 +544,7 @@ class Page extends Item
     public function setnav($nav)
     {
         if (strlen($nav) < self::LENGTH_LONG_TEXT and is_string($nav)) {
+            $nav = crlf2lf($nav);
             $this->nav = $nav;
         }
     }
@@ -548,6 +552,7 @@ class Page extends Item
     public function setaside($aside)
     {
         if (strlen($aside) < self::LENGTH_LONG_TEXT and is_string($aside)) {
+            $aside = crlf2lf($aside);
             $this->aside = $aside;
         }
     }
@@ -562,6 +567,7 @@ class Page extends Item
     public function setcustomhead(string $customhead)
     {
         if (is_string($customhead)) {
+            $customhead = crlf2lf($customhead);
             $this->customhead = $customhead;
         }
     }
@@ -569,6 +575,7 @@ class Page extends Item
     public function setfooter($footer)
     {
         if (strlen($footer) < self::LENGTH_LONG_TEXT and is_string($footer)) {
+            $footer = crlf2lf($footer);
             $this->footer = $footer;
         }
     }

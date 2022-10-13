@@ -458,3 +458,15 @@ function issecure(): bool
     ;
     return $https;
 }
+
+/**
+ * Convert windows encoded new lines to UNIX encoded new lines
+ *
+ * @param string $text                      text to be converted
+ *
+ * @return string                           converted text
+ */
+function crlf2lf(string $text): string
+{
+    return str_replace("\r\n", "\n", $text);
+}

@@ -408,6 +408,7 @@ abstract class Config
     public static function setdefaultbody($defaultbody)
     {
         if (is_string($defaultbody)) {
+            $defaultbody = crlf2lf($defaultbody);
             self::$defaultbody = $defaultbody;
         }
     }
