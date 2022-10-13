@@ -8,6 +8,9 @@ use InvalidArgumentException;
 use LogicException;
 use Michelf\MarkdownExtra;
 use RuntimeException;
+use VStelmakh\UrlHighlight\Highlighter\HtmlHighlighter;
+use VStelmakh\UrlHighlight\UrlHighlight;
+use VStelmakh\UrlHighlight\Validator\Validator;
 
 class Servicerender
 {
@@ -400,6 +403,8 @@ class Servicerender
      * Shorten the urls of links whose content equals the href.
      *
      * @param string $text the page text as html
+     *
+     * @todo remove this to make n-peugnet happy
      */
     private function shortenurl(string $text): string
     {
@@ -410,11 +415,13 @@ class Servicerender
 
     private function autourl($text)
     {
-        $text = preg_replace(
-            '#( |\R|(>)|(&lt;))(https?:\/\/(\S+\.[^< ]+))(((?(3)&gt;|))(?(2)</[^a]|))#',
-            "$1<a href=\"$4\" class=\"external\" $this->externallinkblank>$4</a>$6",
-            $text
-        );
+        $validator = new Validator(false);
+        $highlighter = new HtmlHighlighter("http", [
+            "target" => "_blank",
+            "class" => "external",
+        ]);
+        $urlHighlight = new UrlHighlight($validator, $highlighter);
+        $text = $urlHighlight->highlightUrls($text);
         return $text;
     }
 
