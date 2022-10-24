@@ -113,7 +113,7 @@ class Servicerender
 
         $lang = !empty($this->page->lang()) ? $this->page->lang() : Config::lang();
         $langproperty = 'lang="' . $lang . '"';
-        $html = "<!DOCTYPE html>\n<html $langproperty >\n<head>\n$head\n</head>\n$parsebody\n</html>\n";
+        $html = "<!DOCTYPE html>\n<html $langproperty >\n<head>\n$head\n</head>\n<body>\n$parsebody\n</body>\n</html>\n";
 
         return $html;
     }

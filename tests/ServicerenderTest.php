@@ -3,6 +3,7 @@
 namespace Wcms\Tests;
 
 use AltoRouter;
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use Wcms\Config;
 use Wcms\Fs;
@@ -51,7 +52,13 @@ class ServicerenderTest extends TestCase
 
         $expected = __DIR__ . "/data/ServicerenderTest/$name.html";
         $actual = self::$tmpdir . "/$name.html";
-        Fs::writefile($actual, $html);
+
+        $doc = new DOMDocument();
+        $doc->loadHTML($html, LIBXML_NOERROR);
+        $body = $doc->getElementsByTagName("body")->item(0);
+        $body = $doc->saveHTML($body) . "\n";
+
+        Fs::writefile($actual, $body);
 
         $this->assertFileEquals($expected, $actual, "$actual render does not match expected $expected");
     }
