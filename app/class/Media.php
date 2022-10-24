@@ -238,7 +238,7 @@ class Media extends Item
 
     public function setextension($extension)
     {
-        if (strlen($extension) < 7 and is_string($extension)) {
+        if (strlen($extension) < 17 and is_string($extension)) {
             $this->extension = strip_tags(strtolower($extension));
         }
     }
