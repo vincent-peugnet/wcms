@@ -113,7 +113,8 @@ class Servicerender
 
         $lang = !empty($this->page->lang()) ? $this->page->lang() : Config::lang();
         $langproperty = 'lang="' . $lang . '"';
-        $html = "<!DOCTYPE html>\n<html $langproperty >\n<head>\n$head\n</head>\n<body>\n$parsebody\n</body>\n</html>\n";
+        $html = "<!DOCTYPE html>\n<html $langproperty >\n<head>\n$head\n</head>";
+        $html .= "\n<body>\n$parsebody\n</body>\n</html>\n";
 
         return $html;
     }
@@ -180,6 +181,7 @@ class Servicerender
         $renderpath = Model::renderpath();
         $description = $this->page->description();
         $title = $this->page->title();
+        $suffix = Config::suffix();
         $url = Config::url();
 
         $head = '';
@@ -199,7 +201,7 @@ class Servicerender
         }
 
         $head .= "<meta charset=\"utf-8\" />\n";
-        $head .= "<title>$title</title>\n";
+        $head .= "<title>$title$suffix</title>\n";
         if (!empty($this->page->favicon()) && file_exists(Model::FAVICON_DIR . $this->page->favicon())) {
             $href = Model::faviconpath() . $this->page->favicon();
             $head .= "<link rel=\"shortcut icon\" href=\"$href\" type=\"image/x-icon\">";
@@ -212,7 +214,7 @@ class Servicerender
         $head .= "<meta name=\"generator\" content=\"W-cms\" />\n";
 
         $head .= "<meta property=\"og:type\" content=\"website\" />";
-        $head .= "<meta property=\"og:title\" content=\"$title\">\n";
+        $head .= "<meta property=\"og:title\" content=\"$title$suffix\">\n";
         $head .= "<meta property=\"og:description\" content=\"$description\">\n";
 
         if (!empty($this->page->thumbnail())) {

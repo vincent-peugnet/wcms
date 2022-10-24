@@ -175,6 +175,10 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'home.css'
                 <label for="lang">Default language</label>
                 <input type="text" name="lang" id="lang" value="<?= Wcms\Config::lang() ?>" form="admin" minlength="<?= Wcms\Config::LANG_MIN ?>" maxlength="<?= Wcms\Config::LANG_MAX ?>" required>
 
+                <h4>title</h4>
+
+                <label for="suffix">suffix</label>
+                <input type="text" name="suffix" id="suffix" value="<?= Wcms\Config::suffix() ?>" form="admin" maxlength="<?= Wcms\Config::SUFFIX_MAX ?>">
 
                 <h4>Links</h4>
 

@@ -23,6 +23,7 @@ abstract class Config
     protected static $defaultbody = "%HEADER%\n\n%NAV%\n\n%ASIDE%\n\n%MAIN%\n\n%FOOTER%";
     protected static $defaultfavicon = '';
     protected static $defaultthumbnail = '';
+    protected static string $suffix = "";
     protected static $analytics = '';
     protected static $externallinkblank = true;
     protected static $internallinkblank = false;
@@ -49,6 +50,8 @@ abstract class Config
 
     public const LANG_MIN = 2;
     public const LANG_MAX = 16;
+
+    public const SUFFIX_MAX = 128;
 
 
 
@@ -234,6 +237,11 @@ abstract class Config
     public static function defaultthumbnail()
     {
         return self::$defaultthumbnail;
+    }
+
+    public static function suffix(): string
+    {
+        return self::$suffix;
     }
 
     public static function analytics()
@@ -425,6 +433,13 @@ abstract class Config
     {
         if (is_string($defaultthumbnail)) {
             self::$defaultthumbnail = $defaultthumbnail;
+        }
+    }
+
+    public static function setsuffix($suffix)
+    {
+        if (is_string($suffix) && strlen($suffix) <= self::SUFFIX_MAX) {
+            self::$suffix = strip_tags($suffix);
         }
     }
 
