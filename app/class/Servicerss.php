@@ -20,9 +20,9 @@ class Servicerss
     public function __construct(AltoRouter $router)
     {
         $this->router = $router;
-        $this->render = new Servicerender($this->router);
-        $this->pagemanager = new Modelpage();
+        $this->pagemanager = new Modelpage(Config::pagetable());
         $this->bookmarkmanager = new Modelbookmark();
+        $this->render = new Servicerender($this->router, $this->pagemanager);
     }
 
     /**

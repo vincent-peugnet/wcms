@@ -178,7 +178,7 @@ class Modelbookmark extends Modeldb
         $bookmark->setuser($oldbookmark->user());
 
         if (!empty($bookmark->ref())) {
-            $pagemanager = new Modelpage();
+            $pagemanager = new Modelpage(Config::pagetable());
             $pagemanager->get($bookmark->ref());
         }
 

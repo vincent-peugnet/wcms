@@ -100,6 +100,7 @@ class Controllerpage extends Controller
 
         try {
             $html = $renderengine->render($page);
+            Fs::dircheck(Model::HTML_RENDER_DIR);
             Fs::writefile(Model::HTML_RENDER_DIR . $this->page->id() . '.html', $html);
             Fs::writefile(Model::RENDER_DIR . $this->page->id() . '.css', $this->page->css(), 0664);
             Fs::writefile(Model::RENDER_DIR . $this->page->id() . '.js', $this->page->javascript(), 0664);
@@ -108,6 +109,7 @@ class Controllerpage extends Controller
             $page->setlinkto($renderengine->linkto());
         } catch (RuntimeException $e) {
             Model::sendflashmessage("Error while saving render files", Model::FLASH_ERROR);
+            Logger::errorex($e);
         }
 
         return $page;

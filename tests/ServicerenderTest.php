@@ -4,7 +4,9 @@ namespace Wcms\Tests;
 
 use AltoRouter;
 use PHPUnit\Framework\TestCase;
+use Wcms\Config;
 use Wcms\Fs;
+use Wcms\Modelpage;
 use Wcms\Servicerender;
 use Wcms\Page;
 
@@ -28,7 +30,7 @@ class ServicerenderTest extends TestCase
         $router = new AltoRouter([
             ['GET', '/[cid:page]/', 'Controllerpage#read', 'pageread/'],
         ]);
-        $this->renderengine = new Servicerender($router);
+        $this->renderengine = new Servicerender($router, new Modelpage(Config::pagetable()));
     }
 
     public function tearDown(): void

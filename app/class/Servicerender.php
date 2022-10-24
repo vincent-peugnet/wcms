@@ -39,10 +39,10 @@ class Servicerender
      * @param AltoRouter $router            Router used to generate urls
      * @param Modelpage $pagemanager        [optionnal] can be usefull if a pagemanager already store a page list
      */
-    public function __construct(AltoRouter $router, ?Modelpage $pagemanager = null)
+    public function __construct(AltoRouter $router, Modelpage $pagemanager)
     {
         $this->router = $router;
-        $this->pagemanager = !is_null($pagemanager) ? $pagemanager : new Modelpage();
+        $this->pagemanager = $pagemanager;
 
         if (Config::internallinkblank()) {
             $this->internallinkblank = ' target="_blank" ';

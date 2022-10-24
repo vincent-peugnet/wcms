@@ -21,7 +21,7 @@ class Modeldb extends Model
     }
 
 
-    public function dbinit($dir = Model::DATABASE_DIR)
+    protected function dbinit($dir = Model::DATABASE_DIR)
     {
         $this->database = new Flywheel\Config($dir, [
             'query_class' => Query::class,
@@ -29,7 +29,7 @@ class Modeldb extends Model
         ]);
     }
 
-    public function storeinit(string $repo): void
+    protected function storeinit(string $repo): void
     {
         try {
             $this->repo = new Repository($repo, $this->database);

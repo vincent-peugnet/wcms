@@ -39,7 +39,7 @@ class Controller
 
         $this->setuser();
         $this->router = $router;
-        $this->pagemanager = new Modelpage();
+        $this->pagemanager = new Modelpage(Config::pagetable());
         $this->initplates();
         $this->now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
     }
