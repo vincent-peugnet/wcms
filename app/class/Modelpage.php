@@ -2,6 +2,7 @@
 
 namespace Wcms;
 
+use AltoRouter;
 use JamesMoss\Flywheel\Document;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -53,8 +54,8 @@ class Modelpage extends Modeldb
     public function pagelistbyid(array $idlist = []): array
     {
         $pagedatalist = $this->repo->query()
-        ->where('__id', 'IN', $idlist)
-        ->execute();
+            ->where('__id', 'IN', $idlist)
+            ->execute();
 
         $pagelist = [];
         foreach ($pagedatalist as $id => $pagedata) {
@@ -342,12 +343,43 @@ class Modelpage extends Modeldb
      */
     public function needtoberendered(Page $page): bool
     {
-        return (
-            $page->daterender() <= $page->datemodif() ||
+        return ($page->daterender() <= $page->datemodif() ||
             !file_exists(self::HTML_RENDER_DIR . $page->id() . '.html') ||
             !file_exists(self::RENDER_DIR . $page->id() . '.css') ||
             !file_exists(self::RENDER_DIR . $page->id() . '.js')
         );
+    }
+
+    /**
+     * Render given page
+     * Write HTML, CSS and JS files
+     * update linto property
+     *
+     * @param Page $page input
+     *
+     * @return Page rendered $page
+     */
+    public function renderpage(Page $page, AltoRouter $router): Page
+    {
+        $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
+
+        $renderengine = new Servicerender($router, $this);
+
+        try {
+            $html = $renderengine->render($page);
+            Fs::dircheck(Model::HTML_RENDER_DIR);
+            Fs::writefile(Model::HTML_RENDER_DIR . $page->id() . '.html', $html);
+            Fs::writefile(Model::RENDER_DIR . $page->id() . '.css', $page->css(), 0664);
+            Fs::writefile(Model::RENDER_DIR . $page->id() . '.js', $page->javascript(), 0664);
+
+            $page->setdaterender($now);
+            $page->setlinkto($renderengine->linkto());
+        } catch (RuntimeException $e) {
+            Model::sendflashmessage("Error while saving render files", Model::FLASH_ERROR);
+            Logger::errorex($e);
+        }
+
+        return $page;
     }
 
 

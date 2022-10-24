@@ -4,7 +4,7 @@ namespace Wcms;
 
 use RuntimeException;
 
-class Controllerhome extends Controllerpage
+class Controllerhome extends Controller
 {
     /** @var Modelhome */
     protected $modelhome;
@@ -14,12 +14,15 @@ class Controllerhome extends Controllerpage
     protected $optlist;
     /** @var Modelbookmark */
     protected $bookmarkmanager;
+    /** @var Modelmedia */
+    protected $mediamanager;
 
-    public function __construct($render)
+    public function __construct($router)
     {
-        parent::__construct($render);
+        parent::__construct($router);
         $this->modelhome = new Modelhome();
         $this->bookmarkmanager = new Modelbookmark();
+        $this->mediamanager = new Modelmedia();
     }
 
 
@@ -201,7 +204,7 @@ class Controllerhome extends Controllerpage
             $pagelist = $this->pagemanager->pagelist();
             $count = 0;
             foreach ($pagelist as $page) {
-                $page = $this->renderpage($page);
+                $page = $this->pagemanager->renderpage($page, $this->router);
                 if ($this->pagemanager->update($page)) {
                     $count++;
                 }
@@ -273,7 +276,7 @@ class Controllerhome extends Controllerpage
         $pagelist = $this->pagemanager->pagelistbyid($pagelist);
         $count = 0;
         foreach ($pagelist as $page) {
-            $page = $this->renderpage($page);
+            $page = $this->pagemanager->renderpage($page, $this->router);
             if ($this->pagemanager->update($page)) {
                 $count++;
             }

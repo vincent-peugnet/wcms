@@ -14,14 +14,12 @@ class Controllerpage extends Controller
 
     /** @var Page */
     protected $page;
-    protected $fontmanager;
     protected $mediamanager;
 
     public function __construct($router)
     {
         parent::__construct($router);
 
-        $this->fontmanager = new Modelfont();
         $this->mediamanager = new Modelmedia();
     }
 
@@ -78,41 +76,11 @@ class Controllerpage extends Controller
             if (Config::recursiverender()) {
                 $this->recursiverender($this->page);
             }
-            $this->page = $this->renderpage($this->page);
+            $this->page = $this->pagemanager->renderpage($this->page, $this->router);
             $this->pagemanager->update($this->page);
             $this->templaterender($this->page);
         }
         $this->routedirect('pageread/', ['page' => $this->page->id()]);
-    }
-
-    /**
-     * Render given page
-     *
-     * @param Page $page input
-     *
-     * @return Page rendered $page
-     */
-    public function renderpage(Page $page): Page
-    {
-        $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
-
-        $renderengine = new Servicerender($this->router, $this->pagemanager);
-
-        try {
-            $html = $renderengine->render($page);
-            Fs::dircheck(Model::HTML_RENDER_DIR);
-            Fs::writefile(Model::HTML_RENDER_DIR . $this->page->id() . '.html', $html);
-            Fs::writefile(Model::RENDER_DIR . $this->page->id() . '.css', $this->page->css(), 0664);
-            Fs::writefile(Model::RENDER_DIR . $this->page->id() . '.js', $this->page->javascript(), 0664);
-
-            $page->setdaterender($now);
-            $page->setlinkto($renderengine->linkto());
-        } catch (RuntimeException $e) {
-            Model::sendflashmessage("Error while saving render files", Model::FLASH_ERROR);
-            Logger::errorex($e);
-        }
-
-        return $page;
     }
 
     /**
@@ -124,7 +92,7 @@ class Controllerpage extends Controller
         foreach ($relatedpages as $pageid) {
             try {
                 $page = $this->pagemanager->get($pageid);
-                $page = $this->renderpage($page);
+                $page = $this->pagemanager->renderpage($page, $this->router);
                 $this->pagemanager->update($page);
             } catch (RuntimeException $e) {
                 Logger::errorex($e, true);
@@ -143,7 +111,7 @@ class Controllerpage extends Controller
             $templates = $this->pagemanager->getpagecsstemplates($page);
             foreach ($templates as $page) {
                 if ($this->pagemanager->needtoberendered($page)) {
-                    $page = $this->renderpage($page);
+                    $page = $this->pagemanager->renderpage($page, $this->router);
                     $this->pagemanager->update($page);
                 }
             }
@@ -154,7 +122,7 @@ class Controllerpage extends Controller
             try {
                 $templatejs = $this->pagemanager->get($page->templatejavascript());
                 if ($this->pagemanager->needtoberendered($templatejs)) {
-                    $templatejs = $this->renderpage($templatejs);
+                    $templatejs = $this->pagemanager->renderpage($templatejs, $this->router);
                     $this->pagemanager->update($templatejs);
                 }
             } catch (RuntimeException $e) {
@@ -187,7 +155,7 @@ class Controllerpage extends Controller
             }
 
             if ($this->pagemanager->needtoberendered($this->page)) {
-                $this->page = $this->renderpage($this->page);
+                $this->page = $this->pagemanager->renderpage($this->page, $this->router);
                 $needtoberendered = true;
             }
             $this->templaterender($this->page);
