@@ -437,29 +437,6 @@ function getfirsturl(string $input): string
 }
 
 /**
- * Check if connection is through a HTTPS connection or basic HTTP
- *
- * @return bool                             True if HTTPS, otherwise false
- */
-function issecure(): bool
-{
-    $https =
-        $_SERVER['HTTPS']
-        ?? $_SERVER['REQUEST_SCHEME']
-        ?? $_SERVER['HTTP_X_FORWARDED_PROTO']
-        ?? null
-    ;
-
-    $https =
-        $https && (
-            strcasecmp('on', $https) == 0
-            || strcasecmp('https', $https) == 0
-        )
-    ;
-    return $https;
-}
-
-/**
  * Convert windows encoded new lines to UNIX encoded new lines
  *
  * @param string $text                      text to be converted

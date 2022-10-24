@@ -100,6 +100,15 @@ class Application
         <form action="" method="post">
         <div>
             <h2>
+                Secure connection
+            </h2>
+            <input type="hidden" name="secure" value="0">
+            <input type="checkbox" name="secure" id="secure" value="1" <?= Config::issecure() ? "checked" : "" ?>>
+            <label for="secure">secure connection</label>
+            <p>
+                Should be checked if your web server is using HTTPS
+            </p>
+            <h2>
                 <label for="basepath">Path to W-CMS</label>
             </h2>
             <input type="text" name="configinit[basepath]"  value="<?= Config::basepath() ?>" id="basepath">

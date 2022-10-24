@@ -6,6 +6,7 @@ abstract class Config
 {
     protected static $pagetable = 'mystore';
     protected static $domain = '';
+    protected static $secure = true;
     protected static $fontsize = 15;
     protected static $basepath = '';
     protected static $route404;
@@ -119,7 +120,7 @@ abstract class Config
      */
     public static function getdomain()
     {
-        self::$domain = 'http' . (issecure() ? 's' : '') . '://' . $_SERVER['HTTP_HOST'];
+        self::$domain = 'http' . (self::issecure() ? 's' : '') . '://' . $_SERVER['HTTP_HOST'];
     }
 
     /**
@@ -129,7 +130,7 @@ abstract class Config
      */
     public static function checkdomain(): bool
     {
-        return (self::$domain === 'http' . (issecure() ? 's' : '') . '://' . $_SERVER['HTTP_HOST']);
+        return (self::$domain === 'http' . (self::issecure() ? 's' : '') . '://' . $_SERVER['HTTP_HOST']);
     }
 
     /**
@@ -151,6 +152,11 @@ abstract class Config
     public static function domain()
     {
         return self::$domain;
+    }
+
+    public static function issecure()
+    {
+        return self::$secure;
     }
 
     public static function fontsize()
@@ -321,6 +327,11 @@ abstract class Config
     public static function setdomain($domain)
     {
         self::$domain = strip_tags(strtolower($domain));
+    }
+
+    public static function setsecure($secure)
+    {
+        self::$secure = boolval($secure);
     }
 
     public static function setfontsize($fontsize)
