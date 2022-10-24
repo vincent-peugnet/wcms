@@ -51,7 +51,7 @@ class Application
                     !Config::checkbasepath()
                     || empty(Config::pagetable())
                     || !is_dir(Model::RENDER_DIR)
-                    || !Config::checkdomain()
+                    || empty(Config::domain())
                     || empty(Config::secretkey())
                 ) {
                     echo '<ul>';
@@ -61,7 +61,7 @@ class Application
                     if (empty(Config::pagetable())) {
                         echo '<li>Unset table name</li>';
                     }
-                    if (!Config::checkdomain()) {
+                    if (empty(Config::domain())) {
                         echo '<li>Need to recheck the domain</li>';
                     }
                     if (!is_dir(Model::RENDER_DIR)) {

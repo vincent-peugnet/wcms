@@ -124,16 +124,6 @@ abstract class Config
     }
 
     /**
-     * Verify Domain name
-     *
-     * @return bool                         True if domain is the currently used domain
-     */
-    public static function checkdomain(): bool
-    {
-        return (self::$domain === 'http' . (self::issecure() ? 's' : '') . '://' . $_SERVER['HTTP_HOST']);
-    }
-
-    /**
      * Generate full url adress where W is installed
      * @return string url adress finished by a slash "/"
      */
