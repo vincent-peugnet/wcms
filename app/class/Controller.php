@@ -135,19 +135,11 @@ class Controller
         exit;
     }
 
-    public function routedirect(string $route, array $vars = [])
+    public function routedirect(string $route, array $vars = [], $gets= [])
     {
-        $this->redirect($this->generate($route, $vars));
-    }
-
-    public function routedirectget(string $route, array $vars = [])
-    {
-        $get = '?';
-        foreach ($vars as $key => $value) {
-            $get .= $key . '=' . $value . '&';
-        }
-        $get = rtrim($get, '&');
-        $this->redirect($this->generate($route, []) . $get);
+        
+        $get = empty($gets) ? "" : "?" . http_build_query($gets);
+        $this->redirect($this->generate($route, $vars, $get));
     }
 
     public function error(int $code)
