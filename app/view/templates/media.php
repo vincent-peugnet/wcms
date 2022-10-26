@@ -24,7 +24,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
             <?php
 
 
-            treecount($dirlist, 'media', 0, 'media', $mediaopt->dir(), $mediaopt);
+            \Wcms\Modelmedia::treecount($dirlist, 'media', 0, 'media', $mediaopt->dir(), $mediaopt);
 
             ?>
 

@@ -605,7 +605,7 @@ class Servicerender
 
         if (!empty($matches)) {
             foreach ($matches as $match) {
-                $medialist = new Mediaopt($match);
+                $medialist = new Mediaoptlist($match);
                 $medialist->readoptions();
                 $text = str_replace($medialist->fullmatch(), $medialist->generatecontent(), $text);
             }

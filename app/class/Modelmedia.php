@@ -425,4 +425,40 @@ class Modelmedia extends Model
         }
         return rename($oldname, $newname);
     }
+
+    /**
+     * Generate a clickable folder tree based on reccurive array
+     */
+    public static function treecount(
+        array $dirlist,
+        string $dirname,
+        int $deepness,
+        string $path,
+        string $currentdir,
+        Mediaopt $mediaopt
+    ) {
+        if ($path . '/' === $currentdir) {
+            $folder = '├─<i class="fa fa-folder-open-o"></i> <span id="currentdir">' . $dirname . '<span>';
+        } else {
+            $folder = '├─<i class="fa fa-folder-o"></i> ' . $dirname;
+        }
+        echo '<tr>';
+        $href = $mediaopt->getpathadress($path);
+        $foldername = str_repeat('&nbsp;&nbsp;', $deepness) . $folder;
+        echo '<td><a href="' . $href . '">' . $foldername . '</a></td>';
+        echo '<td>' . $dirlist['dirfilecount'] . '</td>';
+        echo '</tr>';
+        foreach ($dirlist as $key => $value) {
+            if (is_array($value)) {
+                self::treecount(
+                    $value,
+                    $key,
+                    $deepness + 1,
+                    $path . DIRECTORY_SEPARATOR . $key,
+                    $currentdir,
+                    $mediaopt
+                );
+            }
+        }
+    }
 }

@@ -37,32 +37,37 @@ class Controllermedia extends Controller
                 $datas = $_GET;
             }
 
-            $mediaopt = new Mediaopt($datas);
+            $mediaopt = new Mediaoptlist($datas);
 
-            if (is_dir($mediaopt->dir())) {
-                $medialist = $this->mediamanager->medialistopt($mediaopt);
-
-                $dirlist = $this->mediamanager->listdir(Model::MEDIA_DIR);
-
-                $pathlist = [];
-                $this->mediamanager->listpath($dirlist, '', $pathlist);
-
-                $vars['maxuploadsize'] = readablesize(file_upload_max_size()) . 'o';
-
-                if (isset($_GET['display'])) {
-                    $this->session->addtosession('mediadisplay', $_GET['display']);
-                }
-
-                $vars['display'] = $this->session->mediadisplay;
-                $vars['medialist'] = $medialist;
-                $vars['dirlist'] = $dirlist;
-                $vars['pathlist'] = $pathlist;
-                $vars['mediaopt'] = $mediaopt;
-
-                $this->showtemplate('media', $vars);
-            } else {
-                $this->routedirect('media');
+            if (!is_dir($this->mediaopt->dir())) {
+                Model::sendflashmessage(
+                    $mediaopt->path() . " is not a valid path to a directory",
+                    Model::FLASH_WARNING
+                );
+                $this->mediaopt->setpath(Model::MEDIA_DIR);
+                $this->redirect($this->generate("media", [], $this->mediaopt->getpathadress()));
             }
+
+            $medialist = $this->mediamanager->medialistopt($mediaopt);
+
+            $dirlist = $this->mediamanager->listdir(Model::MEDIA_DIR);
+
+            $pathlist = [];
+            $this->mediamanager->listpath($dirlist, '', $pathlist);
+
+            $vars['maxuploadsize'] = readablesize(file_upload_max_size()) . 'o';
+
+            if (isset($_GET['display'])) {
+                $this->session->addtosession('mediadisplay', $_GET['display']);
+            }
+
+            $vars['display'] = $this->session->mediadisplay;
+            $vars['medialist'] = $medialist;
+            $vars['dirlist'] = $dirlist;
+            $vars['pathlist'] = $pathlist;
+            $vars['mediaopt'] = $mediaopt;
+
+            $this->showtemplate('media', $vars);
         } else {
             $this->routedirect('home');
         }
