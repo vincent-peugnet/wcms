@@ -11,7 +11,7 @@ class Mediaopt extends Item
     protected $options = '';
 
     /** @var string directory of media */
-    protected $path = '';
+    protected $path = "/" . Model::MEDIA_DIR;
 
     /** @var string */
     protected $sortby = 'id';
@@ -22,16 +22,8 @@ class Mediaopt extends Item
     /** @var array list of media type to display */
     protected $type = [];
 
-    /** @var int display media contents*/
-    protected $display = 1;
-
-    /** @var int display download links*/
-    protected $links = 0;
-
     /** @var int display the file name of the file */
     protected int $filename = 0;
-
-    public const TYPES = ['image', 'sound', 'video', 'other'];
 
 
 
@@ -109,7 +101,7 @@ class Mediaopt extends Item
             $order = $this->order;
         }
         $query = ['path' => $this->path, 'sortby' => $sortby, 'order' => $order];
-        if (array_diff(self::TYPES, $this->type) != []) {
+        if (array_diff(Media::mediatypes(), $this->type) != []) {
             $query['type'] = $this->type;
         }
         return '?' . urldecode(http_build_query($query));
@@ -118,7 +110,7 @@ class Mediaopt extends Item
     public function getpathadress(string $path): string
     {
         $query = ['path' => '/' . $path, 'sortby' => $this->sortby, 'order' => $this->order];
-        if (array_diff(self::TYPES, $this->type) != []) {
+        if (array_diff(Media::mediatypes(), $this->type) != []) {
             $query['type'] = $this->type;
         }
         return '?' . urldecode(http_build_query($query));
@@ -132,7 +124,7 @@ class Mediaopt extends Item
             'order' => $this->order,
             'filename' => $this->filename
         ];
-        if (array_diff(self::TYPES, $this->type) !== []) {
+        if (array_diff(Media::mediatypes(), $this->type) !== []) {
             $query['type'] = $this->type;
         }
         return urldecode(http_build_query($query));
