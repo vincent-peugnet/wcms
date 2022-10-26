@@ -28,6 +28,11 @@
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>">
                 <input type="submit" value="create folder">
                 </form>
+                <h2>Magic folders</h2>
+                <h3><i class="fa fa-font"></i> fonts</h3>
+                <a href="<?= $this->url('mediafontface', [], $mediaopt->getpathadress()) ?>">
+                    <i class="fa fa-refresh"></i>regenerate @fontface CSS file
+                </a>
             </div>
     </details>
 

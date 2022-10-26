@@ -40,6 +40,7 @@ class Routes
             ['GET', '/!co', 'Controllerconnect#connect', 'connect'],
             ['POST', '/!search', 'Controllerhome#search', 'search'],
             ['GET', '/!media', 'Controllermedia#desktop', 'media'],
+            ['GET', '/!media/fontface', 'Controllermedia#fontface', 'mediafontface'],
             ['POST', '/!media', 'Controllermedia#desktop', 'mediaquery'],
             ['POST', '/!media/upload', 'Controllermedia#upload', 'mediaupload'],
             ['POST', '/!media/urlupload', 'Controllermedia#urlupload', 'mediaurlupload'],

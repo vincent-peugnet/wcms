@@ -176,7 +176,8 @@ class Servicerender
     private function gethead(): string
     {
         $id = $this->page->id();
-        $globalpath = Model::dirtopath(Model::CSS_DIR);
+        $globalpath = Model::dirtopath(Model::GLOBAL_CSS_FILE);
+        $fontcsspath = Model::dirtopath(Model::FONTS_CSS_FILE);
         $renderpath = Model::renderpath();
         $description = $this->page->description();
         $title = $this->page->title();
@@ -238,7 +239,10 @@ class Servicerender
         }
 
         if (file_exists(Model::GLOBAL_CSS_FILE)) {
-            $head .= "<link href=\"{$globalpath}global.css\" rel=\"stylesheet\" />\n";
+            $head .= "<link href=\"{$globalpath}\" rel=\"stylesheet\" />\n";
+        }
+        if (file_exists(Model::FONTS_CSS_FILE)) {
+            $head .= "<link href=\"{$fontcsspath}\" rel=\"stylesheet\" />\n";
         }
 
         $head .= $this->recursivecss($this->page);

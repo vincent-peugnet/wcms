@@ -37,6 +37,42 @@ class Mediaopt extends Item
         $this->hydrate($datas);
     }
 
+    /**
+     * Generate link adress for table header
+     *
+     * @param string $sortby
+     * @return string link adress
+     */
+    public function getsortbyadress(string $sortby): string
+    {
+        if (!in_array($sortby, Modelmedia::MEDIA_SORTBY)) {
+            $sortby = 'id';
+        }
+        if ($this->sortby === $sortby) {
+            $order = $this->order * -1;
+        } else {
+            $order = $this->order;
+        }
+        $query = ['path' => $this->path, 'sortby' => $sortby, 'order' => $order];
+        if (array_diff(Media::mediatypes(), $this->type) != []) {
+            $query['type'] = $this->type;
+        }
+        return '?' . urldecode(http_build_query($query));
+    }
+
+    public function getpathadress(string $path = null): string
+    {
+        $path = is_null($path) ? $this->path : "/$path";
+        $query = ['path' => $path, 'sortby' => $this->sortby, 'order' => $this->order];
+        if (array_diff(Media::mediatypes(), $this->type) != []) {
+            $query['type'] = $this->type;
+        }
+        return '?' . urldecode(http_build_query($query));
+    }
+
+
+    // _________________________________ Mediaoptlist _________________________________
+
     public function readoptions()
     {
         parse_str($this->options, $datas);
@@ -82,38 +118,6 @@ class Mediaopt extends Item
 
             return $div;
         }
-    }
-
-    /**
-     * Generate link adress for table header
-     *
-     * @param string $sortby
-     * @return string link adress
-     */
-    public function getsortbyadress(string $sortby): string
-    {
-        if (!in_array($sortby, Modelmedia::MEDIA_SORTBY)) {
-            $sortby = 'id';
-        }
-        if ($this->sortby === $sortby) {
-            $order = $this->order * -1;
-        } else {
-            $order = $this->order;
-        }
-        $query = ['path' => $this->path, 'sortby' => $sortby, 'order' => $order];
-        if (array_diff(Media::mediatypes(), $this->type) != []) {
-            $query['type'] = $this->type;
-        }
-        return '?' . urldecode(http_build_query($query));
-    }
-
-    public function getpathadress(string $path): string
-    {
-        $query = ['path' => '/' . $path, 'sortby' => $this->sortby, 'order' => $this->order];
-        if (array_diff(Media::mediatypes(), $this->type) != []) {
-            $query['type'] = $this->type;
-        }
-        return '?' . urldecode(http_build_query($query));
     }
 
     public function getquery()

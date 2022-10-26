@@ -135,9 +135,9 @@ class Controller
         exit;
     }
 
-    public function routedirect(string $route, array $vars = [], $gets= [])
+    public function routedirect(string $route, array $vars = [], $gets = [])
     {
-        
+
         $get = empty($gets) ? "" : "?" . http_build_query($gets);
         $this->redirect($this->generate($route, $vars, $get));
     }

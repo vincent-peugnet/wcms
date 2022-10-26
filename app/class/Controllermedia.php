@@ -2,23 +2,20 @@
 
 namespace Wcms;
 
-use Exception;
-use InvalidArgumentException;
-use LogicException;
 use RuntimeException;
 
 class Controllermedia extends Controller
 {
-    /**
-     * @var Modelmedia
-     */
-    protected $mediamanager;
+    protected Modelmedia $mediamanager;
+
+    protected Mediaopt $mediaopt;
 
     public function __construct($render)
     {
         parent::__construct($render);
-
         $this->mediamanager = new Modelmedia();
+
+        $this->mediaopt = new Mediaopt($_GET);
     }
 
 
@@ -41,9 +38,6 @@ class Controllermedia extends Controller
             }
 
             $mediaopt = new Mediaopt($datas);
-            if (empty($mediaopt->path())) {
-                $mediaopt->setpath(DIRECTORY_SEPARATOR . Model::MEDIA_DIR);
-            }
 
             if (is_dir($mediaopt->dir())) {
                 $medialist = $this->mediamanager->medialistopt($mediaopt);
@@ -81,9 +75,10 @@ class Controllermedia extends Controller
             if (!empty($_FILES['file']['name'][0])) {
                 $this->mediamanager->multiupload('file', $target);
             }
-                $this->redirect($this->generate('media') . '?path=/' . $target);
+            $this->redirect($this->generate('media') . '?path=/' . $target);
         } else {
-            $this->routedirect('home');
+            Model::sendflashmessage("acces denied", Model::FLASH_ERROR);
+            $this->routedirect('media');
         }
     }
 
@@ -172,5 +167,26 @@ class Controllermedia extends Controller
             }
         }
         $this->redirect($this->generate('media') . $_POST['route']);
+    }
+
+    public function fontface()
+    {
+        if ($this->user->iseditor()) {
+            $medias = $this->mediamanager->getlistermedia(Model::FONT_DIR, [Media::FONT]);
+            $fontfacer = new Servicefont($medias);
+            $fontcss = $fontfacer->css();
+            try {
+                Fs::writefile(Model::FONTS_CSS_FILE, $fontcss);
+                Model::sendflashmessage("Font face CSS file  successfully generated", Model::FLASH_SUCCESS);
+            } catch (RuntimeException $e) {
+                Model::sendflashmessage(
+                    "Error while trying to save generated fonts file : " . $e->getMessage(),
+                    Model::FLASH_ERROR
+                );
+            }
+        } else {
+            Model::sendflashmessage("Access denied", Model::FLASH_ERROR);
+        }
+        $this->redirect($this->generate("media", [], $this->mediaopt->getpathadress()));
     }
 }

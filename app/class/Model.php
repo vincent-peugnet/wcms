@@ -20,6 +20,7 @@ abstract class Model
     public const RENDER_DIR = 'assets/render/';
     public const HTML_RENDER_DIR = 'render/';
     public const GLOBAL_CSS_FILE = self::CSS_DIR . 'global.css';
+    public const FONTS_CSS_FILE = self::CSS_DIR . 'fonts.css';
     public const DATABASE_DIR = './database/';
     public const PAGES_DIR = self::DATABASE_DIR . 'pages/';
 
