@@ -21,6 +21,65 @@ class Media extends Item
     protected $uid;
     protected $permissions;
 
+    public const IMAGE      = "image";
+    public const SOUND      = "sound";
+    public const VIDEO      = "video";
+    public const ARCHIVE    = "archive";
+    public const DOCUMENT   = "document";
+    public const FONT       = "font";
+    public const CODE       = "code";
+    public const OTHER      = "other";
+
+    public const MEDIA_EXT = [
+        'jpg'   => self::IMAGE,
+        'jpeg'  => self::IMAGE,
+        'png'   => self::IMAGE,
+        'gif'   => self::IMAGE,
+        'ico'   => self::IMAGE,
+        'tiff'  => self::IMAGE,
+        'bmp'   => self::IMAGE,
+        'svg'   => self::IMAGE,
+        'mp3'   => self::SOUND,
+        'opus'  => self::SOUND,
+        'wav'   => self::SOUND,
+        'ogg'   => self::SOUND,
+        'flac'  => self::SOUND,
+        'aiff'  => self::SOUND,
+        'm4a'   => self::SOUND,
+        'mp4'   => self::VIDEO,
+        'mkv'   => self::VIDEO,
+        'avi'   => self::VIDEO,
+        'mov'   => self::VIDEO,
+        'wmv'   => self::VIDEO,
+        'm4v'   => self::VIDEO,
+        'webm'  => self::VIDEO,
+        'zip'   => self::ARCHIVE,
+        '7zip'  => self::ARCHIVE,
+        'tar'   => self::ARCHIVE,
+        'rar'   => self::ARCHIVE,
+        'pdf'   => self::DOCUMENT,
+        'odt'   => self::DOCUMENT,
+        'doc'   => self::DOCUMENT,
+        'docx'  => self::DOCUMENT,
+        'woff'  => self::FONT,
+        'woff2' => self::FONT,
+        'otf'   => self::FONT,
+        'ttf'   => self::FONT,
+        'js'    => self::CODE,
+        'html'  => self::CODE,
+        'css'   => self::CODE,
+        'php'   => self::CODE,
+        ''      => self::OTHER,
+    ];
+
+    /**
+     * Retrun a list of Media types
+     */
+    public static function mediatypes(): array
+    {
+        return array_unique(array_values(self::MEDIA_EXT));
+    }
+
 // _____________________________________________________ F U N ____________________________________________________
 
     public function __construct(array $donnees)
@@ -245,8 +304,8 @@ class Media extends Item
 
     public function settype()
     {
-        if (!empty($this->extension) && isset(Modelmedia::MEDIA_EXT[$this->extension])) {
-            $this->type = Modelmedia::MEDIA_EXT[$this->extension];
+        if (!empty($this->extension) && isset(self::MEDIA_EXT[$this->extension])) {
+            $this->type = self::MEDIA_EXT[$this->extension];
         } else {
             $this->type = 'other';
         }

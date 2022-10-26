@@ -41,7 +41,7 @@ class Mediaopt extends Item
 
     public function __construct(array $datas = [])
     {
-        $this->type = Modelmedia::mediatypes();
+        $this->type = Media::mediatypes();
         $this->hydrate($datas);
     }
 
@@ -245,7 +245,7 @@ class Mediaopt extends Item
     public function settype($type)
     {
         if (is_array($type)) {
-            $this->type = array_intersect(Modelmedia::mediatypes(), array_unique($type));
+            $this->type = array_intersect(Media::mediatypes(), array_unique($type));
         }
     }
 

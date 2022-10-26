@@ -10,46 +10,6 @@ use RuntimeException;
 
 class Modelmedia extends Model
 {
-    public const MEDIA_EXT = [
-        'jpg' => 'image',
-        'jpeg' => 'image',
-        'png' => 'image',
-        'gif' => 'image',
-        'ico' => 'image',
-        'tiff' => 'image',
-        'bmp' => 'image',
-        'svg' => 'image',
-        'mp3' => 'sound',
-        'opus' => 'sound',
-        'wav' => 'sound',
-        'ogg' => 'sound',
-        'flac' => 'sound',
-        'aiff' => 'sound',
-        'm4a' => 'sound',
-        'mp4' => 'video',
-        'mkv' => 'video',
-        'avi' => 'video',
-        'mov' => 'video',
-        'wmv' => 'video',
-        'm4v' => 'video',
-        'webm' => 'video',
-        'zip' => 'archive',
-        '7zip' => 'archive',
-        'pdf' => 'document',
-        'odt' => 'document',
-        'doc' => 'document',
-        'docx' => 'document',
-        'woff' => 'font',
-        'woff2' => 'font',
-        'otf' => 'font',
-        'ttf' => 'font',
-        'js' => 'code',
-        'html' => 'code',
-        'css' => 'code',
-        'php' => 'code',
-        '' => 'other'
-    ];
-
     public const MEDIA_SORTBY = [
         'id' => 'id',
         'size' => 'size',
@@ -57,14 +17,6 @@ class Modelmedia extends Model
         'date' => 'date',
         'extension' => 'extension'
     ];
-
-    /**
-     * Retrun a list of Media types
-     */
-    public static function mediatypes(): array
-    {
-        return array_unique(array_values(self::MEDIA_EXT));
-    }
 
     /**
      * Get the Media Object
