@@ -7,9 +7,9 @@ use DomainException;
 class Font
 {
     protected string $family;
-    protected ?string $style;
-    protected ?string $weight;
-    protected ?string $stretch;
+    protected ?string $style = null;
+    protected ?string $weight = null;
+    protected ?string $stretch = null;
 
     /** @var Media[] $media */
     protected array $medias;
@@ -54,8 +54,8 @@ class Font
         $parts = explode(".", $media->id());
         $this->family = $parts[0];
 
-        $options = array_intersect_key(array_flip($parts), self::OPTIONS);
-        $options = array_flip(array_unique($options));
+        $options = array_intersect_key(self::OPTIONS, array_flip($parts));
+        $options = array_unique(array_flip($options));
 
         foreach ($options as $param => $value) {
             $this->$param = $value;

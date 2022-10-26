@@ -61,26 +61,27 @@ class Servicefont
     protected function parse(Font $font): string
     {
         $family = $font->family();
-        $css = "@fontface {\n    font-family: \"$family\";\n    src:\n";
-        foreach ($font->medias() as $media) {
-            assert($media instanceof Media);
-            $url = $media->getfulldir();
+        $css = "@font-face {\n    font-family: \"$family\";\n    src:\n";
+        $srcs = array_map(function (Media $media) {
+            $url = $media->getfullpath();
             $format = $media->extension();
-            $css .= "        url(\"$url\") format(\"$format\"),\n";
-        }
+            $src = "        url(\"$url\") format(\"$format\")";
+            return $src;
+        }, $font->medias());
+        $css .= implode(",\n", $srcs) . ";";
         if (!is_null($font->style())) {
             $style = $font->style();
-            $css .= "    font-style: $style;";
+            $css .= "\n    font-style: $style;";
         }
         if (!is_null($font->weight())) {
             $weight = $font->weight();
-            $css .= "    font-weight: $weight;";
+            $css .= "\n    font-weight: $weight;";
         }
         if (!is_null($font->stretch())) {
             $stretch = $font->stretch();
-            $css .= "    font-stretch: $stretch;";
+            $css .= "\n    font-stretch: $stretch;";
         }
-        return "$css\n";
+        return "$css\n}\n\n";
     }
 
     /**
