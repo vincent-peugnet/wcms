@@ -41,7 +41,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
             <form action="" method="get">
                 <fieldset>
                     <legend>Type</legend>
-                    <?= checkboxes('type', Wcms\Modelmedia::mediatypes(), $mediaopt->type()) ?>
+                    <?= checkboxes('type', Wcms\Media::mediatypes(), $mediaopt->type()) ?>
                 </fieldset>
                 <fieldset>
                     <legend>Sort</legend>
@@ -99,7 +99,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
                 <?php } elseif($media->type() === 'video' || $media->type() === 'sound') { ?>
                     <?= $media->getcode(true) ?>
                 <?php } else { ?>
-                    <i class="fa fa-file-<?= $media->getsymbol() ?>"></i>
+                    <i class="fa fa-<?= $media->getsymbol() ?>"></i>
                 <?php } ?>
                     
             </label>
@@ -165,11 +165,11 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
                 <a href="<?= $media->getfullpath() ?>" target="_blank">
                     <?php if($media->type() === 'image') { ?>
                         <span class="thumbnail">
-                            <i class="fa fa-file-<?= $media->getsymbol() ?>"></i>
+                            <i class="fa fa-<?= $media->getsymbol() ?>"></i>
                             <img src="<?= $media->getfullpath() ?>" alt="">
                         </span>
                     <?php } else { ?>
-                        <i class="fa fa-file-<?= $media->getsymbol() ?>"></i>
+                        <i class="fa fa-<?= $media->getsymbol() ?>"></i>
                     <?php } ?>
                 </a>
             </td>

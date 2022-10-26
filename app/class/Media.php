@@ -174,32 +174,36 @@ class Media extends Item
     public function getsymbol()
     {
         switch ($this->type) {
-            case 'image':
-                $symbol = 'picture-o';
+            case self::IMAGE:
+                $symbol = 'file-picture-o';
                 break;
 
-            case 'sound':
-                $symbol = "sound-o";
+            case self::SOUND:
+                $symbol = "file-sound-o";
                 break;
 
-            case 'video':
-                $symbol = "movie-o";
+            case self::VIDEO:
+                $symbol = "file-movie-o";
                 break;
 
-            case 'document':
-                $symbol = "pdf-o";
+            case self::DOCUMENT:
+                $symbol = "file-pdf-o";
                 break;
 
-            case 'archive':
-                $symbol = "archive-o";
+            case self::ARCHIVE:
+                $symbol = "file-archive-o";
                 break;
 
-            case 'code':
-                $symbol = "code-o";
+            case self::CODE:
+                $symbol = "file-code-o";
+                break;
+
+            case self::FONT:
+                $symbol = "font";
                 break;
 
             default:
-                $symbol = "o";
+                $symbol = "file-o";
                 break;
         }
         return $symbol;
