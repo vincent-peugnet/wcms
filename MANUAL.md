@@ -407,6 +407,14 @@ This will include the page [description](#description).
 
     %DATE%
 
+Will print date metadata of the page into an HTML `<time>` tag. The `datetime` attribute will specify the full date and time parameters.
+
+##### Date inclusion
+
+    %TIME%
+
+Will print time metadata of the page into an HTML `<time>` tag. The `datetime` attribute will specify the full date and time parameters.
+
 ##### Thumbnail inclusion
 
     %THUMBNAIL%

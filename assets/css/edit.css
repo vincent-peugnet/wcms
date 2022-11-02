@@ -336,10 +336,11 @@ a.icon {
 }
 
 #help kbd {
-    border: 1px solid;
-    padding: 3px 6px;
+    border: 1px solid #000000c7;
+    padding: 1px 4px;
     background-color: lightgrey;
-    box-shadow: 3px 3px #00000087;
+    box-shadow: 3px 2px #000000c7;
+    border-radius: 4px;
 }
 
 #help div {
