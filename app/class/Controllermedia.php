@@ -24,10 +24,10 @@ class Controllermedia extends Controller
     {
         if ($this->user->iseditor()) {
             try {
-                Fs::dircheck(Model::FONT_DIR);
-                Fs::dircheck(Model::THUMBNAIL_DIR);
-                Fs::dircheck(Model::FAVICON_DIR);
-                Fs::dircheck(Model::CSS_DIR);
+                Fs::dircheck(Model::FONT_DIR, true);
+                Fs::dircheck(Model::THUMBNAIL_DIR, true);
+                Fs::dircheck(Model::FAVICON_DIR, true);
+                Fs::dircheck(Model::CSS_DIR, true);
             } catch (RuntimeException $e) {
                 Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
             }
@@ -39,11 +39,10 @@ class Controllermedia extends Controller
 
             $mediaopt = new Mediaoptlist($datas);
 
-            if (!is_dir($this->mediaopt->dir())) {
-                Model::sendflashmessage(
-                    $mediaopt->path() . " is not a valid path to a directory",
-                    Model::FLASH_WARNING
-                );
+            try {
+                $this->mediamanager->checkdir($this->mediaopt->dir());
+            } catch (Folderexception $e) {
+                Model::sendflashmessage($e->getMessage(), Model::FLASH_WARNING);
                 $this->mediaopt->setpath(Model::MEDIA_DIR);
                 $this->redirect($this->generate("media", [], $this->mediaopt->getpathadress()));
             }
@@ -78,13 +77,19 @@ class Controllermedia extends Controller
         if ($this->user->iseditor()) {
             $target = $_POST['dir'] ?? Model::MEDIA_DIR;
             if (!empty($_FILES['file']['name'][0])) {
-                $this->mediamanager->multiupload('file', $target);
+                $count = count($_FILES['file']['name']);
+                try {
+                    $this->mediamanager->multiupload('file', $target);
+                    Model::sendflashmessage("$count file(s) has been uploaded successfully", Model::FLASH_SUCCESS);
+                    $this->redirect($this->generate('media') . '?path=/' . $target);
+                } catch (RuntimeException $e) {
+                    Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+                }
             }
-            $this->redirect($this->generate('media') . '?path=/' . $target);
         } else {
             Model::sendflashmessage("acces denied", Model::FLASH_ERROR);
-            $this->routedirect('media');
         }
+        $this->routedirect('media');
     }
 
     public function urlupload()
@@ -181,7 +186,7 @@ class Controllermedia extends Controller
             $fontfacer = new Servicefont($medias);
             $fontcss = $fontfacer->css();
             try {
-                Fs::writefile(Model::FONTS_CSS_FILE, $fontcss);
+                Fs::writefile(Model::FONTS_CSS_FILE, $fontcss, 0664);
                 Model::sendflashmessage("Font face CSS file  successfully generated", Model::FLASH_SUCCESS);
             } catch (RuntimeException $e) {
                 Model::sendflashmessage(

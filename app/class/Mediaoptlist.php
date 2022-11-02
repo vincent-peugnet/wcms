@@ -15,7 +15,7 @@ class Mediaoptlist extends Mediaopt
 
     public function __construct(array $datas = [])
     {
-        $this->hydrate($datas);
+        parent::__construct($datas);
     }
 
     public function readoptions()

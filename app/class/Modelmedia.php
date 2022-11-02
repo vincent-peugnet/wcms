@@ -192,46 +192,6 @@ class Modelmedia extends Model
     }
 
     /**
-     * Upload single file
-     *
-     * @param string $index The file id
-     * @param string $destination File final destination
-     * @param bool|int $maxsize Max file size in octets
-     * @param bool|array $extensions List of authorized extensions
-     * @param bool $jpgrename Change the file exentension to .jpg
-     *
-     * @return bool If upload process is a succes or not
-     */
-    public function simpleupload(
-        string $index,
-        string $destination,
-        $maxsize = false,
-        $extensions = false,
-        bool $jpgrename = false
-    ): bool {
-        //Test1: if the file is corectly uploaded
-        if (!isset($_FILES[$index]) || $_FILES[$index]['error'] > 0) {
-            return false;
-        }
-        //Test2: check file size
-        if ($maxsize !== false && $_FILES[$index]['size'] > $maxsize) {
-            return false;
-        }
-        //Test3: check extension
-        $ext = substr(strrchr($_FILES[$index]['name'], '.'), 1);
-        if ($extensions !== false && !in_array($ext, $extensions)) {
-            return false;
-        }
-        if ($jpgrename !== false) {
-            $destination .= '.jpg';
-        } else {
-            $destination .= '.' . $ext;
-        }
-        //Move to dir
-        return move_uploaded_file($_FILES[$index]['tmp_name'], $destination);
-    }
-
-    /**
      * @throws RuntimeException             If CURL execution failed
      * @throws Filesystemexception          If writing file failed
      *
@@ -268,12 +228,14 @@ class Modelmedia extends Model
      *
      * @param string $index Id of the file input
      * @param string $target direction to save the files
+     *
+     * @throws Folderexception if target folder does not exist
+     * @throws RuntimeException if upload fail.
      */
-    public function multiupload(string $index, string $target)
+    public function multiupload(string $index, string $target): void
     {
-        if ($target[strlen($target) - 1] != DIRECTORY_SEPARATOR) {
-            $target .= DIRECTORY_SEPARATOR;
-        }
+        $target = trim($target, "/") . "/";
+        $this->checkdir($target);
         $count = 0;
         $successcount = 0;
         foreach ($_FILES[$index]['name'] as $filename) {
@@ -281,16 +243,31 @@ class Modelmedia extends Model
             $extension = self::idclean($fileinfo['extension']);
             $id = self::idclean($fileinfo['filename']);
 
-            $tmp = $_FILES['file']['tmp_name'][$count];
+            $from = $_FILES['file']['tmp_name'][$count];
             $count++;
-            $temp = $target . $id . '.' . $extension;
-            if (move_uploaded_file($tmp, $temp)) {
+            $to = $target . $id . '.' . $extension;
+            if (move_uploaded_file($from, $to)) {
                 $successcount++;
             }
-            $temp = '';
-            $tmp = '';
         }
-        Model::sendflashmessage($successcount . ' / ' . $count . ' files have been uploaded', 'success');
+        if ($successcount < $count) {
+            throw new RuntimeException("$successcount / $count files have been uploaded");
+        }
+    }
+
+    /**
+     * @param string $dir                   directory path
+     *
+     * @throws Folderexception if target folder does not exist or is outside `/media` folder
+     */
+    public function checkdir(string $dir)
+    {
+        if (!is_dir($dir)) {
+            throw new Folderexception("directory `$dir` does not exists");
+        }
+        if (strpos($dir, "media/") !== 0) {
+            throw new Folderexception("directory `$dir`, is not inside `/media` folder");
+        }
     }
 
     /**

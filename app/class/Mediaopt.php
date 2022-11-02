@@ -4,8 +4,8 @@ namespace Wcms;
 
 class Mediaopt extends Item
 {
-    /** @var string directory of media */
-    protected $path = "/" . Model::MEDIA_DIR;
+    /** @var string With a `/media` at the beginning and no trailong slash */
+    protected $path;
 
     /** @var string */
     protected $sortby = 'id';
@@ -24,6 +24,7 @@ class Mediaopt extends Item
 
     public function __construct(array $datas = [])
     {
+        $this->path = "/" . rtrim(Model::MEDIA_DIR, "/");
         $this->type = Media::mediatypes();
         $this->hydrate($datas);
     }

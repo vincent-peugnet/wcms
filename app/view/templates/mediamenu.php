@@ -7,6 +7,7 @@
                 <h3>
                     <label for="file"><i class="fa fa-upload"></i> Upload from computer</label>
                 </h3>
+                <p>max upload file size : <?= $maxuploadsize ?></p>
                 <form id=addmedia action="<?= $this->url('mediaupload') ?>" method="post" enctype="multipart/form-data">
                     <input type='file' id="file" name='file[]' multiple required>
 
