@@ -393,13 +393,16 @@ class Servicerender
     /**
      * Search and replace referenced media code by full absolute address.
      * Add a target="_blank" attribute to link pointing to media.
+     *
+     * About the regex : it will match everything that do not start with a `./` a `/` or an URI sheme.
+     * (`https://`, `ftps://`, etc.) and contain at list one point `.`
      */
     private function media(string $text): string
     {
-        $regex = '%href="([\w\-]+(\/([\w\-])+)*\.[a-z0-9]{1,5})"%';
-        $text = preg_replace($regex, 'href="' . Model::mediapath() . '$1" target="_blank"', $text);
-        $regex = '%src="([\w\-]+(\/([\w\-])+)*\.[a-z0-9]{1,5})"%';
-        $text = preg_replace($regex, 'src="' . Model::mediapath() . '$1"', $text);
+        $regex = '%href="(?!([/#]|[a-zA-Z\.\-\+]+://|\.+/))([^"]+\.[^"]+)"%';
+        $text = preg_replace($regex, 'href="' . Model::mediapath() . '$2" target="_blank"', $text);
+        $regex = '%src="(?!([/#]|[a-zA-Z\.\-\+]+://|\.+/))([^"]+\.[^"]+)"%';
+        $text = preg_replace($regex, 'src="' . Model::mediapath() . '$2"', $text);
         return $text;
     }
 
