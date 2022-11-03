@@ -79,7 +79,7 @@ class Controllermedia extends Controller
             if (!empty($_FILES['file']['name'][0])) {
                 $count = count($_FILES['file']['name']);
                 try {
-                    $this->mediamanager->multiupload('file', $target);
+                    $this->mediamanager->multiupload('file', $target, boolval($_POST['idclean']));
                     Model::sendflashmessage("$count file(s) has been uploaded successfully", Model::FLASH_SUCCESS);
                     $this->redirect($this->generate('media') . '?path=/' . $target);
                 } catch (RuntimeException $e) {

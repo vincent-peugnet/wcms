@@ -18,6 +18,8 @@ class Modelmedia extends Model
         'extension' => 'extension'
     ];
 
+    public const ID_REGEX                   = "%[^a-z0-9-_.]%";
+
     /**
      * Get the Media Object
      *
@@ -228,11 +230,12 @@ class Modelmedia extends Model
      *
      * @param string $index Id of the file input
      * @param string $target direction to save the files
+     * @param bool $idclean                 clean the filename using idclean
      *
      * @throws Folderexception if target folder does not exist
      * @throws RuntimeException if upload fail.
      */
-    public function multiupload(string $index, string $target): void
+    public function multiupload(string $index, string $target, bool $idclean = false): void
     {
         $target = trim($target, "/") . "/";
         $this->checkdir($target);
@@ -240,8 +243,13 @@ class Modelmedia extends Model
         $successcount = 0;
         foreach ($_FILES[$index]['name'] as $filename) {
             $fileinfo = pathinfo($filename);
-            $extension = self::idclean($fileinfo['extension']);
-            $id = self::idclean($fileinfo['filename']);
+            if ($idclean) {
+                $extension = self::idclean($fileinfo['extension']);
+                $id = self::idclean($fileinfo['filename']);
+            } else {
+                $extension = $fileinfo['extension'];
+                $id = $fileinfo['filename'];
+            }
 
             $from = $_FILES['file']['tmp_name'][$count];
             $count++;

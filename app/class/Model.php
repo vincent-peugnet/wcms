@@ -187,7 +187,7 @@ abstract class Model
             $replace = ['e', 'a', 'e', 'c', 'u', 'u', 'i', 'i', '-'];
             $input = str_replace($search, $replace, $input);
 
-            $input = preg_replace(self::ID_REGEX, '', strtolower(trim($input)));
+            $input = preg_replace(static::ID_REGEX, '', strtolower(trim($input)));
             $input = substr($input, 0, $max);
         }
         return $input;
@@ -199,7 +199,7 @@ abstract class Model
     public static function idcheck(string $id, int $max = self::MAX_ID_LENGTH): bool
     {
         return (
-            !((bool) preg_match(self::ID_REGEX, $id))
+            !((bool) preg_match(static::ID_REGEX, $id))
             && strlen($id) <= $max
             && strlen($id) > 0
         );

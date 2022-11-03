@@ -11,6 +11,12 @@
                 <form id=addmedia action="<?= $this->url('mediaupload') ?>" method="post" enctype="multipart/form-data">
                     <input type='file' id="file" name='file[]' multiple required>
 
+                    <div>
+                        <input type="hidden" name="idclean" value="0">
+                        <input type="checkbox" name="idclean" id="idclean" value="1" checked>
+                        <label for="idclean">clean filenames</label>
+                    </div>
+
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>">
                     <input type="submit" value="upload">
                 </form>
