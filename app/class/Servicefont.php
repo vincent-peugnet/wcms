@@ -45,7 +45,7 @@ class Servicefont
     {
         $groupedmedias = [];
         foreach ($medias as $media) {
-            $groupedmedias[$media->filename()][] = $media;
+            $groupedmedias[$media->getbasefilename()][] = $media;
         }
         $fonts = [];
         foreach ($groupedmedias as $medias) {

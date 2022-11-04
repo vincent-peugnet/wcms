@@ -234,6 +234,15 @@ class Media extends Item
         return $symbol;
     }
 
+    /**
+     * @return string                       Filename __without extension__
+     */
+    public function getbasefilename(): string
+    {
+        $pathinfo = pathinfo($this->filename);
+        return $pathinfo['filename'];
+    }
+
 
 
     // _________________________________________________ G E T ____________________________________________________

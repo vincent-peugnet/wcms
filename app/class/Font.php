@@ -51,7 +51,7 @@ class Font
         }
         $this->medias = $medias;
         $media = $medias[0];
-        $parts = explode(".", $media->filename());
+        $parts = explode(".", $media->getbasefilename());
         $this->family = $parts[0];
 
         $options = array_intersect_key(self::OPTIONS, array_flip($parts));
@@ -72,7 +72,7 @@ class Font
     protected function verify(array $medias): bool
     {
         $ids = array_map(function (Media $media) {
-            return $media->filename();
+            return $media->getbasefilename();
         }, $medias);
         return (count(array_unique($ids)) === 1);
     }
