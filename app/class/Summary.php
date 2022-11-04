@@ -33,7 +33,7 @@ class Summary extends Item
     }
 
 
-    public function readoptions()
+    protected function readoptions(): void
     {
         parse_str(htmlspecialchars_decode($this->options), $datas);
         $this->hydrate($datas);
@@ -87,12 +87,12 @@ class Summary extends Item
     // ________________________________________________ G E T ________________________________________________________
 
 
-    public function fullmatch()
+    public function fullmatch(): string
     {
         return $this->fullmatch;
     }
 
-    public function options()
+    public function options(): string
     {
         return $this->options;
     }
@@ -106,13 +106,13 @@ class Summary extends Item
     // ________________________________________________ S E T ________________________________________________________
 
 
-    public function setfullmatch(string $fullmatch)
+    public function setfullmatch(string $fullmatch): void
     {
         $this->fullmatch = $fullmatch;
     }
 
 
-    public function setoptions(string $options)
+    public function setoptions(string $options): void
     {
         if (!empty($options)) {
             $this->options = $options;

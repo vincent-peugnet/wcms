@@ -18,9 +18,9 @@ class Mediaoptlist extends Mediaopt
         parent::__construct($datas);
     }
 
-    public function readoptions()
+    public function readoptions(): void
     {
-        parse_str($this->options, $datas);
+        parse_str(htmlspecialchars_decode($this->options), $datas);
         $this->hydrate($datas);
     }
 
@@ -96,12 +96,12 @@ class Mediaoptlist extends Mediaopt
     // ______________________________________________ G E T ________________________________________________________
 
 
-    public function fullmatch()
+    public function fullmatch(): string
     {
         return $this->fullmatch;
     }
 
-    public function options()
+    public function options(): string
     {
         return $this->options;
     }

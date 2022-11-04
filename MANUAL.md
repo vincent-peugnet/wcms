@@ -405,17 +405,32 @@ This will include the page [description](#description).
 
 ##### Date inclusion
 
+Will print date metadata of the page into an HTML `<time>` tag. The `datetime` attribute will specify the date.
+
     %DATE%
 
-Will print date metadata of the page into an HTML `<time>` tag. The `datetime` attribute will specify the full date and time parameters.
+Language page's metadata will be used for formating over Configuration.
 
-##### Date inclusion
+Options are:
+
+- `format` can be set to `none`, `short`, `medium`, `long`, `full`. Default is `short`.
+- `lang` can be set to a *locale identifier* using [two letters language identifier](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
+
+More complex example:
+
+    %DATE?format=short&lang=fr%
+
+##### Time inclusion
+
+Will print time metadata of the page into an HTML `<time>` tag. The `datetime` attribute will specify time.
 
     %TIME%
 
-Will print time metadata of the page into an HTML `<time>` tag. The `datetime` attribute will specify the full date and time parameters.
+Options are the same as [date inclusion](#date-inclusion).
 
 ##### Thumbnail inclusion
+
+Print the [thumbnail](#thumbnail) of the page inside an `<img>` HTML tag with the `thumbnail` class.
 
     %THUMBNAIL%
 

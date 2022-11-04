@@ -33,6 +33,7 @@ CodeMirror.defineSimpleMode('wcms', {
         { regex: /LIST\?/, token: 'wcms', next: 'list' },
         { regex: /MEDIA\?/, token: 'wcms', next: 'media' },
         { regex: /RSS\?/, token: 'wcms', next: 'rss' },
+        { regex: /(DATE|TIME)\?/, token: 'wcms', next: 'datetime' },
         { regex: /[^&]*&/, token: 'wcms', pop: true },
         { regex: /.*%/, token: 'wcms', next: 'start' },
     ],
@@ -67,6 +68,11 @@ CodeMirror.defineSimpleMode('wcms', {
     // 'rss' mode, parameters' keywords of the 'rss' macro
     rss: [
         { regex: /bookmark/, token: 'wkeyword', push: 'wcms' },
+        { regex: null, push: 'wcms' },
+    ],
+    // 'datetime' mode, parameters' keywords of the 'datetime' macro
+    datetime: [
+        { regex: /format|lang/, token: 'wkeyword', push: 'wcms' },
         { regex: null, push: 'wcms' },
     ],
     comment: [

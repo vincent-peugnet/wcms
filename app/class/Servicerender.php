@@ -4,6 +4,7 @@ namespace Wcms;
 
 use AltoRouter;
 use Exception;
+use IntlDateFormatter;
 use InvalidArgumentException;
 use LogicException;
 use Michelf\MarkdownExtra;
@@ -581,8 +582,8 @@ class Servicerender
     /**
      * Match `%INCLUDE?params=values&...%`
      *
-     * @param string $text Input text to scan
-     * @param string $include word to match
+     * @param string $text                  Input text to scan
+     * @param string $include               Word to match `%$include%`
      *
      * @return array Ordered array containing an array of `fullmatch` and `options`
      */
@@ -722,15 +723,23 @@ class Servicerender
 
     private function date(string $text): string
     {
-        $page = $this->page;
-        $text = preg_replace_callback('~\%DATE\%~', function ($matches) use ($page) {
-            return '<time datetime=' . $page->date('string') . '>' . $page->date('dmy') . '</time>';
-        }, $text);
-        $text = preg_replace_callback('~\%TIME\%~', function ($matches) use ($page) {
-            return '<time datetime=' . $page->date('string') . '>' . $page->date('ptime') . '</time>';
-        }, $text);
-
-        return $text;
+        $date = Clock::DATE;
+        $time = Clock::TIME;
+        $matches = $this->match($text, "$date|$time");
+        $searches = [];
+        $replaces = [];
+        foreach ($matches as $match) {
+            $clock = new Clock(
+                $match['type'],
+                $this->page->date(),
+                $match['fullmatch'],
+                $match['options'],
+                $this->page->lang()
+            );
+            $searches[] = $clock->fullmatch();
+            $replaces[] = $clock->format();
+        }
+        return str_replace($searches, $replaces, $text);
     }
 
     /**
