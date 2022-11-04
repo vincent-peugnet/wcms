@@ -20,7 +20,7 @@ class Controllerinfo extends Controller
                 $htmlman = file_get_contents(Model::MAN_FILE);
                 $htmlman = $render->rendermanual($htmlman);
 
-                $sum = new Summary(['max' => 4, 'sum' => $render->sum()]);
+                $sum = new Summary(['min' => 2, 'max' => 4, 'sum' => $render->sum()]);
                 $summary = $sum->sumparser();
 
                 $this->showtemplate('info', ['version' => getversion(), 'manual' => $htmlman, 'summary' => $summary]);

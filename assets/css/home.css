@@ -200,9 +200,6 @@ main.home a.bookmark {
 }
 
 
-nav li {
-    max-width: 210px;
-}
 
 nav fieldset {
     padding: 0;
@@ -410,6 +407,10 @@ section.info {
     list-style: inside disc;
 }
 
+section.info article {
+    padding: 2%;
+}
+
 
 main.info ul i {
     color: grey;
@@ -420,7 +421,7 @@ main.info a {
 }
 
 nav.info ul {
-    padding-inline-start: 10px;
+    padding-inline-start: 30px;
 }
 
 main.info code {
@@ -489,10 +490,6 @@ section.info ul {
     padding-inline-start: 10px;
 }
 
-main.info code {
-    padding: 0 4px;
-}
-
 article#manual a {
     text-decoration: none;
     background-color: #7b97b959;
@@ -516,6 +513,14 @@ main.info article code i {
     font-style: normal;
     color: #7b97b9;
 }
+
+
+
+nav.info ul.summary {
+    margin: 3%;
+    padding: 0;
+}
+
 
 
 main.media table#medialist img {
@@ -707,7 +712,7 @@ main section {
 main nav {
     display: flex;
     flex-direction: column;
-    width: 230px;
+    width: 300px;
 }
 
 
@@ -800,8 +805,3 @@ footer {
     top: -200px;
   }
 }
-
-
-
-
-

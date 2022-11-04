@@ -57,9 +57,9 @@ You should now see something that look like what you've typed.
 #### Create a hyperlink
 
 
-The [markdown synthax](), this is a formating standard well known accross the web. It's main goal is to be a intermediate between an easy to read prose text, and the internet standard tag language, the HTML. One of the main interest of Markdown, is it is ability to be mixed with HTML. That way, people can type more easily basic text, and switch to HTML at any time, to achieve a more complex layout. You can use the official Markdonw synthax with __W__ alongside with HTML to build your pages.
+The [markdown synthax](https://commonmark.org/), this is a formating standard well known accross the web. It's main goal is to be a intermediate between an easy to read prose text, and the internet standard tag language, the HTML. One of the main interest of Markdown, is it is ability to be mixed with HTML. That way, people can type more easily basic text, and switch to HTML at any time, to achieve a more complex layout. You can use the official Markdonw synthax with __W__ alongside with HTML to build your pages.
 
-[Official website describing Markdown synthax](https://daringfireball.net/projects/markdown/syntax)
+[Official website describing Markdown synthax](https://commonmark.org/help/)
 
 One of the most interesting things to do when you use internet publishing, is to create HYPERLINKS. __W__ encourage you creating those links between pages using a very light synthax. There are multiple ways to do it.
 
@@ -661,6 +661,77 @@ This option is checked by default.
 Use this option if you want to use templated page favicon.
 
 #### Javascript template
+
+
+
+
+
+
+Media management
+----------------
+
+In addition to [page editing](#page-editing), W gives you a dedicated tool to manage all the files you want to include in your website.
+
+### Magic folders
+
+Not all folders are created equals ! There are some magic ones inside the media folder. Those folders are indestrctibles, this means that W will rebuild them if there are not present.
+
+#### Fonts folder
+
+The `fonts` folder is supposed help you use fonts in your project.
+
+When you put fonts files that have a known extension like `.otf`, `.ttf`, `.woff` or `.woff2`, W will generate a css file including all of those fonts in a *@font-face* CSS rule.
+
+This file will be saved inside the [css folder](#css-folder) and will be named `fonts.css`. It will be linked from every page you create.
+
+That way, to use a font you've previously uploaded in this folder in your page, you can directly write the folling rule:
+
+    font-family: <font-name>
+
+Where `<font-name>` is the filename of the font without the extension.
+
+To go further, you can even define font *styles*, *weights* and *stretchs*. To do so, just add those parameters in your font filename using separating dots.
+For example:
+
+    helvetica.woff2
+    helvetica.italic.woff2
+    helvetica.bold.woff2
+    helvetica.condensed.woff2
+    helvetica.italic.bold.woff2
+
+This will add them all to the same `helvetica` font family, and indicate specificities using the *@font-face* CSS rule.
+
+You can as well add multiple file format for the same font in order to maximize browser compatibility. To achieve this, simply add multiple files sharing the same filename that just have differents extensions.
+For example:
+
+    tahoma.woof2
+    tahoma.otf
+
+The `fonts.css` file will be automatically re-generated each time you upload or rename files in this folder using the web interface. If you add or modify files by any other way, you can manually trigger the generation. Under the *File > Magic folder* menu, select: *Regenerate @fontface CSS file*
+
+
+#### CSS folder
+
+This contain two files:
+
+- the `global.css` file, that admins can edit in the [admin panel](#admin).
+- the `fonts.css` file, that is automatcly generated according to content of [fonts folder](#fonts-folder).
+
+
+
+#### Favicon folder
+
+This folder is supposed to contain favicons. Once favicon files (that can be `.ico`, `.png`, etc.) are uploaded here, they are listed in the favicon selection drop down list in every pages or in the admin panel.
+
+
+#### Thumbnail folder
+
+This folder is supposed to contain thumbnails images. Once images files (that can be `.jpg`, `.png`, etc.) are uploaded here, they are listed in the thumbnail selection drop down list in every pages or in the admin panel.
+
+
+
+
+
 
 
 
