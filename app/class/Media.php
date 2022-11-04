@@ -9,16 +9,29 @@ use Exception;
 
 class Media extends Item
 {
-    protected $id;
-    protected $path;
-    protected $extension;
-    protected $type;
+    /** @var string $filename Basename of the file. Ex: `picture.jpeg` */
+    protected string $filename;
+
+    /** @var string $dir Directory where the file is stored */
+    protected string $dir;
+
+    /** @var string $extension May be the extension of the media file if it have one */
+    protected string $extension = "";
+
+    protected string $type;
+
     protected $size;
+
     protected $date;
+
     protected $width;
+
     protected $height;
+
     protected $length;
+
     protected $uid;
+
     protected $permissions;
 
     public const IMAGE      = "image";
@@ -80,30 +93,36 @@ class Media extends Item
         return array_unique(array_values(self::MEDIA_EXT));
     }
 
-// _____________________________________________________ F U N ____________________________________________________
+    // _____________________________________________________ F U N ____________________________________________________
 
     public function __construct(array $donnees)
     {
         $this->hydrate($donnees);
+        $this->analyse();
     }
 
     public function analyse()
     {
+        $infos = pathinfo($this->filename);
+        if (!empty($infos['extension'])) {
+            $this->extension = $infos['extension'];
+        }
+
         $this->settype();
 
         $this->setdate();
 
-        $filepath = $this->path . $this->id . '.' . $this->extension;
+        $path = $this->getlocalpath();
 
         if ($this->type == 'image') {
-            list($width, $height, $type, $attr) = getimagesize($filepath);
+            list($width, $height, $type, $attr) = getimagesize($path);
             $this->width = $width;
             $this->height = $height;
         }
 
-        $stat = stat($filepath);
+        $stat = stat($path);
 
-        $permissions = decoct(fileperms($filepath) & 0777);
+        $permissions = decoct(fileperms($path) & 0777);
 
         $this->setpermissions($permissions);
 
@@ -111,29 +130,35 @@ class Media extends Item
     }
 
 
-    public function getfullpath()
+    public function getabsolutepath()
     {
         if (!empty(Config::basepath())) {
             $base = '/' . Config::basepath();
         } else {
             $base = '';
         }
-        $fullpath = $base . '/' . $this->path() . $this->id() . '.' . $this->extension();
+        $fullpath = $base . '/' . $this->dir() . '/' . $this->filename();
         $fullpath = str_replace('\\', '/', $fullpath);
         return $fullpath;
     }
 
     public function getincludepath()
     {
-        $includepath = $this->path() . $this->id() . '.' . $this->extension();
+        $includepath = $this->dir() . '/' . $this->filename();
         $includepath = str_replace('\\', '/', $includepath);
         $includepath = substr($includepath, 6);
         return $includepath;
     }
 
-    public function getfulldir()
+    /**
+     * Get the relative filesystem path to the media file.
+     *
+     * @return string                       Relative path to a file.
+     *                                      This will look like `media/pictures/hollydays.jpeg`
+     */
+    public function getlocalpath()
     {
-        return $this->path . $this->id . '.' . $this->extension;
+        return $this->dir . '/' . $this->filename;
     }
 
     /**
@@ -143,19 +168,19 @@ class Media extends Item
      */
     public function getcode($fullpath = false): string
     {
-        if ($fullpath === true) {
-            $src = $this->getfullpath();
+        if ($fullpath) {
+            $src = $this->getabsolutepath();
         } else {
             $src = $this->getincludepath();
         }
 
         switch ($this->type) {
             case 'image':
-                $code = '![' . $this->id . '](' . $src . ')';
+                $code = '![' . $this->filename . '](' . $src . ')';
                 break;
 
             case 'sound':
-                    $code = '<audio controls src="' . $src . '"></audio>';
+                $code = '<audio controls src="' . $src . '"></audio>';
                 break;
 
             case 'video':
@@ -164,7 +189,7 @@ class Media extends Item
                 break;
 
             default:
-                    $code = '[' . $this->id . '](' . $src . ')';
+                $code = '[' . $this->filename . '](' . $src . ')';
                 break;
         }
 
@@ -211,16 +236,16 @@ class Media extends Item
 
 
 
-// _________________________________________________ G E T ____________________________________________________
+    // _________________________________________________ G E T ____________________________________________________
 
-    public function id()
+    public function filename()
     {
-        return $this->id;
+        return $this->filename;
     }
 
-    public function path()
+    public function dir()
     {
-        return $this->path;
+        return $this->dir;
     }
 
     public function extension()
@@ -283,19 +308,19 @@ class Media extends Item
         return $this->permissions;
     }
 
-// ___________________________________________________ S E T __________________________________________________
+    // ___________________________________________________ S E T __________________________________________________
 
-    public function setid($id)
+    public function setfilename($filename)
     {
-        if (is_string($id)) {
-            $this->id = $id;
+        if (is_string($filename)) {
+            $this->filename = $filename;
         }
     }
 
-    public function setpath($path)
+    public function setdir($dir)
     {
-        if (strlen($path) < 40 and is_string($path)) {
-            $this->path = strip_tags(strtolower($path));
+        if (is_string($dir)) {
+            $this->dir = strip_tags(strtolower($dir));
         }
     }
 
@@ -306,6 +331,10 @@ class Media extends Item
         }
     }
 
+    /**
+     * Automaticaly set the type of the Media using extension
+     * If extension is unknown, type will be set to `other`
+     */
     public function settype()
     {
         if (!empty($this->extension) && isset(self::MEDIA_EXT[$this->extension])) {
@@ -324,13 +353,9 @@ class Media extends Item
 
     public function setdate()
     {
-        $timestamp = filemtime($this->getfulldir());
-        try {
-            $this->date = new DateTimeImmutable("@$timestamp");
-        } catch (Exception $e) {
-            Logger::warningex($e);
-            $this->date = new DateTimeImmutable();
-        }
+        $timestamp = filemtime($this->getlocalpath());
+        $this->date = new DateTime();
+        $this->date->setTimestamp($timestamp);
     }
 
     public function setwidth($width)

@@ -8,7 +8,7 @@ class Mediaopt extends Item
     protected $path;
 
     /** @var string */
-    protected $sortby = 'id';
+    protected $sortby = 'filename';
 
     /** @var int */
     protected $order = 1;

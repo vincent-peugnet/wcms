@@ -93,9 +93,9 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
 
         <li title="<?= $media->size('hr') ?> | <?= $media->uid('name') ?> | <?= $media->permissions() ?>">
             <div class="thumbnail">
-            <label for="media_<?= $media->id() ?>">
+            <label for="media_<?= $media->filename() ?>">
                 <?php if($media->type() === 'image') { ?>
-                    <img src="<?= $media->getfullpath() ?>" alt="">
+                    <img src="<?= $media->getabsolutepath() ?>" alt="">
                 <?php } elseif($media->type() === 'video' || $media->type() === 'sound') { ?>
                     <?= $media->getcode(true) ?>
                 <?php } else { ?>
@@ -106,9 +106,9 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
             </div>
             
             <div class="meta">
-                <input type="checkbox" name="id[]" value="<?= $media->getfulldir() ?>" form="mediaedit" id="media_<?= $media->id() ?>">
-                <label for="media_<?= $media->id() ?>"><?= $media->id() ?></label>
-                <a href="<?= $media->getfullpath() ?>" target="_blank"><i class="fa fa-external-link"></i></a>
+                <input type="checkbox" name="id[]" value="<?= $media->getlocalpath() ?>" form="mediaedit" id="media_<?= $media->filename() ?>">
+                <label for="media_<?= $media->filename() ?>"><?= $media->filename() ?></label>
+                <a href="<?= $media->getabsolutepath() ?>" target="_blank"><i class="fa fa-external-link"></i></a>
                 <input readonly class="code select-all" value="<?= $this->e($media->getcode()) ?>" />
             </div>
                 
@@ -128,7 +128,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
         <table id="medialist">
         <tr>
             <th id="checkall">x</th>
-            <th><a href="<?= $mediaopt->getsortbyadress('id') ?>">id</a></th>
+            <th><a href="<?= $mediaopt->getsortbyadress('filename') ?>">filename</a></th>
             <th><a href="<?= $mediaopt->getsortbyadress('extension') ?>">ext</a></th>
             <th><a href="<?= $mediaopt->getsortbyadress('type') ?>">type</a></th>
             <th><a href="<?= $mediaopt->getsortbyadress('size') ?>">size</a></th>
@@ -143,30 +143,28 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css'
         foreach ($medialist as $media) {
             ?>
             <tr>
-            <td><input type="checkbox" name="id[]" value="<?= $media->getfulldir() ?>" form="mediaedit" id="media_<?= $media->id() ?>"></td>
+            <td><input type="checkbox" name="id[]" value="<?= $media->getlocalpath() ?>" form="mediaedit" id="media_<?= $media->filename() ?>"></td>
             <td>
                 <details>
                     <summary>
-                            <?= $media->id() ?>
+                            <?= $media->filename() ?>
                     </summary>
                     <form action="<?= $this->url('mediarename') ?>" method="post">
                         <input type="hidden" name="route" value="<?= $mediaopt->getaddress() ?>">
-                        <input type="hidden" name="path" value="<?= $media->path() ?>">
-                        <input type="hidden" name="oldid" value="<?= $media->id() ?>">
-                        <input type="hidden" name="oldextension" value="<?= $media->extension() ?>">
-                        <input type="text" name="newid" value="<?= $media->id() ?>" id="newid-<?= $media->id() ?>" maxlength="<?= Wcms\Model::MAX_ID_LENGTH ?>" minlength="1" required>
-                        <input type="text" name="newextension" value="<?= $media->extension() ?>" id="" style="width: 30px" maxlength="16" minlength="1" required>
+                        <input type="hidden" name="dir" value="<?= $media->dir() ?>">
+                        <input type="hidden" name="oldfilename" value="<?= $media->filename() ?>">
+                        <input type="text" name="newfilename" value="<?= $media->filename() ?>" id="newid-<?= $media->filename() ?>" maxlength="<?= Wcms\Model::MAX_ID_LENGTH ?>" minlength="1" required>
                         <input type="submit" value="rename">
                     </form>
                 </details>
             </td>    
             <td><?= $media->extension() ?></td>
             <td class="nowrap">
-                <a href="<?= $media->getfullpath() ?>" target="_blank">
+                <a href="<?= $media->getabsolutepath() ?>" target="_blank">
                     <?php if($media->type() === 'image') { ?>
                         <span class="thumbnail">
                             <i class="fa fa-<?= $media->getsymbol() ?>"></i>
-                            <img src="<?= $media->getfullpath() ?>" alt="">
+                            <img src="<?= $media->getabsolutepath() ?>" alt="">
                         </span>
                     <?php } else { ?>
                         <i class="fa fa-<?= $media->getsymbol() ?>"></i>

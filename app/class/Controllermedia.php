@@ -156,24 +156,21 @@ class Controllermedia extends Controller
     {
         if (
             $this->user->issupereditor()
-            && isset($_POST['oldid'])
-            && isset($_POST['newid'])
-            && isset($_POST['oldextension'])
-            && isset($_POST['newextension'])
-            && isset($_POST['path'])
+            && isset($_POST['oldfilename'])
+            && isset($_POST['newfilename'])
+            && isset($_POST['dir'])
         ) {
-            $newid = Model::idclean($_POST['newid']);
-            $newextension = Model::idclean($_POST['newextension']);
-            if (!empty($newid) && !empty($newextension)) {
-                $oldname = $_POST['path'] . $_POST['oldid'] . '.' . $_POST['oldextension'];
-                $newname = $_POST['path'] . $newid . '.' . $newextension;
+            $newfilename = $_POST['newfilename'];
+            if (!empty($newfilename)) {
+                $oldname = $_POST['dir'] . '/' . $_POST['oldfilename'];
+                $newname = $_POST['dir'] . '/' . $newfilename;
                 try {
                     $this->mediamanager->rename($oldname, $newname);
                 } catch (RuntimeException $e) {
-                    Model::sendflashmessage($e->getMessage(), 'error');
+                    Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
                 }
             } else {
-                Model::sendflashmessage('Invalid name or extension', 'warning');
+                Model::sendflashmessage('Invalid name or extension', Model::FLASH_WARNING);
             }
         }
         $this->redirect($this->generate('media') . $_POST['route']);
@@ -182,10 +179,10 @@ class Controllermedia extends Controller
     public function fontface()
     {
         if ($this->user->iseditor()) {
-            $medias = $this->mediamanager->getlistermedia(Model::FONT_DIR, [Media::FONT]);
-            $fontfacer = new Servicefont($medias);
-            $fontcss = $fontfacer->css();
             try {
+                $medias = $this->mediamanager->getlistermedia(Model::FONT_DIR, [Media::FONT]);
+                $fontfacer = new Servicefont($medias);
+                $fontcss = $fontfacer->css();
                 Fs::writefile(Model::FONTS_CSS_FILE, $fontcss, 0664);
                 Model::sendflashmessage("Font face CSS file  successfully generated", Model::FLASH_SUCCESS);
             } catch (RuntimeException $e) {

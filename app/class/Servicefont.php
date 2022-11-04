@@ -17,7 +17,7 @@ class Servicefont
         $medias = $this->filterfonts($medias);
         $groupedmedias = [];
         foreach ($medias as $media) {
-            $groupedmedias[$media->id()][] = $media;
+            $groupedmedias[$media->filename()][] = $media;
         }
         foreach ($groupedmedias as $medias) {
             $this->fonts[] = new Font($medias);
@@ -63,7 +63,7 @@ class Servicefont
         $family = $font->family();
         $css = "@font-face {\n    font-family: \"$family\";\n    src:\n";
         $srcs = array_map(function (Media $media) {
-            $url = $media->getfullpath();
+            $url = $media->getabsolutepath();
             $format = $media->extension();
             $src = "        url(\"$url\") format(\"$format\")";
             return $src;

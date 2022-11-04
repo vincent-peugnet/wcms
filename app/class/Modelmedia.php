@@ -2,6 +2,7 @@
 
 namespace Wcms;
 
+use Error;
 use ErrorException;
 use Exception;
 use InvalidArgumentException;
@@ -11,7 +12,7 @@ use RuntimeException;
 class Modelmedia extends Model
 {
     public const MEDIA_SORTBY = [
-        'id' => 'id',
+        'filename' => 'filename',
         'size' => 'size',
         'type' => 'type',
         'date' => 'date',
@@ -23,28 +24,25 @@ class Modelmedia extends Model
     /**
      * Get the Media Object
      *
-     * @param string $entry Id of the file
-     * @param string $dir Directory of media file
+     * @param string $path                  Path to the file
      *
-     * @return Media|bool
+     * @return Media
+     *
+     * @throws Fileexception                If path is not a file
      */
-    public function getmedia(string $entry, string $dir)
+    public function getmedia(string $path)
     {
-        $fileinfo = pathinfo($entry);
-
-        if (isset($fileinfo['extension'])) {
-            $datas = array(
-                'id' => str_replace('.' . $fileinfo['extension'], '', $fileinfo['filename']),
-                'path' => $dir,
-                'extension' => $fileinfo['extension']
-            );
-            return new Media($datas);
-        } else {
-            return false;
+        if (!is_file($path)) {
+            throw new Fileexception("$path is not a file");
         }
+        ['dirname' => $dir] = pathinfo($path);
+        return new Media(['filename' => basename($path), 'dir' => $dir ]);
     }
 
-    public function medialistopt(Mediaopt $mediaopt)
+    /**
+     * @return Media[]                      sorted array of Media
+     */
+    public function medialistopt(Mediaopt $mediaopt): array
     {
         $medialist = $this->getlistermedia($mediaopt->dir(), $mediaopt->type());
         $this->medialistsort($medialist, $mediaopt->sortby(), $mediaopt->order());
@@ -58,28 +56,27 @@ class Modelmedia extends Model
      * @param string $dir Media directory ot look at
      * @param array $type
      *
-     * @return Media[]|bool of Media objects
+     * @return Media[] of Media objects
      */
-    public function getlistermedia($dir, $type = [])
+    public function getlistermedia($dir, $type = []): array
     {
         if (is_dir($dir) && $handle = opendir($dir)) {
             $list = [];
             while (false !== ($entry = readdir($handle))) {
-                if ($entry != "." && $entry != "..") {
-                    $media = $this->getmedia($entry, $dir);
-
-                    if ($media != false) {
-                        $media->analyse();
-
+                if (!empty($entry) && $entry != "." && $entry != "..") {
+                    try {
+                        $media = $this->getmedia($dir . $entry);
                         if (empty($type) || in_array($media->type(), $type)) {
                             $list[] = $media;
                         }
+                    } catch (Fileexception $e) {
+                        Logger::errorex($e);
                     }
                 }
             }
                 return $list;
         }
-        return false;
+        return [];
     }
 
 
@@ -105,7 +102,7 @@ class Modelmedia extends Model
         };
     }
 
-    public function mediacompare($media1, $media2, $method = 'id', $order = 1)
+    public function mediacompare($media1, $media2, $method = 'filename', $order = 1)
     {
         $result = ($media1->$method() <=> $media2->$method());
         return $result * $order;
@@ -402,6 +399,10 @@ class Modelmedia extends Model
      */
     public function rename(string $oldname, string $newname)
     {
+        if (empty(basename($newname))) {
+            throw new Fileexception("new name of file cannot be empty");
+        }
+
         Fs::accessfile($oldname);
         Fs::accessfile($newname);
 

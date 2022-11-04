@@ -39,12 +39,12 @@ class Mediaoptlist extends Mediaopt
 
             foreach ($medialist as $media) {
                 $div .= '<div class="content ' . $media->type() . '">';
-                $id = 'id="media_' . $media->id() . '"';
+                $id = 'id="media_' . $media->filename() . '"';
                 $path = $media->getincludepath();
                 $ext = $media->extension();
-                $filename = $media->id() . '.' . $ext;
+                $filename = $media->filename() . '.' . $ext;
                 if ($media->type() == 'image') {
-                    $div .= '<img alt="' . $media->id() . '" ' . $id . ' src="' . $path . '" >';
+                    $div .= '<img alt="' . $media->filename() . '" ' . $id . ' src="' . $path . '" >';
                 } elseif ($media->type() == 'sound') {
                     $div .= '<audio ' . $id . ' controls src="' . $path . '" </audio>';
                 } elseif ($media->type() == 'video') {
