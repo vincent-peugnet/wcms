@@ -4,24 +4,20 @@ namespace Wcms;
 
 class Servicefont
 {
+    protected Modelmedia $mediamanager;
+
     /** @var Font[] $fonts */
     protected array $fonts = [];
 
     /**
      * This will import all the Media as fonts
-     *
-     * @param Media[] $medias               Feed it with the Media supposed to be fonts non-font Medias will be filtered
      */
-    public function __construct(array $medias)
+    public function __construct(Modelmedia $mediamanager)
     {
+        $this->mediamanager = $mediamanager;
+        $medias = $this->mediamanager->getlistermedia(Model::FONT_DIR, [Media::FONT]);
         $medias = $this->filterfonts($medias);
-        $groupedmedias = [];
-        foreach ($medias as $media) {
-            $groupedmedias[$media->filename()][] = $media;
-        }
-        foreach ($groupedmedias as $medias) {
-            $this->fonts[] = new Font($medias);
-        }
+        $this->fonts = $this->groupfonts($medias);
     }
 
     /**
@@ -39,11 +35,42 @@ class Servicefont
     }
 
     /**
+     * This will group the media by filename
+     *
+     * @param Media[] $medias
+     *
+     * @return Font[]
+     */
+    protected function groupfonts(array $medias): array
+    {
+        $groupedmedias = [];
+        foreach ($medias as $media) {
+            $groupedmedias[$media->filename()][] = $media;
+        }
+        $fonts = [];
+        foreach ($groupedmedias as $medias) {
+            $fonts[] = new Font($medias);
+        }
+        return $fonts;
+    }
+
+    /**
+     * Generate CSS file with @fontface rules according to font folder
+     *
+     * @throws Filesystemexception
+     */
+    public function writecss(): void
+    {
+        $fontcss = $this->css();
+        Fs::writefile(Model::FONTS_CSS_FILE, $fontcss, 0664);
+    }
+
+    /**
      * Generate CSS file as a string using stored fonts
      *
      * @return string                       CSS file ready to be written somewhere
      */
-    public function css(): string
+    protected function css(): string
     {
         $css = "";
         foreach ($this->fonts as $font) {

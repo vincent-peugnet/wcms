@@ -81,6 +81,8 @@ class Controllermedia extends Controller
                 try {
                     $this->mediamanager->multiupload('file', $target, boolval($_POST['idclean']));
                     Model::sendflashmessage("$count file(s) has been uploaded successfully", Model::FLASH_SUCCESS);
+                    if ($target === Model::FONT_DIR) {
+                    }
                     $this->redirect($this->generate('media') . '?path=/' . $target);
                 } catch (RuntimeException $e) {
                     Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
@@ -160,17 +162,17 @@ class Controllermedia extends Controller
             && isset($_POST['newfilename'])
             && isset($_POST['dir'])
         ) {
-            $newfilename = $_POST['newfilename'];
-            if (!empty($newfilename)) {
-                $oldname = $_POST['dir'] . '/' . $_POST['oldfilename'];
-                $newname = $_POST['dir'] . '/' . $newfilename;
-                try {
-                    $this->mediamanager->rename($oldname, $newname);
-                } catch (RuntimeException $e) {
-                    Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+            $oldname = $_POST['dir'] . '/' . $_POST['oldfilename'];
+            $newname = $_POST['dir'] . '/' . $_POST['newfilename'];
+            try {
+                $this->mediamanager->rename($oldname, $newname);
+                Model::sendflashmessage("Media file has been successfully renamed", Model::FLASH_SUCCESS);
+                if ($_POST['dir'] . '/' === Model::FONT_DIR) {
+                    $fontfacer = new Servicefont($this->mediamanager);
+                    $fontfacer->writecss();
                 }
-            } else {
-                Model::sendflashmessage('Invalid name or extension', Model::FLASH_WARNING);
+            } catch (RuntimeException $e) {
+                Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
             }
         }
         $this->redirect($this->generate('media') . $_POST['route']);
@@ -180,10 +182,8 @@ class Controllermedia extends Controller
     {
         if ($this->user->iseditor()) {
             try {
-                $medias = $this->mediamanager->getlistermedia(Model::FONT_DIR, [Media::FONT]);
-                $fontfacer = new Servicefont($medias);
-                $fontcss = $fontfacer->css();
-                Fs::writefile(Model::FONTS_CSS_FILE, $fontcss, 0664);
+                $fontfacer = new Servicefont($this->mediamanager);
+                $fontfacer->writecss();
                 Model::sendflashmessage("Font face CSS file  successfully generated", Model::FLASH_SUCCESS);
             } catch (RuntimeException $e) {
                 Model::sendflashmessage(
