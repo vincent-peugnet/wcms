@@ -63,7 +63,7 @@ class Clock extends Item
         $this->datetime = $datetime;
         $this->fullmatch = $fullmatch;
         $this->options = $options;
-        $this->lang = $lang ?? Config::lang();
+        $this->lang = empty($lang) ? Config::lang() : $lang;
 
         $this->readoptions();
     }
