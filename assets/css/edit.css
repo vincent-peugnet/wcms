@@ -393,6 +393,11 @@ span.cm-wkeyword {
     color: white;
 }
 
+.cm-wikilink {
+    color: blue;
+    font-weight: bold;
+}
+
 
 @media (max-width: 600px) {
     .bar, span#headid{
