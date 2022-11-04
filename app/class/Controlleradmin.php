@@ -48,7 +48,7 @@ class Controlleradmin extends Controller
     {
         try {
             Fs::accessfile(Model::GLOBAL_CSS_FILE, true);
-            Fs::writefile(Model::GLOBAL_CSS_FILE, $_POST['globalcss']);
+            Fs::writefile(Model::GLOBAL_CSS_FILE, $_POST['globalcss'], 0664);
             Config::hydrate($_POST);
             Config::savejson();
             Model::sendflashmessage("Configuration succesfully updated", Model::FLASH_SUCCESS);

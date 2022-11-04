@@ -177,7 +177,8 @@ class Servicerender
     private function gethead(): string
     {
         $id = $this->page->id();
-        $globalpath = Model::dirtopath(Model::CSS_DIR);
+        $globalpath = Model::dirtopath(Model::GLOBAL_CSS_FILE);
+        $fontcsspath = Model::dirtopath(Model::FONTS_CSS_FILE);
         $renderpath = Model::renderpath();
         $description = $this->page->description();
         $title = $this->page->title();
@@ -240,7 +241,10 @@ class Servicerender
         }
 
         if (file_exists(Model::GLOBAL_CSS_FILE)) {
-            $head .= "<link href=\"{$globalpath}global.css\" rel=\"stylesheet\" />\n";
+            $head .= "<link href=\"{$globalpath}\" rel=\"stylesheet\" />\n";
+        }
+        if (file_exists(Model::FONTS_CSS_FILE)) {
+            $head .= "<link href=\"{$fontcsspath}\" rel=\"stylesheet\" />\n";
         }
 
         $head .= $this->recursivecss($this->page);
@@ -391,13 +395,16 @@ class Servicerender
     /**
      * Search and replace referenced media code by full absolute address.
      * Add a target="_blank" attribute to link pointing to media.
+     *
+     * About the regex : it will match everything that do not start with a `./` a `/` or an URI sheme.
+     * (`https://`, `ftps://`, etc.) and contain at list one point `.`
      */
     private function media(string $text): string
     {
-        $regex = '%href="([\w\-]+(\/([\w\-])+)*\.[a-z0-9]{1,5})"%';
-        $text = preg_replace($regex, 'href="' . Model::mediapath() . '$1" target="_blank"', $text);
-        $regex = '%src="([\w\-]+(\/([\w\-])+)*\.[a-z0-9]{1,5})"%';
-        $text = preg_replace($regex, 'src="' . Model::mediapath() . '$1"', $text);
+        $regex = '%href="(?!([/#]|[a-zA-Z\.\-\+]+://|\.+/))([^"]+\.[^"]+)"%';
+        $text = preg_replace($regex, 'href="' . Model::mediapath() . '$2" target="_blank"', $text);
+        $regex = '%src="(?!([/#]|[a-zA-Z\.\-\+]+://|\.+/))([^"]+\.[^"]+)"%';
+        $text = preg_replace($regex, 'src="' . Model::mediapath() . '$2"', $text);
         return $text;
     }
 
@@ -603,7 +610,7 @@ class Servicerender
 
         if (!empty($matches)) {
             foreach ($matches as $match) {
-                $medialist = new Mediaopt($match);
+                $medialist = new Mediaoptlist($match);
                 $medialist->readoptions();
                 $text = str_replace($medialist->fullmatch(), $medialist->generatecontent(), $text);
             }

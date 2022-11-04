@@ -69,35 +69,32 @@ abstract class Fs
 
 
     /**
-     * Check if dir exist. If not, create it.
+     * Check if dir exist.
      *
      * @param string $dir                       Directory to check
-     * @return bool                             return true if the dir already exist or was created succesfullt.
-     *                                          Otherwise return false
+     * @param bool $create                      If it exist not, create it
+     * @param int $permissions                  To specify permission in octal format (start with 0)
+     * @return bool                             return true if the dir already exist otherwise false.
+     *                                          if $create was true, and successfull, return true
      *
-     * @throws Folderexception If folder creation is impossible
+     * @throws Folderexception If folder creation failed
      */
-    public static function dircheck(string $dir): bool
+    public static function dircheck(string $dir, bool $create = false, int $permissions = self::FOLDER_PERMISSION): bool
     {
-        if (!is_dir($dir)) {
-            $parent = dirname($dir);
-            if (self::dircheck($parent)) {
-                if (mkdir($dir)) {
-                    return true;
-                } else {
-                    throw new Folderexception("Cannot create directory : $dir");
-                }
-            } else {
-                return false;
-            }
-        } else {
+        if (is_dir($dir)) {
             return true;
+        } elseif (!$create) {
+            return false;
         }
+        if (!mkdir($dir, $permissions, true)) {
+            throw new Folderexception("Cannot create directory : $dir");
+        }
+        return true;
     }
 
 
     /**
-     * Check if a file is accessible or can be writen
+     * Check if a file path is accessible or can be writen
      *
      * @param string $path                      file path to check
      * @param bool $createdir                   create directory if does not exist
@@ -105,13 +102,11 @@ abstract class Fs
      *
      * @throws Folderexception if parent directory does not exist | is not writable
      * @throws Fileexception if file exist and is not writable
-     *
-     * @todo This function should send Runtime errors insted of LogicError
      */
     public static function accessfile(string $path, bool $createdir = false): bool
     {
         $dir = dirname($path);
-        if (self::dircheck($dir)) {
+        if (self::dircheck($dir, $createdir)) {
             if (!is_writable($dir)) {
                 throw new Folderexception("Directory '$dir' is not writable.");
             }

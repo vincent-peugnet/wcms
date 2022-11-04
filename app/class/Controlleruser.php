@@ -24,9 +24,9 @@ class Controlleruser extends Controller
         if ($this->user->isadmin() && isset($_POST['id'])) {
             $user = new User($_POST);
             if (empty($user->id()) || $this->usermanager->get($user)) {
-                $this->routedirectget('user', ['error' => 'wrong_id']);
+                $this->routedirect('user', [], ['error' => 'wrong_id']);
             } elseif (empty($user->password()) || !$user->validpassword()) {
-                $this->routedirectget('user', ['error' => 'change_password']);
+                $this->routedirect('user', [], ['error' => 'change_password']);
             } else {
                 if ($user->passwordhashed()) {
                     $user->hashpassword();
@@ -66,21 +66,21 @@ class Controlleruser extends Controller
                     $userupdate = clone $user;
                     $userupdate->hydrate($_POST);
                     if (empty($userupdate->id())) {
-                        $this->routedirectget('user', ['error' => 'wrong_id']);
+                        $this->routedirect('user', [], ['error' => 'wrong_id']);
                     } elseif (
                         !empty($_POST['password'])
                         && (empty($userupdate->password())
                         || !$userupdate->validpassword())
                     ) {
-                        $this->routedirectget('user', ['error' => 'password_unvalid']);
+                        $this->routedirect('user', [], ['error' => 'password_unvalid']);
                     } elseif (empty($userupdate->level())) {
-                        $this->routedirectget('user', ['error' => 'wrong_level']);
+                        $this->routedirect('user', [], ['error' => 'wrong_level']);
                     } elseif (
                         $user->level() === 10
                         && $userupdate->level() !== 10
                         && $this->user->id() === $user->id()
                     ) {
-                        $this->routedirectget('user', ['error' => 'cant_edit_yourself']);
+                        $this->routedirect('user', [], ['error' => 'cant_edit_yourself']);
                     } else {
                         if ($userupdate->password() !== $user->password() && $user->passwordhashed()) {
                             $userupdate->setpasswordhashed(false);

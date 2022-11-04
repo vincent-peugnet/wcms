@@ -7,8 +7,15 @@
                 <h3>
                     <label for="file"><i class="fa fa-upload"></i> Upload from computer</label>
                 </h3>
+                <p>max upload file size : <?= $maxuploadsize ?></p>
                 <form id=addmedia action="<?= $this->url('mediaupload') ?>" method="post" enctype="multipart/form-data">
                     <input type='file' id="file" name='file[]' multiple required>
+
+                    <div>
+                        <input type="hidden" name="idclean" value="0">
+                        <input type="checkbox" name="idclean" id="idclean" value="1" checked>
+                        <label for="idclean">clean filenames</label>
+                    </div>
 
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>">
                     <input type="submit" value="upload">
@@ -28,6 +35,11 @@
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>">
                 <input type="submit" value="create folder">
                 </form>
+                <h2>Magic folders</h2>
+                <h3><i class="fa fa-font"></i> fonts</h3>
+                <a href="<?= $this->url('mediafontface', [], $mediaopt->getpathadress()) ?>">
+                    <i class="fa fa-refresh"></i>regenerate @fontface CSS file
+                </a>
             </div>
     </details>
 

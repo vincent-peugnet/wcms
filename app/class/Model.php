@@ -20,6 +20,7 @@ abstract class Model
     public const RENDER_DIR = 'assets/render/';
     public const HTML_RENDER_DIR = 'render/';
     public const GLOBAL_CSS_FILE = self::CSS_DIR . 'global.css';
+    public const FONTS_CSS_FILE = self::CSS_DIR . 'fonts.css';
     public const DATABASE_DIR = './database/';
     public const PAGES_DIR = self::DATABASE_DIR . 'pages/';
 
@@ -186,7 +187,7 @@ abstract class Model
             $replace = ['e', 'a', 'e', 'c', 'u', 'u', 'i', 'i', '-'];
             $input = str_replace($search, $replace, $input);
 
-            $input = preg_replace(self::ID_REGEX, '', strtolower(trim($input)));
+            $input = preg_replace(static::ID_REGEX, '', strtolower(trim($input)));
             $input = substr($input, 0, $max);
         }
         return $input;
@@ -198,7 +199,7 @@ abstract class Model
     public static function idcheck(string $id, int $max = self::MAX_ID_LENGTH): bool
     {
         return (
-            !((bool) preg_match(self::ID_REGEX, $id))
+            !((bool) preg_match(static::ID_REGEX, $id))
             && strlen($id) <= $max
             && strlen($id) > 0
         );

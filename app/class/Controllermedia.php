@@ -2,23 +2,20 @@
 
 namespace Wcms;
 
-use Exception;
-use InvalidArgumentException;
-use LogicException;
 use RuntimeException;
 
 class Controllermedia extends Controller
 {
-    /**
-     * @var Modelmedia
-     */
-    protected $mediamanager;
+    protected Modelmedia $mediamanager;
+
+    protected Mediaopt $mediaopt;
 
     public function __construct($render)
     {
         parent::__construct($render);
-
         $this->mediamanager = new Modelmedia();
+
+        $this->mediaopt = new Mediaopt($_GET);
     }
 
 
@@ -27,10 +24,10 @@ class Controllermedia extends Controller
     {
         if ($this->user->iseditor()) {
             try {
-                Fs::dircheck(Model::FONT_DIR);
-                Fs::dircheck(Model::THUMBNAIL_DIR);
-                Fs::dircheck(Model::FAVICON_DIR);
-                Fs::dircheck(Model::CSS_DIR);
+                Fs::dircheck(Model::FONT_DIR, true);
+                Fs::dircheck(Model::THUMBNAIL_DIR, true);
+                Fs::dircheck(Model::FAVICON_DIR, true);
+                Fs::dircheck(Model::CSS_DIR, true);
             } catch (RuntimeException $e) {
                 Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
             }
@@ -40,35 +37,36 @@ class Controllermedia extends Controller
                 $datas = $_GET;
             }
 
-            $mediaopt = new Mediaopt($datas);
-            if (empty($mediaopt->path())) {
-                $mediaopt->setpath(DIRECTORY_SEPARATOR . Model::MEDIA_DIR);
+            $mediaopt = new Mediaoptlist($datas);
+
+            try {
+                $this->mediamanager->checkdir($this->mediaopt->dir());
+            } catch (Folderexception $e) {
+                Model::sendflashmessage($e->getMessage(), Model::FLASH_WARNING);
+                $this->mediaopt->setpath(Model::MEDIA_DIR);
+                $this->redirect($this->generate("media", [], $this->mediaopt->getpathadress()));
             }
 
-            if (is_dir($mediaopt->dir())) {
-                $medialist = $this->mediamanager->medialistopt($mediaopt);
+            $medialist = $this->mediamanager->medialistopt($mediaopt);
 
-                $dirlist = $this->mediamanager->listdir(Model::MEDIA_DIR);
+            $dirlist = $this->mediamanager->listdir(Model::MEDIA_DIR);
 
-                $pathlist = [];
-                $this->mediamanager->listpath($dirlist, '', $pathlist);
+            $pathlist = [];
+            $this->mediamanager->listpath($dirlist, '', $pathlist);
 
-                $vars['maxuploadsize'] = readablesize(file_upload_max_size()) . 'o';
+            $vars['maxuploadsize'] = readablesize(file_upload_max_size()) . 'o';
 
-                if (isset($_GET['display'])) {
-                    $this->session->addtosession('mediadisplay', $_GET['display']);
-                }
-
-                $vars['display'] = $this->session->mediadisplay;
-                $vars['medialist'] = $medialist;
-                $vars['dirlist'] = $dirlist;
-                $vars['pathlist'] = $pathlist;
-                $vars['mediaopt'] = $mediaopt;
-
-                $this->showtemplate('media', $vars);
-            } else {
-                $this->routedirect('media');
+            if (isset($_GET['display'])) {
+                $this->session->addtosession('mediadisplay', $_GET['display']);
             }
+
+            $vars['display'] = $this->session->mediadisplay;
+            $vars['medialist'] = $medialist;
+            $vars['dirlist'] = $dirlist;
+            $vars['pathlist'] = $pathlist;
+            $vars['mediaopt'] = $mediaopt;
+
+            $this->showtemplate('media', $vars);
         } else {
             $this->routedirect('home');
         }
@@ -79,12 +77,19 @@ class Controllermedia extends Controller
         if ($this->user->iseditor()) {
             $target = $_POST['dir'] ?? Model::MEDIA_DIR;
             if (!empty($_FILES['file']['name'][0])) {
-                $this->mediamanager->multiupload('file', $target);
+                $count = count($_FILES['file']['name']);
+                try {
+                    $this->mediamanager->multiupload('file', $target, boolval($_POST['idclean']));
+                    Model::sendflashmessage("$count file(s) has been uploaded successfully", Model::FLASH_SUCCESS);
+                    $this->redirect($this->generate('media') . '?path=/' . $target);
+                } catch (RuntimeException $e) {
+                    Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+                }
             }
-                $this->redirect($this->generate('media') . '?path=/' . $target);
         } else {
-            $this->routedirect('home');
+            Model::sendflashmessage("acces denied", Model::FLASH_ERROR);
         }
+        $this->routedirect('media');
     }
 
     public function urlupload()
@@ -151,26 +156,44 @@ class Controllermedia extends Controller
     {
         if (
             $this->user->issupereditor()
-            && isset($_POST['oldid'])
-            && isset($_POST['newid'])
-            && isset($_POST['oldextension'])
-            && isset($_POST['newextension'])
-            && isset($_POST['path'])
+            && isset($_POST['oldfilename'])
+            && isset($_POST['newfilename'])
+            && isset($_POST['dir'])
         ) {
-            $newid = Model::idclean($_POST['newid']);
-            $newextension = Model::idclean($_POST['newextension']);
-            if (!empty($newid) && !empty($newextension)) {
-                $oldname = $_POST['path'] . $_POST['oldid'] . '.' . $_POST['oldextension'];
-                $newname = $_POST['path'] . $newid . '.' . $newextension;
+            $newfilename = $_POST['newfilename'];
+            if (!empty($newfilename)) {
+                $oldname = $_POST['dir'] . '/' . $_POST['oldfilename'];
+                $newname = $_POST['dir'] . '/' . $newfilename;
                 try {
                     $this->mediamanager->rename($oldname, $newname);
                 } catch (RuntimeException $e) {
-                    Model::sendflashmessage($e->getMessage(), 'error');
+                    Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
                 }
             } else {
-                Model::sendflashmessage('Invalid name or extension', 'warning');
+                Model::sendflashmessage('Invalid name or extension', Model::FLASH_WARNING);
             }
         }
         $this->redirect($this->generate('media') . $_POST['route']);
+    }
+
+    public function fontface()
+    {
+        if ($this->user->iseditor()) {
+            try {
+                $medias = $this->mediamanager->getlistermedia(Model::FONT_DIR, [Media::FONT]);
+                $fontfacer = new Servicefont($medias);
+                $fontcss = $fontfacer->css();
+                Fs::writefile(Model::FONTS_CSS_FILE, $fontcss, 0664);
+                Model::sendflashmessage("Font face CSS file  successfully generated", Model::FLASH_SUCCESS);
+            } catch (RuntimeException $e) {
+                Model::sendflashmessage(
+                    "Error while trying to save generated fonts file : " . $e->getMessage(),
+                    Model::FLASH_ERROR
+                );
+            }
+        } else {
+            Model::sendflashmessage("Access denied", Model::FLASH_ERROR);
+        }
+        $this->redirect($this->generate("media", [], $this->mediaopt->getpathadress()));
     }
 }
