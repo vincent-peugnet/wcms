@@ -118,6 +118,21 @@ class Page extends Item
         $this->setpassword('');
     }
 
+    public function ispublic(): bool
+    {
+        return $this->secure === 0;
+    }
+
+    public function isprivate(): bool
+    {
+        return $this->secure === 1;
+    }
+
+    public function isnotpublished(): bool
+    {
+        return $this->secure === 2;
+    }
+
     // _____________________________________________________ G E T ____________________________________________________
 
     public function id($type = 'string')

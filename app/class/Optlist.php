@@ -57,7 +57,8 @@ class Optlist extends Opt
 
             $content = '';
 
-            $title = '<span class="title">' . $page->title() . '</span>';
+            $title = !$this->description() && $page->ispublic() ? $page->description() : '';
+            $title = '<span class="title" title="' . $title . '">' . $page->title() . '</span>';
             if ($this->description()) {
                 $content .= '<span class="description">' . $page->description() . '</span>';
             }
