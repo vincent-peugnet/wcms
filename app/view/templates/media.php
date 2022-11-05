@@ -1,7 +1,7 @@
 <?php
 
 
-$this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'home.css']]) ?>
+$this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css', $css . 'media.css']]) ?>
 
 
 <?php $this->start('page') ?>

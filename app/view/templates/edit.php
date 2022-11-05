@@ -9,7 +9,7 @@ $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [$cs
 
 <style>.tabs textarea{font-size: <?= Wcms\Config::fontsize() ?>px}</style>
 
-<main class="editor">
+<div class="editor">
 
     <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'edit', 'pagelist' => $pagelist, 'pageid' => $page->id()]) ?>
 
@@ -24,7 +24,7 @@ $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [$cs
 
     </div>
 
-</main>
+</div>
 
 <?php if(!Wcms\Config::disablejavascript()) { ?>
 

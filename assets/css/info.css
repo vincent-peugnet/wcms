@@ -1,0 +1,119 @@
+section.info {
+    max-width: 600px;
+    list-style: inside disc;
+}
+
+section.info article {
+    padding: 2%;
+}
+
+
+main.info ul i {
+    color: grey;
+}
+
+main.info a {
+    text-decoration: underline white;
+}
+
+nav.info ul {
+    padding-inline-start: 30px;
+}
+
+main.info code {
+    color: white;
+    background-color: #233143;
+    width: fit-content;
+    font-family: monospace;
+    font-size: initial;
+}
+
+main.info blockquote i {
+    font-style: normal;
+    color: #7b97b9;
+}
+
+main.info article#manual h1 {
+    text-align: center;
+    font-size: 50px;
+    color: black;
+    background-color: transparent;
+    font-weight: lighter;
+    margin: 6%;
+    border-top: solid;
+    border-bottom: solid;
+}
+
+
+main.info article#manual h2 {
+    text-align: center;
+    font-size: 40px;
+    margin-top: 200px;
+}
+
+main.info article#manual h3 {
+    border-bottom: solid 2px #7b97b9;
+    margin-top: 120px;
+    margin-bottom: 70px;
+    padding-top: 15px;
+    font-size: 35px;
+}
+
+main.info article h4 {
+    background-color: darkgrey;
+    font-size: x-large;
+    margin-top: 35px;
+    margin-bottom: 25px;
+    padding: 0 20px;
+}
+
+main.info article#manual h5 {
+    text-transform: uppercase;
+    margin-top: 20px;
+    margin-bottom: 0;
+    margin-left: 0;
+    font-size: medium;
+    border: solid 1px;
+    width: fit-content;
+    padding: 0 3px;
+    border-left: 8px solid;
+    border-color: #7b97b9;
+}
+
+
+section.info ul {
+    list-style: inside disc;
+    padding-inline-start: 10px;
+}
+
+article#manual a {
+    text-decoration: none;
+    background-color: #7b97b959;
+}
+
+article#manual a:hover {
+    background-color: #7b97b9;
+}
+
+
+
+main.info pre {padding: 1%;background-color: hsla(213, 31%, 20%, 1);white-space: pre-wrap;margin: 1%;}
+
+main.info blockquote {
+    padding: 6px 12px;
+    text-align: left;
+    word-break: break-all;
+}
+
+main.info article code i {
+    font-style: normal;
+    color: #7b97b9;
+}
+
+
+
+nav.info ul.summary {
+    margin: 3%;
+    padding: 0;
+}
+

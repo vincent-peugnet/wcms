@@ -5,7 +5,7 @@
         value="1"
         class="toggle"
         type="checkbox"
-        form="workspace"
+        form="workspace-form"
         <?= $showeditorleftpanel == true ? 'checked' : '' ?>
     >
     <label for="showeditorleftpanel" class="toogle">◧</label>
