@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use IntlDateFormatter;
+
 class Optlist extends Opt
 {
     protected $title = 1;
@@ -16,6 +18,11 @@ class Optlist extends Opt
 
     /** @var string $bookmark Associated bookmark ID */
     protected string $bookmark = "";
+
+    public function __construct(array $datas = [])
+    {
+        parent::__construct($datas);
+    }
 
     public function parsehydrate(string $encoded)
     {
@@ -63,12 +70,30 @@ class Optlist extends Opt
                 $content .= '<span class="description">' . $page->description() . '</span>';
             }
             if ($this->date()) {
-                $date = $page->date('pdate');
-                $content .= "<time datetime=\"$date\">$date</time>\n";
+                $dateattr = $page->date('pdate');
+                $formater = new IntlDateFormatter(
+                    $currentpage->lang(),
+                    IntlDateFormatter::SHORT,
+                    IntlDateFormatter::NONE
+                );
+                $date = $formater->format($page->date());
+                $formater = new IntlDateFormatter(
+                    $currentpage->lang(),
+                    IntlDateFormatter::FULL,
+                    IntlDateFormatter::NONE
+                );
+                $datetitle = $formater->format($currentpage->date());
+                $content .= "<time datetime=\"$dateattr\" title=\"$datetitle\">$date</time>\n";
             }
             if ($this->time()) {
-                $time = $page->date('ptime');
-                $content .= "<time datetime=\"$time\">$time</time>\n";
+                $timeattr = $page->date('ptime');
+                $formater = new IntlDateFormatter(
+                    $currentpage->lang(),
+                    IntlDateFormatter::NONE,
+                    IntlDateFormatter::SHORT
+                );
+                $time = $formater->format($page->date());
+                $content .= "<time datetime=\"$timeattr\">$time</time>\n";
             }
             if ($this->author()) {
                 $usermanager = new Modeluser();

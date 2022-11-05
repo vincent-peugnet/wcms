@@ -139,16 +139,14 @@ class Controllerhome extends Controller
         return ['regex' => $regex, 'searchopt' => $searchopt];
     }
 
-    public function listquery()
+    public function listquery(): void
     {
         if (isset($_POST['query']) && $this->user->iseditor()) {
             $datas = array_merge($_POST, $_SESSION['opt']);
-            $this->optlist = new Optlist();
-            $this->optlist->hydrate($datas);
+            $this->optlist = new Optlist($datas);
             if (!empty($this->optlist->bookmark())) {
                 $this->optlist->resetall();
             }
-            $coucou = $this->optlist;
         }
     }
 
