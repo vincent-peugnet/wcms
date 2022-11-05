@@ -1,0 +1,21 @@
+:root {
+    --main-color: #7b97b9;
+    --background-color: grey;
+    --code-background-color: rgb(18, 40, 82);
+    --secondary-background-color: lightgrey;
+    --tertiary-background-color: darkgrey;
+    --outline-color: white;
+}
+
+input[type="submit"], input[type="text"], input[type="number"], input[type="password"], input[type="date"], input[type="checkbox"], input[type="datetime-local"], select {
+    border: solid 1px var(--secondary-background-color);
+    border-radius: 4px;
+}
+
+
+h1, h2 {
+    margin: 0;
+    background-color: var(--main-color);
+    color: white;
+    font-size: larger;
+}
