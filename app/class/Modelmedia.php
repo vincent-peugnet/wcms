@@ -423,15 +423,17 @@ class Modelmedia extends Model
         string $currentdir,
         Mediaopt $mediaopt
     ) {
-        if ($path . '/' === $currentdir) {
-            $folder = '├─<i class="fa fa-folder-open-o"></i> <span id="currentdir">' . $dirname . '<span>';
+        $selected = $path . '/' === $currentdir;
+        if ($selected) {
+            $folder = '├─<i class="fa fa-folder-open-o"></i> <span>' . $dirname . '<span>';
         } else {
             $folder = '├─<i class="fa fa-folder-o"></i> ' . $dirname;
         }
-        echo '<tr>';
+        $class = $selected ? ' class="selected"' : '';
+        echo "<tr$class>";
         $href = $mediaopt->getpathadress($path);
         $foldername = str_repeat('&nbsp;&nbsp;', $deepness) . $folder;
-        echo '<td><a href="' . $href . '">' . $foldername . '</a></td>';
+        echo "<td><a href=\"$href\">$foldername</a></td>";
         echo '<td>' . $dirlist['dirfilecount'] . '</td>';
         echo '</tr>';
         foreach ($dirlist as $key => $value) {

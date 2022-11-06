@@ -46,7 +46,6 @@ main.media table#medialist .thumbnail:hover img {
     overflow: hidden;
     margin: 0;
     padding: 0;
-    background-color: darkgrey;
 }
 
 
@@ -57,18 +56,9 @@ main.media table#medialist .thumbnail:hover img {
     object-fit: contain;
 }
 
-
-
-main.media code, input.code {
-    color: #9cbfe8;
-    background-color: darkslategrey;
-    font-family: monospace;
-    font-size: small;
-    padding: 1px;
-}
-
-nav.media span#currentdir {
-    color: hsla(213, 70%, 40%, 1);
+tr.selected {
+    color: var(--outline-color);
+    background-color: var(--outline-background-color);
 }
 
 .media nav a {

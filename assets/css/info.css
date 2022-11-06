@@ -1,26 +1,26 @@
-section.info {
+section {
     max-width: 600px;
     list-style: inside disc;
 }
 
-section.info article {
+section article {
     padding: 2%;
 }
 
 
-main.info ul i {
+main ul i {
     color: grey;
 }
 
-main.info a {
+main a {
     text-decoration: underline white;
 }
 
-nav.info ul {
+nav ul {
     padding-inline-start: 30px;
 }
 
-main.info code {
+main code {
     color: white;
     background-color: #233143;
     width: fit-content;
@@ -28,15 +28,14 @@ main.info code {
     font-size: initial;
 }
 
-main.info blockquote i {
+main blockquote i {
     font-style: normal;
     color: #7b97b9;
 }
 
-main.info article#manual h1 {
+main article#manual h1 {
     text-align: center;
     font-size: 50px;
-    color: black;
     background-color: transparent;
     font-weight: lighter;
     margin: 6%;
@@ -45,13 +44,13 @@ main.info article#manual h1 {
 }
 
 
-main.info article#manual h2 {
+main article#manual h2 {
     text-align: center;
     font-size: 40px;
     margin-top: 200px;
 }
 
-main.info article#manual h3 {
+main article#manual h3 {
     border-bottom: solid 2px #7b97b9;
     margin-top: 120px;
     margin-bottom: 70px;
@@ -59,15 +58,15 @@ main.info article#manual h3 {
     font-size: 35px;
 }
 
-main.info article h4 {
-    background-color: darkgrey;
+main article h4 {
+    background-color: var(--main-color);
     font-size: x-large;
     margin-top: 35px;
     margin-bottom: 25px;
     padding: 0 20px;
 }
 
-main.info article#manual h5 {
+main article#manual h5 {
     text-transform: uppercase;
     margin-top: 20px;
     margin-bottom: 0;
@@ -77,42 +76,38 @@ main.info article#manual h5 {
     width: fit-content;
     padding: 0 3px;
     border-left: 8px solid;
-    border-color: #7b97b9;
+    border-color: var(--main-color);
 }
 
 
-section.info ul {
+section ul {
     list-style: inside disc;
     padding-inline-start: 10px;
 }
 
-article#manual a {
-    text-decoration: none;
-    background-color: #7b97b959;
-}
-
 article#manual a:hover {
-    background-color: #7b97b9;
+    color: var(--outline-color);
+    background-color: var(--outline-background-color);
 }
 
 
 
-main.info pre {padding: 1%;background-color: hsla(213, 31%, 20%, 1);white-space: pre-wrap;margin: 1%;}
+main pre {padding: 1%;background-color: hsla(213, 31%, 20%, 1);white-space: pre-wrap;margin: 1%;}
 
-main.info blockquote {
+main blockquote {
     padding: 6px 12px;
     text-align: left;
     word-break: break-all;
 }
 
-main.info article code i {
+main article code i {
     font-style: normal;
     color: #7b97b9;
 }
 
 
 
-nav.info ul.summary {
+nav ul.summary {
     margin: 3%;
     padding: 0;
 }

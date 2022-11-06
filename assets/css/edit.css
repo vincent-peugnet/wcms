@@ -28,7 +28,7 @@ input.toggle {
 label.toogle:hover {
     color: white;
     cursor: pointer;
-    background-color: #e2e2e2;
+    background-color: #e2e2e287;
 }
 
 label.toogle {
@@ -53,7 +53,7 @@ label.toogle {
     flex: 2;
     position: relative;
     height: 100%;
-    background-color: var(--secondary-background-color);
+    background-color: var(--primary-background-color);
     display: flex;
     overflow: hidden;
 }
@@ -82,12 +82,13 @@ label.toogle {
 }
 
 .tab label.template {
-    color: var(--main-color);
+    color: var(--text2-color);
 }
 
 .checkboxtab:checked ~label
 {
-    background: var(--outline-color);
+    background: var(--outline-background-color);
+    color: var(--outline-color);
 }
 
 .checkboxtab:checked ~.content
@@ -150,26 +151,22 @@ input#editfontsize {
 
 
 details {
-    background-color: var(--tertiary-background-color);
+    background-color: var(--secondary-background-color);
 }
 
 .bar {
-    background-color: var(--secondary-background-color);
+    background-color: var(--primary-background-color);
 }
 
 input#fontsize {
     width: 50px;
 }
 
-span#headid {color: var(--outline-color);}
+span#headid {color: var(--outline-color);background-color: var(--outline-background-color);}
 
 a {
-    color: black;
+    /* color: black; */
     text-decoration: none;
-}
-
-a.templatetooltip {
-    color: white;
 }
 
 a:hover {
@@ -223,7 +220,7 @@ a.icon {
 }
 
 .panel summary {
-    background-color: var(--background-color);
+    background-color: var(--main-color);
 }
 
 .panel summary:hover {
@@ -241,7 +238,7 @@ a.icon {
 #help kbd {
     border: 1px solid #000000c7;
     padding: 1px 4px;
-    background-color: lightgrey;
+    background-color: var(--main-color);
     box-shadow: 3px 2px #000000c7;
     border-radius: 4px;
 }

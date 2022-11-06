@@ -21,17 +21,33 @@ body {
     width: 100%;
 }
 
+input, button, select, textarea {
+    border: none;
+    border-color: var(--button-border-color);
+    background-color: var(--button-background-color);
+}
 
 
+h1, h2 {
+    color: var(--text2-color);
+    background-color: var(--main-color);
+}
 
+body {
+    color: var(--text-color);
+}
 
-.menu {
-    position: fixed;
-    right: 0;
+a, button, input, select, textarea {
+    text-decoration: none;
+    color: var(--text2-color);
 }
 
 
 
+h1, h2 {
+    margin: 0;
+    font-size: larger;
+}
 
 #topbar {
     background-color: var(--main-color);
@@ -62,7 +78,7 @@ main.font table#fontlist {
 }
 
 aside {
-    background-color: var(--tertiary-background-color);
+    background-color: var(--secondary-background-color);
 }
 
 summary {

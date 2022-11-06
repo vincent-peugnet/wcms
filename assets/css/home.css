@@ -31,14 +31,15 @@ main.home nav select, main.home nav input[type="datetime-local"] {
 }
 
 
-main.home nav fieldset[data-default="0"] {
-    background: darkgrey;
+main.home nav fieldset[data-default="0"] ul {
+    background: var(--outline-background-color);
+    color: var(--outline-color);
 }
 
 main.home nav legend {
     font-weight: bold;
     width: 100%;
-    background-color: #bdbdbd;
+    background-color: var(--secondary-background-color);
 }
 
 #home2table a.linkto {
@@ -48,7 +49,8 @@ main.home nav legend {
 }
 
 main.home a.bookmark[data-current="1"] {
-    background-color: darkgrey;
+    background-color: var(--outline-background-color);
+    color: var(--outline-color);
 }
 
 main.home a.bookmark {
@@ -57,12 +59,11 @@ main.home a.bookmark {
 
 
 div#deepsearchbar {
-    background-color: lightgrey;
-    border: solid 1px grey;
+    background-color: var(---secondary-background-color);
 }
 
 #deepsearchbar input[type=text] {
-    width: 30%;
+    width: 150px;
 }
 
 
@@ -97,7 +98,7 @@ table a.tag, table a.author {
 }
 
 table a.author {
-    background-color: darkgrey;
+    background-color: var(--secondary-background-color);
 }
 
 table a.secure{

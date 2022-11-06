@@ -69,11 +69,11 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
     <h2>
         /<?= $mediaopt->dir() ?>
         <span class="right">
-            <a href="<?= $mediaopt->getaddress() ?>&display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> >
+            <a href="<?= $mediaopt->getaddress() ?>&display=list" <?= $display === 'list' ? 'class="selected"' : '' ?> >
                 <i class="fa fa-th-list"></i>
             </a>
             /
-            <a href="<?= $mediaopt->getaddress() ?>&display=gallery"  <?= $display === 'gallery' ? 'style="color: white"' : '' ?>  >
+            <a href="<?= $mediaopt->getaddress() ?>&display=gallery"  <?= $display === 'gallery' ? 'class="selected"' : '' ?>  >
                 <i class="fa fa-th-large"></i>
             </a>
         </span>
