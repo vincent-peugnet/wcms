@@ -398,13 +398,13 @@ class Servicerender
      * Add a target="_blank" attribute to link pointing to media.
      *
      * About the regex : it will match everything that do not start with a `./` a `/` or an URI sheme.
-     * (`https://`, `ftps://`, etc.) and contain at list one point `.`
+     * (`https:`, `ftps:`, `mailto:`, `matrix:` etc.) and contain at list one point `.`
      */
     private function media(string $text): string
     {
-        $regex = '%href="(?!([/#]|[a-zA-Z\.\-\+]+://|\.+/))([^"]+\.[^"]+)"%';
+        $regex = '%href="(?!([/#]|[a-zA-Z\.\-\+]+:|\.+/))([^"]+\.[^"]+)"%';
         $text = preg_replace($regex, 'href="' . Model::mediapath() . '$2" target="_blank"', $text);
-        $regex = '%src="(?!([/#]|[a-zA-Z\.\-\+]+://|\.+/))([^"]+\.[^"]+)"%';
+        $regex = '%src="(?!([/#]|[a-zA-Z\.\-\+]+:|\.+/))([^"]+\.[^"]+)"%';
         $text = preg_replace($regex, 'src="' . Model::mediapath() . '$2"', $text);
         return $text;
     }
