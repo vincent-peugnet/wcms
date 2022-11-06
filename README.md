@@ -12,7 +12,7 @@ If tou want to try it out, you can :
 - be hosted for free by [club1.fr](https://club1.fr) as an official tester (please contact [vincent@club1.fr](mailto:v.peugnet@free.fr) for more info).
 - [install from sources](#install-from-sources), if you want to contribute to the code.
 
-W is a free and open source tool under the MIT License. The project was initiated in 2018 by Vincent Peugnet.
+W is a free and open source tool under [the AGPLv3 License](LICENSE). The project was initiated in 2018 by Vincent Peugnet.
 
 Ideas
 -----
