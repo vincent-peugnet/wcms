@@ -1,6 +1,7 @@
 {
     "name": "w-cms/w-cms",
     "description": "point'n think",
+    "license": "AGPL-3.0-or-later",
     "require": {
         "php": ">=7.4.0",
         "altorouter/altorouter": "^1.2",
