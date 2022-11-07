@@ -80,8 +80,8 @@ jobs:
       - name: Build
         run: make build
 
-  lint:
-    name: lint
+  lint-php:
+    name: lint php
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
@@ -120,6 +120,27 @@ jobs:
       - name: PHPStan
         if: always()
         run: make analyse
+
+  lint-js:
+    name: lint js
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: make node_modules
+
+      - name: Lint
+        run: make lint-js
 
   analyse:
     name: analyse php 8.1

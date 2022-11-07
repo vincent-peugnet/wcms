@@ -189,15 +189,30 @@ buildclean:
 .PHONY: check
 check: lint analyse test
 
-# Lint php code with phpcs.
 .PHONY: lint
-lint: $(phpcs_dir) vendor
+lint: lint-php lint-js
+
+# Lint php code with phpcs.
+.PHONY: lint-php
+lint-php: $(phpcs_dir) vendor
 	phpcs --report-full --report-summary --cache=$(phpcs_dir)/result.cache || { printf "run 'make fix'\n\n"; exit 1; }
 
-# fix php code with phpcbf.
+.PHONY: lint-js
+lint-js: node_modules
+	prettier -c 'src/**'
+
+
 .PHONY: fix
-fix: $(phpcs_dir) vendor
+fix: fix-php fix-js
+
+# fix php code with phpcbf.
+.PHONY: fix-php
+fix-php: $(phpcs_dir) vendor
 	phpcbf || exit 0
+
+.PHONY: fix-js
+fix-js: node_modules
+	prettier --write 'src/**'
 
 # Analyse php code with phpstan.
 .PHONY: analyse
