@@ -248,15 +248,15 @@ a.icon {
 }
 
 #help code {
-    background-color: #1b1b1b;
-    color: white;
+    background-color: var(--code-background-color);
+    color: var(--code-color);
     padding: 2px;
     margin-right: 5px;
     white-space: pre;
 }
 
 #help code i {
-    color: #7b97b9;
+    color: var(--main-color);
 }
 
 
@@ -285,12 +285,12 @@ div#showthumbnail img {
 
 /* CodeMirror Wcms mode */
 .cm-wcms, .cm-wkeyword {
-    color: black;
-    background-color: #7b97b9d9;
+    color: var(--text-color);
+    background-color: var(--main-color);
 }
 
 span.cm-wkeyword {
-    color: white;
+    color: var(--text2-color);
 }
 
 .cm-wikilink {
