@@ -50,6 +50,10 @@ class Optlist extends Opt
 
         $li = '';
 
+        $lang = $currentpage->lang() == '' ? Config::lang() : $currentpage->lang();
+        $dateformatter = new IntlDateFormatter($lang, IntlDateFormatter::SHORT, IntlDateFormatter::NONE);
+        $datetitleformatter = new IntlDateFormatter($lang, IntlDateFormatter::FULL, IntlDateFormatter::NONE);
+        $timeformatter = new IntlDateFormatter($lang, IntlDateFormatter::NONE, IntlDateFormatter::SHORT);
         foreach ($pagelist as $page) {
             // ================= Class =============
             $classdata = [];
@@ -71,28 +75,13 @@ class Optlist extends Opt
             }
             if ($this->date()) {
                 $dateattr = $page->date('pdate');
-                $formater = new IntlDateFormatter(
-                    $currentpage->lang(),
-                    IntlDateFormatter::SHORT,
-                    IntlDateFormatter::NONE
-                );
-                $date = $formater->format($page->date());
-                $formater = new IntlDateFormatter(
-                    $currentpage->lang(),
-                    IntlDateFormatter::FULL,
-                    IntlDateFormatter::NONE
-                );
-                $datetitle = $formater->format($currentpage->date());
+                $date = $dateformatter->format($page->date());
+                $datetitle = $datetitleformatter->format($page->date());
                 $content .= "<time datetime=\"$dateattr\" title=\"$datetitle\">$date</time>\n";
             }
             if ($this->time()) {
                 $timeattr = $page->date('ptime');
-                $formater = new IntlDateFormatter(
-                    $currentpage->lang(),
-                    IntlDateFormatter::NONE,
-                    IntlDateFormatter::SHORT
-                );
-                $time = $formater->format($page->date());
+                $time = $timeformatter->format($page->date());
                 $content .= "<time datetime=\"$timeattr\">$time</time>\n";
             }
             if ($this->author()) {
