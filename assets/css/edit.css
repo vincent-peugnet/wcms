@@ -1,118 +1,66 @@
-div#options {
-    float: left;
-}
-
-div#main {
-    display: inline-block;
-}
-
-body {
-    margin: 0;
-    height: 100%;
-    font-family: sans-serif;
-    font-size: 15px;
-}
-
-.menu {
-    position: fixed;
-    right: 0;
-}
-
-.editor div#leftbar {
-    position: relative;
-    height: 100%;
-}
-
-.editor .tabs {
-    flex: 2;
-    position: relative;
-    height: 100%;
-    background-color: lightgrey;
+#workspace {
     display: flex;
-    overflow: hidden;
+    height: calc(100% - 50px);
 }
 
 
 
-.editor #leftbarpanel, .editor #rightbarpanel {
+.panel {
     width: 250px;
     display: none;
     height: 100%;
     overflow-y: auto;
-}
-
-.editor #showeditorleftpanel:checked ~ #leftbarpanel {
-    display: block;
-    overflow-y: auto;
     height: 100%;
 }
 
-.editor #showeditorrightpanel:checked ~ #rightbarpanel {
+#showeditorleftpanel:checked ~ #leftbarpanel {
     display: block;
 }
 
-.editor input.toggle {
+#showeditorrightpanel:checked ~ #rightbarpanel {
+    display: block;
+}
+
+input.toggle {
     display: none;
 }
 
-.editor label.toogle:hover {
+label.toogle:hover {
     color: white;
     cursor: pointer;
-    background-color: #e2e2e2;
+    background-color: #e2e2e287;
 }
 
-.editor label.toogle {
+label.toogle {
     height: 100%;
     line-height: 100%;
     text-align: center;
 }
 
-.editor #leftbar label.toogle {
+#leftbar label.toogle {
     float: right;
 }
 
-.editor #rightbar label.toogle {
+#rightbar label.toogle {
     float: left;
 }
 
 
-#rightbarpanel {
-    display: none;
-    width: 250px;
-}
-#rightbar:target #rightbarpanel {
-    display: inline-block;
-    overflow-y: scroll;
-    height: 100%;
-}
-#rightbar:target #open {
-    display: none;
-}
-
-
-
-
-
-
-.editor #workspace {
-    display: flex;
-    height: 93%;
-    position: relative;
-    width: 100%;
-}
 
 /* clip the tabs names */
 
-.tabs .tab
-{
-    min-width: 0;
+.tabs {
+    flex: 2;
+    position: relative;
+    height: 100%;
+    background-color: var(--primary-background-color);
+    display: flex;
     overflow: hidden;
 }
 
 .tabs .tab .content
 {
 	position: absolute;
-	background-color: #dc8ad2;
 	left: 0px;
 	width: 100%;
 	height: calc(100% - 30px);
@@ -126,9 +74,7 @@ body {
 
 .tab label
 {
-	margin-right: 10px;
-	border: solid rgba(0, 0, 0, 0);
-	padding: 0px 2px;
+	margin-right: 8px;
 }
 
 .tab label.edited {
@@ -136,13 +82,13 @@ body {
 }
 
 .tab label.template {
-    color: #7b97b9;
+    color: var(--text2-color);
 }
 
 .checkboxtab:checked ~label
 {
-    border: solid 1px;
-    background: white;
+    background: var(--outline-background-color);
+    color: var(--outline-color);
 }
 
 .checkboxtab:checked ~.content
@@ -152,33 +98,25 @@ body {
 
 
 
-main.editor {
+div.editor {
     position: fixed;
     width: 100%;
     height: 100%;
 }
 
-
-html {
-    height: 100%;
-}
-
-.tabs textarea {height: 100%;width: 100%;border: none;resize: none;padding: 1%;}
-
-* {
-    box-sizing: border-box;
+.tabs textarea {
+	height: 100%;
+	width: 100%;
+	border: none;
+	resize: none;
+	padding: 1%;
 }
 
 .editor .tabs label {
-    line-height: 30px;
+    line-height: 25px;
+    padding: 1px;
+    padding-bottom: 5px;
     overflow: hidden;
-}
-
-.editor #edittopbar {
-    /* height: 24px; */
-    background-color: #a9a9a9;
-    line-height: 18px;
-    border-bottom: grey solid 1px;
 }
 
 input#editfontsize {
@@ -187,8 +125,6 @@ input#editfontsize {
 
 
 .editor div#editmenu {
-    /* height: 25px; */
-    /* line-height: 18px; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -215,26 +151,22 @@ input#editfontsize {
 
 
 details {
-    background-color: darkgrey;
+    background-color: var(--secondary-background-color);
 }
 
 .bar {
-    background-color: lightgrey;
+    background-color: var(--primary-background-color);
 }
 
 input#fontsize {
     width: 50px;
 }
 
-span#headid {color: white;}
+span#headid {color: var(--outline-color);background-color: var(--outline-background-color);}
 
 a {
-    color: black;
+    /* color: black; */
     text-decoration: none;
-}
-
-a.templatetooltip {
-    color: white;
 }
 
 a:hover {
@@ -242,37 +174,6 @@ a:hover {
 }
 
 
-#topbar {
-    background-color: #7b97b9;
-    width: 100%;
-    padding: 3px 0.5%;
-    border-bottom: solid 1px dimgrey;
-display: flex;justify-content: space-between;}
-
-#topbar form {
-    display: inline;
-}
-
-
-#topbar span#menu {
-    margin: 0 1%;
-}
-
-#topbar input[type="text"], #topbar input[type="password"] {width: 100px;}
-
-main.font table#fontlist {
-    width: 100%;
-    max-width: 500px;
-}
-
-main.media table#medialist {
-    width: 100%;
-    max-width: 960px;
-}
-
-#topbar a.currentpage {
-    text-decoration: underline;
-}
 
 span#user {
     float: right;
@@ -319,8 +220,7 @@ a.icon {
 }
 
 .panel summary {
-    background-color: grey;
-    color: lightgrey;
+    background-color: var(--main-color);
 }
 
 .panel summary:hover {
@@ -338,7 +238,7 @@ a.icon {
 #help kbd {
     border: 1px solid #000000c7;
     padding: 1px 4px;
-    background-color: lightgrey;
+    background-color: var(--main-color);
     box-shadow: 3px 2px #000000c7;
     border-radius: 4px;
 }
@@ -348,15 +248,15 @@ a.icon {
 }
 
 #help code {
-    background-color: #1b1b1b;
-    color: white;
+    background-color: var(--code-background-color);
+    color: var(--code-color);
     padding: 2px;
     margin-right: 5px;
     white-space: pre;
 }
 
 #help code i {
-    color: #7b97b9;
+    color: var(--main-color);
 }
 
 
@@ -385,12 +285,12 @@ div#showthumbnail img {
 
 /* CodeMirror Wcms mode */
 .cm-wcms, .cm-wkeyword {
-    color: black;
-    background-color: #7b97b9d9;
+    color: var(--text-color);
+    background-color: var(--main-color);
 }
 
 span.cm-wkeyword {
-    color: white;
+    color: var(--text2-color);
 }
 
 .cm-wikilink {
@@ -399,44 +299,13 @@ span.cm-wkeyword {
 }
 
 
-@media (max-width: 600px) {
-    .bar, span#headid{
+@media (max-width: 550px) {
+    .bar{
         display: none;
-    }
-
-    body {
-        font-size: 1.1em;
-    }
-
-    header a span {
-        display: none;
-    }
-
-    header span#search {
-        display: none;
-    }
-
-    header, #edittopbar {
-        font-size: 1.3em;
     }
 
     span#fontsize, span#save-workspace {
         display: none;
-    }
-
-    #edittopbar .text {
-        display: none;
-    }
-
-    img.icon {
-        height: 23px;
-    }
-
-        
-    span#shortcuts {
-        line-height: 1;
-    }
-    
-
+    }   
 }
 

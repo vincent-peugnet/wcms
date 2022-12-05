@@ -31,7 +31,7 @@ abstract class Config
     protected static $defaultprivacy = 0;
     protected static $homepage = 'default';
     protected static $homeredirect = null;
-    protected static $interfacecss = null;
+    protected static ?string $theme = null;
     protected static $secretkey = null;
     protected static $sentrydsn = '';
     /** @var string|false $debug */
@@ -279,9 +279,9 @@ abstract class Config
         return self::$homeredirect;
     }
 
-    public static function interfacecss()
+    public static function theme()
     {
-        return self::$interfacecss;
+        return self::$theme;
     }
 
     public static function secretkey()
@@ -489,12 +489,12 @@ abstract class Config
         }
     }
 
-    public static function setinterfacecss($interfacecss)
+    public static function settheme($theme)
     {
-        if (is_string($interfacecss) && file_exists(Model::ASSETS_CSS_DIR . $interfacecss)) {
-            self::$interfacecss = $interfacecss;
+        if (is_string($theme) && file_exists(Model::THEME_DIR . $theme)) {
+            self::$theme = $theme;
         } else {
-            self::$interfacecss = null;
+            self::$theme = null;
         }
     }
 

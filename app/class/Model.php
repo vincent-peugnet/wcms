@@ -9,6 +9,7 @@ abstract class Model
     public const ASSETS_CSS_DIR = 'assets/css/';
     public const ASSETS_ATOM_DIR = 'assets/atom/';
     public const COLORS_FILE = self::ASSETS_CSS_DIR . 'tagcolors.css';
+    public const THEME_DIR = self::ASSETS_CSS_DIR . 'theme/';
     public const JS_DIR = 'assets/js/';
     public const ICONS_DIR = 'assets/icons/';
     public const MEDIA_DIR = 'media/';
@@ -103,6 +104,11 @@ abstract class Model
     public static function assetscsspath()
     {
         return self::dirtopath(Model::ASSETS_CSS_DIR);
+    }
+
+    public static function themepath()
+    {
+        return self::dirtopath(Model::THEME_DIR);
     }
 
     public static function jspath()

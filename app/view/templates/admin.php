@@ -1,6 +1,6 @@
 <?php
 
-$this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'home.css']]) ?>
+$this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css', $css . 'admin.css']]) ?>
 
 
 <?php $this->start('page') ?>
@@ -244,14 +244,14 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'home.css'
                 </div>
 
 
-                <p>Set interface Style</p>
+                <p>Set interface theme</p>
 
-                <select name="interfacecss" id="interfacecss" form="admin">
+                <select name="theme" id="theme" form="admin">
                     <option value="null">--default interface style---</option>
                     <?php
-                    foreach ($interfacecsslist as $interfacecss) {
+                    foreach ($themes as $theme) {
                     ?>
-                        <option value="<?= $interfacecss ?>" <?= $interfacecss === Wcms\Config::interfacecss() ? 'selected' : '' ?>><?= $interfacecss ?></option>
+                        <option value="<?= $theme ?>" <?= $theme === Wcms\Config::theme() ? 'selected' : '' ?>><?= $theme ?></option>
                     <?php
                     }
                     ?>

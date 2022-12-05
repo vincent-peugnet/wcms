@@ -13,15 +13,19 @@
     <?php } ?>
     <title><?= $title ?></title>
 
+    <link rel="stylesheet" href="<?= Wcms\Model::assetscsspath() ?>base.css">
     <link rel="stylesheet" href="<?= Wcms\Model::assetscsspath() ?>fork-awesome.css">
     <?php foreach ($stylesheets as $stylsheet) { ?>
         <link rel="stylesheet" href="<?= $stylsheet ?>">
     <?php } ?>
     
     <?php
-    if (!empty(Wcms\Config::interfacecss())) {
-        echo '<link rel="stylesheet" href="' . Wcms\Model::assetscsspath() . Wcms\Config::interfacecss() . '">';
+    if (!empty(Wcms\Config::theme())) {
+        echo '<link rel="stylesheet" href="' . Wcms\Model::themepath() . Wcms\Config::theme() . '">';
     }
+    ?>
+
+    <?php
     if (isreportingerrors()) {
     ?>
     <script>

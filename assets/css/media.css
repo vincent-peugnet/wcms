@@ -1,0 +1,82 @@
+
+main.media table#medialist img {
+    display: none;
+    position: absolute;
+    max-width: 400px;
+    max-height: 200px;
+    margin-left: 80px;
+    background-color: white;
+    padding: 1%;
+}
+
+main.media table#medialist .thumbnail:hover img {
+    display: block;
+}
+
+.media ul#gallery {
+    overflow: hidden;
+    display: inline-block;
+}
+
+#gallery li div.thumbnail{
+    font-size: 8em;
+    text-align: center;
+    width: 100%;
+    max-height: 107px;
+}
+
+
+#gallery .thumbnail video, #gallery .thumbnail audio {
+    width: 100%;
+    height: 100%;
+}
+
+#gallery li .thumbnail img {max-width: 100%;height: 100px;}
+
+
+#gallery li code {
+    white-space: nowrap;
+    display: block;
+    overflow: auto;
+}
+
+#gallery li {
+    display: inline-block;
+    width: 200px;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+#gallery li .thumbnail img {
+    width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+tr.selected {
+    color: var(--outline-color);
+    background-color: var(--outline-background-color);
+}
+
+.media nav a {
+    white-space: nowrap;
+}
+
+
+@media (max-width: 600px) {
+    #gallery li {
+        width: 90px;
+    }
+
+    main.media #gallery .meta label {
+        display: none;
+    }
+
+    #gallery li div.thumbnail {
+        font-size: 4em;
+    }
+
+}

@@ -1,0 +1,178 @@
+
+
+* {
+    box-sizing: border-box;
+}
+
+.inline {
+    display: inline;
+}
+
+
+body {
+    margin: 0;
+    height: 100%;
+    background-color: var(--tertiary-background-color);
+    font-family: sans-serif;
+    font-size: 15px;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+input, button, select, textarea {
+    color: var(--button-border-color)!important;
+    border: none;
+    border-color: var(--button-border-color);
+    background-color: var(--button-background-color);
+}
+
+
+h1, h2 {
+    color: var(--text2-color);
+    background-color: var(--main-color);
+}
+
+body {
+    color: var(--text-color);
+}
+
+a, button, input, select, textarea {
+    text-decoration: none;
+    color: var(--text2-color);
+}
+
+
+
+h1, h2 {
+    margin: 0;
+    font-size: larger;
+}
+
+#topbar {
+    background-color: var(--main-color);
+    width: 100%;
+    padding: 4px 3px;
+}
+
+#topbar form {
+    display: inline;
+}
+
+
+#topbar span#menu {
+    display: inline-block;
+    margin: 0 1%;
+}
+
+#topbar input[type="text"], #topbar input[type="password"] {width: 100px;}
+
+main.font table#fontlist {
+    width: 100%;
+    max-width: 500px;
+}
+
+
+#topbar a.currentpage {
+    text-decoration: underline;
+}
+
+aside {
+    background-color: var(--secondary-background-color);
+}
+
+summary {
+    white-space: nowrap;
+}
+
+summary:hover {
+    cursor: pointer;
+}
+
+
+@media (max-width: 750px) {
+    header a span, footer, aside a span {
+        display: none;
+    }
+}
+
+
+@media (max-width: 550px) {
+    body {
+        font-size: 1.1em;
+    }
+
+    header a span, footer, header span#search, aside a span {
+        display: none;
+    }
+
+    header a, aside a {
+        font-size: 1.3em;
+    }
+
+    aside {
+        display: block !important;
+    }
+}
+
+
+
+
+/* __________________________ Flash Messages ___________________________ */
+
+#flashmessage {
+    color: white;
+    border: solid white 1px;
+    position: fixed;
+    animation-delay: 5s;
+    animation-name: flash;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    max-height: 200px;
+    width: 100%;
+}
+
+div#flashmessage:target {
+    display: none;
+}
+
+#flashmessage ul {
+    max-height: 200px;
+    overflow-y: auto;
+    margin: auto;
+    z-index: 5;
+}
+
+
+#flashmessage li.alert-info {
+    background-color: grey;
+}
+
+#flashmessage li.alert-warning {
+    background-color: #FF5722;
+}
+
+#flashmessage li.alert-success {
+    background-color: green;
+}
+
+#flashmessage li.alert-error {
+    background-color: red;
+}
+
+
+@keyframes flash {
+    from {
+      top: 0;
+    }
+  
+    to {
+      top: -200px;
+    }
+  }
+  
+
+table a, li a {
+    color: var(--text3-color);
+}

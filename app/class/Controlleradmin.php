@@ -25,7 +25,7 @@ class Controlleradmin extends Controller
             $this->mediamanager = new Modelmedia();
             $datas['faviconlist'] = $this->mediamanager->listfavicon();
             $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();
-            $datas['interfacecsslist'] = $this->mediamanager->listinterfacecss();
+            $datas['themes'] = $this->mediamanager->listthemes();
 
             $globalcssfile = Model::GLOBAL_CSS_FILE;
 

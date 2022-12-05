@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => 'home', 'stylesheets' => [$css . 'home.css', $css . 'tagcolors.css'], 'favicon' => '']) ?>
+<?php $this->layout('layout', ['title' => 'home', 'stylesheets' => [$css . 'back.css', $css . 'home.css', $css . 'tagcolors.css'], 'favicon' => '']) ?>
 
 
 
@@ -49,9 +49,9 @@
                     <i class="fa fa-filter" title="There are active filters"></i>
                 <?php } ?>
                 <span class="right">
-                    <a href="?display=list" <?= $display === 'list' ? 'style="color: white"' : '' ?> ><i class="fa fa-th-list"></i></a>
+                    <a href="?display=list" <?= $display === 'list' ? 'class="selected"' : '' ?> ><i class="fa fa-th-list"></i></a>
                     /
-                    <a href="?display=map"  <?= $display === 'map' ? 'style="color: white"' : '' ?>  ><i class="fa fa-sitemap"></i></a>
+                    <a href="?display=map"  <?= $display === 'map' ? 'class="selected"' : '' ?>  ><i class="fa fa-sitemap"></i></a>
                 </span>
             </h2>
 

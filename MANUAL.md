@@ -84,7 +84,7 @@ It's the equivalent of HTML (More info about `<img>` tag on [MDN](https://develo
 
     <img src="<image_address>" alt="<alt_comment>">
 
-If your image is already hosted, just use it's URL address for `<image_address>`. Otherwise, access W's [media interface](#medua-manager) using the top bar menu, just after "home", or by typing `<your-W-url>/!media`.
+If your image is already hosted, just use it's URL address for `<image_address>`. Otherwise, access W's [media interface](#media-manager) using the top bar menu, just after "home", or by typing `<your-W-url>/!media`.
 
 Once you're here, you'll have to first choose, using the navigation panel on the left, or create a folder, by selecting __File > New Folder__ in the menu.
 
@@ -240,7 +240,7 @@ The explorer allow you to navigate between differents directories. It will show 
 
 Filters and sorting options can be set by choosing wich types of files to show and how to sort them. They can be used to filter and sort a [medialist](#media-list) using the __filter__ tab in the [media menu](#media-menu).
 
-File types are determined by their file extention. The association table is hardcoded in W's code and can be found [here](https://github.com/vincent-peugnet/wcms/blob/master/app/class/Modelmedia.php#L13).
+File types are determined by their file extention. The association table is hardcoded in W's code and can be found [here](https://github.com/vincent-peugnet/wcms/blob/master/app/class/Media.php#L46).
 
 
 

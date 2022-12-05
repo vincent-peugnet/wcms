@@ -1,0 +1,240 @@
+
+main {
+    display: flex;
+    height: 100%;
+    overflow-y: auto;
+}
+
+
+.block {
+    background-color: var(--primary-background-color);
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    width: 100%;
+}
+
+.scroll {
+    overflow: auto;
+    height: 100%;
+    max-width: 100%;
+}
+
+aside summary:hover {
+    background-color: var(--outline-background-color);
+    color: var(--outline-color);
+}
+
+
+aside {
+    display: flex;
+}
+
+.code, code {
+    display: block;
+    white-space: nowrap;
+    color: var(--code-color) !important;
+    background-color: var(--code-background-color);
+    padding: 1%;
+    font-family: monospace;
+    font-size: small;
+    width: 100%;
+    border: none;
+}
+
+aside details, aside span {
+    max-width: 280px;
+}
+
+aside details .submenu, aside summary {
+    background-color: var(--secondary-background-color);
+    min-width: 100px;
+}
+
+
+aside .submenu {
+    position: absolute;
+    max-height: 85%;
+    overflow-y: auto;
+    z-index: 10;
+}
+
+
+.submenu h2 {
+    font-size: medium;
+}
+
+.submenu h3 {
+    margin: 0;
+    font-size: medium;
+    margin-top: 5px;
+    font-weight: inherit;
+}
+
+
+
+main section {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+main nav {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+
+footer {
+    background-color: black;
+    color: white;
+    opacity: 0.4;
+}
+
+
+.nowrap {
+    white-space: nowrap;
+}
+
+
+
+div#options, article#main {
+    min-width: 180px;
+    overflow-y: auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+h2 .right {
+    float: right;
+}
+
+
+p {
+    padding: 0 1%;
+}
+
+
+
+
+tr:hover a, tr:hover {
+    background-color: var(--outline-background-color);
+    color: var(--outline-color);
+}
+
+ul {
+    list-style: none;
+    padding-inline-start: 0;
+    margin: 0;
+}
+
+th {
+    background-color: var(--secondary-background-color);
+}
+
+main.admin input, main.admin select, main.admin textarea {
+    display: block;
+    width: 100%;
+}
+
+
+
+main section.admin {
+    max-width: 400px;
+}
+
+
+
+div.checkbox [type="checkbox"] {
+    display: inline-block;
+    width: auto;
+}
+
+
+div.radio input[type="radio"] {
+    display: inline-block;
+    width: auto;
+}
+
+main.font input, main.font  select, main.font  textarea {
+    display: block;
+}
+
+span#user {
+    float: right;
+}
+
+span#search {
+    float: left;
+}
+
+img.icon {
+    height: 12px;
+}
+
+a:hover img.icon {
+    filter: invert(1);
+}
+
+
+
+
+
+
+main.user section#user {
+    max-width: 500px;
+}
+
+div#preferences {
+    padding: 2% 0;
+}
+
+
+main.user table form {
+    display: inline-block;
+}
+
+main.user td {
+    white-space: nowrap;
+}
+
+
+li.event:hover span.details {
+    display: inline;
+}
+
+span.details {
+    display: none;
+}
+
+
+
+
+@media (max-width: 600px) {
+    main {
+        display: block;
+    }
+
+    main nav {
+        width: 100%;
+    }
+
+}
+
+
+h2 .right a.selected {
+    color: var(--outline-background-color);
+}
