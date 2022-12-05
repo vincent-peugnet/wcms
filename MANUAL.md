@@ -746,7 +746,12 @@ This folder is supposed to contain thumbnails images. Once images files (that ca
 
 
 
+Administration
+--------------
 
+### Theming
+
+You change the interface theme in the [admin panel](#admin), under *interface*. There is a kit of presets, but you can even add your own themes ! And it is actualy *super easy* 😎. To do so, go to the folder `/assets/css/themes/` and duplicate one of the preset you prefer. Then you can edit the CSS variables to quickly stylise your theme colors.
 
 
 
