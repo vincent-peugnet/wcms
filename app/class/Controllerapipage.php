@@ -78,7 +78,6 @@ class Controllerapipage extends Controllerapi
                 } elseif (!empty($_POST)) {
                     $datas = $_POST;
                 } else {
-                    ;
                     $this->shortresponse(400, "No POST or JSON datas recieved");
                 }
                 $update = new Page($datas);
@@ -154,5 +153,31 @@ class Controllerapipage extends Controllerapi
         http_response_code(200);
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($this->pagemanager->list());
+    }
+
+    public function query()
+    {
+        if (!$this->user->iseditor()) {
+            http_response_code(401);
+        }
+        $json = $this->getrequestbody();
+        if (!empty($json)) {
+            try {
+                $datas = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+            } catch (JsonException $e) {
+                $this->shortresponse(400, "Json decoding error: " . $e->getMessage());
+            }
+        } elseif (!empty($_POST)) {
+            $datas = $_POST;
+        } else {
+            $this->shortresponse(400, "No POST or JSON datas recieved");
+        }
+        $opt = new Opt($datas);
+        $pages = $this->pagemanager->pagelist();
+        $pages = $this->pagemanager->pagetable($pages, $opt);
+        $pages = array_keys($pages);
+        http_response_code(200);
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($pages);
     }
 }

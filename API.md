@@ -90,6 +90,7 @@ In case of success, you will get a `200` HTTP CODE and recieve the full JSON pag
 
 possible error codes:
 
+- `400` if the POST datas are not recieved or in case of JSON decoding error
 - `401` if user does'nt have the rights to update the page
 - `404` if page is not found
 - `406` in case of invalid ID
@@ -138,6 +139,39 @@ possibles error codes:
 - `401` if user does'nt have the rights to view list of page
 
 
+### query
+
+List pages IDs using a given filters and sorting options
+
+    GET /api/v1/pages/filteredlist
+
+You need to provide a JSON storing search options.
+
+```json
+{
+    sortby: "datemodif",
+    order: 1,
+    tagfilter: ["cc", "dille"],
+    tagcompare: "AND",
+    tagnot: false,
+    authorfilter: ["vincent", "audrey"],
+    authorcompare: "OR",
+    secure: 0,
+    linkto: "the-pagest-page",
+    invert: false,
+    limit: 40,
+    since: 2022-12-09T23:27,
+    until: 2025-01-01T10:10
+}
+```
+
+possible error codes:
+
+- `400` if the POST datas are not recieved or in case of JSON decoding error
+- `401` if user does'nt have the rights to view list of page
+
+
+
 Usages example
 --------------
 
@@ -160,4 +194,16 @@ Get the list of all pages.
 ```js
 obj = await fetch('http://localhost:8080/api/v1/pages/list')
     .then(res => res.json());
+```
+
+Get the list of pages filted and sorted.
+
+```js
+const options = {sortby:"datemodif", limit: 40, tagfilter: ["galaxy", "sublime"]};
+fetch('http://localhost:8080/api/v1/pages/query', {
+    method: "POST",
+    body: JSON.stringify(options),
+})
+    .then(res => res.json())
+    .then(console.log);
 ```
