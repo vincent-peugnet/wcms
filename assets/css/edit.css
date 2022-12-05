@@ -299,7 +299,7 @@ span.cm-wkeyword {
 }
 
 
-@media (max-width: 600px) {
+@media (max-width: 550px) {
     .bar{
         display: none;
     }
@@ -307,6 +307,5 @@ span.cm-wkeyword {
     span#fontsize, span#save-workspace {
         display: none;
     }   
-
 }
 

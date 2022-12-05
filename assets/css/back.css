@@ -33,7 +33,7 @@ aside {
 .code, code {
     display: block;
     white-space: nowrap;
-    color: var(--code-color);
+    color: var(--code-color) !important;
     background-color: var(--code-background-color);
     padding: 1%;
     font-family: monospace;
@@ -130,7 +130,7 @@ p {
 
 
 
-tr:hover {
+tr:hover a, tr:hover {
     background-color: var(--outline-background-color);
     color: var(--outline-color);
 }
@@ -235,6 +235,6 @@ span.details {
 }
 
 
-a.selected {
-    color: var(--outline-color);
+h2 .right a.selected {
+    color: var(--outline-background-color);
 }

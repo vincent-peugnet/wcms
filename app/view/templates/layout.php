@@ -20,12 +20,10 @@
     <?php } ?>
     
     <?php
-    if (!empty(Wcms\Config::interfacecss())) {
-        echo '<link rel="stylesheet" href="' . Wcms\Model::assetscsspath() . Wcms\Config::interfacecss() . '">';
+    if (!empty(Wcms\Config::theme())) {
+        echo '<link rel="stylesheet" href="' . Wcms\Model::themepath() . Wcms\Config::theme() . '">';
     }
     ?>
-
-    <link rel="stylesheet" href="<?= Wcms\Model::assetscsspath() ?>style-01.css">
 
     <?php
     if (isreportingerrors()) {

@@ -22,6 +22,7 @@ body {
 }
 
 input, button, select, textarea {
+    color: var(--button-border-color)!important;
     border: none;
     border-color: var(--button-border-color);
     background-color: var(--button-background-color);
@@ -52,7 +53,7 @@ h1, h2 {
 #topbar {
     background-color: var(--main-color);
     width: 100%;
-    padding: 3px 3px;
+    padding: 4px 3px;
 }
 
 #topbar form {
@@ -90,7 +91,14 @@ summary:hover {
 }
 
 
-@media (max-width: 600px) {
+@media (max-width: 750px) {
+    header a span, footer, aside a span {
+        display: none;
+    }
+}
+
+
+@media (max-width: 550px) {
     body {
         font-size: 1.1em;
     }
@@ -164,3 +172,7 @@ div#flashmessage:target {
     }
   }
   
+
+table a, li a {
+    color: var(--text3-color);
+}

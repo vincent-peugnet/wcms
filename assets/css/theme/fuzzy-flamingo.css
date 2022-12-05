@@ -1,0 +1,23 @@
+:root {
+    --text-color: black;
+    --text2-color: #ffffff;
+    --text3-color: #3b1338;
+    --main-color: #b835a2;
+    --secondary-background-color: #9a9a9a;
+    --code-background-color: rgb(17 10 54);
+    --code-color: #6b5bab;
+    --primary-background-color: #cdcdcd;
+    --tertiary-background-color: #6b6b6b;
+    --outline-background-color: #2e1530;
+    --outline-color: #ffffff;
+    --button-background-color: #b9b9b9;
+    --button-border-color: #d70cef;
+    
+}
+
+input, button, select, textarea {
+    border-radius: 5px;
+    border: solid 1px;
+}
+
+

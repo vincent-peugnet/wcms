@@ -21,11 +21,11 @@ nav ul {
 }
 
 main code {
-    color: white;
-    background-color: #233143;
     width: fit-content;
     font-family: monospace;
-    font-size: initial;
+    white-space: pre-wrap;
+    display: inline;
+    padding: 1px;
 }
 
 main blockquote i {
@@ -92,7 +92,7 @@ article#manual a:hover {
 
 
 
-main pre {padding: 1%;background-color: hsla(213, 31%, 20%, 1);white-space: pre-wrap;margin: 1%;}
+main pre {padding: 1%;background-color: var(--code-background-color);white-space: pre-wrap;}
 
 main blockquote {
     padding: 6px 12px;

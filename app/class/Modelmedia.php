@@ -124,12 +124,12 @@ class Modelmedia extends Model
         return $faviconlist;
     }
 
-
-    public function listinterfacecss()
+    /**
+     * @return array                        listing css theme files
+     */
+    public function listthemes(): array
     {
-        $listinterfacecss = $this->globlist(self::ASSETS_CSS_DIR, ['css']);
-        $listinterfacecss = array_diff($listinterfacecss, ['edit.css', 'home.css', 'tagcolors.css']);
-        return $listinterfacecss;
+        return $this->globlist(self::THEME_DIR, ['css']);
     }
 
     public function globlist(string $dir = '', array $extensions = []): array
