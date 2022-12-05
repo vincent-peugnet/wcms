@@ -57,10 +57,10 @@ class Controllermedia extends Controller
             $vars['maxuploadsize'] = readablesize(file_upload_max_size()) . 'o';
 
             if (isset($_GET['display'])) {
-                $this->session->addtosession('mediadisplay', $_GET['display']);
+                $this->workspace->setmediadisplay($_GET['display']);
+                $this->workspace2session();
             }
 
-            $vars['display'] = $this->session->mediadisplay;
             $vars['medialist'] = $medialist;
             $vars['dirlist'] = $dirlist;
             $vars['pathlist'] = $pathlist;

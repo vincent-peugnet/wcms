@@ -176,4 +176,9 @@ class Controller
         $this->session->addtosession('wsession', '');
         $this->usermanager->add($this->user);
     }
+
+    protected function workspace2session(): void
+    {
+        $_SESSION['user' . Config::basepath()]['workspace'] = $this->workspace->dry();
+    }
 }

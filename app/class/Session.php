@@ -2,13 +2,10 @@
 
 namespace Wcms;
 
-use RuntimeException;
-
 class Session extends Item
 {
     public $visitor = false;
     public $user = '';
-    public $mediadisplay = 'list';
     public $wsession = '';
 
     public function __construct($datas = [])
@@ -50,13 +47,6 @@ class Session extends Item
     {
         if (is_string($id)) {
             $this->user = strip_tags($id);
-        }
-    }
-
-    public function setmediadisplay($mediadisplay)
-    {
-        if (in_array($mediadisplay, ['list', 'gallery'])) {
-            $this->mediadisplay = $mediadisplay;
         }
     }
 
