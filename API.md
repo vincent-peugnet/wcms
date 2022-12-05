@@ -127,6 +127,17 @@ possibles error codes:
 - `500` server error
 
 
+### list
+
+List all pages IDs
+
+    GET /api/v1/pages/list
+
+possibles error codes:
+
+- `401` if user does'nt have the rights to view list of page
+
+
 Usages example
 --------------
 
@@ -142,4 +153,11 @@ fetch('http://localhost:8080/api/v1/jardin/update', {
 })
     .then(res => res.text())
     .then(console.log);
+```
+
+Get the list of all pages.
+
+```js
+obj = await fetch('http://localhost:8080/api/v1/pages/list')
+    .then(res => res.json());
 ```

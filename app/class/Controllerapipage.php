@@ -145,4 +145,14 @@ class Controllerapipage extends Controllerapi
             }
         }
     }
+
+    public function list()
+    {
+        if (!$this->user->iseditor()) {
+            http_response_code(401);
+        }
+        http_response_code(200);
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($this->pagemanager->list());
+    }
 }
