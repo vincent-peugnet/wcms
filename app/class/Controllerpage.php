@@ -231,15 +231,6 @@ class Controllerpage extends Controller
 
             $datas['editorlist'] = $this->usermanager->getlisterbylevel(2, '>=');
 
-            if (isset($_SESSION['workspace'])) {
-                $datas['showeditorleftpanel'] = $_SESSION['workspace']['showeditorleftpanel'];
-                $datas['showeditorrightpanel'] = $_SESSION['workspace']['showeditorrightpanel'];
-                $datas['fontsize'] = $_SESSION['workspace']['fontsize'];
-            } else {
-                $datas['showeditorleftpanel'] = false;
-                $datas['showeditorrightpanel'] = false;
-                $datas['fontsize'] = 15;
-            }
             $datas = array_merge($datas, ['page' => $this->page, 'pageexist' => true, 'user' => $this->user]);
             $this->showtemplate('edit', $datas);
         } else {

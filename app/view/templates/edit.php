@@ -7,20 +7,20 @@ $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [$cs
 
 <?php $this->start('page') ?>
 
-<style>.tabs textarea{font-size: <?= $fontsize ?>px}</style>
+<style>.tabs textarea{font-size: <?= $workspace->fontsize() ?>px}</style>
 
 <div class="editor">
 
     <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'edit', 'pagelist' => $pagelist, 'pageid' => $page->id()]) ?>
 
 
-    <?php $this->insert('edittopbar', ['page' => $page, 'user' => $user, 'fontsize' => $fontsize]) ?>
+    <?php $this->insert('edittopbar', ['page' => $page, 'user' => $user, 'workspace' => $workspace]) ?>
 
     <div id="workspace">
 
-    <?php $this->insert('editleftbar', ['page' => $page, 'tablist' => $tablist, 'pagelist' => $pagelist, 'showeditorleftpanel' => $showeditorleftpanel, 'faviconlist' => $faviconlist, 'thumbnaillist' => $thumbnaillist]) ?>
+    <?php $this->insert('editleftbar', ['page' => $page, 'tablist' => $tablist, 'pagelist' => $pagelist, 'faviconlist' => $faviconlist, 'thumbnaillist' => $thumbnaillist, 'workspace' => $workspace]) ?>
     <?php $this->insert('edittabs', ['tablist' => $tablist, 'opentab' => $page->interface(), 'templates' => $page->template()]) ?>
-    <?php $this->insert('editrightbar', ['page' => $page, 'pagelist' => $pagelist, 'showeditorrightpanel' => $showeditorrightpanel, 'templates' => $page->template(), 'tagpagelist' => $tagpagelist, 'lasteditedpagelist' => $lasteditedpagelist, 'editorlist' => $editorlist, 'user' => $user]) ?>
+    <?php $this->insert('editrightbar', ['page' => $page, 'pagelist' => $pagelist, 'templates' => $page->template(), 'tagpagelist' => $tagpagelist, 'lasteditedpagelist' => $lasteditedpagelist, 'editorlist' => $editorlist, 'user' => $user, 'workspace' => $workspace]) ?>
 
     </div>
 

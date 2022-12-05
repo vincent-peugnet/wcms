@@ -8,9 +8,6 @@ class Session extends Item
 {
     public $visitor = false;
     public $user = '';
-    public $showeditorleftpanel = true;
-    public $showeditorrightpanel = false;
-    public $homedisplay = 'list';
     public $mediadisplay = 'list';
     public $wsession = '';
 
@@ -53,23 +50,6 @@ class Session extends Item
     {
         if (is_string($id)) {
             $this->user = strip_tags($id);
-        }
-    }
-
-    public function setshoweditorleftpanel($showeditorleftpanel)
-    {
-        $this->showeditorleftpanel = boolval($showeditorleftpanel);
-    }
-
-    public function setshoweditorrightpanel($showeditorrightpanel)
-    {
-        $this->showeditorrightpanel = boolval($showeditorrightpanel);
-    }
-
-    public function sethomedisplay($homedisplay)
-    {
-        if (in_array($homedisplay, ['list', 'map'])) {
-            $this->homedisplay = $homedisplay;
         }
     }
 

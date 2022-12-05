@@ -15,6 +15,8 @@ class Controller
     /** @var Session */
     protected $session;
 
+    protected Workspace $workspace;
+
     /** @var User */
     protected $user;
 
@@ -35,6 +37,7 @@ class Controller
     public function __construct($router)
     {
         $this->session = new Session($_SESSION['user' . Config::basepath()] ?? []);
+        $this->workspace = new Workspace($_SESSION['user' . Config::basepath()]['workspace'] ?? []);
         $this->usermanager = new Modeluser();
 
         $this->setuser();
@@ -102,6 +105,7 @@ class Controller
         $commonsparams['pagelist'] = $this->pagemanager->list();
         $commonsparams['css'] = Model::assetscsspath();
         $commonsparams['now'] = new DateTimeImmutable();
+        $commonsparams['workspace'] = $this->workspace;
         return $commonsparams;
     }
 
