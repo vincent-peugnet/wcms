@@ -31,7 +31,7 @@ abstract class Config
     protected static $defaultprivacy = 0;
     protected static $homepage = 'default';
     protected static $homeredirect = null;
-    protected static ?string $theme = null;
+    protected static string $theme = 'default.css';
     protected static $secretkey = null;
     protected static $sentrydsn = '';
     /** @var string|false $debug */
@@ -493,8 +493,6 @@ abstract class Config
     {
         if (is_string($theme) && file_exists(Model::THEME_DIR . $theme)) {
             self::$theme = $theme;
-        } else {
-            self::$theme = null;
         }
     }
 

@@ -247,7 +247,6 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
                 <p>Set interface theme</p>
 
                 <select name="theme" id="theme" form="admin">
-                    <option value="null">--default interface style---</option>
                     <?php
                     foreach ($themes as $theme) {
                     ?>
