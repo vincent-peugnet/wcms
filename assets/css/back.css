@@ -82,7 +82,6 @@ main section {
 main nav {
     display: flex;
     flex-direction: column;
-    width: 300px;
 }
 
 

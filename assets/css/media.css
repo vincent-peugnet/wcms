@@ -4,9 +4,10 @@ main.media table#medialist img {
     position: absolute;
     max-width: 400px;
     max-height: 200px;
-    margin-left: 80px;
-    background-color: white;
-    padding: 1%;
+    background-color: var(--secondary-background-color);
+    padding: 5px;
+    left: 30px;
+    top: 60px;
 }
 
 main.media table#medialist .thumbnail:hover img {
