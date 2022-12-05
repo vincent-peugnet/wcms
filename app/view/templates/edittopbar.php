@@ -46,16 +46,17 @@
             <label for="fontsize">
                 <i class="fa fa-text-height"></i>
             </label>
-            <input type="number" name="fontsize" value="<?= Wcms\Config::fontsize() ?>" id="editfontsize" min="5" max="99" form="workspace-form">
+            <input type="number" name="fontsize" value="<?= $fontsize ?>" id="editfontsize" min="5" max="99" form="workspace-form">
         </span>
 
         <span id="save-workspace">
 
-            <form action="" method="post" id="workspace-form">
+            <form action="<?= $this->url('workspaceupdate') ?>" method="post" id="workspace-form">
                 <button type="submit">
                     <i class="fa fa-edit"></i>
                     <span class="text">save workspace</span>
                 </button>
+                <input type="hidden" name="page" value="<?= $page->id() ?>">
             </form>
         </span>
 

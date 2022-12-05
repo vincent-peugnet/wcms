@@ -1,7 +1,7 @@
 <div id="rightbar" class="bar">
     <input
         id="showeditorrightpanel"
-        name="workspace[showeditorrightpanel]"
+        name="showeditorrightpanel"
         value="1"
         class="toggle"
         type="checkbox"

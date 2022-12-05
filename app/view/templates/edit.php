@@ -7,14 +7,14 @@ $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [$cs
 
 <?php $this->start('page') ?>
 
-<style>.tabs textarea{font-size: <?= Wcms\Config::fontsize() ?>px}</style>
+<style>.tabs textarea{font-size: <?= $fontsize ?>px}</style>
 
 <div class="editor">
 
     <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'edit', 'pagelist' => $pagelist, 'pageid' => $page->id()]) ?>
 
 
-    <?php $this->insert('edittopbar', ['page' => $page, 'user' => $user]) ?>
+    <?php $this->insert('edittopbar', ['page' => $page, 'user' => $user, 'fontsize' => $fontsize]) ?>
 
     <div id="workspace">
 

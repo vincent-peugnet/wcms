@@ -76,6 +76,7 @@ class Routes
             ['GET', '/[cid:page]/logout', 'Controllerpage#logout', 'pagelogout'],
             ['GET', '/[cid:page]/login', 'Controllerpage#login', 'pagelogin'],
             ['POST', '/[cid:page]/edit', 'Controllerpage#update', 'pageupdate'],
+            ['POST', '/workspace/update', 'Controllerworkspace#update', 'workspaceupdate'],
             ['POST', '/[cid:page]/editby', 'Controllerpage#editby', 'pageeditby'],
             ['POST', '/[cid:page]/removeeditby', 'Controllerpage#removeeditby', 'pageremoveeditby'],
             ['GET', '/[cid:page]/delete', 'Controllerpage#confirmdelete', 'pageconfirmdelete'],

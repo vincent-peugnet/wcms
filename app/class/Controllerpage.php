@@ -234,9 +234,11 @@ class Controllerpage extends Controller
             if (isset($_SESSION['workspace'])) {
                 $datas['showeditorleftpanel'] = $_SESSION['workspace']['showeditorleftpanel'];
                 $datas['showeditorrightpanel'] = $_SESSION['workspace']['showeditorrightpanel'];
+                $datas['fontsize'] = $_SESSION['workspace']['fontsize'];
             } else {
                 $datas['showeditorleftpanel'] = false;
                 $datas['showeditorrightpanel'] = false;
+                $datas['fontsize'] = 15;
             }
             $datas = array_merge($datas, ['page' => $this->page, 'pageexist' => true, 'user' => $this->user]);
             $this->showtemplate('edit', $datas);
@@ -417,10 +419,6 @@ class Controllerpage extends Controller
     {
         $this->setpage($page, 'pageupdate');
 
-        $this->movepanels();
-        $this->fontsize();
-
-
 
         if ($this->importpage()) {
             if ($this->canedit()) {
@@ -451,24 +449,6 @@ class Controllerpage extends Controller
             }
         }
         $this->routedirect('pageedit', ['page' => $this->page->id()]);
-    }
-
-    public function movepanels()
-    {
-        $_SESSION['workspace']['showeditorrightpanel'] = isset($_POST['workspace']['showeditorrightpanel']);
-        $_SESSION['workspace']['showeditorleftpanel'] = isset($_POST['workspace']['showeditorleftpanel']);
-    }
-
-    public function fontsize()
-    {
-        if (!empty($_POST['fontsize']) && $_POST['fontsize'] !== Config::fontsize()) {
-            Config::setfontsize($_POST['fontsize']);
-            try {
-                Config::savejson();
-            } catch (RuntimeException $e) {
-                Model::sendflashmessage("Error while saving font size inf Config file", Model::FLASH_ERROR);
-            }
-        }
     }
 
     public function pagedirect($page)
