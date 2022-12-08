@@ -81,8 +81,8 @@ can <a href="/projects/markdown/syntax.text">see the source for it by adding '.t
 document should be publishable as-is, as plain text, without looking<br>
 like it's been marked up with tags or formatting instructions. While<br>
 Markdown's syntax has been influenced by several existing text-to-HTML<br>
-filters -- including <a class="external" target="_blank" href="http://docutils.sourceforge.net/mirror/setext.html">Setext</a>, <a class="external" target="_blank" href="http://www.aaronsw.com/2002/atx/">atx</a>, <a class="external" target="_blank" href="http://textism.com/tools/textile/">Textile</a>, <a class="external" target="_blank" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a>,<br>
-<a class="external" target="_blank" href="http://www.triptico.com/software/grutatxt.html">Grutatext</a>, and <a class="external" target="_blank" href="http://ettext.taint.org/doc/">EtText</a> -- the single biggest source of<br>
+filters -- including <a href="http://docutils.sourceforge.net/mirror/setext.html" class="external" target="_blank">Setext</a>, <a href="http://www.aaronsw.com/2002/atx/" class="external" target="_blank">atx</a>, <a href="http://textism.com/tools/textile/" class="external" target="_blank">Textile</a>, <a href="http://docutils.sourceforge.net/rst.html" class="external" target="_blank">reStructuredText</a>,<br>
+<a href="http://www.triptico.com/software/grutatxt.html" class="external" target="_blank">Grutatext</a>, and <a href="http://ettext.taint.org/doc/" class="external" target="_blank">EtText</a> -- the single biggest source of<br>
 inspiration for Markdown's syntax is the format of plain text email.</p>
 
 <p>To this end, Markdown's syntax is comprised entirely of punctuation<br>
@@ -232,7 +232,7 @@ work best -- and look better -- when you format them with hard breaks.</p>
 
 <h3 id="header">Headers</h3>
 
-<p>Markdown supports two styles of headers, <a class="external" target="_blank" href="http://docutils.sourceforge.net/mirror/setext.html">Setext</a> and <a class="external" target="_blank" href="http://www.aaronsw.com/2002/atx/">atx</a>.</p>
+<p>Markdown supports two styles of headers, <a href="http://docutils.sourceforge.net/mirror/setext.html" class="external" target="_blank">Setext</a> and <a href="http://www.aaronsw.com/2002/atx/" class="external" target="_blank">atx</a>.</p>
 
 <p>Setext-style headers are "underlined" using equal signs (for first-level<br>
 headers) and dashes (for second-level headers). For example:</p>
@@ -607,10 +607,10 @@ title for the link, surrounded in quotes. For example:</p>
 
 <p>Will produce:</p>
 
-<pre><code>&lt;p&gt;This is &lt;a class="external"  target="_blank"  href="<a href="http://example.com/" target="_blank" class="external">http://example.com/</a>" title="Title"&gt;
+<pre><code>&lt;p&gt;This is &lt;a href="<a href="http://example.com/" target="_blank" class="external">http://example.com/</a>" title="Title"&gt;
 an example&lt;/a&gt; inline link.&lt;/p&gt;
 
-&lt;p&gt;&lt;a class="external"  target="_blank"  href="<a href="http://example.net/%22&gt;This" target="_blank" class="external">http://example.net/"&gt;This</a> link&lt;/a&gt; has no
+&lt;p&gt;&lt;a href="<a href="http://example.net/%22&gt;This" target="_blank" class="external">http://example.net/"&gt;This</a> link&lt;/a&gt; has no
 title attribute.&lt;/p&gt;
 </code></pre>
 
@@ -735,10 +735,10 @@ document, sort of like footnotes.</p>
 
 <p>Both of the above examples will produce the following HTML output:</p>
 
-<pre><code>&lt;p&gt;I get 10 times more traffic from &lt;a class="external"  target="_blank"  href="<a href="http://google.com/" target="_blank" class="external">http://google.com/</a>"
+<pre><code>&lt;p&gt;I get 10 times more traffic from &lt;a href="<a href="http://google.com/" target="_blank" class="external">http://google.com/</a>"
 title="Google"&gt;Google&lt;/a&gt; than from
-&lt;a class="external"  target="_blank"  href="<a href="http://search.yahoo.com/" target="_blank" class="external">http://search.yahoo.com/</a>" title="Yahoo Search"&gt;Yahoo&lt;/a&gt;
-or &lt;a class="external"  target="_blank"  href="<a href="http://search.msn.com/" target="_blank" class="external">http://search.msn.com/</a>" title="MSN Search"&gt;MSN&lt;/a&gt;.&lt;/p&gt;
+&lt;a href="<a href="http://search.yahoo.com/" target="_blank" class="external">http://search.yahoo.com/</a>" title="Yahoo Search"&gt;Yahoo&lt;/a&gt;
+or &lt;a href="<a href="http://search.msn.com/" target="_blank" class="external">http://search.msn.com/</a>" title="MSN Search"&gt;MSN&lt;/a&gt;.&lt;/p&gt;
 </code></pre>
 
 <p>For comparison, here is the same paragraph written using<br>
@@ -926,7 +926,7 @@ use regular HTML <code>&lt;img&gt;</code> tags.</p>
 
 <p>Markdown will turn this into:</p>
 
-<pre><code>&lt;a class="external"  target="_blank"  href="<a href="http://example.com/%22&gt;http://example.com/&lt;/a&amp;gt" target="_blank" class="external">http://example.com/"&gt;http://example.com/&lt;/a&amp;gt</a>;
+<pre><code>&lt;a href="<a href="http://example.com/%22&gt;http://example.com/&lt;/a&amp;gt" target="_blank" class="external">http://example.com/"&gt;http://example.com/&lt;/a&amp;gt</a>;
 </code></pre>
 
 <p>Automatic links for email addresses work similarly, except that<br>

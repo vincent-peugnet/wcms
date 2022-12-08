@@ -71,6 +71,7 @@ class ServicerenderTest extends TestCase
             ['markdown-test-2'],
             ['body-test'],
             ['date-time-test'],
+            ['external-links-test'],
         ];
     }
 }

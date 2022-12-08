@@ -3,8 +3,9 @@
 namespace Wcms;
 
 use AltoRouter;
+use DOMDocument;
+use DOMElement;
 use Exception;
-use IntlDateFormatter;
 use InvalidArgumentException;
 use LogicException;
 use Michelf\MarkdownExtra;
@@ -115,7 +116,7 @@ class Servicerender
         $lang = !empty($this->page->lang()) ? $this->page->lang() : Config::lang();
         $langproperty = 'lang="' . $lang . '"';
         $html = "<!DOCTYPE html>\n<html $langproperty >\n<head>\n$head\n</head>";
-        $html .= "\n<body>\n$parsebody\n</body>\n</html>\n";
+        $html .= "\n$parsebody\n</html>\n";
 
         return $html;
     }
@@ -374,11 +375,8 @@ class Servicerender
         $text = $this->wurl($text);
         $text = $this->wikiurl($text);
 
-
-
-        $text = str_replace('href="http', "class=\"external\" $this->externallinkblank href=\"http", $text);
-
-        $text = $this->shortenurl($text);
+        $text = "<body>\n$text\n</body>";
+        $text = $this->externallink($text);
 
         $text = $this->autourl($text);
 
@@ -409,21 +407,24 @@ class Servicerender
         return $text;
     }
 
+
     /**
-     * Shorten the urls of links whose content equals the href.
+     * Look for datas about pages.
      *
      * @param string $text the page text as html
-     *
-     * @todo remove this to make n-peugnet happy
      */
-    private function shortenurl(string $text): string
+    private function richlink(string $text): string
     {
         $text = preg_replace('#<a(.*href="(https?:\/\/(.+))".*)>\2</a>#', "<a$1>$3</a>", $text);
         return $text;
     }
 
-
-    private function autourl($text)
+    /**
+     * Replace plain URL with HTML link pointing to their address.
+     *
+     * This will also include `target=_blank` and `class=external` attributes.
+     */
+    private function autourl($text): string
     {
         $validator = new Validator(false);
         $highlighter = new HtmlHighlighter("http", [
@@ -433,6 +434,35 @@ class Servicerender
         $urlHighlight = new UrlHighlight($validator, $highlighter);
         $text = $urlHighlight->highlightUrls($text);
         return $text;
+    }
+
+    /**
+     * Add `external` class attribute in `<a>` anchor HTML link tags
+     *
+     * Keep existing class and remove duplicates or useless spaces in class attribute
+     */
+    private function externallink(string $text): string
+    {
+        $dom = new DOMDocument();
+        $dom->loadHTML($text, LIBXML_NOERROR + LIBXML_HTML_NODEFDTD + LIBXML_HTML_NOIMPLIED);
+        $links = $dom->getElementsByTagName('a');
+        foreach ($links as $link) {
+            assert($link instanceof DOMElement);
+            if (preg_match('~^https?:\/\/~', $link->getAttribute('href'))) {
+                $class = $link->getAttribute('class');
+                $classes = explode(' ', $class);
+                $classes = array_filter($classes, function (string $var) {
+                    return !empty($var);
+                });
+                $classes[] = 'external';
+                $classes = array_unique($classes);
+                $link->setAttribute('class', implode(' ', $classes));
+                if (!empty($this->externallinkblank)) {
+                    $link->setAttribute('target', '_blank');
+                }
+            }
+        }
+        return $dom->saveHTML();
     }
 
     /**
@@ -451,7 +481,10 @@ class Servicerender
         }
     }
 
-    private function wurl(string $text)
+    /**
+     * Analyse internal HTML links
+     */
+    private function wurl(string $text): string
     {
         $linkto = [];
         $rend = $this;
@@ -478,7 +511,10 @@ class Servicerender
         return $text;
     }
 
-    private function wikiurl(string $text)
+    /**
+     * Replace wiki links [[page_id]] with HTML link
+     */
+    private function wikiurl(string $text): string
     {
         $linkto = [];
         $rend = $this;
