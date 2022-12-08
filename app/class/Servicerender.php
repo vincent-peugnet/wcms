@@ -341,7 +341,7 @@ class Servicerender
         $content = $this->pageid($content);
         $content = $this->url($content);
         $content = $this->path($content);
-        if ($element->autolink()) {
+        if ($element->autolink() > 0) {
             $content = $this->everylink($content, $element->autolink());
         }
         if ($element->markdown()) {
@@ -812,7 +812,7 @@ class Servicerender
      */
     private function everylink(string $text, int $limit): string
     {
-        $regex = '~([\w-_éêèùïüîçà]{' . $limit . ',})(?![^<]*>|[^<>]*<\/)~';
+        $regex = '~([\w\-_éêèùïüîçà]{' . $limit . ',})(?![^<]*>|[^<>]*<\/)~';
         $text = preg_replace_callback($regex, function ($matches) {
             return '<a href="' . Model::idclean($matches[1]) . '">' . $matches[1] . '</a>';
         }, $text);

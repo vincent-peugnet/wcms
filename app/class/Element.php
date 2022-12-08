@@ -15,7 +15,7 @@ class Element extends Item
     protected ?string $type;
     protected $options;
     protected $sources = [];
-    protected $autolink = 0;
+    protected int $autolink = 0;
     protected $markdown = 1;
     protected $content = '';
     protected $minheaderid = 1;
@@ -82,7 +82,7 @@ class Element extends Item
         return $this->sources;
     }
 
-    public function autolink()
+    public function autolink(): int
     {
         return $this->autolink;
     }
