@@ -363,7 +363,7 @@ class Modelpage extends Modeldb
     {
         $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
 
-        $renderengine = new Servicerender($router, $this);
+        $renderengine = new Servicerender($router, $this, Config::externallinkblank(), Config::internallinkblank());
 
         try {
             $html = $renderengine->render($page);

@@ -29,8 +29,8 @@ class Servicerender
 
     protected $linkto = [];
     protected $sum = [];
-    protected $internallinkblank = '';
-    protected $externallinkblank = '';
+    protected bool $internallinkblank;
+    protected bool $externallinkblank;
 
     /**
      * @var Bookmark[]                      Associative array of Bookmarks using fullmatch as key
@@ -41,18 +41,16 @@ class Servicerender
      * @param AltoRouter $router            Router used to generate urls
      * @param Modelpage $pagemanager        [optionnal] can be usefull if a pagemanager already store a page list
      */
-    public function __construct(AltoRouter $router, Modelpage $pagemanager)
-    {
+    public function __construct(
+        AltoRouter $router,
+        Modelpage $pagemanager,
+        bool $externallinkblank = false,
+        bool $internallinkblank = false
+    ) {
         $this->router = $router;
         $this->pagemanager = $pagemanager;
-
-        if (Config::internallinkblank()) {
-            $this->internallinkblank = ' target="_blank" ';
-        }
-
-        if (Config::externallinkblank()) {
-            $this->externallinkblank = ' target="_blank" ';
-        }
+        $this->externallinkblank = $externallinkblank;
+        $this->internallinkblank = $internallinkblank;
     }
 
 
@@ -66,6 +64,8 @@ class Servicerender
     public function render(Page $page): string
     {
         $this->page = $page;
+
+        $this->linkto = array_unique($this->linkto);
 
         return $this->gethmtl();
     }
@@ -372,11 +372,10 @@ class Servicerender
         $text = $this->rss($text);
 
         $text = $this->authors($text);
-        $text = $this->wurl($text);
         $text = $this->wikiurl($text);
 
         $text = "<body>\n$text\n</body>";
-        $text = $this->externallink($text);
+        $text = $this->htmlink($text);
 
         $text = $this->autourl($text);
 
@@ -426,40 +425,64 @@ class Servicerender
      */
     private function autourl($text): string
     {
+        $options = ["class" => "external"];
+        if ($this->externallinkblank) {
+            $options['target'] = '_blank';
+        }
         $validator = new Validator(false);
-        $highlighter = new HtmlHighlighter("http", [
-            "target" => "_blank",
-            "class" => "external",
-        ]);
+        $highlighter = new HtmlHighlighter("http", $options);
         $urlHighlight = new UrlHighlight($validator, $highlighter);
         $text = $urlHighlight->highlightUrls($text);
         return $text;
     }
 
     /**
-     * Add `external` class attribute in `<a>` anchor HTML link tags
+     * Add `external` or `internal` class attribute in `<a>` anchor HTML link tags
+     *
+     * For internal link, indicate if page exist or not.
+     * If it exist, add description in title and privacy as class.
      *
      * Keep existing class and remove duplicates or useless spaces in class attribute
      */
-    private function externallink(string $text): string
+    private function htmlink(string $text): string
     {
         $dom = new DOMDocument();
+        /** @phpstan-ignore-next-line Error supposed to be thrown here but is'nt */
         $dom->loadHTML($text, LIBXML_NOERROR + LIBXML_HTML_NODEFDTD + LIBXML_HTML_NOIMPLIED);
         $links = $dom->getElementsByTagName('a');
         foreach ($links as $link) {
             assert($link instanceof DOMElement);
-            if (preg_match('~^https?:\/\/~', $link->getAttribute('href'))) {
-                $class = $link->getAttribute('class');
-                $classes = explode(' ', $class);
-                $classes = array_filter($classes, function (string $var) {
-                    return !empty($var);
-                });
+            $class = $link->getAttribute('class');
+            $classes = explode(' ', $class);
+            $classes = array_filter($classes, function (string $var) {
+                return !empty($var);
+            });
+            $href = $link->getAttribute('href');
+            if (preg_match('~^https?:\/\/~', $href)) {
                 $classes[] = 'external';
-                $classes = array_unique($classes);
-                $link->setAttribute('class', implode(' ', $classes));
-                if (!empty($this->externallinkblank)) {
+                if ($this->externallinkblank) {
+                    $link->setAttribute('target', '_blank');
+                    $link->setAttribute('class', implode(' ', array_unique($classes)));
+                }
+            } elseif (preg_match('~^([\w-]+)\/?(#[\w-]+)?$~', $href, $out)) {
+                $classes[] = 'internal';
+                try {
+                    $page = $this->pagemanager->get($out[1]);
+                    $link->setAttribute('href', $this->upage($out[1]) . $out[2]);
+                    $link->setAttribute('title', $page->description());
+                    $classes[] = 'exist';
+                    $classes[] = $page->secure('string');
+                    $this->linkto = $page->id();
+                } catch (RuntimeException $e) {
+                    $link->setAttribute('href', $this->upage($out[1]));
+                    $link->setAttribute('title', Config::existnot());
+                    $classes[] = 'existnot';
+                    // TODO: store internal link that exist not in $this
+                }
+                if ($this->internallinkblank) {
                     $link->setAttribute('target', '_blank');
                 }
+                $link->setAttribute('class', implode(' ', array_unique($classes)));
             }
         }
         return $dom->saveHTML();
@@ -482,36 +505,6 @@ class Servicerender
     }
 
     /**
-     * Analyse internal HTML links
-     */
-    private function wurl(string $text): string
-    {
-        $linkto = [];
-        $rend = $this;
-        $text = preg_replace_callback(
-            '%href="([\w-]+)\/?(#?[\w-]*)"%',
-            function ($matches) use ($rend, &$linkto) {
-                try {
-                    $matchpage = $rend->pagemanager->get($matches[1]);
-                    $href = $rend->upage($matches[1]) . $matches[2];
-                    $t = $matchpage->description();
-                    $c = 'internal exist ' . $matchpage->secure('string');
-                    $linkto[] = $matchpage->id();
-                } catch (RuntimeException $e) {
-                    $href = $rend->upage($matches[1]);
-                    $t = Config::existnot();
-                    $c = 'internal existnot"' . $this->internallinkblank;
-                }
-                $link =  'href="' . $href . '" title="' . $t . '" class="' . $c . '"' . $this->internallinkblank;
-                return $link;
-            },
-            $text
-        );
-        $this->linkto = array_unique(array_merge($this->linkto, $linkto));
-        return $text;
-    }
-
-    /**
      * Replace wiki links [[page_id]] with HTML link
      */
     private function wikiurl(string $text): string
@@ -519,8 +512,9 @@ class Servicerender
         $linkto = [];
         $rend = $this;
         $text = preg_replace_callback(
-            '%\[\[([\w-]+)\/?#?([a-z-_]*)\]\]%',
+            '%\[\[([\w-]+)\/?(#[\w-]+)?\]\]%',
             function ($matches) use ($rend, &$linkto) {
+                $target = $this->internallinkblank ? ' target="_blank"' : '';
                 try {
                     $matchpage = $rend->pagemanager->get($matches[1]);
                     $href = $rend->upage($matches[1]) . $matches[2];
@@ -531,11 +525,10 @@ class Servicerender
                 } catch (RuntimeException $e) {
                     $href = $rend->upage($matches[1]);
                     $t = Config::existnot();
-                    $c = 'internal existnot" ' . $this->internallinkblank;
+                    $c = 'internal existnot" ' . $target;
                     $a = $matches[1];
                 }
-                $i = $this->internallinkblank;
-                return '<a href="' . $href . '" title="' . $t . '" class="' . $c . '" ' . $i . ' >' . $a . '</a>';
+                return '<a href="' . $href . '" title="' . $t . '" class="' . $c . '" ' . $target . ' >' . $a . '</a>';
             },
             $text
         );

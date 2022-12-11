@@ -31,7 +31,7 @@ class ServicerenderTest extends TestCase
         $router = new AltoRouter([
             ['GET', '/[cid:page]/', 'Controllerpage#read', 'pageread/'],
         ]);
-        $this->renderengine = new Servicerender($router, new Modelpage(Config::pagetable()));
+        $this->renderengine = new Servicerender($router, new Modelpage(Config::pagetable()), true, false);
     }
 
     public function tearDown(): void

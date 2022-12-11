@@ -81,8 +81,8 @@ can <a href="/projects/markdown/syntax.text">see the source for it by adding '.t
 document should be publishable as-is, as plain text, without looking<br>
 like it's been marked up with tags or formatting instructions. While<br>
 Markdown's syntax has been influenced by several existing text-to-HTML<br>
-filters -- including <a href="http://docutils.sourceforge.net/mirror/setext.html" class="external" target="_blank">Setext</a>, <a href="http://www.aaronsw.com/2002/atx/" class="external" target="_blank">atx</a>, <a href="http://textism.com/tools/textile/" class="external" target="_blank">Textile</a>, <a href="http://docutils.sourceforge.net/rst.html" class="external" target="_blank">reStructuredText</a>,<br>
-<a href="http://www.triptico.com/software/grutatxt.html" class="external" target="_blank">Grutatext</a>, and <a href="http://ettext.taint.org/doc/" class="external" target="_blank">EtText</a> -- the single biggest source of<br>
+filters -- including <a href="http://docutils.sourceforge.net/mirror/setext.html" target="_blank" class="external">Setext</a>, <a href="http://www.aaronsw.com/2002/atx/" target="_blank" class="external">atx</a>, <a href="http://textism.com/tools/textile/" target="_blank" class="external">Textile</a>, <a href="http://docutils.sourceforge.net/rst.html" target="_blank" class="external">reStructuredText</a>,<br>
+<a href="http://www.triptico.com/software/grutatxt.html" target="_blank" class="external">Grutatext</a>, and <a href="http://ettext.taint.org/doc/" target="_blank" class="external">EtText</a> -- the single biggest source of<br>
 inspiration for Markdown's syntax is the format of plain text email.</p>
 
 <p>To this end, Markdown's syntax is comprised entirely of punctuation<br>
@@ -155,12 +155,12 @@ characters, you must escape them as entities, e.g. <code>&amp;lt;</code>, and<br
 write about 'AT&amp;T', you need to write '<code>AT&amp;amp;T</code>'. You even need to<br>
 escape ampersands within URLs. Thus, if you want to link to:</p>
 
-<pre><code><a href="http://images.google.com/images?num=30&amp;q=larry+bird" target="_blank" class="external">http://images.google.com/images?num=30&amp;q=larry+bird</a>
+<pre><code><a href="http://images.google.com/images?num=30&amp;q=larry+bird" class="external" target="_blank">http://images.google.com/images?num=30&amp;q=larry+bird</a>
 </code></pre>
 
 <p>you need to encode the URL as:</p>
 
-<pre><code><a href="http://images.google.com/images?num=30&amp;amp;q=larry+bird" target="_blank" class="external">http://images.google.com/images?num=30&amp;amp;q=larry+bird</a>
+<pre><code><a href="http://images.google.com/images?num=30&amp;amp;q=larry+bird" class="external" target="_blank">http://images.google.com/images?num=30&amp;amp;q=larry+bird</a>
 </code></pre>
 
 <p>in your anchor tag <code>href</code> attribute. Needless to say, this is easy to<br>
@@ -232,7 +232,7 @@ work best -- and look better -- when you format them with hard breaks.</p>
 
 <h3 id="header">Headers</h3>
 
-<p>Markdown supports two styles of headers, <a href="http://docutils.sourceforge.net/mirror/setext.html" class="external" target="_blank">Setext</a> and <a href="http://www.aaronsw.com/2002/atx/" class="external" target="_blank">atx</a>.</p>
+<p>Markdown supports two styles of headers, <a href="http://docutils.sourceforge.net/mirror/setext.html" target="_blank" class="external">Setext</a> and <a href="http://www.aaronsw.com/2002/atx/" target="_blank" class="external">atx</a>.</p>
 
 <p>Setext-style headers are "underlined" using equal signs (for first-level<br>
 headers) and dashes (for second-level headers). For example:</p>
@@ -600,17 +600,17 @@ after the link text's closing square bracket. Inside the parentheses,<br>
 put the URL where you want the link to point, along with an <em>optional</em><br>
 title for the link, surrounded in quotes. For example:</p>
 
-<pre><code>This is [an example](<a href="http://example.com/" target="_blank" class="external">http://example.com/</a> "Title") inline link.
+<pre><code>This is [an example](<a href="http://example.com/" class="external" target="_blank">http://example.com/</a> "Title") inline link.
 
-[This link](<a href="http://example.net/" target="_blank" class="external">http://example.net/</a>) has no title attribute.
+[This link](<a href="http://example.net/" class="external" target="_blank">http://example.net/</a>) has no title attribute.
 </code></pre>
 
 <p>Will produce:</p>
 
-<pre><code>&lt;p&gt;This is &lt;a href="<a href="http://example.com/" target="_blank" class="external">http://example.com/</a>" title="Title"&gt;
+<pre><code>&lt;p&gt;This is &lt;a href="<a href="http://example.com/" class="external" target="_blank">http://example.com/</a>" title="Title"&gt;
 an example&lt;/a&gt; inline link.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href="<a href="http://example.net/%22&gt;This" target="_blank" class="external">http://example.net/"&gt;This</a> link&lt;/a&gt; has no
+&lt;p&gt;&lt;a href="<a href="http://example.net/%22&gt;This" class="external" target="_blank">http://example.net/"&gt;This</a> link&lt;/a&gt; has no
 title attribute.&lt;/p&gt;
 </code></pre>
 
@@ -634,7 +634,7 @@ which you place a label of your choosing to identify the link:</p>
 <p>Then, anywhere in the document, you define your link label like this,<br>
 on a line by itself:</p>
 
-<pre><code>[id]: <a href="http://example.com/" target="_blank" class="external">http://example.com/</a>  "Optional Title Here"
+<pre><code>[id]: <a href="http://example.com/" class="external" target="_blank">http://example.com/</a>  "Optional Title Here"
 </code></pre>
 
 <p>That is:</p>
@@ -651,9 +651,9 @@ in double or single quotes, or enclosed in parentheses.</li>
 
 <p>The following three link definitions are equivalent:</p>
 
-<pre><code>[foo]: <a href="http://example.com/" target="_blank" class="external">http://example.com/</a>  "Optional Title Here"
-[foo]: <a href="http://example.com/" target="_blank" class="external">http://example.com/</a>  'Optional Title Here'
-[foo]: <a href="http://example.com/" target="_blank" class="external">http://example.com/</a>  (Optional Title Here)
+<pre><code>[foo]: <a href="http://example.com/" class="external" target="_blank">http://example.com/</a>  "Optional Title Here"
+[foo]: <a href="http://example.com/" class="external" target="_blank">http://example.com/</a>  'Optional Title Here'
+[foo]: <a href="http://example.com/" class="external" target="_blank">http://example.com/</a>  (Optional Title Here)
 </code></pre>
 
 <p><strong>Note:</strong> There is a known bug in Markdown.pl 1.0.1 which prevents<br>
@@ -661,13 +661,13 @@ single quotes from being used to delimit link titles.</p>
 
 <p>The link URL may, optionally, be surrounded by angle brackets:</p>
 
-<pre><code>[id]: &lt;<a href="http://example.com/&amp;gt" target="_blank" class="external">http://example.com/&amp;gt</a>;  "Optional Title Here"
+<pre><code>[id]: &lt;<a href="http://example.com/&amp;gt" class="external" target="_blank">http://example.com/&amp;gt</a>;  "Optional Title Here"
 </code></pre>
 
 <p>You can put the title attribute on the next line and use extra spaces<br>
 or tabs for padding, which tends to look better with longer URLs:</p>
 
-<pre><code>[id]: <a href="http://example.com/longish/path/to/resource/here" target="_blank" class="external">http://example.com/longish/path/to/resource/here</a>
+<pre><code>[id]: <a href="http://example.com/longish/path/to/resource/here" class="external" target="_blank">http://example.com/longish/path/to/resource/here</a>
     "Optional Title Here"
 </code></pre>
 
@@ -694,7 +694,7 @@ Just use an empty set of square brackets -- e.g., to link the word<br>
 
 <p>And then define the link:</p>
 
-<pre><code>[Google]: <a href="http://google.com/" target="_blank" class="external">http://google.com/</a>
+<pre><code>[Google]: <a href="http://google.com/" class="external" target="_blank">http://google.com/</a>
 </code></pre>
 
 <p>Because link names may contain spaces, this shortcut even works for<br>
@@ -705,7 +705,7 @@ multiple words in the link text:</p>
 
 <p>And then define the link:</p>
 
-<pre><code>[Daring Fireball]: <a href="http://daringfireball.net/" target="_blank" class="external">http://daringfireball.net/</a>
+<pre><code>[Daring Fireball]: <a href="http://daringfireball.net/" class="external" target="_blank">http://daringfireball.net/</a>
 </code></pre>
 
 <p>Link definitions can be placed anywhere in your Markdown document. I<br>
@@ -718,9 +718,9 @@ document, sort of like footnotes.</p>
 <pre><code>I get 10 times more traffic from [Google] [1] than from
 [Yahoo] [2] or [MSN] [3].
 
-  [1]: <a href="http://google.com/" target="_blank" class="external">http://google.com/</a>        "Google"
-  [2]: <a href="http://search.yahoo.com/" target="_blank" class="external">http://search.yahoo.com/</a>  "Yahoo Search"
-  [3]: <a href="http://search.msn.com/" target="_blank" class="external">http://search.msn.com/</a>    "MSN Search"
+  [1]: <a href="http://google.com/" class="external" target="_blank">http://google.com/</a>        "Google"
+  [2]: <a href="http://search.yahoo.com/" class="external" target="_blank">http://search.yahoo.com/</a>  "Yahoo Search"
+  [3]: <a href="http://search.msn.com/" class="external" target="_blank">http://search.msn.com/</a>    "MSN Search"
 </code></pre>
 
 <p>Using the implicit link name shortcut, you could instead write:</p>
@@ -728,25 +728,25 @@ document, sort of like footnotes.</p>
 <pre><code>I get 10 times more traffic from [Google][] than from
 [Yahoo][] or [MSN][].
 
-  [google]: <a href="http://google.com/" target="_blank" class="external">http://google.com/</a>        "Google"
-  [yahoo]:  <a href="http://search.yahoo.com/" target="_blank" class="external">http://search.yahoo.com/</a>  "Yahoo Search"
-  [msn]:    <a href="http://search.msn.com/" target="_blank" class="external">http://search.msn.com/</a>    "MSN Search"
+  [google]: <a href="http://google.com/" class="external" target="_blank">http://google.com/</a>        "Google"
+  [yahoo]:  <a href="http://search.yahoo.com/" class="external" target="_blank">http://search.yahoo.com/</a>  "Yahoo Search"
+  [msn]:    <a href="http://search.msn.com/" class="external" target="_blank">http://search.msn.com/</a>    "MSN Search"
 </code></pre>
 
 <p>Both of the above examples will produce the following HTML output:</p>
 
-<pre><code>&lt;p&gt;I get 10 times more traffic from &lt;a href="<a href="http://google.com/" target="_blank" class="external">http://google.com/</a>"
+<pre><code>&lt;p&gt;I get 10 times more traffic from &lt;a href="<a href="http://google.com/" class="external" target="_blank">http://google.com/</a>"
 title="Google"&gt;Google&lt;/a&gt; than from
-&lt;a href="<a href="http://search.yahoo.com/" target="_blank" class="external">http://search.yahoo.com/</a>" title="Yahoo Search"&gt;Yahoo&lt;/a&gt;
-or &lt;a href="<a href="http://search.msn.com/" target="_blank" class="external">http://search.msn.com/</a>" title="MSN Search"&gt;MSN&lt;/a&gt;.&lt;/p&gt;
+&lt;a href="<a href="http://search.yahoo.com/" class="external" target="_blank">http://search.yahoo.com/</a>" title="Yahoo Search"&gt;Yahoo&lt;/a&gt;
+or &lt;a href="<a href="http://search.msn.com/" class="external" target="_blank">http://search.msn.com/</a>" title="MSN Search"&gt;MSN&lt;/a&gt;.&lt;/p&gt;
 </code></pre>
 
 <p>For comparison, here is the same paragraph written using<br>
 Markdown's inline link style:</p>
 
-<pre><code>I get 10 times more traffic from [Google](<a href="http://google.com/" target="_blank" class="external">http://google.com/</a> "Google")
-than from [Yahoo](<a href="http://search.yahoo.com/" target="_blank" class="external">http://search.yahoo.com/</a> "Yahoo Search") or
-[MSN](<a href="http://search.msn.com/" target="_blank" class="external">http://search.msn.com/</a> "MSN Search").
+<pre><code>I get 10 times more traffic from [Google](<a href="http://google.com/" class="external" target="_blank">http://google.com/</a> "Google")
+than from [Yahoo](<a href="http://search.yahoo.com/" class="external" target="_blank">http://search.yahoo.com/</a> "Yahoo Search") or
+[MSN](<a href="http://search.msn.com/" class="external" target="_blank">http://search.msn.com/</a> "MSN Search").
 </code></pre>
 
 <p>The point of reference-style links is not that they're easier to<br>
@@ -921,12 +921,12 @@ use regular HTML <code>&lt;img&gt;</code> tags.</p>
 
 <p>Markdown supports a shortcut style for creating "automatic" links for URLs and email addresses: simply surround the URL or email address with angle brackets. What this means is that if you want to show the actual text of a URL or email address, and also have it be a clickable link, you can do this:</p>
 
-<pre><code>&lt;<a href="http://example.com/&amp;gt" target="_blank" class="external">http://example.com/&amp;gt</a>;
+<pre><code>&lt;<a href="http://example.com/&amp;gt" class="external" target="_blank">http://example.com/&amp;gt</a>;
 </code></pre>
 
 <p>Markdown will turn this into:</p>
 
-<pre><code>&lt;a href="<a href="http://example.com/%22&gt;http://example.com/&lt;/a&amp;gt" target="_blank" class="external">http://example.com/"&gt;http://example.com/&lt;/a&amp;gt</a>;
+<pre><code>&lt;a href="<a href="http://example.com/%22&gt;http://example.com/&lt;/a&amp;gt" class="external" target="_blank">http://example.com/"&gt;http://example.com/&lt;/a&amp;gt</a>;
 </code></pre>
 
 <p>Automatic links for email addresses work similarly, except that<br>
