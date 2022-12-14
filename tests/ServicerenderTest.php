@@ -29,7 +29,7 @@ class ServicerenderTest extends TestCase
         chdir("tests/fixtures");
 
         $router = new AltoRouter([
-            ['GET', '/[cid:page]/', 'Controllerpage#read', 'pageread/'],
+            ['GET', '/[cid:page]', 'Controllerpage#read', 'pageread'],
         ]);
         $this->renderengine = new Servicerender($router, new Modelpage(Config::pagetable()), true, false);
     }

@@ -467,18 +467,20 @@ class Servicerender
                     $link->setAttribute('target', '_blank');
                     $link->setAttribute('class', implode(' ', array_unique($classes)));
                 }
-            } elseif (preg_match('~^([\w-]+)\/?(#[\w-]+)?$~', $href, $out)) {
+            } elseif (preg_match('~^([\w-]+)((\/?#[\w-]+)|(\/([\w\-\%\[\]\=\?\&]*)))?$~', $href, $out)) {
                 $classes[] = 'internal';
+                $fragment = $out[2] ?? '';
+                $link->setAttribute('href', $this->upage($out[1]) . $fragment);
+                if (isset($out[5]) && in_array($out[5], ['add', 'edit', 'update', 'render', 'download', 'delete'])) {
+                    $classes[] = $out[5];
+                }
                 try {
                     $page = $this->pagemanager->get($out[1]);
-                    $fragment = $out[2] ?? '';
-                    $link->setAttribute('href', $this->upage($out[1]) . $fragment);
                     $link->setAttribute('title', $page->description());
                     $classes[] = 'exist';
                     $classes[] = $page->secure('string');
                     $this->linkto[] = $page->id();
                 } catch (RuntimeException $e) {
-                    $link->setAttribute('href', $this->upage($out[1]));
                     $link->setAttribute('title', Config::existnot());
                     $classes[] = 'existnot';
                     // TODO: store internal link that exist not in $this
@@ -503,7 +505,7 @@ class Servicerender
     public function upage(string $id): string
     {
         try {
-            return $this->router->generate('pageread/', ['page' => $id]);
+            return $this->router->generate('pageread', ['page' => $id]);
         } catch (Exception $e) {
             throw new LogicException($e->getMessage(), $e->getCode(), $e);
         }
