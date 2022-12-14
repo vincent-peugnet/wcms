@@ -488,7 +488,8 @@ class Servicerender
                 $link->setAttribute('class', implode(' ', array_unique($classes)));
             }
         }
-        return $dom->saveHTML();
+        // By passing the documentElement to saveHTML, special chars are not converted to entities
+        return $dom->saveHTML($dom->documentElement);
     }
 
     /**
