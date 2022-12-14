@@ -20,7 +20,11 @@ CodeMirror.defineSimpleMode('wcms', {
             token: 'wcms',
             next: 'wcms',
         },
-        { regex: /\[\[[a-z0-9\-\_\#\/]+\]\]/, token: 'wikilink', next: 'start' },
+        {
+            regex: /\[\[[a-z0-9\-\_\#\/]+\]\]/,
+            token: 'wikilink',
+            next: 'start',
+        },
         { regex: /<!--/, token: 'comment', next: 'comment' },
     ],
     // 'wcms' mode, for each macro, if there is parameters, pass to its associated mode

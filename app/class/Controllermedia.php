@@ -152,10 +152,14 @@ class Controllermedia extends Controller
                 $this->mediamanager->multimovefile($_POST['id'], $_POST['dir']);
                 $refreshfont = $_POST['dir'] === Model::FONT_DIR;
             }
-        }
-        if ($refreshfont || $_POST['path'] === Model::FONT_DIR) {
-            $fontfacer = new Servicefont($this->mediamanager);
-            $fontfacer->writecss();
+            if ($refreshfont || $_POST['path'] === Model::FONT_DIR) {
+                $fontfacer = new Servicefont($this->mediamanager);
+                try {
+                    $fontfacer->writecss();
+                } catch (Filesystemexception $e) {
+                    Model::sendflashmessage('Error while updating fonts CSS : ' . $e->getMessage());
+                }
+            }
         }
         $this->redirect($this->generate('media') . $_POST['route']);
     }
