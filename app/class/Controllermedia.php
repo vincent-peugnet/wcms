@@ -141,6 +141,7 @@ class Controllermedia extends Controller
     public function edit()
     {
         if ($this->user->issupereditor() && isset($_POST['action']) && isset($_POST['id'])) {
+            $refreshfont = false;
             if ($_POST['action'] == 'delete') {
                 if ($this->mediamanager->multifiledelete($_POST['id'])) {
                     Model::sendflashmessage('Files deletion successfull', 'success');
@@ -149,7 +150,12 @@ class Controllermedia extends Controller
                 }
             } elseif ($_POST['action'] == 'move' && isset($_POST['dir'])) {
                 $this->mediamanager->multimovefile($_POST['id'], $_POST['dir']);
+                $refreshfont = $_POST['dir'] === Model::FONT_DIR;
             }
+        }
+        if ($refreshfont || $_POST['path'] === Model::FONT_DIR) {
+            $fontfacer = new Servicefont($this->mediamanager);
+            $fontfacer->writecss();
         }
         $this->redirect($this->generate('media') . $_POST['route']);
     }
