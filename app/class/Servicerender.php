@@ -446,9 +446,12 @@ class Servicerender
      */
     private function htmlink(string $text): string
     {
-        $dom = new DOMDocument();
+        $dom = new DOMDocument('1.0', 'UTF-8');
+        /** Force UTF-8 encoding for loadHTML by defining it in the content itself with an XML tag that need to be removed later */
+        $text = '<?xml encoding="utf-8" ?>' . $text;
         /** @phpstan-ignore-next-line Error supposed to be thrown here but is'nt */
-        $dom->loadHTML($text, LIBXML_NOERROR + LIBXML_HTML_NODEFDTD + LIBXML_HTML_NOIMPLIED);
+        $dom->loadHTML($text, LIBXML_NOERROR | LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED);
+        $dom->removeChild($dom->firstChild);
         $links = $dom->getElementsByTagName('a');
         foreach ($links as $link) {
             assert($link instanceof DOMElement);
