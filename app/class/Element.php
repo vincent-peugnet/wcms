@@ -15,7 +15,7 @@ class Element extends Item
     protected ?string $type;
     protected $options;
     protected $sources = [];
-    protected int $autolink = 0;
+    protected int $everylink = 0;
     protected $markdown = 1;
     protected $content = '';
     protected $minheaderid = 1;
@@ -82,9 +82,9 @@ class Element extends Item
         return $this->sources;
     }
 
-    public function autolink(): int
+    public function everylink(): int
     {
-        return $this->autolink;
+        return $this->everylink;
     }
 
     public function markdown()
@@ -150,10 +150,10 @@ class Element extends Item
         }
     }
 
-    public function setautolink(int $level)
+    public function seteverylink(int $level)
     {
         if ($level >= 0 && $level <= 16) {
-            $this->autolink = $level;
+            $this->everylink = $level;
             return true;
         } else {
             return false;

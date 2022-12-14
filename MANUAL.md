@@ -610,21 +610,11 @@ Where `*` is the page ID of the rendered page.
 #### Rendering options
 
 
-##### Autolink
-
-    %<element>?autolink=<level>%
-
-Where `<level>` is an integer. By default `autolink=0`.
-
-Autolink will transform each word containing a minimum of `<level>` letter(s), into internal links.
-
-
 ##### Markdown disable
 
     %<element>?mardown=(0|1)%
 
 Activate or desactivate [markdonw](#markdown) parser in called `<element>`. By default, Markdown is set to `1`.
-
 
 
 ##### Header ID
@@ -641,6 +631,19 @@ You can also set `headerid=0` to totaly disable ID generation for this element.
     %<element>?headeranchor=(0|1)%
 
 Use this to transform headings to anchor links pointing to themself. This settings is deactivated by default.
+
+
+##### Everylink
+
+Everylink is an powerfull but surprising feature that will replace everything you type with links.
+
+    %<element>?everylink=<level>%
+
+Where `<level>` is an integer. By default `everylink=0`.
+
+Everylink will transform each word containing a minimum of `<level>` letter(s), into internal links.
+
+
 
 ### Templating
 

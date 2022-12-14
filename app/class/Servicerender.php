@@ -342,8 +342,8 @@ class Servicerender
         $content = $this->pageid($content);
         $content = $this->url($content);
         $content = $this->path($content);
-        if ($element->autolink() > 0) {
-            $content = $this->everylink($content, $element->autolink());
+        if ($element->everylink() > 0) {
+            $content = $this->everylink($content, $element->everylink());
         }
         if ($element->markdown()) {
             $content = $this->markdown($content);
@@ -471,11 +471,12 @@ class Servicerender
                 $classes[] = 'internal';
                 try {
                     $page = $this->pagemanager->get($out[1]);
-                    $link->setAttribute('href', $this->upage($out[1]) . $out[2]);
+                    $fragment = $out[2] ?? '';
+                    $link->setAttribute('href', $this->upage($out[1]) . $fragment);
                     $link->setAttribute('title', $page->description());
                     $classes[] = 'exist';
                     $classes[] = $page->secure('string');
-                    $this->linkto = $page->id();
+                    $this->linkto[] = $page->id();
                 } catch (RuntimeException $e) {
                     $link->setAttribute('href', $this->upage($out[1]));
                     $link->setAttribute('title', Config::existnot());
