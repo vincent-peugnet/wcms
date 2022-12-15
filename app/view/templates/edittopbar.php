@@ -49,6 +49,12 @@
             <input type="number" name="fontsize" value="<?= $workspace->fontsize() ?>" id="editfontsize" min="<?= Wcms\Workspace::FONTSIZE_MIN ?>" max="<?= Wcms\Workspace::FONTSIZE_MAX ?>" form="workspace-form">
         </span>
 
+        <span id="highlighttheme">
+            <select name="highlighttheme" form="workspace-form" id="edithighlighttheme">
+                <?= options(Wcms\Workspace::THEMES, $workspace->highlighttheme(), true) ?>
+            </select>
+        </span>
+
         <span id="save-workspace">
 
             <form action="<?= $this->url('workspaceupdate') ?>" method="post" id="workspace-form">

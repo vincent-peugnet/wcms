@@ -1,5 +1,6 @@
 import CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/monokai.css';
 import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/css/css';
 import 'codemirror/mode/htmlmixed/htmlmixed';
@@ -113,6 +114,14 @@ let unsavedChanges = false;
 const inputEvent = new Event('input');
 
 window.addEventListener('load', () => {
+    initForm();
+    if (theme !== 'none') {
+        initEditors(theme);
+    }
+    initEditFeatures();
+});
+
+function initForm() {
     form = document.getElementById('update');
     let inputs = form.elements;
     for (const input of inputs) {
@@ -123,7 +132,9 @@ window.addEventListener('load', () => {
         event.preventDefault();
         submitHandler(this);
     });
+}
 
+function initEditors(theme) {
     // disable CodeMirror's default ctrl+D shortcut (delete line)
     delete CodeMirror.keyMap['default']['Ctrl-D'];
 
@@ -132,55 +143,68 @@ window.addEventListener('load', () => {
             mode: 'wcms-markdown',
             lineNumbers: true,
             lineWrapping: true,
+            theme,
             extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editcss'), {
             mode: 'css',
             lineNumbers: true,
+            theme,
             extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editheader'), {
             mode: 'wcms-markdown',
             lineNumbers: true,
             lineWrapping: true,
+            theme,
             extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editnav'), {
             mode: 'wcms-markdown',
             lineNumbers: true,
             lineWrapping: true,
+            theme,
             extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editaside'), {
             mode: 'wcms-markdown',
             lineNumbers: true,
             lineWrapping: true,
+            theme,
             extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editfooter'), {
             mode: 'wcms-markdown',
             lineNumbers: true,
             lineWrapping: true,
+            theme,
             extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editbody'), {
             mode: 'wcms-html',
             lineNumbers: true,
+            theme,
             extraKeys: { 'Alt-F': 'findPersistent' },
         }),
         CodeMirror.fromTextArea(document.getElementById('editjavascript'), {
             mode: 'javascript',
             lineNumbers: true,
+            theme,
             extraKeys: { 'Alt-F': 'findPersistent' },
         }),
     ];
     for (const editor of editors) {
         editor.on('change', cmChangeHandler);
     }
+}
 
+function initEditFeatures() {
     const fontSizeInput = document.getElementById('editfontsize');
     fontSizeInput.addEventListener('change', fontSizeChangeHandler);
     fontSizeInput.dispatchEvent(new Event('change'));
+
+    const themeSelect = document.getElementById('edithighlighttheme');
+    themeSelect.addEventListener('change', themeChangeHandler);
 
     document.getElementById('title').addEventListener('input', e => {
         pagetitle = e.target.value;
@@ -188,7 +212,7 @@ window.addEventListener('load', () => {
 
     window.onkeydown = keyboardHandler;
     window.onbeforeunload = confirmExit;
-});
+}
 
 /**
  * Manage a keyboardEvent
@@ -243,11 +267,37 @@ function cmChangeHandler(cm) {
 }
 
 function fontSizeChangeHandler(e) {
+    const editorElements = document.getElementsByClassName('editorarea');
+    for (const element of editorElements) {
+        element.style.fontSize = `${e.target.value}px`;
+    }
     for (const editor of editors) {
         const element = editor.getWrapperElement();
         element.style.fontSize = `${e.target.value}px`;
         editor.refresh();
     }
+}
+
+/**
+ *
+ * @param {InputEvent} e
+ */
+function themeChangeHandler(e) {
+    if (theme === e.target.value) {
+        return;
+    }
+    if (theme === 'none') {
+        initEditors(e.target.value);
+    } else {
+        for (const editor of editors) {
+            if (e.target.value === 'none') {
+                editor.toTextArea();
+            } else {
+                editor.setOption('theme', e.target.value);
+            }
+        }
+    }
+    theme = e.target.value;
 }
 
 /**

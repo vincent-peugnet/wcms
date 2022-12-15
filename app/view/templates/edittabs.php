@@ -10,6 +10,7 @@
     <div class="content">
 
         <textarea name="<?= $key ?>"
+                  class="editorarea"
                   id="edit<?= $key ?>"
                   autocomplete="off"
                   autocorrect="off"

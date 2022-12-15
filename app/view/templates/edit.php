@@ -31,6 +31,7 @@ $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [$cs
 <script>
     const pageid = '<?= $this->e($page->id()) ?>';
     let pagetitle = '<?= $this->e($page->title()) ?>';
+    let theme = '<?= $this->e($workspace->highlighttheme()) ?>';
 </script>
 <script src="<?= Wcms\Model::jspath() ?>edit.bundle.js"></script>
 

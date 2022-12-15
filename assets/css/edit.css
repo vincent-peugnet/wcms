@@ -304,7 +304,7 @@ span.cm-wkeyword {
         display: none;
     }
 
-    span#fontsize, span#save-workspace {
+    span#fontsize {
         display: none;
     }   
 }

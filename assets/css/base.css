@@ -103,12 +103,16 @@ summary:hover {
         font-size: 1.1em;
     }
 
-    header a span, footer, header span#search, aside a span {
+    header a span, footer, header span#search, aside a span, .text {
         display: none;
     }
 
-    header a, aside a {
+    header a, aside a{
         font-size: 1.3em;
+    }
+
+    button, input, select {
+        font-size: 1em;
     }
 
     aside {

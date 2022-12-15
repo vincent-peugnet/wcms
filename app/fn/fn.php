@@ -271,22 +271,18 @@ function checkboxes(string $name, array $optionlist = [], array $checkedlist = [
  *
  * @param array $options as `value => title`
  * @param string|int $selected value of actualy selected option
- * @param bool $title Use title as value. Default : false
+ * @param bool $simple Use title as value. Default : false
  *
  * @return string HTML list of options
  */
-function options(array $options, $selected = null, $title = false): string
+function options(array $options, $selected = null, $simple = false): string
 {
     $html = '';
     foreach ($options as $value => $title) {
-        if ($value === $selected) {
-            $attribute = 'selected';
-        } else {
-            $attribute = '';
-        }
-        if ($title) {
+        if ($simple) {
             $value = $title;
         }
+        $attribute = $value === $selected ? 'selected' : '';
         $html .= "<option value=\"$value\" $attribute>$title</option>\n";
     }
     return $html;
