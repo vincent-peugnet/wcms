@@ -14,7 +14,7 @@ $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [$cs
     <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'edit', 'pagelist' => $pagelist, 'pageid' => $page->id()]) ?>
 
 
-    <?php $this->insert('edittopbar', ['page' => $page, 'user' => $user, 'workspace' => $workspace]) ?>
+    <?php $this->insert('edittopbar', ['page' => $page, 'user' => $user, 'workspace' => $workspace, 'target' => $target]) ?>
 
     <div id="workspace">
 

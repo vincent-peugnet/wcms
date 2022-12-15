@@ -20,7 +20,7 @@
         </span>
 
         <span>
-            <a href="<?= $this->upage('pageread/', $page->id()) ?>" target="<?= $page->id() ?>" id="display">
+            <a href="<?= $this->upage('pageread', $page->id()) ?>" target="<?= $target ?>" id="display">
                 <i class="fa fa-eye"></i>
                 <span class="text">display</span>
             </a>
