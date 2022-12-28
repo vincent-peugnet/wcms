@@ -26,6 +26,7 @@ class Routes
             ['POST', '/api/v1/[cid:page]/update', 'Controllerapipage#update', 'apipageupdate'],
             ['POST', '/api/v1/[cid:page]/add', 'Controllerapipage#add', 'apipageadd'],
             ['DELETE', '/api/v1/[cid:page]', 'Controllerapipage#delete', 'apipagedelete'],
+            ['PUT', '/api/v1/[cid:page]', 'Controllerapipage#put', 'apipageput'],
             ['GET', '/', 'Controllerhome#desktop', 'home'],
             ['POST', '/', 'Controllerhome#desktop', 'homequery'],
             ['POST', '/columns', 'Controllerhome#columns', 'homecolumns'],

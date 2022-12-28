@@ -107,10 +107,29 @@ To create a page, just send this request using the desired page ID.
 
 possibles error codes:
 
-- `401` if user does'nt have the rights to update the page
+- `401` if user does'nt have the rights to create the page
 - `405` if page already exist with this ID
 - `406` in case of invalid ID
-- `500` server error
+- `500` server error while saving page
+
+
+### put
+
+This will create a page if not existing or erase an existing one with given JSON.
+`datecreation` will be reset if it already existed.
+
+    PUT     /api/v1/<page_id>
+
+possibles success codes:
+
+- `200` if the page already existed and has been successfully overiden.
+- `201` if the page was created created
+
+possibles error codes:
+
+- `401` if user does'nt have the rights to update/create the page
+- `406` in case of invalid ID
+- `500` server error while saving page
 
 
 
@@ -175,7 +194,7 @@ possible error codes:
 Usages example
 --------------
 
-Get a page and then update the MAIN element.
+### Get a page and then update the MAIN element.
 
 ```js
 obj = await fetch('http://localhost:8080/api/v1/jardin')
@@ -189,14 +208,14 @@ fetch('http://localhost:8080/api/v1/jardin/update', {
     .then(console.log);
 ```
 
-Get the list of all pages.
+### Get the list of all pages.
 
 ```js
 obj = await fetch('http://localhost:8080/api/v1/pages/list')
     .then(res => res.json());
 ```
 
-Get the list of pages filted and sorted.
+### Get the list of pages filted and sorted.
 
 ```js
 const options = {sortby:"datemodif", limit: 40, tagfilter: ["galaxy", "sublime"]};
@@ -206,4 +225,38 @@ fetch('http://localhost:8080/api/v1/pages/query', {
 })
     .then(res => res.json())
     .then(console.log);
+```
+
+### Create a page with a random number as ID.
+
+#### HTML
+
+```html
+<button id="create-page">Create a new page</button>
+```
+
+#### Javascript
+
+```js
+document.querySelector('button#create-page').addEventListener('click', function(){
+    const random = Math.floor(Math.random() * 1000) + 1;
+    var url = "/api/v1/" + random;
+
+    var promise = fetch(url, {
+        method: "PUT",
+        body: JSON.stringify({
+            id: random,
+            tag: ['generated'],
+            description: 'This page has been generated thanks to the API',
+            title: 'Page n°' + random,
+        }),
+    })
+    promise.then(function(response) {
+        if (response.ok) {
+            alert('The page has been created !');
+        } else {
+            alert('erreur: ' + response.status);
+        }
+    });
+});
 ```

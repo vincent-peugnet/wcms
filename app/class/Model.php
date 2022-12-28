@@ -200,6 +200,8 @@ abstract class Model
     }
 
     /**
+     * Check if the given ID is a given W Identifier.
+     *
      * @return bool true if valid ID otherwise false
      */
     public static function idcheck(string $id, int $max = self::MAX_ID_LENGTH): bool

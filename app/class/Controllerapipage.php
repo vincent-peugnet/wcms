@@ -67,19 +67,15 @@ class Controllerapipage extends Controllerapi
     {
         if ($this->importpage($page)) {
             if ($this->canedit()) {
-                $oldpage = clone $this->page;
-                $json = $this->getrequestbody();
-                if (!empty($json)) {
-                    try {
-                        $datas = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-                    } catch (JsonException $e) {
-                        $this->shortresponse(400, "Json decoding error: " . $e->getMessage());
-                    }
-                } elseif (!empty($_POST)) {
+                if (!empty($_POST)) {
                     $datas = $_POST;
                 } else {
-                    $this->shortresponse(400, "No POST or JSON datas recieved");
+                    $datas = $this->recievejson();
+                    if (empty($datas)) {
+                        $this->shortresponse(400, "No POST or JSON datas recieved");
+                    }
                 }
+                $oldpage = clone $this->page;
                 $update = new Page($datas);
                 if (!is_null($update->id()) && $update->id() !== $this->page->id()) {
                     $this->shortresponse(400, "Page ID and datas ID doesn't match");
@@ -109,12 +105,10 @@ class Controllerapipage extends Controllerapi
     public function add(string $page)
     {
         if (!Model::idcheck($page)) {
-            http_response_code(406);
-            exit;
+            $this->shortresponse(406, 'ID is not valid');
         }
         if (!$this->user->iseditor()) {
-            http_response_code(401);
-            exit;
+            $this->shortresponse(401, 'User cannot create pages');
         }
         if ($this->pagemanager->exist($page)) {
             http_response_code(405);
@@ -127,6 +121,27 @@ class Controllerapipage extends Controllerapi
             http_response_code(200);
         } else {
             http_response_code(500);
+        }
+    }
+
+    public function put(string $page)
+    {
+        if (!Model::idcheck($page)) {
+            $this->shortresponse(406, 'ID is not valid');
+        }
+        $exist = $this->importpage($page);
+        if (!$exist && !$this->user->iseditor()) {
+            $this->shortresponse(401, 'User cannot create pages');
+        }
+        if ($exist && !$this->canedit()) {
+            $this->shortresponse(401, 'Page already exist but user cannot update it');
+        }
+        $this->page = new Page(array_merge($this->recievejson(), ['id' => $page]));
+        $this->page->addauthor($this->user->id());
+        if ($this->pagemanager->update($this->page)) {
+            http_response_code($exist ? 200 : 201);
+        } else {
+            $this->shortresponse(500, "Error while trying to save page in database");
         }
     }
 

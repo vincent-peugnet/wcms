@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use Error;
+use JsonException;
 
 class Controllerapi extends Controller
 {
@@ -18,6 +19,17 @@ class Controllerapi extends Controller
             throw new Error("failed to read STDIN stream");
         }
         return $body;
+    }
+
+    protected function recievejson(): array
+    {
+        $json = $this->getrequestbody();
+        try {
+            $datas = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            $this->shortresponse(400, "Json decoding error: " . $e->getMessage());
+        }
+        return $datas;
     }
 
     /**
