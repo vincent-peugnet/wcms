@@ -229,7 +229,8 @@ class Controllerpage extends Controller
             $datas['tagpagelist'] = $this->pagemanager->tagpagelist($this->page->tag('array'), $pagelist);
             $datas['lasteditedpagelist'] = $this->pagemanager->lasteditedpagelist(5, $pagelist);
 
-            $datas['editorlist'] = $this->usermanager->getlisterbylevel(2, '>=');
+            $datas['editorlist'] = $this->usermanager->getlisterbylevel(2, '>=', true);
+
 
             $datas = array_merge($datas, ['page' => $this->page, 'pageexist' => true, 'user' => $this->user]);
             $this->showtemplate('edit', $datas);

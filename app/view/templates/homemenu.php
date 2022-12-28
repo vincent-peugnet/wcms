@@ -159,7 +159,7 @@
                 <option value="" disabled selected>--add author--</option>
                     <?php
                         foreach ($editorlist as $editor) {
-                            echo '<option value ="' . $editor . '">' . $editor . '</option>';
+                            echo '<option value ="' . $editor->id() . '">' . $editor->id() . '</option>';
                         }
                     ?>
                 </select>

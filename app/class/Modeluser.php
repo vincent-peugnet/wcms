@@ -82,15 +82,21 @@ class Modeluser extends Modeldb
         return $userdatalist->total();
     }
 
-    public function getlisterbylevel(int $level, $comp = '==')
+    /**
+     * @param int $level                    Level of user (see consts)
+     * @param string $comp                  Comparaison operator
+     * @return User[]                       List of User object using ID as key
+     */
+    public function getlisterbylevel(int $level, string $comp = '==', bool $orderbylevel = false): array
     {
         $userdatalist = $this->repo->query()
             ->where('level', $comp, $level)
+            ->orderBy($orderbylevel ? 'level ASC' : 'id ASC')
             ->execute();
 
         $userlist = [];
         foreach ($userdatalist as $user) {
-            $userlist[] = $user->id;
+            $userlist[$user->id] = new User($user);
         }
 
         return $userlist;

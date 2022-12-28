@@ -772,6 +772,9 @@ class Page extends Item
         $this->visitcount++;
     }
 
+    /**
+     * Update last edited date
+     */
     public function updateedited()
     {
         $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));

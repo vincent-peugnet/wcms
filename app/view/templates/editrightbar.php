@@ -75,35 +75,19 @@
         <h3>Authors</h3>
 
 
-    <?php if($user->level() >= 4) { ?>
-
-
-    <label for="authors">Invites editors</label>
-    <select name="authors[]" id="authors" form="update">
-        <option value="" selected>--add author--</option>
+        
         <?php
-        $notyetauthorlist = array_diff($editorlist, $page->authors());
-            foreach ($notyetauthorlist as $author) {
-                echo '<option value="'.$author.'" >'.$author.'</option>';
+            if($user->level() >= 4) {
+                foreach ($editorlist as $editor) {
+                    ?>
+                    <div class="checkexternal">
+                    <input type="checkbox" name="authors[]" id="<?= $editor->id() ?>" value="<?= $editor->id() ?>" form="update" <?= in_array($editor->id(), $page->authors()) ? 'checked' : '' ?>>
+                    <label for="<?= $editor->id() ?>" ><?= $editor->id() ?> <?= $editor->level() ?></label>
+                    </div>
+                    <?php
+                }
             }
-        }
         ?>
-    </select>
-    <?php
-        $alreadyauthorlist = array_intersect($editorlist, $page->authors());
-        foreach ($alreadyauthorlist as $author) {
-            ?>
-            <div class="checkexternal">
-            <?php if($user->level() >= 4) { ?>
-            <input type="checkbox" name="authors[]" id="<?= $author ?>" value="<?= $author ?>" form="update" checked>
-            <?php } ?>
-            <label for="<?= $author ?>" >⬗ <?= $author ?></label>
-            </div>
-            <?php
-        }
-        ?>
-    
-
     </div>
 
 </div>
