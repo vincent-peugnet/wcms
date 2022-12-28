@@ -9,8 +9,9 @@
             <form action="<?= $this->url('pageupload') ?>" method="post" enctype="multipart/form-data">
             <input type="file" name="pagefile" id="pagefile" accept=".json" required>
             <label for="pagefile">JSON Page file</label>
-            <input type="hidden" name="erase" value="0">
             <input type="hidden" name="datecreation" value="0">
+            <input type="hidden" name="author" value="0">
+            <input type="hidden" name="erase" value="0">
             </br>
             <input type="text" name="id" id="id" placeholder="new id (optionnal)">
             <label for="id">change ID</label>
