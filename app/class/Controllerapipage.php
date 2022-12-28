@@ -82,7 +82,7 @@ class Controllerapipage extends Controllerapi
                 }
                 $update = new Page($datas);
                 if (!is_null($update->id()) && $update->id() !== $this->page->id()) {
-                    $this->shortresponse(400, "Page ID and datas ID does'nt match");
+                    $this->shortresponse(400, "Page ID and datas ID doesn't match");
                 }
                 $this->page->hydrate($datas);
 

@@ -12,7 +12,7 @@ class Notfoundexception extends Filesystemexception
     /**
      * @param string $file                  Filename that was'nt found
      * @param int $code                     [optional] The Exception code.
-     * @param ?Throwable $previous         [optional] The previous throwable used for the exception chaining.
+     * @param ?Throwable $previous          [optional] The previous throwable used for the exception chaining.
      */
     public function __construct(
         string $file,
