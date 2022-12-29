@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use IntlDateFormatter;
+use LogicException;
 
 class Optlist extends Opt
 {
@@ -14,6 +15,9 @@ class Optlist extends Opt
     protected $author = 0;
     protected $style = 'list';
 
+    /** @var Page $page Current page */
+    protected ?Page $page;
+
     private Servicerender $render;
 
     /** @var string $bookmark Associated bookmark ID */
@@ -24,8 +28,10 @@ class Optlist extends Opt
         parent::__construct($datas);
     }
 
-    public function parsehydrate(string $encoded)
+    public function parsehydrate(string $encoded, Page $currentpage)
     {
+        $this->page = $currentpage;
+        $encoded = str_replace('*', $this->page->id(), $encoded);
         parse_str(ltrim($encoded, "?"), $datas);
         $this->hydrate($datas);
     }
@@ -40,24 +46,26 @@ class Optlist extends Opt
 
     /**
      * @param Page[] $pagelist
-     * @param Page $currentpage
      * @param Servicerender $render
-     * @retrun string HTML formated string
+     * @return string HTML formated string
      */
-    public function listhtml(array $pagelist, Page $currentpage, Servicerender $render): string
+    public function listhtml(array $pagelist, Servicerender $render): string
     {
+        if (is_null($this->page)) {
+            throw new LogicException('A Page object should be given to Optlist constructor to allow HTML rendering');
+        };
         $this->render = $render;
 
         $li = '';
 
-        $lang = $currentpage->lang() == '' ? Config::lang() : $currentpage->lang();
+        $lang = $this->page->lang() == '' ? Config::lang() : $this->page->lang();
         $dateformatter = new IntlDateFormatter($lang, IntlDateFormatter::SHORT, IntlDateFormatter::NONE);
         $datetitleformatter = new IntlDateFormatter($lang, IntlDateFormatter::FULL, IntlDateFormatter::NONE);
         $timeformatter = new IntlDateFormatter($lang, IntlDateFormatter::NONE, IntlDateFormatter::SHORT);
         foreach ($pagelist as $page) {
             // ================= Class =============
             $classdata = [];
-            if ($page->id() === $currentpage->id()) {
+            if ($page->id() === $this->page->id()) {
                 $classdata['actual'] = 'current_page';
             }
             $classdata['secure'] = $page->secure('string');

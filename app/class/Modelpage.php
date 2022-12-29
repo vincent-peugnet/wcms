@@ -93,6 +93,9 @@ class Modelpage extends Modeldb
         if ($id instanceof Page) {
             $id = $id->id();
         }
+        if (is_int($id)) {
+            $id = strval($id);
+        }
         if (is_string($id)) {
             $pagedata = $this->repo->findById($id);
             if ($pagedata !== false) {

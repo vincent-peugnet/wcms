@@ -524,7 +524,8 @@ class Servicerender
                 $target = $this->internallinkblank ? ' target="_blank"' : '';
                 try {
                     $matchpage = $rend->pagemanager->get($matches[1]);
-                    $href = $rend->upage($matches[1]) . $matches[2];
+                    $fragment = $matches[2] ?? '';
+                    $href = $rend->upage($matches[1]) . $fragment;
                     $t = $matchpage->description();
                     $c = 'internal exist ' . $matchpage->secure('string');
                     $a = $matchpage->title();
@@ -688,19 +689,19 @@ class Servicerender
             foreach ($matches as $match) {
                 try {
                     $optlist = new Optlist();
-                    $optlist->parsehydrate($match['options']);
+                    $optlist->parsehydrate($match['options'], $this->page);
 
                     if (!empty($optlist->bookmark())) {
                         $bookmarkmanager = new Modelbookmark();
                         $bookmark = $bookmarkmanager->get($optlist->bookmark());
                         $optlist->resetall();
-                        $optlist->parsehydrate($bookmark->query());
-                        $optlist->parsehydrate($match['options']); // Erase bookmark options with LIST ones
+                        $optlist->parsehydrate($bookmark->query(), $this->page);
+                        $optlist->parsehydrate($match['options'], $this->page); // Erase bookmark options with LIST ones
                     }
 
                     $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optlist);
                     $this->linkto = array_merge($this->linkto, array_keys($pagetable));
-                    $content = $optlist->listhtml($pagetable, $this->page, $this);
+                    $content = $optlist->listhtml($pagetable, $this);
                     $text = str_replace($match['fullmatch'], $content, $text);
                 } catch (RuntimeException $e) {
                     Logger::errorex($e);

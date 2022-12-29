@@ -505,9 +505,15 @@ You can specify an [element](#markdown-elements) to target with the `element` pa
 
 #### Page list
 
+    %LIST%
+
 Sometimes, when you want to add links to a lot of pages, it can be way to long. This tool is here to help you generate list of links automatically.
 
 It use the same logic as the page filter.
+
+    %LIST?sortby=datecreation&order=-1&secure=0%
+
+*For example, this will print all public pages sorted by creation date in descending order.*
 
 When you are in the [home view](#home), ajust the filters using the [options panel](#options) to achieve the page selection you desire. Then select "filters" in the [menu](#home-menu), choose options you prefer and hit "generate". You can now copy and paste the code obtainded that way in one of the [elements](#markdown-elements) of a page.
 
@@ -527,6 +533,12 @@ Generate :
         <li><a href="ID">TITLE</a> DESCRIPTION DATE TIME ... </li>
         ....
     </ul>
+
+##### Linkto in templates
+
+A specific case exist when if you want to use the [linkto](#linkto) filter in templates: If you want to list all the pages that point to the current page, you can use the wildcard character `*` as a value.
+
+    %LIST?linkto=*%
 
 ##### styling
 
@@ -812,6 +824,10 @@ The thumbnail have two use cases :
 ##### Authors
 
 List of [users](#user-levels) that have edited the page, or that can do it. You have to be at least [super-editor](#super-editor) to add or remove authors.
+
+##### Linkto
+
+This is not an editable metadata. It's a list of all pages that are linked from the current page. This is analysed when the page is rendered.
 
 #### Content
 
