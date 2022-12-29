@@ -160,9 +160,9 @@ possibles error codes:
 
 ### query
 
-List pages IDs using a given filters and sorting options
+List pages as objects using given filters and sorting options.
 
-    GET /api/v1/pages/filteredlist
+    POST /api/v1/pages/query
 
 You need to provide a JSON storing search options.
 

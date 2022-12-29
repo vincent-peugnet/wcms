@@ -190,7 +190,9 @@ class Controllerapipage extends Controllerapi
         $opt = new Opt($datas);
         $pages = $this->pagemanager->pagelist();
         $pages = $this->pagemanager->pagetable($pages, $opt);
-        $pages = array_keys($pages);
+        $pages = array_map(function (Page $page) {
+            return $page->dry();
+        }, $pages);
         http_response_code(200);
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($pages);
