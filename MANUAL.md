@@ -657,6 +657,25 @@ Everylink will transform each word containing a minimum of `<level>` letter(s), 
 
 
 
+
+
+### Javascript
+
+The Javascript section is untunched and will be linked to your page in the head section.
+You can use a pre-defined constant object called `w` to access pages datas.
+
+    w.page.id               current page ID
+    w.page.title            current page title
+    w.page.description      current page description
+    w.page.secure           current page secure level (0: public, 1: private, 2: not published)
+    w.domain                domain name URL
+
+
+
+
+
+
+
 ### Templating
 
 There is no particular template document, each page can be used as a template.
@@ -691,6 +710,9 @@ This option is checked by default.
 Use this option if you want to use templated page favicon.
 
 #### Javascript template
+
+Use this if you want to use a javascript template.
+
 
 
 
