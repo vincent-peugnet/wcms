@@ -467,7 +467,7 @@ class Modelpage extends Modeldb
         $this->pagelistsort($pagelist, $opt->sortby(), $opt->order());
 
         if ($opt->limit() !== 0) {
-            $pagelist = array_slice($pagelist, 0, $opt->limit());
+            $pagelist = array_slice($pagelist, 0, $opt->limit(), true);
         }
 
         return $pagelist;
