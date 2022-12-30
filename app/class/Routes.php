@@ -20,13 +20,14 @@ class Routes
         }
         $router->addMatchTypes(array('cid' => '[^/]+'));
         $router->addRoutes([
-            ['GET', '/api/v1/[cid:page]', 'Controllerapipage#access', 'apipageaccess'],
+            ['GET', '/api/v1/page/[cid:page]', 'Controllerapipage#get', 'apipageget'],
             ['GET', '/api/v1/pages/list', 'Controllerapipage#list', 'apipagelist'],
             ['POST', '/api/v1/pages/query', 'Controllerapipage#query', 'apipagequery'],
-            ['POST', '/api/v1/[cid:page]/update', 'Controllerapipage#update', 'apipageupdate'],
-            ['POST', '/api/v1/[cid:page]/add', 'Controllerapipage#add', 'apipageadd'],
-            ['DELETE', '/api/v1/[cid:page]', 'Controllerapipage#delete', 'apipagedelete'],
-            ['PUT', '/api/v1/[cid:page]', 'Controllerapipage#put', 'apipageput'],
+            ['POST', '/api/v1/page/[cid:page]/update', 'Controllerapipage#update', 'apipageupdate'],
+            ['POST', '/api/v1/page/[cid:page]/add', 'Controllerapipage#add', 'apipageadd'],
+            ['DELETE', '/api/v1/page/[cid:page]', 'Controllerapipage#delete', 'apipagedelete'],
+            ['PUT', '/api/v1/page/[cid:page]', 'Controllerapipage#put', 'apipageput'],
+            ['GET', '/api/v1/user/[cid:user]', 'Controllerapiuser#current', 'apiusercurrent'],
             ['GET', '/', 'Controllerhome#desktop', 'home'],
             ['POST', '/', 'Controllerhome#desktop', 'homequery'],
             ['POST', '/columns', 'Controllerhome#columns', 'homecolumns'],

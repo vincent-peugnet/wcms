@@ -10,7 +10,7 @@ class Controllerapipage extends Controllerapi
     use Voterpage;
 
     /** @var Page|null $page */
-    protected $page;
+    protected ?Page $page;
 
     /**
      * Check if page ID is valid and exist.
@@ -41,7 +41,7 @@ class Controllerapipage extends Controllerapi
     /**
      * - Send `401` if user can't edit page
      */
-    public function access(string $page)
+    public function get(string $page)
     {
         if ($this->importpage($page)) {
             if ($this->canedit()) {
