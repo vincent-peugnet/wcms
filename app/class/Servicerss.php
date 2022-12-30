@@ -9,6 +9,8 @@ use DOMException;
 use DOMText;
 use LogicException;
 use RuntimeException;
+use Wcms\Exception\Database\Notfoundexception;
+use Wcms\Notfoundexception as WcmsNotfoundexception;
 
 class Servicerss
 {
@@ -154,14 +156,14 @@ class Servicerss
 
             $usermanager = new Modeluser();
             foreach ($page->authors() as $author) {
-                $user = $usermanager->get($author);
-
-                if ($user !== false) {
+                try {
+                    $user = $usermanager->get($author);
                     $author = $xml->createElement("author");
                     $name = $xml->createElement("name");
                     $name->appendChild(new DOMText(empty($user->name()) ? $user->id() : $user->name()));
                     $author->appendChild($name);
                     $entry->appendChild($author);
+                } catch (Notfoundexception $e) {
                 }
             }
 
@@ -217,7 +219,7 @@ class Servicerss
     {
         try {
             Fs::delete(self::atomfile($id));
-        } catch (Notfoundexception $e) {
+        } catch (WcmsNotfoundexception $e) {
             // do nothing, this means file is already deleted
         } catch (Unlinkexception $e) {
             throw new RuntimeException("RSS atom file deletion error", 0, $e);

@@ -2,8 +2,9 @@
 
 namespace Wcms;
 
+use InvalidArgumentException;
 use JamesMoss\Flywheel\Document;
-use RuntimeException;
+use Wcms\Exception\Database\Notfoundexception;
 
 class Modeluser extends Modeldb
 {
@@ -103,28 +104,20 @@ class Modeluser extends Modeldb
     }
 
     /**
-     * Check if the password is used, and return by who
+     * Check the clear password of an user
      *
-     * @param string $userid user ID
-     * @param string $pass password clear
+     * @param User $user                    User to check
+     * @param string $pass                  clear password
      *
-     * @return User|bool User or false
+     * @return bool                         True if password is good otherwise false
      */
-    public function passwordcheck(string $userid, string $pass)
+    public function passwordcheck(User $user, string $pass): bool
     {
-        $user = $this->get($userid);
-        if ($user !== false) {
-            if ($user->passwordhashed()) {
-                if (password_verify($pass, $user->password())) {
-                    return $user;
-                }
-            } else {
-                if ($user->password() === $pass) {
-                    return $user;
-                }
-            }
+        if ($user->passwordhashed()) {
+            return password_verify($pass, $user->password());
+        } else {
+            return $user->password() === $pass;
         }
-        return false;
     }
 
     /**
@@ -141,11 +134,14 @@ class Modeluser extends Modeldb
 
 
     /**
-     * @param string|User $id Can be an User object or a string ID
+     * @param string|User $id               Can be an User object or a string ID
      *
-     * @return User|false User object or false in case of error
+     * @return User                         User object or false in case of error
+     *
+     * @throws Notfoundexception            If User cant be founded
+     * @throws InvalidArgumentException     If $id param is not a string or an User
      */
-    public function get($id)
+    public function get($id): User
     {
         if ($id instanceof User) {
             $id = $id->id();
@@ -155,10 +151,29 @@ class Modeluser extends Modeldb
             if ($userdata !== false) {
                 return new User($userdata);
             } else {
-                return false;
+                throw new Notfoundexception("User with ID $id not found in the database.");
             }
         } else {
-            return false;
+            throw new InvalidArgumentException('input should be an User object or a string ID');
+        }
+    }
+
+    /**
+     * Check if user exist in the database or not.
+     *
+     * @param string|User $id               Can be an User object or a string ID
+     * @return bool
+     * @throws InvalidArgumentException     If $id param is not a string or an User
+     */
+    public function exist($id): bool
+    {
+        if ($id instanceof User) {
+            $id = $id->id();
+        }
+        if (is_string($id)) {
+            return boolval($this->repo->findById($id));
+        } else {
+            throw new InvalidArgumentException('input should be an User object or a string ID');
         }
     }
 

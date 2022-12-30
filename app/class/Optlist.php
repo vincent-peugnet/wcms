@@ -4,6 +4,7 @@ namespace Wcms;
 
 use IntlDateFormatter;
 use LogicException;
+use Wcms\Exception\Database\Notfoundexception;
 
 class Optlist extends Opt
 {
@@ -95,9 +96,10 @@ class Optlist extends Opt
             if ($this->author()) {
                 $usermanager = new Modeluser();
                 foreach ($page->authors() as $author) {
-                    $user = $usermanager->get($author);
-                    if ($user) {
+                    try {
+                        $user = $usermanager->get($author);
                         $content .= "\n" . $this->render->user($user) . "\n";
+                    } catch (Notfoundexception $e) {
                     }
                 }
             }

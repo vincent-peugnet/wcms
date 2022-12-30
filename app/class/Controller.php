@@ -8,7 +8,7 @@ use Exception;
 use InvalidArgumentException;
 use League\Plates\Engine;
 use RuntimeException;
-use Throwable;
+use Wcms\Exception\Database\Notfoundexception;
 
 class Controller
 {
@@ -40,6 +40,7 @@ class Controller
         $this->workspace = new Workspace($_SESSION['user' . Config::basepath()]['workspace'] ?? []);
         $this->usermanager = new Modeluser();
 
+        $this->user = new User();
         $this->setuser();
         $this->router = $router;
         $this->pagemanager = new Modelpage(Config::pagetable());
@@ -47,31 +48,36 @@ class Controller
         $this->now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
     }
 
-    public function setuser()
+    protected function setuser()
     {
         // check session, then cookies
         if (!empty($this->session->user)) {
-            $user = $this->usermanager->get($this->session->user);
+            $sessionuser = $this->session->user;
+            try {
+                $this->user = $this->usermanager->get($sessionuser);
+            } catch (Notfoundexception $e) {
+                Logger::warning("Deleted session using non existing user : '$sessionuser'");
+                $this->session->empty(); // empty the session as a non existing user was set
+            }
         } elseif (!empty($_COOKIE['authtoken'])) {
             try {
                 $modelconnect = new Modelconnect();
                 $datas = $modelconnect->checkcookie();
+                $cookieuser = $datas['userid'];
                 $user = $this->usermanager->get($datas['userid']);
-                if ($user !== false && $user->checksession($datas['wsession'])) {
+                if ($user->checksession($datas['wsession'])) {
+                    $this->user = $user;
                     $this->session->addtosession("wsession", $datas['wsession']);
-                    $this->session->addtosession("user", $datas['userid']);
+                    $this->session->addtosession("user", $user->id());
                 } else {
-                    $user = false;
+                    $modelconnect->deleteauthcookie(); // As not listed in the user
                 }
-            } catch (Exception $e) {
+            } catch (Notfoundexception $e) {
+                Logger::warning('Deleted auth cookie using non existing user');
+                $modelconnect->deleteauthcookie(); // Delete auth cookie as a non existing user was set
+            } catch (RuntimeException $e) {
                 Model::sendflashmessage("Invalid Autentification cookie exist : $e", "warning");
             }
-        }
-        // create visitor
-        if (empty($user)) {
-            $this->user = new User();
-        } else {
-            $this->user = $user;
         }
     }
 
@@ -169,14 +175,18 @@ class Controller
     /**
      * Destroy session and cookie token in user database
      */
-    public function disconnect()
+    protected function disconnect()
     {
-        $this->session->addtosession('user', '');
         $this->user->destroysession($this->session->wsession);
-        $this->session->addtosession('wsession', '');
+        $cookiemanager = new Modelconnect();
+        $cookiemanager->deleteauthcookie();
+        $this->session->empty();
         $this->usermanager->add($this->user);
     }
 
+    /**
+     * @todo user Session object instead
+     */
     protected function workspace2session(): void
     {
         $_SESSION['user' . Config::basepath()]['workspace'] = $this->workspace->dry();

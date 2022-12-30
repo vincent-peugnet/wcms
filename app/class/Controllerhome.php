@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use RuntimeException;
+use Wcms\Exception\Database\Databaseexception;
 
 class Controllerhome extends Controller
 {
@@ -116,7 +117,7 @@ class Controllerhome extends Controller
      *
      * @return array containing `string $regex` and `array $searchopt`
      */
-    public function deepsearch(): array
+    protected function deepsearch(): array
     {
         if (!isset($_GET['search'])) {
             $searchopt = [
@@ -139,7 +140,7 @@ class Controllerhome extends Controller
         return ['regex' => $regex, 'searchopt' => $searchopt];
     }
 
-    public function listquery(): void
+    protected function listquery(): void
     {
         if (isset($_POST['query']) && $this->user->iseditor()) {
             $datas = array_merge($_POST, $_SESSION['opt']);
@@ -153,10 +154,15 @@ class Controllerhome extends Controller
     public function columns()
     {
         if (isset($_POST['columns']) && $this->user->iseditor()) {
-            $user = $this->usermanager->get($this->user->id());
-            $user->hydrate($_POST);
-            $this->usermanager->add($user);
-            $this->usermanager->writesession($user);
+            try {
+                $user = $this->usermanager->get($this->user->id());
+                $user->hydrate($_POST);
+                $this->usermanager->add($user);
+                $this->usermanager->writesession($user);
+                Model::sendflashmessage('Display settings successfully saved', Model::FLASH_SUCCESS);
+            } catch (Databaseexception $e) {
+                Model::sendflashmessage('Error while trying to save display settings', Model::FLASH_ERROR);
+            }
         }
         $this->routedirect('home');
     }

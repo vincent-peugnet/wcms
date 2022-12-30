@@ -2,6 +2,9 @@
 
 namespace Wcms;
 
+/**
+ * Class used to manage user session
+ */
 class Session extends Item
 {
     public $visitor = false;
@@ -34,6 +37,14 @@ class Session extends Item
         } else {
             return false;
         }
+    }
+
+    /**
+     * Empty current user session
+     */
+    public function empty(): void
+    {
+        $_SESSION['user' . Config::basepath()] = [];
     }
 
     // _________________________ S E T ________________________

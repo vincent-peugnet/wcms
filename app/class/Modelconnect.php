@@ -31,14 +31,25 @@ class Modelconnect extends Model
     }
 
     /**
-     * Check cookie using JWT
-     * @throws Exception
+     * Get decoded cookie using JWT
+     * @return array                        Associative array containing JWT token's datas
+     * @throws RuntimeException             If JWT token decode failed or auth cookie is unset
      */
-    public function checkcookie()
+    public function checkcookie(): array
     {
         if (!empty($_COOKIE['authtoken'])) {
             $datas = JWT::decode($_COOKIE['authtoken'], Config::secretkey(), ['HS256']);
             return get_object_vars($datas);
+        } else {
+            throw new RuntimeException('Auth cookie is unset');
         }
+    }
+
+    /**
+     * Delete authentication cookie
+     */
+    public function deleteauthcookie(): void
+    {
+        $_COOKIE['authtoken'] = [];
     }
 }

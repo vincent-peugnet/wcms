@@ -6,6 +6,8 @@ use InvalidArgumentException;
 use JamesMoss\Flywheel\Document;
 use PhpParser\Node\Expr\Instanceof_;
 use RuntimeException;
+use Wcms\Exception\Database\Databaseexception;
+use Wcms\Exception\Database\Notfoundexception;
 
 class Modelbookmark extends Modeldb
 {
@@ -96,8 +98,9 @@ class Modelbookmark extends Modeldb
      *
      * @return Bookmark                     Bookmark object or false in case of error
      *
-     * @throws RuntimeException             If Bookmark cant be founded
+     * @throws Notfoundexception            If Bookmark cant be found
      * @throws InvalidArgumentException     If $id param is not a string or a Bookmark
+     * @throws RuntimeException             If Bookmark cannot be build beccause of invalid datas
      */
     public function get($id): Bookmark
     {
@@ -105,7 +108,7 @@ class Modelbookmark extends Modeldb
         if ($bookmarkdata !== false) {
             return new Bookmark($bookmarkdata);
         } else {
-            throw new RuntimeException("Could not find Bookmark with the following ID: \"$id\"");
+            throw new Notfoundexception("Could not find Bookmark with the following ID: \"$id\"");
         }
     }
 
@@ -123,28 +126,27 @@ class Modelbookmark extends Modeldb
 
     /**
      * @param Bookmark $bookmark
-     * @throws RuntimeException             when ID is empty or when creation failed
+     * @throws Databaseexception            When ID is invalid, already exist or creation failed
+     * @throws Notfoundexception            If personnal bookmark User does not exist
      */
     public function add(Bookmark $bookmark)
     {
         if (empty($bookmark->id())) {
-            throw new RuntimeException("Invalid ID");
+            $id = $bookmark->id();
+            throw new Databaseexception("Invalid ID : $id");
         }
         if ($this->exist($bookmark)) {
-            throw new RuntimeException("ID already exist");
+            throw new Databaseexception("ID already exist");
         }
         if (!$bookmark->ispublic()) {
             $usermanager = new Modeluser();
-            $user = $usermanager->get($bookmark->user());
-            if (!$user) {
-                throw new RuntimeException("User: \"" . $bookmark->user() . "\" cannot be found");
-            }
+            $usermanager->get($bookmark->user());
         }
         $bookmarkdata = new Document($bookmark->dry());
         $bookmarkdata->setId($bookmark->id());
         $success = $this->repo->store($bookmarkdata);
         if (!$success) {
-            throw new RuntimeException("Error while adding Bookmark to database");
+            throw new Databaseexception("Error while adding Bookmark to database");
         }
     }
 

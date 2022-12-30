@@ -1,7 +1,5 @@
 <?php
 
-use Wcms\Model;
-
 $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'back.css']]) ?>
 
 

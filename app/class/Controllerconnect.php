@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use RuntimeException;
+use Wcms\Exception\Database\Notfoundexception;
 
 class Controllerconnect extends Controller
 {
@@ -41,29 +42,32 @@ class Controllerconnect extends Controller
      * Will login an user using POST datas and redirect
      *
      * @param string $route     For redirection
-     * @param ?string $id       For redirection (optionnal)
+     * @param ?string $paramid  For redirection (optionnal, can be used for pages redirection)
      */
-    public function login(string $route, ?string $id = null): void
+    protected function login(string $route, ?string $paramid = null): void
     {
         if (!empty($_POST['pass']) && !empty($_POST['user'])) {
-            $this->user = $this->usermanager->passwordcheck($_POST['user'], $_POST['pass']);
-            if ($this->user === false) {
-                Model::sendflashmessage("Wrong credentials", Model::FLASH_ERROR);
-            } elseif (
-                $this->user->expiredate() !== false &&
-                $this->user->expiredate('date') < $this->now &&
-                $this->user->level() < 10
-            ) {
-                Model::sendflashmessage("Account expired", Model::FLASH_ERROR);
-            } else {
-                $this->user->connectcounter();
-                $this->usermanager->add($this->user);
-                $this->session->addtosession('user', $this->user->id());
-                Model::sendflashmessage("Successfully logged in as " . $this->user->id(), Model::FLASH_SUCCESS);
+            $userid = $_POST['user'];
+            try {
+                $this->user = $this->usermanager->get($userid); // May throw DatabaseException
+                if (!$this->usermanager->passwordcheck($this->user, $_POST['pass'])) {
+                    $userid = $this->user->id();
+                    Model::sendflashmessage("Wrong credentials", Model::FLASH_ERROR);
+                    Logger::error("wrong credential for user : '$userid' when attempting to loggin");
+                } elseif (
+                    $this->user->expiredate() !== false &&
+                    $this->user->expiredate('date') < $this->now &&
+                    $this->user->level() < 10
+                ) {
+                    Model::sendflashmessage("Account expired", Model::FLASH_ERROR);
+                } else {
+                    $this->user->connectcounter();
+                    $this->usermanager->add($this->user);
+                    $this->session->addtosession('user', $this->user->id());
+                    Model::sendflashmessage("Successfully logged in as " . $this->user->id(), Model::FLASH_SUCCESS);
 
-                if (!empty($_POST['rememberme'])) {
-                    if ($this->user->cookie() > 0) {
-                        try {
+                    if (!empty($_POST['rememberme'])) {
+                        if ($this->user->cookie() > 0) {
                             $this->modelconnect = new Modelconnect();
                             $wsession = $this->user->newsession();
                             $this->modelconnect->createauthcookie(
@@ -73,18 +77,23 @@ class Controllerconnect extends Controller
                             );
                             $this->usermanager->add($this->user);
                             $this->session->addtosession('wsession', $wsession);
-                        } catch (RuntimeException $e) {
-                            Model::sendflashmessage("Can't create authentification cookie : $e", "warning");
+                        } else {
+                            $message = "Can't remember you beccause user cookie conservation time is set to 0 days";
+                            Model::sendflashmessage($message, Model::FLASH_WARNING);
                         }
-                    } else {
-                        $message = "Can't remember you beccause user cookie conservation time is set to 0 days";
-                        Model::sendflashmessage($message, "warning");
                     }
                 }
+            } catch (Notfoundexception $e) {
+                Model::sendflashmessage("Wrong credentials", Model::FLASH_ERROR);
+                Logger::errorex($e);
+            } catch (RuntimeException $e) {
+                $message = "Can't create authentification cookie : $e";
+                Model::sendflashmessage($message, Model::FLASH_WARNING);
+                Logger::error($message);
             }
         }
-        if ($id !== null) {
-            $this->routedirect($route, ['page' => $id]);
+        if (is_string($paramid)) {
+            $this->routedirect($route, ['page' => $paramid]);
         } else {
             $this->routedirect($route);
         }

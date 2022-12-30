@@ -3,14 +3,20 @@
 namespace Wcms;
 
 use RuntimeException;
+use Wcms\Exception\Database\Notfoundexception;
 
 class Controllerprofile extends Controller
 {
     public function desktop()
     {
         if ($this->user->isinvite()) {
-            $datas['user'] = $this->usermanager->get($this->user);
-            $this->showtemplate('profile', $datas);
+            try {
+                $datas['user'] = $this->usermanager->get($this->user);
+                $this->showtemplate('profile', $datas);
+            } catch (Notfoundexception $e) {
+                Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+                $this->routedirect('home');
+            }
         } else {
             $this->routedirect('home');
         }
@@ -19,13 +25,18 @@ class Controllerprofile extends Controller
     public function update()
     {
         if ($this->user->isinvite()) {
-            $user = $this->usermanager->get($this->user);
             try {
+                $user = $this->usermanager->get($this->user);
                 $user->hydrateexception($_POST);
-            } catch (RuntimeException $th) {
-                Model::sendflashmessage('There was a problem when updating preference : ' . $th->getMessage(), 'error');
+                $this->usermanager->add($user);
+            } catch (Notfoundexception $e) {
+                Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+            } catch (RuntimeException $e) {
+                Model::sendflashmessage(
+                    'There was a problem when updating preference : ' . $e->getMessage(),
+                    Model::FLASH_ERROR
+                );
             }
-            $this->usermanager->add($user);
             $this->routedirect('profile');
         } else {
             $this->routedirect('home');

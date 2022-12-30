@@ -327,6 +327,10 @@ class User extends Item
         }
     }
 
+    /**
+     * Check if the given session hash identifier is listed in User's open sessions.
+     * @param string $session               Hash identifier of the session stored in auth cookie
+     */
     public function checksession(string $session): bool
     {
         return key_exists($session, $this->sessions);
