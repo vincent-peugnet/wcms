@@ -115,7 +115,7 @@ class Servicerender
 
         $lang = !empty($this->page->lang()) ? $this->page->lang() : Config::lang();
         $langproperty = 'lang="' . $lang . '"';
-        $html = "<!DOCTYPE html>\n<html $langproperty >\n<head>\n$head\n</head>";
+        $html = "<html $langproperty >\n<head>\n$head\n</head>";
         $html .= "\n$parsebody\n</html>\n";
 
         return $html;
@@ -252,17 +252,17 @@ class Servicerender
         $head .= $this->recursivecss($this->page);
         $head .= "<link href=\"$renderpath$id.css\" rel=\"stylesheet\" />\n";
 
-        $wdatas = [
-            'page' => [
-                'id' => $id,
-                'title' => $title,
-                'description' => $description,
-                'secure' => $this->page->secure(),
-            ],
-            'domain' => $url,
-        ];
-        $wobj = json_encode($wdatas);
-        $head .= "<script>const w = $wobj;</script>\n";
+        // $wdatas = [
+        //     'page' => [
+        //         'id' => $id,
+        //         'title' => $title,
+        //         'description' => $description,
+        //         'secure' => $this->page->secure(),
+        //     ],
+        //     'domain' => $url,
+        // ];
+        // $wobj = json_encode($wdatas);
+        // $head .= "<script>const w = $wobj;</script>\n";
         if (!empty($this->page->templatejavascript())) {
             $templatejspage = $this->page->templatejavascript();
             $head .= "<script src=\"$renderpath$templatejspage.js\" async/></script>\n";

@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
+use JsonException;
 use RuntimeException;
 
 class Controllerpage extends Controller
@@ -180,10 +181,14 @@ class Controllerpage extends Controller
                         // TODO : send synthax error to editor
                     }
                 }
-
                 $html = file_get_contents($filedir);
+                try {
+                    $wobj = $this->wobj($this->page, $this->user);
+                } catch (JsonException $e) {
+                    $wobj = '{}';
+                }
                 sleep($this->page->sleep());
-                echo $html;
+                $this->showtemplate('read', ['html' => $html, 'script' => $wobj]);
             }
             $this->pagemanager->update($this->page);
 
@@ -443,8 +448,32 @@ class Controllerpage extends Controller
         $this->routedirect('pageedit', ['page' => $this->page->id()]);
     }
 
-    public function pagedirect($page)
+    protected function pagedirect($page)
     {
         $this->routedirect('pageread/', ['page' => Model::idclean($page)]);
+    }
+
+    /**
+     * @return string                       JSON encoded w global, pages and user datas
+     * @throws JsonException                If JSON encoding failed
+     */
+    protected function wobj(Page $page, User $user): string
+    {
+        $wdatas = [
+            'page' => [
+                'id' => $page->id(),
+                'title' => $page->title(),
+                'description' => $page->description(),
+                'secure' => $page->secure(),
+            ],
+            'domain' => Config::url(),
+            'basepath' => Config::basepath(),
+            'user' => [
+                'id' => $user->id(),
+                'level' => $user->level(),
+                'name' => $user->name(),
+            ]
+        ];
+        return json_encode($wdatas, JSON_THROW_ON_ERROR);
     }
 }

@@ -669,6 +669,11 @@ You can use a pre-defined constant object called `w` to access pages datas.
     w.page.description      current page description
     w.page.secure           current page secure level (0: public, 1: private, 2: not published)
     w.domain                domain name URL
+    w.basepath              folderpath after which W is installed
+    w.user.id               current user ID
+    w.user.name             current user name
+    w.user.level            current user level (0: visitor to 10: admin)
+
 
 
 
