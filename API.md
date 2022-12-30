@@ -73,7 +73,7 @@ Page related api
 
 To access a page means to get the full JSON page object. User needs to be allowed to edit the coresponding page in order to access it.
 
-    GET     /api/v1/page/<page_id>
+    GET     /api/v0/page/<page_id>
 
 possible error codes:
 
@@ -86,7 +86,7 @@ possible error codes:
 To update a page, you'll have to provide it with POST datas.
 In case of success, you will get a `200` HTTP CODE and recieve the full JSON page object.
 
-    POST    /api/v1/page/<page_id>/update
+    POST    /api/v0/page/<page_id>/update
 
 possible error codes:
 
@@ -103,7 +103,7 @@ _ `500` server error
 
 To create a page, just send this request using the desired page ID.
 
-    POST    /api/v1/page/<page_id>/add
+    POST    /api/v0/page/<page_id>/add
 
 possibles error codes:
 
@@ -118,7 +118,7 @@ possibles error codes:
 This will create a page if not existing or erase an existing one with given JSON.
 `datecreation` will be reset if it already existed.
 
-    PUT     /api/v1/page/<page_id>
+    PUT     /api/v0/page/<page_id>
 
 possibles success codes:
 
@@ -137,7 +137,7 @@ possibles error codes:
 
 To delete a page, just send this request using the desired page ID.
 
-    DELETE  /api/v1/page/<page_id>
+    DELETE  /api/v0/page/<page_id>
 
 possibles error codes:
 
@@ -151,7 +151,7 @@ possibles error codes:
 
 List all pages IDs
 
-    GET     /api/v1/pages/list
+    GET     /api/v0/pages/list
 
 possibles error codes:
 
@@ -162,7 +162,7 @@ possibles error codes:
 
 List pages as objects using given filters and sorting options.
 
-    POST    /api/v1/pages/query
+    POST    /api/v0/pages/query
 
 You need to provide a JSON storing search options.
 
@@ -200,7 +200,7 @@ User related API
 
 Retrieve an user as a JSON object
 
-    GET     /api/v1/user/<userid>
+    GET     /api/v0/user/<userid>
 
 possible error codes:
 
@@ -215,10 +215,10 @@ Usages example
 ### Get a page and then update the MAIN element.
 
 ```js
-obj = await fetch('http://localhost:8080/api/v1/page/jardin')
+obj = await fetch('http://localhost:8080/api/v0/page/jardin')
     .then(res => res.json());
 obj.main += "foobar";
-fetch('http://localhost:8080/api/v1/page/jardin/update', {
+fetch('http://localhost:8080/api/v0/page/jardin/update', {
     method: "POST",
     body: JSON.stringify(obj),
 })
@@ -229,7 +229,7 @@ fetch('http://localhost:8080/api/v1/page/jardin/update', {
 ### Get the list of all pages.
 
 ```js
-obj = await fetch('http://localhost:8080/api/v1/pages/list')
+obj = await fetch('http://localhost:8080/api/v0/pages/list')
     .then(res => res.json());
 ```
 
@@ -237,7 +237,7 @@ obj = await fetch('http://localhost:8080/api/v1/pages/list')
 
 ```js
 const options = {sortby:"datemodif", limit: 40, tagfilter: ["galaxy", "sublime"]};
-fetch('http://localhost:8080/api/v1/pages/query', {
+fetch('http://localhost:8080/api/v0/pages/query', {
     method: "POST",
     body: JSON.stringify(options),
 })
@@ -258,7 +258,7 @@ fetch('http://localhost:8080/api/v1/pages/query', {
 ```js
 document.querySelector('button#create-page').addEventListener('click', function(){
     const random = Math.floor(Math.random() * 1000) + 1;
-    var url = "/api/v1/page/" + random;
+    var url = "/api/v0/page/" + random;
 
     var promise = fetch(url, {
         method: "PUT",

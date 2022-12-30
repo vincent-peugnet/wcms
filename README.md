@@ -66,10 +66,10 @@ You can even view a map of links.
 API
 ---
 
-An API exist. Find more info [in the API documentation](API.md)
+An API exist but is experimental for now (v0). Find more info [in the API documentation](API.md)
 
 Development team
-------------------
+----------------
 
 W is a project created and maintained by [Vincent Peugnet](https://github.com/vincent-peugnet), an amateur computer science enthousiast who can only code in PHP. It now includes [Nicolas Peugnet](https://github.com/n-peugnet) (his brother) as JS developer, technical advisor and every challenges that are too complicated for Vincent.
 We can also mention [Guilhem Prévost Leygonie]() as legendary number one user and now as an issue writer too.
