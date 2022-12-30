@@ -195,6 +195,6 @@ class Controllerapipage extends Controllerapi
         }, $pages);
         http_response_code(200);
         header('Content-type: application/json; charset=utf-8');
-        echo json_encode($pages);
+        echo json_encode(array_values($pages));
     }
 }
