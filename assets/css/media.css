@@ -67,7 +67,7 @@ tr.selected {
 }
 
 
-@media (max-width: 600px) {
+@media (max-width: 550px) {
     #gallery li {
         width: 90px;
     }

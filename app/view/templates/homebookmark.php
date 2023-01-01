@@ -4,15 +4,12 @@
     <div class="block">
 
         <h2>Bookmarks</h2>
-        <strong>public</strong>
+        <h3>public</h3>
 
         <table>
             <tbody>
-                <?php
-
-
- foreach ($publicbookmarks as $bookmark) { ?>
-                <tr>
+                <?php foreach ($publicbookmarks as $bookmark) { ?>
+                    <tr>
                         <td>
                             <a
                                 href="<?= $this->url($bookmark->route(), $bookmark->params(), $bookmark->query()) ?>"
@@ -20,10 +17,13 @@
                                 class="bookmark"
                                 title="<?= $bookmark->description() ?>"
                             >
-                            <?= $bookmark->icon() ?> <?= empty($bookmark->name()) ? $bookmark->id() : $bookmark->name() ?>
+                                <?= $bookmark->icon() ?>
+                                <span>
+                                    <?= empty($bookmark->name()) ? $bookmark->id() : $bookmark->name() ?>
+                                </span>
                             </a>
                         </td>
-                        <td>
+                        <td class="rss">
                             <?php if($bookmark->ispublished()){ ?>
                                 <a href="<?= Wcms\Servicerss::atomfile($bookmark->id()) ?>" target="_blank" title="show Atom XML file">
                                     <i class="fa fa-rss"></i>
@@ -35,7 +35,7 @@
             </tbody>
         </table>
 
-            <strong>personal</strong>
+            <h3>personal</h3>
         
         <table>
             <?php foreach ($personalbookmarks as $bookmark) { ?>
@@ -47,7 +47,10 @@
                             class="bookmark"
                             title="<?= $bookmark->description() ?>"
                         >
-                        <?= $bookmark->icon() ?> <?= empty($bookmark->name()) ? $bookmark->id() : $bookmark->name() ?>
+                            <?= $bookmark->icon() ?>
+                            <span>
+                                <?= empty($bookmark->name()) ? $bookmark->id() : $bookmark->name() ?>
+                            </span>
                         </a>
                     </td>
                 </tr>

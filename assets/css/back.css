@@ -222,13 +222,14 @@ span.details {
 
 
 
-@media (max-width: 600px) {
+@media (max-width: 550px) {
     main {
         display: block;
     }
 
     main nav {
         width: 100%;
+        max-width: inherit !important;
     }
 
 }

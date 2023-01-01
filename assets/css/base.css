@@ -28,6 +28,9 @@ input, button, select, textarea {
     background-color: var(--button-background-color);
 }
 
+input[type="submit"] {
+    cursor: pointer;
+}
 
 h1, h2 {
     color: var(--text2-color);
@@ -67,11 +70,6 @@ h1, h2 {
 }
 
 #topbar input[type="text"], #topbar input[type="password"] {width: 100px;}
-
-main.font table#fontlist {
-    width: 100%;
-    max-width: 500px;
-}
 
 
 #topbar a.currentpage {

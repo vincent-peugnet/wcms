@@ -1,42 +1,50 @@
-
-aside.home #edit input[type="submit"] {
+aside #edit input[type="submit"] {
     width: 100%;
 }
 
+section.bookmarks {
+    min-width: 2em;
+}
 
-main.home article#main {
+main nav {
+    max-width: 220px;
+}
+
+
+main article#main {
     width: 100%;
 }
 
-main.home div#main {
+main div#main {
     display: flex;
     align-items: flex-start;
     flex-direction: column;
 }
 
 
-main.home div#graph {
+main div#graph {
     height: 1000px;
     width: 800px;
 }
 
-main.home table td.id {
+main table td.id {
     font-family: monospace;
     font-size: medium;
 }
 
 
-main.home nav select, main.home nav input[type="datetime-local"] {
+nav select, nav input[type="datetime-local"], nav input[type="submit"] {
     width: 100%;
+    margin-top: 10px;
 }
 
 
-main.home nav fieldset[data-default="0"] ul {
+main nav fieldset[data-default="0"] div {
     background: var(--outline-background-color);
     color: var(--outline-color);
 }
 
-main.home nav legend {
+main nav legend {
     font-weight: bold;
     width: 100%;
     background-color: var(--secondary-background-color);
@@ -48,12 +56,12 @@ main.home nav legend {
     background-color: #7b97b9;
 }
 
-main.home a.bookmark[data-current="1"] {
+main a.bookmark[data-current="1"] {
     background-color: var(--outline-background-color);
     color: var(--outline-color);
 }
 
-main.home a.bookmark {
+main a.bookmark {
     display: block;
 }
 
@@ -76,7 +84,7 @@ nav fieldset {
 }
 
 nav span.list-label {
-    width: 74%;
+    width: 122px;
     text-overflow: ellipsis;
     display: inline-block;
     overflow: hidden;
@@ -135,12 +143,25 @@ td label, td time {white-space: nowrap;}
 
 
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
+    .bookmarks a.bookmark {
+        font-size: 1.3em;
+    }
+    .bookmarks td.rss, .bookmarks a span, .bookmarks h3, .bookmarks h2 {
+        display: none;
+    }
+}
+
+@media (max-width: 550px) {
     section.pages {
         max-width: 100%;
     }
 
     td.edit, td.read, td.delete, td.download {
         font-size: 1.3em;
+    }
+
+    .bookmarks a span {
+        display: inline;
     }
 }
