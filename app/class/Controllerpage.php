@@ -448,7 +448,7 @@ class Controllerpage extends Controller
         $this->routedirect('pageedit', ['page' => $this->page->id()]);
     }
 
-    protected function pagedirect($page)
+    public function pagedirect($page)
     {
         $this->routedirect('pageread/', ['page' => Model::idclean($page)]);
     }
