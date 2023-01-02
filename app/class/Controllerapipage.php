@@ -175,18 +175,11 @@ class Controllerapipage extends Controllerapi
         if (!$this->user->iseditor()) {
             http_response_code(401);
         }
-        $json = $this->getrequestbody();
-        if (!empty($json)) {
-            try {
-                $datas = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-            } catch (JsonException $e) {
-                $this->shortresponse(400, "Json decoding error: " . $e->getMessage());
-            }
-        } elseif (!empty($_POST)) {
-            $datas = $_POST;
-        } else {
+        $jsondatas = $this->recievejson();
+        if (empty($jsondatas) && empty($_POST)) {
             $this->shortresponse(400, "No POST or JSON datas recieved");
         }
+        $datas = empty($jsondatas) ? $_POST : $jsondatas;
         $opt = new Opt($datas);
         $pages = $this->pagemanager->pagelist();
         $pages = $this->pagemanager->pagetable($pages, $opt);

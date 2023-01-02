@@ -21,6 +21,25 @@ class Controllerapi extends Controller
         return $body;
     }
 
+    /**
+     * @return string[]                     Associative array that may contain :
+     *                                      `Content-Length` and `Content-Type` key
+     *
+     * @throws Error                        When `apache_request_headers()` failed
+     */
+    protected function getrequestheader(): array
+    {
+        $headers = apache_request_headers();
+        if ($headers === false) {
+            throw new Error('Failed to read headers');
+        } else {
+            return $headers;
+        }
+    }
+
+    /**
+     * Send `400` HTTP Error if the JSON decoding failed
+     */
     protected function recievejson(): array
     {
         $json = $this->getrequestbody();
