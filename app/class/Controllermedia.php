@@ -2,7 +2,9 @@
 
 namespace Wcms;
 
+use AltoRouter;
 use RuntimeException;
+use Wcms\Exception\Forbiddenexception;
 
 class Controllermedia extends Controller
 {
@@ -10,9 +12,12 @@ class Controllermedia extends Controller
 
     protected Mediaopt $mediaopt;
 
-    public function __construct($render)
+    /** @var bool Default action: do not refresh font. */
+    protected bool $refreshfont = false;
+
+    public function __construct(AltoRouter $router)
     {
-        parent::__construct($render);
+        parent::__construct($router);
         $this->mediamanager = new Modelmedia();
 
         $this->mediaopt = new Mediaopt($_GET);
@@ -129,7 +134,15 @@ class Controllermedia extends Controller
     {
         if (isset($_POST['dir'])) {
             if (isset($_POST['deletefolder']) && intval($_POST['deletefolder']) && $this->user->issupereditor()) {
-                $this->mediamanager->deletedir($_POST['dir']);
+                try {
+                    if ($this->mediamanager->deletedir($_POST['dir'])) {
+                        Model::sendflashmessage('Deletion successfull', Model::FLASH_SUCCESS);
+                    } else {
+                        Model::sendflashmessage('Deletion failed');
+                    }
+                } catch (Forbiddenexception $e) {
+                    Model::sendflashmessage('Deletion failed: ' . $e->getMessage(), Model::FLASH_ERROR);
+                }
             } else {
                 $this->redirect($this->generate('media') . '?path=/' . $_POST['dir']);
                 exit;
@@ -141,18 +154,17 @@ class Controllermedia extends Controller
     public function edit()
     {
         if ($this->user->issupereditor() && isset($_POST['action']) && isset($_POST['id'])) {
-            $refreshfont = false;
             if ($_POST['action'] == 'delete') {
-                if ($this->mediamanager->multifiledelete($_POST['id'])) {
-                    Model::sendflashmessage('Files deletion successfull', 'success');
+                if ($counter = $this->mediamanager->multifiledelete($_POST['id'])) {
+                    Model::sendflashmessage("$counter files deletion successfull", Model::FLASH_SUCCESS);
                 } else {
                     Model::sendflashmessage('Error while deleting files', 'error');
                 }
             } elseif ($_POST['action'] == 'move' && isset($_POST['dir'])) {
                 $this->mediamanager->multimovefile($_POST['id'], $_POST['dir']);
-                $refreshfont = $_POST['dir'] === Model::FONT_DIR;
+                $this->refreshfont = $_POST['dir'] === Model::FONT_DIR;
             }
-            if ($refreshfont || $_POST['path'] === Model::FONT_DIR) {
+            if ($this->refreshfont || $_POST['path'] === Model::FONT_DIR) {
                 $fontfacer = new Servicefont($this->mediamanager);
                 try {
                     $fontfacer->writecss();

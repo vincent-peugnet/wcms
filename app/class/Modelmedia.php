@@ -2,12 +2,10 @@
 
 namespace Wcms;
 
-use Error;
 use ErrorException;
-use Exception;
 use InvalidArgumentException;
-use phpDocumentor\Reflection\Types\Mixed_;
 use RuntimeException;
+use Wcms\Exception\Forbiddenexception;
 
 class Modelmedia extends Model
 {
@@ -20,24 +18,6 @@ class Modelmedia extends Model
     ];
 
     public const ID_REGEX                   = "%[^a-z0-9-_.]%";
-
-    /**
-     * Get the Media Object
-     *
-     * @param string $path                  Path to the file
-     *
-     * @return Media
-     *
-     * @throws Fileexception                If path is not a file
-     */
-    public function getmedia(string $path)
-    {
-        if (!is_file($path)) {
-            throw new Fileexception("$path is not a file");
-        }
-        ['dirname' => $dir] = pathinfo($path);
-        return new Media(['filename' => basename($path), 'dir' => $dir ]);
-    }
 
     /**
      * @return Media[]                      sorted array of Media
@@ -65,11 +45,11 @@ class Modelmedia extends Model
             while (false !== ($entry = readdir($handle))) {
                 if (!empty($entry) && $entry != "." && $entry != "..") {
                     try {
-                        $media = $this->getmedia($dir . $entry);
+                        $media = new Media($dir . $entry);
                         if (empty($type) || in_array($media->type(), $type)) {
                             $list[] = $media;
                         }
-                    } catch (Fileexception $e) {
+                    } catch (RuntimeException $e) {
                         Logger::errorex($e);
                     }
                 }
@@ -125,13 +105,16 @@ class Modelmedia extends Model
     }
 
     /**
-     * @return array                        listing css theme files
+     * @return string[]                     listing css theme files
      */
     public function listthemes(): array
     {
         return $this->globlist(self::THEME_DIR, ['css']);
     }
 
+    /**
+     * @return string[]                     List of paths
+     */
     public function globlist(string $dir = '', array $extensions = []): array
     {
         $list = [];
@@ -195,7 +178,7 @@ class Modelmedia extends Model
      * @throws Filesystemexception          If writing file failed
      *
      * @todo clean ID of a file
-     * @todo switch to fopen mothod if CURL is not installed
+     * @todo switch to fopen method if CURL is not installed
      */
     public function urlupload(string $url, string $target): void
     {
@@ -294,9 +277,14 @@ class Modelmedia extends Model
      * @param string $dir Directory to destroy
      *
      * @return bool depending on operation success
+     *
+     * @throws  Forbiddenexception If the directory is not inside `/media` folder
      */
     public function deletedir(string $dir): bool
     {
+        if (strpos($dir, "media/") !== 0) {
+            throw new Forbiddenexception("directory `$dir`, is not inside `/media` folder");
+        }
         if (substr($dir, -1) !== '/') {
             $dir .= '/';
         }
@@ -320,30 +308,32 @@ class Modelmedia extends Model
     }
 
     /**
-     * Delete a file
+     * @throws Filesystemexception          If an error occured
      */
-    public function deletefile(string $filedir)
+    public function delete(Media $media): void
     {
-        if (is_file($filedir) && is_writable(dirname($filedir))) {
-            return unlink($filedir);
-        } else {
-            return false;
-        }
+        Fs::deletefile($media->getlocalpath());
     }
 
-    public function multifiledelete(array $filelist)
+    /**
+     * @param string[] $files               List of file paths to delete
+     * @return int                          number of successfull deletion
+     */
+    public function multifiledelete(array $files): int
     {
-        $success = [];
-        foreach ($filelist as $filedir) {
+        $counter = 0;
+        foreach ($files as $filedir) {
             if (is_string($filedir)) {
-                $success[] = $this->deletefile($filedir);
+                try {
+                    Fs::deletefile($filedir);
+                    $counter++;
+                } catch (Filesystemexception $e) {
+                }
+            } else {
+                throw new InvalidArgumentException('$files argument should be an array containing strings');
             }
         }
-        if (in_array(false, $success)) {
-            return false;
-        } else {
-            return true;
-        }
+        return $counter;
     }
 
     /**

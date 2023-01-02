@@ -209,6 +209,24 @@ possible error codes:
 
 
 
+Media related API
+-----------------
+
+
+### upload
+
+Upload a file. Specify a target `<path>` and send the file through the `body` of the request. Folders will be created automatically.
+
+    POST    /api/v0/media/upload/<path>
+
+possible error codes:
+
+- `400` If a error occured while reading the file stream or when creating the file/folders
+- `403` if user is'nt an editor
+- `406` if user is not found
+
+
+
 Usages example
 --------------
 

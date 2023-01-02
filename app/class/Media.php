@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
+use Wcms\Exception\Forbiddenexception;
 
 class Media extends Item
 {
@@ -95,9 +96,20 @@ class Media extends Item
 
     // _____________________________________________________ F U N ____________________________________________________
 
-    public function __construct(array $donnees)
+    /**
+     * @throws Fileexception                If path is not a file
+     * @throws Forbiddenexception           If file is not inside `media` folder
+     */
+    public function __construct(string $path)
     {
-        $this->hydrate($donnees);
+        if (!is_file($path)) {
+            throw new Fileexception("$path is not a file");
+        }
+        if (!str_starts_with(realpath($path), realpath(Model::MEDIA_DIR))) {
+            throw new Forbiddenexception("File `$path`, is not inside `media` folder");
+        }
+        $this->filename = basename($path);
+        $this->dir = pathinfo($path, PATHINFO_DIRNAME);
         $this->analyse();
     }
 
@@ -107,6 +119,8 @@ class Media extends Item
         if (!empty($infos['extension'])) {
             $this->extension = $infos['extension'];
         }
+
+        $this->extension = pathinfo($this->filename, PATHINFO_EXTENSION);
 
         $this->settype();
 
@@ -120,13 +134,8 @@ class Media extends Item
             $this->height = $height;
         }
 
-        $stat = stat($path);
-
-        $permissions = decoct(fileperms($path) & 0777);
-
-        $this->setpermissions($permissions);
-
-        $this->hydrate($stat);
+        $this->permissions = decoct(fileperms($path) & 0777);
+        $this->hydrate(stat($path));
     }
 
 

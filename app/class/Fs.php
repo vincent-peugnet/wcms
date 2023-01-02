@@ -151,12 +151,17 @@ abstract class Fs
      * @param string $file                      Filename to delete
      *
      * @throws Notfoundexception                If file does not exist
-     * @throws Unlinkexception                  If PHP unlink function fails
+     * @throws Fileexception                    Id file cannot be deleted
+     * @throws Unlinkexception                  If PHP unlink function fails for another reason
      */
-    public static function delete(string $file): void
+    public static function deletefile(string $file): void
     {
         if (!file_exists($file)) {
             throw new Notfoundexception($file);
+        }
+        if (!is_writable($file)) {
+            $perms = fileperms($file);
+            throw new Fileexception("Impossible to delete file: '$file' with permissions $perms");
         }
         if (!unlink($file)) {
             throw new Unlinkexception($file);

@@ -218,7 +218,7 @@ class Servicerss
     public static function removeatom(string $id): void
     {
         try {
-            Fs::delete(self::atomfile($id));
+            Fs::deletefile(self::atomfile($id));
         } catch (WcmsNotfoundexception $e) {
             // do nothing, this means file is already deleted
         } catch (Unlinkexception $e) {

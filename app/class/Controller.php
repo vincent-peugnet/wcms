@@ -2,7 +2,7 @@
 
 namespace Wcms;
 
-use DateTime;
+use AltoRouter;
 use DateTimeImmutable;
 use Exception;
 use InvalidArgumentException;
@@ -20,7 +20,7 @@ class Controller
     /** @var User */
     protected $user;
 
-    /** @var \AltoRouter */
+    /** @var Altorouter */
     protected $router;
 
     /** @var Modeluser */
@@ -34,7 +34,7 @@ class Controller
     /** @var DateTimeImmutable */
     protected $now;
 
-    public function __construct($router)
+    public function __construct(AltoRouter $router)
     {
         $this->session = new Session($_SESSION['user' . Config::basepath()] ?? []);
         $this->workspace = new Workspace($_SESSION['user' . Config::basepath()]['workspace'] ?? []);
