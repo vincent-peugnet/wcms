@@ -29,10 +29,10 @@ class Controllermedia extends Controller
     {
         if ($this->user->iseditor()) {
             try {
-                Fs::dircheck(Model::FONT_DIR, true);
-                Fs::dircheck(Model::THUMBNAIL_DIR, true);
-                Fs::dircheck(Model::FAVICON_DIR, true);
-                Fs::dircheck(Model::CSS_DIR, true);
+                Fs::dircheck(Model::FONT_DIR, true, 0775);
+                Fs::dircheck(Model::THUMBNAIL_DIR, true, 0775);
+                Fs::dircheck(Model::FAVICON_DIR, true, 0775);
+                Fs::dircheck(Model::CSS_DIR, true, 0775);
             } catch (RuntimeException $e) {
                 Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
             }
