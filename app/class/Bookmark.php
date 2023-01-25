@@ -158,7 +158,7 @@ class Bookmark extends Item
     public function setquery($query)
     {
         if (is_string($query)) {
-            $this->query = substr($query, 0, Model::MAX_QUERY_LENGH);
+            $this->query = strip_tags(substr($query, 0, Model::MAX_QUERY_LENGH));
         }
     }
 
