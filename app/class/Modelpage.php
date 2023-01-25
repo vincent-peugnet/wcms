@@ -370,7 +370,7 @@ class Modelpage extends Modeldb
 
         try {
             $html = $renderengine->render($page);
-            Fs::dircheck(Model::HTML_RENDER_DIR);
+            Fs::dircheck(Model::HTML_RENDER_DIR, true);
             Fs::writefile(Model::HTML_RENDER_DIR . $page->id() . '.html', $html);
             Fs::writefile(Model::RENDER_DIR . $page->id() . '.css', $page->css(), 0664);
             Fs::writefile(Model::RENDER_DIR . $page->id() . '.js', $page->javascript(), 0664);
