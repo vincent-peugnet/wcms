@@ -54,7 +54,7 @@ dev:
 .PHONY: serve
 serve: XDEBUG_MODE=debug
 serve: vendor VERSION
-	php -S $(HOST):$(PORT) -t ./ $(PHP_FLAGS)
+	php -S $(HOST):$(PORT) -t ./ $(PHP_FLAGS) dev_router.php
 
 # Run webpack in watch mode.
 .PHONY: watch
