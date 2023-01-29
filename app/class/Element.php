@@ -16,11 +16,13 @@ class Element extends Item
     protected $options;
     protected $sources = [];
     protected int $everylink = 0;
-    protected $markdown = 1;
-    protected $content = '';
-    protected $minheaderid = 1;
-    protected $maxheaderid = 6;
+    protected bool $markdown = true;
+    protected string $content = '';
+    protected int $minheaderid = 1;
+    protected int $maxheaderid = 6;
     protected $headerid = '1-6';
+    /** @var bool default value is set in Config class */
+    protected bool $urllinker;
     protected int $headeranchor = self::NOHEADERANCHOR;
 
     public const NOHEADERANCHOR = 0;
@@ -36,6 +38,7 @@ class Element extends Item
 
     public function __construct($pageid, $datas = [])
     {
+        $this->urllinker = Config::urllinker();
         $this->hydrate($datas);
         $this->analyse($pageid);
     }
@@ -123,6 +126,11 @@ class Element extends Item
         return $this->headeranchor;
     }
 
+    public function urllinker(): bool
+    {
+        return $this->urllinker;
+    }
+
 
 
 
@@ -166,14 +174,9 @@ class Element extends Item
         }
     }
 
-    public function setmarkdown(int $level)
+    public function setmarkdown($markdown)
     {
-        if ($level >= 0 && $level <= 1) {
-            $this->markdown = $level;
-            return true;
-        } else {
-            return false;
-        }
+        $this->markdown = boolval($markdown);
     }
 
     public function setcontent(string $content)
@@ -197,5 +200,10 @@ class Element extends Item
         if (in_array($headeranchor, self::HEADERANCHORMODES)) {
             $this->headeranchor = (int) $headeranchor;
         }
+    }
+
+    public function seturllinker($urllinker)
+    {
+        $this->urllinker = boolval($urllinker);
     }
 }

@@ -650,6 +650,12 @@ choose option 1 to transform headings into links. Choose option 2 to add a link 
 This settings is deactivated by default.
 
 
+##### URL linker
+
+    %<element>?urllinker=(0|1)%
+
+URL Linker is a tool that will transform a plain text URL into a link. This can be enabled or disabled specificly for each elements. The default behavior can be set globaly in the [admin panel](#admin).
+
 ##### Everylink
 
 Everylink is an powerfull but surprising feature that will replace everything you type with links.

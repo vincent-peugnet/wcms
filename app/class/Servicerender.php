@@ -369,6 +369,9 @@ class Servicerender
                 $element->headeranchor()
             );
         }
+        if ($element->urllinker()) {
+            $content = $this->autourl($content);
+        }
 
         return $content;
     }
@@ -387,8 +390,6 @@ class Servicerender
 
         $text = "<body>\n$text\n</body>";
         $text = $this->htmlink($text);
-
-        $text = $this->autourl($text);
 
         $text = $this->authenticate($text);
 

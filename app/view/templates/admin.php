@@ -202,6 +202,16 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
                     <label for="markdownhardwrap" title="When activated, single line break will be rendered as &lt;br/&gt;" >Render soft-linebreaks as &lt;br/&gt;</label>
                 </div>
 
+                <h4>Url linker</h4>
+
+                <div class="checkbox">
+                    <input type="hidden" name="urllinker" value="0" form="admin">
+                    <input type="checkbox" name="urllinker" id="urllinker" value="1" <?= Wcms\Config::urllinker() ? 'checked' : '' ?> form="admin">
+                    <label for="urllinker">transform plain text URLs to links</label>
+                </div>
+
+                <p>This can be overide individualy for each element using render options. See <a href="<?= $this->url('info', [], '#url-linker') ?>">📖 manual section</a> for more infos.</p>
+
                 <p>
                     <i>(Thoses modifications need re-rendering)</i>
                 </p>

@@ -26,6 +26,7 @@ abstract class Config
     protected static $analytics = '';
     protected static $externallinkblank = true;
     protected static $internallinkblank = false;
+    protected static $urllinker = true;
     protected static $recursiverender = true;
     protected static $defaultprivacy = 0;
     protected static $homepage = 'default';
@@ -253,6 +254,11 @@ abstract class Config
         return self::$internallinkblank;
     }
 
+    public static function urllinker(): bool
+    {
+        return self::$urllinker;
+    }
+
     public static function recursiverender()
     {
         return self::$recursiverender;
@@ -444,6 +450,11 @@ abstract class Config
     public static function setinternallinkblank($internallinkblank)
     {
         self::$internallinkblank = boolval($internallinkblank);
+    }
+
+    public static function seturllinker($urllinker)
+    {
+        self::$urllinker = boolval($urllinker);
     }
 
     public static function setrecursiverender($recursiverender)
