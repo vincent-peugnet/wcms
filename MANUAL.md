@@ -525,6 +525,7 @@ Display options are :
 - date : display the [date](#date) of the page.
 - time : display the [time](#time) of the page.
 - author: display the [authors](#authors)
+- hide current: if checked, hide the currently browsed from the list.
 
 Generate :
 

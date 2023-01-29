@@ -243,6 +243,10 @@
             <input type="checkbox" name="author" id="list_author" value="1" <?= !empty($optlist) && $optlist->author() ? 'checked' : '' ?>>
             <label for="list_author">Show author(s)</label>
             </br>
+            <input type="hidden" name="hidecurrent" value="0">
+            <input type="checkbox" name="hidecurrent" id="list_hidecurrent" value="1" <?= !empty($optlist) && $optlist->hidecurrent() ? 'checked' : '' ?>>
+            <label for="list_hidecurrent">Hide current page</label>
+            </br>
             <select name="style" id="list_style">
                 <?= options(Wcms\Model::LIST_STYLES , !empty($optlist) ? $optlist->style() : null) ?>
             </select>

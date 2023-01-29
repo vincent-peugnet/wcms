@@ -8,12 +8,13 @@ use Wcms\Exception\Database\Notfoundexception;
 
 class Optlist extends Opt
 {
-    protected $title = 1;
-    protected $description = 0;
-    protected $thumbnail = 0;
-    protected $date = 0;
-    protected $time = 0;
-    protected $author = 0;
+    protected bool $title = true;
+    protected bool $description = false;
+    protected bool $thumbnail = false;
+    protected bool $date = false;
+    protected bool $time = false;
+    protected bool $author = false;
+    protected bool $hidecurrent = false;
     protected $style = 'list';
 
     /** @var Page $page Current page */
@@ -46,7 +47,7 @@ class Optlist extends Opt
     }
 
     /**
-     * @param Page[] $pagelist
+     * @param Page[] $pagelist              Assoc array of Page objects, key must be ID of page.
      * @param Servicerender $render
      * @return string HTML formated string
      */
@@ -58,6 +59,10 @@ class Optlist extends Opt
         $this->render = $render;
 
         $li = '';
+
+        if ($this->hidecurrent && key_exists($this->page->id(), $pagelist)) {
+            unset($pagelist[$this->page->id()]);
+        }
 
         $lang = $this->page->lang() == '' ? Config::lang() : $this->page->lang();
         $dateformatter = new IntlDateFormatter($lang, IntlDateFormatter::SHORT, IntlDateFormatter::NONE);
@@ -153,34 +158,39 @@ class Optlist extends Opt
     // _______________________________________ G E T _____________________________________
 
 
-    public function title()
+    public function title(): bool
     {
         return $this->title;
     }
 
-    public function description()
+    public function description(): bool
     {
         return $this->description;
     }
 
-    public function thumbnail()
+    public function thumbnail(): bool
     {
         return $this->thumbnail;
     }
 
-    public function date()
+    public function date(): bool
     {
         return $this->date;
     }
 
-    public function time()
+    public function time(): bool
     {
         return $this->time;
     }
 
-    public function author()
+    public function author(): bool
     {
         return $this->author;
+    }
+
+    public function hidecurrent(): bool
+    {
+        return $this->hidecurrent;
     }
 
     public function style()
@@ -198,32 +208,37 @@ class Optlist extends Opt
 
     public function settitle($title)
     {
-        $this->title = intval($title);
+        $this->title = boolval($title);
     }
 
     public function setdescription($description)
     {
-        $this->description = intval($description);
+        $this->description = boolval($description);
     }
 
     public function setthumbnail($thumbnail)
     {
-        $this->thumbnail = intval($thumbnail);
+        $this->thumbnail = boolval($thumbnail);
     }
 
     public function setdate($date)
     {
-        $this->date = intval($date);
+        $this->date = boolval($date);
     }
 
     public function settime($time)
     {
-        $this->time = intval($time);
+        $this->time = boolval($time);
     }
 
     public function setauthor($author)
     {
-        $this->author = intval($author);
+        $this->author = boolval($author);
+    }
+
+    public function sethidecurrent($hidecurrent)
+    {
+        $this->hidecurrent = boolval($hidecurrent);
     }
 
     public function setstyle($style)
