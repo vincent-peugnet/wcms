@@ -640,9 +640,13 @@ You can also set `headerid=0` to totaly disable ID generation for this element.
 
 ##### Anchor links in title
 
-    %<element>?headeranchor=(0|1)%
+    %<element>?headeranchor=(0|1|2)%
 
-Use this to transform headings to anchor links pointing to themself. This settings is deactivated by default.
+This render option is used to add automatic target link to title anchors.
+
+choose option 1 to transform headings into links. Choose option 2 to add a link after the title using a number sign `#`.
+
+This settings is deactivated by default.
 
 
 ##### Everylink

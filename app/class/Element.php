@@ -21,8 +21,14 @@ class Element extends Item
     protected $minheaderid = 1;
     protected $maxheaderid = 6;
     protected $headerid = '1-6';
-    protected bool $headeranchor = false;
+    protected int $headeranchor = self::NOHEADERANCHOR;
 
+    public const NOHEADERANCHOR = 0;
+    public const HEADERANCHORLINK = 1;
+    public const HEADERANCHORHASH = 2;
+    public const HEADERANCHORMODES = [
+        self::NOHEADERANCHOR, self::HEADERANCHORLINK, self::HEADERANCHORHASH
+    ];
 
     // ______________________________________________ F U N ________________________________________________________
 
@@ -107,12 +113,12 @@ class Element extends Item
         return $this->maxheaderid;
     }
 
-    public function headerid()
+    public function headerid(): string
     {
         return $this->headerid;
     }
 
-    public function headeranchor()
+    public function headeranchor(): int
     {
         return $this->headeranchor;
     }
@@ -188,6 +194,8 @@ class Element extends Item
 
     public function setheaderanchor($headeranchor)
     {
-        $this->headeranchor = (bool) $headeranchor;
+        if (in_array($headeranchor, self::HEADERANCHORMODES)) {
+            $this->headeranchor = (int) $headeranchor;
+        }
     }
 }

@@ -96,7 +96,7 @@ class Servicerender
     public function rendermanual(string $text): string
     {
         $text = $this->markdown($text);
-        $text = $this->headerid($text, 1, 5, 'main', false);
+        $text = $this->headerid($text, 1, 5, 'main', 0);
         return $text;
     }
 
@@ -562,11 +562,12 @@ class Servicerender
      * @param int $min Maximum header deepness to look for. Min = 1 Max = 6 Default = 1
      * @param int $max Maximum header deepness to look for. Min = 1 Max = 6 Default = 6
      * @param string $element Name of element being analysed
+     * @param int $anchormode Mode of anchor link display. see Element HEADERANCHORMODES
      *
      * @return string text with id in header
      */
 
-    private function headerid(string $text, int $min, int $max, string $element, bool $anchor): string
+    private function headerid(string $text, int $min, int $max, string $element, int $anchormode): string
     {
         if ($min > 6 || $min < 1) {
             $min = 6;
@@ -577,7 +578,7 @@ class Servicerender
 
         $text = preg_replace_callback(
             "/<h([$min-$max])((.*)id=\"([^\"]*)\"(.*)|.*)>(.+)<\/h[$min-$max]>/mU",
-            function ($matches) use ($element, $anchor) {
+            function ($matches) use ($element, $anchormode) {
                 $level = $matches[1];
                 $beforeid = $matches[3];
                 $id = $matches[4];
@@ -588,8 +589,14 @@ class Servicerender
                     $id = Model::idclean($content);
                 }
                 $this->sum[$element][] = new Header($id, intval($level), $content);
-                if ($anchor) {
-                    $content = "<a href=\"#$id\">$content</a>";
+                switch ($anchormode) {
+                    case Element::HEADERANCHORLINK:
+                        $content = "<a href=\"#$id\">$content</a>";
+                        break;
+
+                    case Element::HEADERANCHORHASH:
+                        $content .= "<span class=\"nbsp\">&nbsp;</span><a class=\"headerlink\" href=\"#$id\">#</a>";
+                        break;
                 }
                 return "<h$level $beforeid id=\"$id\" $afterid>$content</h$level>";
             },
