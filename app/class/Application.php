@@ -42,6 +42,7 @@ class Application
             $userdata = $_POST['userinit'];
             $userdata['level'] = 10;
             $user = new User($userdata);
+            $user->hashpassword();
             $this->usermanager->add($user);
             header('Location: ./');
             exit;
