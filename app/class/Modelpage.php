@@ -346,11 +346,22 @@ class Modelpage extends Modeldb
      */
     public function needtoberendered(Page $page): bool
     {
-        return ($page->daterender() <= $page->datemodif() ||
+        if (
+            $page->daterender() <= $page->datemodif() ||
             !file_exists(self::HTML_RENDER_DIR . $page->id() . '.html') ||
             !file_exists(self::RENDER_DIR . $page->id() . '.css') ||
             !file_exists(self::RENDER_DIR . $page->id() . '.js')
-        );
+        ) {
+            return true;
+        } elseif (!empty($page->templatebody())) {
+            try {
+                $bodytemplate = $this->get($page->templatebody());
+                return $page->daterender() <= $bodytemplate->datemodif();
+            } catch (RuntimeException $e) {
+                return false;
+            }
+        }
+        return false;
     }
 
     /**
