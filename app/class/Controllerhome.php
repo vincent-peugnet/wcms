@@ -106,6 +106,10 @@ class Controllerhome extends Controller
 
             $this->listquery();
 
+            $optrandom = new Optrandom();
+            $optrandom->submit();
+            $vars['optrandom'] = $optrandom;
+
             $vars['optlist'] = $this->optlist;
 
             $this->showtemplate('home', $vars);
@@ -142,7 +146,7 @@ class Controllerhome extends Controller
 
     protected function listquery(): void
     {
-        if (isset($_POST['query']) && $this->user->iseditor()) {
+        if (isset($_POST['listquery']) && $this->user->iseditor()) {
             $datas = array_merge($_POST, $_SESSION['opt']);
             $this->optlist = new Optlist($datas);
             if (!empty($this->optlist->bookmark())) {

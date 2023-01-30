@@ -341,14 +341,6 @@ Page Editing
 
 #### W specific synthax
 
-##### url auto link
-
-When you use an address starting with `http://` or `https://`, W will automaitcaly create a link pointing to a new tab.
-
-    <a href="<url>" target="_blank" class="external"><url></a>
-
-Note that the `.external` class have been added.
-
 ##### Quick links
 
     [[<page_id>]]
@@ -509,7 +501,7 @@ You can specify an [element](#markdown-elements) to target with the `element` pa
 
 Sometimes, when you want to add links to a lot of pages, it can be way to long. This tool is here to help you generate list of links automatically.
 
-It use the same logic as the page filter.
+It use the same logic as the page filters in the [home view](#home).
 
     %LIST?sortby=datecreation&order=-1&secure=0%
 
@@ -535,6 +527,14 @@ Generate :
         ....
     </ul>
 
+##### Using bookmarks
+
+You can use an existing [bookmark](#bookmarks) as filter and sorting preset. For example, with a bookmark with the id: `published-articles`
+
+    %LIST?bookmark=published-articles%
+
+It is even possible to combine bookmark and filters! Specific filters and sorting will overide bookmark settings.
+
 ##### Linkto in templates
 
 A specific case exist when if you want to use the [linkto](#linkto) filter in templates: If you want to list all the pages that point to the current page, you can use the wildcard character `*` as a value.
@@ -556,6 +556,39 @@ Some `.class` and `#id` are generated to help styling.
 
 
 
+
+#### Random page
+
+This surprising feature allow you to create buttons to explore your pages randomly. The syntax is very close to [page lists](#page-list) syntax.
+
+    %RANDOM?tagfilter[]=article%
+
+This will be replaced by an URL during rendering.
+To use it properly you need to put this code inside the target of an HTML link. For example, using markdown:
+
+    [discover a random article](%RANDOM?tagfilter[]=article%)
+
+This is the complete syntax to create a link that will open a random page that have the tag `article`.
+
+To generate a `%RANDOM%` code, you can ajust desired filtering in [home view](#home). Then naviguate to the menu **Filter > Random page**, copy the generated code and put it in your page.
+
+You can use a 
+
+If the link point to an empty set of pages, an error page will be shown.
+
+##### Using bookmarks
+
+You can use an existing [bookmark](#bookmarks) as filter and sorting preset. For example, with a bookmark with the id: `published-articles`
+
+    %RANDOM?bookmark=published-articles%
+
+It is even possible to combine bookmark and filters! Specific filters and sorting will overide bookmark settings.
+
+##### Linkto in templates
+
+A specific case exist when if you want to use the [linkto](#linkto) filter in templates: If you want to create a selection of all the pages that point to the current page, you can use the wildcard character `*` as a value.
+
+    %RANDOM?linkto=*%
 
 
 #### Media list

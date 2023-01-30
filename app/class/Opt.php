@@ -251,12 +251,10 @@ class Opt extends Item
         return urldecode(http_build_query($object));
     }
 
-
-
     /**
      * Get the query as http string
      *
-     * @return string The resulted query
+     * @return string                       Parameters as a HTTP string. If not empty, start with a `?`
      */
     public function getquery(): string
     {
@@ -266,8 +264,11 @@ class Opt extends Item
         $class['taglist'] = $object['taglist'];
         $class['authorlist'] = $object['authorlist'];
         $query = array_diff_assoc_recursive($object, $class);
-
-        return urldecode(http_build_query($query));
+        $httpquery = urldecode(http_build_query($query));
+        if (!empty($httpquery)) {
+            $httpquery = "?$httpquery";
+        }
+        return $httpquery;
     }
 
 

@@ -6,10 +6,8 @@ $this->layout('readerlayout') ?>
 $this->start('head');
 ?>
 
-<head>
-    <?= Wcms\Config::alertcss() ? '<link href="' . Wcms\Model::dirtopath(Wcms\Model::ASSETS_CSS_DIR) . 'global.css" rel="stylesheet" />' : '' ?>
-    <meta name="viewport" content="width=device-width">
-</head>
+<?= Wcms\Config::alertcss() ? '<link href="' . Wcms\Model::dirtopath(Wcms\Model::ASSETS_CSS_DIR) . 'global.css" rel="stylesheet" />' : '' ?>
+<meta name="viewport" content="width=device-width">
 
 
 <?php

@@ -201,64 +201,70 @@
     <details id="selection" <?= !empty($optlist) ? 'open' : '' ?>>
         <summary>Filter</summary>
         <div class="submenu">
-        <h2>List menu</h2>
-        <i>Generate code to display a list of pages</i>
-        <form action="<?= $this->url('homequery') ?>" method="post">
-            <input type="hidden" name="query" value="1">
+            <h2>List menu</h2>
+            <i>Generate code to display a list of pages</i>
+            <form action="<?= $this->url('homequery') ?>" method="post">
+                <input type="hidden" name="listquery" value="1">
 
-            <select name="bookmark" id="list_bookmark">
-                <option value="">--no bookmark--</option>
-                <?php foreach ($matchedbookmarks as $bookmark) { ?>
-                    <option
-                        value="<?= $bookmark->id() ?>"
-                        <?= !empty($optlist) && $optlist->bookmark() === $bookmark->id() ? 'selected' : '' ?>
-                    >
-                        <?= $bookmark->name() ?>
-                    </option>
-                <?php } ?>
-            </select>
-            <label for="list_bookmark" title="use bookmark instead of filters">bookmark</label>
-            </br>
-            <input type="hidden" name="title" value="0">
-            <input type="checkbox" name="title" id="list_title" value="1" <?= !empty($optlist) && !$optlist->title() ? '' : 'checked' ?>>
-            <label for="list_title">Show title</label>
-            </br>
-            <input type="hidden" name="description" value="0">
-            <input type="checkbox" name="description" id="list_description" value="1" <?= !empty($optlist) && $optlist->description() ? 'checked' : '' ?>>
-            <label for="list_description">Show description</label>
-            </br>
-            <input type="hidden" name="thumbnail" value="0">
-            <input type="checkbox" name="thumbnail" id="list_thumbnail" value="1" <?= !empty($optlist) && $optlist->thumbnail() ? 'checked' : '' ?>>
-            <label for="list_thumbnail">Show thumbnail</label>
-            </br>
-            <input type="hidden" name="date" value="0">
-            <input type="checkbox" name="date" id="list_date" value="1" <?= !empty($optlist) && $optlist->date() ? 'checked' : '' ?>>
-            <label for="list_date">Show date</label>
-            </br>
-            <input type="hidden" name="time" value="0">
-            <input type="checkbox" name="time" id="list_time" value="1" <?= !empty($optlist) && $optlist->time() ? 'checked' : '' ?>>
-            <label for="list_time">Show time</label>
-            </br>
-            <input type="hidden" name="author" value="0">
-            <input type="checkbox" name="author" id="list_author" value="1" <?= !empty($optlist) && $optlist->author() ? 'checked' : '' ?>>
-            <label for="list_author">Show author(s)</label>
-            </br>
-            <input type="hidden" name="hidecurrent" value="0">
-            <input type="checkbox" name="hidecurrent" id="list_hidecurrent" value="1" <?= !empty($optlist) && $optlist->hidecurrent() ? 'checked' : '' ?>>
-            <label for="list_hidecurrent">Hide current page</label>
-            </br>
-            <select name="style" id="list_style">
-                <?= options(Wcms\Model::LIST_STYLES , !empty($optlist) ? $optlist->style() : null) ?>
-            </select>
-            <label for="list_style">style</label>
-            </br>
-            <input type="submit" value="generate">
-        </form>
-        <?php if(!empty($optlist)) { ?>
-            <input readonly class="code select-all" value="<?= $optlist->getcode() ?>" />
-        <?php } ?>
+                <select name="bookmark" id="list_bookmark">
+                    <option value="">--no bookmark--</option>
+                    <?php foreach ($matchedbookmarks as $bookmark) { ?>
+                        <option
+                            value="<?= $bookmark->id() ?>"
+                            <?= !empty($optlist) && $optlist->bookmark() === $bookmark->id() ? 'selected' : '' ?>
+                        >
+                            <?= $bookmark->name() ?>
+                        </option>
+                    <?php } ?>
+                </select>
+                <label for="list_bookmark" title="use bookmark instead of filters">bookmark</label>
+                </br>
+                <input type="hidden" name="title" value="0">
+                <input type="checkbox" name="title" id="list_title" value="1" <?= !empty($optlist) && !$optlist->title() ? '' : 'checked' ?>>
+                <label for="list_title">Show title</label>
+                </br>
+                <input type="hidden" name="description" value="0">
+                <input type="checkbox" name="description" id="list_description" value="1" <?= !empty($optlist) && $optlist->description() ? 'checked' : '' ?>>
+                <label for="list_description">Show description</label>
+                </br>
+                <input type="hidden" name="thumbnail" value="0">
+                <input type="checkbox" name="thumbnail" id="list_thumbnail" value="1" <?= !empty($optlist) && $optlist->thumbnail() ? 'checked' : '' ?>>
+                <label for="list_thumbnail">Show thumbnail</label>
+                </br>
+                <input type="hidden" name="date" value="0">
+                <input type="checkbox" name="date" id="list_date" value="1" <?= !empty($optlist) && $optlist->date() ? 'checked' : '' ?>>
+                <label for="list_date">Show date</label>
+                </br>
+                <input type="hidden" name="time" value="0">
+                <input type="checkbox" name="time" id="list_time" value="1" <?= !empty($optlist) && $optlist->time() ? 'checked' : '' ?>>
+                <label for="list_time">Show time</label>
+                </br>
+                <input type="hidden" name="author" value="0">
+                <input type="checkbox" name="author" id="list_author" value="1" <?= !empty($optlist) && $optlist->author() ? 'checked' : '' ?>>
+                <label for="list_author">Show author(s)</label>
+                </br>
+                <input type="hidden" name="hidecurrent" value="0">
+                <input type="checkbox" name="hidecurrent" id="list_hidecurrent" value="1" <?= !empty($optlist) && $optlist->hidecurrent() ? 'checked' : '' ?>>
+                <label for="list_hidecurrent">Hide current page</label>
+                </br>
+                <select name="style" id="list_style">
+                    <?= options(Wcms\Model::LIST_STYLES , !empty($optlist) ? $optlist->style() : null) ?>
+                </select>
+                <label for="list_style">style</label>
+                </br>
+                <input type="submit" value="generate">
+            </form>
+            <?php if(!empty($optlist)) { ?>
+                <input readonly class="code select-all" value="<?= $optlist->getcode() ?>">
+            <?php } ?>
+
+            <h2>Random page</h2>
+            <i>Generate a code to create a link to a random page using the current filtering options.</i>
+            <?php if(!empty($optrandom)) { ?>
+                <input readonly class="code select-all" value="<?= $optrandom->getcode() ?>">
+            <?php } ?>
         </div>
-        </details>
+    </details>
 
 
 

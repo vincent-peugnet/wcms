@@ -27,6 +27,7 @@ class Servicerender
      * */
     protected $page;
 
+    /** @var string[] */
     protected $linkto = [];
     protected $sum = [];
     protected bool $internallinkblank;
@@ -64,8 +65,6 @@ class Servicerender
     public function render(Page $page): string
     {
         $this->page = $page;
-
-        $this->linkto = array_unique($this->linkto);
 
         return $this->gethmtl();
     }
@@ -348,6 +347,7 @@ class Servicerender
         $content = $this->article($element->content());
         $content = $this->automedialist($content);
         $content = $this->pageoptlist($content);
+        $content = $this->randomopt($content);
         $content = $this->date($content);
         $content = $this->thumbnail($content);
         $content = $this->pageid($content);
@@ -505,22 +505,6 @@ class Servicerender
         }
         // By passing the documentElement to saveHTML, special chars are not converted to entities
         return $dom->saveHTML($dom->documentElement);
-    }
-
-    /**
-     * Generate page relative link for given page_id including basepath
-     *
-     * @param string $id                    given page ID
-     * @return string                       Relative URL
-     * @throws LogicException               if router fail to generate route
-     */
-    public function upage(string $id): string
-    {
-        try {
-            return $this->router->generate('pageread', ['page' => $id]);
-        } catch (Exception $e) {
-            throw new LogicException($e->getMessage(), $e->getCode(), $e);
-        }
     }
 
     /**
@@ -703,29 +687,58 @@ class Servicerender
     private function pageoptlist(string $text): string
     {
         $matches = $this->match($text, 'LIST');
+        foreach ($matches as $match) {
+            try {
+                $optlist = new Optlist();
+                $optlist->parsehydrate($match['options'], $this->page);
 
-        if (!empty($matches)) {
-            foreach ($matches as $match) {
+                if (!empty($optlist->bookmark())) {
+                    $bookmarkmanager = new Modelbookmark();
+                    $bookmark = $bookmarkmanager->get($optlist->bookmark());
+                    $optlist->resetall();
+                    $optlist->parsehydrate($bookmark->query(), $this->page);
+                    $optlist->parsehydrate($match['options'], $this->page); // Erase bookmark options with LIST ones
+                }
+
+                $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optlist);
+                $this->linkto = array_merge($this->linkto, array_keys($pagetable));
+                $content = $optlist->listhtml($pagetable, $this, $this->page);
+                $text = str_replace($match['fullmatch'], $content, $text);
+            } catch (RuntimeException $e) {
+                Logger::errorex($e);
+            }
+        }
+
+        return $text;
+    }
+
+    /**
+     * Render Random links
+     */
+    private function randomopt(string $text): string
+    {
+        $matches = $this->match($text, 'RANDOM');
+        foreach ($matches as $match) {
+            $optrandom = new Optrandom();
+            $optrandom->parsehydrate($match['options'], $this->page);
+
+            if (!empty($optrandom->bookmark())) {
                 try {
-                    $optlist = new Optlist();
-                    $optlist->parsehydrate($match['options'], $this->page);
-
-                    if (!empty($optlist->bookmark())) {
-                        $bookmarkmanager = new Modelbookmark();
-                        $bookmark = $bookmarkmanager->get($optlist->bookmark());
-                        $optlist->resetall();
-                        $optlist->parsehydrate($bookmark->query(), $this->page);
-                        $optlist->parsehydrate($match['options'], $this->page); // Erase bookmark options with LIST ones
-                    }
-
-                    $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optlist);
-                    $this->linkto = array_merge($this->linkto, array_keys($pagetable));
-                    $content = $optlist->listhtml($pagetable, $this);
-                    $text = str_replace($match['fullmatch'], $content, $text);
+                    $bookmarkmanager = new Modelbookmark();
+                    $bookmark = $bookmarkmanager->get($optrandom->bookmark());
+                    $optrandom->resetall();
+                    $optrandom->parsehydrate($bookmark->query(), $this->page);
+                    $optrandom->parsehydrate($match['options'], $this->page); // Erase bookmark options with LIST ones
                 } catch (RuntimeException $e) {
-                    Logger::errorex($e);
+                    Logger::errorex($e); // bookmark does not exist
                 }
             }
+
+            $randompages = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optrandom);
+            $this->linkto = array_merge($this->linkto, array_keys($randompages));
+            $optrandom->setorigin($this->page->id());
+            $content = $this->generate('randomdirect', [], $optrandom->getquery());
+            $text = str_replace($match['fullmatch'], $content, $text);
         }
         return $text;
     }
@@ -940,6 +953,45 @@ class Servicerender
 
 
 
+    // _________________________ R O U T E S _______________________________
+
+
+    /**
+     * Generate page relative link for given page_id including basepath
+     *
+     * @param string $id                    given page ID
+     * @return string                       Relative URL
+     * @throws LogicException               if router fail to generate route
+     */
+    public function upage(string $id): string
+    {
+        try {
+            return $this->router->generate('pageread', ['page' => $id]);
+        } catch (Exception $e) {
+            throw new LogicException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * Generate the URL for a named route. Replace regexes with supplied parameters.
+     *
+     * @param string $route The name of the route.
+     * @param array $params Associative array of parameters to replace placeholders with.
+     * @param string $get Optionnal query GET parameters formated
+     * @return string The URL of the route with named parameters in place.
+     * @throws InvalidArgumentException If the route does not exist.
+     *
+     * @todo avoid duplication with Controller (this one a is a duplicate)
+     */
+    public function generate(string $route, array $params = [], string $get = ''): string
+    {
+        try {
+            return $this->router->generate($route, $params) . $get;
+        } catch (Exception $e) {
+            throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
 
     // _________________________ G E T ___________________________________
 
@@ -953,7 +1005,7 @@ class Servicerender
         sort($this->linkto);
         $linkto = $this->linkto;
         $key = array_search($this->page->id(), $linkto);
-        if ($key) {
+        if (is_int($key)) {
             unset($linkto[$key]);
         }
         $this->linkto = [];

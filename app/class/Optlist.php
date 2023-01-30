@@ -6,7 +6,7 @@ use IntlDateFormatter;
 use LogicException;
 use Wcms\Exception\Database\Notfoundexception;
 
-class Optlist extends Opt
+class Optlist extends Optcode
 {
     protected bool $title = true;
     protected bool $description = false;
@@ -17,25 +17,11 @@ class Optlist extends Opt
     protected bool $hidecurrent = false;
     protected $style = 'list';
 
-    /** @var Page $page Current page */
-    protected ?Page $page;
-
     private Servicerender $render;
-
-    /** @var string $bookmark Associated bookmark ID */
-    protected string $bookmark = "";
 
     public function __construct(array $datas = [])
     {
         parent::__construct($datas);
-    }
-
-    public function parsehydrate(string $encoded, Page $currentpage)
-    {
-        $this->page = $currentpage;
-        $encoded = str_replace('*', $this->page->id(), $encoded);
-        parse_str(ltrim($encoded, "?"), $datas);
-        $this->hydrate($datas);
     }
 
     /**
@@ -43,35 +29,33 @@ class Optlist extends Opt
      */
     public function getcode(): string
     {
-        return '%LIST?' . $this->getquery() . '%';
+        return '%LIST' . $this->getquery() . '%';
     }
 
     /**
      * @param Page[] $pagelist              Assoc array of Page objects, key must be ID of page.
      * @param Servicerender $render
+     * @param Page $page                    Current page
      * @return string HTML formated string
      */
-    public function listhtml(array $pagelist, Servicerender $render): string
+    public function listhtml(array $pagelist, Servicerender $render, Page $page): string
     {
-        if (is_null($this->page)) {
-            throw new LogicException('A Page object should be given to Optlist constructor to allow HTML rendering');
-        };
         $this->render = $render;
 
         $li = '';
 
-        if ($this->hidecurrent && key_exists($this->page->id(), $pagelist)) {
-            unset($pagelist[$this->page->id()]);
+        if ($this->hidecurrent && key_exists($page->id(), $pagelist)) {
+            unset($pagelist[$page->id()]);
         }
 
-        $lang = $this->page->lang() == '' ? Config::lang() : $this->page->lang();
+        $lang = $page->lang() == '' ? Config::lang() : $page->lang();
         $dateformatter = new IntlDateFormatter($lang, IntlDateFormatter::SHORT, IntlDateFormatter::NONE);
         $datetitleformatter = new IntlDateFormatter($lang, IntlDateFormatter::FULL, IntlDateFormatter::NONE);
         $timeformatter = new IntlDateFormatter($lang, IntlDateFormatter::NONE, IntlDateFormatter::SHORT);
         foreach ($pagelist as $page) {
             // ================= Class =============
             $classdata = [];
-            if ($page->id() === $this->page->id()) {
+            if ($page->id() === $page->id()) {
                 $classdata['actual'] = 'current_page';
             }
             $classdata['secure'] = $page->secure('string');
@@ -198,11 +182,6 @@ class Optlist extends Opt
         return $this->style;
     }
 
-    public function bookmark()
-    {
-        return $this->bookmark;
-    }
-
 
     // _______________________________________ S E T _____________________________________
 
@@ -245,18 +224,6 @@ class Optlist extends Opt
     {
         if (is_string($style) && key_exists($style, Model::LIST_STYLES)) {
             $this->style = $style;
-        }
-    }
-
-    /**
-     * @param string $bookmark              Bookmark ID
-     */
-    public function setbookmark(string $bookmark)
-    {
-        if (Model::idcheck($bookmark)) {
-            $this->bookmark = $bookmark;
-        } else {
-            $this->bookmark = "";
         }
     }
 }

@@ -49,6 +49,7 @@ aside details, aside span {
 aside details .submenu, aside summary {
     background-color: var(--secondary-background-color);
     min-width: 100px;
+    max-width: 300px;
 }
 
 

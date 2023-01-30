@@ -39,6 +39,7 @@ class Routes
             ['POST', '/bookmark/delete', 'Controllerbookmark#delete', 'bookmarkdelete'],
             ['GET', '/!bookmark/[cid:bookmark]/publish', 'Controllerbookmark#publish', 'bookmarkpublish'],
             ['GET', '/!bookmark/[cid:bookmark]/unpublish', 'Controllerbookmark#unpublish', 'bookmarkunpublish'],
+            ['GET', '/!random', 'Controllerrandom#direct', 'randomdirect'],
             ['GET', '//renderall', 'Controllerhome#renderall', 'homerenderall'],
             ['POST', '/multi', 'Controllerhome#multi', 'multi'],
             ['POST', '/upload', 'Controllerpage#upload', 'pageupload'],
