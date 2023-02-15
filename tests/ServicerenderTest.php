@@ -44,8 +44,11 @@ class ServicerenderTest extends TestCase
      * @test
      * @dataProvider renderProvider
      */
-    public function renderTest(string $name): void
+    public function renderTest(string $name, bool $requireslinux = false): void
     {
+        if ($requireslinux && PHP_OS_FAMILY != 'Linux') {
+            $this->markTestSkipped();
+        }
         $pagedata = json_decode(file_get_contents(__DIR__ . "/data/ServicerenderTest/$name.json"), true);
         $page = new Page($pagedata);
         $html = $this->renderengine->render($page);
@@ -70,7 +73,7 @@ class ServicerenderTest extends TestCase
             ['markdown-test'],
             ['markdown-test-2'],
             ['body-test'],
-            ['date-time-test'],
+            ['date-time-test', true],
             ['external-links-test'],
         ];
     }
