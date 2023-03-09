@@ -411,9 +411,9 @@ class Servicerender
      */
     private function media(string $text): string
     {
-        $regex = '%href="(?!([/#]|[a-zA-Z\.\-\+]+:|\.+/))([^"]+\.[^"]+)"%';
+        $regex = '%href="(?!([/#]|[a-zA-Z\.\-\+]+:|\.+/))([^"]+\.[^";]+)"%';
         $text = preg_replace($regex, 'href="' . Model::mediapath() . '$2" target="_blank"', $text);
-        $regex = '%src="(?!([/#]|[a-zA-Z\.\-\+]+:|\.+/))([^"]+\.[^"]+)"%';
+        $regex = '%src="(?!([/#]|[a-zA-Z\.\-\+]+:|\.+/))([^"]+\.[^";]+)"%';
         $text = preg_replace($regex, 'src="' . Model::mediapath() . '$2"', $text);
         return $text;
     }
