@@ -436,14 +436,6 @@ if (!function_exists('str_contains')) {
     }
 }
 
-// based on original work from the PHP Laravel framework
-if (!function_exists('str_contains')) {
-    function str_contains($haystack, $needle)
-    {
-        return $needle !== '' && mb_strpos($haystack, $needle) !== false;
-    }
-}
-
 /**
  * Insert a string after the first occurence of a string. If the string does not exist, nothing is inserted.
  */
