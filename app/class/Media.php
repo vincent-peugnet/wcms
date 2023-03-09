@@ -53,6 +53,8 @@ class Media extends Item
         'tiff'  => self::IMAGE,
         'bmp'   => self::IMAGE,
         'svg'   => self::IMAGE,
+        'webp'  => self::IMAGE,
+        'avif'  => self::IMAGE,
         'mp3'   => self::SOUND,
         'opus'  => self::SOUND,
         'wav'   => self::SOUND,
@@ -115,12 +117,7 @@ class Media extends Item
 
     public function analyse()
     {
-        $infos = pathinfo($this->filename);
-        if (!empty($infos['extension'])) {
-            $this->extension = $infos['extension'];
-        }
-
-        $this->extension = pathinfo($this->filename, PATHINFO_EXTENSION);
+        $this->extension = strtolower(pathinfo($this->filename, PATHINFO_EXTENSION));
 
         $this->settype();
 
@@ -339,13 +336,6 @@ class Media extends Item
     {
         if (is_string($dir)) {
             $this->dir = strip_tags(strtolower($dir));
-        }
-    }
-
-    public function setextension($extension)
-    {
-        if (strlen($extension) < 17 and is_string($extension)) {
-            $this->extension = strip_tags(strtolower($extension));
         }
     }
 
