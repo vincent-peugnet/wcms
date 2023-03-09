@@ -188,7 +188,9 @@ class Controllerpage extends Controller
                     $wobj = '{}';
                 }
                 sleep($this->page->sleep());
-                $this->showtemplate('read', ['html' => $html, 'script' => $wobj]);
+                $script = "\n<script>const w = $wobj</script>";
+                $html = insert_after($html, '<head>', $script);
+                echo $html;
             }
             $this->pagemanager->update($this->page);
 

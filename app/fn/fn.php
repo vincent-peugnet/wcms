@@ -443,3 +443,16 @@ if (!function_exists('str_contains')) {
         return $needle !== '' && mb_strpos($haystack, $needle) !== false;
     }
 }
+
+/**
+ * Insert a string after the first occurence of a string. If the string does not exist, nothing is inserted.
+ */
+function insert_after(string $text, string $after, string $insert)
+{
+    $afterpos = strpos($text, $after);
+    if ($afterpos === false) {
+        return $text;
+    }
+    $pos = $afterpos + strlen($after);
+    return substr_replace($text, $insert, $pos, 0);
+}
