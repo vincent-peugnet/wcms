@@ -35,7 +35,7 @@ $this->stop();
     <form action="' . $this->url('log') .'" method="post">
     <input type="text" name="user" id="loginuser" autofocus placeholder="user" required>
     <input type="password" name="pass" id="loginpass" placeholder="password" required>
-    <input type="hidden" name="route" value="pageread/">
+    <input type="hidden" name="route" value="pageread">
     <input type="hidden" name="id" value="' . $page->id() . '">
     <input type="checkbox" name="rememberme" id="rememberme" value="1">
     <label for="rememberme">Remember me</label>
@@ -98,7 +98,7 @@ $this->stop();
         <?php
         } elseif(!empty(Wcms\Config::alertlink())) {
             ?>
-            <p><a href="<?= $this->upage('pageread/', Wcms\Config::alertlink()) ?>"><?= empty(Wcms\Config::alertlinktext()) ? Wcms\Config::alertlink() : Wcms\Config::alertlinktext() ?></a></p>
+            <p><a href="<?= $this->upage('pageread', Wcms\Config::alertlink()) ?>"><?= empty(Wcms\Config::alertlinktext()) ? Wcms\Config::alertlink() : Wcms\Config::alertlinktext() ?></a></p>
             <?php
         }
 

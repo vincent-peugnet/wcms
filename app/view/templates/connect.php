@@ -14,7 +14,7 @@
 <form action="<?= $this->url('log') ?>" method="post">
 <input type="hidden" name="route" value="<?= $route ?>">
 <?php
-if(in_array($route, ['pageedit', 'pageread', 'pageread/', 'pageadd'])) {
+if(in_array($route, ['pageedit', 'pageread', 'pageadd'])) {
     echo '<input type="hidden" name="id" value="'. $id .'">';
 }
 ?>
@@ -39,8 +39,8 @@ if(in_array($route, ['pageedit', 'pageread', 'pageread/', 'pageadd'])) {
 <?php } ?>
 
 <?php
-if(in_array($route, ['pageedit', 'pageread', 'pageread/', 'pageadd'])) {
-    echo '<p><a href="' . $this->upage('pageread/', $id) . '">back to page read view</a></p>';
+if(in_array($route, ['pageedit', 'pageread', 'pageadd'])) {
+    echo '<p><a href="' . $this->upage('pageread', $id) . '">back to page read view</a></p>';
 }
 ?>
 

@@ -81,7 +81,7 @@ class Controllerpage extends Controller
             $this->pagemanager->update($this->page);
             $this->templaterender($this->page);
         }
-        $this->routedirect('pageread/', ['page' => $this->page->id()]);
+        $this->routedirect('pageread', ['page' => $this->page->id()]);
     }
 
     /**
@@ -137,7 +137,7 @@ class Controllerpage extends Controller
      */
     public function read($page)
     {
-        $this->setpage($page, 'pageread/');
+        $this->setpage($page, 'pageread');
 
         $pageexist = $this->importpage();
         $canread = false;
@@ -172,7 +172,7 @@ class Controllerpage extends Controller
                 if (!empty($this->page->redirection()) && $this->page->refresh() === 0 && $this->page->sleep() === 0) {
                     try {
                         if (Model::idcheck($this->page->redirection())) {
-                            $this->routedirect('pageread/', ['page' => $this->page->redirection()]);
+                            $this->routedirect('pageread', ['page' => $this->page->redirection()]);
                         } else {
                             $url = getfirsturl($this->page->redirection());
                             $this->redirect($url);
@@ -242,7 +242,7 @@ class Controllerpage extends Controller
             $datas = array_merge($datas, ['page' => $this->page, 'pageexist' => true, 'user' => $this->user]);
             $this->showtemplate('edit', $datas);
         } else {
-            $this->routedirect('pageread/', ['page' => $this->page->id()]);
+            $this->routedirect('pageread', ['page' => $this->page->id()]);
         }
     }
 
@@ -253,7 +253,7 @@ class Controllerpage extends Controller
             $this->importpage();
             var_dump($this->page);
         } else {
-            $this->routedirect('pageread/', ['page' => $page]);
+            $this->routedirect('pageread', ['page' => $page]);
         }
     }
 
@@ -269,7 +269,7 @@ class Controllerpage extends Controller
             $this->pagemanager->add($this->page);
             $this->routedirect('pageedit', ['page' => $this->page->id()]);
         } else {
-            $this->routedirect('pageread/', ['page' => $this->page->id()]);
+            $this->routedirect('pageread', ['page' => $this->page->id()]);
         }
     }
 
@@ -279,7 +279,7 @@ class Controllerpage extends Controller
         if ($this->copy($copy, $page)) {
             $this->routedirect('pageedit', ['page' => $this->page->id()]);
         } else {
-            $this->routedirect('pageread/', ['page' => $page]);
+            $this->routedirect('pageread', ['page' => $page]);
         }
     }
 
@@ -289,7 +289,7 @@ class Controllerpage extends Controller
         if ($this->importpage() && ($this->user->issupereditor() || $this->page->authors() === [$this->user->id()])) {
             $this->showtemplate('confirmdelete', ['page' => $this->page, 'pageexist' => true]);
         } else {
-            $this->routedirect('pageread/', ['page' => $this->page->id()]);
+            $this->routedirect('pageread', ['page' => $this->page->id()]);
         }
     }
 
@@ -310,7 +310,7 @@ class Controllerpage extends Controller
                 exit;
             }
         } else {
-            $this->routedirect('pageread/', ['page' => $page]);
+            $this->routedirect('pageread', ['page' => $page]);
         }
     }
 
@@ -355,16 +355,16 @@ class Controllerpage extends Controller
             $this->disconnect();
             $this->routedirect('pageread', ['page' => $page]);
         } else {
-            $this->routedirect('pageread/', ['page' => $page]);
+            $this->routedirect('pageread', ['page' => $page]);
         }
     }
 
     public function login(string $page)
     {
         if ($this->user->isvisitor()) {
-            $this->showtemplate('connect', ['id' => $page, 'route' => 'pageread/']);
+            $this->showtemplate('connect', ['id' => $page, 'route' => 'pageread']);
         } else {
-            $this->routedirect('pageread/', ['page' => $page]);
+            $this->routedirect('pageread', ['page' => $page]);
         }
     }
 
@@ -381,9 +381,9 @@ class Controllerpage extends Controller
     {
         $duplicate = Model::idclean($duplicate);
         if ($this->copy($page, $duplicate)) {
-            $this->routedirect('pageread/', ['page' => $duplicate]);
+            $this->routedirect('pageread', ['page' => $duplicate]);
         } else {
-            $this->routedirect('pageread/', ['page' => Model::idclean($page)]);
+            $this->routedirect('pageread', ['page' => Model::idclean($page)]);
         }
     }
 
@@ -450,9 +450,34 @@ class Controllerpage extends Controller
         $this->routedirect('pageedit', ['page' => $this->page->id()]);
     }
 
-    public function pagedirect($page)
+    /**
+     * Temporary redirection to a page.
+     * Send a `302` HTTP code.
+     */
+    public function pagedirect($page): void
     {
-        $this->routedirect('pageread/', ['page' => Model::idclean($page)]);
+        $this->routedirect('pageread', ['page' => Model::idclean($page)]);
+    }
+
+    /**
+     * Permanent redirection to a page.
+     * Send a `301` HTTP code.
+     */
+    public function pagepermanentredirect($page): void
+    {
+        $path = $this->generate('pageread', ['page' => Model::idclean($page)]);
+        header("Location: $path", true, 301);
+    }
+
+    /**
+     * Send a `404` HTTP code and display 'Command not found'
+     *
+     * @todo use a dedicated view and suggest a list of W URL based command.
+     */
+    public function commandnotfound($page, $command): void
+    {
+        header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+        echo "<h1>404 Not Found</h1><p>command <code>$command</code> not found<p>";
     }
 
     /**

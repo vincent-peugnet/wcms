@@ -221,7 +221,7 @@
                                     <?php } ?>
                             </td>
                             <td class="read">
-                                <a href="<?= $this->upage('pageread/', $item->id()) ?>" target="<?= $item->id() ?>">
+                                <a href="<?= $this->upage('pageread', $item->id()) ?>" target="<?= $item->id() ?>">
                                     <i class="fa fa-eye"></i>
                                 </a>
                             </td>

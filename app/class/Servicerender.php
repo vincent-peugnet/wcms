@@ -906,7 +906,7 @@ class Servicerender
             $form = '<form action="' . Model::dirtopath('!co') . '" method="post">
             <input type="text" name="user" id="loginuser" autofocus placeholder="user" required>
 			<input type="password" name="pass" id="loginpass" placeholder="password" required>
-			<input type="hidden" name="route" value="pageread/">
+			<input type="hidden" name="route" value="pageread">
 			<input type="hidden" name="id" value="' . $id . '">
 			<input type="submit" name="log" value="login" id="button">
 			</form>';

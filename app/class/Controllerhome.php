@@ -32,7 +32,7 @@ class Controllerhome extends Controller
     public function desktop()
     {
         if ($this->user->isvisitor() && Config::homepage() === 'redirect' && !empty(Config::homeredirect())) {
-            $this->routedirect('pageread/', ['page' => Config::homeredirect()]);
+            $this->routedirect('pageread', ['page' => Config::homeredirect()]);
         } else {
             $pagelist = $this->pagemanager->pagelist();
 
@@ -190,7 +190,7 @@ class Controllerhome extends Controller
             if (isset($_POST['action'])) {
                 switch ($_POST['action']) {
                     case 'read':
-                        $this->routedirect('pageread/', ['page' => $_POST['id']]);
+                        $this->routedirect('pageread', ['page' => $_POST['id']]);
                         break;
 
                     case 'edit':

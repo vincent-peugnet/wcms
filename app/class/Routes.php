@@ -71,7 +71,7 @@ class Routes
             ['GET', '/!timeline', 'Controllertimeline#desktop', 'timeline'],
             ['POST', '/!timeline/add', 'Controllertimeline#add', 'timelineadd'],
             ['POST', '/!timeline/clap', 'Controllertimeline#clap', 'timelineclap'],
-            ['GET', '/[cid:page]/', 'Controllerpage#read', 'pageread/'],
+            ['GET', '/[cid:page]/', 'Controllerpage#pagepermanentredirect', 'pageread/'],
             ['POST', '/[cid:page]/', 'Controllerpage#read', 'pageread/post'],
             ['GET', '/[cid:page]', 'Controllerpage#read', 'pageread'],
             ['GET', '/[cid:page]/add', 'Controllerpage#add', 'pageadd'],
@@ -89,7 +89,7 @@ class Routes
             ['GET', '/[cid:page]/delete', 'Controllerpage#confirmdelete', 'pageconfirmdelete'],
             ['POST', '/[cid:page]/delete', 'Controllerpage#delete', 'pagedelete'],
             ['GET', '/[cid:page]/duplicate:[cid:duplicate]', 'Controllerpage#duplicate', 'pageduplicate'],
-            ['GET', '/[cid:page]/[*]', 'Controllerpage#pagedirect', 'pageread/etoile'],
+            ['GET', '/[cid:page]/[*:command]', 'Controllerpage#commandnotfound', 'pageread/etoile'],
         ]);
 
         $match = $router->match();
