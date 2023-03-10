@@ -115,6 +115,9 @@ class Media extends Item
         $this->analyse();
     }
 
+    /**
+     * This will analyse the media file. Set the extension, date, perms
+     */
     public function analyse()
     {
         $this->extension = strtolower(pathinfo($this->filename, PATHINFO_EXTENSION));
@@ -136,7 +139,7 @@ class Media extends Item
     }
 
 
-    public function getabsolutepath()
+    public function getabsolutepath(): string
     {
         if (!empty(Config::basepath())) {
             $base = '/' . Config::basepath();
@@ -148,11 +151,13 @@ class Media extends Item
         return $fullpath;
     }
 
-    public function getincludepath()
+    /**
+     * Relative path to media starting with `./media`
+     */
+    public function getincludepath(): string
     {
-        $includepath = $this->dir() . '/' . $this->filename();
+        $includepath = './' . $this->dir . '/' . $this->filename();
         $includepath = str_replace('\\', '/', $includepath);
-        $includepath = substr($includepath, 6);
         return $includepath;
     }
 
@@ -162,7 +167,7 @@ class Media extends Item
      * @return string                       Relative path to a file.
      *                                      This will look like `media/pictures/hollydays.jpeg`
      */
-    public function getlocalpath()
+    public function getlocalpath(): string
     {
         return $this->dir . '/' . $this->filename;
     }
@@ -202,7 +207,7 @@ class Media extends Item
         return $code;
     }
 
-    public function getsymbol()
+    public function getsymbol(): string
     {
         switch ($this->type) {
             case self::IMAGE:
