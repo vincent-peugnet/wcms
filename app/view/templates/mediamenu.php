@@ -28,13 +28,26 @@
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>">
                     <input type="submit" value="upload">
                 </form>
-                <h2>Folder</h2>
+                <h2>New folder</h2>
                 <form id="folderadd" action="<?= $this->url('mediafolderadd') ?>" method="post">
                     <label for="foldername"><i class="fa fa-folder"></i>  New folder</label>
                     <input type="text" name="foldername" id="foldername" placeholder="folder name" required>
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>">
                 <input type="submit" value="create folder">
                 </form>
+
+
+                <?php if($user->issupereditor()) { ?>
+                <h2>Delete folder</h2>
+                <form action="<?= $this->url('mediafolderdelete') ?>" id="deletefolder" method="post">
+                    <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>/">
+                    <input type="checkbox" name="deletefolder" id="confirmdeletefolder" value="1">
+                    <label for="confirmdeletefolder">Delete current folder and all it's content</label>
+                    </br>
+                    <input type="submit" value="delete folder" >
+                </form>
+                <?php } ?>
+
                 <h2>Magic folders</h2>
                 <h3><i class="fa fa-font"></i> fonts</h3>
                 <a href="<?= $this->url('mediafontface', [], $mediaopt->getpathadress()) ?>">
@@ -49,16 +62,6 @@
         <div class="submenu">
 
             <?php if($user->issupereditor()) { ?>
-
-            <h2>Folder</h2>
-            <form action="<?= $this->url('mediafolderdelete') ?>" id="deletefolder" method="post">
-                <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>/">
-                <input type="checkbox" name="deletefolder" id="confirmdeletefolder" value="1">
-                <label for="confirmdeletefolder">Delete current folder and all it's content</label>
-                </br>
-                <input type="submit" value="delete folder" >
-            </form>
-
             
             <h2>Move</h2>
             <form action="<?= $this->url('mediaedit') ?>" method="post" id="mediaedit">
