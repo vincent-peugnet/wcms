@@ -388,6 +388,7 @@ class Modelpage extends Modeldb
 
             $page->setdaterender($now);
             $page->setlinkto($renderengine->linkto());
+            $page->setpostprocessaction($renderengine->postprocessaction());
         } catch (RuntimeException $e) {
             Model::sendflashmessage("Error while saving render files", Model::FLASH_ERROR);
             Logger::errorex($e);

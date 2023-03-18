@@ -29,9 +29,17 @@ class Servicerender
 
     /** @var string[] */
     protected $linkto = [];
+
     protected $sum = [];
+
+    /** @var bool If true, internal links target a new tab */
     protected bool $internallinkblank;
+
+    /** @var bool If true, external links target a new tab */
     protected bool $externallinkblank;
+
+    /** @var bool True if the page need post process */
+    protected bool $postprocessaction = false;
 
     /**
      * @var Bookmark[]                      Associative array of Bookmarks using fullmatch as key
@@ -110,6 +118,7 @@ class Servicerender
 
         $body = $this->getbody($this->readbody());
         $parsebody = $this->bodyparser($body);
+        $this->postprocessaction = $this->checkpostprocessaction($parsebody);
         $head = $this->gethead();
 
         $lang = !empty($this->page->lang()) ? $this->page->lang() : Config::lang();
@@ -873,6 +882,16 @@ class Servicerender
     }
 
     /**
+     * Check if the page need post processing by looking for patterns
+     */
+    private function checkpostprocessaction(string $text): bool
+    {
+        $counterpaterns = Servicepostprocess::COUNTERS;
+        $pattern = implode('|', $counterpaterns);
+        return boolval(preg_match("#($pattern)#", $text));
+    }
+
+    /**
      * Autolink Function : transform every word of more than $limit characters in internal link
      *
      * @param string $text The input text to be converted
@@ -1010,5 +1029,10 @@ class Servicerender
         }
         $this->linkto = [];
         return $linkto;
+    }
+
+    public function postprocessaction(): bool
+    {
+        return $this->postprocessaction;
     }
 }

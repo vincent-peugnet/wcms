@@ -182,14 +182,12 @@ class Controllerpage extends Controller
                     }
                 }
                 $html = file_get_contents($filedir);
-                try {
-                    $wobj = $this->wobj($this->page, $this->user);
-                } catch (JsonException $e) {
-                    $wobj = '{}';
-                }
+
+                $postprocessor = new Servicepostprocess($this->page, $this->user);
+                $html = $postprocessor->process($html);
+
                 sleep($this->page->sleep());
-                $script = "\n<script>const w = $wobj</script>";
-                $html = insert_after($html, '<head>', $script);
+
                 echo $html;
             }
             $this->pagemanager->update($this->page);
@@ -478,29 +476,5 @@ class Controllerpage extends Controller
     {
         header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
         echo "<h1>404 Not Found</h1><p>command <code>$command</code> not found<p>";
-    }
-
-    /**
-     * @return string                       JSON encoded w global, pages and user datas
-     * @throws JsonException                If JSON encoding failed
-     */
-    protected function wobj(Page $page, User $user): string
-    {
-        $wdatas = [
-            'page' => [
-                'id' => $page->id(),
-                'title' => $page->title(),
-                'description' => $page->description(),
-                'secure' => $page->secure(),
-            ],
-            'domain' => Config::url(),
-            'basepath' => Config::basepath(),
-            'user' => [
-                'id' => $user->id(),
-                'level' => $user->level(),
-                'name' => $user->name(),
-            ]
-        ];
-        return json_encode($wdatas, JSON_THROW_ON_ERROR);
     }
 }

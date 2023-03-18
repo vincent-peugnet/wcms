@@ -47,6 +47,7 @@ class Page extends Item
     protected $redirection;
     protected $refresh;
     protected $password;
+    protected $postprocessaction;
 
     public const SECUREMAX = 2;
     public const TABS = ['main', 'css', 'header', 'body', 'nav', 'aside', 'footer', 'javascript'];
@@ -116,6 +117,7 @@ class Page extends Item
         $this->setredirection('');
         $this->setrefresh(0);
         $this->setpassword('');
+        $this->postprocessaction = false;
     }
 
     public function ispublic(): bool
@@ -390,6 +392,11 @@ class Page extends Item
     public function password($type = 'string')
     {
         return $this->password;
+    }
+
+    public function postprocessaction($type = 'int'): bool
+    {
+        return $this->postprocessaction;
     }
 
 
@@ -751,6 +758,11 @@ class Page extends Item
         if (is_string($password) && strlen($password) > 0 && strlen($password) < 64) {
             $this->password = $password;
         }
+    }
+
+    public function setpostprocessaction($postprocessaction): void
+    {
+        $this->postprocessaction = boolval($postprocessaction);
     }
 
 

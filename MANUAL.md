@@ -456,6 +456,34 @@ Include the page absolute path, including potential subfolders after domain.
 
 Include the page exact URL.
 
+##### Counters inclusion
+
+Those counters will allow to display stats about your page.
+
+    %VISITCOUNT%
+
+Will display the number of [visit](#visitcount) of the page.
+
+    <span class="counter visitcount">X</span>
+
+----
+
+    %EDITCOUNT%
+
+Will display the number of [edits](#editcount) of the page.
+
+    <span class="counter editcount">X</span>
+
+----
+
+    %AFFCOUNT%
+
+Will display the number of [affcount](#affcount) of the page.
+
+    <span class="counter affcount">X</span>
+
+
+
 ##### Login inclusion
 
     %CONNECT%
@@ -913,6 +941,32 @@ Each page have a dedicated stylesheet, that can be called by other pages using [
 ##### BODY
 
 ##### Javascript
+
+
+##### Visitcount
+
+*read only*
+
+    visitcount
+
+Count the number of visitors that opened the page. Unlike [affcount](#affcount), only un-connected users are counted this way.
+
+##### Editcount
+
+*readonly*
+
+    editcount
+
+Count the number of time the page has been edited. Even empty edits are counted.
+
+##### Affcount
+
+*readonly*
+
+    affcount
+
+Count the number of time the page is opened is opened.
+
 
 
 
