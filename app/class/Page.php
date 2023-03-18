@@ -39,7 +39,7 @@ class Page extends Item
     protected $authors;
     protected $invites;
     protected $readers;
-    protected $affcount;
+    protected $displaycount;
     protected $visitcount;
     protected $editcount;
     protected $editby;
@@ -109,9 +109,9 @@ class Page extends Item
         $this->setauthors([]);
         $this->setinvites([]);
         $this->setreaders([]);
-        $this->setaffcount(0);
         $this->setvisitcount(0);
         $this->seteditcount(0);
+        $this->setdisplaycount(0);
         $this->seteditby([]);
         $this->setsleep(0);
         $this->setredirection('');
@@ -354,17 +354,17 @@ class Page extends Item
         return $this->invites;
     }
 
-    public function affcount($type = 'int')
+    public function displaycount($type = 'int'): int
     {
-        return $this->affcount;
+        return $this->displaycount;
     }
 
-    public function visitcount($type = 'int')
+    public function visitcount($type = 'int'): int
     {
         return $this->visitcount;
     }
 
-    public function editcount($type = 'int')
+    public function editcount($type = 'int'): int
     {
         return $this->editcount;
     }
@@ -693,12 +693,20 @@ class Page extends Item
         }
     }
 
+    /**
+     * @deprecated 2.4.0 Replaced by displaycount
+     */
     public function setaffcount($affcount)
     {
-        if (is_int($affcount)) {
-            $this->affcount = $affcount;
-        } elseif (is_numeric($affcount)) {
-            $this->affcount = intval($affcount);
+        $this->setdisplaycount($affcount);
+    }
+
+    public function setdisplaycount($displaycount)
+    {
+        if (is_int($displaycount)) {
+            $this->displaycount = $displaycount;
+        } elseif (is_numeric($displaycount)) {
+            $this->displaycount = intval($displaycount);
         }
     }
 
@@ -774,9 +782,9 @@ class Page extends Item
         $this->editcount++;
     }
 
-    public function addaffcount()
+    public function adddisplaycount()
     {
-        $this->affcount++;
+        $this->displaycount++;
     }
 
     public function addvisitcount()

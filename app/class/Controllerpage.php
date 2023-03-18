@@ -163,7 +163,7 @@ class Controllerpage extends Controller
 
 
             if ($canread) {
-                $this->page->addaffcount();
+                $this->page->adddisplaycount();
                 if ($this->user->isvisitor()) {
                     $this->page->addvisitcount();
                 }

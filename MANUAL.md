@@ -476,11 +476,11 @@ Will display the number of [edits](#editcount) of the page.
 
 ----
 
-    %AFFCOUNT%
+    %DISPLAYCOUNT%
 
-Will display the number of [affcount](#affcount) of the page.
+Will display the number of [display](#displaycount) of the page.
 
-    <span class="counter affcount">X</span>
+    <span class="counter displaycount">X</span>
 
 
 
@@ -949,7 +949,7 @@ Each page have a dedicated stylesheet, that can be called by other pages using [
 
     visitcount
 
-Count the number of visitors that opened the page. Unlike [affcount](#affcount), only un-connected users are counted this way.
+Count the number of visitors that opened the page. Unlike [displaycount](#displaycount), only un-connected users are counted this way.
 
 ##### Editcount
 
@@ -959,11 +959,11 @@ Count the number of visitors that opened the page. Unlike [affcount](#affcount),
 
 Count the number of time the page has been edited. Even empty edits are counted.
 
-##### Affcount
+##### Displaycount
 
 *readonly*
 
-    affcount
+    displaycount
 
 Count the number of time the page is opened is opened.
 

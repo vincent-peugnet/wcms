@@ -58,7 +58,7 @@ abstract class Model
         'authors',
         'linkto',
         'visitcount',
-        'affcount',
+        'displaycount',
         'editcount'
     ];
 

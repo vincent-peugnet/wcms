@@ -197,10 +197,10 @@
                                 <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'editcount']) ?>
                             </th>
                             <?php }
-                                if ($columns['affcount']) { ?>
-                            <th class="affcount">
-                                <a href="<?= $opt->sortbyorder('affcount') ?>">aff</a>
-                                <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'affcount']) ?>
+                                if ($columns['displaycount']) { ?>
+                            <th class="displaycount">
+                                <a href="<?= $opt->sortbyorder('displaycount') ?>">display</a>
+                                <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'displaycount']) ?>
                             </th>
                             <?php } ?>
                         </tr>
@@ -275,8 +275,8 @@
                                     if ($columns['editcount']) { ?>
                             <td class="editcount"><?= $item->editcount() ?></td>
                             <?php }
-                                    if ($columns['affcount']) { ?>
-                            <td class="affcount"><?= $item->affcount() ?></td>
+                                    if ($columns['displaycount']) { ?>
+                            <td class="displaycount"><?= $item->displaycount() ?></td>
                             <?php } ?>
                         </tr>
 

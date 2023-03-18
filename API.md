@@ -55,7 +55,7 @@ Page related api
     ],
     "invites": [],
     "readers": [],
-    "affcount": 1,
+    "displaycount": 1,
     "visitcount": 0,
     "editcount": 3,
     "editby": [],
