@@ -200,7 +200,7 @@ abstract class Model
     }
 
     /**
-     * Check if the given ID is a given W Identifier.
+     * Check compatibility with W identifier syntax
      *
      * @return bool true if valid ID otherwise false
      */

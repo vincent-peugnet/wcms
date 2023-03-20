@@ -212,7 +212,24 @@
                             <?php if($columns['favicon']) { ?>
                                 <td class="favicon"><img class="favicon" src="<?= Wcms\Model::faviconpath() . $item->favicon() ?>" alt="<?= $item->favicon() ?>" title="<?= $item->favicon() ?>"></td>
                             <?php } ?>
-                            <td class="id"><label title="<?= $item->title() ?>" for="id_<?= $item->id() ?>"><?= $item->id() ?></label></td>
+                            <td class="id">
+                                <label title="<?= $item->title() ?>" for="id_<?= $item->id() ?>">
+                                    <?= $item->id() ?>
+                                </label>
+                                <?php if (!empty($item->redirection())) { ?>
+                                    <span class="redirection">
+                                        <a
+                                            href="<?= \Wcms\Model::idcheck($item->redirection()) ? $this->upage('pageread', $item->redirection()) : getfirsturl($item->redirection()) ?>"
+                                            title="This page redirect to: <?= $item->redirection() ?>"
+                                        >
+                                            <i class="fa fa-external-link-square"></i>
+                                            <span class="refresh">
+                                                <?= $item->refresh() !== 0 ? $item->refresh() . 's' : '' ?>
+                                            </span>
+                                        </a>
+                                    </span>
+                                <?php } ?>
+                            </td>
                             <td class="edit">
                                 <?php if($user->issupereditor() || in_array($user->id(), $item->authors())) { ?>
                                     <a href="<?= $this->upage('pageedit', $item->id()) ?>">
@@ -221,7 +238,7 @@
                                     <?php } ?>
                             </td>
                             <td class="read">
-                                <a href="<?= $this->upage('pageread', $item->id()) ?>" target="<?= $item->id() ?>">
+                                <a href="<?= $this->upage('pageread', $item->id()) ?>">
                                     <i class="fa fa-eye"></i>
                                 </a>
                             </td>

@@ -27,7 +27,7 @@ main div#graph {
     width: 800px;
 }
 
-main table td.id {
+main table td.id label {
     font-family: monospace;
     font-size: medium;
 }
@@ -140,6 +140,10 @@ td.title {
 
 td label, td time {white-space: nowrap;}
 
+span.redirection {
+    background-color: var(--secondary-background-color);
+    border-radius: 5px;
+}
 
 
 
