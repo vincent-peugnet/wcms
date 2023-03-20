@@ -35,27 +35,27 @@ class Optlist extends Optcode
     /**
      * @param Page[] $pagelist              Assoc array of Page objects, key must be ID of page.
      * @param Servicerender $render
-     * @param Page $page                    Current page
+     * @param Page $currentpage             Current page
      * @return string HTML formated string
      */
-    public function listhtml(array $pagelist, Servicerender $render, Page $page): string
+    public function listhtml(array $pagelist, Servicerender $render, Page $currentpage): string
     {
         $this->render = $render;
 
         $li = '';
 
-        if ($this->hidecurrent && key_exists($page->id(), $pagelist)) {
-            unset($pagelist[$page->id()]);
+        if ($this->hidecurrent && key_exists($currentpage->id(), $pagelist)) {
+            unset($pagelist[$currentpage->id()]);
         }
 
-        $lang = $page->lang() == '' ? Config::lang() : $page->lang();
+        $lang = $currentpage->lang() == '' ? Config::lang() : $currentpage->lang();
         $dateformatter = new IntlDateFormatter($lang, IntlDateFormatter::SHORT, IntlDateFormatter::NONE);
         $datetitleformatter = new IntlDateFormatter($lang, IntlDateFormatter::FULL, IntlDateFormatter::NONE);
         $timeformatter = new IntlDateFormatter($lang, IntlDateFormatter::NONE, IntlDateFormatter::SHORT);
         foreach ($pagelist as $page) {
             // ================= Class =============
             $classdata = [];
-            if ($page->id() === $page->id()) {
+            if ($currentpage->id() === $page->id()) {
                 $classdata['actual'] = 'current_page';
             }
             $classdata['secure'] = $page->secure('string');
