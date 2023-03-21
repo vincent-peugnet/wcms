@@ -24,7 +24,7 @@ class Element extends Item
     protected int $headeranchor = self::NOHEADERANCHOR;
 
     /** @var bool Include element with HTML tags */
-    protected bool $tag = true;
+    protected bool $tag;
 
     public const NOHEADERANCHOR = 0;
     public const HEADERANCHORLINK = 1;
@@ -40,6 +40,7 @@ class Element extends Item
     public function __construct($pageid, $datas = [])
     {
         $this->urllinker = Config::urllinker();
+        $this->tag = Config::htmltag();
         $this->hydrate($datas);
         $this->analyse($pageid);
     }

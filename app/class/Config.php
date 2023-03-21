@@ -38,13 +38,16 @@ abstract class Config
     protected static $debug = false;
 
     /** Database config */
-    protected static $markdownhardwrap = true;
+    protected static bool $markdownhardwrap = true;
+
+    /** @var bool BODY content inclusion have HTML tags printed around them */
+    protected static bool $htmltag = true;
 
 
     /** Site config */
 
     /** @var bool $disablejavascript */
-    protected static $disablejavascript = false;
+    protected static bool $disablejavascript = false;
     /** @var string $lang Default string for pages */
     protected static $lang = "en";
 
@@ -309,7 +312,12 @@ abstract class Config
         return self::$lang;
     }
 
-    public static function disablejavascript()
+    public static function htmltag(): bool
+    {
+        return self::$htmltag;
+    }
+
+    public static function disablejavascript(): bool
     {
         return self::$disablejavascript;
     }
@@ -528,6 +536,11 @@ abstract class Config
     public static function setlang(string $lang)
     {
         self::$lang = substr(strip_tags($lang), 0, self::LANG_MAX);
+    }
+
+    public static function sethtmltag($htmltag)
+    {
+        self::$htmltag = boolval($htmltag);
     }
 
     public static function setdisablejavascript($disablejavascript)

@@ -212,10 +212,21 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
 
                 <p>This can be overide individualy for each element using render options. See <a href="<?= $this->url('info', [], '#url-linker') ?>">📖 manual section</a> for more infos.</p>
 
+
+                <h4>HTML tags</h4>
+
+                <div class="checkbox">
+                    <input type="hidden" name="htmltag" value="0" form="admin">
+                    <input type="checkbox" name="htmltag" id="htmltag" value="1" <?= Wcms\Config::htmltag() ? 'checked' : '' ?> form="admin">
+                    <label for="htmltag">Print HTML tags around page's contents</label>
+                </div>
+
+                <p>This can be overide individualy for each element using render options. See <a href="<?= $this->url('info', [], '#html-tags') ?>">📖 manual section</a> for more infos.</p>
+
+
                 <p>
                     <i>(Thoses modifications need re-rendering)</i>
                 </p>
-
 
 
                 <h2 id="css">CSS</h2>

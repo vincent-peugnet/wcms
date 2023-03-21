@@ -688,13 +688,14 @@ Where `*` is the page ID of the rendered page.
 
     %<element>?tag=(0|1)%
 
-By default, HTML tags are printed arround your content. You can disable this behavior by setting the tag parameter to 0.
+This will determine if HTML tags will be printed around included element. This may be usefull for advanced users to achieve more precise HTML editing.
+The default behavior can be set globaly in the [admin panel](#admin).
 
 Example :
 
     %NAV?tag=0%
 
-This will include the content of the *nav* element of your page, but without any `<nav>` and `</nav>` arround.
+This will include the content of the *nav* element of your page, but without any `<nav>` and `</nav>` around.
 
 
 ##### Markdown disable
