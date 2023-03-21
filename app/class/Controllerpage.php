@@ -285,7 +285,14 @@ class Controllerpage extends Controller
     {
         $this->setpage($page, 'pageconfirmdelete');
         if ($this->importpage() && ($this->user->issupereditor() || $this->page->authors() === [$this->user->id()])) {
-            $this->showtemplate('confirmdelete', ['page' => $this->page, 'pageexist' => true]);
+            $linksto = new Opt();
+            $linksto->setlinkto($this->page->id());
+            $pageslinkingto = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $linksto);
+            $this->showtemplate('confirmdelete', [
+                'page' => $this->page,
+                'pageexist' => true,
+                'pageslinkingtocount' => count($pageslinkingto),
+            ]);
         } else {
             $this->routedirect('pageread', ['page' => $this->page->id()]);
         }
