@@ -2,9 +2,7 @@
 
 namespace Wcms;
 
-use Exception;
-use InvalidArgumentException;
-use RangeException;
+use DomainException;
 
 /**
  * HTML Element used in pages
@@ -12,7 +10,7 @@ use RangeException;
 class Element extends Item
 {
     protected $fullmatch;
-    protected ?string $type;
+    protected string $type;
     protected $options;
     protected $sources = [];
     protected int $everylink = 0;
@@ -24,6 +22,9 @@ class Element extends Item
     /** @var bool default value is set in Config class */
     protected bool $urllinker;
     protected int $headeranchor = self::NOHEADERANCHOR;
+
+    /** @var bool Include element with HTML tags */
+    protected bool $tag = true;
 
     public const NOHEADERANCHOR = 0;
     public const HEADERANCHORLINK = 1;
@@ -59,11 +60,6 @@ class Element extends Item
         }
     }
 
-    public function addtags()
-    {
-        $this->content = "\n<{$this->type()}>\n{$this->content()}\n</{$this->type()}>\n";
-    }
-
 
 
 
@@ -71,22 +67,22 @@ class Element extends Item
     // ______________________________________________ G E T ________________________________________________________
 
 
-    public function fullmatch()
+    public function fullmatch(): string
     {
         return $this->fullmatch;
     }
 
-    public function type()
+    public function type(): string
     {
         return $this->type;
     }
 
-    public function options()
+    public function options(): string
     {
         return $this->options;
     }
 
-    public function sources()
+    public function sources(): array
     {
         return $this->sources;
     }
@@ -96,12 +92,12 @@ class Element extends Item
         return $this->everylink;
     }
 
-    public function markdown()
+    public function markdown(): bool
     {
         return $this->markdown;
     }
 
-    public function content()
+    public function content(): string
     {
         return $this->content;
     }
@@ -131,6 +127,11 @@ class Element extends Item
         return $this->urllinker;
     }
 
+    public function tag(): bool
+    {
+        return $this->tag;
+    }
+
 
 
 
@@ -145,7 +146,7 @@ class Element extends Item
     }
 
     /**
-     * @todo throw RangeException if type is invalid
+     * @throws DomainException if given type is not an HTML element
      */
     public function settype(string $type)
     {
@@ -153,7 +154,7 @@ class Element extends Item
         if (in_array($type, Model::HTML_ELEMENTS)) {
             $this->type = $type;
         } else {
-            // throw new RangeException("$type is not a valid Page HTML Element Type");
+            throw new DomainException("$type is not a valid Page HTML Element Type");
         }
     }
 
@@ -205,5 +206,10 @@ class Element extends Item
     public function seturllinker($urllinker)
     {
         $this->urllinker = boolval($urllinker);
+    }
+
+    public function settag($tag)
+    {
+        $this->tag = boolval($tag);
     }
 }

@@ -46,7 +46,7 @@ CodeMirror.defineSimpleMode('wcms', {
     // 'element' mode, parameters' keywords of 'element' macros
     element: [
         {
-            regex: /id|everylink|markdown|headerid|headeranchor|urllinker/,
+            regex: /id|everylink|markdown|headerid|headeranchor|urllinker|tag/,
             token: 'wkeyword',
             push: 'wcms',
         },

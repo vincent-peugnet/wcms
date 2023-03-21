@@ -684,6 +684,19 @@ Where `*` is the page ID of the rendered page.
 #### Rendering options
 
 
+##### HTML tags
+
+    %<element>?tag=(0|1)%
+
+By default, HTML tags are printed arround your content. You can disable this behavior by setting the tag parameter to 0.
+
+Example :
+
+    %NAV?tag=0%
+
+This will include the content of the *nav* element of your page, but without any `<nav>` and `</nav>` arround.
+
+
 ##### Markdown disable
 
     %<element>?mardown=(0|1)%

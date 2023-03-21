@@ -173,7 +173,6 @@ class Servicerender
                 $element = new Element($this->page->id(), $match);
                 $element->setcontent($this->getelementcontent($element->sources(), $element->type()));
                 $element->setcontent($this->elementparser($element));
-                $element->addtags();
                 $body = str_replace($element->fullmatch(), $element->content(), $body);
             }
         }
@@ -380,6 +379,10 @@ class Servicerender
         }
         if ($element->urllinker()) {
             $content = $this->autourl($content);
+        }
+        if ($element->tag()) {
+            $type = $element->type();
+            $content = "\n<{$type}>\n{$content}\n</{$type}>\n";
         }
 
         return $content;
@@ -634,7 +637,7 @@ class Servicerender
      * @param string $text                  Input text to scan
      * @param string $include               Word to match `%$include%`
      *
-     * @return array Ordered array containing an array of `fullmatch` and `options`
+     * @return array Ordered array containing an array of `fullmatch`, `type` and `options`
      */
     private function match(string $text, string $include): array
     {
