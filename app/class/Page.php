@@ -49,6 +49,10 @@ class Page extends Item
     protected $password;
     protected $postprocessaction;
 
+    public const PUBLIC = 0;
+    public const PRIVATE = 1;
+    public const NOT_PUBLISHED = 2;
+
     public const SECUREMAX = 2;
     public const TABS = ['main', 'css', 'header', 'body', 'nav', 'aside', 'footer', 'javascript'];
     public const VAR_DATE = ['date', 'datecreation', 'datemodif', 'daterender'];

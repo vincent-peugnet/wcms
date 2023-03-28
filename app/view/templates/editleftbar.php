@@ -24,9 +24,9 @@
             <input type="text" name="tag" id="tag" value="<?= $page->tag('string'); ?>" form="update">
             <label for="secure">Privacy level :</label>
             <select name="secure" id="secure" form="update">
-                <option value="0" <?= $page->secure() == 0 ? 'selected' : '' ?>>public</option>
-                <option value="1" <?= $page->secure() == 1 ? 'selected' : '' ?>>private</option>
-                <option value="2" <?= $page->secure() == 2 ? 'selected' : '' ?>>not published</option>
+                <option value="0" <?= $page->secure() == Wcms\Page::PUBLIC ? 'selected' : '' ?>>public</option>
+                <option value="1" <?= $page->secure() == Wcms\Page::PRIVATE ? 'selected' : '' ?>>private</option>
+                <option value="2" <?= $page->secure() == Wcms\Page::NOT_PUBLISHED ? 'selected' : '' ?>>not published</option>
             </select>
             <label for="date">Date</label>
             <input type="date" name="pdate" value="<?= $page->date('pdate') ?>" id="date" form="update">

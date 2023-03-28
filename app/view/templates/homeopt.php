@@ -51,9 +51,9 @@
                             <div>
                                 <ul>
                                     <li><input type="radio" id="4" name="secure" value="4" <?= $opt->secure() == 4 ? "checked" : "" ?> /><label for="4">all</label></li>
-                                    <li><input type="radio" id="2" name="secure" value="2" <?= $opt->secure() == 2 ? "checked" : "" ?> /><label for="2">not published</label></li>
-                                    <li><input type="radio" id="1" name="secure" value="1" <?= $opt->secure() == 1 ? "checked" : "" ?> /><label for="1">private</label></li>
-                                    <li><input type="radio" id="0" name="secure" value="0" <?= $opt->secure() == 0 ? "checked" : "" ?> /><label for="0">public</label></li>
+                                    <li><input type="radio" id="2" name="secure" value="<?= Wcms\Page::NOT_PUBLISHED ?>" <?= $opt->secure() == Wcms\Page::NOT_PUBLISHED ? "checked" : "" ?> /><label for="2">not published</label></li>
+                                    <li><input type="radio" id="1" name="secure" value="<?= Wcms\Page::PRIVATE ?>" <?= $opt->secure() == Wcms\Page::PRIVATE ? "checked" : "" ?> /><label for="1">private</label></li>
+                                    <li><input type="radio" id="0" name="secure" value="<?= Wcms\Page::PUBLIC ?>" <?= $opt->secure() == Wcms\Page::PUBLIC ? "checked" : "" ?> /><label for="0">public</label></li>
                                 </ul>
                             </div>
                         </fieldset>

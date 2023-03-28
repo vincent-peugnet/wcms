@@ -197,12 +197,29 @@ class Controllerpage extends Controller
             }
         }
 
-        if (!$canread || !$pageexist) {
+        if (!$pageexist) {
             http_response_code(404);
             $this->showtemplate(
-                'alert',
-                ['page' => $this->page, 'pageexist' => $pageexist, 'canedit' => $this->canedit()]
+                'alertexistnot',
+                ['page' => $this->page, 'canedit' => $this->canedit(), 'subtitle' => Config::existnot()]
             );
+        } else {
+            http_response_code(404);
+            switch ($this->page->secure()) {
+                case Page::NOT_PUBLISHED:
+                    $this->showtemplate(
+                        'alertnotpublished',
+                        ['page' => $this->page, 'subtitle' => Config::notpublished()]
+                    );
+                    break;
+
+                case Page::PRIVATE:
+                    $this->showtemplate(
+                        'alertprivate',
+                        ['page' => $this->page, 'subtitle' => Config::private()]
+                    );
+                    break;
+            }
         }
     }
 
@@ -481,7 +498,7 @@ class Controllerpage extends Controller
      */
     public function commandnotfound($page, $command): void
     {
-        header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
-        echo "<h1>404 Not Found</h1><p>command <code>$command</code> not found<p>";
+        http_response_code(404);
+        $this->showtemplate('alertcommandnotfound', ['command' => $command, 'id' => strip_tags($page)]);
     }
 }
