@@ -13,7 +13,7 @@
     "body": "%HEADER%\n\n%NAV%\n\n%ASIDE%\n\n%MAIN%\n\n%FOOTER%",
     "header": "",
     "main": "%DATE%\n%TIME%\n%DATE?format=full&lang=fr%\n%TIME?format=medium&lang=ja%",
-    "nav": "",
+    "nav": "last modification: %DATEMODIF% at %TIMEMODIF%",
     "aside": "",
     "footer": "",
     "externalcss": [],

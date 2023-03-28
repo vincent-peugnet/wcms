@@ -39,7 +39,11 @@ CodeMirror.defineSimpleMode('wcms', {
         { regex: /LIST\?/, token: 'wcms', next: 'list' },
         { regex: /MEDIA\?/, token: 'wcms', next: 'media' },
         { regex: /RSS\?/, token: 'wcms', next: 'rss' },
-        { regex: /(DATE|TIME|DATEMODIF|TIMEMODIF)\?/, token: 'wcms', next: 'datetime' },
+        {
+            regex: /(DATE|TIME|DATEMODIF|TIMEMODIF)\?/,
+            token: 'wcms',
+            next: 'datetime',
+        },
         { regex: /[^&]*&/, token: 'wcms', pop: true },
         { regex: /.*%/, token: 'wcms', next: 'start' },
     ],
