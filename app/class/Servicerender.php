@@ -265,21 +265,6 @@ class Servicerender
         if (!empty($this->page->javascript())) {
             $head .= "<script src=\"$renderpath$id.js\" async/></script>\n";
         }
-
-        if (!empty(Config::analytics())) {
-            $analitycs = Config::analytics();
-            $head .= "\n
-            <!-- Global site tag (gtag.js) - Google Analytics -->
-			<script async src=\"https://www.googletagmanager.com/gtag/js?id=$analitycs\"></script>
-			<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-
-			gtag('config', 'Config::analytics()');
-			</script>
-			\n";
-        }
         return $head;
     }
 

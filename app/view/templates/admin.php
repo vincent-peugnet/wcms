@@ -278,15 +278,6 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
                 </select>
 
 
-                <h2 id="tracking">Tracking</h2>
-
-                <label for="analytics">Google analytics Tracking ID</label>
-                <input type="text" name="analytics" id="analytics" value="<?= Wcms\Config::analytics() ?>" form="admin">
-
-                <i>(Need rendering to work)</i>
-
-
-
             </div>
 
         </div>

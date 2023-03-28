@@ -23,7 +23,6 @@ abstract class Config
     protected static $defaultfavicon = '';
     protected static $defaultthumbnail = '';
     protected static string $suffix = "";
-    protected static $analytics = '';
     protected static $externallinkblank = true;
     protected static $internallinkblank = false;
     protected static $urllinker = true;
@@ -242,11 +241,6 @@ abstract class Config
         return self::$suffix;
     }
 
-    public static function analytics()
-    {
-        return self::$analytics;
-    }
-
     public static function externallinkblank()
     {
         return self::$externallinkblank;
@@ -440,13 +434,6 @@ abstract class Config
     {
         if (is_string($suffix) && strlen($suffix) <= self::SUFFIX_MAX) {
             self::$suffix = strip_tags($suffix);
-        }
-    }
-
-    public static function setanalytics($analytics)
-    {
-        if (is_string($analytics) && strlen($analytics) < 25) {
-            self::$analytics = $analytics;
         }
     }
 
