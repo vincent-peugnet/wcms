@@ -488,7 +488,9 @@ class Servicerender
                 }
                 try {
                     $page = $this->pagemanager->get($out[1]);
-                    $link->setAttribute('title', $page->description());
+                    if (!$link->hasAttribute('title')) {
+                        $link->setAttribute('title', $page->description());
+                    }
                     $classes[] = 'exist';
                     $classes[] = $page->secure('string');
                     $this->linkto[] = $page->id();
