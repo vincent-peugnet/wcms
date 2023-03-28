@@ -17,7 +17,7 @@ CodeMirror.defineSimpleMode('wcms', {
     // detect a Wcms markup then pass to 'wcms' mode
     start: [
         {
-            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|SUMMARY|LIST|MEDIA|TITLE|DESCRIPTION|DATE|TIME|THUMBNAIL|RSS|AUTHORS|ID|PATH|URL|VISITCOUNT|EDITCOUNT|DISPLAYCOUNT)(\?[^\s]*)?%)/,
+            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|SUMMARY|LIST|MEDIA|TITLE|DESCRIPTION|DATE|TIME|DATEMODIF|TIMEMODIF|THUMBNAIL|RSS|AUTHORS|ID|PATH|URL|VISITCOUNT|EDITCOUNT|DISPLAYCOUNT)(\?[^\s]*)?%)/,
             token: 'wcms',
             next: 'wcms',
         },
@@ -39,7 +39,7 @@ CodeMirror.defineSimpleMode('wcms', {
         { regex: /LIST\?/, token: 'wcms', next: 'list' },
         { regex: /MEDIA\?/, token: 'wcms', next: 'media' },
         { regex: /RSS\?/, token: 'wcms', next: 'rss' },
-        { regex: /(DATE|TIME)\?/, token: 'wcms', next: 'datetime' },
+        { regex: /(DATE|TIME|DATEMODIF|TIMEMODIF)\?/, token: 'wcms', next: 'datetime' },
         { regex: /[^&]*&/, token: 'wcms', pop: true },
         { regex: /.*%/, token: 'wcms', next: 'start' },
     ],

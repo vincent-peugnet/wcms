@@ -22,10 +22,14 @@ class Clock extends Item
 
     public const DATE = 'DATE';
     public const TIME = 'TIME';
+    public const DATEMODIF = 'DATEMODIF';
+    public const TIMEMODIF = 'TIMEMODIF';
 
     public const TYPES = [
-        self::DATE => 0,
-        self::TIME => 1,
+        self::DATE => 'date',
+        self::TIME => 'date',
+        self::DATEMODIF => 'datemodif',
+        self::TIMEMODIF => 'datemodif',
     ];
 
     public const NONE   = 'none';
@@ -48,19 +52,20 @@ class Clock extends Item
      * Specific locale must be set later using setlang() method.
      *
      * @param string $type                  Define if it must display time or date.
-     * @param DateTimeInterface $datetime   The actual DateTime to use
+     * @param Page $page                    The page which is rendered
      * @param string $fullmatch
      * @param string $options
      */
     public function __construct(
         string $type,
-        DateTimeInterface $datetime,
+        Page $page,
         string $fullmatch,
         string $options,
         string $lang = null
     ) {
         $this->settype($type);
-        $this->datetime = $datetime;
+        $datetype = self::TYPES[$this->type];
+        $this->datetime = $page->$datetype();
         $this->fullmatch = $fullmatch;
         $this->options = $options;
         $this->lang = empty($lang) ? Config::lang() : $lang;
@@ -79,8 +84,8 @@ class Clock extends Item
     {
         $formater = new IntlDateFormatter(
             $this->lang,
-            $this->type === self::DATE ? self::FORMATS[$this->format] : self::FORMATS[self::NONE],
-            $this->type === self::TIME ? self::FORMATS[$this->format] : self::FORMATS[self::NONE]
+            $this->isdate() ? self::FORMATS[$this->format] : self::FORMATS[self::NONE],
+            $this->istime() ? self::FORMATS[$this->format] : self::FORMATS[self::NONE]
         );
         return $formater->format($this->datetime);
     }
@@ -89,24 +94,21 @@ class Clock extends Item
     {
         $formater = new IntlDateFormatter(
             $this->lang,
-            $this->type === self::DATE ? self::FORMATS[self::FULL] : self::FORMATS[self::NONE],
-            $this->type === self::TIME ? self::FORMATS[self::LONG] : self::FORMATS[self::NONE]
+            $this->isdate() ? self::FORMATS[self::FULL] : self::FORMATS[self::NONE],
+            $this->istime() ? self::FORMATS[self::LONG] : self::FORMATS[self::NONE]
         );
         return $formater->format($this->datetime);
     }
 
     protected function attribute(): string
     {
-        switch ($this->type) {
-            case self::DATE:
-                return $this->datetime->format('Y-m-d');
-
-            case self::TIME:
-                return $this->datetime->format('H:i');
-
-            default:
-                return '';
+        if ($this->isdate()) {
+            return $this->datetime->format('Y-m-d');
         }
+        if ($this->istime()) {
+            return $this->datetime->format('H:i');
+        }
+        return '';
     }
 
     /**
@@ -117,7 +119,8 @@ class Clock extends Item
         $attribute = $this->attribute();
         $title = $this->title();
         $visible = $this->visible();
-        return "<time datetime=\"$attribute\" title=\"$title\">$visible</time>";
+        $type = self::TYPES[$this->type];
+        return "<time datetime=\"$attribute\" title=\"$title\" class=\"$type\">$visible</time>";
     }
 
 
@@ -161,5 +164,15 @@ class Clock extends Item
         if (is_string($lang) && strlen($lang) < Config::LANG_MAX && strlen($lang) >= Config::LANG_MIN) {
             $this->lang = $lang;
         }
+    }
+
+    private function isdate(): bool
+    {
+        return (str_starts_with($this->type, 'DATE'));
+    }
+
+    private function istime(): bool
+    {
+        return (str_starts_with($this->type, 'TIME'));
     }
 }

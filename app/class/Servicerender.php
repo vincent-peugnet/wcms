@@ -777,15 +777,14 @@ class Servicerender
 
     private function date(string $text): string
     {
-        $date = Clock::DATE;
-        $time = Clock::TIME;
-        $matches = $this->match($text, "$date|$time");
+        $dateregex = implode('|', array_keys(Clock::TYPES));
+        $matches = $this->match($text, $dateregex);
         $searches = [];
         $replaces = [];
         foreach ($matches as $match) {
             $clock = new Clock(
                 $match['type'],
-                $this->page->date(),
+                $this->page,
                 $match['fullmatch'],
                 $match['options'],
                 $this->page->lang()

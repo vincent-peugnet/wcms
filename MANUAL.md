@@ -347,9 +347,9 @@ Page Editing
 
 Will generate :
 
-    <a href="<page_id>" title="PAGE_DESCRIPTION" class="internal">PAGE_TITLE</a>
+    <a href="ID" title="DESCRIPTION" class="internal">TITLE</a>
 
-Where [PAGE_DESCRIPTION](#description) and [PAGE_TITLE](page-title) are the [page_id](#page-id)'s meta infos.
+Where `DESCRIPTION`, `TITLE` and `ID` are the [description](#description) and [title](page-title) of the page related to the [id](#page-id).
 
 Note that the `.internal` class have been added to the `a` html link, allowing you to differenciate internal link styling from `.external`.
 
@@ -377,11 +377,13 @@ Note that the `.internal` class have been added to the `a` html link, allowing y
 
 ### Inclusions
 
-
+Inclusion is an advanced feature of W that allow editors to insert metadatas, generate content using codes. Those codes are always inside percent signs `%`.
 
 
 
 #### Basic inclusions
+
+Those codes are mainly used to print page's metadatas.
 
 ##### Title inclusion
 
@@ -395,11 +397,14 @@ This will include the page [title](#page-title).
 
 This will include the page [description](#description).
 
-##### Date inclusion
+##### Date and time inclusion
 
 Will print date metadata of the page into an HTML `<time>` tag. The `datetime` attribute will specify the date.
 
-    %DATE%
+    %DATE% | %TIME% | %DATEMODIF% | %TIMEMODIF%
+
+- `%DATE%` and `%TIME%` will print the [date and time](#date) infos of the page.
+- `%DATEMODIF%` and `%TIMEMODIF%` will print the [last modification date and time](#datemodif) of the page.
 
 Language page's metadata will be used for formating over Configuration.
 
@@ -412,13 +417,6 @@ More complex example:
 
     %DATE?format=short&lang=fr%
 
-##### Time inclusion
-
-Will print time metadata of the page into an HTML `<time>` tag. The `datetime` attribute will specify time.
-
-    %TIME%
-
-Options are the same as [date inclusion](#date-inclusion).
 
 ##### Thumbnail inclusion
 
@@ -527,7 +525,7 @@ You can specify an [element](#markdown-elements) to target with the `element` pa
 
     %LIST%
 
-Sometimes, when you want to add links to a lot of pages, it can be way to long. This tool is here to help you generate list of links automatically.
+Sometimes, when you want to add links to a lot of pages, it can be way too long. This tool is here to help you generate list of links automatically.
 
 It use the same logic as the page filters in the [home view](#home).
 
@@ -917,9 +915,9 @@ Tags are very powerfull to help you organize your pages. As in __W__, there is n
 
 Tags can be set in the [left panel of the editor interface](#left-panel) using comma to separate tags, or by using the multi edit tool in the [Home menu bar > Edit](#home-menu).
 
-##### Date & time
+##### Date
 
-Date and Time are just a
+This metadata can be set manually by the page editors.
 
 By default, page's date and time are the same as creation date and time.
 
