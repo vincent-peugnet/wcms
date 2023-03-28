@@ -144,7 +144,6 @@ class Servicerender
         } else {
             $body = $this->page->body();
         }
-        $body = $this->article($body);
         $body = $this->automedialist($body);
         return $body;
     }
@@ -259,17 +258,6 @@ class Servicerender
         $head .= $this->recursivecss($this->page);
         $head .= "<link href=\"$renderpath$id.css\" rel=\"stylesheet\" />\n";
 
-        // $wdatas = [
-        //     'page' => [
-        //         'id' => $id,
-        //         'title' => $title,
-        //         'description' => $description,
-        //         'secure' => $this->page->secure(),
-        //     ],
-        //     'domain' => $url,
-        // ];
-        // $wobj = json_encode($wdatas);
-        // $head .= "<script>const w = $wobj;</script>\n";
         if (!empty($this->page->templatejavascript())) {
             $templatejspage = $this->page->templatejavascript();
             $head .= "<script src=\"$renderpath$templatejspage.js\" async/></script>\n";
@@ -352,7 +340,7 @@ class Servicerender
 
     private function elementparser(Element $element)
     {
-        $content = $this->article($element->content());
+        $content = $element->content();
         $content = $this->automedialist($content);
         $content = $this->pageoptlist($content);
         $content = $this->randomopt($content);
@@ -611,23 +599,6 @@ class Servicerender
         // };
         $fortin->hard_wrap = Config::markdownhardwrap();
         $text = $fortin->transform($text);
-        return $text;
-    }
-
-
-
-    private function article($text)
-    {
-        $pattern = '/(\R\R|^\R|^)[=]{3,}([\w-]*)\R\R(.*)(?=\R\R[=]{3,}[\w-]*\R)/sUm';
-        $text = preg_replace_callback($pattern, function ($matches) {
-            if (!empty($matches[2])) {
-                $id = ' id="' . $matches[2] . '" ';
-            } else {
-                $id = ' ';
-            }
-            return "<article $id markdown=\"1\" >\n\n$matches[3]\n\n</article>\n\n";
-        }, $text);
-        $text = preg_replace('/\R\R[=]{3,}([\w-]*)\R/', '', $text);
         return $text;
     }
 
