@@ -88,6 +88,15 @@
 
 
 
+    <details <?= $page->isgeo() ? 'open' : '' ?>>
+        <summary>geolocalisation</summary>
+        <fieldset>
+            <label for="latitude">latitude</label>
+            <input type="number" name="latitude" id="latitude" value="<?= is_null($page->latitude()) ? '' : $page->latitude() ?>" step="0.00001" min="<?= $page::LATITUDE_MIN ?>" max="<?= $page::LATITUDE_MAX ?>" form="update">
+            <label for="longitude">longitude</label>
+            <input type="number" name="longitude" id="longitude" value="<?= is_null($page->longitude()) ? '' : $page->longitude() ?>" step="0.00001" min="<?= $page::LONGITUDE_MIN ?>" max="<?= $page::LONGITUDE_MAX ?>" form="update">
+        </fieldset>
+    </details>
 
 
 

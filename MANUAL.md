@@ -191,7 +191,8 @@ The Edition view is composed of a main content edition area, surounded by two la
 
 This is the 
 
-- Meta infos : edit [title](#title), [description](#description) and more infos about your page.
+- Meta infos: edit [title](#title), [description](#description) and more infos about your page.
+- Geolocalisation: to set [latitude](#latitude) and [longitude](#longitude) metadatas
 - Templating
 - Advanced
 - Help : a quick synthax reference for markdown and W synthax
@@ -924,6 +925,14 @@ By default, page's date and time are the same as creation date and time.
 ##### Datemodif
 
 You can't edit manualy this date. It's just the last time the page has been edited.
+
+##### Latitude
+
+Must be between -90 and 90.
+
+##### Longitude
+
+Must be between -180 and 180.
 
 ##### Thumbnail
 
