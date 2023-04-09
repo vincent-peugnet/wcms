@@ -13,6 +13,89 @@ import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/mode/overlay';
 import 'codemirror/addon/mode/simple';
 
+import 'leaflet/dist/leaflet.css';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import icon_2x from 'leaflet/dist/images/marker-icon-2x.png';
+import shadow from 'leaflet/dist/images/marker-shadow.png';
+import * as L from 'leaflet';
+
+/* ________________ LEAFLET ________________ */
+
+L.Icon.Default.prototype.options.iconUrl = icon;
+L.Icon.Default.prototype.options.iconRetinaUrl = icon_2x;
+L.Icon.Default.prototype.options.shadowUrl = shadow;
+
+/** @var {HTMLInputElement} */
+let inputLatitude = document.querySelector('input[name=latitude]');
+
+/** @var {HTMLInputElement} */
+let inputLongitude = document.querySelector('input[name=longitude]');
+
+if (isNaN(inputLatitude.valueAsNumber) || isNaN(inputLongitude.valueAsNumber)) {
+    var lat = 0;
+    var long = 0;
+    var zoom = 0;
+} else {
+    var lat = inputLatitude.valueAsNumber;
+    var long = inputLongitude.valueAsNumber;
+    var zoom = 7;
+}
+
+console.log(lat);
+
+let map = L.map('geomap').setView([lat, long], zoom);
+
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+}).addTo(map);
+
+let marker = L.marker([lat, long], {
+    draggable: true,
+}).addTo(map);
+
+inputLatitude.addEventListener('change', inputLatitudeChangeHandler);
+inputLongitude.addEventListener('change', inputLongitudeChangeHandler);
+marker.addEventListener('dragend', markerDragHandler);
+
+/**
+ * Manage a change in the latitude input
+ * @param {InputEvent} e
+ */
+function inputLatitudeChangeHandler(e) {
+    if (isNaN(e.target.valueAsNumber)) {
+        return;
+    }
+    let coord = marker.getLatLng();
+    coord.lat = e.target.valueAsNumber;
+    marker.setLatLng(coord);
+}
+
+/**
+ * Manage a change in the longitude input
+ * @param {InputEvent} e
+ */
+function inputLongitudeChangeHandler(e) {
+    if (isNaN(e.target.valueAsNumber)) {
+        return;
+    }
+    let coord = marker.getLatLng();
+    coord.lng = e.target.valueAsNumber;
+    marker.setLatLng(coord);
+}
+
+/**
+ * Manage a drag of the marker
+ * @param {L.DragEndEvent} e
+ */
+function markerDragHandler(e) {
+    inputLatitude.value = e.target.getLatLng().lat.toFixed(5);
+    inputLongitude.value = e.target.getLatLng().lng.toFixed(5);
+    changed();
+}
+
+/* ________________ CODE MIRROR ________________ */
+
 CodeMirror.defineSimpleMode('wcms', {
     // detect a Wcms markup then pass to 'wcms' mode
     start: [
