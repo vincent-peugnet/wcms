@@ -163,9 +163,9 @@ __EDIT__, __READ__, __DELETE__ and __DOWNLOAD__, they are equivalent to [pages c
 
 To edit columns you want to see, use the [menu](#home-menu)>Display submenu.
 
-##### map view
+##### graph view
 
-The map give you an overview of your website, showing you links between pages.
+The graph give you an overview of your website, showing you links between pages.
 
 By default orphans pages are hidden, but you can ajust settings to fit your needs.
 

@@ -24,7 +24,7 @@ module.exports = (env) => {
 		entry: {
 			edit: './src/edit.js',
 			home: './src/home.js',
-			map: './src/map.js',
+			graph: './src/graph.js',
 			media: './src/media.js',
 			sentry: './src/sentry.js',
 		},

@@ -85,7 +85,7 @@ class Controllerhome extends Controller
             $vars['searchopt'] = $deepsearch['searchopt'];
             $vars['display'] = $_GET['display'] ?? 'list';
 
-            if ($vars['display'] === 'map') {
+            if ($vars['display'] === 'graph') {
                 $vars['layout'] = $_GET['layout'] ?? 'cose-bilkent';
                 $vars['showorphans'] = boolval($_GET['showorphans'] ?? false);
                 $vars['showredirection'] = boolval($_GET['showredirection'] ?? false);

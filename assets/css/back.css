@@ -236,6 +236,8 @@ span.details {
 }
 
 
-h2 .right a.selected {
+h2 .right a {
     color: var(--outline-background-color);
 }
+
+h2 .right a.selected, h2 .right a:hover {color: var(--text2-color);}

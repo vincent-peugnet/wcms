@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => 'home', 'stylesheets' => [$css . 'back.css', $css . 'home.css', $css . 'tagcolors.css'], 'favicon' => '']) ?>
+<?php $this->layout('layout', ['title' => 'home', 'stylesheets' => [$css . 'back.css', $css . 'home.css', $css . 'tagcolors.css', 'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css'], 'favicon' => '']) ?>
 
 
 
@@ -51,24 +51,24 @@
                 <?php } ?>
                 <span class="right">
                     <a href="?display=list" <?= $display === 'list' ? 'class="selected"' : '' ?> ><i class="fa fa-th-list"></i></a>
-                    /
-                    <a href="?display=map"  <?= $display === 'map' ? 'class="selected"' : '' ?>  ><i class="fa fa-sitemap"></i></a>
+                    <a href="?display=graph"  <?= $display === 'graph' ? 'class="selected"' : '' ?>  ><i class="fa fa-sitemap"></i></a>
+                    <a href="?display=map" <?= $display === 'map' ? 'class="selected"' : '' ?> ><i class="fa fa-globe"></i></a>
                 </span>
             </h2>
 
-            <?php if($display === 'map') { ?>
+            <?php if($display === 'graph') { ?>
 
-            <!-- ___________________ M  A  P _________________________ -->
+            <!-- ___________________ G R A P H _________________________ -->
 
             <div id="deepsearchbar">
                 <form action="" method="get">
-                    <input type="hidden" name="display" value="map">
+                    <input type="hidden" name="display" value="graph">
                     <input type="checkbox" name="showorphans" value="1" id="showorphans" <?= $showorphans ? 'checked' : '' ?>>
                     <label for="showorphans">show orphans pages</label>
                     <input type="checkbox" name="showredirection" value="1" id="showredirection" <?= $showredirection ? 'checked' : '' ?>>
                     <label for="showredirection">show redirections</label>
                     <select name="layout" id="layout">
-                        <?= options(Wcms\Modelhome::MAP_LAYOUTS, $layout) ?>
+                        <?= options(Wcms\Modelhome::GRAPH_LAYOUTS, $layout) ?>
                     </select>
                     <label for="layout">graph layout</label>
                     <input type="submit" value="update">
@@ -82,8 +82,39 @@
                 console.log(data);
             </script>
 
-            <script src="<?= Wcms\Model::jspath() ?>map.bundle.js"></script>
+            <script src="<?= Wcms\Model::jspath() ?>graph.bundle.js"></script>
 
+            <?php } elseif ($display === 'map') { ?>
+                
+            
+            <!-- ___________________ M A P _________________________ -->
+
+            <div id="map">
+
+                <div id="geomap"></div>
+
+
+                <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+                    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+                    crossorigin=""></script>
+
+                <script>
+                    var map = L.map('geomap').setView([43.3, 6.68], 1);
+                    
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+
+                    <?php foreach ($pagelistopt as $item) {
+                        if ($item->isgeo()) { ?>
+                            L.marker([<?= $item->latitude() ?>, <?= $item->longitude() ?>]).addTo(map)
+                                .bindPopup('<a href="<?= $this->upage('pageread', $item->id()) ?>"><?= $item->title() ?></a>&nbsp;<a href="<?= $this->upage('pageedit', $item->id()) ?>"><i class="fa fa-pencil"></i></a>');
+                        <?php } ?>
+                    <?php } ?>
+                </script>
+
+            </div>
+            
             <?php } else { ?>
 
             <!-- ___________________ D E E P _________________________ -->
