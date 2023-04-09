@@ -91,6 +91,8 @@
 
             <div id="map">
 
+                <?= $mapcounter ?> pages have geo datas set.
+
                 <div id="geomap"></div>
 
 
@@ -105,12 +107,13 @@
                         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     }).addTo(map);
 
-                    <?php foreach ($pagelistopt as $item) {
-                        if ($item->isgeo()) { ?>
-                            L.marker([<?= $item->latitude() ?>, <?= $item->longitude() ?>]).addTo(map)
-                                .bindPopup('<a href="<?= $this->upage('pageread', $item->id()) ?>"><?= $item->title() ?></a>&nbsp;<a href="<?= $this->upage('pageedit', $item->id()) ?>"><i class="fa fa-pencil"></i></a>');
-                        <?php } ?>
-                    <?php } ?>
+                    var pages = <?= $json ?>;
+
+                    for (const page of pages) {
+                        L.marker([page.latitude, page.longitude]).addTo(map)
+                            .bindPopup(`<a href="${page.read}">${page.title}</a>&nbsp;<a href="${page.edit}"><i class="fa fa-pencil"></i></a>`);
+                    }
+
                 </script>
 
             </div>

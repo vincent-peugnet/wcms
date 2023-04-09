@@ -34,6 +34,8 @@ class Controllerhome extends Controller
         if ($this->user->isvisitor() && Config::homepage() === 'redirect' && !empty(Config::homeredirect())) {
             $this->routedirect('pageread', ['page' => Config::homeredirect()]);
         } else {
+            $display = $_GET['display'] ?? 'list';
+
             $pagelist = $this->pagemanager->pagelist();
 
 
@@ -65,7 +67,7 @@ class Controllerhome extends Controller
 
             $deepsearch = $this->deepsearch();
 
-            $vars['pagelistopt'] = $this->pagemanager->pagetable(
+            $pagelistopt = $this->pagemanager->pagetable(
                 $pagelist,
                 $this->opt,
                 $deepsearch['regex'],
@@ -83,21 +85,40 @@ class Controllerhome extends Controller
             $vars['opt'] = $this->opt;
             $vars['deepsearch'] = $deepsearch['regex'];
             $vars['searchopt'] = $deepsearch['searchopt'];
-            $vars['display'] = $_GET['display'] ?? 'list';
+            $vars['display'] = $display;
 
-            if ($vars['display'] === 'graph') {
+            if ($display === 'graph') {
                 $vars['layout'] = $_GET['layout'] ?? 'cose-bilkent';
                 $vars['showorphans'] = boolval($_GET['showorphans'] ?? false);
                 $vars['showredirection'] = boolval($_GET['showredirection'] ?? false);
                 $datas = $this->modelhome->cytodata(
-                    $vars['pagelistopt'],
+                    $pagelistopt,
                     $vars['layout'],
                     $vars['showorphans'],
                     $vars['showredirection']
                 );
-                $vars['json'] = json_encode($datas, JSON_PRETTY_PRINT);
+                $vars['json'] = json_encode($datas);
             }
 
+            if ($display === 'map') {
+                if (!$this->opt->geo()) {
+                    $geopt = new Opt(['geo' => true]);
+                    $geopages = $this->pagemanager->pagetable($pagelistopt, $geopt);
+                } else {
+                    $geopages = $pagelistopt;
+                }
+                $vars['mapcounter'] = count($geopages);
+                $geopages = array_map(function (Page $page) {
+                    $data = $page->drylist(['id', 'title', 'latitude', 'longitude']);
+                    $data['read'] = $this->generate('pageread', ['page' => $page->id()]);
+                    $data['edit'] = $this->generate('pageedit', ['page' => $page->id()]);
+                    return $data;
+                }, $geopages);
+                $geopages = array_values($geopages);
+                $vars['json'] = json_encode($geopages);
+            }
+
+            $vars['pagelistopt'] = $pagelistopt;
             $vars['footer'] = [
                 'version' => getversion(),
                 'total' => count($pagelist),
