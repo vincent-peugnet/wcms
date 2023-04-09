@@ -90,7 +90,7 @@
 
     <details <?= $page->isgeo() ? 'open' : '' ?>>
         <summary>geolocalisation</summary>
-        <div id="geomap" style="width: 100%; height: 200px;" ></div>
+        <div id="geomap"></div>
         <fieldset>
             <label for="latitude">latitude</label>
             <input type="number" name="latitude" id="latitude" value="<?= is_null($page->latitude()) ? '' : $page->latitude() ?>" step="0.00001" min="<?= $page::LATITUDE_MIN ?>" max="<?= $page::LATITUDE_MAX ?>" form="update">
