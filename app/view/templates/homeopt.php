@@ -148,6 +148,16 @@
                         </fieldset>
 
 
+                        <fieldset data-default="<?= $opt->isdefault('geo') ? '1' : '0' ?>">
+                            <legend>geolocalisation</legend>
+                            <div>
+                                <input type="hidden" name="geo" value="0">
+                                <input type="checkbox" name="geo" id="geo" value="1" <?= $opt->geo() ? 'checked' : '' ?>>
+                                <label for="geo">page is geolocalized</label>
+                            </div>
+                        </fieldset>
+
+
 
 
                         <fieldset data-default="<?= $opt->isdefault('linkto') ? '1' : '0' ?>">
