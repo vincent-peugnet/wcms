@@ -5,7 +5,8 @@
     "dependencies": {
         "codemirror": "^5.63.3",
         "cytoscape": "^3.20.0",
-        "cytoscape-cose-bilkent": "^4.1.0"
+        "cytoscape-cose-bilkent": "^4.1.0",
+        "leaflet": "^1.9.3"
     },
     "devDependencies": {
         "@sentry/browser": "^7.17.4",

@@ -25,6 +25,7 @@ module.exports = (env) => {
 			edit: './src/edit.js',
 			home: './src/home.js',
 			graph: './src/graph.js',
+			map: './src/map.js',
 			media: './src/media.js',
 			sentry: './src/sentry.js',
 		},
@@ -42,6 +43,13 @@ module.exports = (env) => {
 						'style-loader',
 						'css-loader',
 					],
+				},
+				{
+					test: /\.png$/,
+					type: 'asset/resource',
+					generator: {
+						filename: 'images/[name]-[hash][ext]'
+					}
 				},
 			],
 		},

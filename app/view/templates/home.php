@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => 'home', 'stylesheets' => [$css . 'back.css', $css . 'home.css', $css . 'tagcolors.css', 'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css'], 'favicon' => '']) ?>
+<?php $this->layout('layout', ['title' => 'home', 'stylesheets' => [$css . 'back.css', $css . 'home.css', $css . 'tagcolors.css'], 'favicon' => '']) ?>
 
 
 
@@ -82,7 +82,7 @@
                 console.log(data);
             </script>
 
-            <script src="<?= Wcms\Model::jspath() ?>graph.bundle.js"></script>
+            <script src="<?= Wcms\Model::jspath() ?>graph.bundle.js" defer></script>
 
             <?php } elseif ($display === 'map') { ?>
                 
@@ -95,26 +95,11 @@
 
                 <div id="geomap"></div>
 
-
-                <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-                    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
-                    crossorigin=""></script>
-
                 <script>
-                    var map = L.map('geomap').setView([43.3, 6.68], 1);
-                    
-                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    }).addTo(map);
-
                     var pages = <?= $json ?>;
-
-                    for (const page of pages) {
-                        L.marker([page.latitude, page.longitude]).addTo(map)
-                            .bindPopup(`<a href="${page.read}">${page.title}</a>&nbsp;<a href="${page.edit}"><i class="fa fa-pencil"></i></a>`);
-                    }
-
                 </script>
+
+                <script src="<?= Wcms\Model::jspath() ?>map.bundle.js" defer></script>
 
             </div>
             
