@@ -100,17 +100,20 @@ nav span.counter {
 }
 
 
-table a.tag, table a.author {
+table td a.tag, table a.author {
     border-radius: 10px;
     padding: 1px 4px;
+    color: black;
 }
 
-table a.author {
-    background-color: var(--secondary-background-color);
+table td a.author {
+    background-color: var(--button-background-color);
+    color: var(--button-color);
 }
 
-table a.secure{
+table td a.secure{
     padding: 1px 3px;
+    color: black;
 }
 
 table a.secure.private {
@@ -121,7 +124,7 @@ table a.secure.not_published {
     background-color: #b97b7b;
 }
 
-table a.secure.public {
+table td a.secure.public {
     background-color: #80b97b;
 }
 

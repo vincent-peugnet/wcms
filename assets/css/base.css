@@ -21,15 +21,20 @@ body {
     width: 100%;
 }
 
-input, button, select, textarea {
-    color: var(--button-border-color)!important;
+input, textarea, button, select {
     border: none;
-    border-color: var(--button-border-color);
-    background-color: var(--button-background-color);
 }
 
-input[type="submit"] {
-    cursor: pointer;
+input, textarea {
+    color: var(--input-color)!important;
+    border-color: var(--input-color);
+    background-color: var(--input-background-color);
+}
+
+input[type="submit"], button, select {
+    color: var(--button-color)!important;
+    border-color: var(--button-color);
+    background-color: var(--button-background-color);
 }
 
 h1, h2 {

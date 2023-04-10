@@ -10,9 +10,11 @@
     --tertiary-background-color: #000000;
     --outline-background-color: #ffb101;
     --outline-color: #000000;
-    --button-background-color: #000000;
-    --button-border-color: #ff662c;
-    
+    --button-background-color: #ff662c;
+    --button-color: #000000;
+    --input-background-color: #000000;
+    --input-color: #ff662c;
+    color-scheme: dark;
 }
 
 input, button, select, textarea, .submenu, .block {

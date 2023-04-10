@@ -130,7 +130,7 @@ p {
 
 
 
-tr:hover a, tr:hover, tr:hover .redirection {
+tr:hover td a, tr:hover td, tr:hover .redirection, tr.selected a, tr.selected td {
     background-color: var(--outline-background-color);
     color: var(--outline-color);
 }

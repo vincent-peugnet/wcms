@@ -10,9 +10,11 @@
     --tertiary-background-color: #909090;
     --outline-background-color: #7a7a7a;
     --outline-color: #ffffff;
-    --button-background-color: #ffffff;
-    --button-border-color: #000000;
-    
+    --button-background-color: #ecf0f5;
+    --button-color: #000000;
+    --input-background-color: #ffffff;
+    --input-color: #303030;
+    color-scheme: light;    
 }
 
 input, button, select, textarea {

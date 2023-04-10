@@ -57,11 +57,6 @@ main.media table#medialist .thumbnail:hover img {
     object-fit: contain;
 }
 
-tr.selected {
-    color: var(--outline-color);
-    background-color: var(--outline-background-color);
-}
-
 .media nav a {
     white-space: nowrap;
 }
