@@ -261,7 +261,7 @@
             <h2>Random page</h2>
             <i>Generate a code to create a link to a random page using the current filtering options.</i>
             <?php if(!empty($optrandom)) { ?>
-                <input readonly class="code select-all" value="<?= $optrandom->getcode() ?>">
+                <input readonly class="code select-all" value="[random page](<?= $optrandom->getcode() ?>)">
             <?php } ?>
         </div>
     </details>
