@@ -28,6 +28,7 @@ class Controllerpage extends Controller
     {
         $cleanid = Model::idclean($id);
         if ($cleanid !== $id) {
+            http_response_code(308);
             $this->routedirect($route, ['page' => $cleanid]);
         } else {
             $this->page = new Page(['id' => $cleanid]);
@@ -81,6 +82,7 @@ class Controllerpage extends Controller
             $this->pagemanager->update($this->page);
             $this->templaterender($this->page);
         }
+        http_response_code(307);
         $this->routedirect('pageread', ['page' => $this->page->id()]);
     }
 
@@ -196,7 +198,7 @@ class Controllerpage extends Controller
                     $this->recursiverender($this->page);
                 }
             } else {
-                http_response_code(404);
+                http_response_code(403);
                 switch ($this->page->secure()) {
                     case Page::NOT_PUBLISHED:
                         $this->showtemplate(
