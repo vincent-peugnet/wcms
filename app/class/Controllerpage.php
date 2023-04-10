@@ -155,14 +155,14 @@ class Controllerpage extends Controller
                 }
             }
 
-            if ($this->pagemanager->needtoberendered($this->page)) {
-                $this->page = $this->pagemanager->renderpage($this->page, $this->router);
-                $needtoberendered = true;
-            }
-            $this->templaterender($this->page);
-
-
             if ($canread) {
+                if ($this->pagemanager->needtoberendered($this->page)) {
+                    $this->page = $this->pagemanager->renderpage($this->page, $this->router);
+                    $needtoberendered = true;
+                }
+                $this->templaterender($this->page);
+
+
                 $this->page->adddisplaycount();
                 if ($this->user->isvisitor()) {
                     $this->page->addvisitcount();
@@ -189,37 +189,37 @@ class Controllerpage extends Controller
                 sleep($this->page->sleep());
 
                 echo $html;
-            }
-            $this->pagemanager->update($this->page);
 
-            if ($needtoberendered && Config::recursiverender()) {
-                $this->recursiverender($this->page);
-            }
-        }
+                $this->pagemanager->update($this->page);
 
-        if (!$pageexist) {
+                if ($needtoberendered && Config::recursiverender()) {
+                    $this->recursiverender($this->page);
+                }
+            } else {
+                http_response_code(404);
+                switch ($this->page->secure()) {
+                    case Page::NOT_PUBLISHED:
+                        $this->showtemplate(
+                            'alertnotpublished',
+                            ['page' => $this->page, 'subtitle' => Config::notpublished()]
+                        );
+                        break;
+
+                    case Page::PRIVATE:
+                        $this->showtemplate(
+                            'alertprivate',
+                            ['page' => $this->page, 'subtitle' => Config::private()]
+                        );
+                        break;
+                }
+                exit;
+            }
+        } else {
             http_response_code(404);
             $this->showtemplate(
                 'alertexistnot',
                 ['page' => $this->page, 'canedit' => $this->canedit(), 'subtitle' => Config::existnot()]
             );
-        } else {
-            http_response_code(404);
-            switch ($this->page->secure()) {
-                case Page::NOT_PUBLISHED:
-                    $this->showtemplate(
-                        'alertnotpublished',
-                        ['page' => $this->page, 'subtitle' => Config::notpublished()]
-                    );
-                    break;
-
-                case Page::PRIVATE:
-                    $this->showtemplate(
-                        'alertprivate',
-                        ['page' => $this->page, 'subtitle' => Config::private()]
-                    );
-                    break;
-            }
         }
     }
 
