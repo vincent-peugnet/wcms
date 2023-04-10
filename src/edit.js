@@ -224,7 +224,7 @@ function initEditFeatures() {
  */
 function keyboardHandler(e) {
     if (e.composed) {
-        if (e.ctrlKey) {
+        if (e.ctrlKey || e.metaKey) {
             switch (e.key) {
                 // ctrl + s
                 case 's':
