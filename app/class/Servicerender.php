@@ -437,6 +437,7 @@ class Servicerender
      * Add `external` or `internal` class attribute in `<a>` anchor HTML link tags
      *
      * For internal link, indicate if page exist or not.
+     * If the link point to the current page, add `current_page` class.
      * If it exist, add description in title and privacy as class.
      *
      * Keep existing class and remove duplicates or useless spaces in class attribute
@@ -477,6 +478,9 @@ class Servicerender
                         $link->setAttribute('title', $page->description());
                     }
                     $classes[] = 'exist';
+                    if ($this->page->id() === $page->id()) {
+                        $classes[] = 'current_page';
+                    }
                     $classes[] = $page->secure('string');
                     $this->linkto[] = $page->id();
                 } catch (RuntimeException $e) {
@@ -508,13 +512,13 @@ class Servicerender
                 try {
                     $matchpage = $rend->pagemanager->get($matches[1]);
                     $fragment = $matches[2] ?? '';
-                    $href = $rend->upage($matches[1]) . $fragment;
+                    $href = $matches[1] . $fragment;
                     $t = $matchpage->description();
                     $c = 'internal exist ' . $matchpage->secure('string');
                     $a = $matchpage->title();
                     $linkto[] = $matchpage->id();
                 } catch (RuntimeException $e) {
-                    $href = $rend->upage($matches[1]);
+                    $href = $matches[1];
                     $t = Config::existnot();
                     $c = 'internal existnot" ' . $target;
                     $a = $matches[1];
