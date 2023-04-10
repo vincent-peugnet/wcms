@@ -299,6 +299,12 @@ span.cm-wkeyword {
 }
 
 
+div#geomap {
+    width: 100%;
+    height: 250px;
+}
+
+
 @media (max-width: 550px) {
     .bar{
         display: none;

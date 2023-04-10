@@ -72,7 +72,6 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
             <a href="<?= $mediaopt->getaddress() ?>&display=list" <?= $workspace->mediadisplay() === Wcms\Workspace::LIST ? 'class="selected"' : '' ?> >
                 <i class="fa fa-th-list"></i>
             </a>
-            /
             <a href="<?= $mediaopt->getaddress() ?>&display=gallery"  <?= $workspace->mediadisplay() === Wcms\Workspace::GALLERY ? 'class="selected"' : '' ?>  >
                 <i class="fa fa-th-large"></i>
             </a>

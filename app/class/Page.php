@@ -13,6 +13,8 @@ class Page extends Item
     protected $description;
     protected $lang;
     protected $tag;
+    protected ?float $latitude;
+    protected ?float $longitude;
     protected $date;
     protected $datecreation;
     protected $datemodif;
@@ -48,6 +50,11 @@ class Page extends Item
     protected $refresh;
     protected $password;
     protected $postprocessaction;
+
+    public const LATITUDE_MIN = -90;
+    public const LATITUDE_MAX = 90;
+    public const LONGITUDE_MIN = -180;
+    public const LONGITUDE_MAX = 180;
 
     public const PUBLIC = 0;
     public const PRIVATE = 1;
@@ -86,6 +93,8 @@ class Page extends Item
         $this->setdescription('');
         $this->setlang('');
         $this->settag([]);
+        $this->latitude = null;
+        $this->longitude = null;
         $this->setdate($now);
         $this->setdatecreation($now);
         $this->setdatecreation($now);
@@ -139,6 +148,14 @@ class Page extends Item
         return $this->secure === 2;
     }
 
+    /**
+     * Indicate if Page is geolocated. Meaning it's latitude and longitude are both set (they are not null)
+     */
+    public function isgeo(): bool
+    {
+        return (!is_null($this->latitude) && !is_null($this->longitude));
+    }
+
     // _____________________________________________________ G E T ____________________________________________________
 
     public function id($type = 'string')
@@ -178,6 +195,16 @@ class Page extends Item
         } elseif ($option == 'sort') {
             return count($this->tag);
         }
+    }
+
+    public function latitude($option = 'float'): ?float
+    {
+        return $this->latitude;
+    }
+
+    public function longitude($optiob = 'float'): ?float
+    {
+        return $this->longitude;
     }
 
     public function date($option = 'date')
@@ -445,6 +472,36 @@ class Page extends Item
             }, $tag);
             $tag = array_filter($tag);
             $this->tag = $tag;
+        }
+    }
+
+    /**
+     * @param ?float $latitude              Must be `null` or a float between -90 and 90 degres
+     */
+    public function setlatitude($latitude): void
+    {
+        if (is_numeric($latitude)) {
+            $latitude = floatval($latitude);
+            if ($latitude >= -90 && $latitude <= 90) {
+                $this->latitude = $latitude;
+            }
+        } else {
+            $this->latitude = null;
+        }
+    }
+
+    /**
+     * @param ?float $longitude              Must be `null` or a float between -180 and 180 degres
+     */
+    public function setlongitude($longitude): void
+    {
+        if (is_numeric($longitude)) {
+            $longitude = floatval($longitude);
+            if ($longitude >= -90 && $longitude <= 90) {
+                $this->longitude = $longitude;
+            }
+        } else {
+            $this->longitude = null;
         }
     }
 

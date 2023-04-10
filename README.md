@@ -56,9 +56,9 @@ Manage your assets using the media manager.
 
 ![media manager](https://w.club1.fr/images/12.png)
 
-You can even view a map of links.
+You can even view a graph of links.
 
-![map](https://w.club1.fr/images/11.png)
+![graph](https://w.club1.fr/images/11.png)
 
 
 

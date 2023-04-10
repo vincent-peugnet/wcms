@@ -67,7 +67,7 @@ main a.bookmark {
 
 
 div#deepsearchbar {
-    background-color: var(---secondary-background-color);
+    background-color: var(--secondary-background-color);
 }
 
 #deepsearchbar input[type=text] {
@@ -143,6 +143,12 @@ td label, td time {white-space: nowrap;}
 span.redirection {
     background-color: var(--secondary-background-color);
     border-radius: 5px;
+}
+
+
+div#geomap {
+    width: 800px;
+    height: 800px;
 }
 
 

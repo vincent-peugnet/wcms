@@ -1,12 +1,11 @@
 .vscode/*
 .env
 *.log
-*.bundle.js
-*.bundle.js.map
 assets/atom/*
 assets/render/*
 assets/global/*
 assets/css/tagcolors.css
+assets/js/*
 database/*
 media/*
 render/

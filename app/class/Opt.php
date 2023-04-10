@@ -35,6 +35,8 @@ class Opt extends Item
     /** @var DateTimeImmutable $until */
     protected ?DateTimeImmutable $until = null;
 
+    protected bool $geo = false;
+
     protected $pageidlist = [];
 
     /** @var array $pagevarlist List fo every properties of an Page object */
@@ -60,6 +62,7 @@ class Opt extends Item
         'linkto',
         'since',
         'until',
+        'geo',
         'invert',
         'limit'
     ];
@@ -345,6 +348,14 @@ class Opt extends Item
         return $this->datetransform('until', $option);
     }
 
+    /**
+     * @return bool                         True if filter only show page with geo datas
+     */
+    public function geo(): bool
+    {
+        return $this->geo;
+    }
+
     public function invert(): bool
     {
         return $this->invert;
@@ -514,6 +525,11 @@ class Opt extends Item
         } else {
             $this->until = null;
         }
+    }
+
+    public function setgeo($geo)
+    {
+        $this->geo = boolval($geo);
     }
 
     public function setinvert($invert)

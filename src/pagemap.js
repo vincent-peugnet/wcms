@@ -8,7 +8,7 @@ L.Icon.Default.prototype.options.iconUrl = icon;
 L.Icon.Default.prototype.options.iconRetinaUrl = icon_2x;
 L.Icon.Default.prototype.options.shadowUrl = shadow;
 
-var map = L.map('geomap').setView([43.3, 6.68], 1);
+var map = L.map(mapId).setView([0, 0], 1);
 
 var pageGroup = L.featureGroup();
 pageGroup.addTo(map);
@@ -21,9 +21,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 for (const page of pages) {
     L.marker([page.latitude, page.longitude])
         .addTo(pageGroup)
-        .bindPopup(
-            `<a href="${page.read}">${page.title}</a>&nbsp;<a href="${page.edit}"><i class="fa fa-pencil"></i></a>`
-        );
+        .bindPopup(`<a href="${page.read}">${page.title}</a>`);
 }
 
 map.fitBounds(pageGroup.getBounds());

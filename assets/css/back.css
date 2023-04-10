@@ -57,7 +57,7 @@ aside .submenu {
     position: absolute;
     max-height: 85%;
     overflow-y: auto;
-    z-index: 10;
+    z-index: 10000;
 }
 
 
@@ -236,6 +236,8 @@ span.details {
 }
 
 
-h2 .right a.selected {
+h2 .right a {
     color: var(--outline-background-color);
 }
+
+h2 .right a.selected, h2 .right a:hover {color: var(--text2-color);}

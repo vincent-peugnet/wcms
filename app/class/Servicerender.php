@@ -328,6 +328,7 @@ class Servicerender
         $content = $element->content();
         $content = $this->automedialist($content);
         $content = $this->pageoptlist($content);
+        $content = $this->pageoptmap($content);
         $content = $this->randomopt($content);
         $content = $this->date($content);
         $content = $this->thumbnail($content);
@@ -683,6 +684,38 @@ class Servicerender
             }
         }
 
+        return $text;
+    }
+
+    /**
+     * Render page maps
+     */
+    private function pageoptmap(string $text): string
+    {
+        $matches = $this->match($text, 'MAP');
+        foreach ($matches as $match) {
+            try {
+                $optmap = new Optmap();
+                $optmap->parsehydrate($match['options'], $this->page);
+
+                if (!empty($optmap->bookmark())) {
+                    $bookmarkmanager = new Modelbookmark();
+                    $bookmark = $bookmarkmanager->get($optmap->bookmark());
+                    $optmap->resetall();
+                    $optmap->parsehydrate($bookmark->query(), $this->page);
+                    $optmap->parsehydrate($match['options'], $this->page); // Erase bookmark options with LIST ones
+                }
+
+                $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optmap);
+                $geopt = new Opt(['geo' => true]);
+                $pagetable = $this->pagemanager->pagetable($pagetable, $geopt);
+                $this->linkto = array_merge($this->linkto, array_keys($pagetable));
+                $content = $optmap->maphtml($pagetable, $this->router);
+                $text = str_replace($match['fullmatch'], $content, $text);
+            } catch (RuntimeException $e) {
+                Logger::errorex($e);
+            }
+        }
         return $text;
     }
 

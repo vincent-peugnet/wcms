@@ -440,7 +440,7 @@ class Modelpage extends Modeldb
      * @return Page[]                       Filtered list of pages
      */
 
-    public function filter(array $pagelist, Opt $opt): array
+    protected function filter(array $pagelist, Opt $opt): array
     {
         $filter = [];
         foreach ($pagelist as $page) {
@@ -450,7 +450,8 @@ class Modelpage extends Modeldb
                 $this->fsecure($page, $opt->secure()) &&
                 $this->flinkto($page, $opt->linkto()) &&
                 $this->fsince($page, $opt->since()) &&
-                $this->funtil($page, $opt->until())
+                $this->funtil($page, $opt->until()) &&
+                $this->fgeo($page, $opt->geo())
             ) {
                 $filter[] = $page->id();
             }
@@ -474,7 +475,7 @@ class Modelpage extends Modeldb
      *
      * @return Page[]                       associative array of `Page` objects
      */
-    public function sort(array $pagelist, Opt $opt): array
+    protected function sort(array $pagelist, Opt $opt): array
     {
         $this->pagelistsort($pagelist, $opt->sortby(), $opt->order());
 
@@ -486,13 +487,13 @@ class Modelpage extends Modeldb
     }
 
 
-    public function pagecompare($page1, $page2, $method = 'id', $order = 1)
+    protected function pagecompare($page1, $page2, $method = 'id', $order = 1)
     {
         $result = ($page1->$method('sort') <=> $page2->$method('sort'));
         return $result * $order;
     }
 
-    public function buildsorter($sortby, $order)
+    protected function buildsorter($sortby, $order)
     {
         return function ($page1, $page2) use ($sortby, $order) {
             $result = $this->pagecompare($page1, $page2, $sortby, $order);
@@ -502,7 +503,7 @@ class Modelpage extends Modeldb
 
 
 
-    public function pagelistsort(&$pagelist, $sortby, $order = 1)
+    protected function pagelistsort(&$pagelist, $sortby, $order = 1)
     {
         return uasort($pagelist, $this->buildsorter($sortby, $order));
     }
@@ -515,7 +516,7 @@ class Modelpage extends Modeldb
      *
      * @return string[]                     array of `string` page id
      */
-    public function filtertagfilter(array $pagelist, array $tagchecked, $tagcompare = 'OR'): array
+    protected function filtertagfilter(array $pagelist, array $tagchecked, $tagcompare = 'OR'): array
     {
 
         $filteredlist = [];
@@ -536,7 +537,7 @@ class Modelpage extends Modeldb
      *
      * @return bool                         true if Page pass test, otherwise false
      */
-    public function ftag(Page $page, array $tagchecked, string $tagcompare = Opt::OR, bool $tagnot = false): bool
+    protected function ftag(Page $page, array $tagchecked, string $tagcompare = Opt::OR, bool $tagnot = false): bool
     {
         if ($tagcompare === Opt::EMPTY) {
             return $tagnot xor empty($page->tag());
@@ -563,7 +564,7 @@ class Modelpage extends Modeldb
      *
      * @return bool                         true if Page pass test, otherwise false
      */
-    public function fauthor(Page $page, array $authorchecked, string $authorcompare = Opt::OR): bool
+    protected function fauthor(Page $page, array $authorchecked, string $authorcompare = Opt::OR): bool
     {
         if ($authorcompare === Opt::EMPTY) {
             return empty($page->authors());
@@ -588,7 +589,7 @@ class Modelpage extends Modeldb
      *
      * @return bool                         true if Page pass test, otherwise false
      */
-    public function fsecure(Page $page, int $secure): bool
+    protected function fsecure(Page $page, int $secure): bool
     {
         if ($page->secure() === intval($secure)) {
             return true;
@@ -605,7 +606,7 @@ class Modelpage extends Modeldb
      *
      * @return bool                         true if Page pass test, otherwise false
      */
-    public function flinkto(Page $page, string $linkto): bool
+    protected function flinkto(Page $page, string $linkto): bool
     {
         return (empty($linkto) || in_array($linkto, $page->linkto('array')));
     }
@@ -617,7 +618,7 @@ class Modelpage extends Modeldb
      *
      * @return bool
      */
-    public function fsince(Page $page, ?DateTimeInterface $since): bool
+    protected function fsince(Page $page, ?DateTimeInterface $since): bool
     {
         if (is_null($since)) {
             return true;
@@ -633,12 +634,21 @@ class Modelpage extends Modeldb
      *
      * @return bool
      */
-    public function funtil(Page $page, ?DateTimeInterface $until): bool
+    protected function funtil(Page $page, ?DateTimeInterface $until): bool
     {
         if (is_null($until)) {
             return true;
         } else {
             return ($page->date() <= $until);
+        }
+    }
+
+    protected function fgeo(Page $page, bool $geo)
+    {
+        if (!$geo) {
+            return true;
+        } else {
+            return $page->isgeo();
         }
     }
 
@@ -652,7 +662,7 @@ class Modelpage extends Modeldb
      *
      * @return array associative array of `Page` objects
      */
-    public function deepsearch(array $pagelist, string $regex, array $options): array
+    protected function deepsearch(array $pagelist, string $regex, array $options): array
     {
         if ($options['casesensitive']) {
             $case = '';
