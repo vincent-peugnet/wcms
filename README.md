@@ -32,6 +32,7 @@ W try to help you create pages more spontaneously.
 - Use standards to edit your pages : markdown, HTML, CSS and Javascript
 - [Media manager](MANUAL.md#media-manager)
 - Multi-users
+- Geolocalisation : generate map using page's coordinates **(BETA)**
 - Flat file database
 - Great website architecture design freedom
 - [url based command interface](MANUAL.md#url-based-command-interface)

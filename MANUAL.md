@@ -582,6 +582,29 @@ Some `.class` and `#id` are generated to help styling.
 
 
 
+#### Map
+
+This feature allow you to integrate a worldmap in your page with markers linking to pages that have coordinates ([latitude](#latitude) and [longitude](#longitude) attributes) set. The syntax is very close to [page lists](#page-list) syntax.
+
+    %MAP?tagfilter[]=france%
+
+*For example, this will add to the map all pages that have the tag `france`, and __have coordinates__*
+
+This will include a `div` HTML tag and some javascript.
+
+    <div id="geomap" class="map"></div>
+
+When you are in the [home view](#home), ajust the filters using the [options panel](#options) to achieve the page selection you desire. Then select "filters" in the [menu](#home-menu), under the "map" title, you can now copy and paste the code obtainded that way in one of the [elements](#markdown-elements) of a page.
+
+**⚠️ this feature is limited to one map per page**
+
+##### Using bookmarks
+
+You can use an existing [bookmark](#bookmarks) as filter and sorting preset. For example, with a bookmark with the id: `my-favorite-places`
+
+    %LIST?bookmark=my-favorite-places%
+
+It is even possible to combine bookmark and filters! Specific filters and sorting will overide bookmark settings.
 
 
 #### Random page
@@ -616,6 +639,7 @@ It is even possible to combine bookmark and filters! Specific filters and sortin
 A specific case exist when if you want to use the [linkto](#linkto) filter in templates: If you want to create a selection of all the pages that point to the current page, you can use the wildcard character `*` as a value.
 
     %RANDOM?linkto=*%
+
 
 
 #### Media list

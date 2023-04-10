@@ -201,7 +201,12 @@
     <details id="selection" <?= !empty($optlist) ? 'open' : '' ?>>
         <summary>Filter</summary>
         <div class="submenu">
-            <h2>List menu</h2>
+            <h2>
+                List menu
+                <span class="right">
+                    <a href="<?= $this->url('info', [], '#page-list') ?>" title="help !" class="help">?</a>
+                </span>
+            </h2>
             <i>Generate code to display a list of pages</i>
             <form action="<?= $this->url('homequery') ?>" method="post">
                 <input type="hidden" name="listquery" value="1">
@@ -258,14 +263,24 @@
                 <input readonly class="code select-all" value="<?= $optlist->getcode() ?>">
             <?php } ?>
 
-            <h2>Map</h2>
+            <h2>
+                Map
+                <span class="right">
+                    <a href="<?= $this->url('info', [], '#map') ?>" title="help !" class="help">?</a>
+                </span>
+            </h2>
             <i>A code to insert a map on a page</i>
             <?php if(!empty($optmap)) { ?>
                 <input readonly class="code select-all" value="<?= $optmap->getcode() ?>">
             <?php } ?>
 
 
-            <h2>Random page</h2>
+            <h2>
+                Random page
+                <span class="right">
+                    <a href="<?= $this->url('info', [], '#random-page') ?>" title="help !" class="help">?</a>
+                </span>
+            </h2>
             <i>Generate a code to create a link to a random page using the current filtering options.</i>
             <?php if(!empty($optrandom)) { ?>
                 <input readonly class="code select-all" value="[random page](<?= $optrandom->getcode() ?>)">
