@@ -26,6 +26,7 @@ module.exports = (env) => {
 			home: './src/home.js',
 			graph: './src/graph.js',
 			map: './src/map.js',
+			pagemap: './src/pagemap.js',
 			media: './src/media.js',
 			sentry: './src/sentry.js',
 		},

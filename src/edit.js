@@ -41,8 +41,6 @@ if (isNaN(inputLatitude.valueAsNumber) || isNaN(inputLongitude.valueAsNumber)) {
     var zoom = 7;
 }
 
-console.log(lat);
-
 let map = L.map('geomap').setView([lat, long], zoom);
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -100,7 +98,7 @@ CodeMirror.defineSimpleMode('wcms', {
     // detect a Wcms markup then pass to 'wcms' mode
     start: [
         {
-            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|SUMMARY|LIST|MEDIA|TITLE|DESCRIPTION|DATE|TIME|DATEMODIF|TIMEMODIF|THUMBNAIL|RSS|AUTHORS|ID|PATH|URL|VISITCOUNT|EDITCOUNT|DISPLAYCOUNT)(\?[^\s]*)?%)/,
+            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|SUMMARY|LIST|MAP|RANDOM|MEDIA|TITLE|DESCRIPTION|DATE|TIME|DATEMODIF|TIMEMODIF|THUMBNAIL|RSS|AUTHORS|ID|PATH|URL|VISITCOUNT|EDITCOUNT|DISPLAYCOUNT)(\?[^\s]*)?%)/,
             token: 'wcms',
             next: 'wcms',
         },
@@ -120,6 +118,8 @@ CodeMirror.defineSimpleMode('wcms', {
         },
         { regex: /SUMMARY\?/, token: 'wcms', next: 'summary' },
         { regex: /LIST\?/, token: 'wcms', next: 'list' },
+        { regex: /MAP\?/, token: 'wcms', next: 'map' },
+        { regex: /RANDOM\?/, token: 'wcms', next: 'random' },
         { regex: /MEDIA\?/, token: 'wcms', next: 'media' },
         { regex: /RSS\?/, token: 'wcms', next: 'rss' },
         {
@@ -147,7 +147,25 @@ CodeMirror.defineSimpleMode('wcms', {
     // 'list' mode, parameters' keywords of the 'list' macro
     list: [
         {
-            regex: /sortby|order|secure|tagcompare|authorcompare|tagfilter|authorfilter|linkto|limit|description|thumbnail|date|time|since|until|author|hidecurrent|style|bookmark/,
+            regex: /sortby|order|secure|tagcompare|authorcompare|tagfilter|authorfilter|linkto|geo|invert|limit|description|thumbnail|date|time|since|until|author|hidecurrent|style|bookmark|invert/,
+            token: 'wkeyword',
+            push: 'wcms',
+        },
+        { regex: null, push: 'wcms' },
+    ],
+    // 'random' mode, parameters' keywords of the 'random' macro
+    random: [
+        {
+            regex: /sortby|order|secure|tagcompare|authorcompare|tagfilter|authorfilter|linkto|geo|invert|limit|since|until|bookmark/,
+            token: 'wkeyword',
+            push: 'wcms',
+        },
+        { regex: null, push: 'wcms' },
+    ],
+    // 'map' mode, parameters' keywords of the 'map' macro
+    map: [
+        {
+            regex: /sortby|order|secure|tagcompare|authorcompare|tagfilter|authorfilter|linkto|geo|invert|limit|since|until|bookmark/,
             token: 'wkeyword',
             push: 'wcms',
         },

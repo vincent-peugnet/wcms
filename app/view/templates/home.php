@@ -19,6 +19,7 @@
         'user' => $user,
         'opt' => $opt,
         'optlist' => $optlist,
+        'optmap' => $optmap,
         'optrandom' => $optrandom,
         'pagelist' => $pagelist,
         'faviconlist' => $faviconlist,

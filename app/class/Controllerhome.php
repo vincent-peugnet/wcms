@@ -131,6 +131,10 @@ class Controllerhome extends Controller
             $optrandom->submit();
             $vars['optrandom'] = $optrandom;
 
+            $optmap = new Optmap();
+            $optmap->submit();
+            $vars['optmap'] = $optmap;
+
             $vars['optlist'] = $this->optlist;
 
             $this->showtemplate('home', $vars);

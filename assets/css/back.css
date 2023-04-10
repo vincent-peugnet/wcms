@@ -57,7 +57,7 @@ aside .submenu {
     position: absolute;
     max-height: 85%;
     overflow-y: auto;
-    z-index: 10;
+    z-index: 10000;
 }
 
 
