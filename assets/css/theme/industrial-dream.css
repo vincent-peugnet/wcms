@@ -1,0 +1,47 @@
+:root {
+    --text-color: black;
+    --text2-color: #ffffff;
+    --text3-color: #3b1338;
+    --main-color: #848484;
+    --secondary-background-color: #bbbbbb;
+    --code-background-color: hsl(213 21% 10% / 1);
+    --code-color: hsl(0deg 0% 100%);
+    --primary-background-color: #d6d6d6;
+    --tertiary-background-color: #909090;
+    --outline-background-color: #7a7a7a;
+    --outline-color: #ffffff;
+    --button-background-color: #ecf0f5;
+    --button-color: #000000;
+    --input-background-color: #ffffff;
+    --input-color: #303030;
+    color-scheme: light;
+}
+
+input, textarea {
+    border: inset 2px;
+}
+
+input[type="submit"], button, select {
+    border: outset 2px;
+}
+
+.block {
+    border: ridge 2px;
+    margin: 0px;
+}
+
+
+
+
+.submenu {
+    border: ridge 2px;
+}
+
+h2, header {
+    border-bottom: #757575 solid 1px;
+}
+
+div.panel details {
+    border: solid 1px;
+    border-color: var(--tertiary-background-color)
+}

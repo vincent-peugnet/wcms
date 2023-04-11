@@ -1,0 +1,32 @@
+:root {
+    --text-color: #272f09;
+    --text2-color: #595d1e;
+    --text3-color: #3b1338;
+    --main-color: #eaeeaf;
+    --secondary-background-color: #d2bd76;
+    --code-background-color: hsl(213 21% 10% / 1);
+    --code-color: hsl(213 46% 66% / 1);
+    --primary-background-color: #ffefbc;
+    --tertiary-background-color: #c6b98e;
+    --outline-background-color: #e7c969;
+    --outline-color: #262626;
+    --button-background-color: #dcdd98;
+    --button-color: #000000;
+    --input-background-color: #ffffff;
+    --input-color: #303030;
+    color-scheme: light;
+}
+
+body {
+    font-family: serif;
+    font-size: 15.8px;
+}
+
+input, button, select, textarea {
+    border-radius: 3px;
+}
+
+.block {
+    border: solid 1px var(--secondary-background-color);
+    border-radius: 5px;
+}
