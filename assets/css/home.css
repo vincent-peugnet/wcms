@@ -33,22 +33,6 @@ main table td.id label {
 }
 
 
-nav select, nav input[type="datetime-local"], nav input[type="submit"] {
-    width: 100%;
-    margin-top: 10px;
-}
-
-
-main nav fieldset[data-default="0"] div {
-    background: var(--outline-background-color);
-    color: var(--outline-color);
-}
-
-main nav legend {
-    font-weight: bold;
-    width: 100%;
-    background-color: var(--secondary-background-color);
-}
 
 #home2table a.linkto {
     font-family: monospace;
@@ -74,14 +58,6 @@ div#deepsearchbar {
     width: 150px;
 }
 
-
-
-nav fieldset {
-    padding: 0;
-    margin: 5px;
-    border: none;
-    margin: 15px 0;
-}
 
 nav span.list-label {
     width: 122px;

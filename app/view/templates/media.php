@@ -34,7 +34,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
     </div>
 </nav>
 
-<div id="fildter">
+<div id="filter">
     <div class="block">
         <h2>filter</h2>
         <div class="scroll">

@@ -85,6 +85,29 @@ main nav {
     flex-direction: column;
 }
 
+main nav fieldset, main #filter fieldset {
+    padding: 0;
+    border: none;
+    margin: 15px 0;
+}
+
+
+main nav fieldset[data-default="0"] div {
+    background: var(--outline-background-color);
+    color: var(--outline-color);
+}
+
+main nav legend, main #filter legend {
+    font-weight: bold;
+    width: 100%;
+    background-color: var(--secondary-background-color);
+}
+
+
+nav select, nav input[type="datetime-local"], nav input[type="submit"], #filter input[type="submit"] {
+    width: 100%;
+    margin-top: 10px;
+}
 
 footer {
     background-color: black;
