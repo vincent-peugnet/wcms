@@ -30,3 +30,11 @@ input, button, select, textarea {
     border: solid 1px var(--secondary-background-color);
     border-radius: 5px;
 }
+
+.editor textarea {
+    background: var(--main-color);
+}
+
+.editor #editmain, .editor #editheader, .editor #editnav, .editor #editaside, .editor #editfooter  {
+    font-family: serif;
+}
