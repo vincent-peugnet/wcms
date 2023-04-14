@@ -87,6 +87,8 @@ class Controllermedia extends Controller
                     $this->mediamanager->multiupload('file', $target, boolval($_POST['idclean']));
                     Model::sendflashmessage("$count file(s) has been uploaded successfully", Model::FLASH_SUCCESS);
                     if ($target === Model::FONT_DIR) {
+                        $fontfacer = new Servicefont($this->mediamanager);
+                        $fontfacer->writecss();
                     }
                     $this->redirect($this->generate('media') . '?path=/' . $target);
                 } catch (RuntimeException $e) {
@@ -200,6 +202,9 @@ class Controllermedia extends Controller
         $this->redirect($this->generate('media') . $_POST['route']);
     }
 
+    /**
+     * Generate the CSS file with the @fontface
+     */
     public function fontface()
     {
         if ($this->user->iseditor()) {

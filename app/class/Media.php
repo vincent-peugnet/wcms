@@ -31,7 +31,8 @@ class Media extends Item
 
     protected $length;
 
-    protected $uid;
+    /** @var int Owner of file ID */
+    protected ?int $uid = null;
 
     protected $permissions;
 
@@ -186,17 +187,22 @@ class Media extends Item
         }
 
         switch ($this->type) {
-            case 'image':
+            case self::IMAGE:
                 $code = '![' . $this->filename . '](' . $src . ')';
                 break;
 
-            case 'sound':
+            case self::SOUND:
                 $code = '<audio controls src="' . $src . '"></audio>';
                 break;
 
-            case 'video':
+            case self::VIDEO:
                 $ext = $this->extension;
                 $code = '<video controls=""><source src="' . $src . '" type="video/' . $ext . '"></video>';
+                break;
+
+            case self::FONT:
+                $font = new Font([$this]);
+                $code = $font->getcode();
                 break;
 
             default:
@@ -313,6 +319,10 @@ class Media extends Item
         return readablesize($surface, 1000) . 'px';
     }
 
+    /**
+     * @param string $option could be `id` or `name`
+     * @return string|int
+     */
     public function uid($option = 'id')
     {
         if ($option === 'name') {
@@ -394,7 +404,9 @@ class Media extends Item
 
     public function setuid($uid)
     {
-        $this->uid = $uid;
+        if (is_int($uid)) {
+            $this->uid = $uid;
+        }
     }
 
     public function setpermissions($permissions)

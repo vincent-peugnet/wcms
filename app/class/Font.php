@@ -4,6 +4,12 @@ namespace Wcms;
 
 use DomainException;
 
+use function Clue\StreamFilter\fun;
+
+/**
+ * Identify a font by family, style, weight, stretch,
+ * but that may be in multiple file format.
+ */
 class Font
 {
     protected string $family;
@@ -14,11 +20,17 @@ class Font
     /** @var Media[] $media */
     protected array $medias;
 
-    protected const STYLE = "style";
-    protected const WEIGHT = "weight";
-    protected const STRETCH = "stretch";
+    public const STYLE = "style";
+    public const WEIGHT = "weight";
+    public const STRETCH = "stretch";
 
-    protected const OPTIONS = [
+    public const FONT_OPTIONS = [
+        self::STYLE,
+        self::WEIGHT,
+        self::STRETCH,
+    ];
+
+    public const OPTIONS = [
         "italic" => self::STYLE,
         "oblique" => self::STYLE,
         "thin" => self::WEIGHT,
@@ -40,7 +52,7 @@ class Font
     ];
 
     /**
-     * Feed it with media sharing same ID. Only font formats may differ.
+     * Feed it with media sharing same basename. Only font formats may differ.
      *
      * @param Media[] $medias
      */
@@ -63,7 +75,7 @@ class Font
     }
 
     /**
-     * Verify if every Media objects share the same ID
+     * Verify if every Media objects share the same basename
      *
      * @param Media[] $medias
      *
@@ -75,6 +87,52 @@ class Font
             return $media->getbasefilename();
         }, $medias);
         return (count(array_unique($ids)) === 1);
+    }
+
+    /**
+     * Parse the font into CSS @fontface property
+     *
+     * @return string                       CSS @Fontface property
+     */
+    public function fontface(): string
+    {
+        $family = $this->family();
+        $css = "@font-face {\n    font-family: \"$family\";\n    src:\n";
+        $srcs = array_map(function (Media $media) {
+            $url = $media->getabsolutepath();
+            $format = $media->extension();
+            $src = "        url(\"$url\") format(\"$format\")";
+            return $src;
+        }, $this->medias());
+        $css .= implode(",\n", $srcs) . ";";
+        if (!is_null($this->style())) {
+            $style = $this->style();
+            $css .= "\n    font-style: $style;";
+        }
+        if (!is_null($this->weight())) {
+            $weight = $this->weight();
+            $css .= "\n    font-weight: $weight;";
+        }
+        if (!is_null($this->stretch())) {
+            $stretch = $this->stretch();
+            $css .= "\n    font-stretch: $stretch;";
+        }
+        return "$css\n}\n\n";
+    }
+
+    /**
+     * @return string                       CSS code to print as Media code
+     */
+    public function getcode(): string
+    {
+        $code = "font-family: $this->family;";
+        foreach (self::FONT_OPTIONS as $option) {
+            if (!is_null($this->$option)) {
+                $value = $this->$option;
+                $code .= " font-$option: $value;";
+            }
+        }
+        return $code;
     }
 
     // _____________________________________ G E T ____________________________________

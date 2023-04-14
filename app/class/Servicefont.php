@@ -74,41 +74,9 @@ class Servicefont
     {
         $css = "";
         foreach ($this->fonts as $font) {
-            $css .= $this->parse($font);
+            $css .= $font->fontface();
         }
         return $css;
-    }
-
-    /**
-     * Parse a font into CSS @fontface property
-     *
-     * @param Font $font                    Font to parse
-     * @return string                       CSS @Fontface property
-     */
-    protected function parse(Font $font): string
-    {
-        $family = $font->family();
-        $css = "@font-face {\n    font-family: \"$family\";\n    src:\n";
-        $srcs = array_map(function (Media $media) {
-            $url = $media->getabsolutepath();
-            $format = $media->extension();
-            $src = "        url(\"$url\") format(\"$format\")";
-            return $src;
-        }, $font->medias());
-        $css .= implode(",\n", $srcs) . ";";
-        if (!is_null($font->style())) {
-            $style = $font->style();
-            $css .= "\n    font-style: $style;";
-        }
-        if (!is_null($font->weight())) {
-            $weight = $font->weight();
-            $css .= "\n    font-weight: $weight;";
-        }
-        if (!is_null($font->stretch())) {
-            $stretch = $font->stretch();
-            $css .= "\n    font-stretch: $stretch;";
-        }
-        return "$css\n}\n\n";
     }
 
     /**
