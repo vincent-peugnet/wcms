@@ -1,7 +1,7 @@
 <?php
 
 
-$this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css', $css . 'media.css']]) ?>
+$this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css', $css . 'media.css', $cssfont]]) ?>
 
 
 <?php $this->start('page') ?>
@@ -163,7 +163,12 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
                     <?php if($media->type() === 'image') { ?>
                         <span class="thumbnail">
                             <i class="fa fa-<?= $media->getsymbol() ?>"></i>
-                            <img src="<?= $media->getabsolutepath() ?>" alt="">
+                            <img src="<?= $media->getabsolutepath() ?>" class="lightbox">
+                        </span>
+                    <?php } elseif ($media->type() === 'font' && $mediaopt->isfontdir()) { ?>
+                        <span class="thumbnail">
+                            <i class="fa fa-<?= $media->getsymbol() ?>"></i>
+                            <p class="lightbox" style="<?= $media->getcode() ?>">Zut ! Je crois que le chien Sambuca préfère le whisky revigorant au doux porto.</p>
                         </span>
                     <?php } else { ?>
                         <i class="fa fa-<?= $media->getsymbol() ?>"></i>

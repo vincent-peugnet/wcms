@@ -1,8 +1,9 @@
 
-main.media table#medialist img {
+table#medialist .thumbnail .lightbox {
     display: none;
+    white-space: pre-wrap;
     position: absolute;
-    max-width: 400px;
+    max-width: 350px;
     max-height: 200px;
     background-color: var(--secondary-background-color);
     padding: 5px;
@@ -10,7 +11,7 @@ main.media table#medialist img {
     top: 60px;
 }
 
-main.media table#medialist .thumbnail:hover img {
+table#medialist .thumbnail:hover .lightbox {
     display: block;
 }
 

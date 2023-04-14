@@ -62,6 +62,30 @@ class Mediaopt extends Item
         return '?' . urldecode(http_build_query($query));
     }
 
+
+    // ___________________ MAGIC FOLDERS _____________________
+
+
+    public function isfontdir(): bool
+    {
+        return $this->dir() === Model::FONT_DIR;
+    }
+
+    public function iscssdir(): bool
+    {
+        return $this->dir() === Model::CSS_DIR;
+    }
+
+    public function isthumbnaildir(): bool
+    {
+        return $this->dir() === Model::THUMBNAIL_DIR;
+    }
+
+    public function isfavicondir(): bool
+    {
+        return $this->dir() === Model::FAVICON_DIR;
+    }
+
     // ______________________________________________ G E T ________________________________________________________
 
 

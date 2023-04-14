@@ -201,9 +201,11 @@ class Media extends Item
                 break;
 
             case self::FONT:
-                $font = new Font([$this]);
-                $code = $font->getcode();
-                break;
+                if ("$this->dir/" === Model::FONT_DIR) {
+                    $font = new Font([$this]);
+                    $code = $font->getcode();
+                    break;
+                } // intentional fall-through
 
             default:
                 $code = '[' . $this->filename . '](' . $src . ')';

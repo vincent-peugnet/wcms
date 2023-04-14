@@ -101,7 +101,7 @@ class Font
         $srcs = array_map(function (Media $media) {
             $url = $media->getabsolutepath();
             $format = $media->extension();
-            $src = "        url(\"$url\") format(\"$format\")";
+            $src = "        url(\"$url\")";
             return $src;
         }, $this->medias());
         $css .= implode(",\n", $srcs) . ";";

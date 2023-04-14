@@ -60,6 +60,7 @@ class Controllermedia extends Controller
             $this->mediamanager->listpath($dirlist, '', $pathlist);
 
             $vars['maxuploadsize'] = readablesize(file_upload_max_size()) . 'o';
+            $vars['cssfont'] = Model::dirtopath(Model::FONTS_CSS_FILE);
 
             if (isset($_GET['display'])) {
                 $this->workspace->setmediadisplay($_GET['display']);
