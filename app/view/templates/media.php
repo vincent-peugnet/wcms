@@ -94,7 +94,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
             <div class="thumbnail">
             <label for="media_<?= $media->filename() ?>">
                 <?php if($media->type() === 'image') { ?>
-                    <img src="<?= $media->getabsolutepath() ?>" alt="">
+                    <img src="<?= $media->getabsolutepath() ?>" loading="lazy">
                 <?php } elseif($media->type() === 'video' || $media->type() === 'sound') { ?>
                     <?= $media->getcode(true) ?>
                 <?php } else { ?>
@@ -163,7 +163,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
                     <?php if($media->type() === 'image') { ?>
                         <span class="thumbnail">
                             <i class="fa fa-<?= $media->getsymbol() ?>"></i>
-                            <img src="<?= $media->getabsolutepath() ?>" class="lightbox">
+                            <img src="<?= $media->getabsolutepath() ?>" class="lightbox" loading="lazy">
                         </span>
                     <?php } elseif ($media->type() === 'font' && $mediaopt->isfontdir()) { ?>
                         <span class="thumbnail">
