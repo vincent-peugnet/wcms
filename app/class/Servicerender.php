@@ -466,7 +466,7 @@ class Servicerender
                     $link->setAttribute('target', '_blank');
                     $link->setAttribute('class', implode(' ', array_unique($classes)));
                 }
-            } elseif (preg_match('~^([\w-]+)((\/?#[\w-]+)|(\/([\w\-\%\[\]\=\?\&]*)))?$~', $href, $out)) {
+            } elseif (preg_match('~^([a-z0-9-_]+)((\/?#[a-z0-9-_]+)|(\/([\w\-\%\[\]\=\?\&]*)))?$~', $href, $out)) {
                 $classes[] = 'internal';
                 $fragment = $out[2] ?? '';
                 $link->setAttribute('href', $this->upage($out[1]) . $fragment);
@@ -504,31 +504,23 @@ class Servicerender
      */
     private function wikiurl(string $text): string
     {
-        $linkto = [];
         $rend = $this;
         $text = preg_replace_callback(
-            '%\[\[([\w-]+)\/?(#[\w-]+)?\]\]%',
-            function ($matches) use ($rend, &$linkto) {
-                $target = $this->internallinkblank ? ' target="_blank"' : '';
+            '%\[\[([a-z0-9_-]+)\/?(#[\w-]+)?\]\]%',
+            function ($matches) use ($rend) {
                 try {
                     $matchpage = $rend->pagemanager->get($matches[1]);
                     $fragment = $matches[2] ?? '';
                     $href = $matches[1] . $fragment;
-                    $t = $matchpage->description();
-                    $c = 'internal exist ' . $matchpage->secure('string');
                     $a = $matchpage->title();
-                    $linkto[] = $matchpage->id();
                 } catch (RuntimeException $e) {
                     $href = $matches[1];
-                    $t = Config::existnot();
-                    $c = 'internal existnot" ' . $target;
                     $a = $matches[1];
                 }
-                return '<a href="' . $href . '" title="' . $t . '" class="' . $c . '" ' . $target . ' >' . $a . '</a>';
+                return '<a href="' . $href . '">' . $a . '</a>';
             },
             $text
         );
-        $this->linkto = array_unique(array_merge($this->linkto, $linkto));
         return $text;
     }
 
@@ -676,7 +668,6 @@ class Servicerender
                 }
 
                 $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optlist);
-                $this->linkto = array_merge($this->linkto, array_keys($pagetable));
                 $content = $optlist->listhtml($pagetable, $this, $this->page);
                 $text = str_replace($match['fullmatch'], $content, $text);
             } catch (RuntimeException $e) {
@@ -953,7 +944,7 @@ class Servicerender
     }
 
     /**
-     * Render a list of Users as a HTML <ul> that may contain links
+     * Render a list of Users as a HTML <ul> that may contain links to their profile pages
      *
      * @param User[] $users     List of User
      * @return string           List of user in HTML
@@ -1019,7 +1010,7 @@ class Servicerender
     public function linkto()
     {
         sort($this->linkto);
-        $linkto = $this->linkto;
+        $linkto = array_unique($this->linkto);
         $key = array_search($this->page->id(), $linkto);
         if (is_int($key)) {
             unset($linkto[$key]);

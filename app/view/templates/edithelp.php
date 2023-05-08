@@ -29,7 +29,7 @@
 
     <h4>W synthax</h4>
     <ul>
-        <li><code>[[<i>page_id</i>]]</code> quick link</li>
+        <li><code>[[<i>page_id</i>]]</code> wiki link</li>
         <li><code>%TITLE%</code> print page title</li>
         <li><code>%DESCRIPTION%</code> print page description</li>
         <li><code>%THUMBNAIL%</code> print page thumbnail</li>

@@ -3,7 +3,6 @@
 namespace Wcms;
 
 use IntlDateFormatter;
-use LogicException;
 use Wcms\Exception\Database\Notfoundexception;
 
 class Optlist extends Optcode
@@ -53,15 +52,6 @@ class Optlist extends Optcode
         $datetitleformatter = new IntlDateFormatter($lang, IntlDateFormatter::FULL, IntlDateFormatter::NONE);
         $timeformatter = new IntlDateFormatter($lang, IntlDateFormatter::NONE, IntlDateFormatter::SHORT);
         foreach ($pagelist as $page) {
-            // ================= Class =============
-            $classdata = [];
-            if ($currentpage->id() === $page->id()) {
-                $classdata['actual'] = 'current_page';
-            }
-            $classdata['secure'] = $page->secure('string');
-            $class = ' class="' . implode(' ', $classdata) . '" ';
-
-
             // ================ Content
 
             $content = '';
@@ -107,11 +97,11 @@ class Optlist extends Optcode
 
             switch ($this->style) {
                 case 'card':
-                    $li .= $this->li($this->a($title . $content, $class, $page->id()), $page->id());
+                    $li .= $this->li($this->a($title . $content, $page->id()), $page->id());
                     break;
 
                 case 'list':
-                    $li .= $this->li($this->a($title, $class, $page->id()) . $content, $page->id());
+                    $li .= $this->li($this->a($title, $page->id()) . $content, $page->id());
                     break;
             }
         }
@@ -131,9 +121,9 @@ class Optlist extends Optcode
         return "<li class=\"pagelistitem $class\">\n$content\n</li>\n";
     }
 
-    private function a(string $content, string $class, string $id)
+    private function a(string $content, string $id)
     {
-        return '<a ' . $class . ' href="' . $this->render->upage($id) . '">' . $content . '</a>';
+        return "<a href=\"$id\">$content</a>";
     }
 
 
