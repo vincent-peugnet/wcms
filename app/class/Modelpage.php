@@ -340,6 +340,12 @@ class Modelpage extends Modeldb
     /**
      * Check if a page need to be rendered
      *
+     * A page need to be rendered when:
+     *
+     * - datemodif is after daterender
+     * - render files do not exist
+     * - body template is used and template datemodif is after page daterender
+     *
      * @param Page $page                    Page to be checked
      *
      * @return bool                         true if the page need to be rendered otherwise false
@@ -366,12 +372,15 @@ class Modelpage extends Modeldb
 
     /**
      * Render given page
-     * Write HTML, CSS and JS files
-     * update linto property
+     * Generate and write HTML, CSS and JS files
+     * update linkto property
      *
      * @param Page $page input
      *
      * @return Page rendered $page
+     *
+     * @todo This function should not send flash message itself,
+     * but throw a RuntimeException instead
      */
     public function renderpage(Page $page, AltoRouter $router): Page
     {
@@ -395,6 +404,54 @@ class Modelpage extends Modeldb
         }
 
         return $page;
+    }
+
+    /**
+     * Render all other pages that are linked from this page
+     */
+    public function recursiverender(Page $page, AltoRouter $router): void
+    {
+        $relatedpages = array_diff($page->linkto(), [$page->id()]);
+        foreach ($relatedpages as $pageid) {
+            try {
+                $page = $this->get($pageid);
+                $page = $this->renderpage($page, $router);
+                $this->update($page);
+            } catch (RuntimeException $e) {
+                Logger::errorex($e, true);
+            }
+        }
+    }
+
+    /**
+     * Render all page JS and CSS templates if they need to
+     *
+     * @param Page $page page to check templates
+     */
+    public function templaterender(Page $page, AltoRouter $router)
+    {
+        try {
+            $templates = $this->getpagecsstemplates($page);
+            foreach ($templates as $page) {
+                if ($this->needtoberendered($page)) {
+                    $page = $this->renderpage($page, $router);
+                    $this->update($page);
+                }
+            }
+        } catch (RuntimeException $e) {
+            Logger::errorex($e);
+        }
+        if (!empty($page->templatejavascript())) {
+            try {
+                $templatejs = $this->get($page->templatejavascript());
+                if ($this->needtoberendered($templatejs)) {
+                    $templatejs = $this->renderpage($templatejs, $router);
+                    $this->update($templatejs);
+                }
+            } catch (RuntimeException $e) {
+                Logger::errorex($e, true);
+            }
+        }
     }
 
 

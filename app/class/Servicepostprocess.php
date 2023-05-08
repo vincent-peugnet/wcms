@@ -37,6 +37,7 @@ class Servicepostprocess
 
     /**
      * Apply post process to page HTML render
+     * Parsing will occur only if the page need it
      */
     public function process(string $html): string
     {

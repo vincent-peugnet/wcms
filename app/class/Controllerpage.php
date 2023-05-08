@@ -60,9 +60,8 @@ class Controllerpage extends Controller
      * show credentials for unconnected editors for a specific page
      *
      * @param string $route direction to redirect after the connection form
-     * @return void
      */
-    public function pageconnect(string $route)
+    public function pageconnect(string $route): void
     {
         if ($this->user->isvisitor()) {
             $this->showtemplate('connect', ['route' => $route, 'id' => $this->page->id()]);
@@ -70,68 +69,23 @@ class Controllerpage extends Controller
         }
     }
 
-    public function render($page)
+    /**
+     * Function called when `/render` is called
+     */
+    public function render($page): void
     {
         $this->setpage($page, 'pageupdate');
 
         if ($this->importpage() && $this->user->iseditor()) {
             if (Config::recursiverender()) {
-                $this->recursiverender($this->page);
+                $this->pagemanager->recursiverender($this->page, $this->router);
             }
             $this->page = $this->pagemanager->renderpage($this->page, $this->router);
             $this->pagemanager->update($this->page);
-            $this->templaterender($this->page);
+            $this->pagemanager->templaterender($this->page, $this->router);
         }
         http_response_code(307);
         $this->routedirect('pageread', ['page' => $this->page->id()]);
-    }
-
-    /**
-     * Render all other pages that are linked from this page
-     */
-    public function recursiverender(Page $page): void
-    {
-        $relatedpages = array_diff($page->linkto(), [$page->id()]);
-        foreach ($relatedpages as $pageid) {
-            try {
-                $page = $this->pagemanager->get($pageid);
-                $page = $this->pagemanager->renderpage($page, $this->router);
-                $this->pagemanager->update($page);
-            } catch (RuntimeException $e) {
-                Logger::errorex($e, true);
-            }
-        }
-    }
-
-    /**
-     * Render all page templates if they need to
-     *
-     * @param Page $page page to check templates
-     */
-    private function templaterender(Page $page)
-    {
-        try {
-            $templates = $this->pagemanager->getpagecsstemplates($page);
-            foreach ($templates as $page) {
-                if ($this->pagemanager->needtoberendered($page)) {
-                    $page = $this->pagemanager->renderpage($page, $this->router);
-                    $this->pagemanager->update($page);
-                }
-            }
-        } catch (RuntimeException $e) {
-            Logger::errorex($e);
-        }
-        if (!empty($page->templatejavascript())) {
-            try {
-                $templatejs = $this->pagemanager->get($page->templatejavascript());
-                if ($this->pagemanager->needtoberendered($templatejs)) {
-                    $templatejs = $this->pagemanager->renderpage($templatejs, $this->router);
-                    $this->pagemanager->update($templatejs);
-                }
-            } catch (RuntimeException $e) {
-                Logger::errorex($e, true);
-            }
-        }
     }
 
     /**
@@ -143,7 +97,7 @@ class Controllerpage extends Controller
 
         $pageexist = $this->importpage();
         $canread = false;
-        $needtoberendered = false;
+        $hasbeenrendered = false;
         $filedir = Model::HTML_RENDER_DIR . $page . '.html';
 
         if ($pageexist) {
@@ -160,9 +114,9 @@ class Controllerpage extends Controller
             if ($canread) {
                 if ($this->pagemanager->needtoberendered($this->page)) {
                     $this->page = $this->pagemanager->renderpage($this->page, $this->router);
-                    $needtoberendered = true;
+                    $hasbeenrendered = true;
                 }
-                $this->templaterender($this->page);
+                $this->pagemanager->templaterender($this->page, $this->router);
 
 
                 $this->page->adddisplaycount();
@@ -190,12 +144,35 @@ class Controllerpage extends Controller
 
                 sleep($this->page->sleep());
 
-                echo $html;
+
+
+                if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+                    $ifmodifiedsince = DateTime::createFromFormat(DATE_RFC7231, $_SERVER['HTTP_IF_MODIFIED_SINCE'], new DateTimeZone('GMT'));
+                } else {
+                    $ifmodifiedsince = null;
+                }
+
+                if (!is_null($ifmodifiedsince) && $ifmodifiedsince >= $this->page->daterender()) {
+                    http_response_code(304);
+                } else {
+                    http_response_code(200);
+                    $datetime = $this->page->daterender();
+                    assert($datetime instanceof DateTimeImmutable);
+                    $lastmodified = date_format($datetime->setTimezone(new DateTimeZone('GMT')), DATE_RFC7231);
+                    // session_cache_limiter('public');
+                    header("Last-Modified: $lastmodified");
+                    header_remove("Expires");
+                    header_remove("Cache-Control");
+                    header_remove("Pragma");
+                    echo $html;
+                }
+                
+
 
                 $this->pagemanager->update($this->page);
 
-                if ($needtoberendered && Config::recursiverender()) {
-                    $this->recursiverender($this->page);
+                if ($hasbeenrendered && Config::recursiverender()) {
+                    $this->pagemanager->recursiverender($this->page, $this->router);
                 }
             } else {
                 http_response_code(403);
