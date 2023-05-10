@@ -29,9 +29,6 @@ PHPSTAN_FLAGS           += $(and $(CI),--no-progress)
 COMPOSER_FLAGS          += $(and $(CI),--prefer-dist --no-progress)
 
 # Files variables.
-js_sources  := $(wildcard $(js_src_dir)/*.js)
-js_bundles  := $(js_sources:$(js_src_dir)/%.js=$(js_build_dir)/%.bundle.js)
-js_srcmaps  := $(js_sources:$(js_src_dir)/%.js=$(js_build_dir)/%.bundle.js.map)
 zip_release := dist/w_cms_$(GIT_VERSION).zip
 phpcs_dir   := $(build_dir)/phpcs
 phpunit_dir := $(build_dir)/phpunit
@@ -44,7 +41,7 @@ all: vendor build
 
 # Build generated files.
 .PHONY: build
-build: VERSION $(js_bundles)
+build: VERSION assets/js;
 
 .PHONY: dev
 dev: ENV := dev
@@ -80,7 +77,7 @@ release-patch release-minor release-major: release-%: check node_modules
 
 # Inform Sentry of a new release.
 .PHONY: .sentryrelease
-.sentryrelease: build $(js_srcmaps)
+.sentryrelease: build
 	sentry-cli releases new $(GIT_VERSION)
 	sentry-cli releases set-commits $(GIT_VERSION) --auto
 	sentry-cli releases files $(GIT_VERSION) upload-sourcemaps assets/js --url-prefix '~/assets/js' --rewrite
@@ -111,7 +108,7 @@ dist/w_cms_%.zip: all
 # Remove non-useful files.
 	zip -d $@ \
 		$(js_src_dir)/\* \
-		$(js_srcmaps) \
+		assets/js/\*.map \
 		.github/\* \
 		.default.env \
 		.gitignore \
@@ -128,12 +125,9 @@ dist/w_cms_%.zip: all
 		tests/\* \
 		webpack.config.js
 
-# Generate the js bundles (and sourcemaps).
-assets/js/%.bundle.js assets/js/%.bundle.js.map: $(js_src_dir)/%.js node_modules webpack.config.js $(PREV_ENV_FILE) | assets/js
-	webpack --entry=./$< --output-path=$(@D) --output-filename=$(@F) --env=$(ENV) $(WEBPACK_FLAGS)
-
-assets/js:
-	mkdir -p $@
+assets/js: $(wildcard src/*.js) node_modules webpack.config.js $(PREV_ENV_FILE)
+	webpack --env=$(ENV) $(WEBPACK_FLAGS)
+	touch $@
 
 # Generate a .env file if none is present.
 .env:
