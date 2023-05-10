@@ -100,7 +100,8 @@
                     var pages = <?= $json ?>;
                 </script>
 
-                <script src="<?= Wcms\Model::jspath() ?>map.bundle.js" defer></script>
+                <script src="<?= Wcms\Model::jspath() ?>leaflet.bundle.js" async></script>
+                <script src="<?= Wcms\Model::jspath() ?>map.bundle.js" async></script>
 
             </div>
             
