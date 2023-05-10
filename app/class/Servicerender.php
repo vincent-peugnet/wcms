@@ -372,8 +372,8 @@ class Servicerender
         $text = $this->rss($text);
 
         $text = $this->authors($text);
-        $text = $this->wikiurl($text);
         $text = $this->authenticate($text);
+        $text = $this->wikiurl($text);
 
         $text = "<body>\n$text\n</body>";
         $text = $this->htmlparser($text);
