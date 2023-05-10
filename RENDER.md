@@ -18,9 +18,10 @@ flowchart TD
         2rss(RSS detection) -->
         2F(W inclusion 2) -->
         2H(Wiki links) -->
-        2I(Link and media analysis)
+        2I(Link and media analysis) -->
+        2pp(check for post render actions)
     end
-    2I -->
+    2pp -->
     3B((Head and Body gathering)) -->
     3C[[Rendered HTML]] --> 4c
     subgraph "post render actions"
@@ -43,6 +44,7 @@ flowchart TD
 
     1E -. "send TOC structure" .-> 2D
     2rss -. "send rss links" .-> 0rss
+    2pp -. trigger post render action .-> 4c
 ```
 
 - *every link: rendering option that transform every word as a link

@@ -117,7 +117,7 @@ class Servicerender
     private function gethmtl()
     {
 
-        $body = $this->parsebody($this->readbody());
+        $body = $this->bodyconstructor($this->readbody());
         $parsebody = $this->bodyparser($body);
         $this->postprocessaction = $this->checkpostprocessaction($parsebody);
         $head = $this->gethead();
@@ -156,7 +156,7 @@ class Servicerender
      *
      * @return string as the full rendered BODY of the page
      */
-    private function parsebody(string $body): string
+    private function bodyconstructor(string $body): string
     {
         $body = $this->basicinclusions($body);
 
