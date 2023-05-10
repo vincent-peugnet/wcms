@@ -192,12 +192,11 @@ class Media extends Item
                 break;
 
             case self::SOUND:
-                $code = '<audio controls src="' . $src . '"></audio>';
+                $code = "<audio controls src=\"$src\"></audio>";
                 break;
 
             case self::VIDEO:
-                $ext = $this->extension;
-                $code = '<video controls=""><source src="' . $src . '" type="video/' . $ext . '"></video>';
+                $code = "<video controls src=\"$src\"></video>";
                 break;
 
             case self::FONT:
