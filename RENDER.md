@@ -11,7 +11,7 @@ flowchart TD
     0rss(RSS feed declaration) --> 3B
 
     2A[[Body]] -->
-    2B(TODO : W inclusion 1)  ------->
+    2B(W inclusion 1)  ------->
     2C((Element inclusion)) --> 2D
     subgraph "post inclusion parser"
         2D(Summary) -->
@@ -55,10 +55,6 @@ flowchart TD
 
 List of W inclusions part 1
 
-1. replace `%LIST%` code
-1. replace `%MEDIA%` code
-1. replace `%MAP%` code
-1. replace `%RANDOM%` code
 1. replace `%DATE%`, `%DATEMODIF%`, `%TIME%`, `%TIMEMODIF%` codes
 1. replace `%THUMBNAIL%` code
 1. replace `%PAGEID%` and `%ID%` code
@@ -73,5 +69,9 @@ The point of doing those inclusions early is to be before __Header ID__ parser. 
 
 List of inclusions part 2
 
+1. replace `%LIST%` code
+1. replace `%MEDIA%` code
+1. replace `%MAP%` code
+1. replace `%RANDOM%` code
 1. replace `%AUTHORS%` code
 1. replace `%CONNECT%` code

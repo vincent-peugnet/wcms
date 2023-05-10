@@ -117,7 +117,7 @@ class Servicerender
     private function gethmtl()
     {
 
-        $body = $this->getbody($this->readbody());
+        $body = $this->parsebody($this->readbody());
         $parsebody = $this->bodyparser($body);
         $this->postprocessaction = $this->checkpostprocessaction($parsebody);
         $head = $this->gethead();
@@ -145,7 +145,6 @@ class Servicerender
         } else {
             $body = $this->page->body();
         }
-        $body = $this->automedialist($body);
         return $body;
     }
 
@@ -157,8 +156,10 @@ class Servicerender
      *
      * @return string as the full rendered BODY of the page
      */
-    private function getbody(string $body): string
+    private function parsebody(string $body): string
     {
+        $body = $this->basicinclusions($body);
+
         // Elements that can be detected
         $types = array_map("strtoupper", Model::HTML_ELEMENTS);
 
@@ -324,20 +325,25 @@ class Servicerender
         return $content . $subseparator;
     }
 
+    /**
+     * Perfom W's syntax basic inclusions
+     */
+    private function basicinclusions($text)
+    {
+        $text = $this->date($text);
+        $text = $this->thumbnail($text);
+        $text = $this->pageid($text);
+        $text = $this->url($text);
+        $text = $this->path($text);
+        $text = $this->title($text);
+        $text = $this->description($text);
+        return $text;
+    }
+
     private function elementparser(Element $element)
     {
         $content = $element->content();
-        $content = $this->automedialist($content);
-        $content = $this->pageoptlist($content);
-        $content = $this->pageoptmap($content);
-        $content = $this->randomopt($content);
-        $content = $this->date($content);
-        $content = $this->thumbnail($content);
-        $content = $this->pageid($content);
-        $content = $this->url($content);
-        $content = $this->path($content);
-        $content = $this->title($content, $this->page->title());
-        $content = $this->description($content, $this->page->description());
+        $content = $this->basicinclusions($content);
         if ($element->everylink() > 0) {
             $content = $this->everylink($content, $element->everylink());
         }
@@ -365,38 +371,43 @@ class Servicerender
     }
 
 
-    private function bodyparser(string $text)
+    private function bodyparser(string $html)
     {
-        $text = $this->summary($text);
+        $html = $this->automedialist($html);
+        $html = $this->pageoptlist($html);
+        $html = $this->pageoptmap($html);
+        $html = $this->randomopt($html);
 
-        $text = $this->rss($text);
+        $html = $this->summary($html);
 
-        $text = $this->authors($text);
-        $text = $this->authenticate($text);
-        $text = $this->wikiurl($text);
+        $html = $this->rss($html);
 
-        $text = "<body>\n$text\n</body>";
-        $text = $this->htmlparser($text);
+        $html = $this->authors($html);
+        $html = $this->authenticate($html);
+        $html = $this->wikiurl($html);
+
+        $html = "<body>\n$html\n</body>";
+        $html = $this->htmlparser($html);
 
 
-        return $text;
+        return $html;
     }
 
     /**
      * Replace `%TITLE%` code with page's title
      */
-    private function title($text, $title)
+    private function title($text)
     {
-        return str_replace('%TITLE%', $title, $text);
+        return str_replace('%TITLE%', $this->page->title(), $text);
     }
 
 
     /**
      * Replace `%DESCRIPTION%` code with page's description
      */
-    private function description($text, $desc)
+    private function description($text)
     {
-        return str_replace('%DESCRIPTION%', $desc, $text);
+        return str_replace('%DESCRIPTION%', $this->page->description(), $text);
     }
 
     /**
