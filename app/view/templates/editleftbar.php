@@ -88,7 +88,7 @@
 
 
 
-    <details <?= $page->isgeo() ? 'open' : '' ?>>
+    <details <?= $page->isgeo() ? 'open' : '' ?> id="geomap-details">
         <summary>geolocalisation</summary>
         <div id="geomap"></div>
         <fieldset>

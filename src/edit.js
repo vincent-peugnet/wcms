@@ -31,6 +31,9 @@ let inputLatitude = document.querySelector('input[name=latitude]');
 /** @var {HTMLInputElement} */
 let inputLongitude = document.querySelector('input[name=longitude]');
 
+/** @var {HTMLDetailsElement} */
+let details = document.getElementById('geomap-details');
+
 if (isNaN(inputLatitude.valueAsNumber) || isNaN(inputLongitude.valueAsNumber)) {
     var lat = 0;
     var long = 0;
@@ -55,6 +58,7 @@ let marker = L.marker([lat, long], {
 inputLatitude.addEventListener('change', inputLatitudeChangeHandler);
 inputLongitude.addEventListener('change', inputLongitudeChangeHandler);
 marker.addEventListener('dragend', markerDragHandler);
+details.addEventListener('toggle', map.invalidateSize);
 
 /**
  * Manage a change in the latitude input
