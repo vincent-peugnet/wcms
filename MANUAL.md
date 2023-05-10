@@ -57,15 +57,15 @@ You should now see something that look like what you've typed.
 #### Create a hyperlink
 
 
-The [markdown synthax](https://commonmark.org/), this is a formating standard well known accross the web. It's main goal is to be a intermediate between an easy to read prose text, and the internet standard tag language, the HTML. One of the main interest of Markdown, is it is ability to be mixed with HTML. That way, people can type more easily basic text, and switch to HTML at any time, to achieve a more complex layout. You can use the official Markdonw synthax with __W__ alongside with HTML to build your pages.
+The [markdown syntax](https://commonmark.org/), this is a formating standard well known accross the web. It's main goal is to be a intermediate between an easy to read prose text, and the internet standard tag language, the HTML. One of the main interest of Markdown, is it is ability to be mixed with HTML. That way, people can type more easily basic text, and switch to HTML at any time, to achieve a more complex layout. You can use the official Markdonw syntax with __W__ alongside with HTML to build your pages.
 
-[Official website describing Markdown synthax](https://commonmark.org/help/)
+[Official website describing Markdown syntax](https://commonmark.org/help/)
 
-One of the most interesting things to do when you use internet publishing, is to create HYPERLINKS. __W__ encourage you creating those links between pages using a very light synthax. There are multiple ways to do it.
+One of the most interesting things to do when you use internet publishing, is to create HYPERLINKS. __W__ encourage you creating those links between pages using a very light syntax. There are multiple ways to do it.
 
 1. Using classic HTML : `<a href="<page_id>">click here</a>`
 2. Using Markdown :  `[click here](<page_id>)`
-3. Using wiki synthax : `[[<page_id>]]`
+3. Using wiki syntax : `[[<page_id>]]`
 
 All those methods will create a link pointing to the `<page_id>` you've given.
 
@@ -76,7 +76,7 @@ Those kind of links are called internal links beccause they stay inside of your 
 
 When adding an image to a page, you can either use an already web-hosted image, wich is a bit dangerous, or host yourself the image using W's [media interface](#media-manager).
 
-Markdown synthax for inserting an image :
+Markdown syntax for inserting an image :
 
     ![<alt_comment>](<image_address>)
 
@@ -90,7 +90,7 @@ Once you're here, you'll have to first choose, using the navigation panel on the
 
 When you've selected the folder you prefer for hosting your image, it's time for uploading it using __File > Upload__. Browse you computer or drag n' drop files onto the "Choose Files" button, then click "Upload". Note that you can upload multiple files at once !
 
-Now you should see your files appearing in the table. W will remove whitespaces and special characters of your medias to avoid synthax problems.
+Now you should see your files appearing in the table. W will remove whitespaces and special characters of your medias to avoid syntax problems.
 
 To add the image on your page, the simplest method is to copy the Makdown generated code on the right side.
 
@@ -195,7 +195,7 @@ This is the
 - Geolocalisation: to set [latitude](#latitude) and [longitude](#longitude) metadatas
 - Templating
 - Advanced
-- Help : a quick synthax reference for markdown and W synthax
+- Help : a quick syntax reference for markdown and W syntax
 
 ##### contents area
 
@@ -332,15 +332,15 @@ When you update or add pages in the bookmark's scope, you need to manually refre
 Page Editing
 ------------
 
-### Synthax
+### Syntax
 
 #### Markdown
 
-- [Daring Fireballs](https://daringfireball.net/projects/markdown/syntax) Official reference of Markdown Synthax
+- [Daring Fireballs](https://daringfireball.net/projects/markdown/syntax) Official reference of Markdown Syntax
 - [Michel Fortin's Markdown extra](https://michelf.ca/projects/php-markdown/extra/) The library used in W.
 
 
-#### W specific synthax
+#### W specific syntax
 
 ##### Quick links
 
@@ -348,7 +348,7 @@ Page Editing
 
 Will generate :
 
-    <a href="ID" title="DESCRIPTION" class="internal">TITLE</a>
+    <a href="ID" title="DESCRIPTION" class="internal page">TITLE</a>
 
 Where `DESCRIPTION`, `TITLE` and `ID` are the [description](#description) and [title](page-title) of the page related to the [id](#page-id).
 
