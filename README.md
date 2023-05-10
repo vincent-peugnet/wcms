@@ -62,6 +62,10 @@ You can even view a graph of links.
 ![graph](https://w.club1.fr/images/11.png)
 
 
+Rendering diagram
+-----------------
+
+W page rendering is document through [this diagram](RENDER.md).
 
 
 API
