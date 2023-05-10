@@ -335,13 +335,14 @@ class Servicerender
         $content = $this->pageid($content);
         $content = $this->url($content);
         $content = $this->path($content);
+        $content = $this->title($content, $this->page->title());
+        $content = $this->description($content, $this->page->description());
         if ($element->everylink() > 0) {
             $content = $this->everylink($content, $element->everylink());
         }
         if ($element->markdown()) {
             $content = $this->markdown($content);
         }
-        $content = $this->desctitle($content, $this->page->description(), $this->page->title());
         if ($element->headerid()) {
             $content = $this->headerid(
                 $content,
@@ -373,21 +374,32 @@ class Servicerender
 
         $text = $this->authors($text);
         $text = $this->wikiurl($text);
+        $text = $this->authenticate($text);
 
         $text = "<body>\n$text\n</body>";
         $text = $this->htmlink($text);
 
-        $text = $this->authenticate($text);
 
         return $text;
     }
 
-    private function desctitle($text, $desc, $title)
+    /**
+     * Replace `%TITLE%` code with page's title
+     */
+    private function title($text, $title)
     {
-        $text = str_replace('%TITLE%', $title, $text);
-        $text = str_replace('%DESCRIPTION%', $desc, $text);
-        return $text;
+        return str_replace('%TITLE%', $title, $text);
     }
+
+
+    /**
+     * Replace `%DESCRIPTION%` code with page's description
+     */
+    private function description($text, $desc)
+    {
+        return str_replace('%DESCRIPTION%', $desc, $text);
+    }
+
     /**
      * Search and replace referenced media code by full absolute address.
      * Add a target="_blank" attribute to link pointing to media.
