@@ -5,6 +5,7 @@ namespace Wcms;
 use AltoRouter;
 use DOMDocument;
 use DOMElement;
+use DOMNodeList;
 use Exception;
 use InvalidArgumentException;
 use LogicException;
@@ -366,8 +367,6 @@ class Servicerender
 
     private function bodyparser(string $text)
     {
-        $text = $this->media($text);
-
         $text = $this->summary($text);
 
         $text = $this->rss($text);
@@ -377,7 +376,7 @@ class Servicerender
         $text = $this->authenticate($text);
 
         $text = "<body>\n$text\n</body>";
-        $text = $this->htmlink($text);
+        $text = $this->htmlparser($text);
 
 
         return $text;
@@ -399,23 +398,6 @@ class Servicerender
     {
         return str_replace('%DESCRIPTION%', $desc, $text);
     }
-
-    /**
-     * Search and replace referenced media code by full absolute address.
-     * Add a target="_blank" attribute to link pointing to media.
-     *
-     * About the regex : it will match everything that do not start with a `./` a `/` or an URI sheme.
-     * (`https:`, `ftps:`, `mailto:`, `matrix:` etc.) and contain at list one point `.`
-     */
-    private function media(string $text): string
-    {
-        $regex = '%href="(?!([/#]|[a-zA-Z\.\-\+]+:|\.+/))([^"]+\.[^";]+)"%';
-        $text = preg_replace($regex, 'href="' . Model::mediapath() . '$2" target="_blank"', $text);
-        $regex = '%src="(?!([/#]|[a-zA-Z\.\-\+]+:|\.+/))([^"]+\.[^";]+)"%';
-        $text = preg_replace($regex, 'src="' . Model::mediapath() . '$2"', $text);
-        return $text;
-    }
-
 
     /**
      * Look for datas about pages.
@@ -447,21 +429,23 @@ class Servicerender
     }
 
     /**
-     * Add `external` or `internal` class attribute in `<a>` anchor HTML link tags
-     *
-     * For internal link, indicate if page exist or not.
+     * Add `external` or `internal` class attribute in `<a>` anchor HTML link tags.
+     * In case of internal link, add `media` or `page` class depending of the kind of ressource it is pointing to.     *
+     * For internal link to pages, indicate if page exist or not.
      * If the link point to the current page, add `current_page` class.
      * If it exist, add description in title and privacy as class.
      *
+     * Add `external` or `internal` class attribute in `<img>`, `audio`, `video` or `source` HTML tags.
+     *
      * Keep existing class and remove duplicates or useless spaces in class attribute
      */
-    private function htmlink(string $text): string
+    private function htmlparser(string $html): string
     {
         $dom = new DOMDocument('1.0', 'UTF-8');
         /** Force UTF-8 encoding for loadHTML by defining it in the content itself with an XML tag that need to be removed later */
-        $text = '<?xml encoding="utf-8" ?>' . $text;
+        $html = '<?xml encoding="utf-8" ?>' . $html;
         /** @phpstan-ignore-next-line Error supposed to be thrown here but is'nt */
-        $dom->loadHTML($text, LIBXML_NOERROR | LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED);
+        $dom->loadHTML($html, LIBXML_NOERROR | LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED);
         $dom->removeChild($dom->firstChild);
         $links = $dom->getElementsByTagName('a');
         foreach ($links as $link) {
@@ -476,10 +460,10 @@ class Servicerender
                 $classes[] = 'external';
                 if ($this->externallinkblank) {
                     $link->setAttribute('target', '_blank');
-                    $link->setAttribute('class', implode(' ', array_unique($classes)));
                 }
             } elseif (preg_match('~^([a-z0-9-_]+)((\/?#[a-z0-9-_]+)|(\/([\w\-\%\[\]\=\?\&]*)))?$~', $href, $out)) {
                 $classes[] = 'internal';
+                $classes[] = 'page';
                 $fragment = $out[2] ?? '';
                 $link->setAttribute('href', $this->upage($out[1]) . $fragment);
                 if (isset($out[5]) && in_array($out[5], ['add', 'edit', 'update', 'render', 'download', 'delete'])) {
@@ -496,7 +480,7 @@ class Servicerender
                     }
                     $classes[] = $page->secure('string');
                     $this->linkto[] = $page->id();
-                } catch (RuntimeException $e) {
+                } catch (RuntimeException $e) { // Page does not exist
                     $link->setAttribute('title', Config::existnot());
                     $classes[] = 'existnot';
                     // TODO: store internal link that exist not in $this
@@ -504,11 +488,56 @@ class Servicerender
                 if ($this->internallinkblank) {
                     $link->setAttribute('target', '_blank');
                 }
+            // Links pointing to medias
+            } elseif (preg_match('~^(?!([\/#]|[a-zA-Z\.\-\+]+:|\.+\/))([^"]+\.[^";]+)$~', $href, $out)) {
+                $classes[] = 'internal';
+                $classes[] = 'media';
+                $link->setAttribute('href', Model::mediapath() . $out[2]);
+            } elseif (preg_match('~^\.\/media~', $href)) {
+                $classes[] = 'internal';
+                $classes[] = 'media';
+            }
+            if (!empty($classes)) {
                 $link->setAttribute('class', implode(' ', array_unique($classes)));
             }
         }
+        $images = $dom->getElementsByTagName('img');
+        $this->sourceparser($images);
+        $sources = $dom->getElementsByTagName('source');
+        $this->sourceparser($sources);
+        $audios = $dom->getElementsByTagName('audio');
+        $this->sourceparser($audios);
+        $videos = $dom->getElementsByTagName('video');
+        $this->sourceparser($videos);
         // By passing the documentElement to saveHTML, special chars are not converted to entities
         return $dom->saveHTML($dom->documentElement);
+    }
+
+    /**
+     * Edit `src` attributes in media HTML tags
+     */
+    private function sourceparser(DOMNodeList $sourcables): void
+    {
+        foreach ($sourcables as $sourcable) {
+            assert($sourcable instanceof DOMElement);
+            $src = $sourcable->getAttribute('src');
+            $class = $sourcable->getAttribute('class');
+            $classes = explode(' ', $class);
+            $classes = array_filter($classes, function (string $var) {
+                return !empty($var);
+            });
+            if (preg_match('~^https?:\/\/~', $src)) {
+                $classes[] = 'external';
+            } elseif (preg_match('~^(?!([\/#]|[a-zA-Z\.\-\+]+:|\.+\/))([^"]+\.[^";]+)$~', $src, $out)) {
+                $sourcable->setAttribute('src', Model::mediapath() . $out[2]);
+                $classes[] = 'internal';
+            } elseif (preg_match('~^\.\/media~', $src)) {
+                $classes[] = 'internal';
+            }
+            if (!empty($classes)) {
+                $sourcable->setAttribute('class', implode(' ', array_unique($classes)));
+            }
+        }
     }
 
     /**
