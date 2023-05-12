@@ -67,6 +67,7 @@ class Controllermedia extends Controller
                 $this->workspace2session();
             }
 
+            $vars['filtercode'] = !empty($_POST); // indicate that filter code has been generated
             $vars['medialist'] = $medialist;
             $vars['dirlist'] = $dirlist;
             $vars['pathlist'] = $pathlist;

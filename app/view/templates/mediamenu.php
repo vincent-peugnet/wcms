@@ -92,7 +92,7 @@
     </details>
 
 
-    <details>
+    <details<?= $filtercode ? " open" : " " ?>>
         <summary>Filter</summary>
         <div class="submenu">
             <h2>Print folder content</h2>

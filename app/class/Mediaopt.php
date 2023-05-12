@@ -4,7 +4,7 @@ namespace Wcms;
 
 class Mediaopt extends Item
 {
-    /** @var string With a `/media` at the beginning and no trailong slash */
+    /** @var string With a `/media` at the beginning and no trailing slash */
     protected $path;
 
     /** @var string */

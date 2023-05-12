@@ -9,7 +9,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
 
 <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'media', 'pagelist' => $pagelist]) ?>
 
-<?php $this->insert('mediamenu', ['user' => $user, 'pathlist' => $pathlist, 'mediaopt' => $mediaopt, 'maxuploadsize' => $maxuploadsize]) ?>
+<?php $this->insert('mediamenu', ['user' => $user, 'pathlist' => $pathlist, 'mediaopt' => $mediaopt, 'maxuploadsize' => $maxuploadsize, 'filtercode' => $filtercode]) ?>
 
 <main class="media">
 
