@@ -47,6 +47,9 @@ class Servicerender
      * */
     protected $rsslist = [];
 
+    /** @var bool Indicate presence of an included MAP, meant to call the script in page's Head */
+    protected bool $map = false;
+
     /**
      * @param AltoRouter $router            Router used to generate urls
      * @param Modelpage $pagemanager        [optionnal] can be usefull if a pagemanager already store a page list
@@ -266,6 +269,10 @@ class Servicerender
         }
         if (!empty($this->page->javascript())) {
             $head .= "<script src=\"$renderpath$id.js\" async/></script>\n";
+        }
+        if ($this->map) {
+            $src = Model::jspath() . 'pagemap.bundle.js';
+            $head .= "<script src=\"$src\" async/></script>";
         }
         return $head;
     }
@@ -758,6 +765,7 @@ class Servicerender
                 $this->linkto = array_merge($this->linkto, array_keys($pagetable));
                 $content = $optmap->maphtml($pagetable, $this->router);
                 $text = str_replace($match['fullmatch'], $content, $text);
+                $this->map = true;
             } catch (RuntimeException $e) {
                 Logger::errorex($e);
             }

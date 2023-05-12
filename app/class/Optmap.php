@@ -39,8 +39,6 @@ class Optmap extends Optcode
 
         $html .= "<script>var pages = $json;\nvar mapId = \"$mapid\";\n</script>";
 
-        $html .= "\n<script src=\"$mapjs\" defer></script>\n";
-
 
 
         return $html;
