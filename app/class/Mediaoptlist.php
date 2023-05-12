@@ -42,7 +42,7 @@ class Mediaoptlist extends Mediaopt
                 $id = 'id="media_' . $media->filename() . '"';
                 $path = $media->getincludepath();
                 $ext = $media->extension();
-                $filename = $media->filename() . '.' . $ext;
+                $filename = $media->filename();
                 if ($media->type() == 'image') {
                     $div .= '<img alt="' . $media->filename() . '" ' . $id . ' src="' . $path . '" >';
                 } elseif ($media->type() == 'sound') {

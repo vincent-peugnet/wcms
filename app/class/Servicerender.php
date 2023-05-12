@@ -548,6 +548,9 @@ class Servicerender
             if (!empty($classes)) {
                 $sourcable->setAttribute('class', implode(' ', array_unique($classes)));
             }
+            if ($sourcable->tagName === 'img') {
+                $sourcable->setAttribute('loading', 'lazy');
+            }
         }
     }
 
