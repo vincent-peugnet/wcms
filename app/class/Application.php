@@ -28,6 +28,9 @@ class Application
             if (!is_dir(Model::RENDER_DIR)) {
                 mkdir(Model::RENDER_DIR);
             }
+            if (boolval($_POST['defaultbookmarks'])) {
+                $this->defaultbookmarks();
+            }
             try {
                 Config::savejson();
             } catch (RuntimeException $e) {
@@ -89,7 +92,7 @@ class Application
         }
     }
 
-    public function configform()
+    protected function configform()
     {
         ?>
         <h1>Configuration</h1>
@@ -143,13 +146,22 @@ class Application
                 (16 to 128 characters)
             </i></p>
         </div>
+        <div>
+            <h2>default</h2>
+            <input type="hidden" name="defaultbookmarks" value="0">
+            <input type="checkbox" name="defaultbookmarks" id="defaultbookmarks" value="1" checked>
+            <label for="defaultbookmarks">default bookmarks</label>
+            <p>
+                Gives you a set of default bookmarks. Usefull in most case 😉.
+            </p>
+        </div>
         <input type="submit" value="set">
         </form>
 
         <?php
     }
 
-    public function adminform()
+    protected function adminform()
     {
         ?>
 
@@ -179,6 +191,52 @@ class Application
         </form>
 
         <?php
+    }
+
+    /**
+     * Create default bookmarks set during install
+     */
+    protected function defaultbookmarks()
+    {
+        $bookmarkmanager = new Modelbookmark();
+        if (empty($bookmarkmanager->list())) {
+            try {
+                $lastedited = new Opt(['sortby' => 'datemodif', 'limit' => 5, 'order' => -1]);
+                $lasteditedbookmark = new Bookmark();
+                $lasteditedbookmark->init(
+                    'last5edited',
+                    'home',
+                    $lastedited->getaddress(),
+                    '🕒',
+                    'Last 5 edited',
+                    'Get the 5 last edited pages of the database'
+                );
+                $lastcreated = new Opt(['sortby' => 'datecreation', 'limit' => 10, 'order' => -1]);
+                $lastcreatedbookmark = new Bookmark();
+                $lastcreatedbookmark->init(
+                    'last10created',
+                    'home',
+                    $lastcreated->getaddress(),
+                    '🖍️',
+                    'Last 10 created',
+                    'Get the 10 last created pages of the database'
+                );
+                $emptytag = new Opt(['tagcompare' => 'EMPTY']);
+                $emptytagbookmark = new Bookmark();
+                $emptytagbookmark->init(
+                    'notags',
+                    'home',
+                    $emptytag->getaddress(),
+                    '❌',
+                    'No tags',
+                    'Pages that does\'nt have any tag'
+                );
+                    $bookmarkmanager->add($lasteditedbookmark);
+                    $bookmarkmanager->add($lastcreatedbookmark);
+                    $bookmarkmanager->add($emptytagbookmark);
+            } catch (RuntimeException $e) {
+            }
+        }
     }
 }
 

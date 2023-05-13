@@ -48,13 +48,20 @@ class Bookmark extends Item
         $this->hydrateexception($datas);
     }
 
-    public function init(string $id, string $route, string $query, array $params = [], string $icon = '⭐')
-    {
+    public function init(
+        string $id,
+        string $route,
+        string $query,
+        string $icon = '⭐',
+        string $name = '',
+        string $description = ''
+    ) {
         $this->setid($id);
         $this->setroute($route);
         $this->setquery($query);
-        $this->setparams($params);
         $this->seticon($icon);
+        $this->setname($name);
+        $this->setdescription($description);
     }
 
     public function ispublic(): bool
