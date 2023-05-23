@@ -38,7 +38,7 @@ module.exports = (env) => {
 			},
 			media: './src/media.js',
 			sentry: './src/sentry.js',
-			leaflet: 'leaflet',
+			leaflet: ['leaflet', 'leaflet/dist/leaflet.css'],
 		},
 		output: {
 			filename: '[name].bundle.js',
