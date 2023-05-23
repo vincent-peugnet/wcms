@@ -22,13 +22,23 @@ module.exports = (env) => {
 			errorDetails: true,
 		},
 		entry: {
-			edit: './src/edit.js',
+			edit: {
+				import: './src/edit.js',
+				dependOn: 'leaflet',
+			},
 			home: './src/home.js',
 			graph: './src/graph.js',
-			map: './src/map.js',
-			pagemap: './src/pagemap.js',
+			map: {
+				import: './src/map.js',
+				dependOn: 'leaflet',
+			},
+			pagemap: {
+				import: './src/pagemap.js',
+				dependOn: 'leaflet',
+			},
 			media: './src/media.js',
 			sentry: './src/sentry.js',
+			leaflet: ['leaflet', 'leaflet/dist/leaflet.css'],
 		},
 		output: {
 			filename: '[name].bundle.js',

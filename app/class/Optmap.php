@@ -32,7 +32,6 @@ class Optmap extends Optcode
         }, $pages);
         $geopages = array_values($geopages);
         $json = json_encode($geopages);
-        $mapjs = Model::jspath() . 'pagemap.bundle.js';
         $mapid = 'geomap';
 
         $html = "<div id=\"$mapid\" class=\"map\" style=\"min-height: 400px; min-width: 400px;\"></div>\n";

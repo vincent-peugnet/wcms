@@ -271,8 +271,9 @@ class Servicerender
             $head .= "<script src=\"$renderpath$id.js\" async/></script>\n";
         }
         if ($this->map) {
-            $src = Model::jspath() . 'pagemap.bundle.js';
-            $head .= "<script src=\"$src\" async/></script>";
+            $leafletjs = Model::jspath() . 'leaflet.bundle.js';
+            $mapjs = Model::jspath() . 'pagemap.bundle.js';
+            $head .= "\n<script src=\"$leafletjs\" async></script>\n<script src=\"$mapjs\" async></script>\n";
         }
         return $head;
     }

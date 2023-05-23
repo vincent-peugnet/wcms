@@ -33,7 +33,8 @@ $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [$cs
     let pagetitle = '<?= $this->e($page->title()) ?>';
     let theme = '<?= $this->e($workspace->highlighttheme()) ?>';
 </script>
-<script src="<?= Wcms\Model::jspath() ?>edit.bundle.js"></script>
+<script src="<?= Wcms\Model::jspath() ?>leaflet.bundle.js" async></script>
+<script src="<?= Wcms\Model::jspath() ?>edit.bundle.js" async></script>
 
 <?php } ?>
 
