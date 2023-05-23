@@ -58,7 +58,7 @@ let marker = L.marker([lat, long], {
 inputLatitude.addEventListener('change', inputLatitudeChangeHandler);
 inputLongitude.addEventListener('change', inputLongitudeChangeHandler);
 marker.addEventListener('dragend', markerDragHandler);
-details.addEventListener('toggle', map.invalidateSize);
+details.addEventListener('toggle', () => map.invalidateSize());
 
 /**
  * Manage a change in the latitude input
