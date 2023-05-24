@@ -51,10 +51,17 @@ class Page extends Item
     protected $password;
     protected $postprocessaction;
 
+    protected int $version;
+
     public const LATITUDE_MIN = -90;
     public const LATITUDE_MAX = 90;
     public const LONGITUDE_MIN = -180;
     public const LONGITUDE_MAX = 180;
+
+    public const V1 = 1;
+    public const V2 = 2;
+
+    public const VERSIONS = [self::V1, self::V2];
 
     public const PUBLIC = 0;
     public const PRIVATE = 1;
@@ -131,6 +138,7 @@ class Page extends Item
         $this->setrefresh(0);
         $this->setpassword('');
         $this->postprocessaction = false;
+        $this->version = Config::pageversion();
     }
 
     public function ispublic(): bool
@@ -428,6 +436,11 @@ class Page extends Item
     public function postprocessaction($type = 'int'): bool
     {
         return $this->postprocessaction;
+    }
+
+    public function version($type = 'int'): int
+    {
+        return $this->version;
     }
 
 
@@ -832,6 +845,13 @@ class Page extends Item
     public function setpostprocessaction($postprocessaction): void
     {
         $this->postprocessaction = boolval($postprocessaction);
+    }
+
+    public function setversion($version): void
+    {
+        if (in_array($version, self::VERSIONS)) {
+            $this->version = $version;
+        }
     }
 
 
