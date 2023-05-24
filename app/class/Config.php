@@ -50,6 +50,11 @@ abstract class Config
     /** @var string $lang Default string for pages */
     protected static $lang = "en";
 
+    /** Page version during creation */
+    protected static int $pageversion = Page::V1;
+
+
+
     public const LANG_MIN = 2;
     public const LANG_MAX = 16;
 
@@ -75,12 +80,16 @@ abstract class Config
         }
     }
 
-    public static function readconfig()
+    public static function readconfig(): bool
     {
         if (file_exists(Model::CONFIG_FILE)) {
             $current = file_get_contents(Model::CONFIG_FILE);
             $datas = json_decode($current, true);
             self::hydrate($datas);
+            // Setup old config file to user page version 1
+            if (isset($datas['pageaversion'])) {
+                self::$pageversion = Page::V1;
+            }
             return true;
         } else {
             return false;
@@ -316,6 +325,11 @@ abstract class Config
         return self::$disablejavascript;
     }
 
+    public static function pageversion(): int
+    {
+        return self::$pageversion;
+    }
+
 
     // __________________________________________ S E T ______________________________________
 
@@ -533,5 +547,12 @@ abstract class Config
     public static function setdisablejavascript($disablejavascript)
     {
         self::$disablejavascript = boolval($disablejavascript);
+    }
+
+    public static function setpageversion($pageversion): void
+    {
+        if (in_array($pageversion, Page::VERSIONS)) {
+            self::$pageversion = $pageversion;
+        }
     }
 }
