@@ -183,6 +183,26 @@
                         </fieldset>
 
 
+
+                        <fieldset data-default="<?= $opt->isdefault('version') ? '1' : '0' ?>">
+                            <legend>Version</legend>
+                            <div>
+                                <ul>
+                                    <li>
+                                        <input type="radio" id="version0" name="version" value="0" <?= $opt->version() === 0 ? "checked" : "" ?> />
+                                        <label for="version0">all</label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" id="version1" name="version" value="<?= Wcms\Page::V1 ?>" <?= $opt->version() === Wcms\Page::V1  ? "checked" : "" ?> />
+                                        <label for="version1">v1</label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" id="version2" name="version" value="<?= Wcms\Page::V2 ?>" <?= $opt->version() === Wcms\Page::V2  ? "checked" : "" ?> />
+                                        <label for="version2">v2</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </fieldset>
                         
 
                         <fieldset data-default="<?= $opt->isdefault('invert') ? '1' : '0' ?>">

@@ -37,6 +37,8 @@ class Opt extends Item
 
     protected bool $geo = false;
 
+    protected int $version = 0;
+
     protected $pageidlist = [];
 
     /** @var array $pagevarlist List fo every properties of an Page object */
@@ -63,6 +65,7 @@ class Opt extends Item
         'since',
         'until',
         'geo',
+        'version',
         'invert',
         'limit'
     ];
@@ -371,6 +374,11 @@ class Opt extends Item
         return $this->geo;
     }
 
+    public function version(): int
+    {
+        return $this->version;
+    }
+
     public function invert(): bool
     {
         return $this->invert;
@@ -545,6 +553,14 @@ class Opt extends Item
     public function setgeo($geo)
     {
         $this->geo = boolval($geo);
+    }
+
+    public function setversion($version): void
+    {
+        $version = intval($version);
+        if ($version === 0 || in_array($version, Page::VERSIONS)) {
+            $this->version = $version;
+        }
     }
 
     public function setinvert($invert)
