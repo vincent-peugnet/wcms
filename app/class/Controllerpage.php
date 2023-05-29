@@ -31,7 +31,7 @@ class Controllerpage extends Controller
             http_response_code(308);
             $this->routedirect($route, ['page' => $cleanid]);
         } else {
-            $this->page = new Page(['id' => $cleanid]);
+            $this->page = $this->pagemanager->newpage(['id' => $cleanid]);
         }
     }
 
@@ -42,17 +42,17 @@ class Controllerpage extends Controller
      */
     public function importpage(): bool
     {
-        if (isset($_SESSION['pageupdate']['id']) && $_SESSION['pageupdate']['id'] == $this->page->id()) {
-            $this->page = new Page($_SESSION['pageupdate']);
-            unset($_SESSION['pageupdate']);
-            return true;
-        } else {
-            try {
+        try {
+            if (isset($_SESSION['pageupdate']['id']) && $_SESSION['pageupdate']['id'] == $this->page->id()) {
+                $this->page = $this->pagemanager->parsepage($_SESSION['pageupdate']);
+                unset($_SESSION['pageupdate']);
+                return true;
+            } else {
                 $this->page = $this->pagemanager->get($this->page);
                 return true;
-            } catch (RuntimeException $e) {
-                return false;
             }
+        } catch (RuntimeException $e) {
+            return false;
         }
     }
 
@@ -233,16 +233,7 @@ class Controllerpage extends Controller
 
 
         if ($this->importpage() && $this->canedit()) {
-            $datas['tablist'] = [
-                'main' => $this->page->main(),
-                'css' => $this->page->css(),
-                'header' => $this->page->header(),
-                'nav' => $this->page->nav(),
-                'aside' => $this->page->aside(),
-                'footer' => $this->page->footer(),
-                'body' => $this->page->body(),
-                'javascript' => $this->page->javascript()
-            ];
+            $datas['tablist'] = $this->page->tabs();
 
             $datas['faviconlist'] = $this->mediamanager->listfavicon();
             $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();

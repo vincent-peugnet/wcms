@@ -6,7 +6,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 
-class Page extends Item
+abstract class Page extends Item
 {
     protected $id;
     protected $title;
@@ -22,11 +22,6 @@ class Page extends Item
     protected $css;
     protected $javascript;
     protected $body;
-    protected $header;
-    protected $main;
-    protected $nav;
-    protected $aside;
-    protected $footer;
     protected $externalcss;
     protected $customhead;
     protected $secure;
@@ -68,7 +63,7 @@ class Page extends Item
     public const NOT_PUBLISHED = 2;
 
     public const SECUREMAX = 2;
-    public const TABS = ['main', 'css', 'header', 'body', 'nav', 'aside', 'footer', 'javascript'];
+    public const TABS = ['css', 'body', 'javascript'];
     public const VAR_DATE = ['date', 'datecreation', 'datemodif', 'daterender'];
     public const TEMPLATE_OPTIONS = ['externalcss', 'externaljavascript', 'favicon', 'thumbnail', 'recursivecss'];
 
@@ -83,13 +78,13 @@ class Page extends Item
     }
 
     /**
-     * Return a list of all object vars name as strings
+     * Return a list of all class vars name as strings
      *
      * @return string[]
      */
-    public function getobjectvars(): array
+    public static function getclassvars(): array
     {
-        return array_keys(get_object_vars($this));
+        return array_keys(get_class_vars(self::class));
     }
 
     public function reset()
@@ -110,15 +105,9 @@ class Page extends Item
         $this->setcss('');
         $this->setjavascript('');
         $this->setbody(Config::defaultbody());
-        $this->setheader('');
-        $this->setmain('');
-        $this->setnav('');
-        $this->setaside('');
-        $this->setfooter('');
         $this->setexternalcss([]);
         $this->setcustomhead('');
         $this->setsecure(Config::defaultprivacy());
-        $this->setinterface('main');
         $this->setlinkto([]);
         $this->settemplatebody('');
         $this->settemplatecss('');
@@ -138,7 +127,6 @@ class Page extends Item
         $this->setrefresh(0);
         $this->setpassword('');
         $this->postprocessaction = false;
-        $this->version = Config::pageversion();
     }
 
     public function ispublic(): bool
@@ -162,6 +150,26 @@ class Page extends Item
     public function isgeo(): bool
     {
         return (!is_null($this->latitude) && !is_null($this->longitude));
+    }
+
+    /**
+     * @return string[]                     Page fields containting content
+     */
+    public function contents(): array
+    {
+        return array_diff($this::TABS, Page::TABS);
+    }
+
+    /**
+     * @return string[]                     Tabs contents to be included in edit page
+     */
+    public function tabs(): array
+    {
+        $tabs = [];
+        foreach ($this::TABS as $tab) {
+            $tabs[$tab] = $this->$tab;
+        }
+        return $tabs;
     }
 
     // _____________________________________________________ G E T ____________________________________________________
@@ -236,6 +244,11 @@ class Page extends Item
         return $this->datetransform('daterender', $option);
     }
 
+    public function primary($type = ''): string
+    {
+        return '';
+    }
+
     public function css($type = 'string')
     {
         return $this->css;
@@ -250,27 +263,6 @@ class Page extends Item
     {
         return $this->body;
     }
-
-    public function header($type = 'string')
-    {
-        return $this->header;
-    }
-
-    public function main($type = 'string')
-    {
-        return $this->main;
-    }
-
-    public function nav($type = "string")
-    {
-        return $this->nav;
-    }
-
-    public function aside($type = "string")
-    {
-        return $this->aside;
-    }
-
     public function externalcss($type = "array")
     {
         return $this->externalcss;
@@ -283,11 +275,6 @@ class Page extends Item
         } elseif ($type === 'int') {
             return substr_count($this->customhead, "\n") + 1;
         }
-    }
-
-    public function footer($type = "string")
-    {
-        return $this->footer;
     }
 
     public function secure($type = 'int')
@@ -621,38 +608,6 @@ class Page extends Item
         }
     }
 
-    public function setheader($header)
-    {
-        if (strlen($header) < self::LENGTH_LONG_TEXT && is_string($header)) {
-            $header = crlf2lf($header);
-            $this->header = $header;
-        }
-    }
-
-    public function setmain($main)
-    {
-        if (strlen($main) < self::LENGTH_LONG_TEXT and is_string($main)) {
-            $main = crlf2lf($main);
-            $this->main = $main;
-        }
-    }
-
-    public function setnav($nav)
-    {
-        if (strlen($nav) < self::LENGTH_LONG_TEXT and is_string($nav)) {
-            $nav = crlf2lf($nav);
-            $this->nav = $nav;
-        }
-    }
-
-    public function setaside($aside)
-    {
-        if (strlen($aside) < self::LENGTH_LONG_TEXT and is_string($aside)) {
-            $aside = crlf2lf($aside);
-            $this->aside = $aside;
-        }
-    }
-
     public function setexternalcss($externalcss)
     {
         if (is_array($externalcss)) {
@@ -668,14 +623,6 @@ class Page extends Item
         }
     }
 
-    public function setfooter($footer)
-    {
-        if (strlen($footer) < self::LENGTH_LONG_TEXT and is_string($footer)) {
-            $footer = crlf2lf($footer);
-            $this->footer = $footer;
-        }
-    }
-
     public function setsecure($secure)
     {
         if ($secure >= 0 and $secure <= self::SECUREMAX) {
@@ -685,7 +632,7 @@ class Page extends Item
 
     public function setinterface($interface)
     {
-        if (in_array($interface, self::TABS)) {
+        if (in_array($interface, $this::TABS)) {
             $this->interface = $interface;
         }
     }
@@ -845,13 +792,6 @@ class Page extends Item
     public function setpostprocessaction($postprocessaction): void
     {
         $this->postprocessaction = boolval($postprocessaction);
-    }
-
-    public function setversion($version): void
-    {
-        if (in_array($version, self::VERSIONS)) {
-            $this->version = $version;
-        }
     }
 
 

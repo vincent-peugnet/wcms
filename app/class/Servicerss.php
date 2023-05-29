@@ -175,7 +175,7 @@ class Servicerss
 
             $content = $xml->createElement("content");
             $content->appendChild(
-                new DOMText(html_entity_decode($this->mainhtml($page), ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8"))
+                new DOMText(html_entity_decode($this->primaryhtml($page), ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8"))
             );
             $content->setAttribute("type", "html");
             $entry->appendChild($content);
@@ -199,15 +199,15 @@ class Servicerss
     }
 
     /**
-     * Get the HTML output of a page
+     * Get the HTML output of the primary content of a page
      *
      * @param Page $page
-     * @return string                       HTML content parsed from page MAIN
+     * @return string                       HTML content parsed from page primary field
      */
-    protected function mainhtml(Page $page): string
+    protected function primaryhtml(Page $page): string
     {
         $render = new Servicerender($this->router, $this->pagemanager);
-        return $render->rendermain($page);
+        return $render->renderprimary($page);
     }
 
     /**

@@ -82,18 +82,18 @@ class Servicerender
     }
 
     /**
-     * Render a page MAIN content to be used in RSS feed
+     * Render page's primary content to be used in RSS feed
      *
      * @param Page $page                    Page to render
      *
-     * @return string                       HTML Parsed MAIN content of a page
+     * @return string                       HTML Parsed primary content of a page
      *
      * @todo                                render absolute media links
      */
-    public function rendermain(Page $page): string
+    public function renderprimary(Page $page): string
     {
         $this->page = $page;
-        $element = new Element($page->id(), ['content' => $page->main(), 'type' => "main"]);
+        $element = new Element($page->id(), ['content' => $page->primary(), 'type' => 'main']);
         $html = $this->elementparser($element);
         return $this->bodyparser($html);
     }
