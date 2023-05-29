@@ -71,8 +71,7 @@ class Opt extends Item
 
     public function __construct(array $data = [])
     {
-        $page = new Page();
-        $this->pagevarlist = ($page->getobjectvars());
+        $this->pagevarlist = Page::getclassvars();
         $this->hydrate($data);
     }
 

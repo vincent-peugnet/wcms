@@ -9,7 +9,7 @@ use Wcms\Config;
 use Wcms\Fs;
 use Wcms\Modelpage;
 use Wcms\Servicerender;
-use Wcms\Page;
+use Wcms\Pagev1;
 
 class ServicerenderTest extends TestCase
 {
@@ -50,7 +50,7 @@ class ServicerenderTest extends TestCase
             $this->markTestSkipped();
         }
         $pagedata = json_decode(file_get_contents(__DIR__ . "/data/ServicerenderTest/$name.json"), true);
-        $page = new Page($pagedata);
+        $page = new Pagev1($pagedata);
         $html = $this->renderengine->render($page);
 
         $expected = __DIR__ . "/data/ServicerenderTest/$name.html";

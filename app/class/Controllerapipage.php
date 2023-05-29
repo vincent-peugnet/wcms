@@ -76,8 +76,7 @@ class Controllerapipage extends Controllerapi
                     }
                 }
                 $oldpage = clone $this->page;
-                $update = new Page($datas);
-                if (!is_null($update->id()) && $update->id() !== $this->page->id()) {
+                if (isset($datas['id']) && $datas['id'] !== $this->page->id()) {
                     $this->shortresponse(400, "Page ID and datas ID doesn't match");
                 }
                 $this->page->hydrate($datas);
@@ -114,7 +113,8 @@ class Controllerapipage extends Controllerapi
             http_response_code(405);
             exit;
         }
-        $this->page = new Page(["id" => $page]);
+
+        $this->page = $this->pagemanager->newpage(["id" => $page]);
         $this->page->reset();
         $this->page->addauthor($this->user->id());
         if ($this->pagemanager->add($this->page)) {
@@ -136,7 +136,7 @@ class Controllerapipage extends Controllerapi
         if ($exist && !$this->canedit()) {
             $this->shortresponse(401, 'Page already exist but user cannot update it');
         }
-        $this->page = new Page(array_merge($this->recievejson(), ['id' => $page]));
+        $this->page = $this->pagemanager->newpage(array_merge($this->recievejson(), ['id' => $page]));
         $this->page->addauthor($this->user->id());
         if ($this->pagemanager->update($this->page)) {
             http_response_code($exist ? 200 : 201);
