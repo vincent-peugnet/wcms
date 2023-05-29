@@ -59,7 +59,8 @@ abstract class Model
         'linkto',
         'visitcount',
         'displaycount',
-        'editcount'
+        'editcount',
+        'version',
     ];
 
     public const HTML_ELEMENTS = ['header', 'nav', 'main', 'aside', 'footer'];
