@@ -268,7 +268,9 @@ class Controllerpage extends Controller
         if ($this->user->issupereditor()) {
             $this->setpage($page, 'pagelog');
             $this->importpage();
+            echo '<pre>';
             var_dump($this->page);
+            echo '</pre>';
         } else {
             $this->routedirect('pageread', ['page' => $page]);
         }
