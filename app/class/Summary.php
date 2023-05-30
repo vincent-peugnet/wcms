@@ -142,7 +142,7 @@ class Summary extends Item
 
     public function setelement(string $element)
     {
-        if (in_array($element, Model::HTML_ELEMENTS)) {
+        if (in_array($element, Pagev1::HTML_ELEMENTS)) {
             $this->element = $element;
         }
     }

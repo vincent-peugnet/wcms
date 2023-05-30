@@ -15,7 +15,7 @@ use VStelmakh\UrlHighlight\Highlighter\HtmlHighlighter;
 use VStelmakh\UrlHighlight\UrlHighlight;
 use VStelmakh\UrlHighlight\Validator\Validator;
 
-class Servicerender
+abstract class Servicerender
 {
     /** @var AltoRouter */
     protected ?AltoRouter $router;
@@ -23,10 +23,7 @@ class Servicerender
     /** @var Modelpage */
     protected Modelpage $pagemanager;
 
-    /**
-     * @var Page                            Actual page being rendered
-     * */
-    protected $page;
+    protected Page $page;
 
     /** @var string[] */
     protected $linkto = [];
@@ -90,13 +87,7 @@ class Servicerender
      *
      * @todo                                render absolute media links
      */
-    public function renderprimary(Page $page): string
-    {
-        $this->page = $page;
-        $element = new Element($page->id(), ['content' => $page->primary(), 'type' => 'main']);
-        $html = $this->elementparser($element);
-        return $this->bodyparser($html);
-    }
+    abstract public function renderprimary(Page $page): string;
 
     /**
      * Used to convert the markdown user manual to html document
@@ -107,7 +98,7 @@ class Servicerender
     public function rendermanual(string $text): string
     {
         $text = $this->markdown($text);
-        $text = $this->headerid($text, 1, 5, 'main', 0);
+        $text = $this->headerid($text, 1, 5, 0);
         return $text;
     }
 
@@ -117,7 +108,7 @@ class Servicerender
      *
      * @return string html string
      */
-    private function gethmtl()
+    protected function gethmtl()
     {
 
         $body = $this->bodyconstructor($this->readbody());
@@ -134,7 +125,7 @@ class Servicerender
     }
 
 
-    private function readbody()
+    protected function readbody()
     {
         if (!empty($this->page->templatebody())) {
             $templateid = $this->page->templatebody();
@@ -153,41 +144,22 @@ class Servicerender
 
 
     /**
-     * Analyse BODY, call the corresponding CONTENTs and render everything
+     * Analyse BODY, include basic inclusions
      *
      * @param string $body as the string BODY of the page
      *
      * @return string as the full rendered BODY of the page
      */
-    private function bodyconstructor(string $body): string
+    protected function bodyconstructor(string $body): string
     {
         $body = $this->basicinclusions($body);
-
-        // Elements that can be detected
-        $types = array_map("strtoupper", Model::HTML_ELEMENTS);
-
-        // First level regex
-        $regex = implode("|", $types);
-
-        $matches = $this->match($body, $regex);
-
-        // First, analyse the synthax and call the corresponding methods
-        if (!empty($matches)) {
-            foreach ($matches as $match) {
-                $element = new Element($this->page->id(), $match);
-                $element->setcontent($this->getelementcontent($element->sources(), $element->type()));
-                $element->setcontent($this->elementparser($element));
-                $body = str_replace($element->fullmatch(), $element->content(), $body);
-            }
-        }
-
         return $body;
     }
 
     /**
      * Return HEAD html element of a page
      */
-    private function gethead(): string
+    protected function gethead(): string
     {
         $id = $this->page->id();
         $globalpath = Model::dirtopath(Model::GLOBAL_CSS_FILE);
@@ -284,7 +256,7 @@ class Servicerender
      * @param Page $page                    Page being rendered
      * @return string                       HTML to insert into <head> of page
      */
-    private function recursivecss(Page $page): string
+    protected function recursivecss(Page $page): string
     {
         $head = "";
         try {
@@ -306,37 +278,9 @@ class Servicerender
 
 
     /**
-     * Foreach $sources (pages), this will get the corresponding $type element content
-     *
-     * @param string[] $sources             Array of pages ID
-     * @param string $type                  Type of element
-     */
-    private function getelementcontent(array $sources, string $type)
-    {
-        if (!in_array($type, Model::HTML_ELEMENTS)) {
-            throw new InvalidArgumentException();
-        }
-        $content = '';
-        $subseparator = "\n\n";
-        foreach ($sources as $source) {
-            if ($source !== $this->page->id()) {
-                try {
-                    $subcontent = $this->pagemanager->get($source)->$type();
-                } catch (RuntimeException $e) {
-                    $subcontent = $this->page->$type();
-                }
-            } else {
-                $subcontent = $this->page->$type();
-            }
-            $content .= $subseparator . $subcontent;
-        }
-        return $content . $subseparator;
-    }
-
-    /**
      * Perfom W's syntax basic inclusions
      */
-    private function basicinclusions($text)
+    protected function basicinclusions($text)
     {
         $text = $this->date($text);
         $text = $this->thumbnail($text);
@@ -348,38 +292,7 @@ class Servicerender
         return $text;
     }
 
-    private function elementparser(Element $element)
-    {
-        $content = $element->content();
-        $content = $this->basicinclusions($content);
-        if ($element->everylink() > 0) {
-            $content = $this->everylink($content, $element->everylink());
-        }
-        if ($element->markdown()) {
-            $content = $this->markdown($content);
-        }
-        if ($element->headerid()) {
-            $content = $this->headerid(
-                $content,
-                $element->minheaderid(),
-                $element->maxheaderid(),
-                $element->type(),
-                $element->headeranchor()
-            );
-        }
-        if ($element->urllinker()) {
-            $content = $this->autourl($content);
-        }
-        if ($element->tag()) {
-            $type = $element->type();
-            $content = "\n<{$type}>\n{$content}\n</{$type}>\n";
-        }
-
-        return $content;
-    }
-
-
-    private function bodyparser(string $html)
+    protected function bodyparser(string $html)
     {
         $html = $this->automedialist($html);
         $html = $this->pageoptlist($html);
@@ -404,7 +317,7 @@ class Servicerender
     /**
      * Replace `%TITLE%` code with page's title
      */
-    private function title($text)
+    protected function title($text)
     {
         return str_replace('%TITLE%', $this->page->title(), $text);
     }
@@ -413,7 +326,7 @@ class Servicerender
     /**
      * Replace `%DESCRIPTION%` code with page's description
      */
-    private function description($text)
+    protected function description($text)
     {
         return str_replace('%DESCRIPTION%', $this->page->description(), $text);
     }
@@ -423,7 +336,7 @@ class Servicerender
      *
      * @param string $text the page text as html
      */
-    private function richlink(string $text): string
+    protected function richlink(string $text): string
     {
         $text = preg_replace('#<a(.*href="(https?:\/\/(.+))".*)>\2</a>#', "<a$1>$3</a>", $text);
         return $text;
@@ -434,7 +347,7 @@ class Servicerender
      *
      * This will also include `target=_blank` and `class=external` attributes.
      */
-    private function autourl($text): string
+    protected function autourl($text): string
     {
         $options = ["class" => "external"];
         if ($this->externallinkblank) {
@@ -458,7 +371,7 @@ class Servicerender
      *
      * Keep existing class and remove duplicates or useless spaces in class attribute
      */
-    private function htmlparser(string $html): string
+    protected function htmlparser(string $html): string
     {
         $dom = new DOMDocument('1.0', 'UTF-8');
         /** Force UTF-8 encoding for loadHTML by defining it in the content itself with an XML tag that need to be removed later */
@@ -535,7 +448,7 @@ class Servicerender
     /**
      * Edit `src` attributes in media HTML tags
      */
-    private function sourceparser(DOMNodeList $sourcables): void
+    protected function sourceparser(DOMNodeList $sourcables): void
     {
         foreach ($sourcables as $sourcable) {
             assert($sourcable instanceof DOMElement);
@@ -565,7 +478,7 @@ class Servicerender
     /**
      * Replace wiki links [[page_id]] with HTML link
      */
-    private function wikiurl(string $text): string
+    protected function wikiurl(string $text): string
     {
         $rend = $this;
         $text = preg_replace_callback(
@@ -593,14 +506,17 @@ class Servicerender
      * @param string $text Input html document to scan
      * @param int $min Maximum header deepness to look for. Min = 1 Max = 6 Default = 1
      * @param int $max Maximum header deepness to look for. Min = 1 Max = 6 Default = 6
-     * @param string $element Name of element being analysed
+     * @param string $element Name of element being analysed. Leave empty if using Markdown field
      * @param int $anchormode Mode of anchor link display. see Element HEADERANCHORMODES
      *
      * @return string text with id in header
      */
 
-    private function headerid(string $text, int $min, int $max, string $element, int $anchormode): string
+    protected function headerid(string $text, int $min, int $max, int $anchormode, string $element = ''): string
     {
+        if (empty($element)) {
+            $element = md5($text);
+        }
         if ($min > 6 || $min < 1) {
             $min = 6;
         }
@@ -637,7 +553,7 @@ class Servicerender
         return $text;
     }
 
-    private function markdown($text)
+    protected function markdown($text)
     {
         $fortin = new MarkdownExtra();
         // id in headers
@@ -657,7 +573,7 @@ class Servicerender
      *
      * @return array Ordered array containing an array of `fullmatch`, `type` and `options`
      */
-    private function match(string $text, string $include): array
+    protected function match(string $text, string $include): array
     {
         preg_match_all('~\%(' . $include . ')(\?([a-zA-Z0-9:\[\]\&=\-_\/\%\+\*\;]*))?\%~', $text, $out);
 
@@ -675,7 +591,7 @@ class Servicerender
      *
      * @return string Output text
      */
-    private function automedialist(string $text): string
+    protected function automedialist(string $text): string
     {
         $matches = $this->match($text, 'MEDIA');
 
@@ -695,7 +611,7 @@ class Servicerender
      *
      * @return string Output text
      */
-    private function summary(string $text): string
+    protected function summary(string $text): string
     {
         $matches = $this->match($text, 'SUMMARY');
 
@@ -714,7 +630,7 @@ class Servicerender
     /**
      * Render pages list
      */
-    private function pageoptlist(string $text): string
+    protected function pageoptlist(string $text): string
     {
         $matches = $this->match($text, 'LIST');
         foreach ($matches as $match) {
@@ -744,7 +660,7 @@ class Servicerender
     /**
      * Render page maps
      */
-    private function pageoptmap(string $text): string
+    protected function pageoptmap(string $text): string
     {
         $matches = $this->match($text, 'MAP');
         foreach ($matches as $match) {
@@ -777,7 +693,7 @@ class Servicerender
     /**
      * Render Random links
      */
-    private function randomopt(string $text): string
+    protected function randomopt(string $text): string
     {
         $matches = $this->match($text, 'RANDOM');
         foreach ($matches as $match) {
@@ -812,7 +728,7 @@ class Servicerender
      *
      * @return string                       Text with replaced valid %RSS% inclusions
      */
-    private function rss(string $text): string
+    protected function rss(string $text): string
     {
         $this->rsslist = $this->rssmatch($text);
         foreach ($this->rsslist as $fullmatch => $bookmark) {
@@ -829,7 +745,7 @@ class Servicerender
      *
      * @return Bookmark[]                   Associative array of bookmarks, using fullmatch as key
      */
-    private function rssmatch(string $text): array
+    protected function rssmatch(string $text): array
     {
         $rsslist = [];
         $matches = $this->match($text, "RSS");
@@ -852,7 +768,7 @@ class Servicerender
 
 
 
-    private function date(string $text): string
+    protected function date(string $text): string
     {
         $dateregex = implode('|', array_keys(Clock::TYPES));
         $matches = $this->match($text, $dateregex);
@@ -879,7 +795,7 @@ class Servicerender
      *
      * @return string The rendered output
      */
-    private function thumbnail(string $text): string
+    protected function thumbnail(string $text): string
     {
         $src = Model::thumbnailpath() . $this->page->thumbnail();
         $alt = $this->page->title();
@@ -895,7 +811,7 @@ class Servicerender
      * @param string $text input text
      * @return string output text with replaced elements
      */
-    private function pageid(string $text): string
+    protected function pageid(string $text): string
     {
         return str_replace(['%PAGEID%', '%ID%'], $this->page->id(), $text);
     }
@@ -905,7 +821,7 @@ class Servicerender
      * @param string $text input text
      * @return string output text with replaced elements
      */
-    private function url(string $text): string
+    protected function url(string $text): string
     {
         return str_replace('%URL%', Config::domain() . $this->upage($this->page->id()), $text);
     }
@@ -915,7 +831,7 @@ class Servicerender
      * @param string $text input text
      * @return string output text with replaced elements
      */
-    private function path(string $text): string
+    protected function path(string $text): string
     {
         return str_replace('%PATH%', $this->upage($this->page->id()), $text);
     }
@@ -923,7 +839,7 @@ class Servicerender
     /**
      * Replace `%AUTHORS%` with a rendered list of authors
      */
-    private function authors(string $text): string
+    protected function authors(string $text): string
     {
         $page = $this->page;
         return preg_replace_callback("~\%AUTHORS\%~", function () use ($page) {
@@ -936,7 +852,7 @@ class Servicerender
     /**
      * Check if the page need post processing by looking for patterns
      */
-    private function checkpostprocessaction(string $text): bool
+    protected function checkpostprocessaction(string $text): bool
     {
         $counterpaterns = Servicepostprocess::COUNTERS;
         $pattern = implode('|', $counterpaterns);
@@ -950,7 +866,7 @@ class Servicerender
      *
      * @return string Conversion output
      */
-    private function everylink(string $text, int $limit): string
+    protected function everylink(string $text, int $limit): string
     {
         $regex = '~([\w\-_éêèùïüîçà]{' . $limit . ',})(?![^<]*>|[^<>]*<\/)~';
         $text = preg_replace_callback($regex, function ($matches) {
@@ -966,7 +882,7 @@ class Servicerender
      *
      * @return string text ouput
      */
-    private function authenticate(string $text): string
+    protected function authenticate(string $text): string
     {
         $id = $this->page->id();
         $regex = '~\%CONNECT(\?dir=([a-zA-Z0-9-_]+))?\%~';
@@ -1013,7 +929,7 @@ class Servicerender
      * @param User[] $users     List of User
      * @return string           List of user in HTML
      */
-    private function userlist(array $users): string
+    protected function userlist(array $users): string
     {
         $html = "";
         foreach ($users as $user) {

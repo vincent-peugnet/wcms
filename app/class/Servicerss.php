@@ -4,9 +4,11 @@ namespace Wcms;
 
 use AltoRouter;
 use DateTime;
+use DomainException;
 use DOMDocument;
 use DOMException;
 use DOMText;
+use Exception;
 use LogicException;
 use RuntimeException;
 use Wcms\Exception\Database\Notfoundexception;
@@ -15,7 +17,6 @@ use Wcms\Notfoundexception as WcmsNotfoundexception;
 class Servicerss
 {
     protected AltoRouter $router;
-    protected Servicerender $render;
     protected Modelpage $pagemanager;
     protected Modelbookmark $bookmarkmanager;
 
@@ -24,7 +25,6 @@ class Servicerss
         $this->router = $router;
         $this->pagemanager = new Modelpage(Config::pagetable());
         $this->bookmarkmanager = new Modelbookmark();
-        $this->render = new Servicerender($this->router, $this->pagemanager);
     }
 
     /**
@@ -195,7 +195,12 @@ class Servicerss
      */
     protected function href(Page $page): string
     {
-        return Config::domain() . $this->render->upage($page->id());
+        try {
+            $path = $this->router->generate('pageread', ['page' => $page->id()]);
+            return Config::domain() . $path;
+        } catch (Exception $e) {
+            throw new LogicException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**
@@ -206,7 +211,16 @@ class Servicerss
      */
     protected function primaryhtml(Page $page): string
     {
-        $render = new Servicerender($this->router, $this->pagemanager);
+        switch ($page->version()) {
+            case Page::V1:
+                $render = new Servicerenderv1($this->router, $this->pagemanager);
+                break;
+            case Page::V2:
+                $render = new Servicerenderv2($this->router, $this->pagemanager);
+                break;
+            default:
+                throw new DomainException('Page version is out of range');
+        }
         return $render->renderprimary($page);
     }
 

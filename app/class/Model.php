@@ -63,8 +63,6 @@ abstract class Model
         'version',
     ];
 
-    public const HTML_ELEMENTS = ['header', 'nav', 'main', 'aside', 'footer'];
-
     public const ID_REGEX                   = "%[^a-z0-9-_]%";
     public const MAX_ID_LENGTH              = 64;
     public const PASSWORD_MIN_LENGTH        = 4;

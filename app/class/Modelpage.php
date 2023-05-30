@@ -391,7 +391,18 @@ class Modelpage extends Modeldb
     {
         $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
 
-        $renderengine = new Servicerender($router, $this, Config::externallinkblank(), Config::internallinkblank());
+        $params = [$router, $this, Config::externallinkblank(), Config::internallinkblank()];
+
+        switch ($page->version()) {
+            case Page::V1:
+                $renderengine = new Servicerenderv1(...$params);
+                break;
+            case Page::V2:
+                $renderengine = new Servicerenderv2(...$params);
+                break;
+            default:
+                throw new DomainException('Page version is out of range');
+        }
 
         try {
             $html = $renderengine->render($page);
@@ -760,7 +771,7 @@ class Modelpage extends Modeldb
                     return new Pagev1($datas);
 
                 case Page::V2:
-                    return new Pagev1($datas);
+                    return new Pagev2($datas);
             }
             throw new RangeException('Version is specified but out of range');
         } elseif (isset($metadatas['markdown'])) {

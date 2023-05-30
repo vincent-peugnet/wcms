@@ -10,6 +10,7 @@ use Wcms\Fs;
 use Wcms\Modelpage;
 use Wcms\Servicerender;
 use Wcms\Pagev1;
+use Wcms\Servicerenderv1;
 
 class ServicerenderTest extends TestCase
 {
@@ -31,7 +32,7 @@ class ServicerenderTest extends TestCase
         $router = new AltoRouter([
             ['GET', '/[cid:page]', 'Controllerpage#read', 'pageread'],
         ]);
-        $this->renderengine = new Servicerender($router, new Modelpage(Config::pagetable()), true, false);
+        $this->renderengine = new Servicerenderv1($router, new Modelpage(Config::pagetable()), true, false);
     }
 
     public function tearDown(): void
