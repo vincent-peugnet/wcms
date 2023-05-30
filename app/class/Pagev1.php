@@ -13,6 +13,7 @@ class Pagev1 extends Page
     protected $footer;
 
     public const TABS = ['main', 'css', 'header', 'nav', 'aside', 'footer','body', 'javascript'];
+    public const HTML_ELEMENTS = ['header', 'nav', 'main', 'aside', 'footer'];
 
     public function reset()
     {

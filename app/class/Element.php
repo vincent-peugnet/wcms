@@ -2,17 +2,13 @@
 
 namespace Wcms;
 
-use DomainException;
-
 /**
  * HTML Element used in pages
  */
-class Element extends Item
+abstract class Element extends Item
 {
-    protected $fullmatch;
-    protected string $type;
-    protected $options;
-    protected $sources = [];
+    protected string $fullmatch;
+    protected string $options;
     protected int $everylink = 0;
     protected bool $markdown = true;
     protected string $content = '';
@@ -23,8 +19,6 @@ class Element extends Item
     protected bool $urllinker;
     protected int $headeranchor = self::NOHEADERANCHOR;
 
-    /** @var bool Include element with HTML tags */
-    protected bool $tag;
 
     public const NOHEADERANCHOR = 0;
     public const HEADERANCHORLINK = 1;
@@ -37,32 +31,7 @@ class Element extends Item
 
 
 
-    public function __construct($pageid, $datas = [])
-    {
-        $this->urllinker = Config::urllinker();
-        $this->tag = Config::htmltag();
-        $this->hydrate($datas);
-        $this->analyse($pageid);
-    }
-
-    private function analyse(string $pageid)
-    {
-        if (!empty($this->options)) {
-            $this->options = str_replace('*', $pageid, $this->options);
-            parse_str($this->options, $datas);
-            if (isset($datas['id'])) {
-                $this->sources = explode(' ', $datas['id']);
-            } else {
-                $this->sources = [$pageid];
-            }
-            $this->hydrate($datas);
-        } else {
-            $this->sources = [$pageid];
-        }
-    }
-
-
-
+    abstract protected function analyse(string $pageid);
 
 
     // ______________________________________________ G E T ________________________________________________________
@@ -73,19 +42,9 @@ class Element extends Item
         return $this->fullmatch;
     }
 
-    public function type(): string
-    {
-        return $this->type;
-    }
-
     public function options(): string
     {
         return $this->options;
-    }
-
-    public function sources(): array
-    {
-        return $this->sources;
     }
 
     public function everylink(): int
@@ -128,11 +87,6 @@ class Element extends Item
         return $this->urllinker;
     }
 
-    public function tag(): bool
-    {
-        return $this->tag;
-    }
-
 
 
 
@@ -144,19 +98,6 @@ class Element extends Item
     public function setfullmatch(string $fullmatch)
     {
         $this->fullmatch = $fullmatch;
-    }
-
-    /**
-     * @throws DomainException if given type is not an HTML element
-     */
-    public function settype(string $type)
-    {
-        $type = strtolower($type);
-        if (in_array($type, Model::HTML_ELEMENTS)) {
-            $this->type = $type;
-        } else {
-            throw new DomainException("$type is not a valid Page HTML Element Type");
-        }
     }
 
     public function setoptions(string $options)
@@ -207,10 +148,5 @@ class Element extends Item
     public function seturllinker($urllinker)
     {
         $this->urllinker = boolval($urllinker);
-    }
-
-    public function settag($tag)
-    {
-        $this->tag = boolval($tag);
     }
 }
