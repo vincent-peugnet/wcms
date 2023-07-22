@@ -12,7 +12,7 @@
                     <tr>
                         <td>
                             <a
-                                href="<?= $this->url($bookmark->route(), $bookmark->params(), $bookmark->query()) ?>"
+                                href="<?= $this->url("home", $bookmark->params(), $bookmark->query()) ?>"
                                 data-current="<?= isset($queryaddress) && $bookmark->query() === $queryaddress ? '1' : '0' ?>"
                                 class="bookmark"
                                 title="<?= $bookmark->description() ?>"
@@ -42,7 +42,7 @@
                 <tr>
                     <td>
                         <a
-                            href="<?= $this->url($bookmark->route(), $bookmark->params(), $bookmark->query()) ?>"
+                            href="<?= $this->url("home", $bookmark->params(), $bookmark->query()) ?>"
                             data-current="<?= isset($queryaddress) && $bookmark->query() === $queryaddress ? '1' : '0' ?>"
                             class="bookmark"
                             title="<?= $bookmark->description() ?>"

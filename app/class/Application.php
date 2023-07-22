@@ -205,7 +205,6 @@ class Application
                 $lasteditedbookmark = new Bookmark();
                 $lasteditedbookmark->init(
                     'last5edited',
-                    'home',
                     $lastedited->getaddress(),
                     '🕒',
                     'Last 5 edited',
@@ -215,7 +214,6 @@ class Application
                 $lastcreatedbookmark = new Bookmark();
                 $lastcreatedbookmark->init(
                     'last10created',
-                    'home',
                     $lastcreated->getaddress(),
                     '🖍️',
                     'Last 10 created',
@@ -225,7 +223,6 @@ class Application
                 $emptytagbookmark = new Bookmark();
                 $emptytagbookmark->init(
                     'notags',
-                    'home',
                     $emptytag->getaddress(),
                     '❌',
                     'No tags',

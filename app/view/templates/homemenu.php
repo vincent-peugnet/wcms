@@ -394,7 +394,7 @@
                     <h2>Delete</h2>
                     <form action="<?= $this->url('bookmarkdelete') ?>" method="post">
                         <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
-                        <input type="hidden" name="route" value="<?= $bookmark->route() ?>">
+                        <input type="hidden" name="route" value="home">
                         <input type="hidden" name="confirmdelete" value="0">
                         <input type="checkbox" name="confirmdelete" id="bookmark_confirmdelete" value="1">
                         <label for="bookmark_confirmdelete">confirm</label>

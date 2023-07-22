@@ -2,11 +2,7 @@
 
 namespace Wcms;
 
-use DateTimeImmutable;
-use InvalidArgumentException;
-use RangeException;
 use RuntimeException;
-use UnexpectedValueException;
 
 class Bookmark extends Item
 {
@@ -21,9 +17,6 @@ class Bookmark extends Item
 
     /** @var string $query */
     protected $query = '';
-
-    /** @var string $route Can be `home|media` */
-    protected $route;
 
     /** @var array $params*/
     protected $params = [];
@@ -50,14 +43,12 @@ class Bookmark extends Item
 
     public function init(
         string $id,
-        string $route,
         string $query,
         string $icon = '⭐',
         string $name = '',
         string $description = ''
     ) {
         $this->setid($id);
-        $this->setroute($route);
         $this->setquery($query);
         $this->seticon($icon);
         $this->setname($name);
@@ -96,11 +87,6 @@ class Bookmark extends Item
     public function query()
     {
         return $this->query;
-    }
-
-    public function route()
-    {
-        return $this->route;
     }
 
     public function params()
@@ -166,16 +152,6 @@ class Bookmark extends Item
     {
         if (is_string($query)) {
             $this->query = strip_tags(substr($query, 0, Model::MAX_QUERY_LENGH));
-        }
-    }
-
-    public function setroute($route)
-    {
-        if ($route === 'home' || $route === 'media') {
-            $this->route = $route;
-            return true;
-        } else {
-            return false;
         }
     }
 

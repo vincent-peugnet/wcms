@@ -33,8 +33,8 @@ class Controllerbookmark extends Controller
             } catch (RuntimeException $e) {
                 Model::sendflashmessage("Error while creating bookmark : " . $e->getMessage(), Model::FLASH_ERROR);
             }
-            $this->routedirect($_POST['route'] ?? 'home');
         }
+        $this->routedirect($_POST['route'] ?? 'home');
     }
 
     public function delete()
