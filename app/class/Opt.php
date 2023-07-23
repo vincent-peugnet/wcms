@@ -558,7 +558,7 @@ class Opt extends Item
     public function setversion($version): void
     {
         $version = intval($version);
-        if ($version === 0 || in_array($version, Page::VERSIONS)) {
+        if ($version === 0 || key_exists($version, Page::VERSIONS)) {
             $this->version = $version;
         }
     }
