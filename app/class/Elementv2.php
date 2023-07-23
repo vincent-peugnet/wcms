@@ -10,18 +10,15 @@ class Elementv2 extends Element
     {
         $this->urllinker = Config::urllinker();
         $this->fullmatch = $fullmatch;
+        $this->id = $pageid;
         $this->options = $options;
         $this->analyse($pageid);
     }
 
     protected function analyse(string $pageid)
     {
-        if (!empty($this->options)) {
-            parse_str($this->options, $datas);
-            $this->hydrate($datas);
-        } else {
-            $this->id = $pageid;
-        }
+        parse_str($this->options, $datas);
+        $this->hydrate($datas);
     }
 
 
