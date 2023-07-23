@@ -7,7 +7,7 @@
 
 
 
-<?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'home', 'pagelist' => $pagelist, 'queryaddress' => $queryaddress]) ?>
+<?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'home', 'pagelist' => $pagelist]) ?>
 
 <?php if ($user->iseditor()) { ?>
 

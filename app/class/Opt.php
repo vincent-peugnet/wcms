@@ -135,6 +135,9 @@ class Opt extends Item
         }
     }
 
+    /**
+     * @todo Move this out of this Class
+     */
     public function submit()
     {
         if (isset($_GET['submit'])) {
@@ -148,6 +151,9 @@ class Opt extends Item
         }
     }
 
+    /**
+     * @todo Move this out of this Class
+     */
     public function getall()
     {
         foreach (self::DATALIST as $method) {
@@ -175,7 +181,7 @@ class Opt extends Item
      */
     public function getaddress(): string
     {
-        $object = $this->drylist(self::DATALIST, self::HTML_DATETIME_LOCAL);
+        $object = $this->paramdiff();
         $object['submit'] = 'filter';
 
         return '?' . urldecode(http_build_query($object));
@@ -261,17 +267,27 @@ class Opt extends Item
      */
     public function getquery(): string
     {
-        $class = get_class_vars(get_class($this));
-        $object = $this->dry(self::HTML_DATETIME_LOCAL);
-        $class['pagevarlist'] = $object['pagevarlist'];
-        $class['taglist'] = $object['taglist'];
-        $class['authorlist'] = $object['authorlist'];
-        $query = array_diff_assoc_recursive($object, $class);
+        $query = $this->paramdiff();
         $httpquery = urldecode(http_build_query($query));
         if (!empty($httpquery)) {
             $httpquery = "?$httpquery";
         }
         return $httpquery;
+    }
+
+    /**
+     * @return array                        associative array of object's filtering and sorting values
+     *                                      that are not default ones.
+     */
+    protected function paramdiff(): array
+    {
+        $class = get_class_vars(get_class($this));
+        $object = $this->dry(self::HTML_DATETIME_LOCAL);
+        $class['pageidlist'] = $object['pageidlist'];
+        $class['pagevarlist'] = $object['pagevarlist'];
+        $class['taglist'] = $object['taglist'];
+        $class['authorlist'] = $object['authorlist'];
+        return array_diff_assoc_recursive($object, $class);
     }
 
 
