@@ -56,7 +56,10 @@ abstract class Page extends Item
     public const V1 = 1;
     public const V2 = 2;
 
-    public const VERSIONS = [self::V1, self::V2];
+    public const VERSIONS = [
+        self::V1 => "version 1",
+        self::V2 => "version 2"
+    ];
 
     public const PUBLIC = 0;
     public const PRIVATE = 1;

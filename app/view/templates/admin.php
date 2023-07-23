@@ -74,6 +74,8 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
                 <h2 id="page-creation">Page creation</h2>
 
                 <p>What really happend when you create a new page</p>
+                
+                <h3>Privacy of new pages</h3>
 
                 <label for="defaultprivacy">Default privacy</label>
                 <select name="defaultprivacy" id="defaultprivacy" form="admin">
@@ -82,10 +84,20 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
                     <option value="2" <?= Wcms\Config::defaultprivacy() == 2 ? 'selected' : '' ?>>not published</option>
                 </select>
 
+                <h3>Page version</h3>
 
+                <p>Choose W page version you want to use when a new page is created.</p>
 
-                <label for="defaultbody">Edit default BODY element</label>
-                <textarea name="defaultbody" id="defaultbody" cols="30" rows="10" form="admin"><?= Wcms\Config::defaultbody() ?></textarea>
+                <label for="pageversion">Select page version</label>
+                <select name="pageversion" id="pageversion" form="admin">
+                    <?= options(Wcms\Page::VERSIONS, Wcms\Config::pageversion()) ?>
+                </select>
+
+                <h3>Default BODY</h3>
+
+                <?php $defaultbody = 'defaultv' . Wcms\Config::pageversion() . 'body' ?>
+                <label for="defaultbody">Edit default page V<?= Wcms\Config::pageversion() ?> BODY content</label>
+                <textarea name="<?= $defaultbody ?>" id="defaultbody" cols="30" rows="10" form="admin"><?= Wcms\Config::defaultbody() ?></textarea>
 
 
 
