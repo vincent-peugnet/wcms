@@ -15,6 +15,19 @@ table#medialist .thumbnail:hover .lightbox {
     display: block;
 }
 
+table#medialist details > summary {
+    list-style: none;
+}
+
+table#medialist details i {
+    visibility: hidden;
+}
+
+table#medialist details:hover i {
+    visibility: visible;
+}
+
+
 .media ul#gallery {
     overflow: hidden;
     display: inline-block;

@@ -147,6 +147,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
                 <details>
                     <summary>
                             <?= $media->filename() ?>
+                            <i class="fa fa-pencil"></i>
                     </summary>
                     <form action="<?= $this->url('mediarename') ?>" method="post">
                         <input type="hidden" name="route" value="<?= $mediaopt->getaddress() ?>">
