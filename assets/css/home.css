@@ -78,10 +78,16 @@ main a.bookmark {
 
 div#deepsearchbar {
     background-color: var(--secondary-background-color);
+    line-height: 24px;
+    padding-left: 5px;
 }
 
 #deepsearchbar input[type=text] {
     width: 150px;
+}
+
+#deepsearchbar details, #deepsearchbar summary {
+    display: inline;
 }
 
 
