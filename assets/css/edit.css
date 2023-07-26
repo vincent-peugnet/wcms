@@ -3,16 +3,6 @@
     height: calc(100% - 50px);
 }
 
-
-
-.panel {
-    width: 250px;
-    display: none;
-    height: 100%;
-    overflow-y: auto;
-    height: 100%;
-}
-
 #showeditorleftpanel:checked ~ #leftbarpanel {
     display: block;
 }
@@ -21,20 +11,17 @@
     display: block;
 }
 
-input.toggle {
-    display: none;
+.panel {
+    width: 250px;
+    height: 100%;
+    overflow-y: auto;
+    height: 100%;
 }
 
 label.toogle:hover {
     color: white;
     cursor: pointer;
     background-color: #e2e2e287;
-}
-
-label.toogle {
-    height: 100%;
-    line-height: 100%;
-    text-align: center;
 }
 
 #leftbar label.toogle {
@@ -152,10 +139,6 @@ input#editfontsize {
 
 details {
     background-color: var(--secondary-background-color);
-}
-
-.bar {
-    background-color: var(--primary-background-color);
 }
 
 input#fontsize {

@@ -6,8 +6,34 @@ section.bookmarks {
     min-width: 2em;
 }
 
+.bookmarks .block {
+    height: 100%;
+}
+
 main nav {
-    max-width: 220px;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.panel {
+    height: 100%;
+    overflow-y: auto;
+    height: 100%;
+}
+
+label.toogle:hover {
+    color: white;
+    cursor: pointer;
+    background-color: #e2e2e287;
+}
+
+nav label.toogle {
+    float: right;
+}
+
+
+#showeoptionspanel:checked ~ #optionspanel {
+    display: block;
 }
 
 
@@ -150,7 +176,11 @@ div#geomap {
         font-size: 1.3em;
     }
 
-    .bookmarks a span {
-        display: inline;
+    .bookmarks tbody {
+        display: flex;
+    }
+
+    .bookmarks .block {
+        /*! flex-direction: row; */
     }
 }

@@ -93,6 +93,29 @@ summary:hover {
     cursor: pointer;
 }
 
+.bar {
+    background-color: var(--primary-background-color);
+}
+
+.panel {
+    display: none;
+}
+
+label.toogle {
+    height: 100%;
+    line-height: 100%;
+    text-align: center;
+}
+
+/* Used for interface modification using hidden checkboxes */
+input.toggle {
+    display: none;
+}
+
+label.toogle {
+    width: 15px;
+}
+
 
 @media (max-width: 750px) {
     header a span, footer, aside a span {
@@ -120,6 +143,15 @@ summary:hover {
 
     aside {
         display: block !important;
+    }
+
+    .bar {
+        flex-direction: column;
+    }
+
+    label.toogle {
+        width: 100%;
+        height: 20px;
     }
 }
 
