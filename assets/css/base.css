@@ -85,6 +85,12 @@ aside {
     background-color: var(--secondary-background-color);
 }
 
+aside summary {
+    list-style: none;
+}
+
+
+
 summary {
     white-space: nowrap;
 }
@@ -141,9 +147,14 @@ label.toogle {
         font-size: 1em;
     }
 
-    aside {
-        display: block !important;
+    aside summary {
+        min-width: 45px !important;
+        padding-right: 15px;
     }
+
+    aside .submenu {
+        left: 0;
+      }
 
     .bar {
         flex-direction: column;
