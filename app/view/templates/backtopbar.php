@@ -89,7 +89,6 @@ if($user->isadmin()) {
     <i class="fa fa-user"></i>
     <span><?= $user->id() ?></span>
 </a>
-<i><?= $user->level() ?></i>
 </span>
 
 
