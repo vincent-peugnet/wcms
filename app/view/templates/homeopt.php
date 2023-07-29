@@ -1,7 +1,7 @@
 <nav class="bar">
 
     
-    <input id="showeoptionspanel" name="showeoptionspanel" value="1" class="toggle" type="checkbox" form="workspace-form" checked="">
+    <input id="showeoptionspanel" name="showeoptionspanel" value="1" class="toggle" type="checkbox" form="workspace-form" <?= $workspace->showeoptionspanel() === true ? 'checked' : '' ?>>
     <label for="showeoptionspanel" class="toogle">◧</label>
     
     <div class="panel" id="optionspanel">

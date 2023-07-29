@@ -224,13 +224,17 @@ class Application
                 $emptytagbookmark->init(
                     'notags',
                     $emptytag->getaddress(),
-                    '❌',
+                    '🏷️',
                     'No tags',
                     'Pages that does\'nt have any tag'
                 );
+                $all = new Opt();
+                $allbookmark = new Bookmark();
+                $allbookmark->init('all', $all->getaddress(), '⚓', 'All', 'Show all pages');
                     $bookmarkmanager->add($lasteditedbookmark);
                     $bookmarkmanager->add($lastcreatedbookmark);
                     $bookmarkmanager->add($emptytagbookmark);
+                    $bookmarkmanager->add($allbookmark);
             } catch (RuntimeException $e) {
             }
         }

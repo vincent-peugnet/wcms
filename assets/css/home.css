@@ -185,8 +185,4 @@ div#geomap {
     .bookmarks tbody {
         display: flex;
     }
-
-    .bookmarks .block {
-        /*! flex-direction: row; */
-    }
 }

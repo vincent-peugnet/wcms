@@ -6,6 +6,7 @@ class Workspace extends Item
 {
     protected bool $showeditorleftpanel = true;
     protected bool $showeditorrightpanel = false;
+    protected bool $showeoptionspanel = false;
     protected int $fontsize = 15;
     protected string $mediadisplay = self::LIST;
     protected string $highlighttheme = self::THEME_DEFAULT;
@@ -37,6 +38,11 @@ class Workspace extends Item
         return $this->showeditorrightpanel;
     }
 
+    public function showeoptionspanel(): bool
+    {
+        return $this->showeoptionspanel;
+    }
+
     public function fontsize(): int
     {
         return $this->fontsize;
@@ -60,6 +66,11 @@ class Workspace extends Item
     public function setshoweditorrightpanel($show)
     {
         $this->showeditorrightpanel = boolval($show);
+    }
+
+    public function setshoweoptionspanel($show)
+    {
+        $this->showeoptionspanel = boolval($show);
     }
 
     public function setfontsize($fontsize)

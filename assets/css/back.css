@@ -60,6 +60,11 @@ aside .submenu {
     z-index: 10000;
 }
 
+aside #save-workspace {
+    position: absolute;
+    right: 0;
+}
+
 
 .submenu h2 {
     font-size: medium;

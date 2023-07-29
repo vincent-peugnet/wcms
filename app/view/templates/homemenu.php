@@ -434,6 +434,15 @@
         </div>
     </details>
 
+    <span id="save-workspace">
 
+<form action="<?= $this->url('workspaceupdate') ?>" method="post" id="workspace-form">
+    <input type="hidden" name="showeoptionspanel" value="0">
+    <button type="submit">
+        <i class="fa fa-edit"></i>
+        <span class="text">save workspace</span>
+    </button>
+</form>
+</span>
 
 </aside>
