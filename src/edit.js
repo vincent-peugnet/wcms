@@ -102,7 +102,7 @@ CodeMirror.defineSimpleMode('wcms', {
     // detect a Wcms markup then pass to 'wcms' mode
     start: [
         {
-            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|INCLUDE|SUMMARY|LIST|MAP|RANDOM|MEDIA|TITLE|DESCRIPTION|DATE|TIME|DATEMODIF|TIMEMODIF|THUMBNAIL|RSS|AUTHORS|ID|PATH|URL|VISITCOUNT|EDITCOUNT|DISPLAYCOUNT)(\?[^\s]*)?%)/,
+            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|CONTENT|SUMMARY|LIST|MAP|RANDOM|MEDIA|TITLE|DESCRIPTION|DATE|TIME|DATEMODIF|TIMEMODIF|THUMBNAIL|RSS|AUTHORS|ID|PATH|URL|VISITCOUNT|EDITCOUNT|DISPLAYCOUNT)(\?[^\s]*)?%)/,
             token: 'wcms',
             next: 'wcms',
         },
@@ -116,7 +116,7 @@ CodeMirror.defineSimpleMode('wcms', {
     // 'wcms' mode, for each macro, if there is parameters, pass to its associated mode
     wcms: [
         {
-            regex: /(HEADER|NAV|ASIDE|MAIN|FOOTER|INCLUDE)\?/,
+            regex: /(HEADER|NAV|ASIDE|MAIN|FOOTER|CONTENT)\?/,
             token: 'wcms',
             next: 'element',
         },
