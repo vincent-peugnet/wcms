@@ -1,0 +1,51 @@
+{
+    "id": "date-time-test-v2",
+    "title": "date-time-test-v2",
+    "description": "",
+    "lang": "",
+    "tag": [
+        "test"
+    ],
+    "latitude": null,
+    "longitude": null,
+    "date": "2023-08-06T19:31:00+0200",
+    "datecreation": "2023-08-06T19:31:15+0200",
+    "datemodif": "2023-08-06T19:32:27+0200",
+    "daterender": "2023-08-06T19:32:27+0200",
+    "css": "",
+    "javascript": "",
+    "body": "<h1>DateTime Test<\/h1>\n\n\n%INCLUDE%\n\n<p>\n  last modification: %DATEMODIF% at %TIMEMODIF%\n<\/p>",
+    "externalcss": [],
+    "customhead": "",
+    "secure": 0,
+    "interface": "body",
+    "linkto": [],
+    "templatebody": "",
+    "templatecss": "",
+    "templatejavascript": "",
+    "templateoptions": [
+        "thumbnail",
+        "recursivecss",
+        "externalcss",
+        "favicon",
+        "externaljavascript"
+    ],
+    "favicon": "",
+    "thumbnail": "",
+    "authors": [
+        "vincent"
+    ],
+    "invites": [],
+    "readers": [],
+    "displaycount": 2,
+    "visitcount": 0,
+    "editcount": 4,
+    "editby": [],
+    "sleep": 0,
+    "redirection": "",
+    "refresh": 0,
+    "password": null,
+    "postprocessaction": false,
+    "version": 2,
+    "content": "%DATE%\r\n%TIME%\r\n%DATE?format=full&lang=fr%\r\n%TIME?format=medium&lang=ja%\r\n"
+}

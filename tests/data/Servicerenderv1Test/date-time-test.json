@@ -1,6 +1,6 @@
 {
-    "id": "empty-test",
-    "title": "empty-test",
+    "id": "date-time-test",
+    "title": "date-time-test",
     "description": "",
     "lang": "",
     "tag": [],
@@ -45,5 +45,6 @@
     "sleep": 0,
     "redirection": "",
     "refresh": 0,
-    "password": null
+    "password": null,
+    "version": 1
 }
