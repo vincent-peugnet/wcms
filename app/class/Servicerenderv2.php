@@ -102,7 +102,7 @@ class Servicerenderv2 extends Servicerender
     protected function getelementcontent(string $source): string
     {
         if ($source === $this->page->id()) {
-            return $this->page->markdown();
+            return $this->page->content();
         } else {
             try {
                 $page = $this->pagemanager->get($source);

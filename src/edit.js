@@ -312,7 +312,7 @@ function initEditors(theme) {
         case 2:
             editors = [
                 CodeMirror.fromTextArea(
-                    document.getElementById('editmarkdown'),
+                    document.getElementById('editcontent'),
                     {
                         mode: 'wcms-markdown',
                         lineNumbers: true,

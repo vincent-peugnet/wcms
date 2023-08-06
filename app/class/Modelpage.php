@@ -756,7 +756,7 @@ class Modelpage extends Modeldb
 
     /**
      * This function will check for page version in datas and will retrun coresponding page version object
-     * If no version is specified and Markdown field is not used, it will return Pagev1
+     * If no version is specified and `content` field is not used, it will return Pagev1
      *
      * @param array|object $datas           Page's datas
      * @return Page                         V1 or V2
@@ -774,7 +774,7 @@ class Modelpage extends Modeldb
                     return new Pagev2($datas);
             }
             throw new RangeException('Version is specified but out of range');
-        } elseif (isset($metadatas['markdown'])) {
+        } elseif (isset($metadatas['content'])) {
             return new Pagev2($datas);
         } else {
             return new Pagev1($datas);
