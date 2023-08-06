@@ -20,7 +20,7 @@ abstract class Config
     protected static $notpublishedpass = false;
     protected static $alertcss = false;
     protected static $defaultv1body = "%HEADER%\n\n%NAV%\n\n%ASIDE%\n\n%MAIN%\n\n%FOOTER%";
-    protected static $defaultv2body = "%INCLUDE%";
+    protected static $defaultv2body = "%CONTENT%";
     protected static $defaultfavicon = '';
     protected static $defaultthumbnail = '';
     protected static string $suffix = "";

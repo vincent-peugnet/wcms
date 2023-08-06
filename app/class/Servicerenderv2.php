@@ -31,7 +31,7 @@ class Servicerenderv2 extends Servicerender
             throw new DomainException('Page should be only Pagev2');
         }
         $this->page = $page;
-        $html = $this->bodyconstructor('%INCLUDE%');
+        $html = $this->bodyconstructor('%CONTENT%');
         return $this->bodyparser($html);
     }
 
@@ -47,7 +47,7 @@ class Servicerenderv2 extends Servicerender
     {
         $body = parent::bodyconstructor($body);
 
-        $matches = $this->match($body, 'INCLUDE');
+        $matches = $this->match($body, 'CONTENT');
 
         // First, analyse the synthax and call the corresponding methods
         if (!empty($matches)) {
