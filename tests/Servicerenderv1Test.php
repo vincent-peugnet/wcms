@@ -12,7 +12,7 @@ use Wcms\Servicerender;
 use Wcms\Pagev1;
 use Wcms\Servicerenderv1;
 
-class ServicerenderTest extends TestCase
+class Servicerenderv1Test extends TestCase
 {
     protected string $cwd;
     protected static string $tmpdir;
@@ -20,7 +20,7 @@ class ServicerenderTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$tmpdir = mktempdir("w-cms-test-servicerender");
+        self::$tmpdir = mktempdir("w-cms-test-servicerenderv1");
     }
 
     public function setUp(): void
@@ -50,11 +50,11 @@ class ServicerenderTest extends TestCase
         if ($requireslinux && PHP_OS_FAMILY != 'Linux') {
             $this->markTestSkipped();
         }
-        $pagedata = json_decode(file_get_contents(__DIR__ . "/data/ServicerenderTest/$name.json"), true);
+        $pagedata = json_decode(file_get_contents(__DIR__ . "/data/Servicerenderv1Test/$name.json"), true);
         $page = new Pagev1($pagedata);
         $html = $this->renderengine->render($page);
 
-        $expected = __DIR__ . "/data/ServicerenderTest/$name.html";
+        $expected = __DIR__ . "/data/Servicerenderv1Test/$name.html";
         $actual = self::$tmpdir . "/$name.html";
 
         $doc = new DOMDocument();
