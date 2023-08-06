@@ -59,6 +59,10 @@ main article#manual h3 {
     font-size: 35px;
 }
 
+#manual table {
+    margin-top: 12px;
+  }
+
 main article h4 {
     background-color: var(--main-color);
     font-size: x-large;

@@ -150,7 +150,7 @@ This panel is also usefull to set up a [page list](#page-list) to include the sa
 
 The Deep Search bar help you to look for words or regular expressions in your pages.
 
-By default, searching only look in [title](#page-title), [description](#description) and [contents (markdown elements)](#markdown-elements), but the "other" checkbox will allow you to look up in [css](#css), [javascript](#javascript) and [BODY](#body) contents.
+By default, searching only look in [title](#page-title), [description](#description) and [contents (markdown elements)](#content-elements), but the "other" checkbox will allow you to look up in [css](#css), [javascript](#javascript) and [BODY](#body) contents.
 
 Unlike the [filterings options](#options) below, searches can't be saved or used for [page lists](#page-list).
 
@@ -513,7 +513,7 @@ Where `<min>` and `<max>` are integers beetwen `1` to `6`.
 
 You can set `<min>` and `<max>` values to filters beetwen `<h*>` and `<h*>` headlines to take care of.
 
-You can specify an [element](#markdown-elements) to target with the `element` parameter. The summary will only refer to this `element` headlines.
+You can specify an [element](#content-elements) to target with the `element` parameter. The summary will only refer to this `element` headlines.
 
 
 
@@ -534,7 +534,7 @@ It use the same logic as the page filters in the [home view](#home).
 
 *For example, this will print all public pages sorted by creation date in descending order.*
 
-When you are in the [home view](#home), ajust the filters using the [options panel](#options) to achieve the page selection you desire. Then select "filters" in the [menu](#home-menu), choose options you prefer and hit "generate". You can now copy and paste the code obtainded that way in one of the [elements](#markdown-elements) of a page.
+When you are in the [home view](#home), ajust the filters using the [options panel](#options) to achieve the page selection you desire. Then select "filters" in the [menu](#home-menu), choose options you prefer and hit "generate". You can now copy and paste the code obtainded that way in one of the [elements](#content-elements) of a page.
 
 Display options are :
 
@@ -594,7 +594,7 @@ This will include a `div` HTML tag and some javascript.
 
     <div id="geomap" class="map"></div>
 
-When you are in the [home view](#home), ajust the filters using the [options panel](#options) to achieve the page selection you desire. Then select "filters" in the [menu](#home-menu), under the "map" title, you can now copy and paste the code obtainded that way in one of the [elements](#markdown-elements) of a page.
+When you are in the [home view](#home), ajust the filters using the [options panel](#options) to achieve the page selection you desire. Then select "filters" in the [menu](#home-menu), under the "map" title, you can now copy and paste the code obtainded that way in one of the [elements](#content-elements) of a page.
 
 **⚠️ this feature is limited to one map per page**
 
@@ -675,15 +675,19 @@ The most common usage is tu use it as a link `href`. For example, with a publish
 
 The BODY tab allow you to create more complex canvas for your pages.
 
-It use only HTML.
+It cannot interpret Markdown language, you have to use HTML. But still you can use all the W [inclusions codes](#inclusions).
+
+Depending on whitch page version you use, BODY synthax may be slightly different.
 
 #### Element inclusion
 
-The main purpose of BODY, is to display [Markdown elements](#markdown-elements) of your page.
+The main purpose of BODY, is to display [contents](#content-elements) of your page.
 
     %<element>%
 
-Where `<element>` can be `MAIN`, `HEADER`, `ASIDE`, `NAV` or `FOOTER`. This will invoke the selected element into your page's BODY.
+**In pages V1** `<element>` can be `MAIN`, `HEADER`, `ASIDE`, `NAV` or `FOOTER`. This will invoke the selected element into your page's BODY.
+
+**In page V2** `<element>` can only be `CONTENT`
 
 #### External Element inclusion
 
@@ -691,23 +695,33 @@ Where `<element>` can be `MAIN`, `HEADER`, `ASIDE`, `NAV` or `FOOTER`. This will
 
     %<element>?id=<page_id>%
 
-Just specify the [ID](#page-id) of the page [elements](#markdown-elements) you want to include.
+Just specify the [ID](#page-id) of the page [elements](#content-elements) you want to include.
 
 
 ##### concatenate elements
 
-You can even concatenate differents pages [elements](#markdown-elements), using `+` symbol separating [pages IDs](#page-id). All contents of differents pages elements will be concatenated inside one element.
+
+|page versions  |1  |2  |
+|---------------|---|---|
+|support        |✔️  |❌ |
+
+**In pages V1**, ou can concatenate differents pages [elements](#content-elements), using `+` symbol separating [pages IDs](#page-id). All contents of differents pages elements will be concatenated inside one element.
 
     %<element>?id=<page1_id>+<page2_id>+*%
 
 Where `*` is the page ID of the rendered page.
 
-
+**In page V2** this is useless as you can simply repeat the simple inclusion syntax multiple times.
 
 #### Rendering options
 
 
 ##### HTML tags
+
+
+|page versions  |1  |2  |
+|---------------|---|---|
+|support        |✔️  |❌ |
 
     %<element>?tag=(0|1)%
 
@@ -723,12 +737,22 @@ This will include the content of the *nav* element of your page, but without any
 
 ##### Markdown disable
 
+
+|page versions  |1  |2  |
+|---------------|---|---|
+|support        |✔️  |✔️  |
+
     %<element>?mardown=(0|1)%
 
 Activate or desactivate [markdonw](#markdown) parser in called `<element>`. By default, Markdown is set to `1`.
 
 
 ##### Header ID
+
+
+|page versions  |1  |2  |
+|---------------|---|---|
+|support        |✔️  |✔️  |
 
     %<element>?headerid=<x>-<y>%
 
@@ -738,6 +762,11 @@ You can also set `headerid=0` to totaly disable ID generation for this element.
 
 
 ##### Anchor links in title
+
+
+|page versions  |1  |2  |
+|---------------|---|---|
+|support        |✔️  |✔️  |
 
     %<element>?headeranchor=(0|1|2)%
 
@@ -750,11 +779,21 @@ This settings is deactivated by default.
 
 ##### URL linker
 
+
+|page versions  |1  |2  |
+|---------------|---|---|
+|support        |✔️  |✔️  |
+
     %<element>?urllinker=(0|1)%
 
 URL Linker is a tool that will transform a plain text URL into a link. This can be enabled or disabled specificly for each elements. The default behavior can be set globaly in the [admin panel](#admin).
 
 ##### Everylink
+
+
+|page versions  |1  |2  |
+|---------------|---|---|
+|support        |✔️  |✔️  |
 
 Everylink is an powerfull but surprising feature that will replace everything you type with links.
 
@@ -975,9 +1014,11 @@ This is not an editable metadata. It's a list of all pages that are linked from 
 
 #### Content
 
-##### markdown elements
+##### content elements
 
-Main, Nav, Aside, Header, Footer
+**In pages V1**, there are 5 content elements : Main, Nav, Aside, Header, Footer.
+
+**In pages V2**, there is only one content element called "content".
 
 ##### CSS
 
