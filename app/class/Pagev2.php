@@ -6,33 +6,33 @@ class Pagev2 extends Page
 {
     protected int $version = self::V2;
 
-    protected $markdown;
+    protected $content;
 
-    public const TABS = ['markdown', 'css', 'body', 'javascript'];
+    public const TABS = ['content', 'css', 'body', 'javascript'];
 
     public function reset()
     {
         parent::reset();
 
-        $this->setmarkdown('');
+        $this->setcontent('');
 
-        $this->setinterface('markdown');
+        $this->setinterface('content');
     }
 
-    public function markdown($type = ''): string
+    public function content($type = ''): string
     {
-        return $this->markdown;
+        return $this->content;
     }
 
     public function primary($type = ''): string
     {
-        return $this->markdown;
+        return $this->content;
     }
 
-    public function setmarkdown($markdown)
+    public function setcontent($content)
     {
-        if (is_string($markdown)) {
-            $this->markdown = $markdown;
+        if (is_string($content)) {
+            $this->content = $content;
         }
     }
 }
