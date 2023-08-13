@@ -465,7 +465,8 @@ class Modelpage extends Modeldb
                 $this->flinkto($page, $opt->linkto()) &&
                 $this->fsince($page, $opt->since()) &&
                 $this->funtil($page, $opt->until()) &&
-                $this->fgeo($page, $opt->geo())
+                $this->fgeo($page, $opt->geo()) &&
+                $this->fversion($page, $opt->version())
             ) {
                 $filter[] = $page->id();
             }
@@ -663,6 +664,15 @@ class Modelpage extends Modeldb
             return true;
         } else {
             return $page->isgeo();
+        }
+    }
+
+    protected function fversion(Page $page, int $version)
+    {
+        if ($version === 0) {
+            return true;
+        } else {
+            return $page->version() === $version;
         }
     }
 
