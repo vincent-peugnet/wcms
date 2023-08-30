@@ -88,7 +88,7 @@ class Colors extends Item
     {
         $css = "";
         foreach ($tagcolor as $tag => $color) {
-            $css .= "\ntr td a.tag_$tag { background-color: $color; }";
+            $css .= "\n.tag_$tag { background-color: $color; }";
         }
         return $css;
     }

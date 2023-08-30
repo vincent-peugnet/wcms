@@ -105,7 +105,12 @@ nav span.counter {
     height: 17px;
     display: inline-block;
     text-align: center;
+    font-size: smaller;
 }
+
+fieldset.tag .counter, td a.tag {
+    color: white !important;
+  }
 
 
 table td a.tag, table a.author {
