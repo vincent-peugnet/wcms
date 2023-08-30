@@ -20,13 +20,6 @@ main nav {
     overflow-y: auto;
     height: 100%;
 }
-
-label.toogle:hover {
-    color: white;
-    cursor: pointer;
-    background-color: #e2e2e287;
-}
-
 nav label.toogle {
     float: right;
 }

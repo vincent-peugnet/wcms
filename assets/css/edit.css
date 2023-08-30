@@ -18,12 +18,6 @@
     height: 100%;
 }
 
-label.toogle:hover {
-    color: white;
-    cursor: pointer;
-    background-color: #e2e2e287;
-}
-
 #leftbar label.toogle {
     float: right;
 }

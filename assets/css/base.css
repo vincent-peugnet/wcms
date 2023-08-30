@@ -113,6 +113,12 @@ label.toogle {
     text-align: center;
 }
 
+label.toogle:hover {
+    color: var(--outline-color);
+    cursor: pointer;
+    background-color: var(--outline-background-color);
+}
+
 /* Used for interface modification using hidden checkboxes */
 input.toggle {
     display: none;
