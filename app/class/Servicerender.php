@@ -161,7 +161,7 @@ class Servicerender
      */
     private function bodyconstructor(string $body): string
     {
-        $body = $this->basicinclusions($body);
+        $body = $this->winclusions($body);
 
         // Elements that can be detected
         $types = array_map("strtoupper", Model::HTML_ELEMENTS);
@@ -334,9 +334,9 @@ class Servicerender
     }
 
     /**
-     * Perfom W's syntax basic inclusions
+     * Perfom W syntax inclusions
      */
-    private function basicinclusions($text)
+    private function winclusions($text)
     {
         $text = $this->date($text);
         $text = $this->thumbnail($text);
@@ -345,13 +345,19 @@ class Servicerender
         $text = $this->path($text);
         $text = $this->title($text);
         $text = $this->description($text);
+        $text = $this->pageoptlist($text);
+        $text = $this->automedialist($text);
+        $text = $this->pageoptmap($text);
+        $text = $this->randomopt($text);
+        $text = $this->authors($text);
+        $text = $this->authenticate($text);
         return $text;
     }
 
     private function elementparser(Element $element)
     {
         $content = $element->content();
-        $content = $this->basicinclusions($content);
+        $content = $this->winclusions($content);
         if ($element->everylink() > 0) {
             $content = $this->everylink($content, $element->everylink());
         }
@@ -381,17 +387,9 @@ class Servicerender
 
     private function bodyparser(string $html)
     {
-        $html = $this->automedialist($html);
-        $html = $this->pageoptlist($html);
-        $html = $this->pageoptmap($html);
-        $html = $this->randomopt($html);
-
         $html = $this->summary($html);
 
         $html = $this->rss($html);
-
-        $html = $this->authors($html);
-        $html = $this->authenticate($html);
         $html = $this->wikiurl($html);
 
         $html = "<body>\n$html\n</body>";

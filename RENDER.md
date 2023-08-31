@@ -11,12 +11,11 @@ flowchart TD
     0rss(RSS feed declaration) --> 3B
 
     2A[[Body]] -->
-    2B(W inclusion 1)  ------->
+    2B(W inclusion)  ------->
     2C((Element inclusion)) --> 2D
     subgraph "post inclusion parser"
         2D(Summary) -->
         2rss(RSS detection) -->
-        2F(W inclusion 2) -->
         2H(Wiki links) -->
         2I(Link and media analysis) -->
         2pp(check for post render actions)
@@ -32,7 +31,7 @@ flowchart TD
 
 
     1A[[Element]] -->
-    1B(W inclusion 1) -->
+    1B(W inclusion) -->
     1C(every link*) -->
     1D(Markdown) --> 1E
     subgraph "post MD parser"
@@ -53,9 +52,9 @@ flowchart TD
 
 
 
-## W inclusions 1
+## W inclusions
 
-List of W inclusions part 1
+List of W inclusions
 
 1. replace `%DATE%`, `%DATEMODIF%`, `%TIME%`, `%TIMEMODIF%` codes
 1. replace `%THUMBNAIL%` code
@@ -64,16 +63,11 @@ List of W inclusions part 1
 1. replace `%PATH%` code
 1. replace `%TITLE%` code
 1. replace `%DESCRIPTION%` code
-
-The point of doing those inclusions early is to be before __Header ID__ parser. That way, when they are used inside HTML headings, they will generate nicer IDs.
-
-## W inclusions 2
-
-List of inclusions part 2
-
 1. replace `%LIST%` code
 1. replace `%MEDIA%` code
 1. replace `%MAP%` code
 1. replace `%RANDOM%` code
 1. replace `%AUTHORS%` code
 1. replace `%CONNECT%` code
+
+The point of doing those inclusions early is to be before __Header ID__ parser. That way, when they are used inside HTML headings, they will generate nicer IDs.
