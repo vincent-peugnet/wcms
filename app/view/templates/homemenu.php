@@ -27,8 +27,6 @@
             </br>
             <input type="submit" value="upload">
             </form>
-            <h2>Export database</h2>
-            <p>Future feature</p>
             </div>
     </details>
 
@@ -104,6 +102,13 @@
                 <label for="thumbnail">Thumnail</label>
                 </br>
 
+                <strong>Geolocalisation</strong>
+                </br>
+                <input type="hidden" name="reset[geo]" value="0">
+                <input type="checkbox" name="reset[geo]" id="resetgeo" value="1">
+                <label for="resetgeo">delete geo datas</label>
+                </br>
+
                 <strong>Templates</strong>
                 </br>
                 <select name="datas[templatebody]" id="templatebody">
@@ -174,6 +179,7 @@
                 <input type="checkbox" name="reset[datemodif]" id="resetdatemodif" value="1" checked>
                 <label for="resetdatemodif">update modification date</label>
                 </br>
+
                 <input type="submit" name="action" value="edit">
 
                 <h2>Render</h2>

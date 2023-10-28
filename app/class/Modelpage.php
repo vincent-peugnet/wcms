@@ -319,19 +319,23 @@ class Modelpage extends Modeldb
     public function reset(Page $page, array $reset): Page
     {
         $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
-        if ($reset['tag']) {
+        if (boolval($reset['tag'])) {
             $page->settag([]);
         }
-        if ($reset['author']) {
+        if (boolval($reset['geo'])) {
+            $page->setlatitude(null);
+            $page->setlongitude(null);
+        }
+        if (boolval($reset['author'])) {
             $page->setauthors([]);
         }
-        if ($reset['redirection']) {
+        if (boolval($reset['redirection'])) {
             $page->setredirection('');
         }
-        if ($reset['date']) {
+        if (boolval($reset['date'])) {
             $page->setdate($now);
         }
-        if ($reset['datemodif']) {
+        if (boolval($reset['datemodif'])) {
             $page->setdatemodif($now);
         }
         return $page;
