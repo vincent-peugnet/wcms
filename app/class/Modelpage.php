@@ -303,7 +303,7 @@ class Modelpage extends Modeldb
         $page->hydrate($datas);
         $page->addtag($addtag);
         $page->addauthor($addauthor);
-        if ($this->update($page)) {
+        if (!$this->update($page)) {
             throw new RuntimeException("Error while trying to update page $pageid");
         }
     }
