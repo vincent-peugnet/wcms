@@ -119,6 +119,9 @@ abstract class Config
      */
     public static function checkbasepath(): bool
     {
+        if (str_starts_with(self::$basepath, '/') || str_ends_with(self::$basepath, '/')) {
+            return false;
+        }
         $path = $_SERVER['DOCUMENT_ROOT'] . '/' . self::$basepath . '/' .  Model::CONFIG_FILE;
         return (file_exists($path));
     }
