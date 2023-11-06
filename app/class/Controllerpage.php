@@ -28,6 +28,9 @@ class Controllerpage extends Controller
     {
         $cleanid = Model::idclean($id);
         if ($cleanid !== $id) {
+            if ($route === 'pageadd') {
+                $_SESSION['dirtyid'][$cleanid] = rawurldecode($id);
+            }
             http_response_code(308);
             $this->routedirect($route, ['page' => $cleanid]);
         } else {
@@ -284,6 +287,10 @@ class Controllerpage extends Controller
 
         if ($this->user->iseditor() && !$this->importpage()) {
             $this->page->reset();
+            if (isset($_SESSION['dirtyid'])) {
+                $this->page->settitle($_SESSION['dirtyid'][$page]);
+                unset($_SESSION['dirtyid']);
+            }
             $this->page->addauthor($this->user->id());
             $this->pagemanager->add($this->page);
             $this->routedirect('pageedit', ['page' => $this->page->id()]);
