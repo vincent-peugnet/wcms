@@ -114,9 +114,15 @@ abstract class Config
         return $json;
     }
 
-    public static function checkbasepath()
+    /**
+     * Check if basepath is correct
+     */
+    public static function checkbasepath(): bool
     {
-        $path = $_SERVER['DOCUMENT_ROOT'] . '/' . self::basepath() . '/' .  Model::CONFIG_FILE;
+        if (str_starts_with(self::$basepath, '/') || str_ends_with(self::$basepath, '/')) {
+            return false;
+        }
+        $path = $_SERVER['DOCUMENT_ROOT'] . '/' . self::$basepath . '/' .  Model::CONFIG_FILE;
         return (file_exists($path));
     }
 
