@@ -37,6 +37,7 @@ class Application
                 echo 'Cant write config file : ' . $e->getMessage();
             }
             header('Location: ./');
+            exit;
         } elseif (
             isset($_POST['userinit'])
             && !empty($_POST['userinit']['id'])
