@@ -824,7 +824,7 @@ class Page extends Item
 
     public function setpassword($password)
     {
-        if (is_string($password) && strlen($password) > 0 && strlen($password) < 64) {
+        if (is_string($password) && strlen($password) < 64) {
             $this->password = $password;
         }
     }
