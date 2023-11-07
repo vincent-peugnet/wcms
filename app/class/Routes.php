@@ -66,7 +66,7 @@ class Routes
             ['POST', '/!profile/password', 'Controllerprofile#password', 'profilepassword'],
             ['GET', '/!info', 'Controllerinfo#desktop', 'info'],
             ['GET', '/[cid:page]/', 'Controllerpage#pagepermanentredirect', 'pageread/'],
-            ['POST', '/[cid:page]/', 'Controllerpage#read', 'pageread/post'],
+            ['POST', '/[cid:page]', 'Controllerpage#read', 'pagereadpost'],
             ['GET', '/[cid:page]', 'Controllerpage#read', 'pageread'],
             ['GET', '/[cid:page]/add', 'Controllerpage#add', 'pageadd'],
             ['GET', '/[cid:page]/add:[cid:copy]', 'Controllerpage#addascopy', 'pageaddascopy'],

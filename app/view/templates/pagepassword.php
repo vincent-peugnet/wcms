@@ -27,7 +27,7 @@ $this->stop();
 
 <h1>This page is password protected</h1>
 
-<form action="<?= $this->url('pageread/post', ['page' => $pageid]) ?>" method="post">
+<form action="<?= $this->url('pagereadpost', ['page' => $pageid]) ?>" method="post">
 <label for="pagepassword">Page password</label>
 <input type="password" name="pagepassword" id="pagepassword" autofocus required>
 </form>
