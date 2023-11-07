@@ -940,6 +940,14 @@ Tags are very powerfull to help you organize your pages. As in __W__, there is n
 
 Tags can be set in the [left panel of the editor interface](#left-panel) using comma to separate tags, or by using the multi edit tool in the [Home menu bar > Edit](#home-menu).
 
+##### Privacy
+
+Pages have 3 possible levels of privacy:
+
+- **public** Free to read for every [visitor](#visitor).
+- **private** Hidden to [visitor](#visitor), but accessible to [reader users](#reader).
+- **not published** Only readable for users allowed to edit the page.
+
 ##### Date
 
 This metadata can be set manually by the page editors.
@@ -1027,6 +1035,8 @@ Count the number of time the page is opened is opened.
 
 > level : 1
 
+Reader users are allowed to read [private pages](#privacy).
+
 #### Invite Editor
 
 > level : 2
@@ -1038,13 +1048,14 @@ Invite Editors are the lowest editor status possible. They can only access the [
 > level : 3
 
 - Can create pages and edit them.
-- Can only edit pages when listed as [author](#authors)
+- Can only edit pages when listed as [author](#authors).
 
 #### Super Editor
 
 > level : 4
 
-- Can edit any pages they like (they will be added as [author](#authors) of the page).
+- Can edit any pages they like.
+- Can manage users as [author](#authors) of a page.
 - Can use the home menu and media menu to access powerfull features.
 
 #### Administrator

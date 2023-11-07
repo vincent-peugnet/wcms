@@ -84,7 +84,6 @@ class Controllerapipage extends Controllerapi
 
                 if ($this->page->datemodif() == $oldpage->datemodif()) {
                     $this->page->updateedited();
-                    $this->page->addauthor($this->user->id());
                     if ($this->pagemanager->update($this->page)) {
                         http_response_code(200);
                         header('Content-type: application/json; charset=utf-8');
@@ -137,7 +136,6 @@ class Controllerapipage extends Controllerapi
             $this->shortresponse(401, 'Page already exist but user cannot update it');
         }
         $this->page = new Page(array_merge($this->recievejson(), ['id' => $page]));
-        $this->page->addauthor($this->user->id());
         if ($this->pagemanager->update($this->page)) {
             http_response_code($exist ? 200 : 201);
         } else {

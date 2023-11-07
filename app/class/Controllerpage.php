@@ -454,7 +454,7 @@ class Controllerpage extends Controller
 
         if ($this->importpage()) {
             if ($this->canedit()) {
-                // Check if someone esle edited the page during the editing.
+                // Check if someone else edited the page during the editing.
                 $oldpage = clone $this->page;
                 $this->page->hydrate($_POST);
 
@@ -465,7 +465,6 @@ class Controllerpage extends Controller
                     $this->routedirect('pageedit', ['page' => $this->page->id()]);
                 } else {
                     $this->page->updateedited();
-                    $this->page->addauthor($this->user->id());
                     $this->page->removeeditby($this->user->id());
 
                     $this->pagemanager->update($this->page);
