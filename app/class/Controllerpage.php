@@ -223,7 +223,7 @@ class Controllerpage extends Controller
             http_response_code(404);
             $this->showtemplate(
                 'alertexistnot',
-                ['page' => $this->page, 'canedit' => $this->canedit(), 'subtitle' => Config::existnot()]
+                ['page' => $this->page, 'canedit' => $this->canedit($this->page), 'subtitle' => Config::existnot()]
             );
         }
     }
@@ -234,8 +234,13 @@ class Controllerpage extends Controller
 
         $this->pageconnect('pageedit');
 
+        if ($this->importpage()) {
 
-        if ($this->importpage() && $this->canedit()) {
+            if (!$this->canedit($this->page)) {
+                $this->showtemplate('unauthorized', ['route' => 'pageedit', 'id' => $this->page->id()]);
+                exit;
+            }
+
             $datas['tablist'] = [
                 'main' => $this->page->main(),
                 'css' => $this->page->css(),
@@ -431,7 +436,7 @@ class Controllerpage extends Controller
         if ($this->user->iseditor()) {
             try {
                 $this->page = $this->pagemanager->get($srcid);
-                if ($this->canedit() && !$this->pagemanager->exist($targetid)) {
+                if ($this->canedit($this->page) && !$this->pagemanager->exist($targetid)) {
                     $this->page->setid($targetid);
                     $this->page->setdatecreation(true); // Reset date of creation
                     $this->page->setdatemodif(new DateTimeImmutable());
@@ -453,8 +458,8 @@ class Controllerpage extends Controller
 
 
         if ($this->importpage()) {
-            if ($this->canedit()) {
-                // Check if someone else edited the page during the editing.
+            if ($this->canedit($this->page)) {
+                // Check if someone esle edited the page during the editing.
                 $oldpage = clone $this->page;
                 $this->page->hydrate($_POST);
 

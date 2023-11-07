@@ -44,7 +44,7 @@ class Controllerapipage extends Controllerapi
     public function get(string $page)
     {
         if ($this->importpage($page)) {
-            if ($this->canedit()) {
+            if ($this->canedit($this->page)) {
                 http_response_code(200);
                 header('Content-type: application/json; charset=utf-8');
                 echo json_encode($this->page->dry(), JSON_PRETTY_PRINT);
@@ -66,7 +66,7 @@ class Controllerapipage extends Controllerapi
     public function update(string $page)
     {
         if ($this->importpage($page)) {
-            if ($this->canedit()) {
+            if ($this->canedit($this->page)) {
                 if (!empty($_POST)) {
                     $datas = $_POST;
                 } else {
@@ -132,7 +132,7 @@ class Controllerapipage extends Controllerapi
         if (!$exist && !$this->user->iseditor()) {
             $this->shortresponse(401, 'User cannot create pages');
         }
-        if ($exist && !$this->canedit()) {
+        if ($exist && !$this->canedit($this->page)) {
             $this->shortresponse(401, 'Page already exist but user cannot update it');
         }
         $this->page = new Page(array_merge($this->recievejson(), ['id' => $page]));

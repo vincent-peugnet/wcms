@@ -191,4 +191,20 @@ class Controller
     {
         $_SESSION['user' . Config::basepath()]['workspace'] = $this->workspace->dry();
     }
+
+    /**
+     * Tell if the current user can edit the given Page
+     *
+     * @param Page $page
+     */
+    protected function canedit(Page $page): bool
+    {
+        if ($this->user->issupereditor()) {
+            return true;
+        } elseif ($this->user->isinvite() || $this->user->iseditor()) {
+            return (in_array($this->user->id(), $page->authors()));
+        } else {
+            return false;
+        }
+    }
 }
