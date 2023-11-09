@@ -105,12 +105,23 @@ input#editfontsize {
 }
 
 
-.editor div#editmenu {
+.editor aside {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: nowrap;
+    padding: 2px 3px;
 }
+
+aside#edittopbar .menu {
+    display: flex;
+  }
+  aside #pagemenu > span {
+    margin-right: 14px;
+  }
+  aside #workspacemenu > span {
+    margin-left: 10px;
+  }
 
 .editor ul {
     list-style: none;
@@ -148,16 +159,6 @@ a {
 
 a:hover {
     color: white;
-}
-
-
-
-span#user {
-    float: right;
-}
-
-span#search {
-    float: left;
 }
 
 

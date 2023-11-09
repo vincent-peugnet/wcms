@@ -1,6 +1,6 @@
 <aside id="edittopbar">
 
-    <div id="editmenu">
+    <span class="menu" id="pagemenu">
         <span>
             <form
                 action="<?= $this->upage('pageupdate', $page->id()) ?>"
@@ -41,6 +41,8 @@
                     <span class="text">delete</span>
                 </a>
         </span>
+    </span>
+    <span class="menu" id="workspacemenu">
 
         <span id="fontsize">
             <label for="fontsize">
@@ -68,6 +70,6 @@
             </form>
         </span>
 
-    </div>
+</span>
 
 </aside>

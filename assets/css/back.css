@@ -201,14 +201,6 @@ main.font input, main.font  select, main.font  textarea {
     display: block;
 }
 
-span#user {
-    float: right;
-}
-
-span#search {
-    float: left;
-}
-
 img.icon {
     height: 12px;
 }

@@ -62,6 +62,7 @@ h1, h2 {
     background-color: var(--main-color);
     width: 100%;
     padding: 4px 3px;
+    display: flex;
 }
 
 #topbar form {
@@ -79,6 +80,10 @@ h1, h2 {
 
 #topbar a.currentpage {
     text-decoration: underline;
+}
+
+span#user {
+    margin-left: auto; /* align to the right */
 }
 
 aside {
