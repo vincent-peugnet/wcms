@@ -235,9 +235,9 @@ class Controllerpage extends Controller
         $this->pageconnect('pageedit');
 
         if ($this->importpage()) {
-
             if (!$this->canedit($this->page)) {
-                $this->showtemplate('unauthorized', ['route' => 'pageedit', 'id' => $this->page->id()]);
+                http_response_code(403);
+                $this->showtemplate('forbidden', ['route' => 'pageedit', 'id' => $this->page->id()]);
                 exit;
             }
 
@@ -300,7 +300,8 @@ class Controllerpage extends Controller
             $this->pagemanager->add($this->page);
             $this->routedirect('pageedit', ['page' => $this->page->id()]);
         } else {
-            $this->routedirect('pageread', ['page' => $this->page->id()]);
+            http_response_code(403);
+            $this->showtemplate('forbidden', ['route' => 'pageedit', 'id' => $this->page->id()]);
         }
     }
 

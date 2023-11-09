@@ -10,6 +10,12 @@ class Controlleruser extends Controller
     public function __construct($router)
     {
         parent::__construct($router);
+
+        if ($this->user->isvisitor()) {
+            http_response_code(401);
+            $this->showtemplate('connect', ['route' => 'user']);
+            exit;
+        }
     }
 
     public function desktop()
@@ -18,7 +24,8 @@ class Controlleruser extends Controller
             $datas['userlist'] = $this->usermanager->getlister();
             $this->showtemplate('user', $datas);
         } else {
-            $this->routedirect('home');
+            http_response_code(403);
+            $this->showtemplate('forbidden', []);
         }
     }
 

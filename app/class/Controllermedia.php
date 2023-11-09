@@ -21,62 +21,69 @@ class Controllermedia extends Controller
         $this->mediamanager = new Modelmedia();
 
         $this->mediaopt = new Mediaopt($_GET);
+
+        if ($this->user->isvisitor()) {
+            http_response_code(401);
+            $this->showtemplate('connect', ['route' => 'media']);
+            exit;
+        }
     }
 
 
 
     public function desktop()
     {
-        if ($this->user->iseditor()) {
-            try {
-                Fs::dircheck(Model::FONT_DIR, true, 0775);
-                Fs::dircheck(Model::THUMBNAIL_DIR, true, 0775);
-                Fs::dircheck(Model::FAVICON_DIR, true, 0775);
-                Fs::dircheck(Model::CSS_DIR, true, 0775);
-            } catch (RuntimeException $e) {
-                Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
-            }
-            if (isset($_POST['query'])) {
-                $datas = array_merge($_GET, $_POST);
-            } else {
-                $datas = $_GET;
-            }
-
-            $mediaopt = new Mediaoptlist($datas);
-
-            try {
-                $this->mediamanager->checkdir($this->mediaopt->dir());
-            } catch (Folderexception $e) {
-                Model::sendflashmessage($e->getMessage(), Model::FLASH_WARNING);
-                $this->mediaopt->setpath(Model::MEDIA_DIR);
-                $this->redirect($this->generate("media", [], $this->mediaopt->getpathadress()));
-            }
-
-            $medialist = $this->mediamanager->medialistopt($mediaopt);
-
-            $dirlist = $this->mediamanager->listdir(Model::MEDIA_DIR);
-
-            $pathlist = [];
-            $this->mediamanager->listpath($dirlist, '', $pathlist);
-
-            $vars['maxuploadsize'] = readablesize(file_upload_max_size()) . 'o';
-            $vars['cssfont'] = Model::dirtopath(Model::FONTS_CSS_FILE);
-
-            if (isset($_GET['display'])) {
-                $this->workspace->setmediadisplay($_GET['display']);
-                $this->workspace2session();
-            }
-
-            $vars['filtercode'] = !empty($_POST); // indicate that filter code has been generated
-            $vars['medialist'] = $medialist;
-            $vars['dirlist'] = $dirlist;
-            $vars['pathlist'] = $pathlist;
-            $vars['mediaopt'] = $mediaopt;
-
-            $this->showtemplate('media', $vars);
-        } else {
-            $this->routedirect('home');
+        if (!$this->user->iseditor()) {
+            http_response_code(403);
+            $this->showtemplate('forbidden', []);
+            exit;
         }
+        try {
+            Fs::dircheck(Model::FONT_DIR, true, 0775);
+            Fs::dircheck(Model::THUMBNAIL_DIR, true, 0775);
+            Fs::dircheck(Model::FAVICON_DIR, true, 0775);
+            Fs::dircheck(Model::CSS_DIR, true, 0775);
+        } catch (RuntimeException $e) {
+            Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+        }
+        if (isset($_POST['query'])) {
+            $datas = array_merge($_GET, $_POST);
+        } else {
+            $datas = $_GET;
+        }
+
+        $mediaopt = new Mediaoptlist($datas);
+
+        try {
+            $this->mediamanager->checkdir($this->mediaopt->dir());
+        } catch (Folderexception $e) {
+            Model::sendflashmessage($e->getMessage(), Model::FLASH_WARNING);
+            $this->mediaopt->setpath(Model::MEDIA_DIR);
+            $this->redirect($this->generate("media", [], $this->mediaopt->getpathadress()));
+        }
+
+        $medialist = $this->mediamanager->medialistopt($mediaopt);
+
+        $dirlist = $this->mediamanager->listdir(Model::MEDIA_DIR);
+
+        $pathlist = [];
+        $this->mediamanager->listpath($dirlist, '', $pathlist);
+
+        $vars['maxuploadsize'] = readablesize(file_upload_max_size()) . 'o';
+        $vars['cssfont'] = Model::dirtopath(Model::FONTS_CSS_FILE);
+
+        if (isset($_GET['display'])) {
+            $this->workspace->setmediadisplay($_GET['display']);
+            $this->workspace2session();
+        }
+
+        $vars['filtercode'] = !empty($_POST); // indicate that filter code has been generated
+        $vars['medialist'] = $medialist;
+        $vars['dirlist'] = $dirlist;
+        $vars['pathlist'] = $pathlist;
+        $vars['mediaopt'] = $mediaopt;
+
+        $this->showtemplate('media', $vars);
     }
 
     public function upload()

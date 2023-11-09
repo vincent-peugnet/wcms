@@ -16,32 +16,39 @@ class Controlleradmin extends Controller
         parent::__construct($router);
 
         $this->adminmanager = new Modeladmin();
+
+        if ($this->user->isvisitor()) {
+            http_response_code(401);
+            $this->showtemplate('connect', ['route' => 'admin']);
+            exit;
+        }
+        if (!$this->user->isadmin()) {
+            http_response_code(403);
+            $this->showtemplate('forbidden', []);
+            exit;
+        }
     }
 
     public function desktop()
     {
-        if ($this->user->isadmin()) {
-            $datas['pagelist'] = $this->pagemanager->list();
-            $this->mediamanager = new Modelmedia();
-            $datas['faviconlist'] = $this->mediamanager->listfavicon();
-            $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();
-            $datas['themes'] = $this->mediamanager->listthemes();
+        $datas['pagelist'] = $this->pagemanager->list();
+        $this->mediamanager = new Modelmedia();
+        $datas['faviconlist'] = $this->mediamanager->listfavicon();
+        $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();
+        $datas['themes'] = $this->mediamanager->listthemes();
 
-            $globalcssfile = Model::GLOBAL_CSS_FILE;
+        $globalcssfile = Model::GLOBAL_CSS_FILE;
 
-            if (is_file($globalcssfile)) {
-                $datas['globalcss'] = file_get_contents($globalcssfile);
-            } else {
-                $datas['globalcss'] = "";
-            }
-
-            $datas['pagesdblist'] = $this->adminmanager->pagesdblist();
-            $datas['pagesdbtree'] = $this->mediamanager->listdir(Model::PAGES_DIR);
-
-            $this->showtemplate('admin', $datas);
+        if (is_file($globalcssfile)) {
+            $datas['globalcss'] = file_get_contents($globalcssfile);
         } else {
-            $this->routedirect('home');
+            $datas['globalcss'] = "";
         }
+
+        $datas['pagesdblist'] = $this->adminmanager->pagesdblist();
+        $datas['pagesdbtree'] = $this->mediamanager->listdir(Model::PAGES_DIR);
+
+        $this->showtemplate('admin', $datas);
     }
 
     public function update()
@@ -52,10 +59,10 @@ class Controlleradmin extends Controller
             Config::hydrate($_POST);
             Config::savejson();
             Model::sendflashmessage("Configuration succesfully updated", Model::FLASH_SUCCESS);
-            $this->routedirect('admin');
         } catch (Filesystemexception $e) {
             Model::sendflashmessage("Can't write config file or global css file", Model::FLASH_ERROR);
         }
+        $this->routedirect('admin');
     }
 
     public function database()
