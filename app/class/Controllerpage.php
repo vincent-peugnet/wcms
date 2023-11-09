@@ -11,8 +11,6 @@ use RuntimeException;
 
 class Controllerpage extends Controller
 {
-    use Voterpage;
-
     /** @var Page */
     protected $page;
     protected $mediamanager;
@@ -223,7 +221,7 @@ class Controllerpage extends Controller
             http_response_code(404);
             $this->showtemplate(
                 'alertexistnot',
-                ['page' => $this->page, 'canedit' => $this->canedit($this->page), 'subtitle' => Config::existnot()]
+                ['page' => $this->page, 'subtitle' => Config::existnot()]
             );
         }
     }
@@ -315,26 +313,11 @@ class Controllerpage extends Controller
         }
     }
 
-    public function confirmdelete($page)
-    {
-        $this->setpage($page, 'pageconfirmdelete');
-        if ($this->importpage() && ($this->user->issupereditor() || $this->page->authors() === [$this->user->id()])) {
-            $linksto = new Opt();
-            $linksto->setlinkto($this->page->id());
-            $pageslinkingto = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $linksto);
-            $this->showtemplate('confirmdelete', [
-                'page' => $this->page,
-                'pageexist' => true,
-                'pageslinkingtocount' => count($pageslinkingto),
-            ]);
-        } else {
-            $this->routedirect('pageread', ['page' => $this->page->id()]);
-        }
-    }
-
     public function download($page)
     {
-        if ($this->user->isadmin()) {
+        $this->setpage($page, 'pagedownload');
+
+        if ($this->importpage() && $this->canedit($this->page)) {
             $file = Model::PAGES_DIR . Config::pagetable() . DIRECTORY_SEPARATOR . $page . '.json';
 
             if (file_exists($file)) {
@@ -409,11 +392,31 @@ class Controllerpage extends Controller
 
     public function delete($page)
     {
-        $this->setpage($page, 'pagedelete');
+        $this->setpage($page, 'pagecdelete');
+        if ($this->importpage() && $this->candelete($this->page)) {
+            $linksto = new Opt();
+            $linksto->setlinkto($this->page->id());
+            $pageslinkingto = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $linksto);
+            $this->showtemplate('delete', [
+                'page' => $this->page,
+                'pageexist' => true,
+                'pageslinkingtocount' => count($pageslinkingto),
+            ]);
+        } else {
+            $this->routedirect('pageread', ['page' => $this->page->id()]);
+        }
+    }
+
+    public function confirmdelete($page)
+    {
+        $this->setpage($page, 'pageconfirmdelete');
         if ($this->user->iseditor() && $this->importpage()) {
             $this->pagemanager->delete($this->page);
+            $this->routedirect('pageread', ['page' => $this->page->id()]);
+        } else {
+            http_response_code(403);
+            $this->showtemplate('forbidden', ['route' => 'pageread', 'id' => $this->page->id()]);
         }
-        $this->routedirect('home');
     }
 
     public function duplicate(string $page, string $duplicate)

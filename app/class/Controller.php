@@ -94,6 +94,12 @@ class Controller
         $this->plates->registerFunction('ubookmark', function (string $string, string $id) {
             return $this->generate($string, ['bookmark' => $id]);
         });
+        $this->plates->registerFunction('caneditpage', function (Page $page) {
+            return $this->canedit($page);
+        });
+        $this->plates->registerFunction('candeletepage', function (Page $page) {
+            return $this->candelete($page);
+        });
         $this->plates->addData(['flashmessages' => Model::getflashmessages()]);
     }
 
@@ -195,6 +201,8 @@ class Controller
     /**
      * Tell if the current user can edit the given Page
      *
+     * User need to be SUPEREDITOR, otherwise, it need to be author of a page.
+     *
      * @param Page $page
      */
     protected function canedit(Page $page): bool
@@ -203,6 +211,24 @@ class Controller
             return true;
         } elseif ($this->user->isinvite() || $this->user->iseditor()) {
             return (in_array($this->user->id(), $page->authors()));
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Tell if the current user can delete the given Page
+     *
+     * User need to be SUPEREDITOR, otherwise, it need to be the only author of a page.
+     *
+     * @param Page $page
+     */
+    protected function candelete(Page $page): bool
+    {
+        if ($this->user->issupereditor()) {
+            return true;
+        } elseif ($this->user->isinvite() || $this->user->iseditor()) {
+            return ($page->authors() === [$this->user->id()]);
         } else {
             return false;
         }

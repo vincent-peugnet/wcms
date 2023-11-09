@@ -10,6 +10,12 @@ class Controllerinfo extends Controller
     public function __construct($render)
     {
         parent::__construct($render);
+
+        if ($this->user->isvisitor()) {
+            http_response_code(401);
+            $this->showtemplate('connect', ['route' => 'info']);
+            exit;
+        }
     }
 
     public function desktop()

@@ -258,7 +258,7 @@
                                 <?php } ?>
                             </td>
                             <td class="edit">
-                                <?php if($user->issupereditor() || in_array($user->id(), $item->authors())) { ?>
+                                <?php if($this->caneditpage($item)) { ?>
                                     <a href="<?= $this->upage('pageedit', $item->id()) ?>">
                                         <i class="fa fa-pencil"></i>
                                     </a>
@@ -270,7 +270,7 @@
                                 </a>
                             </td>
                             <td class="delete">
-                                <?php if($user->issupereditor() || $item->authors() === [$user->id()]) { ?>
+                                <?php if($this->candeletepage($item)) { ?>
                                     <a href="<?= $this->upage('pagedelete', $item->id()) ?>">
                                         <i class="fa fa-trash"></i>
                                     </a>

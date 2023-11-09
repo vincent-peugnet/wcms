@@ -5,6 +5,9 @@
 
 <?php $this->start('page') ?>
 
+
+<?php $this->insert('backtopbar', ['user' => $user, 'pagelist' => $pagelist]) ?>
+
 <h1>Forbidden</h1>
 
 <span>

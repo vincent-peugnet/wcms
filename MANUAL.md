@@ -1049,6 +1049,7 @@ Invite Editors are the lowest editor status possible. They can only access the [
 
 - Can create pages and edit them.
 - Can only edit pages when listed as [author](#authors).
+- Can only delete pages if they are the only author.
 
 #### Super Editor
 
@@ -1057,6 +1058,8 @@ Invite Editors are the lowest editor status possible. They can only access the [
 - Can edit any pages they like.
 - Can manage users as [author](#authors) of a page.
 - Can use the home menu and media menu to access powerfull features.
+- Can delete any page.
+- Have access to mass edit features.
 
 #### Administrator
 

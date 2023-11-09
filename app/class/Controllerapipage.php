@@ -7,8 +7,6 @@ use RuntimeException;
 
 class Controllerapipage extends Controllerapi
 {
-    use Voterpage;
-
     /** @var Page|null $page */
     protected ?Page $page;
 

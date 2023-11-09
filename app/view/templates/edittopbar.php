@@ -35,12 +35,15 @@
         </span>
 
 
-        <span id="delete">
-                <a href="<?= $this->upage('pageconfirmdelete', $page->id()) ?>">
-                    <i class="fa fa-trash"></i>
-                    <span class="text">delete</span>
-                </a>
-        </span>
+        <?php if($this->candeletepage($page)) { ?>
+            <span id="delete">
+                    <a href="<?= $this->upage('pagedelete', $page->id()) ?>">
+                        <i class="fa fa-trash"></i>
+                        <span class="text">delete</span>
+                    </a>
+            </span>
+        <?php } ?>
+
     </span>
     <span class="menu" id="workspacemenu">
 
@@ -52,6 +55,9 @@
         </span>
 
         <span id="highlighttheme">
+            <label for="fontsize">
+                <i class="fa fa-adjust"></i>
+            </label>
             <select name="highlighttheme" form="workspace-form" id="edithighlighttheme">
                 <?= options(Wcms\Workspace::THEMES, $workspace->highlighttheme(), true) ?>
             </select>
