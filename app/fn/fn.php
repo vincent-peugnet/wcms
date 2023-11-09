@@ -88,7 +88,11 @@ function isreportingerrors()
     return function_exists('Sentry\init') && !empty(Wcms\Config::sentrydsn());
 }
 
-
+/**
+ * Get W version using VERSION file in root directory.
+ * @return string                           W's current version.
+ *                                          If the file cannot be read, `unknown` is used as output.
+ */
 function getversion(): string
 {
     if (file_exists('VERSION')) {

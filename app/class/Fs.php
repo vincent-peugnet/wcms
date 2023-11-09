@@ -3,6 +3,8 @@
 namespace Wcms;
 
 use DomainException;
+use LogicException;
+use RuntimeException;
 
 /**
  * File system related tools. No Wcms specific param should be set here.
@@ -119,6 +121,27 @@ abstract class Fs
         }
     }
 
+    /**
+     * Read file as string
+     *
+     * @param string $path                  the file path
+     * @return string                       the file as string
+     *
+     * @throws Notfoundexception            if the diven path is not a file
+     * @throws Fileexception                if an error reading the file occured
+     */
+    public static function readfile(string $path): string
+    {
+        if (!is_file($path)) {
+            throw new Notfoundexception("The given path `$path` is not a file");
+        }
+        $file = file_get_contents($path);
+        if ($file === false) {
+            throw new Fileexception("Error when reading file `$path`");
+        }
+        return $file;
+    }
+
 
 
     /**
@@ -151,7 +174,7 @@ abstract class Fs
      * @param string $file                      Filename to delete
      *
      * @throws Notfoundexception                If file does not exist
-     * @throws Fileexception                    Id file cannot be deleted
+     * @throws Fileexception                    If file cannot be deleted
      * @throws Unlinkexception                  If PHP unlink function fails for another reason
      */
     public static function deletefile(string $file): void
@@ -165,6 +188,31 @@ abstract class Fs
         }
         if (!unlink($file)) {
             throw new Unlinkexception($file);
+        }
+    }
+
+    /**
+     * Delete all files in a given folder
+     *
+     * @throws Notfoundexception                If folder does not exist
+     * @throws Fileexception                    If a file cannot be deleted
+     * @throws Unlinkexception                  If PHP unlink function fails for another reason
+     */
+    public static function folderflush(string $path): void
+    {
+        $path = trim($path, '/');
+        $files = glob("$path/*");
+        if ($files === false) {
+            throw new Notfoundexception("Error while trying to scan directory $path");
+        }
+        try {
+            foreach ($files as $file) {
+                self::deletefile($file);
+            }
+        } catch (Notfoundexception $e) {
+            throw new LogicException(
+                'Problem with Fs::folderflush(), path given to Fs::deletefile() does not exist.'
+            );
         }
     }
 }

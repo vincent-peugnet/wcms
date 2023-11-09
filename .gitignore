@@ -4,6 +4,7 @@
 assets/atom/*
 assets/render/*
 assets/global/*
+assets/manual/*
 assets/css/tagcolors.css
 assets/js/*
 database/*
