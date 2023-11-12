@@ -102,7 +102,7 @@ CodeMirror.defineSimpleMode('wcms', {
     // detect a Wcms markup then pass to 'wcms' mode
     start: [
         {
-            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|SUMMARY|LIST|MAP|RANDOM|MEDIA|TITLE|DESCRIPTION|DATE|TIME|DATEMODIF|TIMEMODIF|THUMBNAIL|RSS|AUTHORS|ID|PATH|URL|VISITCOUNT|EDITCOUNT|DISPLAYCOUNT)(\?[^\s]*)?%)/,
+            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|CONTENT|SUMMARY|LIST|MAP|RANDOM|MEDIA|TITLE|DESCRIPTION|DATE|TIME|DATEMODIF|TIMEMODIF|THUMBNAIL|RSS|AUTHORS|ID|PATH|URL|VISITCOUNT|EDITCOUNT|DISPLAYCOUNT)(\?[^\s]*)?%)/,
             token: 'wcms',
             next: 'wcms',
         },
@@ -116,7 +116,7 @@ CodeMirror.defineSimpleMode('wcms', {
     // 'wcms' mode, for each macro, if there is parameters, pass to its associated mode
     wcms: [
         {
-            regex: /(HEADER|NAV|ASIDE|MAIN|FOOTER)\?/,
+            regex: /(HEADER|NAV|ASIDE|MAIN|FOOTER|CONTENT)\?/,
             token: 'wcms',
             next: 'element',
         },
@@ -247,61 +247,105 @@ function initEditors(theme) {
     // disable CodeMirror's default ctrl+D shortcut (delete line)
     delete CodeMirror.keyMap['default']['Ctrl-D'];
 
-    editors = [
-        CodeMirror.fromTextArea(document.getElementById('editmain'), {
-            mode: 'wcms-markdown',
-            lineNumbers: true,
-            lineWrapping: true,
-            theme,
-            extraKeys: { 'Alt-F': 'findPersistent' },
-        }),
-        CodeMirror.fromTextArea(document.getElementById('editcss'), {
-            mode: 'css',
-            lineNumbers: true,
-            theme,
-            extraKeys: { 'Alt-F': 'findPersistent' },
-        }),
-        CodeMirror.fromTextArea(document.getElementById('editheader'), {
-            mode: 'wcms-markdown',
-            lineNumbers: true,
-            lineWrapping: true,
-            theme,
-            extraKeys: { 'Alt-F': 'findPersistent' },
-        }),
-        CodeMirror.fromTextArea(document.getElementById('editnav'), {
-            mode: 'wcms-markdown',
-            lineNumbers: true,
-            lineWrapping: true,
-            theme,
-            extraKeys: { 'Alt-F': 'findPersistent' },
-        }),
-        CodeMirror.fromTextArea(document.getElementById('editaside'), {
-            mode: 'wcms-markdown',
-            lineNumbers: true,
-            lineWrapping: true,
-            theme,
-            extraKeys: { 'Alt-F': 'findPersistent' },
-        }),
-        CodeMirror.fromTextArea(document.getElementById('editfooter'), {
-            mode: 'wcms-markdown',
-            lineNumbers: true,
-            lineWrapping: true,
-            theme,
-            extraKeys: { 'Alt-F': 'findPersistent' },
-        }),
-        CodeMirror.fromTextArea(document.getElementById('editbody'), {
-            mode: 'wcms-html',
-            lineNumbers: true,
-            theme,
-            extraKeys: { 'Alt-F': 'findPersistent' },
-        }),
-        CodeMirror.fromTextArea(document.getElementById('editjavascript'), {
-            mode: 'javascript',
-            lineNumbers: true,
-            theme,
-            extraKeys: { 'Alt-F': 'findPersistent' },
-        }),
-    ];
+    switch (pageversion) {
+        case 1:
+            editors = [
+                CodeMirror.fromTextArea(document.getElementById('editmain'), {
+                    mode: 'wcms-markdown',
+                    lineNumbers: true,
+                    lineWrapping: true,
+                    theme,
+                    extraKeys: { 'Alt-F': 'findPersistent' },
+                }),
+                CodeMirror.fromTextArea(document.getElementById('editcss'), {
+                    mode: 'css',
+                    lineNumbers: true,
+                    theme,
+                    extraKeys: { 'Alt-F': 'findPersistent' },
+                }),
+                CodeMirror.fromTextArea(document.getElementById('editheader'), {
+                    mode: 'wcms-markdown',
+                    lineNumbers: true,
+                    lineWrapping: true,
+                    theme,
+                    extraKeys: { 'Alt-F': 'findPersistent' },
+                }),
+                CodeMirror.fromTextArea(document.getElementById('editnav'), {
+                    mode: 'wcms-markdown',
+                    lineNumbers: true,
+                    lineWrapping: true,
+                    theme,
+                    extraKeys: { 'Alt-F': 'findPersistent' },
+                }),
+                CodeMirror.fromTextArea(document.getElementById('editaside'), {
+                    mode: 'wcms-markdown',
+                    lineNumbers: true,
+                    lineWrapping: true,
+                    theme,
+                    extraKeys: { 'Alt-F': 'findPersistent' },
+                }),
+                CodeMirror.fromTextArea(document.getElementById('editfooter'), {
+                    mode: 'wcms-markdown',
+                    lineNumbers: true,
+                    lineWrapping: true,
+                    theme,
+                    extraKeys: { 'Alt-F': 'findPersistent' },
+                }),
+                CodeMirror.fromTextArea(document.getElementById('editbody'), {
+                    mode: 'wcms-html',
+                    lineNumbers: true,
+                    theme,
+                    extraKeys: { 'Alt-F': 'findPersistent' },
+                }),
+                CodeMirror.fromTextArea(
+                    document.getElementById('editjavascript'),
+                    {
+                        mode: 'javascript',
+                        lineNumbers: true,
+                        theme,
+                        extraKeys: { 'Alt-F': 'findPersistent' },
+                    }
+                ),
+            ];
+            break;
+
+        case 2:
+            editors = [
+                CodeMirror.fromTextArea(
+                    document.getElementById('editcontent'),
+                    {
+                        mode: 'wcms-markdown',
+                        lineNumbers: true,
+                        lineWrapping: true,
+                        theme,
+                        extraKeys: { 'Alt-F': 'findPersistent' },
+                    }
+                ),
+                CodeMirror.fromTextArea(document.getElementById('editcss'), {
+                    mode: 'css',
+                    lineNumbers: true,
+                    theme,
+                    extraKeys: { 'Alt-F': 'findPersistent' },
+                }),
+                CodeMirror.fromTextArea(document.getElementById('editbody'), {
+                    mode: 'wcms-html',
+                    lineNumbers: true,
+                    theme,
+                    extraKeys: { 'Alt-F': 'findPersistent' },
+                }),
+                CodeMirror.fromTextArea(
+                    document.getElementById('editjavascript'),
+                    {
+                        mode: 'javascript',
+                        lineNumbers: true,
+                        theme,
+                        extraKeys: { 'Alt-F': 'findPersistent' },
+                    }
+                ),
+            ];
+            break;
+    }
+
     for (const editor of editors) {
         editor.on('change', cmChangeHandler);
     }

@@ -60,10 +60,9 @@ abstract class Model
         'linkto',
         'visitcount',
         'displaycount',
-        'editcount'
+        'editcount',
+        'version',
     ];
-
-    public const HTML_ELEMENTS = ['header', 'nav', 'main', 'aside', 'footer'];
 
     public const ID_REGEX                   = "%[^a-z0-9-_]%";
     public const MAX_ID_LENGTH              = 64;

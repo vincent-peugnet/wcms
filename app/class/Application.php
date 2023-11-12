@@ -124,6 +124,18 @@ class Application
         </div>
         <div>
             <h2>
+                Page version
+            </h2>
+            <p>
+                Select the page version you want to use. If you don't know what it means, keep version 2.
+            </p>
+            <select name="configinit[pageversion]" id="pageversion">
+                <option value="1">v1</option>
+                <option value="2" selected>v2</option>
+            </select>
+        </div>
+        <div>
+            <h2>
                 <label for="pagetable">Name of your database table</label>
             </h2>
             <input type="text" name="configinit[pagetable]"  value="<?= Config::pagetable() ?>" id="pagetable">

@@ -6,7 +6,9 @@ use AltoRouter;
 use JamesMoss\Flywheel\Document;
 use DateTimeImmutable;
 use DateTimeInterface;
+use DomainException;
 use InvalidArgumentException;
+use RangeException;
 use RuntimeException;
 
 class Modelpage extends Modeldb
@@ -37,7 +39,12 @@ class Modelpage extends Modeldb
         if (empty($this->pagelist)) {
             $list = $this->repo->findAll();
             foreach ($list as $pagedata) {
-                $this->pagelist[$pagedata->id] = new Page($pagedata);
+                $id = $pagedata->id;
+                try {
+                    $this->pagelist[$id] = $this->parsepage($pagedata);
+                } catch (RuntimeException $e) {
+                    Logger::error("Could not load Page with ID \"$id\" : $e");
+                }
             }
         }
         return $this->pagelist;
@@ -59,7 +66,11 @@ class Modelpage extends Modeldb
 
         $pagelist = [];
         foreach ($pagedatalist as $id => $pagedata) {
-            $pagelist[$id] = new Page($pagedata);
+            try {
+                $this->pagelist[$id] = $this->parsepage($pagedata);
+            } catch (RuntimeException $e) {
+                Logger::error("Could not load Page with ID \"$id\" : $e");
+            }
         }
         return $pagelist;
     }
@@ -98,10 +109,13 @@ class Modelpage extends Modeldb
         }
         if (is_string($id)) {
             $pagedata = $this->repo->findById($id);
-            if ($pagedata !== false) {
-                return new Page($pagedata);
-            } else {
+            if ($pagedata === false) {
                 throw new RuntimeException("Could not find Page with the following ID: \"$id\"");
+            }
+            try {
+                return $this->parsepage($pagedata);
+            } catch (RuntimeException $e) {
+                throw new RuntimeException("Could not load Page with ID \"$id\": $e");
             }
         } else {
             throw new InvalidArgumentException("argument of Modelpage->get() should be a ID string or Page");
@@ -141,8 +155,6 @@ class Modelpage extends Modeldb
             return false;
         }
 
-        $files = $_FILES;
-
         $json = file_get_contents($_FILES['pagefile']['tmp_name']);
         $pagedata = json_decode($json, true);
 
@@ -150,9 +162,11 @@ class Modelpage extends Modeldb
             return false;
         }
 
-        $page = new Page($pagedata);
-
-        return $page;
+        try {
+            return $this->parsepage($pagedata);
+        } catch (RuntimeException $e) {
+            return false;
+        }
     }
 
     /**
@@ -381,7 +395,18 @@ class Modelpage extends Modeldb
     {
         $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
 
-        $renderengine = new Servicerender($router, $this, Config::externallinkblank(), Config::internallinkblank());
+        $params = [$router, $this, Config::externallinkblank(), Config::internallinkblank()];
+
+        switch ($page->version()) {
+            case Page::V1:
+                $renderengine = new Servicerenderv1(...$params);
+                break;
+            case Page::V2:
+                $renderengine = new Servicerenderv2(...$params);
+                break;
+            default:
+                throw new DomainException('Page version is out of range');
+        }
 
         try {
             $html = $renderengine->render($page);
@@ -455,7 +480,8 @@ class Modelpage extends Modeldb
                 $this->flinkto($page, $opt->linkto()) &&
                 $this->fsince($page, $opt->since()) &&
                 $this->funtil($page, $opt->until()) &&
-                $this->fgeo($page, $opt->geo())
+                $this->fgeo($page, $opt->geo()) &&
+                $this->fversion($page, $opt->version())
             ) {
                 $filter[] = $page->id();
             }
@@ -656,6 +682,15 @@ class Modelpage extends Modeldb
         }
     }
 
+    protected function fversion(Page $page, int $version)
+    {
+        if ($version === 0) {
+            return true;
+        } else {
+            return $page->version() === $version;
+        }
+    }
+
 
     /**
      * Search for regex and count occurences
@@ -678,11 +713,9 @@ class Modelpage extends Modeldb
         foreach ($pagelist as $page) {
             $count = 0;
             if ($options['content']) {
-                $count += preg_match($regex, $page->main());
-                $count += preg_match($regex, $page->nav());
-                $count += preg_match($regex, $page->aside());
-                $count += preg_match($regex, $page->header());
-                $count += preg_match($regex, $page->footer());
+                foreach ($page->contents() as $content) {
+                    $count += preg_match($regex, $page->$content());
+                }
             }
             if ($options['other']) {
                 $count += preg_match($regex, $page->body());
@@ -703,5 +736,50 @@ class Modelpage extends Modeldb
             }
         }
         return $pageselected;
+    }
+
+    /**
+     * Create a page
+     *
+     * @param array $datas                  Page's datas
+     * @return Page                         V1 or V2 depending of config file setting
+     */
+    public function newpage(array $datas = []): Page
+    {
+        $pageversion = Config::pageversion();
+        switch ($pageversion) {
+            case Page::V1:
+                return new Pagev1($datas);
+
+            case Page::V2:
+                return new Pagev2($datas);
+        }
+        throw new DomainException("Invalid page version allowed to be set in config");
+    }
+
+
+    /**
+     * This function will check for page version in datas and will retrun coresponding page version object
+     * If no version is specified and `content` field is not used, it will return Pagev1
+     *
+     * @param array|object $datas           Page's datas
+     * @return Page                         V1 or V2
+     * @throws RangeException               If page version is defined but out of range
+     */
+    public function parsepage($datas = []): Page
+    {
+        $metadatas = is_object($datas) ? get_object_vars($datas) : $datas;
+        if (isset($metadatas['version'])) {
+            switch ($metadatas['version']) {
+                case Page::V1:
+                    return new Pagev1($datas);
+
+                case Page::V2:
+                    return new Pagev2($datas);
+            }
+            throw new RangeException('Version is specified but out of range');
+        } else {
+            return new Pagev1($datas);
+        }
     }
 }

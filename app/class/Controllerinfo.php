@@ -29,7 +29,7 @@ class Controllerinfo extends Controller
             } catch (RuntimeException $e) {
                 try {
                     $mansrc = Fs::readfile(Model::MAN_FILE);
-                    $render = new Servicerender($this->router, $this->pagemanager, true);
+                    $render = new Servicerenderv2($this->router, $this->pagemanager, true);
                     $manual = $render->rendermanual($mansrc);
 
                     $sum = new Summary(['min' => 2, 'max' => 4, 'sum' => $render->sum()]);

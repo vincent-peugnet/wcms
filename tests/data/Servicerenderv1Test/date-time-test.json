@@ -1,6 +1,6 @@
 {
-    "id": "empty-test",
-    "title": "empty-test",
+    "id": "date-time-test",
+    "title": "date-time-test",
     "description": "",
     "lang": "",
     "tag": [],
@@ -12,8 +12,8 @@
     "javascript": "",
     "body": "%HEADER%\n\n%NAV%\n\n%ASIDE%\n\n%MAIN%\n\n%FOOTER%",
     "header": "",
-    "main": "",
-    "nav": "",
+    "main": "%DATE%\n%TIME%\n%DATE?format=full&lang=fr%\n%TIME?format=medium&lang=ja%",
+    "nav": "last modification: %DATEMODIF% at %TIMEMODIF%",
     "aside": "",
     "footer": "",
     "externalcss": [],
@@ -45,5 +45,6 @@
     "sleep": 0,
     "redirection": "",
     "refresh": 0,
-    "password": null
+    "password": null,
+    "version": 1
 }

@@ -19,7 +19,8 @@ abstract class Config
     protected static $privatepass = false;
     protected static $notpublishedpass = false;
     protected static $alertcss = false;
-    protected static $defaultbody = "%HEADER%\n\n%NAV%\n\n%ASIDE%\n\n%MAIN%\n\n%FOOTER%";
+    protected static $defaultv1body = "%HEADER%\n\n%NAV%\n\n%ASIDE%\n\n%MAIN%\n\n%FOOTER%";
+    protected static $defaultv2body = "%CONTENT%";
     protected static $defaultfavicon = '';
     protected static $defaultthumbnail = '';
     protected static string $suffix = "";
@@ -50,6 +51,9 @@ abstract class Config
     /** @var string $lang Default string for pages */
     protected static $lang = "en";
 
+    /** Page version during creation */
+    protected static int $pageversion = Page::V1;
+
     public const LANG_MIN = 2;
     public const LANG_MAX = 16;
 
@@ -75,12 +79,16 @@ abstract class Config
         }
     }
 
-    public static function readconfig()
+    public static function readconfig(): bool
     {
         if (file_exists(Model::CONFIG_FILE)) {
             $current = file_get_contents(Model::CONFIG_FILE);
             $datas = json_decode($current, true);
             self::hydrate($datas);
+            // Setup old config file to user page version 1
+            if (isset($datas['pageaversion'])) {
+                self::$pageversion = Page::V1;
+            }
             return true;
         } else {
             return false;
@@ -227,9 +235,23 @@ abstract class Config
         return self::$alertcss;
     }
 
-    public static function defaultbody()
+    /**
+     * @return string Default BODY corrsponding to current Config's page version
+     */
+    public static function defaultbody(): string
     {
-        return self::$defaultbody;
+        $fn = 'defaultv' . self::$pageversion . 'body';
+        return self::$$fn;
+    }
+
+    public static function defaultv1body(): string
+    {
+        return self::$defaultv1body;
+    }
+
+    public static function defaultv2body(): string
+    {
+        return self::$defaultv2body;
     }
 
     public static function defaultfavicon()
@@ -320,6 +342,11 @@ abstract class Config
     public static function disablejavascript(): bool
     {
         return self::$disablejavascript;
+    }
+
+    public static function pageversion(): int
+    {
+        return self::$pageversion;
     }
 
 
@@ -414,11 +441,31 @@ abstract class Config
         self::$alertcss = boolval($alertcss);
     }
 
+    /**
+     * Used to convert old Config version. Save
+     * `defaultbody` param as `defaultv1body`.
+     */
     public static function setdefaultbody($defaultbody)
     {
         if (is_string($defaultbody)) {
             $defaultbody = crlf2lf($defaultbody);
-            self::$defaultbody = $defaultbody;
+            self::$defaultv1body = $defaultbody;
+        }
+    }
+
+    public static function setdefaultv1body($defaultbody)
+    {
+        if (is_string($defaultbody)) {
+            $defaultbody = crlf2lf($defaultbody);
+            self::$defaultv1body = $defaultbody;
+        }
+    }
+
+    public static function setdefaultv2body($defaultbody)
+    {
+        if (is_string($defaultbody)) {
+            $defaultbody = crlf2lf($defaultbody);
+            self::$defaultv2body = $defaultbody;
         }
     }
 
@@ -539,5 +586,12 @@ abstract class Config
     public static function setdisablejavascript($disablejavascript)
     {
         self::$disablejavascript = boolval($disablejavascript);
+    }
+
+    public static function setpageversion($pageversion): void
+    {
+        if (key_exists($pageversion, Page::VERSIONS)) {
+            self::$pageversion = $pageversion;
+        }
     }
 }

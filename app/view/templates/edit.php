@@ -29,6 +29,7 @@ $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [$cs
 <?php if(!Wcms\Config::disablejavascript()) { ?>
 
 <script>
+    const pageversion = <?= $this->e($page->version()) ?>;
     const pageid = '<?= $this->e($page->id()) ?>';
     let pagetitle = '<?= $this->e($page->title()) ?>';
     let theme = '<?= $this->e($workspace->highlighttheme()) ?>';

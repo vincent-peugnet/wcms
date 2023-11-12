@@ -229,6 +229,11 @@
                                 <a href="<?= $opt->sortbyorder('displaycount') ?>">display</a>
                                 <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'displaycount']) ?>
                             </th>
+                            <?php } if ($columns['version']) { ?>
+                                <th class="displaycount">
+                                    <a href="<?= $opt->sortbyorder('version') ?>">version</a>
+                                    <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'version']) ?>
+                                </th>
                             <?php } ?>
                         </tr>
                     </thead>
@@ -321,6 +326,8 @@
                             <?php }
                                     if ($columns['displaycount']) { ?>
                             <td class="displaycount"><?= $item->displaycount() ?></td>
+                            <?php } if ($columns['version']) { ?>
+                                <td class="version"><?= $item->version() ?></td>                                
                             <?php } ?>
                         </tr>
 
