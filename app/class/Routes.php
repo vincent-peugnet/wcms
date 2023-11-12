@@ -78,8 +78,6 @@ class Routes
             ['GET', '/[cid:page]/login', 'Controllerpage#login', 'pagelogin'],
             ['POST', '/[cid:page]/edit', 'Controllerpage#update', 'pageupdate'],
             ['POST', '/workspace/update', 'Controllerworkspace#update', 'workspaceupdate'],
-            ['POST', '/[cid:page]/editby', 'Controllerpage#editby', 'pageeditby'],
-            ['POST', '/[cid:page]/removeeditby', 'Controllerpage#removeeditby', 'pageremoveeditby'],
             ['GET', '/[cid:page]/delete', 'Controllerpage#delete', 'pagedelete'],
             ['POST', '/[cid:page]/delete', 'Controllerpage#confirmdelete', 'pageconfirmdelete'],
             ['GET', '/[cid:page]/duplicate:[cid:duplicate]', 'Controllerpage#duplicate', 'pageduplicate'],

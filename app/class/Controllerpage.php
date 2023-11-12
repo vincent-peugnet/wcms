@@ -466,7 +466,6 @@ class Controllerpage extends Controller
                     $this->routedirect('pageedit', ['page' => $this->page->id()]);
                 } else {
                     $this->page->updateedited();
-                    $this->page->removeeditby($this->user->id());
 
                     $this->pagemanager->update($this->page);
                 }

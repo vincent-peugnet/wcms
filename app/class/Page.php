@@ -39,7 +39,6 @@ abstract class Page extends Item
     protected $displaycount;
     protected $visitcount;
     protected $editcount;
-    protected $editby;
     protected $sleep;
     protected $redirection;
     protected $refresh;
@@ -124,7 +123,6 @@ abstract class Page extends Item
         $this->setvisitcount(0);
         $this->seteditcount(0);
         $this->setdisplaycount(0);
-        $this->seteditby([]);
         $this->setsleep(0);
         $this->setredirection('');
         $this->setrefresh(0);
@@ -396,11 +394,6 @@ abstract class Page extends Item
     public function editcount($type = 'int'): int
     {
         return $this->editcount;
-    }
-
-    public function editby($type = 'array')
-    {
-        return $this->editby;
     }
 
     public function sleep($type = 'int')
@@ -752,13 +745,6 @@ abstract class Page extends Item
         }
     }
 
-    public function seteditby($editby)
-    {
-        if (is_array($editby)) {
-            $this->editby = $editby;
-        }
-    }
-
     public function setredirection($redirection)
     {
         if (is_string($redirection) && strlen($redirection) <= 64) {
@@ -831,21 +817,6 @@ abstract class Page extends Item
         if (!in_array($id, $this->authors)) {
             $this->authors[] = $id;
         }
-    }
-
-    public function addeditby(string $id)
-    {
-        $this->editby[$id] = true;
-    }
-
-    public function removeeditby(string $id)
-    {
-        unset($this->editby[$id]);
-    }
-
-    public function iseditedby()
-    {
-        return count($this->editby) > 0;
     }
 
     public function setsleep($sleep)

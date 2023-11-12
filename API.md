@@ -58,7 +58,6 @@ Page related api
     "displaycount": 1,
     "visitcount": 0,
     "editcount": 3,
-    "editby": [],
     "sleep": 0,
     "redirection": "",
     "refresh": 0,
