@@ -52,6 +52,7 @@ class Controllerpage extends Controller
                 return true;
             }
         } catch (RuntimeException $e) {
+            Logger::errorex($e);
             return false;
         }
     }

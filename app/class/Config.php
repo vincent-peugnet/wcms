@@ -52,7 +52,7 @@ abstract class Config
     protected static $lang = "en";
 
     /** Page version during creation */
-    protected static int $pageversion = Page::V2;
+    protected static int $pageversion = Page::V1;
 
     public const LANG_MIN = 2;
     public const LANG_MAX = 16;
