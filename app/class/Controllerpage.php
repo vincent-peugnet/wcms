@@ -469,9 +469,6 @@ class Controllerpage extends Controller
 
                     $this->pagemanager->update($this->page);
                 }
-
-
-                //$this->showtemplate('updatemerge', $compare);
             } else {
                 // If the editor session finished during the editing, let's try to reconnect to save the editing
                 $_SESSION['pageupdate'] = $_POST;
