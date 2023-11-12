@@ -34,8 +34,6 @@ abstract class Page extends Item
     protected $favicon;
     protected $thumbnail;
     protected $authors;
-    protected $invites;
-    protected $readers;
     protected $displaycount;
     protected $visitcount;
     protected $editcount;
@@ -118,8 +116,6 @@ abstract class Page extends Item
         $this->setfavicon('');
         $this->setthumbnail('');
         $this->setauthors([]);
-        $this->setinvites([]);
-        $this->setreaders([]);
         $this->setvisitcount(0);
         $this->seteditcount(0);
         $this->setdisplaycount(0);
@@ -369,16 +365,6 @@ abstract class Page extends Item
         } elseif ($type == 'sort') {
             return count($this->authors);
         }
-    }
-
-    public function invites($type = 'array')
-    {
-        return $this->invites;
-    }
-
-    public function readers($type = 'array')
-    {
-        return $this->invites;
     }
 
     public function displaycount($type = 'int'): int
@@ -693,20 +679,6 @@ abstract class Page extends Item
     {
         if (is_array($authors)) {
             $this->authors = array_unique(array_values(array_filter($authors)));
-        }
-    }
-
-    public function setinvites($invites)
-    {
-        if (is_array($invites)) {
-            $this->invites = array_values(array_filter($invites));
-        }
-    }
-
-    public function setreaders($readers)
-    {
-        if (is_array($readers)) {
-            $this->readers = array_values(array_filter($readers));
         }
     }
 

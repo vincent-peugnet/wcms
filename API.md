@@ -53,8 +53,6 @@ Page related api
         "cindy",
         "vincent"
     ],
-    "invites": [],
-    "readers": [],
     "displaycount": 1,
     "visitcount": 0,
     "editcount": 3,
