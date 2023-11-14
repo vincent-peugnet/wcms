@@ -1,13 +1,6 @@
-
-
 * {
     box-sizing: border-box;
 }
-
-.inline {
-    display: inline;
-}
-
 
 body {
     margin: 0;
@@ -19,6 +12,7 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
+    color: var(--text-color);
 }
 
 input, textarea, button, select {
@@ -40,10 +34,6 @@ input[type="submit"], button, select {
 h1, h2 {
     color: var(--text2-color);
     background-color: var(--main-color);
-}
-
-body {
-    color: var(--text-color);
 }
 
 a, button, input, select, textarea {
@@ -142,20 +132,9 @@ label.toogle {
 
 
 @media (max-width: 550px) {
-    body {
-        font-size: 1.1em;
-    }
 
     header a span, footer, header span#search, aside a span, .text {
         display: none;
-    }
-
-    header a, aside a{
-        font-size: 1.3em;
-    }
-
-    button, input, select {
-        font-size: 1em;
     }
 
     aside summary {
@@ -165,6 +144,7 @@ label.toogle {
 
     aside .submenu {
         left: 0;
+        max-width: inherit !important;
     }
 
     .bar {
@@ -173,11 +153,29 @@ label.toogle {
 
     label.toogle {
         width: 100%;
-        height: 20px;
     }
 }
 
+@media (pointer: coarse) {
 
+    header a span, footer, header span#search, aside a span, .text {
+        display: none;
+    }
+
+    body, input, select, button {
+        font-size: 20px;
+    }
+
+    input[type="checkbox"], input[type="radio"] {
+        height: 22px;
+        width: 22px !important;
+    }
+
+    header a {
+        font-size: 35px;
+    }
+    
+}
 
 
 /* __________________________ Flash Messages ___________________________ */

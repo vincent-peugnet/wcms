@@ -66,16 +66,10 @@ aside #save-workspace {
     right: 0;
 }
 
-
-.submenu h2 {
-    font-size: medium;
-}
-
 .submenu h3 {
     margin: 0;
-    font-size: medium;
+    font-size: inherit;
     margin-top: 5px;
-    font-weight: inherit;
 }
 
 
@@ -194,7 +188,7 @@ div.checkbox [type="checkbox"] {
 
 div.radio input[type="radio"] {
     display: inline-block;
-    width: auto;
+    width: inherit;
 }
 
 main.font input, main.font  select, main.font  textarea {
@@ -253,6 +247,13 @@ span.details {
         max-width: inherit !important;
     }
 
+}
+
+@media (pointer: coarse) {
+    aside summary {
+        padding-bottom: 5px;
+        padding-top: 5px;
+    }
 }
 
 

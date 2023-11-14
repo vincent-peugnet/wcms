@@ -1,0 +1,13 @@
+.connect {
+    max-width: 250px;
+    margin: auto;
+}
+
+.connect input {
+    margin: 5px;
+}
+
+.connect form {
+    display: flex;
+    flex-direction: column;
+}

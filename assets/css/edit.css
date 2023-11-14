@@ -56,6 +56,7 @@
 .tab label
 {
 	margin-right: 8px;
+	display: inline-block;
 }
 
 .tab label.edited {
@@ -94,10 +95,8 @@ div.editor {
 }
 
 .editor .tabs label {
-    line-height: 25px;
     padding: 1px;
-    padding-bottom: 5px;
-    overflow: hidden;
+    height: 22px;
 }
 
 input#editfontsize {
@@ -293,3 +292,20 @@ div#geomap {
     }   
 }
 
+
+@media (pointer: coarse) {
+	.editor .tabs label {
+	    height: 35px;
+	    margin-right: 4px;
+	}
+	aside#edittopbar {
+	    padding: 5px;
+	    font-size: 25px;
+	    padding-top: 7px;
+	    padding-bottom: 7px;
+	}
+	
+	span#headid {
+	    display: none;
+	}
+}

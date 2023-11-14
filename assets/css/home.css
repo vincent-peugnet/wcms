@@ -163,9 +163,6 @@ div#geomap {
 
 
 @media (max-width: 900px) {
-    .bookmarks a.bookmark {
-        font-size: 1.3em;
-    }
     .bookmarks td.rss, .bookmarks a span, .bookmarks h3, .bookmarks h2 {
         display: none;
     }
@@ -176,11 +173,23 @@ div#geomap {
         max-width: 100%;
     }
 
-    td.edit, td.read, td.delete, td.download {
-        font-size: 1.3em;
-    }
-
     .bookmarks tbody {
         display: flex;
+    }
+}
+
+@media (pointer: coarse) {
+    .bookmarks td.rss, .bookmarks a span, .bookmarks h3, .bookmarks h2 {
+        display: none;
+    }
+
+    aside #save-workspace {
+        display: none;
+    }
+    a.bookmark {
+        font-size: 30px;
+    }
+    td.edit a, td.read a, td.delete a, td.download a {
+        margin: 0 5px;
     }
 }
