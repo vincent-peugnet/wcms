@@ -1,4 +1,8 @@
-<?php $this->layout('layout', ['title' => 'home', 'stylesheets' => [$css . 'back.css', $css . 'home.css', $css . 'tagcolors.css'], 'favicon' => '']) ?>
+<?php
+
+use Wcms\Config;
+
+ $this->layout('layout', ['title' => 'home', 'stylesheets' => [$css . 'back.css', $css . 'home.css', $css . 'tagcolors.css'], 'favicon' => '']) ?>
 
 
 
@@ -242,7 +246,14 @@
                         <tr>
                             <?php if($user->issupereditor()) { ?><td><input type="checkbox" name="pagesid[]" value="<?= $item->id() ?>" id="id_<?= $item->id() ?>" form="multi"></td><?php } ?>
                             <?php if($columns['favicon']) { ?>
-                                <td class="favicon"><img class="favicon" src="<?= Wcms\Model::faviconpath() . $item->favicon() ?>" alt="<?= $item->favicon() ?>" title="<?= $item->favicon() ?>"></td>
+                                <td class="favicon">
+                                    <?php if(!empty($item->favicon())) { ?>
+                                    <picture>
+                                        <source srcset="<?= Wcms\Model::faviconpath() . $item->favicon() ?>" />
+                                        <img alt="" title="<?= $item->favicon() ?>" >
+                                    </picture>
+                                    <?php } ?>
+                                </td>
                             <?php } ?>
                             <td class="id">
                                 <label title="<?= $item->title() ?>" for="id_<?= $item->id() ?>">

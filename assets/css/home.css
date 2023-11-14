@@ -135,7 +135,7 @@ table td a.secure.public {
 }
 
 
-table img.favicon {
+table .favicon img {
     height: 16px;
     max-width: 32px;
 }
@@ -191,5 +191,9 @@ div#geomap {
     }
     td.edit a, td.read a, td.delete a, td.download a {
         margin: 0 5px;
+    }
+    #deepsearchbar summary {
+        font-size: 22px;
+        padding: 0 10px;
     }
 }
