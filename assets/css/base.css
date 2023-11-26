@@ -17,6 +17,7 @@ body {
 
 input, textarea, button, select {
     border: none;
+    accent-color: var(--main-color);
 }
 
 input, textarea {
