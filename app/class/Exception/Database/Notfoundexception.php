@@ -2,7 +2,7 @@
 
 namespace Wcms\Exception\Database;
 
-use RuntimeException;
+use Wcms\Exception\Databaseexception;
 
 class Notfoundexception extends Databaseexception
 {

@@ -2,7 +2,8 @@
 
 namespace Wcms;
 
-use Wcms\Exception\Database\Databaseexception;
+use RuntimeException;
+use Wcms\Exception\Databaseexception;
 use Wcms\Exception\Database\Notfoundexception;
 
 class Controlleruser extends Controller
@@ -41,7 +42,12 @@ class Controlleruser extends Controller
                 if ($user->passwordhashed()) {
                     $user->hashpassword();
                 }
-                $this->usermanager->add($user);
+                try {
+                    $this->usermanager->add($user);
+                    Model::sendflashmessage('User successfully added', Model::FLASH_SUCCESS);
+                } catch (Databaseexception $e) {
+                    Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+                }
                 $this->routedirect('user');
             }
         }
@@ -64,12 +70,17 @@ class Controlleruser extends Controller
 
                     case 'update':
                         $this->change($_POST);
+                        Model::sendflashmessage('User successfully updated', Model::FLASH_SUCCESS);
+                        $this->routedirect('user');
+                        break;
                 }
-            } catch (Databaseexception $e) {
+            } catch (RuntimeException $e) {
                 Model::sendflashmessage('Error : ' . $e->getMessage(), Model::FLASH_ERROR);
             }
         } else {
-            $this->routedirect('home');
+            http_response_code(403);
+            $this->showtemplate('forbidden', []);
+            exit;
         }
     }
 
@@ -89,6 +100,8 @@ class Controlleruser extends Controller
 
     /**
      * @throws Notfoundexception            If User is not found in the database
+     * @throws Databaseexception            If an error occured with database
+     * @throws Runtimeexception             In case of other various problems
      */
     protected function change(array $datas)
     {
@@ -100,15 +113,15 @@ class Controlleruser extends Controller
             && (empty($userupdate->password())
             || !$userupdate->validpassword())
         ) {
-            Model::sendflashmessage('Unvalid password', Model::FLASH_ERROR);
-            $this->routedirect('user');
-        } elseif (
+            throw new RuntimeException('Unvalid password');
+        }
+
+        if (
             $user->level() === 10
             && $userupdate->level() !== 10
             && $this->user->id() === $user->id()
         ) {
-            Model::sendflashmessage('You cannot quit administration', Model::FLASH_ERROR);
-            $this->routedirect('user');
+            throw new RuntimeException('You cannot quit administration job');
         } else {
             if ($userupdate->password() !== $user->password() && $user->passwordhashed()) {
                 $userupdate->setpasswordhashed(false);
@@ -116,9 +129,7 @@ class Controlleruser extends Controller
             if ($userupdate->passwordhashed() && !$user->passwordhashed()) {
                 $userupdate->hashpassword();
             }
-            $this->usermanager->add($userupdate);
-            Model::sendflashmessage('User successfully updated', Model::FLASH_SUCCESS);
-            $this->routedirect('user');
+            $this->usermanager->update($userupdate);
         }
     }
 }

@@ -5,6 +5,7 @@ namespace Wcms;
 use InvalidArgumentException;
 use JamesMoss\Flywheel;
 use JamesMoss\Flywheel\DocumentInterface;
+use JamesMoss\Flywheel\Document;
 use RuntimeException;
 use Wcms\Flywheel\Formatter\JSON;
 use Wcms\Flywheel\Query;
@@ -44,12 +45,13 @@ class Modeldb extends Model
     /**
      * Store Document but only if there is enough space left on disk
      *
-     * @param DocumentInterface $document   Flywheel Document
+     * @param Document $document   Flywheel Document
      * @return bool                         True in case of success, otherwise false
      *
      * @todo use exceptions to create a disctinction between differents possible problems
      */
-    protected function storedoc(DocumentInterface $document): bool {
+    protected function storedoc(DocumentInterface $document): bool
+    {
         if (!$this->isdiskfree()) {
             Logger::error("Not enough free space on disk to store datas in database");
             return false;
@@ -60,12 +62,13 @@ class Modeldb extends Model
     /**
      * Update Document but only if there is enough space left on disk
      *
-     * @param DocumentInterface $document   Flywheel Document
+     * @param Document $document   Flywheel Document
      * @return bool                         True in case of success, otherwise false
      *
      * @todo use exceptions to create a disctinction between differents possible problems
      */
-    protected function updatedoc(DocumentInterface $document): bool {
+    protected function updatedoc(DocumentInterface $document): bool
+    {
         if (!$this->isdiskfree()) {
             Logger::error("Not enough free space on disk to update datas in database");
             return false;

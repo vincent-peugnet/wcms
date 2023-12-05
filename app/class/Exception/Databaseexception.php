@@ -1,6 +1,6 @@
 <?php
 
-namespace Wcms\Exception\Database;
+namespace Wcms\Exception;
 
 use RuntimeException;
 

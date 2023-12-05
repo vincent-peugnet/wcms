@@ -4,6 +4,7 @@ namespace Wcms;
 
 use InvalidArgumentException;
 use JamesMoss\Flywheel\Document;
+use Wcms\Exception\Databaseexception;
 use Wcms\Exception\Database\Notfoundexception;
 
 class Modeluser extends Modeldb
@@ -121,17 +122,35 @@ class Modeluser extends Modeldb
     }
 
     /**
+     * Add a new user in the database
+     *
      * @param User $user
      *
-     * @return bool depending on success
-     *
-     * @todo throw error instead of returning boolean
+     * @throws Databaseexception            in case of error
      */
-    public function add(User $user): bool
+    public function add(User $user): void
     {
         $userdata = new Document($user->dry());
         $userdata->setId($user->id());
-        return $this->storedoc($userdata);
+        if (!$this->storedoc($userdata)) {
+            throw new Databaseexception("Database error while editing user.");
+        }
+    }
+
+    /**
+     * Update an user in the database
+     *
+     * @param User $user
+     *
+     * @throws Databaseexception            in case of error
+     */
+    public function update(User $user): void
+    {
+        $userdata = new Document($user->dry());
+        $userdata->setId($user->id());
+        if (!$this->updatedoc($userdata)) {
+            throw new Databaseexception("Database error while editing user.");
+        }
     }
 
 

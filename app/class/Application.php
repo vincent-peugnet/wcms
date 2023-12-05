@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use RuntimeException;
+use Wcms\Exception\Databaseexception;
 
 class Application
 {
@@ -47,7 +48,11 @@ class Application
             $userdata['level'] = 10;
             $user = new User($userdata);
             $user->hashpassword();
-            $this->usermanager->add($user);
+            try {
+                $this->usermanager->add($user);
+            } catch (Databaseexception $e) {
+                Logger::errorex($e);
+            }
             header('Location: ./');
             exit;
         } else {

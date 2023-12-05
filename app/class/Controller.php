@@ -9,6 +9,7 @@ use InvalidArgumentException;
 use League\Plates\Engine;
 use RuntimeException;
 use Wcms\Exception\Database\Notfoundexception;
+use Wcms\Exception\Databaseexception;
 
 class Controller
 {
@@ -183,11 +184,15 @@ class Controller
      */
     protected function disconnect()
     {
-        $this->user->destroysession($this->session->wsession);
-        $cookiemanager = new Modelconnect();
-        $cookiemanager->deleteauthcookie();
-        $this->session->empty();
-        $this->usermanager->add($this->user);
+        try {
+            $this->user->destroysession($this->session->wsession);
+            $cookiemanager = new Modelconnect();
+            $cookiemanager->deleteauthcookie();
+            $this->session->empty();
+            $this->usermanager->update($this->user);
+        } catch (Databaseexception $e) {
+            Logger::errorex($e);
+        }
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace Wcms;
 
 use RuntimeException;
-use Wcms\Exception\Database\Databaseexception;
+use Wcms\Exception\Databaseexception;
 
 class Controllerhome extends Controller
 {

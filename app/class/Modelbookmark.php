@@ -4,9 +4,8 @@ namespace Wcms;
 
 use InvalidArgumentException;
 use JamesMoss\Flywheel\Document;
-use PhpParser\Node\Expr\Instanceof_;
 use RuntimeException;
-use Wcms\Exception\Database\Databaseexception;
+use Wcms\Exception\Databaseexception;
 use Wcms\Exception\Database\Notfoundexception;
 
 class Modelbookmark extends Modeldb
