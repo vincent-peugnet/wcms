@@ -143,53 +143,6 @@ function changekey($array, $oldkey, $newkey)
     return array_combine($keys, $array);
 }
 
-
-
-function compare($stringa, $stringb)
-{
-    $arraya = explode("\n", $stringa);
-    $arrayb = explode("\n", $stringb);
-
-    $lnb = -1;
-    $commonlines = [];
-    foreach ($arraya as $na => $linea) {
-        $found = false;
-        foreach ($arrayb as $nb => $lineb) {
-            if ($linea === $lineb && $nb > $lnb && !$found && !empty($linea)) {
-                $commonlines[$na] = $nb;
-                $merge[] = $arrayb[$nb];
-                $lnb = $nb;
-                $found = true;
-            }
-        }
-    }
-
-
-    $merge = [];
-    $lnb = 0;
-    foreach ($arraya as $na => $linea) {
-        if (array_key_exists($na, $commonlines)) {
-            for ($j = $lnb; $j <= $commonlines[$na]; $j++) {
-                    $merge[] = $arrayb[$j];
-            }
-            $lnb = $j;
-        } else {
-            $merge[] = $arraya[$na];
-        }
-    }
-    for ($k = $lnb;; $k++) {
-        if (array_key_exists($k, $arrayb)) {
-            $merge[] = $arrayb[$k];
-        } else {
-            break;
-        }
-    }
-
-    return implode("\n", $merge);
-}
-
-
-
 function findsize($file)
 {
     if (substr(PHP_OS, 0, 3) == "WIN") {
@@ -451,4 +404,22 @@ function insert_after(string $text, string $after, string $insert)
     }
     $pos = $afterpos + strlen($after);
     return substr_replace($text, $insert, $pos, 0);
+}
+
+/**
+ * Returns available space on filesystem or disk partition in octets
+ *
+ * @param string $directory                 Directory to mesure
+ * @return float                            In bytes
+ *
+ * @throws RuntimeException                 In case of fail
+ */
+function disk_free_space_ex(string $directory): float
+{
+    $dfs = disk_free_space($directory);
+    if (is_bool($dfs)) {
+        throw new RuntimeException("Error while calculating free space left on disk with directory `$directory`");
+    } else {
+        return $dfs;
+    }
 }

@@ -124,12 +124,14 @@ class Modeluser extends Modeldb
      * @param User $user
      *
      * @return bool depending on success
+     *
+     * @todo throw error instead of returning boolean
      */
     public function add(User $user): bool
     {
         $userdata = new Document($user->dry());
         $userdata->setId($user->id());
-        return $this->repo->store($userdata);
+        return $this->storedoc($userdata);
     }
 
 

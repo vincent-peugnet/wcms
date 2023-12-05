@@ -86,7 +86,7 @@ class Modelpage extends Modeldb
 
         $pagedata = new Document($page->dry());
         $pagedata->setId($page->id());
-        return $this->repo->store($pagedata);
+        return $this->storedoc($pagedata);
     }
 
     /**
@@ -231,7 +231,6 @@ class Modelpage extends Modeldb
     /**
      * Update a page in the database
      *
-     * @todo Check if page already exist before updating ?
      * @todo Use Exceptions instead of returning bool
      *
      * @param Page $page                    The page that is going to be updated
@@ -243,35 +242,8 @@ class Modelpage extends Modeldb
     {
         $pagedata = new Document($page->dry());
         $pagedata->setId($page->id());
-        return $this->repo->store($pagedata);
+        return $this->updatedoc($pagedata);
     }
-
-    public function combine(Page $pagea, Page $pageb)
-    {
-        $mergepage = $pagea;
-        $merge = [];
-        $diff = [];
-        foreach ($pagea::TABS as $element) {
-            if ($pagea->$element() !== $pageb->$element()) {
-                $merge[$element] = compare($pagea->$element(), $pageb->$element());
-                $diff[] = $element;
-            }
-        }
-        $mergepage->hydrate($merge);
-
-        return ['diff' => $diff, 'mergepage' => $mergepage];
-    }
-
-    // public function diffpageelement(Page $pagea, Page $pageb)
-    // {
-    //  $diff = [];
-    //  foreach ($pagea::TABS as $element) {
-    //      if($pagea->$element() !== $pageb->$element()) {
-    //          $diff[] = $element;
-    //      }
-    //  }
-    //  return $diff;
-    // }
 
     /**
      * @param string[] $taglist             list of tags

@@ -144,7 +144,7 @@ class Modelbookmark extends Modeldb
         }
         $bookmarkdata = new Document($bookmark->dry());
         $bookmarkdata->setId($bookmark->id());
-        $success = $this->repo->store($bookmarkdata);
+        $success = $this->storedoc($bookmarkdata);
         if (!$success) {
             throw new Databaseexception("Error while adding Bookmark to database");
         }
@@ -186,7 +186,7 @@ class Modelbookmark extends Modeldb
 
         $bookmarkdata = new Document($bookmark->dry());
         $bookmarkdata->setId($bookmark->id());
-        $success = $this->repo->store($bookmarkdata);
+        $success = $this->updatedoc($bookmarkdata);
         if (!$success) {
             throw new RuntimeException("Error while updating Bookmark to database");
         }

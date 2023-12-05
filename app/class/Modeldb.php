@@ -2,7 +2,9 @@
 
 namespace Wcms;
 
+use InvalidArgumentException;
 use JamesMoss\Flywheel;
+use JamesMoss\Flywheel\DocumentInterface;
 use RuntimeException;
 use Wcms\Flywheel\Formatter\JSON;
 use Wcms\Flywheel\Query;
@@ -14,12 +16,62 @@ class Modeldb extends Model
     /** @var Repository */
     protected $repo;
 
+    /**
+     * Minimal disk space needed to authorize database writing.
+     * 2^18 o = 256 kio
+    */
+    public const MINIMAL_DISK_SPACE = 2 ** 18;
 
     public function __construct()
     {
         $this->dbinit();
     }
 
+    /**
+     * Check if database directory have at least the minimal free disk space required left.
+     *
+     * @return bool                         True if enought space left, otherwise False
+     */
+    protected function isdiskfree(): bool
+    {
+        try {
+            return (disk_free_space_ex(self::DATABASE_DIR) > self::MINIMAL_DISK_SPACE);
+        } catch (RuntimeException $e) {
+            throw new InvalidArgumentException($e->getMessage());
+        }
+    }
+
+    /**
+     * Store Document but only if there is enough space left on disk
+     *
+     * @param DocumentInterface $document   Flywheel Document
+     * @return bool                         True in case of success, otherwise false
+     *
+     * @todo use exceptions to create a disctinction between differents possible problems
+     */
+    protected function storedoc(DocumentInterface $document): bool {
+        if (!$this->isdiskfree()) {
+            Logger::error("Not enough free space on disk to store datas in database");
+            return false;
+        }
+        return $this->repo->store($document);
+    }
+
+    /**
+     * Update Document but only if there is enough space left on disk
+     *
+     * @param DocumentInterface $document   Flywheel Document
+     * @return bool                         True in case of success, otherwise false
+     *
+     * @todo use exceptions to create a disctinction between differents possible problems
+     */
+    protected function updatedoc(DocumentInterface $document): bool {
+        if (!$this->isdiskfree()) {
+            Logger::error("Not enough free space on disk to update datas in database");
+            return false;
+        }
+        return $this->repo->update($document);
+    }
 
     protected function dbinit($dir = Model::DATABASE_DIR)
     {
