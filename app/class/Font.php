@@ -51,6 +51,16 @@ class Font
         "ultra-expanded" => self::STRETCH,
     ];
 
+    public const WEIGHT_EQUIV = [
+        'thin' => 100,
+        'extra-light' => 200,
+        'light' => 300,
+        'medium' => 500,
+        'semi-bold' => 600,
+        'extra-bold' => 800,
+        'black' => 900,
+    ];
+
     /**
      * Feed it with media sharing same basename. Only font formats may differ.
      *
@@ -70,6 +80,9 @@ class Font
         $options = array_unique(array_flip($options));
 
         foreach ($options as $param => $value) {
+            if ($param === self::WEIGHT) {
+                $value = self::WEIGHT_EQUIV[$value] ?? $value;
+            }
             $this->$param = $value;
         };
     }
@@ -105,17 +118,14 @@ class Font
             return $src;
         }, $this->medias());
         $css .= implode(",\n", $srcs) . ";";
-        if (!is_null($this->style())) {
-            $style = $this->style();
-            $css .= "\n    font-style: $style;";
+        if (!is_null($this->style)) {
+            $css .= "\n    font-style: $this->style;";
         }
         if (!is_null($this->weight())) {
-            $weight = $this->weight();
-            $css .= "\n    font-weight: $weight;";
+            $css .= "\n    font-weight: $this->weight;";
         }
-        if (!is_null($this->stretch())) {
-            $stretch = $this->stretch();
-            $css .= "\n    font-stretch: $stretch;";
+        if (!is_null($this->stretch)) {
+            $css .= "\n    font-stretch: $this->stretch;";
         }
         return "$css\n}\n\n";
     }

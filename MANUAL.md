@@ -915,6 +915,36 @@ For example:
 The `fonts.css` file will be automatically re-generated each time you upload or rename files in this folder using the web interface. If you add or modify files by any other way, you can manually trigger the generation. Under the *File > Magic folder* menu, select: *Regenerate @fontface CSS file*
 
 
+##### Authorized properties
+
+Here is the full list of font properties you can use in W.
+
+- **style**
+    - `italique`
+    - `oblique`
+- **weight**
+    - `thin` conveted to `100`
+    - `extra-light` conveted to `200`
+    - `light` conveted to `300`
+    - `medium` conveted to `500`
+    - `semi-bold` conveted to `600`
+    - `bold`
+    - `extra-bold` conveted to `800`
+    - `black`  conveted to `900`
+- **stretch**
+    - `ultra-condensed`
+    - `extra-condensed`
+    - `condensed`
+    - `semi-condensed`
+    - `semi-expanded`
+    - `expanded`
+    - `extra-expanded`
+    - `ultra-expanded`
+
+
+CSS properties for weight only use `normal` and `bold` as absolute values. otherwise, you have to specify it with a number value. **W** will convert text defined weight to numbered values for other common weights.
+
+
 #### CSS folder
 
 This contain two files:
