@@ -24,9 +24,17 @@ class Modelconnect extends Model
             throw new RuntimeException("Secret Key not set");
         }
         $jwt = JWT::encode($datas, Config::secretkey());
-        $cookie = setcookie('authtoken', $jwt, time() + $conservation * 24 * 3600, '/' . Config::basepath(), "", false, true);
+        $options = [
+            'expires' => time() + $conservation * 24 * 3600,
+            'path' => '/' . Config::basepath(),
+            'domain' => '',
+            'secure' => Config::issecure(),
+            'httponly' => true,
+            'samesite' => 'Strict'
+        ];
+        $cookie = setcookie('rememberme', $jwt, $options);
         if (!$cookie) {
-            throw new RuntimeException("Cant be send");
+            throw new RuntimeException("Remember me cookie cannot be created");
         }
     }
 
@@ -37,8 +45,8 @@ class Modelconnect extends Model
      */
     public function checkcookie(): array
     {
-        if (!empty($_COOKIE['authtoken'])) {
-            $datas = JWT::decode($_COOKIE['authtoken'], Config::secretkey(), ['HS256']);
+        if (!empty($_COOKIE['rememberme'])) {
+            $datas = JWT::decode($_COOKIE['rememberme'], Config::secretkey(), ['HS256']);
             return get_object_vars($datas);
         } else {
             throw new RuntimeException('Auth cookie is unset');
@@ -50,6 +58,6 @@ class Modelconnect extends Model
      */
     public function deleteauthcookie(): void
     {
-        $_COOKIE['authtoken'] = [];
+        $_COOKIE['rememberme'] = [];
     }
 }

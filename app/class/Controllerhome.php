@@ -176,7 +176,7 @@ class Controllerhome extends Controller
     protected function listquery(): void
     {
         if (isset($_POST['listquery']) && $this->user->iseditor()) {
-            $datas = array_merge($_POST, $_SESSION['opt']);
+            $datas = array_merge($_POST, $this->servicesession->getopt());
             $this->optlist = new Optlist($datas);
             if (!empty($this->optlist->bookmark())) {
                 $this->optlist->resetall();

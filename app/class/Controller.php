@@ -59,7 +59,7 @@ class Controller
                 Logger::warning("Deleted session using non existing user : '$sessionuser'");
                 $this->servicesession->empty(); // empty the session as a non existing user was set
             }
-        } elseif (!empty($_COOKIE['authtoken'])) {
+        } elseif (!empty($_COOKIE['rememberme'])) {
             try {
                 $modelconnect = new Modelconnect();
                 $datas = $modelconnect->checkcookie();
