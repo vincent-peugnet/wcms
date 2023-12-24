@@ -388,7 +388,7 @@ abstract class Servicerender
             $href = $link->getAttribute('href');
             if (preg_match('~^https?:\/\/~', $href)) {
                 $classes[] = 'external';
-                if ($this->externallinkblank) {
+                if (!$link->hasAttribute('target') && $this->externallinkblank) {
                     $link->setAttribute('target', '_blank');
                 }
             } elseif (preg_match('~^([a-z0-9-_]+)((\/?#[a-z0-9-_]+)|(\/([\w\-\%\[\]\=\?\&]*)))?$~', $href, $out)) {
@@ -415,7 +415,7 @@ abstract class Servicerender
                     $classes[] = 'existnot';
                     // TODO: store internal link that exist not in $this
                 }
-                if ($this->internallinkblank) {
+                if (!$link->hasAttribute('target') && $this->internallinkblank) {
                     $link->setAttribute('target', '_blank');
                 }
             // Links pointing to medias
