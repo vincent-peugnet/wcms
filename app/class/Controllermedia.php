@@ -74,7 +74,7 @@ class Controllermedia extends Controller
 
         if (isset($_GET['display'])) {
             $this->workspace->setmediadisplay($_GET['display']);
-            $this->workspace2session();
+            $this->servicesession->setworkspace($this->workspace);
         }
 
         $vars['filtercode'] = !empty($_POST); // indicate that filter code has been generated

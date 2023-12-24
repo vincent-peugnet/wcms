@@ -191,7 +191,6 @@ class Controllerhome extends Controller
                 $user = $this->usermanager->get($this->user->id());
                 $user->hydrate($_POST);
                 $this->usermanager->add($user);
-                $this->usermanager->writesession($user);
                 Model::sendflashmessage('Display settings successfully saved', Model::FLASH_SUCCESS);
             } catch (Databaseexception $e) {
                 Model::sendflashmessage('Error while trying to save display settings', Model::FLASH_ERROR);

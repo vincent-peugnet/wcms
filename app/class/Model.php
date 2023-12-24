@@ -148,9 +148,9 @@ abstract class Model
      */
     public static function getflashmessages(): array
     {
-        if (!empty($_SESSION['user' . Config::basepath()]['flashmessages'])) {
-            $flashmessage = $_SESSION['user' . Config::basepath()]['flashmessages'];
-            $_SESSION['user' . Config::basepath()]['flashmessages'] = [];
+        if (!empty($_SESSION['flashmessages'])) {
+            $flashmessage = $_SESSION['flashmessages'];
+            $_SESSION['flashmessages'] = [];
             if (is_array($flashmessage)) {
                 return $flashmessage;
             } else {
@@ -172,7 +172,7 @@ abstract class Model
         if (!key_exists($type, self::FLASH_MESSAGE_TYPES)) {
             $type = self::FLASH_INFO;
         }
-        $_SESSION['user' . Config::basepath()]['flashmessages'][] = ['content' => $content, 'type' => $type];
+        $_SESSION['flashmessages'][] = ['content' => $content, 'type' => $type];
     }
 
 

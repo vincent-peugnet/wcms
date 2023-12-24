@@ -13,8 +13,7 @@ use Wcms\Exception\Databaseexception;
 
 class Controller
 {
-    /** @var Session */
-    protected $session;
+    protected Servicesession $servicesession;
 
     protected Workspace $workspace;
 
@@ -37,8 +36,8 @@ class Controller
 
     public function __construct(AltoRouter $router)
     {
-        $this->session = new Session($_SESSION['user' . Config::basepath()] ?? []);
-        $this->workspace = new Workspace($_SESSION['user' . Config::basepath()]['workspace'] ?? []);
+        $this->servicesession = new Servicesession();
+        $this->workspace = $this->servicesession->getworkspace();
         $this->usermanager = new Modeluser();
 
         $this->user = new User();
@@ -52,24 +51,23 @@ class Controller
     protected function setuser()
     {
         // check session, then cookies
-        if (!empty($this->session->user)) {
-            $sessionuser = $this->session->user;
+        if (!is_null($this->servicesession->getuser())) {
+            $sessionuser = $this->servicesession->getuser();
             try {
                 $this->user = $this->usermanager->get($sessionuser);
             } catch (Notfoundexception $e) {
                 Logger::warning("Deleted session using non existing user : '$sessionuser'");
-                $this->session->empty(); // empty the session as a non existing user was set
+                $this->servicesession->empty(); // empty the session as a non existing user was set
             }
         } elseif (!empty($_COOKIE['authtoken'])) {
             try {
                 $modelconnect = new Modelconnect();
                 $datas = $modelconnect->checkcookie();
-                $cookieuser = $datas['userid'];
                 $user = $this->usermanager->get($datas['userid']);
                 if ($user->checksession($datas['wsession'])) {
                     $this->user = $user;
-                    $this->session->addtosession("wsession", $datas['wsession']);
-                    $this->session->addtosession("user", $user->id());
+                    $this->servicesession->setwsessionid($datas['wsession']);
+                    $this->servicesession->setuser($user->id());
                 } else {
                     $modelconnect->deleteauthcookie(); // As not listed in the user
                 }
@@ -185,22 +183,14 @@ class Controller
     protected function disconnect()
     {
         try {
-            $this->user->destroysession($this->session->wsession);
+            $this->user->destroysession($this->servicesession->getwsessionid());
             $cookiemanager = new Modelconnect();
             $cookiemanager->deleteauthcookie();
-            $this->session->empty();
+            $this->servicesession->empty();
             $this->usermanager->update($this->user);
         } catch (Databaseexception $e) {
             Logger::errorex($e);
         }
-    }
-
-    /**
-     * @todo user Session object instead
-     */
-    protected function workspace2session(): void
-    {
-        $_SESSION['user' . Config::basepath()]['workspace'] = $this->workspace->dry();
     }
 
     /**

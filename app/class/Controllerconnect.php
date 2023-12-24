@@ -63,20 +63,20 @@ class Controllerconnect extends Controller
                 } else {
                     $this->user->connectcounter();
                     $this->usermanager->add($this->user);
-                    $this->session->addtosession('user', $this->user->id());
+                    $this->servicesession->setuser($this->user->id());
                     Model::sendflashmessage("Successfully logged in as " . $this->user->id(), Model::FLASH_SUCCESS);
 
                     if (!empty($_POST['rememberme'])) {
                         if ($this->user->cookie() > 0) {
                             $this->modelconnect = new Modelconnect();
-                            $wsession = $this->user->newsession();
+                            $wsessionid = $this->user->newsession();
                             $this->modelconnect->createauthcookie(
                                 $this->user->id(),
-                                $wsession,
+                                $wsessionid,
                                 $this->user->cookie()
                             );
                             $this->usermanager->add($this->user);
-                            $this->session->addtosession('wsession', $wsession);
+                            $this->servicesession->setwsessionid($wsessionid);
                         } else {
                             $message = "Can't remember you beccause user cookie conservation time is set to 0 days";
                             Model::sendflashmessage($message, Model::FLASH_WARNING);

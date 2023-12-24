@@ -169,15 +169,11 @@ abstract class Config
     }
 
     /**
-     * @param bool $trailingslash If not empty basepath, add a trailing slash after the basepath
+     * @return string                       Basepath without trailing slash
      */
-    public static function basepath(bool $trailingslash = false): string
+    public static function basepath(): string
     {
-        if ($trailingslash && !empty(self::$basepath)) {
-            return self::$basepath . '/';
-        } else {
-            return self::$basepath;
-        }
+        return self::$basepath;
     }
 
     public static function route404()

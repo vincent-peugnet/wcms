@@ -24,18 +24,6 @@ class Modeluser extends Modeldb
         $this->storeinit(self::USER_REPO_NAME);
     }
 
-    /**
-     * Write session cookie according to users datas
-     *
-     * @param User $user Current user to keep in session
-     */
-    public function writesession(User $user)
-    {
-        $_SESSION['user' . Config::basepath()]['level'] = $user->level();
-        $_SESSION['user' . Config::basepath()]['id'] = $user->id();
-        $_SESSION['user' . Config::basepath()]['columns'] = $user->columns();
-    }
-
 
     public function logout()
     {

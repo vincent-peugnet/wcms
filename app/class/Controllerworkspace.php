@@ -8,7 +8,7 @@ class Controllerworkspace extends Controller
     {
         if ($this->user->isinvite()) {
             $this->workspace->hydrate($_POST);
-            $this->workspace2session();
+            $this->servicesession->setworkspace($this->workspace);
         }
         if (isset($_POST['page'])) {
             $this->routedirect('pageedit', ['page' => $_POST['page']]);
