@@ -11,7 +11,7 @@ try {
 $app = new Wcms\Application();
 $app->wakeup();
 
-session_set_cookie_params(['path' => Wcms\Config::basepath() . '/']);
+session_set_cookie_params(['path' => '/' . Wcms\Config::basepath()]);
 session_start();
 
 if (class_exists('Whoops\Run') && !empty(Wcms\Config::debug())) {

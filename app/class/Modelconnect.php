@@ -24,7 +24,7 @@ class Modelconnect extends Model
             throw new RuntimeException("Secret Key not set");
         }
         $jwt = JWT::encode($datas, Config::secretkey());
-        $cookie = setcookie('authtoken', $jwt, time() + $conservation * 24 * 3600, "", "", false, true);
+        $cookie = setcookie('authtoken', $jwt, time() + $conservation * 24 * 3600, '/' . Config::basepath(), "", false, true);
         if (!$cookie) {
             throw new RuntimeException("Cant be send");
         }
