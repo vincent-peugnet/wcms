@@ -224,6 +224,7 @@ const inputEvent = new Event('input');
 
 window.addEventListener('load', () => {
     initForm();
+    initWorkspaceForm();
     if (theme !== 'none') {
         initEditors(theme);
     }
@@ -234,12 +235,31 @@ function initForm() {
     form = document.getElementById('update');
     let inputs = form.elements;
     for (const input of inputs) {
-        input.oninput = changeHandler;
+        input.oninput = changed;
     }
 
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        submitHandler(this);
+        submitHandler(this, onSuccess);
+    });
+}
+
+function initWorkspaceForm() {
+    let form = document.getElementById('workspace-form');
+    let inputs = form.elements;
+    for (const input of inputs) {
+        input.oninput = workspaceChanged;
+    }
+    let submits = form.querySelectorAll('[type="submit"]');
+    for (const submit of submits) {
+        if (submit instanceof HTMLElement) {
+            submit.style.display = 'none';
+        }
+    }
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        submitHandler(this, noop);
     });
 }
 
@@ -377,7 +397,7 @@ function keyboardHandler(e) {
             switch (e.key) {
                 // ctrl + s
                 case 's':
-                    submitHandler(form);
+                    form.requestSubmit();
                     break;
                 // ctrl + d
                 case 'd':
@@ -393,20 +413,6 @@ function keyboardHandler(e) {
             return false;
         }
     }
-}
-
-/**
- * Manage change event
- * @param {InputEvent} e
- */
-function changeHandler(e) {
-    if (
-        e.target.classList.contains('toggle') ||
-        e.target.classList.contains('checkboxtab')
-    ) {
-        return;
-    }
-    changed();
 }
 
 /**
@@ -457,13 +463,13 @@ function themeChangeHandler(e) {
  * Manage submit event
  * @param {HTMLFormElement} form
  */
-function submitHandler(form) {
+function submitHandler(form, onSuccess) {
     var xhr = new XMLHttpRequest();
     var fd = new FormData(form);
 
     xhr.addEventListener('load', function(event) {
         if (httpOk(xhr.status)) {
-            saved(JSON.parse(xhr.response));
+            onSuccess(xhr.response);
         } else {
             alert('Error while trying to update: ' + xhr.statusText);
         }
@@ -498,6 +504,18 @@ function saved(data) {
     document.querySelector('input[name="datemodif"]').value = data.datemodif;
 }
 
+function onSuccess(response) {
+    saved(JSON.parse(response));
+}
+
+/**
+ * @param {InputEvent} e
+ */
+function workspaceChanged(e) {
+    let elem = e.target;
+    elem.form.requestSubmit();
+}
+
 /**
  * Check if an HTTP response status indicates a success.
  * @param {number} status
@@ -505,3 +523,5 @@ function saved(data) {
 function httpOk(status) {
     return status >= 200 && status < 300;
 }
+
+function noop() {}
