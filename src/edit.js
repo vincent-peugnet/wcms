@@ -236,6 +236,8 @@ function initForm() {
     let inputs = form.elements;
     for (const input of inputs) {
         input.oninput = changed;
+        input.oninput = changeHandler;
+
     }
 
     form.addEventListener('submit', function(event) {
@@ -413,6 +415,20 @@ function keyboardHandler(e) {
             return false;
         }
     }
+}
+
+/**
+ * Manage change event
+ * @param {InputEvent} e
+ */
+function changeHandler(e) {
+    if (
+        e.target.classList.contains('toggle') ||
+        e.target.classList.contains('checkboxtab')
+    ) {
+        return;
+    }
+    changed();
 }
 
 /**
