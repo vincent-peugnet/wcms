@@ -30,6 +30,7 @@ class Routes
             ['GET', '/api/v0/user/[cid:user]', 'Controllerapiuser#get', 'apiuserget'],
             ['POST', '/api/v0/media/upload/[*:path]', 'Controllerapimedia#upload', 'apimediaupload'],
             ['DELETE', '/api/v0/media/[*:path]', 'Controllerapimedia#delete', 'apimediadelete'],
+            ['POST', '/api/v0/workspace', 'Controllerapiworkspace#update', 'apiworkspaceupdate'],
             ['GET', '/', 'Controllerhome#desktop', 'home'],
             ['POST', '/', 'Controllerhome#desktop', 'homequery'],
             ['POST', '/columns', 'Controllerhome#columns', 'homecolumns'],

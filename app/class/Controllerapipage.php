@@ -2,7 +2,6 @@
 
 namespace Wcms;
 
-use JsonException;
 use RuntimeException;
 
 class Controllerapipage extends Controllerapi
