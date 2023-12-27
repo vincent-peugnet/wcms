@@ -237,7 +237,6 @@ function initForm() {
     for (const input of inputs) {
         input.oninput = changed;
         input.oninput = changeHandler;
-
     }
 
     form.addEventListener('submit', function(event) {
