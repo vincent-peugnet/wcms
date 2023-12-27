@@ -2,7 +2,7 @@
 
 function readablesize($bytes, $base = 2 ** 10)
 {
-    $format = ' %d %s';
+    $format = '%d&nbsp;%s';
 
     if ($base === 2 ** 10) {
         $i = 'i';

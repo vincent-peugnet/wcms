@@ -143,10 +143,10 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
             ?>
             <tr>
             <td><input type="checkbox" name="id[]" value="<?= $media->getlocalpath() ?>" form="mediaedit" id="media_<?= $media->filename() ?>"></td>
-            <td>
+            <td class="filename">
                 <details>
                     <summary>
-                            <?= $media->filename() ?>
+                            <span><?= $media->filename() ?></span>
                             <i class="fa fa-pencil"></i>
                     </summary>
                     <form action="<?= $this->url('mediarename') ?>" method="post">

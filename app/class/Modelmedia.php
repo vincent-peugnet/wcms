@@ -389,9 +389,13 @@ class Modelmedia extends Model
      */
     public function rename(string $oldname, string $newname)
     {
-        if (empty(basename($newname))) {
+        $newbasename = trim(basename($newname));
+        $newdirname = dirname($newname);
+        if (empty($newbasename)) {
             throw new Fileexception("new name of file cannot be empty");
         }
+
+        $newname = "$newdirname/$newbasename";
 
         Fs::accessfile($oldname);
         Fs::accessfile($newname);

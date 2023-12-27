@@ -27,6 +27,11 @@ table#medialist details:hover i {
     visibility: visible;
 }
 
+table#medialist td.filename span {
+    font-family: monospace;
+    white-space: pre;
+    font-size: 14px;
+}
 
 .media ul#gallery {
     overflow: hidden;
@@ -90,3 +95,4 @@ table#medialist details:hover i {
     }
 
 }
+
