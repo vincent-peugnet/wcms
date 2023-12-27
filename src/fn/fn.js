@@ -74,3 +74,61 @@ export function activateSelectAll() {
         selectAllInput.addEventListener('click', selectAll);
     }
 }
+
+/**
+ * Manage submit event for a given form
+ * @param {HTMLFormElement} form
+ * @param {(response: any) => void} onSuccess
+ */
+export function submitHandler(form, onSuccess = () => {}) {
+    var xhr = new XMLHttpRequest();
+    var fd = new FormData(form);
+
+    xhr.addEventListener('load', function(event) {
+        if (httpOk(xhr.status)) {
+            onSuccess(xhr.response);
+        } else {
+            alert('Error while trying to update: ' + xhr.statusText);
+        }
+    });
+    xhr.addEventListener('error', function(event) {
+        alert('Network error while trying to update.');
+    });
+    xhr.open(form.method, form.dataset.api);
+    xhr.send(fd);
+}
+
+/**
+ * Check if an HTTP response status indicates a success.
+ * @param {number} status
+ */
+function httpOk(status) {
+    return status >= 200 && status < 300;
+}
+
+export function initWorkspaceForm() {
+    let form = document.getElementById('workspace-form');
+    let inputs = form.elements;
+    for (const input of inputs) {
+        input.oninput = workspaceChanged;
+    }
+    let submits = form.querySelectorAll('[type="submit"]');
+    for (const submit of submits) {
+        if (submit instanceof HTMLElement) {
+            submit.style.display = 'none';
+        }
+    }
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        submitHandler(this);
+    });
+}
+
+/**
+ * @param {InputEvent} e
+ */
+function workspaceChanged(e) {
+    let elem = e.target;
+    elem.form.requestSubmit();
+}

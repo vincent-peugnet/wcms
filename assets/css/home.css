@@ -2,10 +2,6 @@ aside #edit input[type="submit"] {
     width: 100%;
 }
 
-section.bookmarks {
-    min-width: 2em;
-}
-
 .bookmarks .block {
     height: 100%;
 }

@@ -18,6 +18,7 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import icon_2x from 'leaflet/dist/images/marker-icon-2x.png';
 import shadow from 'leaflet/dist/images/marker-shadow.png';
 import * as L from 'leaflet';
+import { initWorkspaceForm, submitHandler } from './fn/fn';
 
 /* ________________ LEAFLET ________________ */
 
@@ -245,25 +246,6 @@ function initForm() {
     });
 }
 
-function initWorkspaceForm() {
-    let form = document.getElementById('workspace-form');
-    let inputs = form.elements;
-    for (const input of inputs) {
-        input.oninput = workspaceChanged;
-    }
-    let submits = form.querySelectorAll('[type="submit"]');
-    for (const submit of submits) {
-        if (submit instanceof HTMLElement) {
-            submit.style.display = 'none';
-        }
-    }
-
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        submitHandler(this, noop);
-    });
-}
-
 function initEditors(theme) {
     // disable CodeMirror's default ctrl+D shortcut (delete line)
     delete CodeMirror.keyMap['default']['Ctrl-D'];
@@ -475,28 +457,6 @@ function themeChangeHandler(e) {
 }
 
 /**
- * Manage submit event
- * @param {HTMLFormElement} form
- */
-function submitHandler(form, onSuccess) {
-    var xhr = new XMLHttpRequest();
-    var fd = new FormData(form);
-
-    xhr.addEventListener('load', function(event) {
-        if (httpOk(xhr.status)) {
-            onSuccess(xhr.response);
-        } else {
-            alert('Error while trying to update: ' + xhr.statusText);
-        }
-    });
-    xhr.addEventListener('error', function(event) {
-        alert('Network error while trying to update.');
-    });
-    xhr.open(form.method, form.dataset.api);
-    xhr.send(fd);
-}
-
-/**
  * Manage a beforeUnloadEvent
  * @param {BeforeUnloadEvent} e
  */
@@ -522,21 +482,3 @@ function saved(data) {
 function onSuccess(response) {
     saved(JSON.parse(response));
 }
-
-/**
- * @param {InputEvent} e
- */
-function workspaceChanged(e) {
-    let elem = e.target;
-    elem.form.requestSubmit();
-}
-
-/**
- * Check if an HTTP response status indicates a success.
- * @param {number} status
- */
-function httpOk(status) {
-    return status >= 200 && status < 300;
-}
-
-function noop() {}

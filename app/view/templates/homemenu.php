@@ -442,7 +442,12 @@
 
     <span id="save-workspace">
 
-<form action="<?= $this->url('workspaceupdate') ?>" method="post" id="workspace-form">
+<form
+    action="<?= $this->url('workspaceupdate') ?>"
+    method="post"
+    data-api="<?= $this->url('apiworkspaceupdate') ?>"
+    id="workspace-form"
+>
     <input type="hidden" name="showeoptionspanel" value="0">
     <button type="submit">
         <i class="fa fa-edit"></i>
