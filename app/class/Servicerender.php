@@ -188,13 +188,10 @@ abstract class Servicerender
 
         $head .= "<meta charset=\"utf-8\" />\n";
         $head .= "<title>$title$suffix</title>\n";
-        if (!empty($this->page->favicon()) && file_exists(Model::FAVICON_DIR . $this->page->favicon())) {
-            $href = Model::faviconpath() . $this->page->favicon();
-            $head .= "<link rel=\"shortcut icon\" href=\"$href\" type=\"image/x-icon\">";
-        } elseif (!empty(Config::defaultfavicon()) && file_exists(Model::FAVICON_DIR . Config::defaultfavicon())) {
-            $href = Model::faviconpath() . Config::defaultfavicon();
-            $head .= "<link rel=\"shortcut icon\" href=\"$href\" type=\"image/x-icon\">";
-        }
+
+        $favicon = Model::faviconpath() . $this->pagemanager->getpagefavicon($this->page);
+        $head .= "<link rel=\"shortcut icon\" href=\"$favicon\" type=\"image/x-icon\">";
+
         $head .= "<meta name=\"description\" content=\"$description\" />\n";
         $head .= "<meta name=\"viewport\" content=\"width=device-width\" />\n";
         $head .= "<meta name=\"generator\" content=\"W-cms\" />\n";
@@ -203,15 +200,10 @@ abstract class Servicerender
         $head .= "<meta property=\"og:title\" content=\"$title$suffix\">\n";
         $head .= "<meta property=\"og:description\" content=\"$description\">\n";
 
-        if (!empty($this->page->thumbnail())) {
-            $content = Config::domain() . Model::thumbnailpath() . $this->page->thumbnail();
-            $head .= "<meta property=\"og:image\" content=\"$content\">\n";
-        } elseif (!empty(Config::defaultthumbnail())) {
-            $content = Config::domain() . Model::thumbnailpath() . Config::defaultthumbnail();
-            $head .= "<meta property=\"og:image\" content=\"$content\">\n";
-        }
+        $thumbnail = Config::domain() . Model::thumbnailpath() . $this->pagemanager->getpagethumbnail($this->page);
+        $head .= "<meta property=\"og:image\" content=\"$thumbnail\">\n";
 
-        $head .= "<meta property=\"og:url\" content=\"$url$id/\">\n";
+        $head .= "<meta property=\"og:url\" content=\"$url$id\">\n";
 
         foreach ($this->rsslist as $bookmark) {
             $atompath = Servicerss::atompath($bookmark->id());
@@ -262,10 +254,8 @@ abstract class Servicerender
         try {
             $templates = $this->pagemanager->getpagecsstemplates($page);
             foreach ($templates as $template) {
-                if (in_array('externalcss', $template->templateoptions())) {
-                    foreach ($template->externalcss() as $externalcss) {
-                        $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
-                    }
+                foreach ($template->externalcss() as $externalcss) {
+                    $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
                 }
                 $head .= '<link href="' . Model::renderpath() . $template->id() . '.css" rel="stylesheet" />';
                 $head .= "\n";
@@ -795,7 +785,7 @@ abstract class Servicerender
      */
     protected function thumbnail(string $text): string
     {
-        $src = Model::thumbnailpath() . $this->page->thumbnail();
+        $src = Model::thumbnailpath() . $this->pagemanager->getpagethumbnail($this->page);
         $alt = $this->page->title();
         $img = '<img class="thumbnail" src="' . $src . '" alt="' . $alt . '">';
         $img = "\n$img\n";

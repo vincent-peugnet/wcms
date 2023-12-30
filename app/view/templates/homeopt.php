@@ -28,13 +28,18 @@
                             }
                             ?>
                         </select>
-                        </br>
-                        <input type="radio" id="asc" name="order" value="1" <?= $opt->order() == '1' ? "checked" : "" ?> /><label for="asc">ascending</label>
-                        </br>
-                        <input type="radio" id="desc" name="order" value="-1" <?= $opt->order() == '-1' ? "checked" : "" ?> /><label for="desc">descending</label>
-                        <br>
-                        <input type="number" name="limit" id="limit" value="<?= $opt->limit() ?>" min="0" max="9999">
-                        <label for="limit">limit</label>
+                        <div>
+                            <input type="radio" id="asc" name="order" value="1" <?= $opt->order() == '1' ? "checked" : "" ?> />
+                            <label for="asc">ascending</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="desc" name="order" value="-1" <?= $opt->order() == '-1' ? "checked" : "" ?> />
+                            <label for="desc">descending</label>
+                        </div>
+                        <div>
+                            <input type="number" name="limit" id="limit" value="<?= $opt->limit() ?>" min="0" max="9999">
+                            <label for="limit">limit</label>
+                        </div>
                     </div>
                 </fieldset>
 
@@ -97,7 +102,7 @@
 
 
 
-                <fieldset data-default="<?= $opt->isdefault('authorfilter') && $opt->authorcompare() !== 'EMPTY' ? '1' : '0' ?>">
+                <fieldset class="authors data-default="<?= $opt->isdefault('authorfilter') && $opt->authorcompare() !== 'EMPTY' ? '1' : '0' ?>">
                     <legend>Author(s)</legend>
                             
                     <div>

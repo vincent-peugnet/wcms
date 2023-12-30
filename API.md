@@ -40,13 +40,6 @@ Page related api
     "templatebody": "",
     "templatecss": "",
     "templatejavascript": "",
-    "templateoptions": [
-        "thumbnail",
-        "recursivecss",
-        "externalcss",
-        "favicon",
-        "externaljavascript"
-    ],
     "favicon": "",
     "thumbnail": "",
     "authors": [

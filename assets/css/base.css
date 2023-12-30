@@ -236,3 +236,8 @@ div#flashmessage:target {
 table a, li a {
     color: var(--text3-color);
 }
+
+
+.panel input, .panel select, .panel textarea {
+    margin-bottom: 3px;
+}

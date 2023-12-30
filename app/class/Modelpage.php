@@ -183,11 +183,65 @@ class Modelpage extends Modeldb
         if (!empty($page->templatecss()) && $page->templatecss() !== $page->id()) {
             $template = $this->get($page->templatecss());
             $templates[$template->id()] = $template;
-            if (in_array('recursivecss', $page->templateoptions())) {
-                $templates = array_merge($this->getpagecsstemplates($template), $templates);
-            }
+            $templates = array_merge($this->getpagecsstemplates($template), $templates);
         }
         return $templates;
+    }
+
+    /**
+     * Get Page's favicon filename using the priority order:
+     * Page > BODY Template > Default
+     *
+     * @param Page $page
+     * @return string                       Page's thumbnail file, or an empty string
+     */
+    public function getpagefavicon(Page $page): string
+    {
+        if (!empty($page->favicon())) {
+            return $page->favicon();
+        }
+        if (!empty($page->templatebody())) {
+            try {
+                $templatebody = $this->get($page->templatebody());
+                if (!empty($templatebody->favicon())) {
+                    return $templatebody->favicon();
+                }
+            } catch (RuntimeException $e) {
+                // Page BODY template does not exist
+            }
+        }
+        if (!empty(Config::defaultfavicon())) {
+            return Config::defaultfavicon();
+        }
+        return '';
+    }
+
+    /**
+     * Get Page's thumbnail filename using the priority order:
+     * Page > BODY Template > Default
+     *
+     * @param Page $page
+     * @return string                       Thumbnail filename or empty string
+     */
+    public function getpagethumbnail(Page $page): string
+    {
+        if (!empty($page->thumbnail())) {
+            return $page->thumbnail();
+        }
+        if (!empty($page->templatebody())) {
+            try {
+                $templatebody = $this->get($page->templatebody());
+                if (!empty($templatebody->thumbnail())) {
+                    return $templatebody->thumbnail();
+                }
+            } catch (RuntimeException $e) {
+                // Page BODY template does not exist
+            }
+        }
+        if (!empty(Config::defaultthumbnail())) {
+            return Config::defaultthumbnail();
+        }
+        return '';
     }
 
     /**

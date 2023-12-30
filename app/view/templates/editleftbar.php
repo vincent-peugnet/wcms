@@ -35,47 +35,33 @@
 
             <label for="favicon">Favicon</label>
             <select name="favicon" id="favicon" form="update">
-                <?php
-                if(!empty($page->templatecss()) && $page->template()['cssfavicon']) {
-                    ?>
-                    <option value="<?= $page->favicon() ?>">--using template favicon--</option>
-                    <?php
-                } else {
-                    echo '<option value="">--no favicon--</option>';
-                foreach ($faviconlist as $favicon) {
-                    ?>
-                    <option value="<?= $favicon ?>" <?= $page->favicon() === $favicon ? 'selected' : '' ?>><?= $favicon ?></option>
-                    <?php
-                    }
-                }
-                ?>
+                <option value="">
+                    <?= empty($page->templatebody()) ? '--default favicon--' : '--using template BODY favicon--' ?>
+                </option>
+                <?php foreach ($faviconlist as $favicon) { ?>
+                    <option value="<?= $favicon ?>" <?= $page->favicon() === $favicon ? 'selected' : '' ?>>
+                        <?= $favicon ?>
+                    </option>
+                <?php } ?>
             </select>
 
             
             <label for="thumbnail">Thumbnail</label>
             <select name="thumbnail" id="thumbnail" form="update">
-                <?php
-                if(!empty($page->templatebody()) && $page->template()['cssthumbnail']) {
-                    ?>
-                    <option value="<?= $page->thumbnail() ?>">--using template thumbnail--</option>
-                    <?php
-                } else {
-                    if(!file_exists(Wcms\Model::thumbnailpath() . $page->thumbnail())) {
-                        echo '<option value="">--no thumbnail--</option>';
-                    }
-                foreach ($thumbnaillist as $thumbnail) {
-                    ?>
-                    <option value="<?= $thumbnail ?>" <?= $page->thumbnail() === $thumbnail ? 'selected' : '' ?>><?= $thumbnail ?></option>
-                    <?php
-                    }
-                }
-                ?>
+                <option value="">
+                    <?= empty($page->templatebody()) ? '--default thumbnail--' : '--using template BODY thumbnail--' ?>
+                </option>
+                <?php foreach ($thumbnaillist as $thumbnail) { ?>
+                    <option value="<?= $thumbnail ?>" <?= $page->thumbnail() === $thumbnail ? 'selected' : '' ?>>
+                        <?= $thumbnail ?>
+                    </option>
+                <?php } ?>
             </select>
 
             <?php if(!empty($page->thumbnail())) { ?>
-            <div id="showthumbnail">
-                <img src="<?= Wcms\Model::thumbnailpath() . $page->thumbnail() ?>">
-            </div>
+                <div id="showthumbnail">
+                    <img src="<?= Wcms\Model::thumbnailpath() . $page->thumbnail() ?>">
+                </div>
             <?php } ?>
 
             
@@ -102,10 +88,15 @@
 
 
 
-    <details <?= !empty($page->templatebody()) || !empty($page->templatecss()) || !empty($page->templatejavascript()) ? 'open' : '' ?>>
+    <details class="template" <?= !empty($page->templatebody()) || !empty($page->templatecss()) || !empty($page->templatejavascript()) ? 'open' : '' ?>>
         <summary>Template</summary>
             <fieldset>
             <label for="templatebody">BODY template</label>
+            <?php if(!empty($page->templatebody())) { ?>
+                <a href="<?= $this->upage('pageedit', $page->templatebody()) ?>" title="Edit template">
+                    <i class="fa fa-pencil"></i>
+                </a>
+            <?php } ?>
             <select name="templatebody" id="templatebody" form="update">
                 <option value="" <?= empty($page->templatebody()) ? 'selected' : '' ?>>--no template--</option>
                 <?php
@@ -117,13 +108,13 @@
                 ?>
             </select>
 
-            <div class="subtemplate">
-                <input type="checkbox" name="templateoptions[]" id="othumbnail" value="thumbnail" form="update" <?= in_array('thumbnail', $page->templateoptions()) ? 'checked' : '' ?>>
-                <label for="othumbnail">Thumbnail</label>
-            </div>
-
 
             <label for="templatecss">CSS template</label>
+            <?php if(!empty($page->templatecss())) { ?>
+                <a href="<?= $this->upage('pageedit', $page->templatecss()) ?>" title="Edit template">
+                    <i class="fa fa-pencil"></i>
+                </a>
+            <?php } ?>
             <select name="templatecss" id="templatecss" form="update">
                 <option value="" <?= empty($page->templatecss()) ? 'selected' : '' ?>>--no template--</option>
                 <?php
@@ -135,22 +126,14 @@
                 ?>
             </select>
 
-            <div class="subtemplate">
-                <input type="checkbox" name="templateoptions[]" id="orecursivecss" value="recursivecss" form="update" <?= in_array('recursivecss', $page->templateoptions()) ? 'checked' : '' ?>>
-                <label for="orecursivecss">recursive template</label>
-                </div>
-                <div class="subtemplate">
-                <input type="checkbox" name="templateoptions[]" id="oexternalcss" value="externalcss" form="update" <?= in_array('externalcss', $page->templateoptions()) ? 'checked' : '' ?>>
-                <label for="oexternalcss">External CSS</label>
-                </div>
-                <div class="subtemplate">
-                <input type="checkbox" name="templateoptions[]" id="ofavicon" value="favicon" form="update" <?= in_array('favicon', $page->templateoptions()) ? 'checked' : '' ?>>
-                <label for="ofavicon">Favicon</label>
-            </div>
-
 
 
             <label for="templatejavascript">Javascript template</label>
+            <?php if(!empty($page->templatejavascript())) { ?>
+                <a href="<?= $this->upage('pageedit', $page->templatejavascript()) ?>" title="Edit template">
+                    <i class="fa fa-pencil"></i>
+                </a>
+            <?php } ?>
             <select name="templatejavascript" id="templatejavascript" form="update">
                 <option value="" <?= empty($page->templatejavascript()) ? 'selected' : '' ?>>--no template--</option>
                 <?php
@@ -161,13 +144,6 @@
                 }
                 ?>
             </select>
-
-
-
-            <div class="subtemplate">
-                <input type="checkbox" name="templateoptions[]" value="externaljavascript" id="oexternaljs" form="update" <?= in_array('externaljavascript', $page->templateoptions()) ? 'checked' : '' ?>>
-                <label for="oexternaljs">external js</label>
-            </div>
 
 
 

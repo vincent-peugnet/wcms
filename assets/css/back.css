@@ -105,7 +105,8 @@ main nav legend, main #filter legend {
 
 nav select, nav input[type="datetime-local"], nav input[type="submit"], #filter input[type="submit"] {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 5px;
+    display: block;
 }
 
 footer {

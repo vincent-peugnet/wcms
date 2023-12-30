@@ -12,9 +12,9 @@ main nav {
 }
 
 .panel {
-    height: 100%;
     overflow-y: auto;
     height: 100%;
+    width: 200px;
 }
 nav label.toogle {
     float: right;
@@ -62,6 +62,7 @@ main a.bookmark[data-current="1"] {
 
 main a.bookmark {
     display: block;
+    white-space: nowrap;
 }
 
 
@@ -192,4 +193,9 @@ div#geomap {
         font-size: 22px;
         padding: 0 10px;
     }
+}
+
+
+fieldset.tag input[type="radio"], fieldset.authors input[type="radio"] {
+    margin-right: -2px;
 }

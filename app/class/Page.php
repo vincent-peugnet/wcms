@@ -30,7 +30,6 @@ abstract class Page extends Item
     protected $templatebody;
     protected $templatecss;
     protected $templatejavascript;
-    protected $templateoptions;
     protected $favicon;
     protected $thumbnail;
     protected $authors;
@@ -65,8 +64,6 @@ abstract class Page extends Item
     public const SECUREMAX = 2;
     public const TABS = ['css', 'body', 'javascript'];
     public const VAR_DATE = ['date', 'datecreation', 'datemodif', 'daterender'];
-    public const TEMPLATE_OPTIONS = ['externalcss', 'externaljavascript', 'favicon', 'thumbnail', 'recursivecss'];
-
 
 
 // _____________________________________________________ F U N ____________________________________________________
@@ -112,7 +109,6 @@ abstract class Page extends Item
         $this->settemplatebody('');
         $this->settemplatecss('');
         $this->settemplatejavascript('');
-        $this->settemplateoptions(self::TEMPLATE_OPTIONS);
         $this->setfavicon('');
         $this->setthumbnail('');
         $this->setauthors([]);
@@ -315,35 +311,6 @@ abstract class Page extends Item
     public function templatejavascript($type = 'string')
     {
         return $this->templatejavascript;
-    }
-
-    public function template(): array
-    {
-        $template['body'] = $this->templatebody;
-        $template['css'] = $this->templatecss;
-        $template['javascript'] = $this->templatejavascript;
-
-        $template['cssrecursive'] = $this->checkoption('recursive');
-        $template['externalcss'] = $this->checkoption('externalcss');
-        $template['cssfavicon'] = $this->checkoption('favicon');
-        $template['cssthumbnail'] = $this->checkoption('thumbnail');
-
-        $template['externaljavascript'] = $this->checkoption('externaljavascript');
-
-        return $template;
-    }
-
-    /**
-     * @return string[] where options are : 'externalcss', 'externaljavascript', 'favicon', 'thumbnail', 'recursivecss'
-     */
-    public function templateoptions(): array
-    {
-        return $this->templateoptions;
-    }
-
-    public function checkoption(string $option)
-    {
-        return (in_array($option, $this->templateoptions));
     }
 
     public function favicon($type = 'string')
@@ -651,13 +618,6 @@ abstract class Page extends Item
     {
         if (is_string($templatejavascript)) {
             $this->templatejavascript = $templatejavascript;
-        }
-    }
-
-    public function settemplateoptions($templateoptions)
-    {
-        if (is_array($templateoptions)) {
-            $this->templateoptions = array_values(array_filter($templateoptions));
         }
     }
 

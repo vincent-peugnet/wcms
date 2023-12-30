@@ -21,7 +21,7 @@ If you already know the basics, you may want to check the references :
 
 This 4 steps tutorial will introduce you to the basic __W__ moves.
 
-#### Add a new page
+#### 1. Add a new page
 
 
 The first thing you have to do before creating a page is to **choose an address** for this page. Each page have a unique address that identify it, it is the [**page id**](#page-id). You can use the address bar of your web browser to directly access, [edit](#edit) or [delete](#delete) a page.
@@ -38,7 +38,7 @@ There is two ways to do this :
 There it is ! Congratulation, you've created your first page using W.
 
 
-#### Edit your page content
+#### 2. Edit your page content
 
 Now you should be in front of the [edit interface](#editor) of your page. If you check the address bar, you will now see `/edit` written after your page address.
 
@@ -54,7 +54,7 @@ The first method will use the same tab while the second will create a new one, w
 You should now see something that look like what you've typed.
 
 
-#### Create a hyperlink
+#### 3. Create a hyperlink
 
 
 The [markdown syntax](https://commonmark.org/), this is a formating standard well known accross the web. It's main goal is to be a intermediate between an easy to read prose text, and the internet standard tag language, the HTML. One of the main interest of Markdown, is it is ability to be mixed with HTML. That way, people can type more easily basic text, and switch to HTML at any time, to achieve a more complex layout. You can use the official Markdonw syntax with __W__ alongside with HTML to build your pages.
@@ -72,7 +72,7 @@ All those methods will create a link pointing to the `<page_id>` you've given.
 Those kind of links are called internal links beccause they stay inside of your domain. To set a link outside of your website, simply remplace `<page_id>` by the website adress you whant to target (ex : `https://w.club1.fr`), but this won't work with the third method as it is'nt a W page.
 
 
-#### Insert images
+#### 4. Insert images
 
 When adding an image to a page, you can either use an already web-hosted image, wich is a bit dangerous, or host yourself the image using W's [media interface](#media-manager).
 
@@ -107,22 +107,14 @@ To add the image on your page, the simplest method is to copy the Makdown genera
 
 
 
-### Navigation
-
-Discover the differents interfaces of __W__.
-
-
-
-
-
-
-#### Home
+Home
+----
 
 The Home interface is the main view of your project. You can access it only when you're connected. All the pages of your database are listed here.
 
 The [readers](#reader) and [invite editors](#invite-editor) can't access this interface.
 
-##### Home menu
+### Home menu
 
 In the home menu [super editors and above](#super-editor) can :
 
@@ -133,20 +125,21 @@ In the home menu [super editors and above](#super-editor) can :
 - __Display :__ Set columns to be shown (user based) and tag colors.
 
 
-##### Bookmark panel
+### Bookmark panel
 
 This panel list public and personnal [bookmarks](#bookmarks).
 Select a bookmark to apply preset filters and sortings options.
 If your filters and sort options match an existing bookmark, it will be highlighted.
 
-##### Options
+### Options
 
 The option panel contains multiples options for sorting and filtering your pages database.
 
 Just select the options you want and press "Fitler". Use the "Reset" button to come back to the default settings. W will keep the settings for the SESSION time.
 
 This panel is also usefull to set up a [page list](#page-list) to include the same list of page you've filtered in any page.
-##### Deep Search Bar
+
+### Deep Search Bar
 
 The Deep Search bar help you to look for words or regular expressions in your pages.
 
@@ -155,15 +148,15 @@ By default, searching only look in [title](#page-title), [description](#descript
 Unlike the [filterings options](#options) below, searches can't be saved or used for [page lists](#page-list).
 
 
-##### list view
+### list view
 
-The table is composed of [meta](#meta-infos) datas and actions links that are :
+The table is composed of [meta](#metadatas) datas and actions links that are :
 
 __EDIT__, __READ__, __DELETE__ and __DOWNLOAD__, they are equivalent to [pages commands](#pages-commands). Don't hesitate to open edit or read links in a new tab, to keep the Home view open.
 
 To edit columns you want to see, use the [menu](#home-menu)>Display submenu.
 
-##### graph view
+### graph view
 
 The graph give you an overview of your website, showing you links between pages.
 
@@ -179,114 +172,12 @@ By default orphans pages are hidden, but you can ajust settings to fit your need
 
 
 
-#### Edition
 
-The edition interface is accessible when [typing `/edit`](#edit) after an existing [page_id](#page-id) in the address bar. Or from the [home](#home), by clicking on the pencil button.
 
-[Invite editors](#invite-editor) and [editors](#editor) users can only access edition of pages where they are listed as [author](#authors).
 
-The Edition view is composed of a main content edition area, surounded by two lateral panels that you can deploy or hide.
 
-##### left panel
 
-This is the 
-
-- Meta infos: edit [title](#title), [description](#description) and more infos about your page.
-- Geolocalisation: to set [latitude](#latitude) and [longitude](#longitude) metadatas
-- Templating
-- Advanced
-- Help : a quick syntax reference for markdown and W syntax
-
-##### contents area
-
-Each tab allow you to edit a different type of content :
-
-[main](#main), [nav](#nav), [aside](#aside)
-
-Note that the MAIN tab is the default opened tab, this is meant to be the most spontaneous place to store information when you are using __W__ in *note taking style*.
-
-##### right panel
-
-
-
-
-
-
-
-
-
-
-
-#### Media manager
-
-When you need to use images, sound or videos in your pages, or any other type of files, you can use the media manager to host them before including them in your pages.
-
-[Invite editors](#invite-editor) don't have access to this place.
-
-##### Media menu
-
-The media menu allow you to do more powerfull function like moving medias or delete folders it is only accessible by [super editors](#super-editor) and above.
-
-- __file :__ to import new files, create or delete directories
-- __edit :__ to edit selected items
-- __filter :__ to export filter settings as [medialist](#media-list)
-- __Bookmarks :__ Create some [bookmarks](#bookmarks) to save your [filtering options](#media-filters) as presets.
-
-
-##### Explorer
-
-The explorer allow you to navigate between differents directories. It will show you the amount of files in every folder.
-
-##### Media Filters
-
-Filters and sorting options can be set by choosing wich types of files to show and how to sort them. They can be used to filter and sort a [medialist](#media-list) using the __filter__ tab in the [media menu](#media-menu).
-
-File types are determined by their file extention. The association table is hardcoded in W's code and can be found [here](https://github.com/vincent-peugnet/wcms/blob/master/app/class/Media.php#L46).
-
-
-
-
-
-
-
-
-
-
-
-
-
-#### Profile
-
-The profile allow you to edit some user related preferences.
-
-##### name and URL
-
-Your __display name__ ande __url__ are used in case of an [authors inclusion](#authors-inclusion) or a [page list](#page-list) inclusion with `authors=1`.
-
-
-
-
-
-
-
-
-#### Admin
-
-
-
-
-
-
-
-#### User manager
-
-
-
-
-
-
-
-#### Bookmarks
+### Bookmarks
 
 A bookmark is usefull to store a preset of pages filters and sorting settings.
 
@@ -300,7 +191,7 @@ There are two kinds of bookmarks:
 - **public bookmark** Can only be created and edited by [super editor](#super-editor) and above. Every users that can access home view will be able to see and use them.
 - **private bookmark** Can be created by [editor](#editor) and above. They are user specific. Personnal bookmarks can only be accessed by their owners.
 
-##### Publish a RSS feed
+#### Publish a RSS feed
 
 __Public__ bookmarks can be used to publish a RSS feed.
 
@@ -326,21 +217,44 @@ When you update or add pages in the bookmark's scope, you need to manually refre
 
 
 
-
-
-
 Page Editing
 ------------
 
+Editing pages is the core feature of W. The edition interface is accessible when [typing `/edit`](#edit) after an existing [page_id](#page-id) in the address bar. Or from the [home](#home), by clicking on the pencil button.
+
+### Edition interface
+
+[Invite editors](#invite-editor) and [editors](#editor) users can only access edition of pages where they are listed as [author](#authors).
+
+The Edition view is composed of a main content edition area, surounded by two lateral panels that you can deploy or hide.
+
+This is where you can edit page [metadatas](#metadatas).
+
+**shortcuts**
+
+- Press <kbd>CTRL</kbd> + <kbd>S</kbd> or "update" button to save your edits.
+- Press <kbd>CTRL</kbd> + <kbd>S</kbd> or "display" button to view your page. This will open a new tab.
+
+
 ### Syntax
+
+W take advantage of the *Markdown* syntax, flavored with a few specific syntax.
 
 #### Markdown
 
-- [Daring Fireballs](https://daringfireball.net/projects/markdown/syntax) Official reference of Markdown Syntax
+Markdown can be used by default in [content elements](#content-elements) but never in the [BODY](#body).
+
+Markdown language is a common markup language. It's meant to be more human readable than HTML, but at the same time more limited.
+
+It's important to notice that you can mix  Markdown and HTML. But beware, as HTML can be used inside markdown, the opposite is not possible.
+
+- [Markdown Guide](https://www.markdownguide.org/) Markdown Syntax guide
 - [Michel Fortin's Markdown extra](https://michelf.ca/projects/php-markdown/extra/) The library used in W.
 
 
 #### W specific syntax
+
+This is not part of the markdown syntax.
 
 ##### Quick links
 
@@ -380,11 +294,9 @@ Note that the `.internal` class have been added to the `a` html link, allowing y
 
 Inclusion is an advanced feature of W that allow editors to insert metadatas, generate content using codes. Those codes are always inside percent signs `%`.
 
-
-
 #### Basic inclusions
 
-Those codes are mainly used to print page's metadatas.
+Those codes are mainly used to print page's [metadatas](#metadatas).
 
 ##### Title inclusion
 
@@ -836,35 +748,21 @@ There is 3 types of templating in W :
 
 #### BODY template
 
-This will call the BODY of another page.
+This will call the BODY of another page instead of current page's BODY.
+
+If they are sets, BODY template also provide a page [thumbnail](#thumbnail) and [favicon](#favicon).
 
 #### CSS template
 
 CSS template allow you to link another page's stylesheet to your page.
+But you still can use current page's CSS to overide rules, it will always be the last stylesheet loaded.
 
-Options are :
+This templating is reccursive : If the template is itsleft using a CSS template, then all stylsheets are stacked.
 
-##### Recursive template
-
-If templated page is already templating another page, this will add it to the stylesheet links.
-If you don't want this recursivity, uncheck the option.
-
-This option is checked by default.
-
-##### External CSS
-
-If templated page is using external stylesheet, this will include them as well.
-
-This option is checked by default.
-
-
-##### Favicon
-
-Use this option if you want to use templated page favicon.
 
 #### Javascript template
 
-Use this if you want to use a javascript template.
+This will link another's page Javascript file.
 
 
 
@@ -875,7 +773,20 @@ Use this if you want to use a javascript template.
 Media management
 ----------------
 
-In addition to [page editing](#page-editing), W gives you a dedicated tool to manage all the files you want to include in your website.
+
+When you need to use images, sound or videos in your pages, or any other type of files, you can use the media manager to host them before including them in your pages.
+
+[Invite editors](#invite-editor) don't have access to this place.
+
+The media menu allow you to do more powerfull function like moving medias or delete folders it is only accessible by [super editors](#super-editor) and above.
+
+### Media Filters
+
+Filters and sorting options can be set by choosing wich types of files to show and how to sort them. They can be used to filter and sort a [medialist](#media-list) using the __filter__ tab in the [media menu](#media-menu).
+
+File types are determined by their file extention. The association table is hardcoded in W's code and can be found [here](https://github.com/vincent-peugnet/wcms/blob/master/app/class/Media.php#L46).
+
+
 
 ### Magic folders
 
@@ -966,8 +877,30 @@ This folder is supposed to contain thumbnails images. Once images files (that ca
 
 
 
+
+
+
+
+
+Profile
+-------
+
+The profile allow you to edit some user related preferences.
+
+Your __display name__ ande __url__ are used in case of an [authors inclusion](#authors-inclusion) or a [page list](#page-list) inclusion with `authors=1`.
+
+
+
+
+
+
+
+
+
 Administration
 --------------
+
+Acces to admin menu is reserved to [admin](#administrator) users.
 
 ### Theming
 
@@ -988,20 +921,25 @@ Technicaly, each page is stored as a JSON object in yout fatabase folder.
 
 A page consist of meta informations and contents.
 
-#### Meta infos
+#### Metadatas
+
+Page metadatas can be set through the page [edition interface](#edition-interface) or with multi edit in the [home menu](#home-menu).
 
 ##### Page ID
 
 __The unique identifier of a page__. It can only contain lowercases characters from `a-z`, numbers `0-9`, underscore `_` and hyphen `-`.
 Normaly W will take care of cleaning your pages's ID, by lowering uppercases, removing some accents, and remplacing special characters or spaces with hyphens.
 
+
 ##### Page title
 
 The page title is also very important. It's like the official name of a page. It will be displayed in the browser tab of your page.
 
+
 ##### Description
 
 The description will be used by web search engines when they display lists of pages. This is also usefull for social media sharing.
+
 
 ##### Tag
 
@@ -1009,23 +947,36 @@ Tags are very powerfull to help you organize your pages. As in __W__, there is n
 
 Tags can be set in the [left panel of the editor interface](#left-panel) using comma to separate tags, or by using the multi edit tool in the [Home menu bar > Edit](#home-menu).
 
+
 ##### Privacy
 
 Pages have 3 possible levels of privacy:
 
 - **public** Free to read for every [visitor](#visitor).
 - **private** Hidden to [visitor](#visitor), but accessible to [reader users](#reader).
-- **not published** Only readable for users allowed to edit the page.
+- **not
+ published** Only readable for users allowed to edit the page.
 
 ##### Date
 
-This metadata can be set manually by the page editors.
+When you create a page, the date is set to the currente date and time.
 
-By default, page's date and time are the same as creation date and time.
+This metadata can later be set manually by the page editors.
+
+
+##### datecreation
+
+*read only*
+
+Page creation date.
+
 
 ##### Datemodif
 
-You can't edit manualy this date. It's just the last time the page has been edited.
+*read only*
+
+It's just the last time the page has been edited.
+
 
 ##### Latitude
 
@@ -1035,12 +986,28 @@ Must be between -90 and 90.
 
 Must be between -180 and 180.
 
+
+##### Favicon
+
+The page favicon can be set in the [edition view](#edition-interface).
+A default favicon for all pages can be set in the [administration interface](#administration).
+
+If no favicon is specified for a page, then the BODY template favicon will be used. If the page have no BODY template or the favicon of the template is not set, then the default favicon is used.
+
+
 ##### Thumbnail
 
 The thumbnail have two use cases :
 
 - When you share a link to a page on a social network
 - When you generate a [list of page](#page-list) and activated the `thumbail` option. 
+- When using [thumbnail inclusion](#thumbnail-inclusion) in a page.
+
+The page thumbnail can be set in the [edition view](#edition-interface).
+A default thumbnail for all pages can be set in the [administration interface](#administration).
+
+If no thumbnail is specified for a page, then the BODY template thumbnail will be used. If the page have no BODY template or the thumbnail of the template is not set, then the default thumbnail is used.
+
 
 ##### Authors
 
@@ -1048,24 +1015,9 @@ List of [users](#user-levels) that have edited the page, or that can do it. You 
 
 ##### Linkto
 
-This is not an editable metadata. It's a list of all pages that are linked from the current page. This is analysed when the page is rendered.
+*read only*
 
-#### Content
-
-##### content elements
-
-**In pages V1**, there are 5 content elements : Main, Nav, Aside, Header, Footer.
-
-**In pages V2**, there is only one content element called "content".
-
-##### CSS
-
-Each page have a dedicated stylesheet, that can be called by other pages using [templating](#templating).
-
-##### BODY
-
-##### Javascript
-
+It's a list of all pages that are linked from the current page. This is analysed when the page is rendered.
 
 ##### Visitcount
 
@@ -1096,6 +1048,29 @@ Count the number of time the page is opened is opened.
 
 
 
+
+
+#### Content
+
+##### content elements
+
+**In pages V1**, there are 5 content elements : Main, Nav, Aside, Header, Footer.
+
+**In pages V2**, there is only one content element called "content".
+
+##### CSS
+
+Each page have a dedicated stylesheet, that can be called by other pages using [templating](#templating).
+
+##### BODY
+
+##### Javascript
+
+
+
+
+
+
 ### User levels
 
 #### Visitor
@@ -1112,7 +1087,7 @@ Reader users are allowed to read [private pages](#privacy).
 
 > level : 2
 
-Invite Editors are the lowest editor status possible. They can only access the [Edition interface](#edition). They can't create page but only edit page when listed as [author](#authors).
+Invite Editors are the lowest editor status possible. They can only access the [Edition interface](#edition-interface). They can't create page but only edit page when listed as [author](#authors).
 
 #### Editor
 

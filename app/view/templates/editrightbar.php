@@ -55,9 +55,10 @@
 
         </details>
 
-        <details id="tempaltes" open>
+        <details id="templates" open>
             <summary>Templates</summary>
             <ul>
+            
             <?php
             foreach ($templates as $template => $id) {
                 if(!empty($id) && !is_bool($id)) {

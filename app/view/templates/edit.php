@@ -19,8 +19,8 @@ $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [$cs
     <div id="workspace">
 
     <?php $this->insert('editleftbar', ['page' => $page, 'tablist' => $tablist, 'pagelist' => $pagelist, 'faviconlist' => $faviconlist, 'thumbnaillist' => $thumbnaillist, 'workspace' => $workspace]) ?>
-    <?php $this->insert('edittabs', ['tablist' => $tablist, 'opentab' => $page->interface(), 'templates' => $page->template()]) ?>
-    <?php $this->insert('editrightbar', ['page' => $page, 'pagelist' => $pagelist, 'templates' => $page->template(), 'tagpagelist' => $tagpagelist, 'lasteditedpagelist' => $lasteditedpagelist, 'editorlist' => $editorlist, 'user' => $user, 'workspace' => $workspace]) ?>
+    <?php $this->insert('edittabs', ['tablist' => $tablist, 'opentab' => $page->interface()]) ?>
+    <?php $this->insert('editrightbar', ['page' => $page, 'pagelist' => $pagelist, 'tagpagelist' => $tagpagelist, 'lasteditedpagelist' => $lasteditedpagelist, 'editorlist' => $editorlist, 'user' => $user, 'workspace' => $workspace]) ?>
 
     </div>
 
