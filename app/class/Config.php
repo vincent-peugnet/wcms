@@ -163,7 +163,7 @@ abstract class Config
         return self::$domain;
     }
 
-    public static function issecure()
+    public static function issecure(): bool
     {
         return self::$secure;
     }

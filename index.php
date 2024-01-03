@@ -13,7 +13,8 @@ $app->wakeup();
 
 session_set_cookie_params([
     'path' => '/' . Wcms\Config::basepath(),
-    'samesite' => 'Strict'
+    'samesite' => 'Strict',
+    'secure' => Wcms\Config::issecure()
 ]);
 session_start();
 
