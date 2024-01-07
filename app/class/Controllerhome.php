@@ -238,6 +238,7 @@ class Controllerhome extends Controller
             Model::sendflashmessage('Render cache successfully deleted', Model::FLASH_SUCCESS);
         } catch (RuntimeException $e) {
             Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+            Logger::errorex($e);
         }
         $this->routedirect('home');
     }
@@ -318,7 +319,7 @@ class Controllerhome extends Controller
             $total = count($pagelist);
             $count = 0;
             foreach ($pagelist as $id) {
-                if ($this->pagemanager->delete($id)) {
+                if ($this->pagemanager->delete(new Pagev2(['id' => $id]))) {
                     $count++;
                 }
             }

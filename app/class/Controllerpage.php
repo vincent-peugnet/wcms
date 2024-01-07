@@ -73,9 +73,6 @@ class Controllerpage extends Controller
         $this->setpage($page, 'pageupdate');
 
         if ($this->importpage() && $this->user->iseditor()) {
-            if (Config::recursiverender()) {
-                $this->recursiverender($this->page);
-            }
             $this->page = $this->pagemanager->renderpage($this->page, $this->router);
             $this->pagemanager->update($this->page);
             $this->templaterender($this->page);
@@ -85,16 +82,15 @@ class Controllerpage extends Controller
     }
 
     /**
-     * Render all other pages that are linked from this page
+     * Delete render cache of all related pages
+     *
+     * @param string[] $relatedpages        List of page ids
      */
-    public function recursiverender(Page $page): void
+    public function deletelinktocache(array $relatedpages): void
     {
-        $relatedpages = array_diff($page->linkto(), [$page->id()]);
         foreach ($relatedpages as $pageid) {
             try {
-                $page = $this->pagemanager->get($pageid);
-                $page = $this->pagemanager->renderpage($page, $this->router);
-                $this->pagemanager->update($page);
+                $this->pagemanager->unlink($pageid);
             } catch (RuntimeException $e) {
                 Logger::errorex($e, true);
             }
@@ -102,9 +98,11 @@ class Controllerpage extends Controller
     }
 
     /**
-     * Render all page templates if they need to
+     * Render page's JS and CSS templates if they need to
      *
      * @param Page $page page to check templates
+     *
+     * @todo Move this function in Modelpage
      */
     private function templaterender(Page $page)
     {
@@ -138,89 +136,88 @@ class Controllerpage extends Controller
     public function read($page)
     {
         $this->setpage($page, 'pageread');
-
-        $pageexist = $this->importpage();
-        $canread = false;
-        $needtoberendered = false;
         $filedir = Model::HTML_RENDER_DIR . $page . '.html';
+        $reccursiverender = false;
 
-        if ($pageexist) {
-            $canread = $this->user->level() >= $this->page->secure();
-
-            // Check page password
-            if (!empty($this->page->password())) {
-                if (empty($_POST['pagepassword']) || $_POST['pagepassword'] !== $this->page->password()) {
-                    $this->showtemplate('pagepassword', ['pageid' => $this->page->id()]);
-                    exit;
-                }
-            }
-
-            if ($canread) {
-                if ($this->pagemanager->needtoberendered($this->page)) {
-                    $this->page = $this->pagemanager->renderpage($this->page, $this->router);
-                    $needtoberendered = true;
-                }
-                $this->templaterender($this->page);
-
-
-                $this->page->adddisplaycount();
-                if ($this->user->isvisitor()) {
-                    $this->page->addvisitcount();
-                }
-
-                // redirection using Location and 302
-                if (!empty($this->page->redirection()) && $this->page->refresh() === 0 && $this->page->sleep() === 0) {
-                    try {
-                        if (Model::idcheck($this->page->redirection())) {
-                            $this->routedirect('pageread', ['page' => $this->page->redirection()]);
-                        } else {
-                            $url = getfirsturl($this->page->redirection());
-                            $this->redirect($url);
-                        }
-                    } catch (RuntimeException $e) {
-                        // TODO : send synthax error to editor
-                    }
-                }
-                $html = file_get_contents($filedir);
-
-                $postprocessor = new Servicepostprocess($this->page, $this->user);
-                $html = $postprocessor->process($html);
-
-                sleep($this->page->sleep());
-
-                echo $html;
-
-                $this->pagemanager->update($this->page);
-
-                if ($needtoberendered && Config::recursiverender()) {
-                    $this->recursiverender($this->page);
-                }
-            } else {
-                http_response_code(403);
-                switch ($this->page->secure()) {
-                    case Page::NOT_PUBLISHED:
-                        $this->showtemplate(
-                            'alertnotpublished',
-                            ['page' => $this->page, 'subtitle' => Config::notpublished()]
-                        );
-                        break;
-
-                    case Page::PRIVATE:
-                        $this->showtemplate(
-                            'alertprivate',
-                            ['page' => $this->page, 'subtitle' => Config::private()]
-                        );
-                        break;
-                }
-                exit;
-            }
-        } else {
+        if (!$this->importpage()) {
             http_response_code(404);
             $this->showtemplate(
                 'alertexistnot',
                 ['page' => $this->page, 'subtitle' => Config::existnot()]
             );
+            exit;
         }
+
+        // Check page password
+        if (!empty($this->page->password())) {
+            if (empty($_POST['pagepassword']) || $_POST['pagepassword'] !== $this->page->password()) {
+                $this->showtemplate('pagepassword', ['pageid' => $this->page->id()]);
+                exit;
+            }
+        }
+
+        if ($this->user->level() < $this->page->secure()) {
+            http_response_code(403);
+            switch ($this->page->secure()) {
+                case Page::NOT_PUBLISHED:
+                    $this->showtemplate(
+                        'alertnotpublished',
+                        ['page' => $this->page, 'subtitle' => Config::notpublished()]
+                    );
+                    break;
+
+                case Page::PRIVATE:
+                    $this->showtemplate(
+                        'alertprivate',
+                        ['page' => $this->page, 'subtitle' => Config::private()]
+                    );
+                    break;
+            }
+            exit;
+        }
+
+        if ($this->pagemanager->needtoberendered($this->page)) {
+            if (Config::deletelinktocache() && $this->page->daterender() <= $this->page->datemodif()) {
+                $oldlinkto = $this->page->linkto();
+            }
+            $this->page = $this->pagemanager->renderpage($this->page, $this->router);
+            if (isset($oldlinkto)) {
+                $relatedpages = array_unique(array_merge($oldlinkto, $this->page->linkto()));
+                $this->deletelinktocache($relatedpages);
+            }
+        }
+
+        $this->templaterender($this->page);
+
+
+        $this->page->adddisplaycount();
+        if ($this->user->isvisitor()) {
+            $this->page->addvisitcount();
+        }
+
+        // redirection using Location and 302
+        if (!empty($this->page->redirection()) && $this->page->refresh() === 0 && $this->page->sleep() === 0) {
+            try {
+                if (Model::idcheck($this->page->redirection())) {
+                    $this->routedirect('pageread', ['page' => $this->page->redirection()]);
+                } else {
+                    $url = getfirsturl($this->page->redirection());
+                    $this->redirect($url);
+                }
+            } catch (RuntimeException $e) {
+                // TODO : send synthax error to editor
+            }
+        }
+        $html = file_get_contents($filedir);
+
+        $postprocessor = new Servicepostprocess($this->page, $this->user);
+        $html = $postprocessor->process($html);
+
+        sleep($this->page->sleep());
+
+        echo $html;
+
+        $this->pagemanager->update($this->page);
     }
 
     public function edit($page)

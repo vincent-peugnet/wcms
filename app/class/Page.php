@@ -287,9 +287,9 @@ abstract class Page extends Item
     public function linkto($option = 'array')
     {
         if ($option == 'json') {
-            $linkto = json_encode($this->linkto);
+            return json_encode($this->linkto);
         } elseif ($option == 'array') {
-            $linkto = $this->linkto;
+            return $this->linkto;
         } elseif ($option == 'sort') {
             return count($this->linkto);
         } elseif ($option == 'string') {

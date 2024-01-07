@@ -638,7 +638,7 @@ Where `*` is the page ID of the rendered page.
     %<element>?tag=(0|1)%
 
 This will determine if HTML tags will be printed around included element. This may be usefull for advanced users to achieve more precise HTML editing.
-The default behavior can be set globaly in the [admin panel](#admin).
+The default behavior can be set globaly in the [admin panel](#administration).
 
 Example :
 
@@ -698,7 +698,7 @@ This settings is deactivated by default.
 
     %<element>?urllinker=(0|1)%
 
-URL Linker is a tool that will transform a plain text URL into a link. This can be enabled or disabled specificly for each elements. The default behavior can be set globaly in the [admin panel](#admin).
+URL Linker is a tool that will transform a plain text URL into a link. This can be enabled or disabled specificly for each elements. The default behavior can be set globaly in the [admin panel](#administration).
 
 ##### Everylink
 
@@ -860,7 +860,7 @@ CSS properties for weight only use `normal` and `bold` as absolute values. other
 
 This contain two files:
 
-- the `global.css` file, that admins can edit in the [admin panel](#admin).
+- the `global.css` file, that admins can edit in the [admin panel](#administration).
 - the `fonts.css` file, that is automatcly generated according to content of [fonts folder](#fonts-folder).
 
 
@@ -904,7 +904,7 @@ Acces to admin menu is reserved to [admin](#administrator) users.
 
 ### Theming
 
-You change the interface theme in the [admin panel](#admin), under *interface*. There is a kit of presets, but you can even add your own themes ! And it is actualy *super easy* 😎. To do so, go to the folder `/assets/css/themes/` and duplicate one of the preset you prefer. Then you can edit the CSS variables to quickly stylise your theme colors.
+You change the interface theme in the [admin panel](#administration), under *interface*. There is a kit of presets, but you can even add your own themes ! And it is actualy *super easy* 😎. To do so, go to the folder `/assets/css/themes/` and duplicate one of the preset you prefer. Then you can edit the CSS variables to quickly stylise your theme colors.
 
 
 
@@ -1111,7 +1111,7 @@ Invite Editors are the lowest editor status possible. They can only access the [
 
 > level : 10
 
-- Can access the [admin interface](#admin).
+- Can access the [admin interface](#administration).
 - Can create new users.
 
 ### URL based command interface

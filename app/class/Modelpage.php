@@ -67,7 +67,7 @@ class Modelpage extends Modeldb
         $pagelist = [];
         foreach ($pagedatalist as $id => $pagedata) {
             try {
-                $this->pagelist[$id] = $this->parsepage($pagedata);
+                $pagelist[$id] = $this->parsepage($pagedata);
             } catch (RuntimeException $e) {
                 Logger::error("Could not load Page with ID \"$id\" : $e");
             }
@@ -247,38 +247,43 @@ class Modelpage extends Modeldb
     /**
      * Delete a page and it's linked rendered html and css files
      *
-     * @param Page|string $page             could be an Page object or a id string
+     * @param Page $page                    Page to delete
      *
      * @return bool                         true if success otherwise false
+     *
+     * @todo use Exception istead of returning boolean
      */
-    public function delete($page): bool
+    public function delete(Page $page): bool
     {
-        if ($page instanceof Page) {
-            $page = $page->id();
-        }
-        if (is_string($page)) {
-            $this->unlink($page);
-            return $this->repo->delete($page);
-        } else {
+        try {
+            $this->unlink($page->id());
+        } catch (Filesystemexception $e) {
             return false;
         }
+        return $this->repo->delete($page->id());
     }
 
     /**
-     * Delete rendered CSS and HTML files
+     * Delete rendered CSS, JS and HTML files associated with given Page
      *
      * @param string $pageid
+     *
+     * @throws Filesystemexception          If a file deletion failure occurs
      */
     public function unlink(string $pageid)
     {
         $files = ['.css', '.quick.css', '.js'];
         foreach ($files as $file) {
-            if (file_exists(Model::RENDER_DIR . $pageid . $file)) {
-                unlink(Model::RENDER_DIR . $pageid . $file);
+            try {
+                Fs::deletefile(Model::RENDER_DIR . $pageid . $file);
+            } catch (Notfoundexception $e) {
+                // do nothing, this means file is already deleted
             }
         }
-        if (file_exists(Model::HTML_RENDER_DIR . $pageid . '.html')) {
-            unlink(Model::HTML_RENDER_DIR . $pageid . '.html');
+        try {
+            Fs::deletefile(Model::HTML_RENDER_DIR . $pageid . '.html');
+        } catch (Notfoundexception $e) {
+            // do nothing, this means file is already deleted
         }
     }
 
@@ -399,6 +404,10 @@ class Modelpage extends Modeldb
 
     /**
      * Check if a page need to be rendered
+     *
+     * This will compare edit and render dates,
+     * then if render file exists,
+     * then if the templatebody is set and has been updated.
      *
      * @param Page $page                    Page to be checked
      *

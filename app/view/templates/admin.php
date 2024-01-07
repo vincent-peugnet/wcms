@@ -21,13 +21,16 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
                     <li><a href="#page-creation">Page creation</a></li>
                     <li><a href="#alert-pages">Alert Pages</a></li>
                     <li><a href="#render">Render</a></li>
-                    <li><a href="#css">CSS</a></li>
+                    <li><a href="#style">Style</a></li>
                     <li><a href="#interface">Interface</a></li>
-                    <li><a href="#tracking">Tracking</a></li>
                 </ul>
 
                 <form action="<?= $this->url('adminupdate') ?>" method="post" id="admin">
-                    <input type="submit" value="Update configuration">
+                    
+                    <button type="submit">
+                        <i class="fa fa-save"></i>
+                        <span>Save configuration</span>
+                    </button>
                 </form>
             </div>
         </div>
@@ -44,7 +47,10 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
 
                 <h2 id="home-page">Home page</h2>
 
-                <p>Here you can set the home-page view for visitors.</p>
+                <p>
+                    By default, W has no home page for visitors without an account.
+                    But if you wish, you can define a page to which visitors who are not logged in will be redirected.
+                </p>
 
                 <div class="radio">
                     <input type="radio" name="homepage" value="default" id="default" <?= Wcms\Config::homepage() === 'default' ? 'checked' : '' ?> form="admin">
@@ -178,19 +184,36 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
 
                 <h2 id="render">Render</h2>
 
+                <h4>rendering details</h4>
+
                 <div class="checkbox">
-                    <input type="hidden" name="recursiverender" value="0" form="admin">
-                    <input type="checkbox" name="recursiverender" id="recursiverender" value="1" <?= Wcms\Config::recursiverender() ? 'checked' : '' ?> form="admin">
-                    <label for="recursiverender">recursive render</label>
+                    <input type="hidden" name="deletelinktocache" value="0" form="admin">
+                    <input type="checkbox" name="deletelinktocache" id="deletelinktocache" value="1" <?= Wcms\Config::deletelinktocache() ? 'checked' : '' ?> form="admin">
+                    <label for="deletelinktocache">invalidates the rendering of linked pages when updating</label>
+                    <p>
+                        When a page is modified, this may affect the rendering of other pages linked to it.
+                        The pages to which it points have a strong possibility of needing to be updated too.
+                        This option will invalidate their rendering each time the page pointing to them is updated.
+                        They will therefore be re-rendered the next time they are viewed.
+                    </p>
                 </div>
+
+                <h4>base page language</h4>
 
                 <label for="lang">Default language</label>
                 <input type="text" name="lang" id="lang" value="<?= Wcms\Config::lang() ?>" form="admin" minlength="<?= Wcms\Config::LANG_MIN ?>" maxlength="<?= Wcms\Config::LANG_MAX ?>" required>
+
+                <p>
+                    If the page language is not specified in metadatas, then this default will be used.
+                </p>
 
                 <h4>title</h4>
 
                 <label for="suffix">suffix</label>
                 <input type="text" name="suffix" id="suffix" value="<?= Wcms\Config::suffix() ?>" form="admin" maxlength="<?= Wcms\Config::SUFFIX_MAX ?>">
+                <p>
+                    This add a suffix to the title of all your pages.
+                </p>
 
                 <h4>Links</h4>
 
@@ -241,10 +264,16 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
                 </p>
 
 
-                <h2 id="css">CSS</h2>
+                <h2 id="style">Style</h2>
 
-                <label for="globalcss">Edit global css that will apply to every pages</label>
+                <h4>Global CSS</h4>
+
+                <p>
+                    Global CSS will be loaded with every pages.
+                </p>
                 <textarea name="globalcss" id="globalcss" cols="30" rows="30" form="admin"><?= $globalcss ?></textarea>
+
+                <h4>Favicon</h4>
 
                 <label for="defaultfavicon">Default favicon</label>
                 <select name="defaultfavicon" id="defaultfavicon" form="admin">
@@ -258,6 +287,8 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
                     ?>
                 </select>
 
+                <h4>Thumbnail</h4>
+
                 <label for="defaultthumbnail">Default thumbnail</label>
                 <select name="defaultthumbnail" id="defaultthumbnail" form="admin">
                     <option value="">--no thumbnail--</option>
@@ -270,15 +301,10 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
 
                 <h2 id="interface">Interface</h2>
 
-                <div class="checkbox">
-                    <input type="hidden" name="disablejavascript" value="0" form="admin">
-                    <input type="checkbox" name="disablejavascript" id="disablejavascript" value="1" <?= Wcms\Config::disablejavascript() ? 'checked' : '' ?> form="admin">
-                    <label for="disablejavascript">Disable javascript</label>
-                </div>
+                <h4>Theme</h4>
 
 
-                <p>Set interface theme</p>
-
+                <label for="theme">select interface theme</label>
                 <select name="theme" id="theme" form="admin">
                     <?php
                     foreach ($themes as $theme) {
@@ -288,6 +314,25 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
                     }
                     ?>
                 </select>
+
+                <p>
+                    See <a href="<?= $this->url('info', [], '#theming') ?>">📖 manual section</a> for more infos.
+                </p>
+
+                <h4>Javascript</h4>
+
+                <div class="checkbox">
+                    <input type="hidden" name="disablejavascript" value="0" form="admin">
+                    <input type="checkbox" name="disablejavascript" id="disablejavascript" value="1" <?= Wcms\Config::disablejavascript() ? 'checked' : '' ?> form="admin">
+                    <label for="disablejavascript">Disable javascript</label>
+                </div>
+
+                <p>
+                    Disables javascript in the user interface.
+                    Syntax highlighting, depend on it and will therefore not be displayed.
+                    This also reduces comfort a little, but full functionality is retained.
+                </p>
+
 
 
             </div>

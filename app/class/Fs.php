@@ -176,6 +176,8 @@ abstract class Fs
      * @throws Notfoundexception                If file does not exist
      * @throws Fileexception                    If file cannot be deleted
      * @throws Unlinkexception                  If PHP unlink function fails for another reason
+     *
+     * @todo Maybe do not send Notfoundexception
      */
     public static function deletefile(string $file): void
     {

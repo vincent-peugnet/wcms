@@ -27,7 +27,7 @@ abstract class Config
     protected static $externallinkblank = true;
     protected static $internallinkblank = false;
     protected static $urllinker = true;
-    protected static $recursiverender = true;
+    protected static bool $deletelinktocache = true;
     protected static $defaultprivacy = 0;
     protected static $homepage = 'default';
     protected static $homeredirect = null;
@@ -280,9 +280,9 @@ abstract class Config
         return self::$urllinker;
     }
 
-    public static function recursiverender()
+    public static function deletelinktocache(): bool
     {
-        return self::$recursiverender;
+        return self::$deletelinktocache;
     }
 
     public static function defaultprivacy()
@@ -501,9 +501,9 @@ abstract class Config
         self::$urllinker = boolval($urllinker);
     }
 
-    public static function setrecursiverender($recursiverender)
+    public static function setdeletelinktocache($deletelinktocache)
     {
-        self::$recursiverender = boolval($recursiverender);
+        self::$deletelinktocache = boolval($deletelinktocache);
     }
 
     public static function setdefaultprivacy($defaultprivacy)
