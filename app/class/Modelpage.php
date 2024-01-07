@@ -283,6 +283,22 @@ class Modelpage extends Modeldb
     }
 
     /**
+     * Empty RENDER_DIR and HTML_RENDER_DIR
+     *
+     * @throws RuntimeException in cas of falilure
+     */
+    public function flushrendercache(): void
+    {
+        try {
+            Fs::folderflush(self::RENDER_DIR);
+            Fs::folderflush(self::HTML_RENDER_DIR);
+        } catch (Filesystemexception $e) {
+            $fserror = $e->getMessage();
+            throw new RuntimeException("Error while trying to flush page render cache: $fserror", 1);
+        }
+    }
+
+    /**
      * Update a page in the database
      *
      * @todo Use Exceptions instead of returning bool

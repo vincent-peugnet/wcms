@@ -231,22 +231,13 @@ class Controllerhome extends Controller
         }
     }
 
-    /**
-     * Render every pages in the database
-     */
-    public function renderall()
+    public function flushrendercache(): void
     {
-        if ($this->user->iseditor()) {
-            $pagelist = $this->pagemanager->pagelist();
-            $count = 0;
-            foreach ($pagelist as $page) {
-                $page = $this->pagemanager->renderpage($page, $this->router);
-                if ($this->pagemanager->update($page)) {
-                    $count++;
-                }
-            }
-            $total = count($pagelist);
-            $this->sendstatflashmessage($count, $total, 'pages have been rendered');
+        try {
+            $this->pagemanager->flushrendercache();
+            Model::sendflashmessage('Render cache successfully deleted', Model::FLASH_SUCCESS);
+        } catch (RuntimeException $e) {
+            Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
         }
         $this->routedirect('home');
     }

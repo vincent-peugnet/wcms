@@ -78,6 +78,7 @@ class Controlleradmin extends Controller
                     if (!empty($_POST['pagetable'])) {
                         Config::hydrate($_POST);
                         try {
+                            $this->pagemanager->flushrendercache();
                             Config::savejson();
                         } catch (RuntimeException $e) {
                             Model::sendflashmessage(

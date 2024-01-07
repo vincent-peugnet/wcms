@@ -41,7 +41,7 @@ class Routes
             ['GET', '/!bookmark/[cid:bookmark]/publish', 'Controllerbookmark#publish', 'bookmarkpublish'],
             ['GET', '/!bookmark/[cid:bookmark]/unpublish', 'Controllerbookmark#unpublish', 'bookmarkunpublish'],
             ['GET', '/!random', 'Controllerrandom#direct', 'randomdirect'],
-            ['GET', '//renderall', 'Controllerhome#renderall', 'homerenderall'],
+            ['GET', '/!flushrendercache', 'Controllerhome#flushrendercache', 'flushrendercache'],
             ['POST', '/multi', 'Controllerhome#multi', 'multi'],
             ['POST', '/upload', 'Controllerpage#upload', 'pageupload'],
             ['POST', '/!co', 'Controllerconnect#log', 'log'],
