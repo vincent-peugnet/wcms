@@ -1,0 +1,22 @@
+:root {
+    --text-color: #dfe0eb;
+    --text2-color: #ffffff;
+    --text3-color: #3b1338;
+    --main-color: #033879;
+    --secondary-background-color: #4050bd;
+    --code-background-color: hsl(213deg 74.31% 13.58%);
+    --code-color: hsl(213deg 69.63% 74.23%);
+    --primary-background-color: #5476d9;
+    --tertiary-background-color: #061456;
+    --outline-background-color: #1927cf;
+    --outline-color: #ffffff;
+    --button-background-color: #0057d9;
+    --button-color: #ffffff;
+    --input-background-color: #0066ff;
+    --input-color: #ffffff;
+    color-scheme: light;
+}
+
+input, button, select, textarea, legend {
+    border-radius: 10px;
+}
