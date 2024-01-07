@@ -120,6 +120,9 @@ footer {
     white-space: nowrap;
 }
 
+fieldset li {
+    text-wrap: nowrap;
+}
 
 
 div#options, article#main {

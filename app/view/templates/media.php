@@ -48,11 +48,14 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
                     <select name="sortby" id="sortby">
                         <?= options(Wcms\Modelmedia::MEDIA_SORTBY, $mediaopt->sortby()) ?>
                     </select>
-                    </br>
-                    <input type="radio" name="order" id="asc" value="1" <?= $mediaopt->order() == 1 ? 'checked' : '' ?>><label for="asc">ascending</label>
-                    </br>
-                    <input type="radio" name="order" id="desc" value="-1" <?= $mediaopt->order() == -1 ? 'checked' : '' ?>><label for="desc">descending</label>
-                    </br>
+                    <ul>
+                        <li>
+                            <input type="radio" name="order" id="asc" value="1" <?= $mediaopt->order() == 1 ? 'checked' : '' ?>><label for="asc">ascending</label>
+                        </li>
+                        <li>
+                            <input type="radio" name="order" id="desc" value="-1" <?= $mediaopt->order() == -1 ? 'checked' : '' ?>><label for="desc">descending</label>
+                        </li>
+                    </ul>
                 </fieldset>
                 <input type="hidden" name="path" value="<?= $mediaopt->path() ?>">
                 <input type="submit" value="filter">
@@ -134,7 +137,6 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
             <th><a href="<?= $mediaopt->getsortbyadress('date') ?>">date</a></th>
             <th>user</th>
             <th>perms</th>
-            <th>surface</th>
             <th>code</th>
         </tr>
 
@@ -180,7 +182,6 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
             <td class="nowrap" title="<?= $media->date('dmy') ?> <?= $media->date('ptime') ?>"><?= $media->date('hrdi') ?></td>
             <td><?= $media->uid('name') ?></td>
             <td><code><?= $media->permissions() ?></code></td>
-            <td><?= $media->surface() ?></td>
             <td><input readonly class="code select-all" value="<?= $this->e($media->getcode()) ?>" /></td>
             </tr>
             <?php

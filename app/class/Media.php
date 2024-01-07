@@ -314,12 +314,6 @@ class Media extends Item
         return $this->length;
     }
 
-    public function surface()
-    {
-        $surface = $this->width * $this->height;
-        return readablesize($surface, 1000) . 'px';
-    }
-
     /**
      * @param string $option could be `id` or `name`
      * @return string|int

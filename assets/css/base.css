@@ -91,9 +91,10 @@ summary {
     white-space: nowrap;
 }
 
-summary:hover {
+summary:hover, input[type="submit"] {
     cursor: pointer;
 }
+
 
 .bar {
     background-color: var(--primary-background-color);
