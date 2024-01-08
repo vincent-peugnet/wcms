@@ -2,7 +2,7 @@
 
 use Wcms\Model;
 
-$this->layout('layout', ['title' => 'profile', 'stylesheets' => [$css . 'back.css']]) ?>
+$this->layout('layout', ['title' => 'profile', 'stylesheets' => [$css . 'back.css', $css . 'profile.css']]) ?>
 
 
 <?php $this->start('page') ?>
@@ -50,6 +50,7 @@ $this->layout('layout', ['title' => 'profile', 'stylesheets' => [$css . 'back.cs
 
                     <p>Change some infos about you.</p>
 
+                    <label for="name">Display name (if none, user ID will be used)</label>
                     <input
                         type="text"
                         name="name"
@@ -58,10 +59,10 @@ $this->layout('layout', ['title' => 'profile', 'stylesheets' => [$css . 'back.cs
                         placeholder="<?= $user->id() ?> "
                         maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>"
                     >
-                    <label for="name">Display name (if none, user ID will be used)</label>
                     </br>
 
 
+                    <label for="url">associated url (can be a page ID)</label>
                     <input
                         type="text"
                         name="url"
@@ -71,7 +72,6 @@ $this->layout('layout', ['title' => 'profile', 'stylesheets' => [$css . 'back.cs
                         placeholder="URL or page ID"
                         maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>"
                     >
-                    <label for="url">associated url (can be a page ID)</label>
                     </br>
 
                     <p>When you tick the <em>remember-me</em> checkbox during login, you can choose how much time <strong>W</strong> will remember you.</p>
@@ -84,7 +84,6 @@ $this->layout('layout', ['title' => 'profile', 'stylesheets' => [$css . 'back.cs
                         max="<?= Model::MAX_COOKIE_CONSERVATION ?>"
                     >
                     <label for="cookie">Cookie conservation time <i>(In days)</i></label>
-                    </br>
                     <input type="submit" value="update preferences">
                     
                 </form>
@@ -94,22 +93,18 @@ $this->layout('layout', ['title' => 'profile', 'stylesheets' => [$css . 'back.cs
 
                 <form action="<?= $this->url('profilepassword') ?>" method="post" id="password">
 
-                    <label for="currentpassword">Actual password</label>
-                    </br>
-                    <input type="password" name="currentpassword" id="currentpassword" required>
-                    </br>
-
-                    <label for="password1">New password</label>
-                    </br>
-                    <input type="password" name="password1" id="password1" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" required>
-                    </br>
-                    <label for="password2">Confirm new password</label>
-                    </br>
-                    <input type="password" name="password2" id="password2" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" required>
-
                     <p>Password have to be between <?= Wcms\Model::PASSWORD_MIN_LENGTH ?> and <?= Wcms\Model::PASSWORD_MAX_LENGTH ?> characters long.</p>
 
+                    <label for="currentpassword">Actual password</label>
+                    <input type="password" name="currentpassword" id="currentpassword" required>
+
+                    <label for="password1">New password</label>
+                    <input type="password" name="password1" id="password1" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" required>
+                    <label for="password2">Confirm new password</label>
+                    <input type="password" name="password2" id="password2" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" required>
                     <input type="submit" value="update password">
+
+
 
                 </form>
 

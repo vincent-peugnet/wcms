@@ -26,6 +26,9 @@ button, input[type="submit"] {
 }
 
 
-.submenu, .block {
+.submenu, .block, nav.bar {
     border-radius: 0 0 10px 10px;
+}
+
+label.toogle {
 }

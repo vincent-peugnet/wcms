@@ -130,11 +130,26 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
         <table id="medialist">
         <tr>
             <th id="checkall">x</th>
-            <th><a href="<?= $mediaopt->getsortbyadress('filename') ?>">filename</a></th>
-            <th><a href="<?= $mediaopt->getsortbyadress('extension') ?>">ext</a></th>
-            <th><a href="<?= $mediaopt->getsortbyadress('type') ?>">type</a></th>
-            <th><a href="<?= $mediaopt->getsortbyadress('size') ?>">size</a></th>
-            <th><a href="<?= $mediaopt->getsortbyadress('date') ?>">date</a></th>
+            <th>
+                <a href="<?= $mediaopt->getsortbyadress('filename') ?>">filename</a>
+                <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'filename']) ?>
+            </th>
+            <th>
+                <a href="<?= $mediaopt->getsortbyadress('extension') ?>">ext</a>
+                <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'extension']) ?>
+            </th>
+            <th>
+                <a href="<?= $mediaopt->getsortbyadress('type') ?>">type</a>
+                <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'type']) ?>
+            </th>
+            <th>
+                <a href="<?= $mediaopt->getsortbyadress('size') ?>">size</a>
+                <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'size']) ?>
+            </th>
+            <th>
+                <a href="<?= $mediaopt->getsortbyadress('date') ?>">date</a>
+                <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'date']) ?>
+            </th>
             <th>user</th>
             <th>perms</th>
             <th>code</th>
