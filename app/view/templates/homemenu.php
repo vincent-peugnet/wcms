@@ -425,25 +425,33 @@
         <summary>Display</summary>
         <div class="submenu">
             <h2>Columns</h2>
-        <form action="<?= $this->url('homecolumns') ?>" method="post">
-        <ul>
-        <?php
-        foreach (Wcms\Model::COLUMNS as $col) { ?>
-            <li>
-            <input type="checkbox" name="columns[]" value="<?= $col ?>" id="col_<?= $col ?>" <?= in_array($col, $user->columns()) ? 'checked' : '' ?>>
-            <label for="col_<?= $col ?>"><?= $col ?></label>
-            </li>
+            <form action="<?= $this->url('homecolumns') ?>" method="post">
+            <input type="hidden" name="columns[]" value="id">
+                <ul>
+                    <li>
+                        <input type="checkbox" name="columns[]" id="col_id" checked disabled>
+                        <label for="col_id">id</label>
+                    </li>
+                <?php
+                foreach (Wcms\User::COLUMNS as $col) {
+                    $name = Wcms\Model::METADATAS_NAMES[$col];
+                    ?>
+                    <li>
+                    <input type="checkbox" name="columns[]" value="<?= $col ?>" id="col_<?= $col ?>" <?= in_array($col, $user->columns()) ? 'checked' : '' ?>>
+                    <label for="col_<?= $col ?>"><?= $name ?></label>
+                    </li>
+                    <?php } ?>
+                </ul>
+                <input type="submit" value="update columns">
+            </form>
+
+            <?php if($user->issupereditor() && !empty($colors)) { ?>
+            <h2>Tag colors</h2>
+            <form action="<?= $this->url('homecolors') ?>" method="post">
+                <?= $colors->htmlcolorpicker() ?>
+                <input type="submit" value="update">
+            </form>
             <?php } ?>
-        </ul>
-        <input type="submit" value="update columns">
-        </form>
-        <?php if($user->issupereditor() && !empty($colors)) { ?>
-        <h2>Tag colors</h2>
-        <form action="<?= $this->url('homecolors') ?>" method="post">
-            <?= $colors->htmlcolorpicker() ?>
-            <input type="submit" value="update">
-        </form>
-        <?php } ?>
         </div>
     </details>
 

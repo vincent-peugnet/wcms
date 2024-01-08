@@ -177,7 +177,7 @@ use Wcms\Config;
                             </th>
                             <?php }
                                 if ($columns['description']) { ?>
-                            <th class="summary">summary</th>
+                            <th class="description">description</th>
                             <?php }
                                 if ($columns['linkto']) { ?>
                             <th class="linkto">
@@ -185,6 +185,10 @@ use Wcms\Config;
                                 <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'linkto']) ?>
                                 
                             </th>
+                            <?php } if ($columns['geolocalisation']) { ?>
+                                <th class="geo">
+                                    <i class="fa fa-globe"></i>
+                                </th>                                
                             <?php }
                                 if ($columns['datemodif']) { ?>
                             <th class="datemodif">
@@ -306,10 +310,13 @@ use Wcms\Config;
                             <td class="title" title="<?= $item->title() ?>"><label for="id_<?= $item->id() ?>"><?= $item->title() ?></label></td>
                             <?php }
                                     if ($columns['description']) { ?>
-                            <td class="summary" title="<?= $item->description() ?>"><?= $item->description('short') ?></td>
+                            <td class="description" title="<?= $item->description() ?>"><?= $item->description('short') ?></td>
                             <?php }
                                     if ($columns['linkto']) { ?>
                             <td class="linkto"><?= $opt->linktolink($item->linkto('array')) ?></td>
+                            <?php }
+                                    if ($columns['geolocalisation']) { ?>
+                            <td class="geo"><?= $item->isgeo() ? '<i class="fa fa-globe"></i>' : '' ?></td>
                             <?php }
                                     if ($columns['datemodif']) { ?>
                             <td class="datemodif" <?= $item->datemodif('dmy') ?> <?= $item->datemodif('ptime') ?>><time datetime="<?= $item->datemodif('string') ?>" title="<?= $item->datemodif('dmy') . ' ' . $item->datemodif('ptime') ?>"><?= $item->datemodif('hrdi') ?></time></td>

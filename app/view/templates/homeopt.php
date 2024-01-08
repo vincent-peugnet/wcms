@@ -23,8 +23,9 @@
                     <div>
                         <select name="sortby" id="sortby">
                             <?php
-                            foreach (Wcms\Model::COLUMNS as $col) {
-                                echo '<option value="' . $col . '" ' . ($opt->sortby() == $col ? "selected" : "") . '>' . $col . '</option>';
+                            foreach (Wcms\Opt::SORTBYLIST as $col) {
+                                $name = Wcms\Model::METADATAS_NAMES[$col];
+                                echo '<option value="' . $col . '" ' . ($opt->sortby() == $col ? "selected" : "") . '>' . $name . '</option>';
                             }
                             ?>
                         </select>

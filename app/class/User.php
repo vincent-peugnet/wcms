@@ -37,6 +37,25 @@ class User extends Item
     /** @var bool[] $display interface display options */
     protected array $display = ['bookmark' => false];
 
+    public const COLUMNS = [
+        'favicon',
+        'tag',
+        'title',
+        'description',
+        'linkto',
+        'geolocalisation',
+        'datemodif',
+        'datecreation',
+        'date',
+        'secure',
+        'authors',
+        'visitcount',
+        'editcount',
+        'displaycount',
+        'version',
+    ];
+
+
     public function __construct($datas = [])
     {
         if (!empty($datas)) {
@@ -214,7 +233,7 @@ class User extends Item
     public function setcolumns($columns)
     {
         if (is_array($columns)) {
-            $columns = array_filter(array_intersect(array_unique($columns), Model::COLUMNS));
+            $columns = array_filter(array_intersect(array_unique($columns), self::COLUMNS));
             $this->columns = $columns;
         }
     }
@@ -334,6 +353,20 @@ class User extends Item
     public function checksession(string $session): bool
     {
         return key_exists($session, $this->sessions);
+    }
+
+
+    /**
+     * Full list of columns with a boolean indicating if checked or not
+     *
+     * @return bool[]                       associative array where page id is key and value is bool
+     */
+    public function checkedcolumns(): array
+    {
+        foreach (self::COLUMNS as $col) {
+            $checkedcolumns[$col] = in_array($col, $this->columns);
+        }
+        return $checkedcolumns;
     }
 
 

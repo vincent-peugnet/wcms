@@ -79,7 +79,7 @@ class Controllerhome extends Controller
             );
 
 
-            $vars['columns'] = $this->modelhome->setcolumns($this->user->columns());
+            $vars['columns'] = $this->user->checkedcolumns();
 
 
             $vars['faviconlist'] = $this->mediamanager->listfavicon();
@@ -189,7 +189,7 @@ class Controllerhome extends Controller
         if (isset($_POST['columns']) && $this->user->iseditor()) {
             try {
                 $user = $this->usermanager->get($this->user->id());
-                $user->hydrate($_POST);
+                $user->setcolumns($_POST['columns']);
                 $this->usermanager->add($user);
                 Model::sendflashmessage('Display settings successfully saved', Model::FLASH_SUCCESS);
             } catch (Databaseexception $e) {

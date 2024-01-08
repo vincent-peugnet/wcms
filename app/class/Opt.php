@@ -72,6 +72,23 @@ class Opt extends Item
 
     protected const DATALIST = [...self::SORTLIST, ...self::FILTERLIST];
 
+    public const SORTBYLIST = [
+        'favicon',
+        'id',
+        'tag',
+        'title',
+        'linkto',
+        'datemodif',
+        'datecreation',
+        'date',
+        'secure',
+        'authors',
+        'visitcount',
+        'editcount',
+        'displaycount',
+        'version',
+    ];
+
     public function __construct(array $data = [])
     {
         $this->pagevarlist = Page::getclassvars();
@@ -404,7 +421,7 @@ class Opt extends Item
 
     public function setsortby($sortby)
     {
-        if (is_string($sortby) && in_array($sortby, $this->pagevarlist) && in_array($sortby, Model::COLUMNS)) {
+        if (is_string($sortby) && in_array($sortby, $this->pagevarlist) && in_array($sortby, self::SORTBYLIST)) {
             $this->sortby = strtolower(strip_tags($sortby));
         }
     }

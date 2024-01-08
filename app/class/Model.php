@@ -46,22 +46,23 @@ abstract class Model
     public const FLASH_SUCCESS  = 'success';
     public const FLASH_ERROR    = 'error';
 
-    public const COLUMNS = [
-        'id',
-        'favicon',
-        'title',
-        'description',
-        'tag',
-        'date',
-        'datemodif',
-        'datecreation',
-        'secure',
-        'authors',
-        'linkto',
-        'visitcount',
-        'displaycount',
-        'editcount',
-        'version',
+    public const METADATAS_NAMES = [
+        'favicon' => 'favicon',
+        'id' => 'id',
+        'tag' => 'tag',
+        'title' => 'title',
+        'description' => 'description',
+        'linkto' => 'linkto',
+        'geolocalisation' => 'geolocalisation',
+        'datemodif' => 'modification date',
+        'datecreation' => 'creation date',
+        'date' => 'date',
+        'secure' => 'privacy',
+        'authors' => 'authors',
+        'visitcount' => 'visit',
+        'editcount' => 'edit',
+        'displaycount' => 'display',
+        'version' => 'version',
     ];
 
     public const ID_REGEX                   = "%[^a-z0-9-_]%";
