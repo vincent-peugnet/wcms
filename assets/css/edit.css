@@ -149,7 +149,11 @@ input#fontsize {
     width: 50px;
 }
 
-span#headid {color: var(--outline-color);background-color: var(--outline-background-color);}
+span#headid {
+	color: var(--outline-color);
+	background-color: var(--outline-background-color);
+	text-wrap: nowrap;
+}
 
 a {
     /* color: black; */
@@ -289,7 +293,11 @@ div#geomap {
 
     span#fontsize {
         display: none;
-    }   
+    }
+
+	span#headid .pageid {
+		display: none;
+	}
 }
 
 
@@ -304,8 +312,10 @@ div#geomap {
 	    padding-top: 7px;
 	    padding-bottom: 7px;
 	}
-	
-	span#headid {
-	    display: none;
+}
+
+@media (max-width: 750px) and (pointer: coarse) {
+	span#headid .pageid {
+		display: none;
 	}
 }

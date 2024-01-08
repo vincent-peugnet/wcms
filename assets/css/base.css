@@ -91,7 +91,7 @@ summary {
     white-space: nowrap;
 }
 
-summary:hover, input[type="submit"], button {
+summary:hover, input[type="submit"], input[type="file"], button {
     cursor: pointer;
 }
 

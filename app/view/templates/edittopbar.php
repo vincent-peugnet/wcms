@@ -16,7 +16,7 @@
         </span>
 
         <span id="headid">
-            <?= $page->id() ?>
+            <span id="editstatus"></span><span class="pageid"><?= $page->id() ?></span>
         </span>
 
         <span>

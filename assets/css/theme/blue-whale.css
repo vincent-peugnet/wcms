@@ -12,11 +12,20 @@
     --outline-color: #ffffff;
     --button-background-color: #0057d9;
     --button-color: #ffffff;
-    --input-background-color: #0066ff;
+    --input-background-color: #002152;
     --input-color: #ffffff;
-    color-scheme: light;
+    color-scheme: dark;
 }
 
 input, button, select, textarea, legend {
     border-radius: 10px;
+}
+
+button, input[type="submit"] {
+    border: solid 1px var(--text-color);
+}
+
+
+.submenu, .block {
+    border-radius: 0 0 10px 10px;
 }

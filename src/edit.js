@@ -469,13 +469,13 @@ function confirmExit(e) {
 function changed() {
     unsavedChanges = true;
     document.title = '✏ *' + pagetitle;
-    document.getElementById('headid').innerHTML = '*' + pageid;
+    document.getElementById('editstatus').innerHTML = '*';
 }
 
 function saved(data) {
     unsavedChanges = false;
     document.title = '✏ ' + pagetitle;
-    document.getElementById('headid').innerHTML = pageid;
+    document.getElementById('editstatus').innerHTML = '';
     document.querySelector('input[name="datemodif"]').value = data.datemodif;
 }
 
