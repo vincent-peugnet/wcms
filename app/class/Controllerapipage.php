@@ -133,7 +133,7 @@ class Controllerapipage extends Controllerapi
             $this->shortresponse(401, 'Page already exist but user cannot update it');
         }
         $this->page = $this->pagemanager->newpage(array_merge($this->recievejson(), ['id' => $page]));
-        if ($this->pagemanager->update($this->page)) {
+        if ($this->pagemanager->add($this->page)) {
             http_response_code($exist ? 200 : 201);
         } else {
             $this->shortresponse(500, "Error while trying to save page in database");
