@@ -18,14 +18,10 @@ class Controllerrandom extends Controller
             $pages = $this->pagemanager->pagelist();
             $pages = $this->pagemanager->pagetable($pages, $this->optrandom);
             unset($pages[$origin->id()]);
-            if (!empty($pages)) {
-                $page = $pages[array_rand($pages)];
-
-                if (in_array($page->id(), $origin->linkto())) {
-                    $this->routedirect('pageread', ['page' => $page->id()]);
-                } else {
-                    $message = 'Wrong filters';
-                }
+            $keys = array_intersect_key($pages, array_flip($origin->linkto()));
+            if (!empty($keys)) {
+                $page = $pages[array_rand($keys)];
+                $this->routedirect('pageread', ['page' => $page->id()]);
             } else {
                 $message = 'Empty set of page';
             }

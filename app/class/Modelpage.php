@@ -496,7 +496,7 @@ class Modelpage extends Modeldb
      * @param string $regex                 Regex to match.
      * @param array $searchopt              Option search, could be `content` `title` `description`.
      *
-     * @return Page[]                       associative array of `Page` objects     *
+     * @return Page[]                       associative array of `Page` objects
      */
     public function pagetable(array $pagelist, Opt $opt, $regex = '', $searchopt = []): array
     {
