@@ -161,16 +161,13 @@ use Wcms\Config;
                             <th class="edit"></th>
                             <th class="read"></th>
                             <th class="delete" title="delete page"></th>
-                            <?php if ($user->issupereditor()) { ?>
                             <th class="download" title="download page as json"></th>
-                            <?php }
-                                if ($columns['tag']) { ?>
+                            <?php if ($columns['tag']) { ?>
                             <th class="tag">
                                 <a href="<?= $opt->sortbyorder('tag') ?>">tag</a>
                                 <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'tag']) ?>
                             </th>
-                            <?php }
-                                if ($columns['title']) { ?>
+                            <?php } if ($columns['title']) { ?>
                             <th class="title">
                                 <a href="<?= $opt->sortbyorder('title') ?>">title</a>
                                 <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'title']) ?>
@@ -296,14 +293,14 @@ use Wcms\Config;
                                     </a>
                                 <?php } ?>
                             </td>
-                            <?php if ($user->issupereditor()) { ?>
                             <td class="download">
+                                <?php if ($this->caneditpage($item)) { ?>
                                 <a href="<?= $this->upage('pagedownload', $item->id()) ?>" download>
                                     <i class="fa fa-download"></i>
                                 </a>
+                                <?php } ?>
                             </td>
-                            <?php }
-                                    if ($columns['tag']) { ?>
+                            <?php if ($columns['tag']) { ?>
                             <td class="tag"><?= $opt->taglinks($item->tag('array')) ?></td>
                             <?php }
                                     if ($columns['title']) { ?>

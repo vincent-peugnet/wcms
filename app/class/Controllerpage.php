@@ -63,6 +63,7 @@ class Controllerpage extends Controller
     public function pageconnect(string $route)
     {
         if ($this->user->isvisitor()) {
+            http_response_code(401);
             $this->showtemplate('connect', ['route' => $route, 'id' => $this->page->id()]);
             exit;
         }
@@ -302,22 +303,30 @@ class Controllerpage extends Controller
     {
         $this->setpage($page, 'pagedownload');
 
-        if ($this->importpage() && $this->canedit($this->page)) {
-            $file = Model::PAGES_DIR . Config::pagetable() . DIRECTORY_SEPARATOR . $page . '.json';
-
-            if (file_exists($file)) {
-                header('Content-Description: File Transfer');
-                header('Content-Type: application/json; charset=utf-8');
-                header('Content-Disposition: attachment; filename="' . basename($file) . '"');
-                header('Expires: 0');
-                header('Cache-Control: must-revalidate');
-                header('Pragma: public');
-                header('Content-Length: ' . filesize($file));
-                readfile($file);
-                exit;
-            }
-        } else {
+        if (!$this->importpage()) {
             $this->routedirect('pageread', ['page' => $page]);
+        }
+
+        $this->pageconnect('pagedownload');
+
+        if (!$this->canedit($this->page)) {
+            http_response_code(403);
+            $this->showtemplate('forbidden', ['id' => $this->page->id(), 'route' => 'pagedownload']);
+            exit;
+        }
+
+        $file = Model::PAGES_DIR . Config::pagetable() . DIRECTORY_SEPARATOR . $page . '.json';
+
+        if (file_exists($file)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/json; charset=utf-8');
+            header('Content-Disposition: attachment; filename="' . basename($file) . '"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            readfile($file);
+            exit;
         }
     }
 
