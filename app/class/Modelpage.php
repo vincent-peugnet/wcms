@@ -321,32 +321,6 @@ class Modelpage extends Modeldb
     }
 
     /**
-     * @param string[] $taglist             list of tags
-     * @param Page[] $pagelist              list of Page
-     *
-     * @return array                        list of tags each containing list of id
-     */
-    public function tagpagelist(array $taglist, array $pagelist): array
-    {
-        $tagpagelist = [];
-        foreach ($taglist as $tag) {
-            $tagpagelist[$tag] = $this->filtertagfilter($pagelist, [$tag]);
-        }
-        return $tagpagelist;
-    }
-
-    public function lasteditedpagelist(int $last, array $pagelist)
-    {
-        $this->pagelistsort($pagelist, 'datemodif', -1);
-        $pagelist = array_slice($pagelist, 0, $last);
-        $idlist = [];
-        foreach ($pagelist as $page) {
-            $idlist[] = $page->id();
-        }
-        return $idlist;
-    }
-
-    /**
      * Edit a page based on meta infos
      *
      * @param string $pageid

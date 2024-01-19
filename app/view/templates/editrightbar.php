@@ -10,84 +10,29 @@
     >
     <label for="showeditorrightpanel" class="toogle">◧</label>
     <div id="rightbarpanel" class="panel">
-    
+   
+        
+        <?php if ($user->iseditor()) { ?>
+            <h3>Authors</h3>
 
-        <details id="lastedited" open>
-            <summary>Last edited</summary>
-        <ul>
-        <?php
-        foreach ($lasteditedpagelist as $id) {
-            ?>
-            <li><a href="<?= $this->upage('pageedit', $id) ?>"><?= $id === $page->id() ? '➤' : '✎' ?> <?= $id ?></a></li>
-            <?php
-        }
+            <?php foreach ($editorlist as $editor) { ?>
+                <div class="checkexternal">
+                <input
+                    type="checkbox"
+                    name="authors[]"
+                    id="<?= $editor->id() ?>"
+                    value="<?= $editor->id() ?>"
+                    form="update"
+                    <?= in_array($editor->id(), $page->authors()) ? 'checked' : '' ?>
 
-        ?>
-        </ul>
+                    <?php /* safeguard against editor removing themself from authors too easily */ ?>
+                    <?= !$user->issupereditor() && $editor->id() === $user->id() ? 'disabled=""' : '' ?>
+                >
+                <label for="<?= $editor->id() ?>" ><?= $editor->id() ?> <?= $editor->level() ?></label>
+                </div>
+            <?php } ?>
 
-        </details>
-
-
-        <details id="tags" open>
-            <summary>Tags</summary>
-            <?php
-            foreach ($tagpagelist as $tag => $idlist) {
-                if(count($idlist) > 1) {
-                ?>
-                <strong><?= $tag ?></strong>
-                <?php
-
-                echo '<ul>';
-                foreach ($idlist as $id) {
-                    if($id === $page->id()) {
-                        echo '<li>➤ '.$id.'</li>';
-                    } else {
-                    ?>
-                    <li><a href="<?= $this->upage('pageedit', $id) ?>">✎ <?= $id ?></a></li>
-                    <?php
-                    }
-                }
-                }
-                echo '</ul>';
-            }
-
-            ?>
-
-        </details>
-
-        <details id="templates" open>
-            <summary>Templates</summary>
-            <ul>
-            
-            <?php
-            foreach ($templates as $template => $id) {
-                if(!empty($id) && !is_bool($id)) {
-                    ?>
-                    <li><?= $template ?> : <?= $id ?> <a href="<?= $this->upage('pageedit', $id) ?>">✎</a></li>
-                    <?php
-                }
-            }
-            
-            ?>
-            </ul>
-            
-        </details>
-
-
-        <h3>Authors</h3>
-
-        <?php
-            if($user->level() >= 4) {
-                foreach ($editorlist as $editor) {
-                    ?>
-                    <div class="checkexternal">
-                    <input type="checkbox" name="authors[]" id="<?= $editor->id() ?>" value="<?= $editor->id() ?>" form="update" <?= in_array($editor->id(), $page->authors()) ? 'checked' : '' ?>>
-                    <label for="<?= $editor->id() ?>" ><?= $editor->id() ?> <?= $editor->level() ?></label>
-                    </div>
-                    <?php
-                }
-            }
-        ?>
+        <?php } ?>
 
 
 

@@ -234,21 +234,13 @@ class Controllerpage extends Controller
                 exit;
             }
 
-            $datas['tablist'] = $this->page->tabs();
-
             $datas['faviconlist'] = $this->mediamanager->listfavicon();
             $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();
             $datas['pagelist'] = $this->pagemanager->list();
             $datas['target'] = hash('crc32', $this->page->id() . rand(0, 2048));
-
-            $pagelist = $this->pagemanager->pagelist();
-            $datas['tagpagelist'] = $this->pagemanager->tagpagelist($this->page->tag('array'), $pagelist);
-            $datas['lasteditedpagelist'] = $this->pagemanager->lasteditedpagelist(5, $pagelist);
-
             $datas['editorlist'] = $this->usermanager->getlisterbylevel(2, '>=', true);
+            $datas['page'] = $this->page;
 
-
-            $datas = array_merge($datas, ['page' => $this->page, 'pageexist' => true, 'user' => $this->user]);
             $this->showtemplate('edit', $datas);
         } else {
             $this->routedirect('pageread', ['page' => $this->page->id()]);
