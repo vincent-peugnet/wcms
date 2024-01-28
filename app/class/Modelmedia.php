@@ -285,7 +285,7 @@ class Modelmedia extends Model
         if (strpos($dir, "media/") !== 0) {
             throw new Forbiddenexception("directory `$dir`, is not inside `/media` folder");
         }
-        if (substr($dir, -1) !== '/') {
+        if (mb_substr($dir, -1) !== '/') {
             $dir .= '/';
         }
         if (is_dir($dir)) {
@@ -344,7 +344,7 @@ class Modelmedia extends Model
      */
     public function movefile(string $filedir, string $dir): bool
     {
-        if (substr($dir, -1) !== '/') {
+        if (mb_substr($dir, -1) !== '/') {
             $dir .= '/';
         }
         if (is_file($filedir)) {

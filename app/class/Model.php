@@ -195,7 +195,7 @@ abstract class Model
             $input = str_replace($search, $replace, $input);
 
             $input = preg_replace(static::ID_REGEX, '', strtolower(trim($input)));
-            $input = substr($input, 0, $max);
+            $input = mb_substr($input, 0, $max);
         }
         return $input;
     }

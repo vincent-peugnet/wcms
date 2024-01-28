@@ -316,13 +316,25 @@ use Wcms\Config;
                             <td class="geo"><?= $item->isgeo() ? '<i class="fa fa-globe"></i>' : '' ?></td>
                             <?php }
                                     if ($columns['datemodif']) { ?>
-                            <td class="datemodif" <?= $item->datemodif('dmy') ?> <?= $item->datemodif('ptime') ?>><time datetime="<?= $item->datemodif('string') ?>" title="<?= $item->datemodif('dmy') . ' ' . $item->datemodif('ptime') ?>"><?= $item->datemodif('hrdi') ?></time></td>
+                            <td class="datemodif" title="<?= $item->datemodif('dmy') ?> <?= $item->datemodif('ptime') ?>">
+                                <time datetime="<?= $item->datemodif('string') ?>" title="<?= $item->datemodif('dmy') . ' ' . $item->datemodif('ptime') ?>">
+                                    <?= $item->datemodif('hrdi') ?>
+                                </time>
+                            </td>
                             <?php }
                                     if ($columns['datecreation']) { ?>
-                            <td class="datecreation" <?= $item->datecreation('dmy') ?> <?= $item->datecreation('ptime') ?>><time datetime="<?= $item->datecreation('string') ?>" title="<?= $item->datecreation('dmy') . ' ' . $item->datecreation('ptime') ?>"><?= $item->datecreation('hrdi') ?></time></td>
+                            <td class="datecreation" title="<?= $item->datecreation('dmy') ?> <?= $item->datecreation('ptime') ?>">
+                                <time datetime="<?= $item->datecreation('string') ?>" title="<?= $item->datecreation('dmy') . ' ' . $item->datecreation('ptime') ?>">
+                                    <?= $item->datecreation('hrdi') ?>
+                                </time>
+                            </td>
                             <?php }
                                     if ($columns['date']) { ?>
-                            <td class="date" <?= $item->date('dmy') ?> <?= $item->date('ptime') ?>><time datetime="<?= $item->date('string') ?>" title="<?= $item->date('dmy') . ' ' . $item->date('ptime') ?>"><?= $item->date('dmy') ?></time></td>
+                            <td class="date" title="<?= $item->date('dmy') ?> <?= $item->date('ptime') ?>">
+                                <time datetime="<?= $item->date('string') ?>" title="<?= $item->date('dmy') . ' ' . $item->date('ptime') ?>">
+                                    <?= $item->date('dmy') ?>
+                                </time>
+                        </td>
                             <?php }
                                     if ($columns['secure']) { ?>
                             <td class="secure">

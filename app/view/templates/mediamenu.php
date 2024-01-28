@@ -43,7 +43,7 @@
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>/">
                     <input type="checkbox" name="deletefolder" id="confirmdeletefolder" value="1">
                     <label for="confirmdeletefolder">Delete current folder and all it's content</label>
-                    </br>
+                    <br>
                     <input type="submit" value="delete folder" >
                 </form>
                 <?php } ?>
@@ -68,7 +68,7 @@
                 <input type="hidden" name="route" value="<?= $mediaopt->getaddress() ?>">
                 <input type="hidden" name="path" value="<?= $mediaopt->dir() ?>">
                 <label for="moveto">Move selected medias to a new directory</label>
-                </br>
+                <br>
                 <select name="dir" id="moveto" >
                     <option selected>---select destination---</option>
                     <option value="<?= Wcms\Model::MEDIA_DIR ?>">/</option>
@@ -81,7 +81,7 @@
                 <input type="submit" name="action" value="move" >
                 <h2>Delete</h2>
                 Delete selected medias
-                </br>
+                <br>
                 <input type="submit" name="action" value="delete" >
             </form>
 

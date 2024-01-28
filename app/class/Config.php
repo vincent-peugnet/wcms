@@ -571,7 +571,7 @@ abstract class Config
 
     public static function setlang(string $lang)
     {
-        self::$lang = substr(strip_tags($lang), 0, self::LANG_MAX);
+        self::$lang = mb_substr(strip_tags($lang), 0, self::LANG_MAX);
     }
 
     public static function sethtmltag($htmltag)

@@ -145,7 +145,7 @@ function changekey($array, $oldkey, $newkey)
 
 function findsize($file)
 {
-    if (substr(PHP_OS, 0, 3) == "WIN") {
+    if (mb_substr(PHP_OS, 0, 3) == "WIN") {
         exec('for %I in ("' . $file . '") do @echo %~zI', $output);
         $return = $output[0];
     } else {
@@ -383,7 +383,7 @@ if (!function_exists('str_starts_with')) {
 if (!function_exists('str_ends_with')) {
     function str_ends_with(string $haystack, string $needle): bool
     {
-        return $needle !== '' && substr($haystack, -strlen($needle)) === (string)$needle;
+        return $needle !== '' && mb_substr($haystack, -strlen($needle)) === (string)$needle;
     }
 }
 if (!function_exists('str_contains')) {

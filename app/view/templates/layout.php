@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="utf8" />
+    <meta charset="utf-8" />
 
     <meta name="viewport" content="width=device-width" />
     <?php if (!empty($favicon)) {

@@ -150,7 +150,7 @@ class Modelpage extends Modeldb
             return false;
         }
 
-        $ext = substr(strrchr($_FILES['pagefile']['name'], '.'), 1);
+        $ext = mb_substr(strrchr($_FILES['pagefile']['name'], '.'), 1);
         if ($ext !== 'json') {
             return false;
         }

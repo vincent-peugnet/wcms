@@ -12,19 +12,19 @@
                 <input type="hidden" name="datecreation" value="0">
                 <input type="hidden" name="author" value="0">
                 <input type="hidden" name="erase" value="0">
-                </br>
+                <br>
                 <input type="text" name="id" id="id" placeholder="new id (optionnal)">
                 <label for="id">change ID</label>
-                </br>
+                <br>
                 <input type="checkbox" name="datecreation" id="datecreation" value="1">
                 <label for="datecreation">Reset date creation as now</label>
-                </br>
+                <br>
                 <input type="checkbox" name="author" id="author" value="1">
                 <label for="author">Reset author(s) as just you</label>
-                </br>
+                <br>
                 <input type="checkbox" name="erase" id="erase" value="1">
                 <label for="erase">Replace if already existing</label>
-                </br>
+                <br>
                 <input type="submit" value="upload">
                 </form>
 
@@ -48,33 +48,33 @@
             <h2>Edit Meta infos</h2>
             <input type="text" name="datas[title]" id="title">
                 <label for="title">title</label>
-                </br>
+                <br>
                 <input type="text" name="datas[description]" id="description">
                 <label for="description">description</label>
-                </br>
+                <br>
                 <strong>Tag</strong>
-                </br>
+                <br>
                 <input type="hidden" name="reset[tag]" value="0">
                 <input type="checkbox" name="reset[tag]" id="resettag" value="1">
                 <label for="resettag">reset tag(s)</label>
-                </br>
+                <br>
                 <input type="text" name="addtag" id="addtag">
                 <label for="addtag">add tag(s)</label>
-                </br>
+                <br>
                 <strong>Date</strong>
-                </br>
+                <br>
                 <input type="hidden" name="reset[date]" value="0">
                 <input type="checkbox" name="reset[date]" id="resetdate" value="1">
                 <label for="resetdate">reset date as now</label>
-                </br>
+                <br>
                 <input type="date" name="datas[pdate]" id="date">
                 <label for="date">Date</label>
-                </br>
+                <br>
                 <input type="time" name="datas[ptime]" id="time">
                 <label for="time">Time</label>
-                </br>
+                <br>
                 <strong>Privacy</strong>
-                </br>
+                <br>
                 <select name="datas[secure]" id="setlevel">
                     <option value=""  selected>--keep privacy--</option>
                     <option value="0">public</option>
@@ -82,9 +82,9 @@
                     <option value="2">not_published</option>
                 </select>
                 <label for="setlevel">Privacy level</label>
-                </br>
+                <br>
                 <strong>Images</strong>
-                </br>
+                <br>
                 <select name="datas[favicon]" id="favicon">
                 <option value=""  selected>--keep favicon--</option>
                 <option value="!" >--unset favicon--</option>
@@ -95,7 +95,7 @@
                     ?>
                 </select>
                 <label for="favicon">Favicon</label>
-                </br>
+                <br>
 
                 <select name="datas[thumbnail]" id="thumbnail">
                 <option value="" selected>--keep thumbnail--</option>
@@ -107,17 +107,17 @@
                     ?>
                 </select>
                 <label for="thumbnail">Thumnail</label>
-                </br>
+                <br>
 
                 <strong>Geolocalisation</strong>
-                </br>
+                <br>
                 <input type="hidden" name="reset[geo]" value="0">
                 <input type="checkbox" name="reset[geo]" id="resetgeo" value="1">
                 <label for="resetgeo">delete geo datas</label>
-                </br>
+                <br>
 
                 <strong>Templates</strong>
-                </br>
+                <br>
                 <select name="datas[templatebody]" id="templatebody">
                     <option value="" selected>--keep template body--</option>
                     <option value="!" >--unset template body--</option>
@@ -128,7 +128,7 @@
                     ?>
                 </select>
                 <label for="templatebody">Body</label>
-                </br>
+                <br>
 
                 <select name="datas[templatecss]" id="templatecss">
                 <option value="" selected>--keep css template--</option>
@@ -139,7 +139,7 @@
                         }
                     ?>                </select>
                 <label for="templatecss">CSS</label>
-                </br>
+                <br>
 
                 <select name="datas[templatejavascript]" id="templatejavascript">
                 <option value="" selected>--keep javascript template--</option>
@@ -150,24 +150,24 @@
                         }
                     ?>                </select>
                 <label for="templatejavascript">Javascript</label>
-                </br>
+                <br>
                 <strong>Advanced</strong>
-                </br>
+                <br>
                 <input type="number" name="datas[sleep]" id="sleep" min="0" max="180">
                 <label for="sleep">Sleep time (seconds)</label>
-                </br>
+                <br>
                 <input type="hidden" name="reset[redirection]" value="0">
                 <input type="checkbox" name="reset[redirection]" id="resetredirection" value="1">
                 <label for="resetredirection">reset redirection</label>
-                </br>
+                <br>
                 <input type="text" name="datas[redirection]" id="redirection" list="searchdatalist">     
                 <label for="redirection" title="page_id or URL like https://domain.org">Redirection</label>
-                </br>
+                <br>
                 <input type="number" name="datas[refresh]" id="refresh" min="0" max="180">
                 <label for="refresh">refresh time (seconds)</label>
-                </br>
+                <br>
                 <strong>Author</strong>
-                </br>
+                <br>
                 <select name="addauthor" id="addauthor">
                 <option value="" disabled selected>--add author--</option>
                     <?php
@@ -177,15 +177,15 @@
                     ?>
                 </select>
                 <label for="addauthor">Author</label>
-                </br>
+                <br>
                 <input type="hidden" name="reset[author]" value="0">
                 <input type="checkbox" name="reset[author]" id="resetauthor" value="1">
                 <label for="resetauthor">Empty Authors</label>
-                </br>
+                <br>
                 <input type="hidden" name="reset[datemodif]" value="0">
                 <input type="checkbox" name="reset[datemodif]" id="resetdatemodif" value="1" checked>
                 <label for="resetdatemodif">update modification date</label>
-                </br>
+                <br>
 
                 <input type="submit" name="action" value="edit">
 
@@ -236,40 +236,40 @@
                     <?php } ?>
                 </select>
                 <label for="list_bookmark" title="use bookmark instead of filters">bookmark</label>
-                </br>
+                <br>
                 <input type="hidden" name="title" value="0">
                 <input type="checkbox" name="title" id="list_title" value="1" <?= !empty($optlist) && !$optlist->title() ? '' : 'checked' ?>>
                 <label for="list_title">Show title</label>
-                </br>
+                <br>
                 <input type="hidden" name="description" value="0">
                 <input type="checkbox" name="description" id="list_description" value="1" <?= !empty($optlist) && $optlist->description() ? 'checked' : '' ?>>
                 <label for="list_description">Show description</label>
-                </br>
+                <br>
                 <input type="hidden" name="thumbnail" value="0">
                 <input type="checkbox" name="thumbnail" id="list_thumbnail" value="1" <?= !empty($optlist) && $optlist->thumbnail() ? 'checked' : '' ?>>
                 <label for="list_thumbnail">Show thumbnail</label>
-                </br>
+                <br>
                 <input type="hidden" name="date" value="0">
                 <input type="checkbox" name="date" id="list_date" value="1" <?= !empty($optlist) && $optlist->date() ? 'checked' : '' ?>>
                 <label for="list_date">Show date</label>
-                </br>
+                <br>
                 <input type="hidden" name="time" value="0">
                 <input type="checkbox" name="time" id="list_time" value="1" <?= !empty($optlist) && $optlist->time() ? 'checked' : '' ?>>
                 <label for="list_time">Show time</label>
-                </br>
+                <br>
                 <input type="hidden" name="author" value="0">
                 <input type="checkbox" name="author" id="list_author" value="1" <?= !empty($optlist) && $optlist->author() ? 'checked' : '' ?>>
                 <label for="list_author">Show author(s)</label>
-                </br>
+                <br>
                 <input type="hidden" name="hidecurrent" value="0">
                 <input type="checkbox" name="hidecurrent" id="list_hidecurrent" value="1" <?= !empty($optlist) && $optlist->hidecurrent() ? 'checked' : '' ?>>
                 <label for="list_hidecurrent">Hide current page</label>
-                </br>
+                <br>
                 <select name="style" id="list_style">
                     <?= options(Wcms\Model::LIST_STYLES , !empty($optlist) ? $optlist->style() : null) ?>
                 </select>
                 <label for="list_style">style</label>
-                </br>
+                <br>
                 <input type="submit" value="generate">
             </form>
             <?php if(!empty($optlist)) { ?>
@@ -349,7 +349,7 @@
                             <?php } ?>
                         </select>
                         <label for="bookmark_id">bookmark</label>
-                        </br>
+                        <br>
                         <input type="submit" value="update">
                     </form>
                 <?php } ?>

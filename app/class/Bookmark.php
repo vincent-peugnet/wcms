@@ -151,7 +151,7 @@ class Bookmark extends Item
     public function setquery($query)
     {
         if (is_string($query)) {
-            $this->query = strip_tags(substr($query, 0, Model::MAX_QUERY_LENGH));
+            $this->query = strip_tags(mb_substr($query, 0, Model::MAX_QUERY_LENGH));
         }
     }
 
@@ -165,7 +165,7 @@ class Bookmark extends Item
     public function seticon($icon)
     {
         if (is_string($icon)) {
-            $this->icon = substr(strip_tags($icon), 0, 16);
+            $this->icon = mb_substr(strip_tags($icon), 0, 16);
         }
     }
 

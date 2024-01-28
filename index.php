@@ -1,6 +1,7 @@
 <?php
 
 require('./vendor/autoload.php');
+mb_internal_encoding('UTF-8');
 
 try {
     Wcms\Logger::init('w_error.log', 2);

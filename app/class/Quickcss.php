@@ -170,9 +170,9 @@ class Quickcss extends Item
     public function form($action)
     {
         echo '<form action="' . $action . '" method="post">';
-        echo '</br><input type="submit" value="submit">';
+        echo '<br><input type="submit" value="submit">';
         $this->inputs($this->quickcss);
-        echo '</br><input type="submit" value="submit">';
+        echo '<br><input type="submit" value="submit">';
         echo '</form>';
     }
 

@@ -2,7 +2,7 @@
 
     <h4>update shortcut</h4>
     <kbd>CTRL</kbd> + <kbd>S</kbd>
-    </br></br>
+    <br><br>
     <kbd>ALT</kbd> + <kbd>S</kbd>
     <h4>display shortcut</h4>
     <kbd>CTRL</kbd> + <kbd>D</kbd>

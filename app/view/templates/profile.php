@@ -59,7 +59,7 @@ $this->layout('layout', ['title' => 'profile', 'stylesheets' => [$css . 'back.cs
                         placeholder="<?= $user->id() ?> "
                         maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>"
                     >
-                    </br>
+                    <br>
 
 
                     <label for="url">associated url (can be a page ID)</label>
@@ -72,7 +72,7 @@ $this->layout('layout', ['title' => 'profile', 'stylesheets' => [$css . 'back.cs
                         placeholder="URL or page ID"
                         maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>"
                     >
-                    </br>
+                    <br>
 
                     <p>When you tick the <em>remember-me</em> checkbox during login, you can choose how much time <strong>W</strong> will remember you.</p>
                     <input

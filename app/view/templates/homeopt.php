@@ -71,7 +71,7 @@
                         <br>
 
                         
-                        <input type="radio" id="tag_OR" name="tagcompare" value="OR" ' . <?= $opt->tagcompare() == "OR" ? "checked" : "" ?> >
+                        <input type="radio" id="tag_OR" name="tagcompare" value="OR" <?= $opt->tagcompare() == "OR" ? "checked" : "" ?>>
                         <label for="tag_OR">OR</label>
                         <input type="radio" id="tag_AND" name="tagcompare" value="AND" <?= $opt->tagcompare() == "AND" ? "checked" : "" ?>>
                         <label for="tag_AND">AND</label>
@@ -103,11 +103,11 @@
 
 
 
-                <fieldset class="authors data-default="<?= $opt->isdefault('authorfilter') && $opt->authorcompare() !== 'EMPTY' ? '1' : '0' ?>">
+                <fieldset class="authors" data-default="<?= $opt->isdefault('authorfilter') && $opt->authorcompare() !== 'EMPTY' ? '1' : '0' ?>">
                     <legend>Author(s)</legend>
                             
                     <div>
-                        <input type="radio" id="author_OR" name="authorcompare" value="OR" ' . <?= $opt->authorcompare() == "OR" ? "checked" : "" ?>>
+                        <input type="radio" id="author_OR" name="authorcompare" value="OR" <?= $opt->authorcompare() == "OR" ? "checked" : "" ?>>
                         <label for="author_OR">OR</label>
                         <input type="radio" id="author_AND" name="authorcompare" value="AND" <?= $opt->authorcompare() == "AND" ? "checked" : "" ?>>
                         <label for="author_AND">AND</label>
@@ -140,10 +140,10 @@
                     <legend>Date & time</legend>
                     <div>
                         <label for="since">since</label>
-                        </br>
+                        <br>
                         <input type="datetime-local" name="since" id="since" value="<?= !is_null($opt->since()) ? $opt->since('Y-m-d\TH:i') : "" ?>">
                         <label for="until">until</label>
-                        </br>
+                        <br>
                         <input type="datetime-local" name="until" id="until" value="<?= !is_null($opt->until()) ? $opt->until('Y-m-d\TH:i') : "" ?>">
                     </div>
                 </fieldset>
@@ -166,7 +166,7 @@
                     
                     <div>
                         <label for="linkto" title="filter pages that have links pointing to the following selected page">Link pointing to</label>
-                        </br>
+                        <br>
                         <select name="linkto" id="linkto">
                             <option value="" selected>-- not set --</option>
                             <?php
@@ -214,7 +214,7 @@
                         <input type="hidden" name="invert" value="0" <?= !$opt->invert() ? 'checked' : '' ?>>
                         <input type="checkbox" name="invert" value="1" id="invert" <?= $opt->invert() ? 'checked' : '' ?>>
 
-                        <label for="invert">invert</label></br>
+                        <label for="invert">invert</label><br>
                     </div>
 
                     

@@ -184,7 +184,7 @@ abstract class Page extends Item
     public function description($type = 'string')
     {
         if ($type == 'short' && strlen($this->description) > 15) {
-                return substr($this->description, 0, 20) . '...';
+                return mb_substr($this->description, 0, 20) . '...';
         } else {
             return $this->description;
         }
@@ -407,7 +407,7 @@ abstract class Page extends Item
 
     public function setlang(string $lang)
     {
-        $this->lang = substr(strip_tags($lang), 0, Config::LANG_MAX);
+        $this->lang = mb_substr(strip_tags($lang), 0, Config::LANG_MAX);
     }
 
     public function settag($tag)
