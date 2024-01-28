@@ -40,7 +40,7 @@ use Wcms\Config;
 
 <main class="home">
 
-    <?php $this->insert('homebookmark', ['publicbookmarks' => $publicbookmarks, 'personalbookmarks' => $personalbookmarks, 'queryaddress' => $queryaddress]) ?>
+    <?php $this->insert('homebookmark', ['publicbookmarks' => $publicbookmarks, 'personalbookmarks' => $personalbookmarks, 'queryaddress' => $queryaddress, 'display' => $display]) ?>
 
 
     <?php $this->insert('homeopt', ['opt' => $opt, 'user' => $user, 'display' => $display, 'workspace' => $workspace]) ?>
@@ -52,7 +52,13 @@ use Wcms\Config;
             <h2>
                 Pages (<?= count($pagelistopt) ?>)
                 <?php if($opt->isfiltered()) { ?>
-                    <i class="fa fa-filter" title="There are active filters"></i>
+                    <span class="badge filter">
+
+                        <i class="fa fa-filter" title="There are active filters"></i>
+                        <a href="?submit=reset&display=<?= $display ?>" class="button" title="remove filters">
+                            <i class="fa fa-times-circle"></i>
+                        </a>
+                    </span>
                 <?php } ?>
                 <?php if(!empty($deepsearch)) { ?>
                     <i class="fa fa-search" title="There is active search"></i>
@@ -184,7 +190,7 @@ use Wcms\Config;
                             </th>
                             <?php } if ($columns['geolocalisation']) { ?>
                                 <th class="geo">
-                                    <i class="fa fa-globe"></i>
+                                    geo
                                 </th>                                
                             <?php }
                                 if ($columns['datemodif']) { ?>
@@ -313,7 +319,11 @@ use Wcms\Config;
                             <td class="linkto"><?= $opt->linktolink($item->linkto('array')) ?></td>
                             <?php }
                                     if ($columns['geolocalisation']) { ?>
-                            <td class="geo"><?= $item->isgeo() ? '<i class="fa fa-globe"></i>' : '' ?></td>
+                            <td class="geo" title="This page is geolocated: <?= $item->latitude() ?> <?= $item->longitude() ?>">
+                                <a href="?<?= $opt->getfilteraddress(['geo' => 1]) ?>">
+                                    <?= $item->isgeo() ? '<i class="fa fa-globe"></i>' : '' ?>
+                                </a>
+                            </td>
                             <?php }
                                     if ($columns['datemodif']) { ?>
                             <td class="datemodif" title="<?= $item->datemodif('dmy') ?> <?= $item->datemodif('ptime') ?>">
