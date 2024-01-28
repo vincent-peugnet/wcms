@@ -161,6 +161,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
             <tr>
             <td><input type="checkbox" name="id[]" value="<?= $media->getlocalpath() ?>" form="mediaedit" id="media_<?= $media->filename() ?>"></td>
             <td class="filename">
+                <?php if ($user->issupereditor()) { ?>
                 <details>
                     <summary>
                             <span><?= $media->filename() ?></span>
@@ -174,6 +175,9 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
                         <input type="submit" value="rename">
                     </form>
                 </details>
+                <?php } else { ?>
+                    <span><?= $media->filename() ?></span>
+                <?php } ?>
             </td>    
             <td><?= $media->extension() ?></td>
             <td class="nowrap">

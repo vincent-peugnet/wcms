@@ -61,13 +61,14 @@ class Controllerhome extends Controller
             $bookmarks = array_merge($publicbookmarks, $personalbookmarks);
 
             $vars['editablebookmarks'] = $personalbookmarks;
+            $vars['matchedbookmarks'] = $this->modelhome->matchedbookmarks($personalbookmarks, $queryaddress);
             if ($this->user->isadmin()) {
                 $vars['editablebookmarks'] += $publicbookmarks;
+                $vars['matchedbookmarks'] += $this->modelhome->matchedbookmarks($publicbookmarks, $queryaddress);
             }
             $vars['publicbookmarks'] = $publicbookmarks;
             $vars['personalbookmarks'] = $personalbookmarks;
             $vars['queryaddress'] = $queryaddress;
-            $vars['matchedbookmarks'] = $this->modelhome->matchedbookmarks($bookmarks, $queryaddress);
 
             $deepsearch = $this->deepsearch();
 
