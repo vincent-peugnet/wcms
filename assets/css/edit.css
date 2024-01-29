@@ -266,17 +266,31 @@ div#showthumbnail img {
 
 /* CodeMirror Wcms mode */
 .cm-wcms, .cm-wkeyword {
-    color: var(--text-color);
-    background-color: var(--main-color);
+    color: var(--outline-color);
+    background-color: var(--outline-background-color);
 }
 
 span.cm-wkeyword {
-    color: var(--text2-color);
+    text-decoration: underline;
 }
 
 .cm-wikilink {
     color: rgb(98, 81, 248);
     font-weight: bold;
+}
+
+/* To make markdown heading bigger
+.cm-header-1 { font-size: 150%; }
+.cm-header-2 { font-size: 130%; }
+.cm-header-3 { font-size: 120%; }
+.cm-header-4 { font-size: 110%; }
+*/
+
+.CodeMirror-selected  {
+	background-color: var(--main-color) !important;
+}
+.CodeMirror-selectedtext {
+	color: var(--text-color) !important;
 }
 
 

@@ -12,6 +12,7 @@ import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/mode/overlay';
 import 'codemirror/addon/mode/simple';
+import 'codemirror/addon/selection/mark-selection';
 
 import 'leaflet/dist/leaflet.css';
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -257,6 +258,7 @@ function initEditors(theme) {
                     mode: 'wcms-markdown',
                     lineNumbers: true,
                     lineWrapping: true,
+                    styleSelectedText: true,
                     theme,
                     extraKeys: { 'Alt-F': 'findPersistent' },
                 }),
@@ -270,6 +272,7 @@ function initEditors(theme) {
                     mode: 'wcms-markdown',
                     lineNumbers: true,
                     lineWrapping: true,
+                    styleSelectedText: true,
                     theme,
                     extraKeys: { 'Alt-F': 'findPersistent' },
                 }),
@@ -277,6 +280,7 @@ function initEditors(theme) {
                     mode: 'wcms-markdown',
                     lineNumbers: true,
                     lineWrapping: true,
+                    styleSelectedText: true,
                     theme,
                     extraKeys: { 'Alt-F': 'findPersistent' },
                 }),
@@ -284,6 +288,7 @@ function initEditors(theme) {
                     mode: 'wcms-markdown',
                     lineNumbers: true,
                     lineWrapping: true,
+                    styleSelectedText: true,
                     theme,
                     extraKeys: { 'Alt-F': 'findPersistent' },
                 }),
@@ -291,12 +296,14 @@ function initEditors(theme) {
                     mode: 'wcms-markdown',
                     lineNumbers: true,
                     lineWrapping: true,
+                    styleSelectedText: true,
                     theme,
                     extraKeys: { 'Alt-F': 'findPersistent' },
                 }),
                 CodeMirror.fromTextArea(document.getElementById('editbody'), {
                     mode: 'wcms-html',
                     lineNumbers: true,
+                    styleSelectedText: true,
                     theme,
                     extraKeys: { 'Alt-F': 'findPersistent' },
                 }),
@@ -320,6 +327,7 @@ function initEditors(theme) {
                         mode: 'wcms-markdown',
                         lineNumbers: true,
                         lineWrapping: true,
+                        styleSelectedText: true,
                         theme,
                         extraKeys: { 'Alt-F': 'findPersistent' },
                     }
@@ -333,6 +341,7 @@ function initEditors(theme) {
                 CodeMirror.fromTextArea(document.getElementById('editbody'), {
                     mode: 'wcms-html',
                     lineNumbers: true,
+                    styleSelectedText: true,
                     theme,
                     extraKeys: { 'Alt-F': 'findPersistent' },
                 }),
