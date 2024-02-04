@@ -78,6 +78,15 @@ class Modelhome extends Model
                 ],
             ],
             [
+                'selector' => 'edge.bidirectionnal',
+                'style' => [
+                    'curve-style' => 'bezier',
+                    'target-arrow-shape' => 'triangle',
+                    'source-arrow-shape' => 'triangle',
+                    'arrow-scale' => 1.5
+                ],
+            ],
+            [
                 'selector' => 'edge.redirect',
                 'style' => [
                     'line-style' => 'dashed',
@@ -106,13 +115,27 @@ class Modelhome extends Model
         foreach ($pagelist as $page) {
             foreach ($page->linkto() as $linkto) {
                 if (in_array($linkto, $idlist)) {
-                    $edge['group'] = 'edges';
-                    $edge['data']['id'] = $page->id() . '>' . $linkto;
-                    $edge['data']['source'] = $page->id();
-                    $edge['data']['target'] = $linkto;
-                    $edges[] = $edge;
-                    $notorphans[] = $linkto;
-                    $notorphans[] = $page->id();
+                    if (in_array($page->id(), $pagelist[$linkto]->linkto())) {
+                        if ($page->id() > $linkto) {
+                        // We have a bi-directionnal link !
+                            $edgeb['group'] = 'edges';
+                            $edgeb['data']['id'] = $page->id() . '<>' . $linkto;
+                            $edgeb['data']['source'] = $page->id();
+                            $edgeb['data']['target'] = $linkto;
+                            $edgeb['classes'] = 'bidirectionnal';
+                            $edges[] = $edgeb;
+                            $notorphans[] = $linkto;
+                            $notorphans[] = $page->id();
+                        }
+                    } else {
+                        $edge['group'] = 'edges';
+                        $edge['data']['id'] = $page->id() . '>' . $linkto;
+                        $edge['data']['source'] = $page->id();
+                        $edge['data']['target'] = $linkto;
+                        $edges[] = $edge;
+                        $notorphans[] = $linkto;
+                        $notorphans[] = $page->id();
+                    }
                 }
             }
             // add redirection edge

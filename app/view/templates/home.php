@@ -93,7 +93,6 @@ use Wcms\Config;
 
             <script>
                 var data = <?= $json ?>;
-                console.log(data);
             </script>
 
             <script src="<?= Wcms\Model::jspath() ?>graph.bundle.js" defer></script>

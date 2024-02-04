@@ -205,3 +205,8 @@ fieldset.tag input[type="radio"], fieldset.authors input[type="radio"] {
 nav {
     display: flex;
 }
+
+
+.pages h2, .pages #deepsearchbar {
+    z-index: 1;
+}
