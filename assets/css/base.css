@@ -1,5 +1,11 @@
 * {
     box-sizing: border-box;
+    scrollbar-color: var(--main-color) transparent;
+}
+
+*::selection {
+    background: var(--outline-background-color);
+    color: var(--outline-color);
 }
 
 body {
@@ -155,6 +161,7 @@ label.toogle {
 
     label.toogle {
         width: 100%;
+        height: 30px;
     }
 }
 

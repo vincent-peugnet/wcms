@@ -1,11 +1,11 @@
-<nav class="bar">
+<div class="bar" id="filter">
 
     
     <input id="showeoptionspanel" name="showeoptionspanel" value="1" class="toggle" type="checkbox" form="workspace-form" <?= $workspace->showeoptionspanel() === true ? 'checked' : '' ?>>
     <label for="showeoptionspanel" class="toogle">◧</label>
     
     <div class="panel" id="optionspanel">
-        <h2>Options</h2>
+        <h2>Filters</h2>
 
 
         <form action="<?= $this->url('home') ?>" method="get">
@@ -234,4 +234,4 @@
     </div>
 
 
-</nav>
+</div>

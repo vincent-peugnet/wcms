@@ -347,7 +347,7 @@ Display options are :
 - description : display the [description](#description) of the page.
 - thumbnail : display the [thumnail](#thumbnail) of the page.
 - date : display the [date](#date) of the page.
-- time : display the [time](#time) of the page.
+- time : display the [time](#date) of the page.
 - author: display the [authors](#authors)
 - hide current: if checked, hide the currently browsed from the list.
 

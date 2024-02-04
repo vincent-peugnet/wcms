@@ -2,11 +2,8 @@ aside #edit input[type="submit"] {
     width: 100%;
 }
 
-.bookmarks .block {
-    height: 100%;
-}
 
-main nav {
+main #filter {
     display: flex;
     flex-direction: row-reverse;
 }
@@ -16,10 +13,6 @@ main nav {
     height: 100%;
     width: 200px;
 }
-nav label.toogle {
-    float: right;
-}
-
 
 #showeoptionspanel:checked ~ #optionspanel {
     display: block;
@@ -44,7 +37,7 @@ main div#graph {
 
 main table td.id label {
     font-family: monospace;
-    font-size: medium;
+    font-size: 0.9em;
 }
 
 
@@ -81,7 +74,7 @@ div#deepsearchbar {
 }
 
 
-nav span.list-label {
+#filter span.list-label {
     width: 122px;
     text-overflow: ellipsis;
     display: inline-block;
@@ -89,7 +82,7 @@ nav span.list-label {
     vertical-align: text-bottom;
 }
 
-nav span.counter {
+#filter span.counter {
     border-radius: 100%;
     width: 17px;
     height: 17px;
@@ -159,8 +152,8 @@ div#geomap {
 
 
 
-@media (max-width: 900px) {
-    .bookmarks td.rss, .bookmarks a span, .bookmarks h3, .bookmarks h2 {
+@media (max-width: 900px) and (min-width: 550px) {
+    #bookmarks td.rss, #bookmarks a span.name, #bookmarks h3, #bookmarks h2 {
         display: none;
     }
 }
@@ -170,20 +163,29 @@ div#geomap {
         max-width: 100%;
     }
 
-    .bookmarks tbody {
-        display: flex;
+    main nav {
+        flex-direction: column;
+    }
+
+    main #filter {
+        flex-direction: column-reverse;
+    }
+
+    #bookmarks table {
+        width: 100%;
+    }
+
+    main .panel {
+        width: auto;
     }
 }
 
 @media (pointer: coarse) {
-    .bookmarks td.rss, .bookmarks a span, .bookmarks h3, .bookmarks h2 {
-        display: none;
-    }
 
     aside #save-workspace {
         display: none;
     }
-    a.bookmark {
+    a.bookmark .icon {
         font-size: 30px;
     }
     td.edit a, td.read a, td.delete a, td.download a {
@@ -198,4 +200,8 @@ div#geomap {
 
 fieldset.tag input[type="radio"], fieldset.authors input[type="radio"] {
     margin-right: -2px;
+}
+
+nav {
+    display: flex;
 }

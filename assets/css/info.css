@@ -1,7 +1,6 @@
 section {
     max-width: 650px;
     list-style: inside disc;
-    font-size: 1.1em;
 }
 
 section article {
@@ -55,7 +54,7 @@ main article#manual h2 {
 }
 
 main article#manual h3 {
-    border-bottom: solid 2px #7b97b9;
+    border-bottom: solid 2px var(--secondary-background-color);
     margin-top: 130px;
     margin-bottom: 70px;
     padding-top: 15px;
@@ -93,12 +92,6 @@ section ul {
     padding-inline-start: 10px;
 }
 
-article#manual a:hover {
-    /* color: var(--outline-color); */
-    /* background-color: var(--outline-background-color); */
-}
-
-
 
 main pre {padding: 1%;background-color: var(--code-background-color);white-space: pre-wrap;border-radius: 3px;}
 
@@ -125,6 +118,7 @@ nav ul.summary {
 
 #manual {
     hyphens: auto;
+    font-size: 1.1em;
 }
 
 #manual p {
@@ -175,16 +169,17 @@ nav ul.summary {
     font-weight: bold;
     margin-bottom: 5px;
     display: block;
-    font-size: 16px;
+    font-size: 1.15em;
 }
 
 .summary > li > ul > li > ul {
     /* display: none; */
-    font-size: small;
+    font-size: 0.8em;
     border-left: solid 2px var(--main-color);
     padding-left: 5px;
     margin-left: 5px;
     margin-bottom: 6px;
+    opacity: 0.9;
 }
 
 .summary > li > ul {

@@ -1,8 +1,7 @@
 
-<section class="bookmarks">
 
-    <div class="block">
-
+<div class="block">
+    <div id="bookmarks">
         <h2>Bookmarks</h2>
         <h3>public</h3>
 
@@ -17,8 +16,10 @@
                                 class="bookmark"
                                 title="<?= $bookmark->description() ?>"
                             >
-                                <?= $bookmark->icon() ?>
-                                <span>
+                                <span class="icon">
+                                    <?= $bookmark->icon() ?>
+                                </span>
+                                <span class="name">
                                     <?= empty($bookmark->name()) ? $bookmark->id() : $bookmark->name() ?>
                                 </span>
                             </a>
@@ -57,5 +58,4 @@
             <?php } ?>
         </table>
     </div>
-
-</section>
+</div>

@@ -39,12 +39,12 @@ use Wcms\Config;
 
 
 <main class="home">
+    <nav>
 
-    <?php $this->insert('homebookmark', ['publicbookmarks' => $publicbookmarks, 'personalbookmarks' => $personalbookmarks, 'queryaddress' => $queryaddress, 'display' => $display]) ?>
+        <?php $this->insert('homebookmark', ['publicbookmarks' => $publicbookmarks, 'personalbookmarks' => $personalbookmarks, 'queryaddress' => $queryaddress, 'display' => $display]) ?>
 
-
-    <?php $this->insert('homeopt', ['opt' => $opt, 'user' => $user, 'display' => $display, 'workspace' => $workspace]) ?>
-
+        <?php $this->insert('homeopt', ['opt' => $opt, 'user' => $user, 'display' => $display, 'workspace' => $workspace]) ?>
+    </nav>
     <section class="pages">
 
         <div class="block">

@@ -79,31 +79,25 @@ main section {
     flex-direction: column;
 }
 
-main nav {
-    display: flex;
-    flex-direction: column;
-}
-
-main nav fieldset, main #filter fieldset {
+main #filter fieldset {
     padding: 0;
     border: none;
     margin: 15px 0;
 }
 
 
-main nav fieldset[data-default="0"] div {
+main #filter fieldset[data-default="0"] div {
     background: var(--outline-background-color);
     color: var(--outline-color);
 }
 
-main nav legend, main #filter legend {
+main #filter legend {
     font-weight: bold;
     width: 100%;
     background-color: var(--secondary-background-color);
 }
 
-
-nav select, nav input[type="datetime-local"], nav input[type="submit"], #filter input[type="submit"] {
+#filter select, #filter input[type="datetime-local"], #filter input[type="submit"] {
     width: 100%;
     margin-top: 5px;
     display: block;
@@ -243,10 +237,10 @@ span.details {
 
 @media (max-width: 550px) {
     main {
-        display: block;
+        flex-direction: column;
     }
 
-    main nav {
+    main > * {
         width: 100%;
         max-width: inherit !important;
     }

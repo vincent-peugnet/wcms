@@ -2,19 +2,19 @@
     --text-color: black;
     --text2-color: #ffffff;
     --text3-color: #3b1338;
-    --main-color: #e212bf;
+    --main-color: #fb21d6;
     --secondary-background-color: #e589d5;
     --code-background-color: rgb(17 10 54);
-    --code-color: #6b5bab;
+    --code-color: #e381fe;
     --primary-background-color: #ecbbe3;
-    --tertiary-background-color: #6b6b6b;
+    --tertiary-background-color: #fd88ff;
     --outline-background-color: #2e1530;
     --outline-color: #ffffff;
     --button-background-color: #b707c9;
     --button-color: #ffffff;
     --input-background-color: #eab7f0;
     --input-color: #9621a4;
-    color-scheme: light;    
+    color-scheme: light;
 }
 
 input, button, select, textarea {
@@ -28,3 +28,13 @@ input[type="submit"], button {
     border: none;
 }
 
+
+
+.block {
+    box-shadow: -4px 8px 20px #ff00c69c;
+    border-radius: 5px;
+}
+
+main > * {
+    padding: 5px;
+}
