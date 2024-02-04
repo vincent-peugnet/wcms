@@ -96,3 +96,8 @@ table#medialist td.filename span {
 
 }
 
+
+
+input.code {
+    font-size: 12px;
+}

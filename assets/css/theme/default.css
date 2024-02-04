@@ -5,7 +5,7 @@
     --main-color: #7b97b9;
     --secondary-background-color: #bbbbbb;
     --code-background-color: hsl(213 21% 10% / 1);
-    --code-color: hsl(213 46% 66% / 1);
+    --code-color: hsl(213deg 100% 80.86%);
     --primary-background-color: #d6d6d6;
     --tertiary-background-color: #909090;
     --outline-background-color: #7a7a7a;
@@ -14,7 +14,7 @@
     --button-color: #000000;
     --input-background-color: #ffffff;
     --input-color: #303030;
-    color-scheme: light;    
+    color-scheme: light;
 }
 
 input, button, select, textarea {

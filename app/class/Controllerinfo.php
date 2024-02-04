@@ -2,7 +2,6 @@
 
 namespace Wcms;
 
-use Michelf\MarkdownExtra;
 use RuntimeException;
 
 class Controllerinfo extends Controller

@@ -1,10 +1,11 @@
 section {
-    max-width: 600px;
+    max-width: 650px;
     list-style: inside disc;
+    font-size: 1.1em;
 }
 
 section article {
-    padding: 2%;
+    margin: 6%;
 }
 
 
@@ -26,7 +27,8 @@ main code {
     font-family: monospace;
     white-space: pre-wrap;
     display: inline;
-    padding: 1px;
+    padding: 2px 4px;
+    border-radius: 3px;
 }
 
 main blockquote i {
@@ -48,12 +50,13 @@ main article#manual h1 {
 main article#manual h2 {
     text-align: center;
     font-size: 40px;
-    margin-top: 250px;
+    margin-top: 200px;
+    margin-bottom: 90px;
 }
 
 main article#manual h3 {
     border-bottom: solid 2px #7b97b9;
-    margin-top: 140px;
+    margin-top: 130px;
     margin-bottom: 70px;
     padding-top: 15px;
     font-size: 35px;
@@ -91,18 +94,19 @@ section ul {
 }
 
 article#manual a:hover {
-    color: var(--outline-color);
-    background-color: var(--outline-background-color);
+    /* color: var(--outline-color); */
+    /* background-color: var(--outline-background-color); */
 }
 
 
 
-main pre {padding: 1%;background-color: var(--code-background-color);white-space: pre-wrap;}
+main pre {padding: 1%;background-color: var(--code-background-color);white-space: pre-wrap;border-radius: 3px;}
 
-main blockquote {
-    padding: 6px 12px;
-    text-align: left;
-    word-break: break-all;
+#manual blockquote {
+    margin: 30px 0;
+    margin-left: 15px;
+    padding-left: 5px;
+    border-left: solid 3px var(--main-color);
 }
 
 main article code i {
@@ -115,5 +119,75 @@ main article code i {
 nav ul.summary {
     margin: 3%;
     padding: 0;
+    margin-bottom: 200px;
 }
 
+
+#manual {
+    hyphens: auto;
+}
+
+#manual p {
+    line-height: 1.4em;
+}
+
+#manual li {
+    margin: 5px 0;
+    line-height: 23px;
+}
+
+#manual a[href^="https://"]::after {
+    content: "◥";
+    color: var(--text2-color);
+}
+
+#manual a[href^="#"]::after {
+    content: " ✻";
+    color: var(--text2-color);
+    white-space: nowrap;
+}
+
+#manual kbd {
+    background-color: var(--main-color);
+    padding: 1px 4px;
+    border-radius: 7px;
+    box-shadow: 2px 2px;
+    margin: 0 2px;
+}
+
+.summary li a {
+    text-decoration: none;
+}
+
+.summary li a:hover {
+    text-decoration: underline var(--text2-color);
+}
+
+.summary li {
+    margin: 2px 1px;
+}
+
+.summary > li {
+    margin-bottom: 10px;
+}
+
+.summary > li > a {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    font-size: 16px;
+}
+
+.summary > li > ul > li > ul {
+    /* display: none; */
+    font-size: small;
+    border-left: solid 2px var(--main-color);
+    padding-left: 5px;
+    margin-left: 5px;
+    margin-bottom: 6px;
+}
+
+.summary > li > ul {
+    padding-left: 15px;
+    margin-bottom: 15px;
+}

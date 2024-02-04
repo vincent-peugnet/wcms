@@ -37,7 +37,7 @@ aside {
     background-color: var(--code-background-color);
     padding: 1%;
     font-family: monospace;
-    font-size: small;
+    font-size: 15px;
     width: 100%;
     border: none;
 }

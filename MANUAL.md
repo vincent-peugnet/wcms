@@ -1,195 +1,57 @@
 USER MANUAL
 ===========
 
-Introduction
-------------
+Welcome to W's manual !
 
-Welcome to __W__, this manual is here to help you get the best of this tool.
-
-If it's you're first time using it, you should learn how to [create your first page](#create-your-first-page).
-
-If you already know the basics, you may want to check the references :
-
-- Discover how to [navigate](#navigation).
-- Get to know the [structure of a page](#page-structure) to edit meta content.
-- Learn more about the [URL based commands](#url-based-command-interface) you can type in the address bar.
-- Master the [render engine](#page-editing) to release the full potential of __W__.
-
-
-
-### Create your first page
-
-This 4 steps tutorial will introduce you to the basic __W__ moves.
-
-#### 1. Add a new page
-
-
-The first thing you have to do before creating a page is to **choose an address** for this page. Each page have a unique address that identify it, it is the [**page id**](#page-id). You can use the address bar of your web browser to directly access, [edit](#edit) or [delete](#delete) a page.
-
-You can type anything in your address bar (after your W installation root). If it is an already exisiting page_id, you will access a page. Otherwise, you will arrive to an empty space waiting to be filled.
-
-Once you've typed an address and found nothing, if you are connected, you now have the opportunity to create a page at this address.
-
-There is two ways to do this :
-
-1. Graphicaly, by clicking the "create" button
-2. Using the address bar, by typing `/add` just after the address
-
-There it is ! Congratulation, you've created your first page using W.
-
-
-#### 2. Edit your page content
-
-Now you should be in front of the [edit interface](#editor) of your page. If you check the address bar, you will now see `/edit` written after your page address.
-
-You can type a few words in the main text area. Once you're happy with what you wrote, it's time to save your work : click on the <kbd>update</kbd> button in the top left corner. You can use the shortcut <kbd>CTRL</kbd> + <kbd>S</kbd> too if you prefer. After you've done this, you sould have notice that the asterix `*` next to your page_id have left, it's the sign that saving was sucesfull.
-
-Let's come back to the page reading view to see the result of our editing. There are different approaches for doing so :
-
-1. By removing the `/edit` command after your page address
-2. Pressing the "display" button (next to "update"), or using <kbd>CTRL</kbd> + <kbd>D</kbd> shortcut.
-
-The first method will use the same tab while the second will create a new one, wich is usefull if you want to keep your [edit interface](#editor) open to come back quickly.
-
-You should now see something that look like what you've typed.
-
-
-#### 3. Create a hyperlink
-
-
-The [markdown syntax](https://commonmark.org/), this is a formating standard well known accross the web. It's main goal is to be a intermediate between an easy to read prose text, and the internet standard tag language, the HTML. One of the main interest of Markdown, is it is ability to be mixed with HTML. That way, people can type more easily basic text, and switch to HTML at any time, to achieve a more complex layout. You can use the official Markdonw syntax with __W__ alongside with HTML to build your pages.
-
-[Official website describing Markdown syntax](https://commonmark.org/help/)
-
-One of the most interesting things to do when you use internet publishing, is to create HYPERLINKS. __W__ encourage you creating those links between pages using a very light syntax. There are multiple ways to do it.
-
-1. Using classic HTML : `<a href="<page_id>">click here</a>`
-2. Using Markdown :  `[click here](<page_id>)`
-3. Using wiki syntax : `[[<page_id>]]`
-
-All those methods will create a link pointing to the `<page_id>` you've given.
-
-Those kind of links are called internal links beccause they stay inside of your domain. To set a link outside of your website, simply remplace `<page_id>` by the website adress you whant to target (ex : `https://w.club1.fr`), but this won't work with the third method as it is'nt a W page.
-
-
-#### 4. Insert images
-
-When adding an image to a page, you can either use an already web-hosted image, wich is a bit dangerous, or host yourself the image using W's [media interface](#media-manager).
-
-Markdown syntax for inserting an image :
-
-    ![<alt_comment>](<image_address>)
-
-It's the equivalent of HTML (More info about `<img>` tag on [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Img)) :
-
-    <img src="<image_address>" alt="<alt_comment>">
-
-If your image is already hosted, just use it's URL address for `<image_address>`. Otherwise, access W's [media interface](#media-manager) using the top bar menu, just after "home", or by typing `<your-W-url>/!media`.
-
-Once you're here, you'll have to first choose, using the navigation panel on the left, or create a folder, by selecting __File > New Folder__ in the menu.
-
-When you've selected the folder you prefer for hosting your image, it's time for uploading it using __File > Upload__. Browse you computer or drag n' drop files onto the "Choose Files" button, then click "Upload". Note that you can upload multiple files at once !
-
-Now you should see your files appearing in the table. W will remove whitespaces and special characters of your medias to avoid syntax problems.
-
-To add the image on your page, the simplest method is to copy the Makdown generated code on the right side.
-
-*For bigger files transfer, you can always use FTP or SSH connections to add, delete, move files by accessing the `/media` directory of your W installation folder*
+See an introduction on [W's website](https://w.club1.fr/usage.html).
 
 
 
 
+Management
+----------
 
+W let you manage a database of pages. All those pages have an [unique ID](#page-id) and have an address corresponding to `/PAGE_ID`.
 
+You can create, edit and delete pages using [URL commands](#url-based-command-interface):
 
+- To __create a page__, you can use the [/add](#add) command. Type in your address bar `PAGE_NAME/add`.
+- To __edit a page__, you can use the [/edit](#edit) command. Type `/edit` after a page ID.
 
+To create a page, users need to be [editors](#editor) or above.
 
+### Home
 
-
-
-Home
-----
 
 The Home interface is the main view of your project. You can access it only when you're connected. All the pages of your database are listed here.
 
 The [readers](#reader) and [invite editors](#invite-editor) can't access this interface.
 
-### Home menu
-
-In the home menu [super editors and above](#super-editor) can :
-
-- __File :__ Import pages as JSON file. (usefull for transfering pages from a W instance to another).
-- __Edit :__ Apply changes, render, or delete multiple pages at once.
-- __Filters :__ Use your [filtering options](#options) to generate a [automatic menu](#page-list) you can later include in a page.
-- __Bookmarks :__ Create some [bookmarks](#bookmarks) to save your [filtering options](#options) as presets.
-- __Display :__ Set columns to be shown (user based) and tag colors.
 
 
-### Bookmark panel
+### Filters
 
-This panel list public and personnal [bookmarks](#bookmarks).
-Select a bookmark to apply preset filters and sortings options.
-If your filters and sort options match an existing bookmark, it will be highlighted.
+Filter system is at the heart of W. It's the only way to organize your pages as there is no other form of hierarchy.
 
-### Options
-
-The option panel contains multiples options for sorting and filtering your pages database.
-
-Just select the options you want and press "Fitler". Use the "Reset" button to come back to the default settings. W will keep the settings for the SESSION time.
-
-This panel is also usefull to set up a [page list](#page-list) to include the same list of page you've filtered in any page.
-
-### Deep Search Bar
-
-The Deep Search bar help you to look for words or regular expressions in your pages.
-
-By default, searching only look in [title](#page-title), [description](#description) and [contents (markdown elements)](#content-elements), but the "other" checkbox will allow you to look up in [css](#css), [javascript](#javascript) and [BODY](#body) contents.
-
-Unlike the [filterings options](#options) below, searches can't be saved or used for [page lists](#page-list).
-
-
-### list view
-
-The table is composed of [meta](#metadatas) datas and actions links that are :
-
-__EDIT__, __READ__, __DELETE__ and __DOWNLOAD__, they are equivalent to [pages commands](#pages-commands). Don't hesitate to open edit or read links in a new tab, to keep the Home view open.
-
-To edit columns you want to see, use the [menu](#home-menu)>Display submenu.
-
-### graph view
-
-The graph give you an overview of your website, showing you links between pages.
-
-By default orphans pages are hidden, but you can ajust settings to fit your needs.
-
-- left click on a page to read it
-- right click to edit it
-
-
-
-
-
-
-
-
-
-
+You can use them to filter your page database and later to insert [list of pages](#page-list) in your pages.
 
 
 
 ### Bookmarks
 
-A bookmark is usefull to store a preset of pages filters and sorting settings.
-
+Bookmarks are there to store a preset of [filters](#filters).
 
 To create a bookmark, after ajusting [filters and sorting options](#options), select the bookmark menu in the [home menu](#home-menu), add a name and a symbol. This will add a new bookmark on the left side of the home view !
 
-You can ajust bookmarks infos more precisely later : select a bookmark in the [bookmark panel](#bookmark-panel), then click on the bookmark tab in the [home menu](#home-menu). **Title** and **description** can be edited.
+You can ajust bookmarks infos more precisely later: select a bookmark in the [bookmark panel](#bookmark-panel), then click on the bookmark tab in the [home menu](#home-menu). **Title** and **description** can be edited.
 
 There are two kinds of bookmarks:
 
 - **public bookmark** Can only be created and edited by [super editor](#super-editor) and above. Every users that can access home view will be able to see and use them.
 - **private bookmark** Can be created by [editor](#editor) and above. They are user specific. Personnal bookmarks can only be accessed by their owners.
+
+
+
 
 #### Publish a RSS feed
 
@@ -220,7 +82,11 @@ When you update or add pages in the bookmark's scope, you need to manually refre
 Page Editing
 ------------
 
-Editing pages is the core feature of W. The edition interface is accessible when [typing `/edit`](#edit) after an existing [page_id](#page-id) in the address bar. Or from the [home](#home), by clicking on the pencil button.
+Editing pages is the core feature of W. The edition interface is accessible when [typing `/edit`](#edit) after an existing [page ID](#page-id) in the address bar. Or from the [home](#home), by clicking on the pencil button.
+
+The pages are rendered and then cached until some new edit is performed on them or their [templates](#templating). If you want to manually render a page, use the [render](#render) URL command by typing `/render` after the page ID.
+
+To have a more precise idea of how the render process work, you can check [RENDER.md](https://github.com/vincent-peugnet/wcms/blob/master/RENDER.md) file.
 
 ### Edition interface
 
@@ -233,7 +99,7 @@ This is where you can edit page [metadatas](#metadatas).
 **shortcuts**
 
 - Press <kbd>CTRL</kbd> + <kbd>S</kbd> or "update" button to save your edits.
-- Press <kbd>CTRL</kbd> + <kbd>S</kbd> or "display" button to view your page. This will open a new tab.
+- Press <kbd>CTRL</kbd> + <kbd>D</kbd> or "display" button to view your page. This will open a new tab.
 
 
 ### Syntax
@@ -256,7 +122,9 @@ It's important to notice that you can mix  Markdown and HTML. But beware, as HTM
 
 This is not part of the markdown syntax.
 
-##### Quick links
+##### Wiki links
+
+Wiki style links are __only for internal links__. Their main interest compared to markdon links is that the clickable part of the link will be replaced by page's [title](#page-title) if it exist.
 
     [[<page_id>]]
 
@@ -264,7 +132,7 @@ Will generate :
 
     <a href="ID" title="DESCRIPTION" class="internal page">TITLE</a>
 
-Where `DESCRIPTION`, `TITLE` and `ID` are the [description](#description) and [title](page-title) of the page related to the [id](#page-id).
+Where `DESCRIPTION`, `TITLE` and `ID` are the [description](#description) and [title](#page-title) of the page related to the [id](#page-id).
 
 Note that the `.internal` class have been added to the `a` html link, allowing you to differenciate internal link styling from `.external`.
 
@@ -278,11 +146,36 @@ Note that the `.internal` class have been added to the `a` html link, allowing y
 
 
 
+### Styling links
+
+During the render process, some semantic datas are added to the __HTML classes of links__. It's intended to help editor style their Webpages.
 
 
+- `page` link to a page of your W
+- `internal`, `external` differenciate internal and external links
+- `existnot`, `exist` in case of internal link, indicate if page exist or not
+- `public`, `private`, `not_published` if page exist, indicate it's [privacy](#privacy) level
+- `current_page` the link point to the current page
 
+#### CSS examples
 
+To color in red internal links to page that does not exist:
 
+```css
+a.page.existnot {
+    color: red;
+}
+```
+
+Add a symbol after external links:
+
+```css
+a.external::after {
+  content: "➚";
+}
+```
+
+> 💡 If you want to go further, you can also use [CSS attribute selector](https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors) to achieve more complex rules.
 
 
 
@@ -292,7 +185,7 @@ Note that the `.internal` class have been added to the `a` html link, allowing y
 
 ### Inclusions
 
-Inclusion is an advanced feature of W that allow editors to insert metadatas, generate content using codes. Those codes are always inside percent signs `%`.
+Inclusion is an advanced feature of W that allow editors to insert metadatas, generate content using codes. Those codes are always inside percent signs `%`. Inclusions can be called in [content elements](#content-elements) and in [body](#body).
 
 #### Basic inclusions
 
@@ -480,15 +373,7 @@ A specific case exist when if you want to use the [linkto](#linkto) filter in te
 
     %LIST?linkto=*%
 
-##### styling
 
-Some `.class` and `#id` are generated to help styling.
-
-`.public`, `.private`, `not_published` are used to define the privacity level of pages.
-
-`.current_page` is used to highlight the current page.
-
-`#<pageid>` is set to each item to allow selective styling.
 
 
 
@@ -556,9 +441,16 @@ A specific case exist when if you want to use the [linkto](#linkto) filter in te
 
 #### Media list
 
-Just like [page lists](#page-list), media list are used to generate a list of media based on filters.
+Just like [page lists](#page-list), media list are used to print a list of media based on filters.
 
+    %MEDIA?path=<path>%
 
+- `path` path of the folder
+- `sortby` how medias are sorted
+- `order` order of the sorting, can be `1` or `-1`
+- `type[]` an array of media types
+
+It's way more easier to generate such a code using [media filters](#media-filters) menu in the media panel.
 
 
 
@@ -724,19 +616,15 @@ Everylink will transform each word containing a minimum of `<level>` letter(s), 
 The Javascript section is untunched and will be linked to your page in the head section.
 You can use a pre-defined constant object called `w` to access pages datas.
 
-    w.page.id               current page ID
-    w.page.title            current page title
-    w.page.description      current page description
-    w.page.secure           current page secure level (0: public, 1: private, 2: not published)
-    w.domain                domain name URL
-    w.basepath              folderpath after which W is installed
-    w.user.id               current user ID
-    w.user.name             current user name
-    w.user.level            current user level (0: visitor to 10: admin)
-
-
-
-
+- `w.page.id` current page [id](#page-id)
+- `w.page.title` current page [title](#page-title)
+- `w.page.description` current page [description](#description)
+- `w.page.secure` current page [privacy level](#privacy) (0: public, 1: private, 2: not published)
+- `w.domain` domain name URL
+- `w.basepath` folderpath after which W is installed
+- `w.user.id` current user ID
+- `w.user.name` current user name
+- `w.user.level` current [user level](#user-levels) (0: visitor to 10: admin)
 
 
 
@@ -770,6 +658,7 @@ This will link another's page Javascript file.
 
 
 
+
 Media management
 ----------------
 
@@ -784,7 +673,7 @@ The media menu allow you to do more powerfull function like moving medias or del
 
 Filters and sorting options can be set by choosing wich types of files to show and how to sort them. They can be used to filter and sort a [medialist](#media-list) using the __filter__ tab in the [media menu](#media-menu).
 
-File types are determined by their file extention. The association table is hardcoded in W's code and can be found [here](https://github.com/vincent-peugnet/wcms/blob/master/app/class/Media.php#L46).
+File types are determined by their file extention. The association table is hardcoded in W's code and can be found [here](https://github.com/vincent-peugnet/wcms/blob/master/app/class/Media.php#L48).
 
 
 
@@ -882,29 +771,29 @@ This folder is supposed to contain thumbnails images. Once images files (that ca
 
 
 
-Profile
--------
-
-The profile allow you to edit some user related preferences.
-
-Your __display name__ ande __url__ are used in case of an [authors inclusion](#authors-inclusion) or a [page list](#page-list) inclusion with `authors=1`.
-
-
-
-
-
-
-
-
 
 Administration
 --------------
 
-Acces to admin menu is reserved to [admin](#administrator) users.
+Acces to admin interface is reserved to [admin](#administrator) users. This is mostly a graphical representation of the `/config.json` file located at the root of W installation path.
 
-### Theming
+### Themes
 
-You change the interface theme in the [admin panel](#administration), under *interface*. There is a kit of presets, but you can even add your own themes ! And it is actualy *super easy* 😎. To do so, go to the folder `/assets/css/themes/` and duplicate one of the preset you prefer. Then you can edit the CSS variables to quickly stylise your theme colors.
+You change the interface theme in the admin panel, under *interface*. There is a kit of presets, but you can even add your own themes ! And it is actualy *super easy* 😎. To do so, go to the folder `/assets/css/themes/` and duplicate one of the preset you prefer. Then you can edit the CSS variables to quickly stylise your theme colors.
+
+
+
+
+Profile
+-------
+
+The profile allow each users to edit some preferences.
+
+__Display name__ ande __url__ are used in case of an [authors inclusion](#authors-inclusion) or a [page list](#page-list) inclusion with `authors=1`.
+
+
+
+
 
 
 
@@ -945,17 +834,16 @@ The description will be used by web search engines when they display lists of pa
 
 Tags are very powerfull to help you organize your pages. As in __W__, there is no hierarchy between pages, this is the only tool to create groups of pages.
 
-Tags can be set in the [left panel of the editor interface](#left-panel) using comma to separate tags, or by using the multi edit tool in the [Home menu bar > Edit](#home-menu).
+Tags can be set in the left panel of the editor interface using comma to separate tags, or by using the multi edit tool in the Home menu bar > Edit.
 
 
 ##### Privacy
 
 Pages have 3 possible levels of privacy:
 
-- **public** Free to read for every [visitor](#visitor).
-- **private** Hidden to [visitor](#visitor), but accessible to [reader users](#reader).
-- **not
- published** Only readable for users allowed to edit the page.
+- `0` **public** Free to read for every [visitor](#visitor).
+- `1` **private** Hidden to [visitor](#visitor), but accessible to [reader users](#reader).
+- `2` **not published** Only readable for users allowed to edit the page.
 
 ##### Date
 
@@ -1073,43 +961,47 @@ Each page have a dedicated stylesheet, that can be called by other pages using [
 
 ### User levels
 
+Not all users are equal. Users have rights according to their level (from 0 to 10).
+
 #### Visitor
 
-> level : 0
+> 👤 level : 0
+
+Someone browsing your Website but not connected.
 
 #### Reader
 
-> level : 1
+> 👤 level : 1
 
-Reader users are allowed to read [private pages](#privacy).
+Reader users are allowed to read [private pages](#privacy). They cannot do any editing.
 
 #### Invite Editor
 
-> level : 2
+> 👤 level : 2
 
 Invite Editors are the lowest editor status possible. They can only access the [Edition interface](#edition-interface). They can't create page but only edit page when listed as [author](#authors).
 
 #### Editor
 
-> level : 3
+> 👤 level : 3
 
 - Can create pages and edit them.
-- Can only edit pages when listed as [author](#authors).
+- Can only edit pages when listed as [authors](#authors).
 - Can only delete pages if they are the only author.
 
 #### Super Editor
 
-> level : 4
+> 👤 level : 4
 
 - Can edit any pages they like.
-- Can manage users as [author](#authors) of a page.
+- Can manage [author](#authors) of a page.
 - Can use the home menu and media menu to access powerfull features.
 - Can delete any page.
 - Have access to mass edit features.
 
 #### Administrator
 
-> level : 10
+> 👤 level : 10
 
 - Can access the [admin interface](#administration).
 - Can create new users.
@@ -1125,6 +1017,8 @@ Type thoses commands after a __page_id__
 ##### /add
 
 Command used to add a page in the database.
+
+It's possible to directly type the [title](#page-title) of the page, the ID will be automatically cleaned from white space or invalid characters.
 
 ##### /add:id
 
@@ -1156,6 +1050,8 @@ Show a `var_dump` of the page object. This could be usefull for debbuging.
 
     <pageid>/duplicate:<newpageid>
 
+Duplicate current page with under a new ID.
+
 ##### /login
 
 If you are not connected yet, this will ask you for credentials.
@@ -1164,14 +1060,4 @@ If you are not connected yet, this will ask you for credentials.
 ##### /logout
 
 If you were connected, this will disconnect you.
-
-#### Home commands
-
-
-
-##### //renderall
-
-Render all pages in the database
-
-
 
