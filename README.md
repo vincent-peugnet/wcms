@@ -146,19 +146,6 @@ Install from sources
 
 The last two commands can be run at once using only `make`.
 
-There are 3 different build environments that `make` can use:
-
--   **`dev`** _when developing the application._  
-    It installs every dependencies and builds big but easy-to-debug js bundles.
-
--   **`prod`** _when installing from sources a deployed production application._  
-    It installs every dependencies and builds minified js bundles.
-
--   **`dist`** _to create the releases' distribution zip._  
-    It strips all the development dependencies and the error reporting module and the sourcemaps of the js bundles are hidden. It can also be used for a production environment if the error reports are not used.
-
-The build environment can be set either for each `make` command by changing it in the `.env` file or on a per command basis by adding it at the end of the command (e.g. `make build ENV=prod`).
-
 PHP development
 ---------------
 
