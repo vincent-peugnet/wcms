@@ -34,8 +34,7 @@
         const url = '<?= Wcms\Config::url() ?>';
         const basepath = '<?= Wcms\Config::basepath() ?>';
     </script>
-    <script src="https://browser.sentry-cdn.com/5.9.0/bundle.min.js"></script>
-    <script src="<?= Wcms\Model::jspath() ?>sentry.bundle.js"></script>
+    <script type="module" src="<?= Wcms\Model::jspath() ?>sentry.bundle.js"></script>
     <?php } ?>
 </head>
 

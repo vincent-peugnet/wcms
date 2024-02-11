@@ -3,8 +3,8 @@ include .env
 export
 
 build_dir    := build
-js_src_dir   := src
 js_build_dir := assets/js
+entrypoints   = $(wildcard src/*.js)
 
 # Misc variables.
 export PATH             := vendor/bin:node_modules/.bin:$(PATH)
@@ -24,6 +24,7 @@ PORT                    := 8080
 PHP_FLAGS               += -d xdebug.start_with_request=yes
 PHPSTAN_FLAGS           += $(and $(CI),--no-progress)
 COMPOSER_FLAGS          += $(and $(CI),--prefer-dist --no-progress)
+ESBUILD_FLAGS           += --bundle --outdir=$(js_build_dir) --loader:.png=dataurl --splitting --format=esm --entry-names=[dir]/[name].bundle
 
 # Files variables.
 zip_release := dist/w_cms_$(GIT_VERSION).zip
@@ -50,11 +51,11 @@ serve: XDEBUG_MODE=debug
 serve: vendor VERSION
 	php -S $(HOST):$(PORT) -t ./ $(PHP_FLAGS)
 
-# Run webpack in watch mode.
+# Run esbuild in watch mode.
 .PHONY: watch
 watch: node_modules
 	@touch node_modules
-	webpack --env dev --watch
+	esbuild $(entrypoints) $(ESBUILD_FLAGS) --sourcemap=inline --watch=forever
 
 # Create a new release and upload it on GitHub.
 .PHONY: release-patch release-minor release-major
@@ -97,7 +98,6 @@ dist/w_cms_%.zip: all
 	zip $@ $(shell git ls-tree -r HEAD --name-only -d)
 # Remove non-useful files.
 	zip -d $@ \
-		$(js_src_dir)/\* \
 		.github/\* \
 		.default.env \
 		.gitignore \
@@ -111,11 +111,11 @@ dist/w_cms_%.zip: all
 		phpcs.xml \
 		phpunit.xml \
 		phpstan.neon \
-		tests/\* \
-		webpack.config.js
+		src/\* \
+		tests/\*
 
-$(js_build_dir): $(wildcard src/*.js) node_modules webpack.config.js
-	webpack --env=prod $(WEBPACK_FLAGS)
+$(js_build_dir): $(entrypoints) src/fn/fn.js node_modules
+	esbuild $(entrypoints) $(ESBUILD_FLAGS) --sourcemap --minify
 	touch $@
 
 # Generate a .env file if none is present.

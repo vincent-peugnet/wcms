@@ -2,7 +2,7 @@
 
 use Wcms\Config;
 
- $this->layout('layout', ['title' => 'home', 'stylesheets' => [$css . 'back.css', $css . 'home.css', $css . 'tagcolors.css'], 'favicon' => '']) ?>
+ $this->layout('layout', ['title' => 'home', 'stylesheets' => [$css . 'back.css', $css . 'home.css', Wcms\Model::jspath() . 'map.bundle.css', $css . 'tagcolors.css'], 'favicon' => '']) ?>
 
 
 
@@ -95,7 +95,7 @@ use Wcms\Config;
                 var data = <?= $json ?>;
             </script>
 
-            <script src="<?= Wcms\Model::jspath() ?>graph.bundle.js" defer></script>
+            <script type="module" src="<?= Wcms\Model::jspath() ?>graph.bundle.js" defer></script>
 
             <?php } elseif ($display === 'map') { ?>
                 
@@ -112,8 +112,7 @@ use Wcms\Config;
                     var pages = <?= $json ?>;
                 </script>
 
-                <script src="<?= Wcms\Model::jspath() ?>leaflet.bundle.js" async></script>
-                <script src="<?= Wcms\Model::jspath() ?>map.bundle.js" async></script>
+                <script type="module" src="<?= Wcms\Model::jspath() ?>map.bundle.js" async></script>
 
             </div>
             
@@ -384,7 +383,7 @@ use Wcms\Config;
 
 <?php if(!Wcms\Config::disablejavascript()) { ?>
 
-<script src="<?= Wcms\Model::jspath() ?>home.bundle.js"></script>
+<script type="module" src="<?= Wcms\Model::jspath() ?>home.bundle.js"></script>
 
 <?php } ?>
 

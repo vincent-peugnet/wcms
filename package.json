@@ -11,13 +11,9 @@
     "devDependencies": {
         "@sentry/browser": "^7.17.4",
         "@sentry/cli": "^2.8.1",
-        "css-loader": "^6.7.1",
+        "esbuild": "^0.20.0",
         "prettier": "^1.19.1",
-        "semver": "^7.3.8",
-        "style-loader": "^3.3.1",
-        "terser-webpack-plugin": "^5.2.5",
-        "webpack": "^5.76.0",
-        "webpack-cli": "^5.0.1"
+        "semver": "^7.3.8"
     },
     "prettier": {
         "tabWidth": 4,

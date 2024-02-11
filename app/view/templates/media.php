@@ -225,7 +225,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
 
 <?php if(!Wcms\Config::disablejavascript()) { ?>
 
-<script src="<?= Wcms\Model::jspath() ?>media.bundle.js"></script>
+<script type="module" src="<?= Wcms\Model::jspath() ?>media.bundle.js"></script>
 
 <?php } ?>
 

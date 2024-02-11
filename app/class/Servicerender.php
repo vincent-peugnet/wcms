@@ -239,9 +239,10 @@ abstract class Servicerender
             $head .= "<script src=\"$renderpath$id.js\" async/></script>\n";
         }
         if ($this->map) {
-            $leafletjs = Model::jspath() . 'leaflet.bundle.js';
+            $mapcss = Model::jspath() . 'pagemap.bundle.css';
             $mapjs = Model::jspath() . 'pagemap.bundle.js';
-            $head .= "\n<script src=\"$leafletjs\" async></script>\n<script src=\"$mapjs\" async></script>\n";
+            $head .= "<link href=\"$mapcss\" rel=\"stylesheet\" />\n"
+                . "<script type=\"module\" src=\"$mapjs\"></script>\n";
         }
         return $head;
     }
