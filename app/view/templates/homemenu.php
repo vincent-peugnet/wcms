@@ -273,7 +273,7 @@
                 <input type="submit" value="generate">
             </form>
             <?php if(!empty($optlist)) { ?>
-                <input readonly class="code select-all" value="<?= $optlist->getcode() ?>">
+                <code class="select-all"><?= $optlist->getcode() ?></code>
             <?php } ?>
 
             <h2>
@@ -284,7 +284,7 @@
             </h2>
             <i>A code to insert a map on a page</i>
             <?php if(!empty($optmap)) { ?>
-                <input readonly class="code select-all" value="<?= $optmap->getcode() ?>">
+                <code class="select-all"><?= $optmap->getcode() ?></code>
             <?php } ?>
 
 
@@ -296,7 +296,7 @@
             </h2>
             <i>Generate a code to create a link to a random page using the current filtering options.</i>
             <?php if(!empty($optrandom)) { ?>
-                <input readonly class="code select-all" value="[random page](<?= $optrandom->getcode() ?>)">
+                <code class="select-all">[random page](<?= $optrandom->getcode() ?>)</code>
             <?php } ?>
         </div>
     </details>
@@ -391,7 +391,7 @@
                         <h2 title="you can use public bookmarks as RSS feeds">RSS feed</h2>
                         <?php if ($bookmark->ispublished()) { ?>
                             copy and paste this code in any page
-                            <input readonly class="code select-all" value="%RSS?bookmark=<?= $bookmark->id() ?>%">
+                            <code class="select-all">%RSS?bookmark=<?= $bookmark->id() ?>%</code>
                             <a href="<?= $this->ubookmark('bookmarkpublish', $bookmark->id()) ?>" title="update the RSS feed">
                                 <i class="fa fa-refresh"></i> refresh
                             </a>

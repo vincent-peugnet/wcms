@@ -111,7 +111,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
                 <input type="checkbox" name="id[]" value="<?= $media->getlocalpath() ?>" form="mediaedit" id="media_<?= $media->filename() ?>">
                 <label for="media_<?= $media->filename() ?>"><?= $media->filename() ?></label>
                 <a href="<?= $media->getabsolutepath() ?>" target="_blank"><i class="fa fa-external-link"></i></a>
-                <input readonly class="code select-all" value="<?= $this->e($media->getcode()) ?>" />
+                <code class="select-all"><?= $this->e($media->getcode()) ?></code>
             </div>
                 
         </li>
@@ -127,33 +127,36 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
     <!-- ___________________ L I S T _________________________ -->
 
 
-        <table id="medialist">
-        <tr>
-            <th id="checkall">x</th>
-            <th>
-                <a href="<?= $mediaopt->getsortbyadress('filename') ?>">filename</a>
-                <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'filename']) ?>
-            </th>
-            <th>
-                <a href="<?= $mediaopt->getsortbyadress('extension') ?>">ext</a>
-                <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'extension']) ?>
-            </th>
-            <th>
-                <a href="<?= $mediaopt->getsortbyadress('type') ?>">type</a>
-                <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'type']) ?>
-            </th>
-            <th>
-                <a href="<?= $mediaopt->getsortbyadress('size') ?>">size</a>
-                <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'size']) ?>
-            </th>
-            <th>
-                <a href="<?= $mediaopt->getsortbyadress('date') ?>">date</a>
-                <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'date']) ?>
-            </th>
-            <th>user</th>
-            <th>perms</th>
-            <th>code</th>
-        </tr>
+    <table id="medialist">
+        <thead>
+            <tr>
+                <th id="checkall">x</th>
+                <th>
+                    <a href="<?= $mediaopt->getsortbyadress('filename') ?>">filename</a>
+                    <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'filename']) ?>
+                </th>
+                <th>
+                    <a href="<?= $mediaopt->getsortbyadress('extension') ?>">ext</a>
+                    <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'extension']) ?>
+                </th>
+                <th>
+                    <a href="<?= $mediaopt->getsortbyadress('type') ?>">type</a>
+                    <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'type']) ?>
+                </th>
+                <th>
+                    <a href="<?= $mediaopt->getsortbyadress('size') ?>">size</a>
+                    <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'size']) ?>
+                </th>
+                <th>
+                    <a href="<?= $mediaopt->getsortbyadress('date') ?>">date</a>
+                    <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'date']) ?>
+                </th>
+                <th>user</th>
+                <th>perms</th>
+                <th>code</th>
+            </tr>
+        </thead>
+        <tbody>
 
         <?php
         foreach ($medialist as $media) {
@@ -201,17 +204,19 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
             <td class="nowrap" title="<?= $media->date('dmy') ?> <?= $media->date('ptime') ?>"><?= $media->date('hrdi') ?></td>
             <td><?= $media->uid('name') ?></td>
             <td><code><?= $media->permissions() ?></code></td>
-            <td><input readonly class="code select-all" value="<?= $this->e($media->getcode()) ?>" /></td>
+            <td>
+                <code class="select-all"><?= $this->e($media->getcode()) ?></code>
+            </td>
             </tr>
-            <?php
-        }
-        ?>
+            <?php } ?>
+
+        </tbody>
+        
+        </table>
+
 
     <?php } ?>
 
-    </div>
-
-</table>
 
 </div>
 </section>

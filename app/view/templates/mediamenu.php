@@ -107,7 +107,7 @@
 
 
             <p>Use this code to print the content of the current folder in a page</p>
-            <input readonly class="code select-all" value="<?= $mediaopt->getcode() ?>" />
+            <code class="select-all" ><?= $mediaopt->getcode() ?></code>
         </div>
     </details>
 

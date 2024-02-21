@@ -132,6 +132,19 @@ label.toogle {
 }
 
 
+body {
+    user-select: none;
+}
+
+p, code {
+    user-select: text;
+}
+
+code.select-all {
+    user-select: all;
+}
+
+
 @media (max-width: 750px) {
     header a span, footer, aside a span {
         display: none;

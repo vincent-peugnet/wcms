@@ -55,27 +55,6 @@ export function activateCloseSubmenus() {
 }
 
 /**
- * Select the whole content of the clicked item.
- * @param {MouseEvent} e
- */
-function selectAll(e) {
-    if (e.target instanceof HTMLInputElement) {
-        e.target.select();
-        e.target.focus();
-    }
-}
-
-/**
- * Activate "select all" feature for `input.select-all` elements.
- */
-export function activateSelectAll() {
-    let selectAllInputs = document.querySelectorAll('input.select-all');
-    for (const selectAllInput of selectAllInputs) {
-        selectAllInput.addEventListener('click', selectAll);
-    }
-}
-
-/**
  * Manage submit event for a given form
  * @param {HTMLFormElement} form
  * @param {(response: any) => void} onSuccess
