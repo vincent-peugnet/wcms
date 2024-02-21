@@ -189,6 +189,25 @@ class Modelpage extends Modeldb
     }
 
     /**
+     * Get all the pages that are called in Javascript templating
+     *
+     * @param Page $page                    page to retrieve JS templates
+     * @return Page[]                       array of pages with ID as index
+     *
+     * @throws RuntimeException             If JS template is not found in database
+     */
+    public function getpagejavascripttemplates(Page $page): array
+    {
+        $templates = [];
+        if (!empty($page->templatejavascript()) && $page->templatejavascript() !== $page->id()) {
+            $template = $this->get($page->templatejavascript());
+            $templates[$template->id()] = $template;
+            $templates = array_merge($this->getpagejavascripttemplates($template), $templates);
+        }
+        return $templates;
+    }
+
+    /**
      * Get Page's favicon filename using the priority order:
      * Page > BODY Template > Default
      *

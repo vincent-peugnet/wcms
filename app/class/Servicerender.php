@@ -227,9 +227,13 @@ abstract class Servicerender
         $head .= $this->recursivecss($this->page);
         $head .= "<link href=\"$renderpath$id.css\" rel=\"stylesheet\" />\n";
 
-        if (!empty($this->page->templatejavascript())) {
-            $templatejspage = $this->page->templatejavascript();
-            $head .= "<script src=\"$renderpath$templatejspage.js\" async/></script>\n";
+        try {
+            foreach ($this->pagemanager->getpagejavascripttemplates($this->page) as $template) {
+                $templateid = $template->id();
+                $head .= "<script src=\"$renderpath$templateid.js\" async/></script>\n";
+            }
+        } catch (RuntimeException $e) {
+            Logger::warningex($e);
         }
         if (!empty($this->page->javascript())) {
             $head .= "<script src=\"$renderpath$id.js\" async/></script>\n";
