@@ -127,7 +127,8 @@ class Controllerhome extends Controller
             $vars['footer'] = [
                 'version' => getversion(),
                 'total' => count($pagelist),
-                'database' => Config::pagetable()
+                'database' => Config::pagetable(),
+                'pageversion' => Config::pageversion()
             ];
 
             $this->listquery();

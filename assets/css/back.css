@@ -35,11 +35,12 @@ aside {
     white-space: nowrap;
     color: var(--code-color) !important;
     background-color: var(--code-background-color);
-    padding: 1%;
+    padding: 2px;
     font-family: monospace;
     font-size: 15px;
     width: 100%;
     border: none;
+    overflow: hidden;
 }
 
 aside details, aside span {
@@ -59,6 +60,10 @@ aside .submenu {
     overflow-y: auto;
     z-index: 10000;
     box-shadow: 0px 14px 14px #24242430;
+}
+
+aside code {
+    overflow-x: auto;
 }
 
 aside #save-workspace {
@@ -150,7 +155,7 @@ p {
 
 
 
-tr:hover td a, tr:hover td, tr:hover .redirection, tr.selected a, tr.selected td {
+tbody tr:hover {
     background-color: var(--outline-background-color);
     color: var(--outline-color);
 }
@@ -189,10 +194,6 @@ div.radio input[type="radio"] {
     width: inherit;
 }
 
-main.font input, main.font  select, main.font  textarea {
-    display: block;
-}
-
 img.icon {
     height: 12px;
 }
@@ -206,22 +207,6 @@ a:hover img.icon {
 
 
 
-main.user section#user {
-    max-width: 500px;
-}
-
-div#preferences {
-    padding: 2% 0;
-}
-
-
-main.user table form {
-    display: inline-block;
-}
-
-main.user td {
-    white-space: nowrap;
-}
 
 
 li.event:hover span.details {

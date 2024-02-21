@@ -46,6 +46,7 @@ main table td.id label {
     font-family: monospace;
     font-size: medium;
     background-color: #7b97b9;
+    text-wrap: nowrap;
 }
 
 main a.bookmark[data-current="1"] {
@@ -139,7 +140,7 @@ td.title {
 
 td label, td time {white-space: nowrap;}
 
-span.redirection {
+a.redirection {
     background-color: var(--secondary-background-color);
     border-radius: 5px;
 }
@@ -209,4 +210,9 @@ nav {
 
 .pages h2, .pages #deepsearchbar {
     z-index: 1;
+}
+
+
+td.tag, td.authors, td.description {
+    white-space: nowrap;
 }

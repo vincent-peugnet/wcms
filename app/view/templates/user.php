@@ -1,6 +1,6 @@
 <?php
 
-$this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'back.css']]) ?>
+$this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'back.css', $css . 'user.css']]) ?>
 
 
 <?php $this->start('page') ?>

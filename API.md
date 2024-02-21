@@ -85,7 +85,7 @@ possible error codes:
 - `404` if page is not found
 - `406` in case of invalid ID
 - `409` in case of conflict (someone or something else updated the page before you)
-_ `500` server error
+- `500` server error
 
 
 

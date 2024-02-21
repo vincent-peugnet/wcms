@@ -787,7 +787,7 @@ You change the interface theme in the admin panel, under *interface*. There is a
 Profile
 -------
 
-The profile allow each users to edit some preferences.
+The profile panel allow each users to edit some preferences. To access it, click on your username preceded by <i class="fa fa-user"></i> on the right side of the main menu.
 
 __Display name__ ande __url__ are used in case of an [authors inclusion](#authors-inclusion) or a [page list](#page-list) inclusion with `authors=1`.
 
@@ -885,7 +885,7 @@ If no favicon is specified for a page, then the BODY template favicon will be us
 
 ##### Thumbnail
 
-The thumbnail have two use cases :
+The thumbnail have 3 use cases :
 
 - When you share a link to a page on a social network
 - When you generate a [list of page](#page-list) and activated the `thumbail` option. 
@@ -911,7 +911,6 @@ It's a list of all pages that are linked from the current page. This is analysed
 
 *read only*
 
-    visitcount
 
 Count the number of visitors that opened the page. Unlike [displaycount](#displaycount), only un-connected users are counted this way.
 
@@ -919,7 +918,6 @@ Count the number of visitors that opened the page. Unlike [displaycount](#displa
 
 *readonly*
 
-    editcount
 
 Count the number of time the page has been edited. Even empty edits are counted.
 
@@ -927,9 +925,8 @@ Count the number of time the page has been edited. Even empty edits are counted.
 
 *readonly*
 
-    displaycount
 
-Count the number of time the page is opened is opened.
+Count the number of time the page is opened.
 
 
 

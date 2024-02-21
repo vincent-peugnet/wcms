@@ -1,0 +1,13 @@
+
+main.user section#user {
+    max-width: 500px;
+}
+
+
+main.user table form {
+    display: inline-block;
+}
+
+main.user td {
+    white-space: nowrap;
+}

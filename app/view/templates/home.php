@@ -266,41 +266,40 @@ use Wcms\Config;
                                     <?= $item->id() ?>
                                 </label>
                                 <?php if (!empty($item->redirection())) { ?>
-                                    <span class="redirection">
-                                        <a
-                                            href="<?= \Wcms\Model::idcheck($item->redirection()) ? $this->upage('pageread', $item->redirection()) : getfirsturl($item->redirection()) ?>"
-                                            title="This page redirect to: <?= $item->redirection() ?>"
-                                        >
-                                            <i class="fa fa-external-link-square"></i>
-                                            <span class="refresh">
-                                                <?= $item->refresh() !== 0 ? $item->refresh() . 's' : '' ?>
-                                            </span>
-                                        </a>
-                                    </span>
+                                    <a
+                                        href="<?= \Wcms\Model::idcheck($item->redirection()) ? $this->upage('pageread', $item->redirection()) : getfirsturl($item->redirection()) ?>"
+                                        title="This page redirect to: <?= $item->redirection() ?>"
+                                        class="redirection"
+                                    >
+                                        <i class="fa fa-external-link-square"></i>
+                                        <span class="refresh">
+                                            <?= $item->refresh() !== 0 ? $item->refresh() . 's' : '' ?>
+                                        </span>
+                                    </a>
                                 <?php } ?>
                             </td>
                             <td class="edit">
                                 <?php if($this->caneditpage($item)) { ?>
-                                    <a href="<?= $this->upage('pageedit', $item->id()) ?>">
+                                    <a href="<?= $this->upage('pageedit', $item->id()) ?>" class="button">
                                         <i class="fa fa-pencil"></i>
                                     </a>
                                     <?php } ?>
                             </td>
                             <td class="read">
-                                <a href="<?= $this->upage('pageread', $item->id()) ?>">
+                                <a href="<?= $this->upage('pageread', $item->id()) ?>" class="button">
                                     <i class="fa fa-eye"></i>
                                 </a>
                             </td>
                             <td class="delete">
                                 <?php if($this->candeletepage($item)) { ?>
-                                    <a href="<?= $this->upage('pagedelete', $item->id()) ?>">
+                                    <a href="<?= $this->upage('pagedelete', $item->id()) ?>" class="button">
                                         <i class="fa fa-trash"></i>
                                     </a>
                                 <?php } ?>
                             </td>
                             <td class="download">
                                 <?php if ($this->caneditpage($item)) { ?>
-                                <a href="<?= $this->upage('pagedownload', $item->id()) ?>" download>
+                                <a href="<?= $this->upage('pagedownload', $item->id()) ?>" class="button" download>
                                     <i class="fa fa-download"></i>
                                 </a>
                                 <?php } ?>
