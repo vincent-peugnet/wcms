@@ -106,12 +106,10 @@ class Controllerapipage extends Controllerapi
             $this->shortresponse(401, 'User cannot create pages');
         }
         if ($this->pagemanager->exist($page)) {
-            http_response_code(405);
-            exit;
+            $this->shortresponse(405, 'ID is already used');
         }
 
-        $this->page = $this->pagemanager->newpage(["id" => $page]);
-        $this->page->reset();
+        $this->page = $this->pagemanager->newpage(array_merge($this->recievejson(), ['id' => $page]));
         $this->page->addauthor($this->user->id());
         if ($this->pagemanager->add($this->page)) {
             http_response_code(200);

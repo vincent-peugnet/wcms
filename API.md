@@ -95,6 +95,8 @@ To create a page, just send this request using the desired page ID.
 
     POST    /api/v0/page/<page_id>/add
 
+Optionaly, you can provide a JSON page object that will be used for the newly created page.
+
 possibles error codes:
 
 - `401` if user does'nt have the rights to create the page
