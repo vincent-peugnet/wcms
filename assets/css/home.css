@@ -45,7 +45,7 @@ main table td.id label {
 #home2table a.linkto {
     font-family: monospace;
     font-size: medium;
-    background-color: #7b97b9;
+    background-color: var(--main-color);
     text-wrap: nowrap;
 }
 
@@ -92,15 +92,10 @@ div#deepsearchbar {
     font-size: smaller;
 }
 
-fieldset.tag .counter, td a.tag {
-    color: white !important;
-  }
-
 
 table td a.tag, table a.author {
     border-radius: 10px;
     padding: 1px 4px;
-    color: black;
 }
 
 table td a.author {
@@ -215,4 +210,10 @@ nav {
 
 td.tag, td.authors, td.description {
     white-space: nowrap;
+}
+
+
+details#display input[type="color"] {
+    height: 1.5em;
+    width: 1.5em;
 }

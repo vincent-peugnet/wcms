@@ -50,9 +50,11 @@ class Controllerhome extends Controller
             $this->opt->submit();
 
             try {
-                $vars['colors'] = new Colors(Model::COLORS_FILE, $this->opt->taglist());
+                $servicetags = new Servicetags();
+                $vars['colors'] = $servicetags->synctags($this->opt->taglist());
             } catch (RuntimeException $e) {
                 Model::sendflashmessage("Error while generating display colors", Model::FLASH_ERROR);
+                Logger::errorex($e);
             }
 
             $publicbookmarks = $this->bookmarkmanager->getlisterpublic();
@@ -203,12 +205,13 @@ class Controllerhome extends Controller
 
     public function colors()
     {
-        if (isset($_POST['tagcolor']) && $this->user->issupereditor()) {
+        if ($this->user->issupereditor()) {
             try {
-                $colors = new Colors(Model::COLORS_FILE);
-                $colors->update($_POST['tagcolor']);
+                $servicetags = new Servicetags();
+                $servicetags->updatecolors($_POST);
             } catch (RuntimeException $e) {
                 Model::sendflashmessage("Error while saving display colors", Model::FLASH_ERROR);
+                Logger::errorex($e);
             }
         }
         $this->routedirect('home');

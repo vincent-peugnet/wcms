@@ -357,6 +357,9 @@ class Opt extends Item
         return $this->linkto;
     }
 
+    /**
+     * @return int[]                        Array where keys are tags and value the number of pages
+     */
     public function taglist(): array
     {
         return $this->taglist;
