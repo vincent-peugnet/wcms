@@ -1,6 +1,10 @@
 <?php
 
-$this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [$css . 'edit.css', Wcms\Model::jspath() . 'edit.bundle.css'], 'favicon' => $page->favicon()]) ?>
+$this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [
+    Wcms\Model::jspath() . 'edit.bundle.css',
+    $css . 'edit.css',
+    $css . 'tagcolors.css'
+], 'favicon' => $page->favicon()]) ?>
 
 
 
@@ -33,6 +37,7 @@ $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [$cs
     const pageid = '<?= $this->e($page->id()) ?>';
     let pagetitle = '<?= $this->e($page->title()) ?>';
     let theme = '<?= $this->e($workspace->highlighttheme()) ?>';
+    const taglist = <?= json_encode($taglist) ?>;
 </script>
 <script type="module" src="<?= Wcms\Model::jspath() ?>edit.bundle.js" async></script>
 

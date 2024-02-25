@@ -234,6 +234,14 @@ class Controllerpage extends Controller
                 exit;
             }
 
+            $servicetags = new Servicetags();
+
+            try {
+                $datas['taglist'] = $servicetags->taglist();
+            } catch (Filesystemexception $e) {
+                Logger::errorex($e);
+            }
+
             $datas['faviconlist'] = $this->mediamanager->listfavicon();
             $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();
             $datas['pagelist'] = $this->pagemanager->list();

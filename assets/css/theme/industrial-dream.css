@@ -17,7 +17,7 @@
     color-scheme: light;
 }
 
-input, textarea {
+input, textarea, .field {
     border: inset 2px;
 }
 

@@ -299,6 +299,48 @@ div#geomap {
     height: 250px;
 }
 
+/* __________ Tags _____________ */
+
+.tagify {
+    --tag-pad: 0 0;
+    --tag-text-color: inherit;
+    --tag-border-radius: 10px;
+    --tag-inset-shadow-size: 0;
+    --loader-size: 0;
+    --tags-focus-border-color: transparent;
+    display: block;
+}
+
+:root {
+	--tagify-dd-color-primary: var(--outline-background-color);
+	--tagify-dd-item-pad: 5px;
+	--tagify-dd-bg-color:  var(--input-background-color);
+}
+
+.tagify__tag {
+    border-radius: 10px;
+    padding-left: 4px;
+    padding-right: 0;
+    padding-bottom: 1px;
+    animation: none;
+}
+
+.tagify__tag__removeBtn {
+    color: inherit;
+    margin-left: 1px;
+}
+
+.tagify__dropdown span.tag {
+    border-radius: 10px;
+	padding: 1px 4px;
+}
+
+.tagify--focus {
+    outline: ridge 2px var(--outline-background-color)
+}
+
+
+
 
 @media (max-width: 550px) {
     .bar{

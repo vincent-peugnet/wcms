@@ -17,13 +17,8 @@
     color-scheme: light;
 }
 
-body {
-    /* font-family: serif; */
-    /* font-size: 15.8px; */
-}
-
-input, button, select, textarea {
-    border-radius: 3px;
+input, button, select, textarea, .field {
+    border-radius: 4px;
 }
 
 .block {

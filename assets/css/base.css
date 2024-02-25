@@ -8,6 +8,10 @@
     color: var(--outline-color);
 }
 
+:focus-visible {
+    outline: ridge 2px var(--outline-background-color);
+}
+
 body {
     margin: 0;
     height: 100%;
@@ -21,12 +25,12 @@ body {
     color: var(--text-color);
 }
 
-input, textarea, button, select {
+input, textarea, button, select, .field {
     border: none;
     accent-color: var(--main-color);
 }
 
-input, textarea {
+input, textarea, .field {
     color: var(--input-color)!important;
     border-color: var(--input-color);
     background-color: var(--input-background-color);
@@ -43,7 +47,7 @@ h1, h2 {
     background-color: var(--main-color);
 }
 
-a, button, input, select, textarea {
+a, button, input, select, textarea, .field {
     text-decoration: none;
     color: var(--text2-color);
 }

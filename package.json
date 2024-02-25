@@ -3,6 +3,7 @@
     "repository": "github:vincent-peugnet/wcms",
     "license": "MIT",
     "dependencies": {
+        "@yaireo/tagify": "^4.21.1",
         "codemirror": "^5.63.3",
         "cytoscape": "^3.20.0",
         "cytoscape-cose-bilkent": "^4.1.0",

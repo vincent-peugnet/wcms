@@ -21,7 +21,7 @@
             <label for="description">Description :</label>
             <input type="text" name="description" id="description" value="<?= $page->description(); ?>" form="update">
             <label for="tag">Tag(s) :</label>
-            <input type="text" name="tag" id="tag" value="<?= $page->tag('string'); ?>" form="update">
+            <input type="text" name="tag" class="field" id="tag" value="<?= $page->tag('string'); ?>" form="update">
             <label for="secure">Privacy level :</label>
             <select name="secure" id="secure" form="update">
                 <option value="0" <?= $page->secure() == Wcms\Page::PUBLIC ? 'selected' : '' ?>>public</option>
