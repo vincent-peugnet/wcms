@@ -11,7 +11,7 @@ class Servicesession
 
     public function getvisitor(): bool
     {
-        return $_SESSION['visitor'];
+        return $_SESSION['visitor'] ?? true;
     }
 
     public function setuser(string $userid): void
@@ -21,7 +21,7 @@ class Servicesession
 
     public function getuser(): ?string
     {
-        return $_SESSION['user'];
+        return $_SESSION['user'] ?? null;
     }
 
     public function setwsessionid(string $wsessionid): void
