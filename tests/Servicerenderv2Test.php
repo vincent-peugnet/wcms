@@ -41,15 +41,8 @@ class Servicerenderv2Test extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     * @dataProvider renderProvider
-     */
-    public function renderTest(string $name, bool $requireslinux = false): void
+    public function renderTest(string $name): void
     {
-        if ($requireslinux && PHP_OS_FAMILY != 'Linux') {
-            $this->markTestSkipped();
-        }
         $pagedata = json_decode(file_get_contents(__DIR__ . "/data/Servicerenderv2Test/$name.json"), true);
         $page = new Pagev2($pagedata);
         $html = $this->renderengine->render($page);
@@ -67,14 +60,35 @@ class Servicerenderv2Test extends TestCase
         $this->assertFileEquals($expected, $actual, "$actual render does not match expected $expected");
     }
 
+    /**
+     * @test
+     * @dataProvider renderProvider
+     */
+    public function renderTestCommon(string $name): void
+    {
+        $this->renderTest($name);
+    }
+
     public function renderProvider(): array
     {
         return [
             ['empty-test-v2'],
             ['markdown-test-v2'],
             ['body-test-v2'],
-            ['date-time-test-v2', true],
             ['external-links-test-v2'],
         ];
+    }
+
+    /**
+     * @test
+     * @requires OS Linux
+     * @requires extension intl
+     */
+    public function renderTestDate(): void
+    {
+        if (floatval(INTL_ICU_VERSION) >= 72) {
+            $this->markTestSkipped();
+        }
+        $this->renderTest('date-time-test-v2');
     }
 }
