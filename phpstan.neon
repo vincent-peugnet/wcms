@@ -10,6 +10,8 @@ parameters:
         - tests
     excludePaths:
         - app/view/*
+    dynamicConstantNames:
+        - INTL_ICU_VERSION
     exceptionRules:
         # ignore some exceptions and their chlidrens
         uncheckedExceptions:
