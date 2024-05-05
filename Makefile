@@ -81,41 +81,45 @@ release-patch release-minor release-major: release-%: check node_modules
 dist: distclean buildclean
 	@touch composer.lock
 	$(MAKE) $(zip_release) DIST=1
-	@touch composer.lock
+	@touch composer.lock node_modules
 
 # Build Zip release
 dist/w_cms_%.zip: all
 	mkdir -p $(dir $@)
-# Include git tracked files (everything except ignored) + needed files.
-	zip -r $@ \
+# Include reuqired git tracked files (everything except ignored).
+	@echo adding git files...
+	@zip $@ \
 		$(shell git ls-tree -r HEAD --name-only) \
-		VERSION \
+		$(shell git ls-tree -r HEAD --name-only -d) \
+		-x ".github/*" \
+		-x "src/*" \
+		-x "tests/*" \
+		-x .default.env \
+		-x .gitignore \
+		-x codecov.yaml \
+		-x composer.json \
+		-x composer.lock \
+		-x Makefile \
+		-x package.json \
+		-x package-lock.json \
+		-x phpcs.xml \
+		-x phpunit.xml \
+		-x phpstan.neon
+# Include additionnal untracked files
+	@echo adding other files...
+	@zip -r $@ \
 		$(js_build_dir) \
+		VERSION \
 		vendor \
-		-x "*test*" \
-		-x "*docs*"
-# Include non-empty git tracked directories (to keep dir permissions).
-	zip $@ $(shell git ls-tree -r HEAD --name-only -d)
-# Remove non-useful files.
-	zip -d $@ \
-		.github/\* \
-		.default.env \
-		.gitignore \
-		.release-it.json \
-		codecov.yaml \
-		composer.json \
-		composer.lock \
-		Makefile \
-		package.json \
-		package-lock.json \
-		phpcs.xml \
-		phpunit.xml \
-		phpstan.neon \
-		src/\* \
-		tests/\*
+		-x "*.map" \
+		-x "*/doc/*" \
+		-x "*/docs/*" \
+		-x "*/example/*" \
+		-x "*/test/*" \
+		-x "*/tests/*"
 
 .BUILDDATE: $(entrypoints) src/fn/fn.js node_modules
-	esbuild $(entrypoints) $(ESBUILD_FLAGS) --sourcemap --minify
+	esbuild $(entrypoints) $(ESBUILD_FLAGS) --sourcemap=$(if $(DIST),external,linked) --minify
 	@date --iso-8601=seconds > $@
 
 # Generate a .env file if none is present.
