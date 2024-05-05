@@ -54,7 +54,7 @@ jobs:
           echo "::remove-matcher owner=phpunit::"
 
       - name: Codecov upload
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v3.1.5
         with:
           files: ./build/phpunit/cov.xml
           flags: php
