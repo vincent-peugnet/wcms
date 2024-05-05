@@ -10,11 +10,10 @@ assets/js/*
 database/*
 media/*
 render/
-build/
 dist/
 vendor/*
 node_modules/
 config.json
 error_log
+.BUILDDATE
 VERSION
-!README.md
