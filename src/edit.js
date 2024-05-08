@@ -24,6 +24,9 @@ import shadow from 'leaflet/dist/images/marker-shadow.png';
 import * as L from 'leaflet';
 import { initWorkspaceForm, submitHandler } from './fn/fn';
 
+/** @var {Window | null} */
+let preview = null;
+
 /* ________________ TAGIFY  ________________ */
 
 /** @var {HTMLInputElement} */
@@ -450,7 +453,11 @@ function keyboardHandler(e) {
                     const a = document.getElementById('display');
                     const href = a.getAttribute('href');
                     const target = a.getAttribute('target');
-                    window.open(href, target);
+                    try {
+                        preview.location.reload();
+                    } catch {
+                        preview = window.open(href, target);
+                    }
                     break;
                 default:
                     return true;
