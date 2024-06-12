@@ -112,6 +112,7 @@ dist/w_cms_%.zip: all
 		VERSION \
 		vendor \
 		-x "*.map" \
+		-x "*/.*" \
 		-x "*/doc/*" \
 		-x "*/docs/*" \
 		-x "*/example/*" \
