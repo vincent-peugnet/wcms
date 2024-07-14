@@ -59,6 +59,7 @@ jobs:
           files: ./build/phpunit/cov.xml
           flags: php
           name: php-${{ matrix.php }}-${{ matrix.os }}
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   build-js:
     name: build js
