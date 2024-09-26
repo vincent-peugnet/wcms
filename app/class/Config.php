@@ -54,6 +54,9 @@ abstract class Config
     /** Page version during creation */
     protected static int $pageversion = Page::V1;
 
+    /** Indicate if img should have loading="lazy" attribute */
+    protected static bool $lazyloadimg = true;
+
     public const LANG_MIN = 2;
     public const LANG_MAX = 16;
 
@@ -345,6 +348,11 @@ abstract class Config
         return self::$pageversion;
     }
 
+    public static function lazyloadimg(): bool
+    {
+        return self::$lazyloadimg;
+    }
+
 
     // __________________________________________ S E T ______________________________________
 
@@ -589,5 +597,10 @@ abstract class Config
         if (key_exists($pageversion, Page::VERSIONS)) {
             self::$pageversion = $pageversion;
         }
+    }
+
+    public static function setlazyloadimg($lazyloadimg): bool
+    {
+        return self::$lazyloadimg = boolval($lazyloadimg);
     }
 }

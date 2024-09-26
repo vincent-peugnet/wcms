@@ -462,7 +462,7 @@ abstract class Servicerender
             if (!empty($classes)) {
                 $sourcable->setAttribute('class', implode(' ', array_unique($classes)));
             }
-            if ($sourcable->tagName === 'img') {
+            if ($sourcable->tagName === 'img' && Config::lazyloadimg()) {
                 $sourcable->setAttribute('loading', 'lazy');
             }
         }

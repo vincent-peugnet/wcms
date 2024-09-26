@@ -258,6 +258,13 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
 
                 <p>This can be overide individualy for each element using render options. See <a href="<?= $this->url('info', [], '#html-tags') ?>">📖 manual section</a> for more infos.</p>
 
+                <h4>Lazy load images</h4>
+
+                <div class="checkbox">
+                    <input type="hidden" name="lazyloadimg" value="0" form="admin">
+                    <input type="checkbox" name="lazyloadimg" id="lazyloadimg" value="1" <?= Wcms\Config::lazyloadimg() ? 'checked' : '' ?> form="admin">
+                    <label for="lazyloadimg">Add <em>loading="lazy"</em> attribute to images</label>
+                </div>
 
                 <p>
                     <i>(Thoses modifications need re-rendering)</i>
