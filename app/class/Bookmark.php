@@ -18,9 +18,6 @@ class Bookmark extends Item
     /** @var string $query */
     protected $query = '';
 
-    /** @var array $params*/
-    protected $params = [];
-
     /** @var string $icon associated emoji */
     protected $icon = '⭐';
 
@@ -89,11 +86,6 @@ class Bookmark extends Item
         return $this->query;
     }
 
-    public function params()
-    {
-        return $this->params;
-    }
-
     public function icon()
     {
         return $this->icon;
@@ -152,13 +144,6 @@ class Bookmark extends Item
     {
         if (is_string($query)) {
             $this->query = strip_tags(mb_substr($query, 0, Model::MAX_QUERY_LENGH));
-        }
-    }
-
-    public function setparams($params)
-    {
-        if (is_array($params)) {
-            $this->params = $params;
         }
     }
 
