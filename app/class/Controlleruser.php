@@ -26,7 +26,7 @@ class Controlleruser extends Controller
             $this->showtemplate('user', $datas);
         } else {
             http_response_code(403);
-            $this->showtemplate('forbidden', []);
+            $this->showtemplate('forbidden');
         }
     }
 
@@ -79,7 +79,7 @@ class Controlleruser extends Controller
             }
         } else {
             http_response_code(403);
-            $this->showtemplate('forbidden', []);
+            $this->showtemplate('forbidden');
             exit;
         }
     }

@@ -24,7 +24,7 @@ class Controlleradmin extends Controller
         }
         if (!$this->user->isadmin()) {
             http_response_code(403);
-            $this->showtemplate('forbidden', []);
+            $this->showtemplate('forbidden');
             exit;
         }
     }

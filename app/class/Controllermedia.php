@@ -33,7 +33,7 @@ class Controllermedia extends Controller
     {
         if (!$this->user->iseditor()) {
             http_response_code(403);
-            $this->showtemplate('forbidden', []);
+            $this->showtemplate('forbidden');
             exit;
         }
         try {

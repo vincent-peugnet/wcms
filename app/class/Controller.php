@@ -102,7 +102,7 @@ class Controller
         $this->plates->addData(['flashmessages' => Model::getflashmessages()]);
     }
 
-    public function showtemplate($template, $params)
+    public function showtemplate(string $template, array $params = [])
     {
         $params = array_merge($this->commonsparams(), $params);
         echo $this->plates->render($template, $params);
