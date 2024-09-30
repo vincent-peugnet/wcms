@@ -162,7 +162,7 @@
 
     <fieldset id="external">
         <label for="externalcss">External CSS</label>
-        <input type="text" name="externalcss[]" id="externalcss" placeholder="add external adress" form="update">
+        <input type="text" name="externalcss[]" id="externalcss" placeholder="add external address" form="update">
         <?php
             foreach ($page->externalcss() as $css) {
                 ?>

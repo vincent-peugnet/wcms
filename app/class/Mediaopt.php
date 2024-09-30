@@ -30,12 +30,12 @@ class Mediaopt extends Item
     }
 
     /**
-     * Generate link adress for table header
+     * Generate link address for table header
      *
      * @param string $sortby
-     * @return string link adress
+     * @return string link address
      */
-    public function getsortbyadress(string $sortby): string
+    public function getsortbyaddress(string $sortby): string
     {
         if (!in_array($sortby, Modelmedia::MEDIA_SORTBY)) {
             $sortby = 'id';
@@ -58,7 +58,7 @@ class Mediaopt extends Item
      * @param string $path                  Media path to display. Default is the current path.
      * @return string                       URL-encoded path, filter and sort parameters, startiting with a `?`
      */
-    public function getpathadress(string $path = null): string
+    public function getpathaddress(string $path = null): string
     {
         $path = is_null($path) ? $this->path : "/$path";
         $query = ['path' => $path, 'sortby' => $this->sortby, 'order' => $this->order];

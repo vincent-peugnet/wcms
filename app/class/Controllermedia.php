@@ -57,7 +57,7 @@ class Controllermedia extends Controller
         } catch (Folderexception $e) {
             Model::sendflashmessage($e->getMessage(), Model::FLASH_WARNING);
             $this->mediaopt->setpath(Model::MEDIA_DIR);
-            $this->redirect($this->generate("media", [], $this->mediaopt->getpathadress()));
+            $this->redirect($this->generate("media", [], $this->mediaopt->getpathaddress()));
         }
 
         $medialist = $this->mediamanager->medialistopt($mediaopt);
@@ -235,7 +235,7 @@ class Controllermedia extends Controller
                     Model::FLASH_ERROR
                 );
             }
-            $this->redirect($this->generate("media", [], $this->mediaopt->getpathadress()));
+            $this->redirect($this->generate("media", [], $this->mediaopt->getpathaddress()));
         } else {
             http_response_code(403);
             $this->showtemplate('forbidden');

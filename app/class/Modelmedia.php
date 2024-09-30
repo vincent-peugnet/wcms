@@ -427,7 +427,7 @@ class Modelmedia extends Model
         }
         $class = $selected ? ' class="selected"' : '';
         echo "<tr$class>";
-        $href = $mediaopt->getpathadress($path);
+        $href = $mediaopt->getpathaddress($path);
         $foldername = str_repeat('&nbsp;&nbsp;', $deepness) . $folder;
         echo "<td><a href=\"$href\">$foldername</a></td>";
         echo '<td>' . $dirlist['dirfilecount'] . '</td>';

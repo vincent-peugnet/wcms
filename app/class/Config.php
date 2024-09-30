@@ -146,8 +146,8 @@ abstract class Config
     }
 
     /**
-     * Generate full url adress where W is installed
-     * @return string url adress finished by a slash "/"
+     * Generate full url address where W is installed
+     * @return string url address finished by a slash "/"
      */
     public static function url($endslash = true): string
     {

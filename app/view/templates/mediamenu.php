@@ -9,7 +9,7 @@
                 </h3>
                 <p>max upload file size : <?= $maxuploadsize ?></p>
                 <form id=addmedia action="<?= $this->url('mediaupload') ?>" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="route" value="<?= $mediaopt->getpathadress() ?>">
+                    <input type="hidden" name="route" value="<?= $mediaopt->getpathaddress() ?>">
                     <input type='file' id="file" name='file[]' multiple required>
 
                     <div>
@@ -25,14 +25,14 @@
                     <label for="url"><i class="fa fa-cloud-upload"></i> Upload from URL</label>
                 </h3>
                 <form id="addurlmedia" action="<?= $this->url('mediaurlupload') ?>" method="post">
-                    <input type="hidden" name="route" value="<?= $mediaopt->getpathadress() ?>">
+                    <input type="hidden" name="route" value="<?= $mediaopt->getpathaddress() ?>">
                     <input type="text" name="url" id="url" placeholder="paste url here">
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>">
                     <input type="submit" value="upload">
                 </form>
                 <h2>New folder</h2>
                 <form id="folderadd" action="<?= $this->url('mediafolderadd') ?>" method="post">
-                    <input type="hidden" name="route" value="<?= $mediaopt->getpathadress() ?>">
+                    <input type="hidden" name="route" value="<?= $mediaopt->getpathaddress() ?>">
                     <label for="foldername"><i class="fa fa-folder"></i>  New folder</label>
                     <input type="text" name="foldername" id="foldername" placeholder="folder name" required>
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>">
@@ -43,7 +43,7 @@
                 <?php if($user->issupereditor()) { ?>
                 <h2>Delete folder</h2>
                 <form action="<?= $this->url('mediafolderdelete') ?>" id="deletefolder" method="post">
-                    <input type="hidden" name="route" value="<?= $mediaopt->getpathadress('media') ?>">
+                    <input type="hidden" name="route" value="<?= $mediaopt->getpathaddress('media') ?>">
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>/">
                     <input type="checkbox" name="deletefolder" id="confirmdeletefolder" value="1">
                     <label for="confirmdeletefolder">Delete current folder and all it's content</label>
@@ -54,7 +54,7 @@
 
                 <h2>Magic folders</h2>
                 <h3><i class="fa fa-font"></i> fonts</h3>
-                <a href="<?= $this->url('mediafontface', [], $mediaopt->getpathadress()) ?>">
+                <a href="<?= $this->url('mediafontface', [], $mediaopt->getpathaddress()) ?>">
                     <i class="fa fa-refresh"></i>regenerate @fontface CSS file
                 </a>
             </div>
@@ -69,7 +69,7 @@
             
             <h2>Move</h2>
             <form action="<?= $this->url('mediaedit') ?>" method="post" id="mediaedit">
-                <input type="hidden" name="route" value="<?= $mediaopt->getpathadress() ?>">
+                <input type="hidden" name="route" value="<?= $mediaopt->getpathaddress() ?>">
                 <input type="hidden" name="path" value="<?= $mediaopt->dir() ?>">
                 <label for="moveto">Move selected medias to a new directory</label>
                 <br>

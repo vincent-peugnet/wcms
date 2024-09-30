@@ -72,10 +72,10 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
     <h2>
         /<?= $mediaopt->dir() ?>
         <span class="right">
-            <a href="<?= $mediaopt->getpathadress() ?>&display=list" <?= $workspace->mediadisplay() === Wcms\Workspace::LIST ? 'class="selected"' : '' ?> >
+            <a href="<?= $mediaopt->getpathaddress() ?>&display=list" <?= $workspace->mediadisplay() === Wcms\Workspace::LIST ? 'class="selected"' : '' ?> >
                 <i class="fa fa-th-list"></i>
             </a>
-            <a href="<?= $mediaopt->getpathadress() ?>&display=gallery"  <?= $workspace->mediadisplay() === Wcms\Workspace::GALLERY ? 'class="selected"' : '' ?>  >
+            <a href="<?= $mediaopt->getpathaddress() ?>&display=gallery"  <?= $workspace->mediadisplay() === Wcms\Workspace::GALLERY ? 'class="selected"' : '' ?>  >
                 <i class="fa fa-th-large"></i>
             </a>
         </span>
@@ -132,23 +132,23 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
             <tr>
                 <th id="checkall">x</th>
                 <th>
-                    <a href="<?= $mediaopt->getsortbyadress('filename') ?>">filename</a>
+                    <a href="<?= $mediaopt->getsortbyaddress('filename') ?>">filename</a>
                     <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'filename']) ?>
                 </th>
                 <th>
-                    <a href="<?= $mediaopt->getsortbyadress('extension') ?>">ext</a>
+                    <a href="<?= $mediaopt->getsortbyaddress('extension') ?>">ext</a>
                     <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'extension']) ?>
                 </th>
                 <th>
-                    <a href="<?= $mediaopt->getsortbyadress('type') ?>">type</a>
+                    <a href="<?= $mediaopt->getsortbyaddress('type') ?>">type</a>
                     <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'type']) ?>
                 </th>
                 <th>
-                    <a href="<?= $mediaopt->getsortbyadress('size') ?>">size</a>
+                    <a href="<?= $mediaopt->getsortbyaddress('size') ?>">size</a>
                     <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'size']) ?>
                 </th>
                 <th>
-                    <a href="<?= $mediaopt->getsortbyadress('date') ?>">date</a>
+                    <a href="<?= $mediaopt->getsortbyaddress('date') ?>">date</a>
                     <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'date']) ?>
                 </th>
                 <th>user</th>
@@ -171,7 +171,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
                             <i class="fa fa-pencil"></i>
                     </summary>
                     <form action="<?= $this->url('mediarename') ?>" method="post">
-                        <input type="hidden" name="route" value="<?= $mediaopt->getpathadress() ?>">
+                        <input type="hidden" name="route" value="<?= $mediaopt->getpathaddress() ?>">
                         <input type="hidden" name="dir" value="<?= $media->dir() ?>">
                         <input type="hidden" name="oldfilename" value="<?= $media->filename() ?>">
                         <input type="text" name="newfilename" value="<?= $media->filename() ?>" id="newid-<?= $media->filename() ?>" maxlength="<?= Wcms\Model::MAX_ID_LENGTH ?>" minlength="1" required>
