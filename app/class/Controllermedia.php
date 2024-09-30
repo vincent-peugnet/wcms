@@ -18,15 +18,13 @@ class Controllermedia extends Controller
     public function __construct(AltoRouter $router)
     {
         parent::__construct($router);
-        $this->mediamanager = new Modelmedia();
-
-        $this->mediaopt = new Mediaopt($_GET);
-
         if ($this->user->isvisitor()) {
             http_response_code(401);
             $this->showtemplate('connect', ['route' => 'media']);
             exit;
         }
+        $this->mediamanager = new Modelmedia();
+        $this->mediaopt = new Mediaopt($_GET);
     }
 
 
@@ -99,15 +97,15 @@ class Controllermedia extends Controller
                         $fontfacer = new Servicefont($this->mediamanager);
                         $fontfacer->writecss();
                     }
-                    $this->redirect($this->generate('media') . '?path=/' . $target);
+                    $this->redirect($this->generate('media') . $_POST['route']);
                 } catch (RuntimeException $e) {
                     Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
                 }
             }
         } else {
-            Model::sendflashmessage("acces denied", Model::FLASH_ERROR);
+            http_response_code(403);
+            $this->showtemplate('forbidden');
         }
-        $this->routedirect('media');
     }
 
     public function urlupload()
@@ -121,9 +119,10 @@ class Controllermedia extends Controller
                     Model::sendflashmessage('Error while uploading : ' . $e->getMessage(), Model::FLASH_ERROR);
                 }
             }
-            $this->redirect($this->generate('media') . '?path=/' . $target);
+            $this->redirect($this->generate('media') . $_POST['route']);
         } else {
-            $this->routedirect('home');
+            http_response_code(403);
+            $this->showtemplate('forbidden');
         }
     }
 
@@ -136,30 +135,33 @@ class Controllermedia extends Controller
                 $name = 'new-folder';
             }
             $this->mediamanager->adddir($dir, $name);
-            $this->redirect($this->generate('media') . '?path=/' . $dir . $name);
+            parse_str(ltrim($_POST['route'], '?'), $route);
+            $route['path'] = $dir . $name;
+            $this->routedirect('media', [], $route);
         }
-        $this->routedirect('home');
+        http_response_code(403);
+        $this->showtemplate('forbidden');
     }
 
     public function folderdelete()
     {
-        if (isset($_POST['dir'])) {
-            if (isset($_POST['deletefolder']) && intval($_POST['deletefolder']) && $this->user->issupereditor()) {
+        if ($this->user->issupereditor()) {
+            if (isset($_POST['deletefolder']) && intval($_POST['deletefolder']) && isset($_POST['dir'])) {
                 try {
                     if ($this->mediamanager->deletedir($_POST['dir'])) {
                         Model::sendflashmessage('Deletion successfull', Model::FLASH_SUCCESS);
                     } else {
-                        Model::sendflashmessage('Deletion failed');
+                        Model::sendflashmessage('Deletion failed', Model::FLASH_ERROR);
                     }
                 } catch (Forbiddenexception $e) {
                     Model::sendflashmessage('Deletion failed: ' . $e->getMessage(), Model::FLASH_ERROR);
                 }
-            } else {
-                $this->redirect($this->generate('media') . '?path=/' . $_POST['dir']);
-                exit;
             }
+            $this->redirect($this->generate('media') . $_POST['route']);
+        } else {
+            http_response_code(403);
+            $this->showtemplate('forbidden');
         }
-        $this->redirect($this->generate('media'));
     }
 
     public function edit()
@@ -183,8 +185,11 @@ class Controllermedia extends Controller
                     Model::sendflashmessage('Error while updating fonts CSS : ' . $e->getMessage());
                 }
             }
+            $this->redirect($this->generate('media') . $_POST['route']);
+        } else {
+            http_response_code(403);
+            $this->showtemplate('forbidden');
         }
-        $this->redirect($this->generate('media') . $_POST['route']);
     }
 
     public function rename()
@@ -207,8 +212,11 @@ class Controllermedia extends Controller
             } catch (RuntimeException $e) {
                 Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
             }
+            $this->redirect($this->generate('media') . $_POST['route']);
+        } else {
+            http_response_code(403);
+            $this->showtemplate('forbidden');
         }
-        $this->redirect($this->generate('media') . $_POST['route']);
     }
 
     /**
@@ -227,9 +235,10 @@ class Controllermedia extends Controller
                     Model::FLASH_ERROR
                 );
             }
+            $this->redirect($this->generate("media", [], $this->mediaopt->getpathadress()));
         } else {
-            Model::sendflashmessage("Access denied", Model::FLASH_ERROR);
+            http_response_code(403);
+            $this->showtemplate('forbidden');
         }
-        $this->redirect($this->generate("media", [], $this->mediaopt->getpathadress()));
     }
 }

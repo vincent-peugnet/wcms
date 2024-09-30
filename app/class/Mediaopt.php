@@ -52,6 +52,12 @@ class Mediaopt extends Item
         return '?' . urldecode(http_build_query($query));
     }
 
+    /**
+     * Give the GET params to be used for redirection. Using hidden input under the `route` name.
+     *
+     * @param string $path                  Media path to display. Default is the current path.
+     * @return string                       URL-encoded path, filter and sort parameters, startiting with a `?`
+     */
     public function getpathadress(string $path = null): string
     {
         $path = is_null($path) ? $this->path : "/$path";

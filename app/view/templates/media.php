@@ -72,10 +72,10 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
     <h2>
         /<?= $mediaopt->dir() ?>
         <span class="right">
-            <a href="<?= $mediaopt->getaddress() ?>&display=list" <?= $workspace->mediadisplay() === Wcms\Workspace::LIST ? 'class="selected"' : '' ?> >
+            <a href="<?= $mediaopt->getpathadress() ?>&display=list" <?= $workspace->mediadisplay() === Wcms\Workspace::LIST ? 'class="selected"' : '' ?> >
                 <i class="fa fa-th-list"></i>
             </a>
-            <a href="<?= $mediaopt->getaddress() ?>&display=gallery"  <?= $workspace->mediadisplay() === Wcms\Workspace::GALLERY ? 'class="selected"' : '' ?>  >
+            <a href="<?= $mediaopt->getpathadress() ?>&display=gallery"  <?= $workspace->mediadisplay() === Wcms\Workspace::GALLERY ? 'class="selected"' : '' ?>  >
                 <i class="fa fa-th-large"></i>
             </a>
         </span>
@@ -171,7 +171,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
                             <i class="fa fa-pencil"></i>
                     </summary>
                     <form action="<?= $this->url('mediarename') ?>" method="post">
-                        <input type="hidden" name="route" value="<?= $mediaopt->getaddress() ?>">
+                        <input type="hidden" name="route" value="<?= $mediaopt->getpathadress() ?>">
                         <input type="hidden" name="dir" value="<?= $media->dir() ?>">
                         <input type="hidden" name="oldfilename" value="<?= $media->filename() ?>">
                         <input type="text" name="newfilename" value="<?= $media->filename() ?>" id="newid-<?= $media->filename() ?>" maxlength="<?= Wcms\Model::MAX_ID_LENGTH ?>" minlength="1" required>

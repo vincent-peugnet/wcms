@@ -279,6 +279,8 @@ class Modelmedia extends Model
      * @return bool depending on operation success
      *
      * @throws  Forbiddenexception If the directory is not inside `/media` folder
+     *
+     * @todo return void and throw exception in case of failure
      */
     public function deletedir(string $dir): bool
     {
