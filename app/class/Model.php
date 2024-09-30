@@ -50,6 +50,7 @@ abstract class Model
     public const METADATAS_NAMES = [
         'favicon' => 'favicon',
         'id' => 'id',
+        'download' => 'download',
         'tag' => 'tag',
         'title' => 'title',
         'description' => 'description',

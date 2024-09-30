@@ -39,6 +39,7 @@ class User extends Item
 
     public const COLUMNS = [
         'favicon',
+        'download',
         'tag',
         'title',
         'description',

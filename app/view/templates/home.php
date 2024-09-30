@@ -165,8 +165,9 @@ use Wcms\Config;
                             <th class="edit"></th>
                             <th class="read"></th>
                             <th class="delete" title="delete page"></th>
-                            <th class="download" title="download page as json"></th>
-                            <?php if ($columns['tag']) { ?>
+                            <?php if ($columns['download']) { ?>
+                                <th class="download" title="download page as json"></th>
+                            <?php } if ($columns['tag']) { ?>
                             <th class="tag">
                                 <a href="<?= $opt->sortbyorder('tag') ?>">tag</a>
                                 <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'tag']) ?>
@@ -296,6 +297,7 @@ use Wcms\Config;
                                     </a>
                                 <?php } ?>
                             </td>
+                            <?php if ($columns['download']) { ?>
                             <td class="download">
                                 <?php if ($this->caneditpage($item)) { ?>
                                 <a href="<?= $this->upage('pagedownload', $item->id()) ?>" class="button" download>
@@ -303,7 +305,7 @@ use Wcms\Config;
                                 </a>
                                 <?php } ?>
                             </td>
-                            <?php if ($columns['tag']) { ?>
+                            <?php } if ($columns['tag']) { ?>
                             <td class="tag"><?= $opt->taglinks($item->tag('array')) ?></td>
                             <?php }
                                     if ($columns['title']) { ?>
