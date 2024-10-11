@@ -108,9 +108,6 @@ class Media extends Item
         if (!is_file($path)) {
             throw new Fileexception("$path is not a file");
         }
-        if (!str_starts_with(realpath($path), realpath(Model::MEDIA_DIR))) {
-            throw new Forbiddenexception("File `$path`, is not inside `media` folder");
-        }
         $this->filename = basename($path);
         $this->dir = pathinfo($path, PATHINFO_DIRNAME);
         $this->analyse();
