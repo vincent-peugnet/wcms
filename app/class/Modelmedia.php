@@ -2,9 +2,12 @@
 
 namespace Wcms;
 
+use DomainException;
 use ErrorException;
 use InvalidArgumentException;
 use RuntimeException;
+use Imagick;
+use ImagickException;
 use Wcms\Exception\Forbiddenexception;
 
 class Modelmedia extends Model
@@ -18,6 +21,10 @@ class Modelmedia extends Model
     ];
 
     public const ID_REGEX                   = "%[^a-z0-9-_.]%";
+
+    public const CONVERSION_MAX_WIDTH       = 1920;
+    public const CONVERSION_MAX_HEIGHT      = 1920;
+    public const CONVERSION_QUALITY         = 50;
 
     /**
      * @return Media[]                      sorted array of Media
@@ -208,19 +215,21 @@ class Modelmedia extends Model
     /**
      * Upload multiple files
      *
-     * @param string $index Id of the file input
-     * @param string $target direction to save the files
+     * @param string $index                 Id of the file input
+     * @param string $target                direction to save the files
      * @param bool $idclean                 clean the filename using idclean
+     * @param bool $convertimages           resize and compress images if any
      *
      * @throws Folderexception if target folder does not exist
      * @throws RuntimeException if upload fail.
      */
-    public function multiupload(string $index, string $target, bool $idclean = false): void
+    public function multiupload(string $index, string $target, bool $idclean = false, bool $convertimages = false): void
     {
         $target = trim($target, "/") . "/";
         $this->checkdir($target);
         $count = 0;
         $successcount = 0;
+        $failedconversion = 0;
         foreach ($_FILES[$index]['name'] as $filename) {
             $fileinfo = pathinfo($filename);
             if ($idclean) {
@@ -231,15 +240,28 @@ class Modelmedia extends Model
                 $id = $fileinfo['filename'];
             }
 
-            $from = $_FILES['file']['tmp_name'][$count];
+            $from = $_FILES[$index]['tmp_name'][$count];
             $count++;
             $to = $target . $id . '.' . $extension;
             if (move_uploaded_file($from, $to)) {
                 $successcount++;
+                if ($convertimages) {
+                    $media = new Media($to);
+                    if ($media->type() === Media::IMAGE) {
+                        try {
+                            $this->convertimage($media);
+                        } catch (RuntimeException | ImagickException $e) {
+                            $failedconversion++;
+                        }
+                    }
+                }
             }
         }
-        if ($successcount < $count) {
-            throw new RuntimeException("$successcount / $count files have been uploaded");
+
+        if ($successcount < $count || $failedconversion > 0) {
+            $message = "$successcount / $count files have been uploaded";
+            $message .= $failedconversion > 0 ? " and $failedconversion image(s) conversion(s) failed" : '';
+            throw new RuntimeException($message);
         }
     }
 
@@ -406,6 +428,42 @@ class Modelmedia extends Model
             throw new Fileexception("File : $oldname does not exist");
         }
         return rename($oldname, $newname);
+    }
+
+    /**
+     * Convert an image to Webp format using Max width and height.
+     *
+     * @param Media $media                  Media to convert. It have to be an image.
+     *                                      Otherwise a DomainException will be throwned
+     * @return Media                        Converted Media object
+     *
+     * @throws RuntimeException             If imagick is not installed
+     * @throws ImagickException             If an error occured during IM process
+     * @throws Filesystemexception          If deleting the original media failed
+     */
+    private function convertimage(Media $media): Media
+    {
+        if ($media->type() !== Media::IMAGE) {
+            throw new DomainException('Given Media should be an image');
+        }
+        if (extension_loaded('imagick')) {
+            $image = new Imagick($media->getlocalpath());
+            $image->adaptiveResizeImage(
+                min($image->getImageWidth(), $this::CONVERSION_MAX_WIDTH),
+                min($image->getImageHeight(), $this::CONVERSION_MAX_HEIGHT),
+                true
+            );
+            $image->setImageFormat('webp');
+            $image->setImageCompressionQuality($this::CONVERSION_QUALITY);
+
+            $convertmediapath = $media->dir() . '/' . $media->getbasefilename() . '.webp';
+            if ($image->writeImage($convertmediapath)) {
+                Fs::deletefile($media->getlocalpath());
+            }
+            return new Media($convertmediapath);
+        } else {
+            throw new RuntimeException('Impossible to convert: missing imagick or gd PHP extension');
+        }
     }
 
     /**

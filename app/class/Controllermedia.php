@@ -91,7 +91,12 @@ class Controllermedia extends Controller
             if (!empty($_FILES['file']['name'][0])) {
                 $count = count($_FILES['file']['name']);
                 try {
-                    $this->mediamanager->multiupload('file', $target, boolval($_POST['idclean']));
+                    $this->mediamanager->multiupload(
+                        'file',
+                        $target,
+                        boolval($_POST['idclean']),
+                        boolval($_POST['convertimages'])
+                    );
                     Model::sendflashmessage("$count file(s) has been uploaded successfully", Model::FLASH_SUCCESS);
                     if ($target === Model::FONT_DIR) {
                         $fontfacer = new Servicefont($this->mediamanager);
