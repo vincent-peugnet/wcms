@@ -97,11 +97,11 @@ class Controllermedia extends Controller
                         $fontfacer = new Servicefont($this->mediamanager);
                         $fontfacer->writecss();
                     }
-                    $this->redirect($this->generate('media') . $_POST['route']);
                 } catch (RuntimeException $e) {
                     Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
                 }
             }
+            $this->redirect($this->generate('media') . $_POST['route']);
         } else {
             http_response_code(403);
             $this->showtemplate('forbidden');
