@@ -1,5 +1,7 @@
 <?php
 
+use Wcms\Folderexception;
+
 function readablesize($bytes, $base = 2 ** 10)
 {
     $format = '%d&nbsp;%s';
@@ -440,7 +442,7 @@ function get_temp_dir()
  * @param string $prefix                    A prefix to suit your case (It is nice to precise that it is related to W)
  * @return string                           Absolute created path without trailing slash
  *
- * @throws RuntimeException                 If creation failed
+ * @throws Folderexception                  If creation failed
  */
 function mktmpdir(string $prefix): string
 {
@@ -448,7 +450,7 @@ function mktmpdir(string $prefix): string
     $randstr = dechex(mt_rand() % (2 << 16));
     $path = "$tmp/$prefix-$randstr";
     if (!mkdir($path)) {
-        throw new RuntimeException("cannot create tmp dir '$path'");
+        throw new Folderexception("cannot create tmp dir '$path'");
     }
     return $path;
 }

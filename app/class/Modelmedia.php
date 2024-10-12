@@ -230,6 +230,7 @@ class Modelmedia extends Model
         $count = 0;
         $successcount = 0;
         $failedconversion = 0;
+        $tmpdir = mktmpdir('w-media-upload');
         foreach ($_FILES[$index]['name'] as $filename) {
             $fileinfo = pathinfo($filename);
             if ($idclean) {
@@ -242,7 +243,7 @@ class Modelmedia extends Model
 
             $from = $_FILES[$index]['tmp_name'][$count];
             $count++;
-            $to = mktmpdir('w-media-upload') . '/' . $id . '.' . $extension;
+            $to = "$tmpdir/$id.$extension";
             if (move_uploaded_file($from, $to)) {
                 try {
                     $media = new Media($to);
@@ -251,14 +252,18 @@ class Modelmedia extends Model
                     }
                     if (rename($media->getabsolutepath(), $target . $media->filename())) {
                         $successcount++;
+                    } else {
+                        Logger::error('failed to move file from tmp dir to media folder');
                     }
                 } catch (Fileexception $e) {
-                    // transfert failed
+                    Logger::errorex($e);
                 } catch (RuntimeException | ImagickException $e) {
+                    Logger::errorex($e);
                     $failedconversion++;
                 }
             }
         }
+        rmdir($tmpdir);
 
         if ($successcount < $count || $failedconversion > 0) {
             $message = "$successcount / $count files have been uploaded";
