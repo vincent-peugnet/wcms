@@ -101,7 +101,6 @@ class Media extends Item
 
     /**
      * @throws Fileexception                If path is not a file
-     * @throws Forbiddenexception           If file is not inside `media` folder
      */
     public function __construct(string $path)
     {
