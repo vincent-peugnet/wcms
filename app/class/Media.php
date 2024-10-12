@@ -3,10 +3,8 @@
 namespace Wcms;
 
 use DateTime;
-use DateTimeImmutable;
-use DateTimeZone;
-use Exception;
-use Wcms\Exception\Forbiddenexception;
+use DomainException;
+use RuntimeException;
 
 class Media extends Item
 {
@@ -25,9 +23,9 @@ class Media extends Item
 
     protected $date;
 
-    protected $width;
+    protected ?int $width = null;
 
-    protected $height;
+    protected ?int $height = null;
 
     protected $length;
 
@@ -125,17 +123,19 @@ class Media extends Item
 
         $path = $this->getlocalpath();
 
-        if ($this->type == 'image') {
+        if ($this->type == $this::IMAGE) {
             list($width, $height, $type, $attr) = getimagesize($path);
-            $this->width = $width;
-            $this->height = $height;
+            $this->width = empty($width) ? null : $width;
+            $this->height = empty($height) ? null : $height;
         }
 
         $this->permissions = decoct(fileperms($path) & 0777);
         $this->hydrate(stat($path));
     }
 
-
+    /**
+     * Get the Web absolute path. Starting with basepath if W is in a subfolder
+     */
     public function getabsolutepath(): string
     {
         if (!empty(Config::basepath())) {
@@ -159,10 +159,10 @@ class Media extends Item
     }
 
     /**
-     * Get the relative filesystem path to the media file.
+     * Get the filesystem path to the media file.
      *
-     * @return string                       Relative path to a file.
-     *                                      This will look like `media/pictures/hollydays.jpeg`
+     * @return string                       path to a file.
+     *                                      This will look like `/home/user/w/media/pictures/hollydays.jpeg`
      */
     public function getlocalpath(): string
     {
@@ -255,6 +255,39 @@ class Media extends Item
     {
         $pathinfo = pathinfo($this->filename);
         return $pathinfo['filename'];
+    }
+
+    /**
+     * @return int                          Total number of pixels of image
+     *
+     * @throws DomainException              If not called on an image.
+     * @throws RuntimeException             If an error reading width or height of image occured
+     */
+    public function pixelcount(): int
+    {
+        if ($this->type !== $this::IMAGE) {
+            throw new DomainException('Method getpixelcount() should only be called on images');
+        }
+        if (is_null($this->width) || $this->width < 1 || is_null($this->height) || $this->height < 1) {
+            throw new RuntimeException(
+                "impossible to count pixel, error reading width or height of image $this->filename"
+            );
+        }
+        return $this->width * $this->height;
+    }
+
+    /**
+     * This help to figure out a compression ratio independently from algo
+     *
+     * @return float                        Bit per pixel ratio of image
+     *
+     * @throws DomainException              If not called on an image.
+     * @throws RuntimeException             If an error reading width or height of image occured
+     */
+    public function bitperpixel(): float
+    {
+        $bits = $this->size * 8;
+        return $bits / $this->pixelcount();
     }
 
 

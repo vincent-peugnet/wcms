@@ -24,7 +24,7 @@ class Modelmedia extends Model
 
     public const CONVERSION_MAX_WIDTH       = 1920;
     public const CONVERSION_MAX_HEIGHT      = 1920;
-    public const CONVERSION_QUALITY         = 50;
+    public const CONVERSION_QUALITY         = 60;
 
     /**
      * @return Media[]                      sorted array of Media
@@ -248,9 +248,9 @@ class Modelmedia extends Model
                 try {
                     $media = new Media($to);
                     if ($convertimages && $media->type() === Media::IMAGE) {
-                        $media = $this->convertimage($media);
+                        $media = $this->optimizeimage($media);
                     }
-                    if (rename($media->getabsolutepath(), $target . $media->filename())) {
+                    if (rename($media->getlocalpath(), $target . $media->filename())) {
                         $successcount++;
                     } else {
                         Logger::error('failed to move file from tmp dir to media folder');
@@ -438,7 +438,8 @@ class Modelmedia extends Model
     }
 
     /**
-     * Convert an image to Webp format using Max width and height.
+     * Optimize an image to Webp format using Max width and height.
+     * But only if image is not already compressed and normal sized.
      *
      * @param Media $media                  Media to convert. It have to be an image.
      *                                      Otherwise will thow a DomainException
@@ -450,7 +451,7 @@ class Modelmedia extends Model
      * @throws ImagickException             If an error occured during IM process
      * @throws Filesystemexception          If deleting the original media failed, or if file creation failed.
      */
-    private function convertimage(Media $media, $deleteoriginal = true): Media
+    private function optimizeimage(Media $media, $deleteoriginal = true): Media
     {
         if ($media->type() !== Media::IMAGE) {
             throw new DomainException('Given Media should be an image');
@@ -458,6 +459,19 @@ class Modelmedia extends Model
         if (!extension_loaded('imagick')) {
             throw new RuntimeException('Imagick PHP extension is not installed');
         }
+        try {
+            if (
+                $media->bitperpixel() < 1
+                && $media->width() <= $this::CONVERSION_MAX_WIDTH
+                && $media->height() <= $this::CONVERSION_MAX_HEIGHT
+            ) {
+                    return $media; // image is already well compressed
+            }
+        } catch (RuntimeException $e) {
+            Logger::errorex($e);
+            return $media; // PHP could not get image dimensions. It may be beccause of supporting new formats.
+        }
+
         $image = new Imagick($media->getlocalpath());
         $image->adaptiveResizeImage(
             min($image->getImageWidth(), $this::CONVERSION_MAX_WIDTH),
@@ -468,7 +482,7 @@ class Modelmedia extends Model
         $image->setImageCompressionQuality($this::CONVERSION_QUALITY);
 
         $convertmediapath = $media->dir() . '/' . $media->getbasefilename() . '.webp';
-        if ($image->writeImage($convertmediapath) && $deleteoriginal) {
+        if ($image->writeImage($convertmediapath) && $deleteoriginal && $convertmediapath !== $media->getlocalpath()) {
             Fs::deletefile($media->getlocalpath());
         }
         return new Media($convertmediapath);
