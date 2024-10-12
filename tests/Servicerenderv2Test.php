@@ -20,7 +20,7 @@ class Servicerenderv2Test extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$tmpdir = mktempdir("w-cms-test-servicerenderv2");
+        self::$tmpdir = mktmpdir("w-cms-test-servicerenderv2");
     }
 
     public function setUp(): void

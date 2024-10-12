@@ -21,7 +21,7 @@
                     <div>
                         <input type="hidden" name="convertimages" value="0">
                         <input type="checkbox" name="convertimages" id="convertimages" value="1" checked>
-                        <label for="convertimages">optimize images</label>
+                        <label for="convertimages">optimize images for the Web</label>
                     </div>
 
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>">

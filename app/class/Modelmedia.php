@@ -242,18 +242,20 @@ class Modelmedia extends Model
 
             $from = $_FILES[$index]['tmp_name'][$count];
             $count++;
-            $to = $target . $id . '.' . $extension;
+            $to = mktmpdir('w-media-upload') . '/' . $id . '.' . $extension;
             if (move_uploaded_file($from, $to)) {
-                $successcount++;
-                if ($convertimages) {
+                try {
                     $media = new Media($to);
-                    if ($media->type() === Media::IMAGE) {
-                        try {
-                            $this->convertimage($media);
-                        } catch (RuntimeException | ImagickException $e) {
-                            $failedconversion++;
-                        }
+                    if ($convertimages && $media->type() === Media::IMAGE) {
+                        $media = $this->convertimage($media);
                     }
+                    if (rename($media->getabsolutepath(), $target . $media->filename())) {
+                        $successcount++;
+                    }
+                } catch (Fileexception $e) {
+                    // transfert failed
+                } catch (RuntimeException | ImagickException $e) {
+                    $failedconversion++;
                 }
             }
         }
@@ -434,37 +436,39 @@ class Modelmedia extends Model
      * Convert an image to Webp format using Max width and height.
      *
      * @param Media $media                  Media to convert. It have to be an image.
-     *                                      Otherwise a DomainException will be throwned
+     *                                      Otherwise will thow a DomainException
+     * @param bool $deleteoriginal          Choose if original media file should be deleted. Default is true.
+     *
      * @return Media                        Converted Media object
      *
      * @throws RuntimeException             If imagick is not installed
      * @throws ImagickException             If an error occured during IM process
-     * @throws Filesystemexception          If deleting the original media failed
+     * @throws Filesystemexception          If deleting the original media failed, or if file creation failed.
      */
-    private function convertimage(Media $media): Media
+    private function convertimage(Media $media, $deleteoriginal = true): Media
     {
         if ($media->type() !== Media::IMAGE) {
             throw new DomainException('Given Media should be an image');
         }
-        if (extension_loaded('imagick')) {
-            $image = new Imagick($media->getlocalpath());
-            $image->adaptiveResizeImage(
-                min($image->getImageWidth(), $this::CONVERSION_MAX_WIDTH),
-                min($image->getImageHeight(), $this::CONVERSION_MAX_HEIGHT),
-                true
-            );
-            $image->setImageFormat('webp');
-            $image->setImageCompressionQuality($this::CONVERSION_QUALITY);
-
-            $convertmediapath = $media->dir() . '/' . $media->getbasefilename() . '.webp';
-            if ($image->writeImage($convertmediapath)) {
-                Fs::deletefile($media->getlocalpath());
-            }
-            return new Media($convertmediapath);
-        } else {
-            throw new RuntimeException('Impossible to convert: missing imagick or gd PHP extension');
+        if (!extension_loaded('imagick')) {
+            throw new RuntimeException('Imagick PHP extension is not installed');
         }
+        $image = new Imagick($media->getlocalpath());
+        $image->adaptiveResizeImage(
+            min($image->getImageWidth(), $this::CONVERSION_MAX_WIDTH),
+            min($image->getImageHeight(), $this::CONVERSION_MAX_HEIGHT),
+            true
+        );
+        $image->setImageFormat('webp');
+        $image->setImageCompressionQuality($this::CONVERSION_QUALITY);
+
+        $convertmediapath = $media->dir() . '/' . $media->getbasefilename() . '.webp';
+        if ($image->writeImage($convertmediapath) && $deleteoriginal) {
+            Fs::deletefile($media->getlocalpath());
+        }
+        return new Media($convertmediapath);
     }
+
 
     /**
      * Generate a clickable folder tree based on reccurive array

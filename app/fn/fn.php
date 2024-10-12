@@ -423,3 +423,32 @@ function disk_free_space_ex(string $directory): float
         return $dfs;
     }
 }
+
+/**
+ * Get system tmp dir without trailing slah
+ *
+ * @return string                           something like `/tmp`
+ */
+function get_temp_dir()
+{
+    return rtrim(sys_get_temp_dir(), "/");
+}
+
+/**
+ * Create a folder with an auto-generated name, in OS temp directory
+ *
+ * @param string $prefix                    A prefix to suit your case (It is nice to precise that it is related to W)
+ * @return string                           Absolute created path without trailing slash
+ *
+ * @throws RuntimeException                 If creation failed
+ */
+function mktmpdir(string $prefix): string
+{
+    $tmp = get_temp_dir();
+    $randstr = dechex(mt_rand() % (2 << 16));
+    $path = "$tmp/$prefix-$randstr";
+    if (!mkdir($path)) {
+        throw new RuntimeException("cannot create tmp dir '$path'");
+    }
+    return $path;
+}
