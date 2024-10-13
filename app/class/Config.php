@@ -8,34 +8,34 @@ abstract class Config
 {
     protected static $pagetable = 'mystore';
     protected static $domain = '';
-    protected static $secure = true;
-    protected static $basepath = '';
-    protected static $route404;
-    protected static $alerttitle = '';
-    protected static $alertlink = '';
-    protected static $alertlinktext = '';
-    protected static $existnot = 'This page does not exist yet';
-    protected static $private = 'This page is private';
-    protected static $notpublished = 'This page is not published';
-    protected static $existnotpass = false;
-    protected static $privatepass = false;
-    protected static $notpublishedpass = false;
-    protected static $alertcss = false;
-    protected static $defaultv1body = "%HEADER%\n\n%NAV%\n\n%ASIDE%\n\n%MAIN%\n\n%FOOTER%";
-    protected static $defaultv2body = "%CONTENT%";
-    protected static $defaultfavicon = '';
-    protected static $defaultthumbnail = '';
+    protected static bool $secure = true;
+    protected static string $basepath = '';
+    protected static string $alerttitle = '';
+    protected static string $alertlink = '';
+    protected static string $alertlinktext = '';
+    protected static string $existnot = 'This page does not exist yet';
+    protected static string $private = 'This page is private';
+    protected static string $notpublished = 'This page is not published';
+    protected static bool $existnotpass = false;
+    protected static bool $privatepass = false;
+    protected static bool $notpublishedpass = false;
+    protected static bool $alertcss = false;
+    protected static string $defaultv1body = "%HEADER%\n\n%NAV%\n\n%ASIDE%\n\n%MAIN%\n\n%FOOTER%";
+    protected static string $defaultv2body = "%CONTENT%";
+    protected static string $defaultfavicon = '';
+    protected static string $defaultthumbnail = '';
     protected static string $suffix = "";
-    protected static $externallinkblank = true;
-    protected static $internallinkblank = false;
-    protected static $urllinker = true;
+    protected static bool $externallinkblank = true;
+    protected static bool $internallinkblank = false;
+    protected static bool $urllinker = true;
     protected static bool $deletelinktocache = true;
-    protected static $defaultprivacy = 0;
-    protected static $homepage = 'default';
-    protected static $homeredirect = null;
+    protected static int $defaultprivacy = 0;
+    protected static string $homepage = 'default';
+    protected static ?string $homeredirect = null;
     protected static string $theme = 'default.css';
-    protected static $secretkey = null;
-    protected static $sentrydsn = '';
+    protected static ?string $secretkey = null;
+    protected static string $sentrydsn = '';
+
     /** @var string|false $debug */
     protected static $debug = false;
 
@@ -64,7 +64,7 @@ abstract class Config
 
     public const SUFFIX_MAX = 128;
 
-
+    public const HOMEPAGE = ['default', 'redirect'];
 
     public const SECRET_KEY_MIN = 16;
     public const SECRET_KEY_MAX = 128;
@@ -180,12 +180,6 @@ abstract class Config
     {
         return self::$basepath;
     }
-
-    public static function route404()
-    {
-        return self::$route404;
-    }
-
     public static function alerttitle()
     {
         return self::$alerttitle;
@@ -378,13 +372,6 @@ abstract class Config
         self::$basepath = strip_tags($basepath);
     }
 
-    public static function setroute404($id)
-    {
-        if (is_string($id)) {
-            self::$route404 = Model::idclean($id);
-        }
-    }
-
     public static function setalerttitle($alerttitle)
     {
         if (is_string($alerttitle)) {
@@ -526,7 +513,7 @@ abstract class Config
 
     public static function sethomepage($homepage)
     {
-        if (in_array($homepage, Model::HOMEPAGE)) {
+        if (in_array($homepage, self::HOMEPAGE)) {
             self::$homepage = $homepage;
         }
     }

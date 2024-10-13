@@ -26,9 +26,6 @@ class Application
                 Config::hydrate($_POST['configinit']);
             }
             Config::getdomain();
-            if (!is_dir(Model::RENDER_DIR)) {
-                mkdir(Model::RENDER_DIR);
-            }
             if (boolval($_POST['defaultbookmarks'])) {
                 $this->defaultbookmarks();
             }
@@ -60,7 +57,6 @@ class Application
                 if (
                     !Config::checkbasepath()
                     || empty(Config::pagetable())
-                    || !is_dir(Model::RENDER_DIR)
                     || empty(Config::domain())
                     || empty(Config::secretkey())
                 ) {
@@ -74,10 +70,7 @@ class Application
                     if (empty(Config::domain())) {
                         echo '<li>Need to recheck the domain</li>';
                     }
-                    if (!is_dir(Model::RENDER_DIR)) {
-                        echo '<li>Render path not existing</li>';
-                    }
-                    if (!is_dir(Model::RENDER_DIR)) {
+                    if (empty(Config::secretkey())) {
                         echo '<li>Secret Key not set or not valid</li>';
                     }
                     echo '</ul>';

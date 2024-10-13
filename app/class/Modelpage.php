@@ -296,7 +296,7 @@ class Modelpage extends Modeldb
         $files = ['.css', '.quick.css', '.js'];
         foreach ($files as $file) {
             try {
-                Fs::deletefile(Model::RENDER_DIR . $pageid . $file);
+                Fs::deletefile(Model::ASSETS_RENDER_DIR . $pageid . $file);
             } catch (Notfoundexception $e) {
                 // do nothing, this means file is already deleted
             }
@@ -316,7 +316,7 @@ class Modelpage extends Modeldb
     public function flushrendercache(): void
     {
         try {
-            Fs::folderflush(self::RENDER_DIR);
+            Fs::folderflush(self::ASSETS_RENDER_DIR);
             Fs::folderflush(self::HTML_RENDER_DIR);
         } catch (Filesystemexception $e) {
             $fserror = $e->getMessage();
@@ -413,8 +413,8 @@ class Modelpage extends Modeldb
         if (
             $page->daterender() <= $page->datemodif() ||
             !file_exists(self::HTML_RENDER_DIR . $page->id() . '.html') ||
-            !file_exists(self::RENDER_DIR . $page->id() . '.css') ||
-            !file_exists(self::RENDER_DIR . $page->id() . '.js')
+            !file_exists(self::ASSETS_RENDER_DIR . $page->id() . '.css') ||
+            !file_exists(self::ASSETS_RENDER_DIR . $page->id() . '.js')
         ) {
             return true;
         } elseif (!empty($page->templatebody())) {
@@ -431,7 +431,7 @@ class Modelpage extends Modeldb
     /**
      * Render given page
      * Write HTML, CSS and JS files
-     * update linto property
+     * update linkto property
      *
      * @param Page $page input
      *
@@ -456,10 +456,11 @@ class Modelpage extends Modeldb
 
         try {
             $html = $renderengine->render($page);
-            Fs::dircheck(Model::HTML_RENDER_DIR, true);
+            Fs::dircheck(Model::ASSETS_RENDER_DIR, true, 0775);
+            Fs::dircheck(Model::HTML_RENDER_DIR, true, 0775);
             Fs::writefile(Model::HTML_RENDER_DIR . $page->id() . '.html', $html);
-            Fs::writefile(Model::RENDER_DIR . $page->id() . '.css', $page->css(), 0664);
-            Fs::writefile(Model::RENDER_DIR . $page->id() . '.js', $page->javascript(), 0664);
+            Fs::writefile(Model::ASSETS_RENDER_DIR . $page->id() . '.css', $page->css(), 0664);
+            Fs::writefile(Model::ASSETS_RENDER_DIR . $page->id() . '.js', $page->javascript(), 0664);
 
             $page->setdaterender($now);
             $page->setlinkto($renderengine->linkto());

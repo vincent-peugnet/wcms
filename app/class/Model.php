@@ -20,7 +20,7 @@ abstract class Model
     public const FONT_DIR = self::MEDIA_DIR . 'fonts/';
     public const CSS_DIR = self::MEDIA_DIR . 'css/';
     public const TEMPLATES_DIR = './app/view/templates/';
-    public const RENDER_DIR = 'assets/render/';
+    public const ASSETS_RENDER_DIR = 'assets/render/';
     public const HTML_RENDER_DIR = 'render/';
     public const GLOBAL_CSS_FILE = self::CSS_DIR . 'global.css';
     public const FONTS_CSS_FILE = self::CSS_DIR . 'fonts.css';
@@ -74,15 +74,6 @@ abstract class Model
     public const MAX_COOKIE_CONSERVATION    = 365;
     public const MAX_QUERY_LENGH            = 512;
 
-    /** RENDER OPTIONS   */
-    // add class in html element indicating from witch page the content come.
-    public const RENDER_CLASS_ORIGIN = false;
-    // render empty CONTENT element as empty html element, if set to false, render html comment
-    public const RENDER_EMPTY_ELEMENT = false;
-
-
-    /** CONFIG OPTIONS */
-    public const HOMEPAGE = ['default', 'search', 'redirect'];
 
     public static function dirtopath($dir)
     {
@@ -96,7 +87,7 @@ abstract class Model
 
     public static function renderpath()
     {
-        return self::dirtopath(Model::RENDER_DIR);
+        return self::dirtopath(Model::ASSETS_RENDER_DIR);
     }
 
     public static function csspath()
