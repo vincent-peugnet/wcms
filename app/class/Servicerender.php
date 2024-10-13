@@ -289,7 +289,6 @@ abstract class Servicerender
         $text = $this->pageoptmap($text);
         $text = $this->randomopt($text);
         $text = $this->authors($text);
-        $text = $this->authenticate($text);
         return $text;
     }
 
@@ -851,7 +850,7 @@ abstract class Servicerender
      */
     protected function checkpostprocessaction(string $text): bool
     {
-        $counterpaterns = Servicepostprocess::COUNTERS;
+        $counterpaterns = Servicepostprocess::POST_PROCESS_CODES;
         $pattern = implode('|', $counterpaterns);
         return boolval(preg_match("#($pattern)#", $text));
     }
@@ -868,33 +867,6 @@ abstract class Servicerender
         $regex = '~([\w\-_éêèùïüîçà]{' . $limit . ',})(?![^<]*>|[^<>]*<\/)~';
         $text = preg_replace_callback($regex, function ($matches) {
             return '<a href="' . Model::idclean($matches[1]) . '">' . $matches[1] . '</a>';
-        }, $text);
-        return $text;
-    }
-
-
-
-    /**
-     * @param string $text content to analyse and replace
-     *
-     * @return string text ouput
-     */
-    protected function authenticate(string $text): string
-    {
-        $id = $this->page->id();
-        $regex = '~\%CONNECT(\?dir=([a-zA-Z0-9-_]+))?\%~';
-        $text = preg_replace_callback($regex, function ($matches) use ($id) {
-            if (isset($matches[2])) {
-                $id = $matches[2];
-            }
-            $form = '<form action="' . Model::dirtopath('!co') . '" method="post">
-            <input type="text" name="user" id="loginuser" autofocus placeholder="user" required>
-			<input type="password" name="pass" id="loginpass" placeholder="password" required>
-			<input type="hidden" name="route" value="pageread">
-			<input type="hidden" name="id" value="' . $id . '">
-			<input type="submit" name="log" value="login" id="button">
-			</form>';
-            return $form;
         }, $text);
         return $text;
     }

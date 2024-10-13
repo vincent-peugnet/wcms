@@ -2,6 +2,7 @@
 
 namespace Wcms;
 
+use FTP\Connection;
 use JsonException;
 
 /**
@@ -20,12 +21,16 @@ class Servicepostprocess
 
     public const VISIT_COUNT    = '%VISITCOUNT%';
     public const EDIT_COUNT     = '%EDITCOUNT%';
-    public const AFF_COUNT      = '%DISPLAYCOUNT%';
+    public const DISPLAY_COUNT  = '%DISPLAYCOUNT%';
+    public const CONNECT        = '%CONNECT%';
+    public const USER           = '%USER%';
 
-    public const COUNTERS = [
+    public const POST_PROCESS_CODES = [
         self::VISIT_COUNT,
         self::EDIT_COUNT,
-        self::AFF_COUNT,
+        self::DISPLAY_COUNT,
+        self::CONNECT,
+        self::USER,
     ];
 
     public function __construct(Page $page, User $user)
@@ -71,14 +76,19 @@ class Servicepostprocess
         $displaycount = $this->page->displaycount();
 
         $replacements = [
-            self::VISIT_COUNT => "<span class=\"counter visitcount\">$visitcount</span>",
-            self::EDIT_COUNT => "<span class=\"counter editcount\">$editcount</span>",
-            self::AFF_COUNT => "<span class=\"counter displaycount\">$displaycount</span>",
+            self::VISIT_COUNT   => "<span class=\"counter visitcount\">$visitcount</span>",
+            self::EDIT_COUNT    => "<span class=\"counter editcount\">$editcount</span>",
+            self::DISPLAY_COUNT => "<span class=\"counter displaycount\">$displaycount</span>",
+            self::CONNECT       => $this->connect(),
+            self::USER          => $this->user->name(),
         ];
         return strtr($text, $replacements);
     }
 
     /**
+     * Datas about given page and user in JSON
+     * To be printed with every pages, so it can be used in JS
+     *
      * @return string                       JSON encoded w global, pages and user datas
      * @throws JsonException                If JSON encoding failed
      */
@@ -100,5 +110,31 @@ class Servicepostprocess
             ]
         ];
         return json_encode($wdatas, JSON_THROW_ON_ERROR);
+    }
+
+
+
+    /**
+     * Generate a login or logout form
+     *
+     * @return string                       HTML code
+     */
+    protected function connect(): string
+    {
+
+        $form = "<form action=\"!co\" method=\"post\">\n";
+
+        if (!$this->user->isvisitor()) {
+            $form .= '<input type="submit" name="log" value="logout">';
+        } else {
+            $form .= '<input type="text" name="user" id="loginuser" autofocus placeholder="user" required>';
+            $form .= '<input type="password" name="pass" id="loginpass" placeholder="password" required>';
+            $form .= '<input type="submit" name="log" value="login" id="button">';
+        }
+        $pageid = $this->page->id();
+        $form .= '<input type="hidden" name="route" value="pageread">';
+        $form .= "<input type=\"hidden\" name=\"id\" value=\"$pageid\">";
+        $form .= '</form>';
+        return $form;
     }
 }
