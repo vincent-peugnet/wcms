@@ -255,7 +255,7 @@ class Servicerss
         try {
             Fs::writefile($filename, $xml, 0664);
         } catch (Folderexception $e) {
-            Fs::dircheck(dirname($filename), true);
+            Fs::dircheck(dirname($filename), true, 0775);
             Fs::writefile($filename, $xml, 0664);
         }
     }
