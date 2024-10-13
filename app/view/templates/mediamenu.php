@@ -18,11 +18,13 @@
                         <label for="idclean">clean filenames</label>
                     </div>
 
+                    <?php if ($optimizeimage) { ?>
                     <div>
                         <input type="hidden" name="convertimages" value="0">
                         <input type="checkbox" name="convertimages" id="convertimages" value="1" checked>
                         <label for="convertimages">optimize images for the Web</label>
                     </div>
+                    <?php } ?>
 
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>">
                     <input type="submit" value="upload">

@@ -22,9 +22,17 @@ class Modelmedia extends Model
 
     public const ID_REGEX                   = "%[^a-z0-9-_.]%";
 
-    public const CONVERSION_MAX_WIDTH       = 1920;
-    public const CONVERSION_MAX_HEIGHT      = 1920;
-    public const CONVERSION_QUALITY         = 60;
+    public const OPTIMIZE_IMG_MAX_WIDTH     = 1920;
+    public const OPTIMIZE_IMG_MAX_HEIGHT    = 1920;
+    public const OPTIMIZE_IMG_QUALITY       = 60;
+    public const OPTIMIZE_IMG_MAX_BPP       = 0.5;
+    public const OPTIMIZE_IMG_ALLOWED_EXT   = [
+        'jpg' => 'imagecreatefromjpeg',
+        'jpeg' => 'imagecreatefromjpeg',
+        'png' => 'imagecreatefrompng',
+        'webp' => 'imagecreatefromwebp',
+        'bmp' => 'imagecreatefrombmp',
+    ];
 
     /**
      * @return Media[]                      sorted array of Media
@@ -438,7 +446,7 @@ class Modelmedia extends Model
     }
 
     /**
-     * Optimize an image to Webp format using Max width and height.
+     * Optimize an image to Webp format and limit width and height.
      * But only if image is not already compressed and normal sized.
      *
      * @param Media $media                  Media to convert. It have to be an image.
@@ -456,33 +464,61 @@ class Modelmedia extends Model
         if ($media->type() !== Media::IMAGE) {
             throw new DomainException('Given Media should be an image');
         }
-        if (!extension_loaded('imagick')) {
-            throw new RuntimeException('Imagick PHP extension is not installed');
-        }
+
         try {
             if (
-                $media->bitperpixel() < 1
-                && $media->width() <= $this::CONVERSION_MAX_WIDTH
-                && $media->height() <= $this::CONVERSION_MAX_HEIGHT
+                !key_exists($media->extension(), $this::OPTIMIZE_IMG_ALLOWED_EXT) ||
+                (
+                    $media->bitperpixel() < $this::OPTIMIZE_IMG_MAX_BPP &&
+                    $media->width() <= $this::OPTIMIZE_IMG_MAX_WIDTH &&
+                    $media->height() <= $this::OPTIMIZE_IMG_MAX_HEIGHT
+                )
             ) {
-                    return $media; // image is already well compressed
+                return $media; // image is already well compressed
             }
         } catch (RuntimeException $e) {
             Logger::errorex($e);
             return $media; // PHP could not get image dimensions. It may be beccause of supporting new formats.
         }
 
-        $image = new Imagick($media->getlocalpath());
-        $image->adaptiveResizeImage(
-            min($image->getImageWidth(), $this::CONVERSION_MAX_WIDTH),
-            min($image->getImageHeight(), $this::CONVERSION_MAX_HEIGHT),
-            true
-        );
-        $image->setImageFormat('webp');
-        $image->setImageCompressionQuality($this::CONVERSION_QUALITY);
-
         $convertmediapath = $media->dir() . '/' . $media->getbasefilename() . '.webp';
-        if ($image->writeImage($convertmediapath) && $deleteoriginal && $convertmediapath !== $media->getlocalpath()) {
+
+        if (extension_loaded('imagick')) {
+            $image = new Imagick($media->getlocalpath());
+            $image->adaptiveResizeImage(
+                min($image->getImageWidth(), $this::OPTIMIZE_IMG_MAX_WIDTH),
+                min($image->getImageHeight(), $this::OPTIMIZE_IMG_MAX_HEIGHT),
+                true
+            );
+            $image->setImageFormat('webp');
+            $image->setImageCompressionQuality($this::OPTIMIZE_IMG_QUALITY);
+
+            $convertmediapath = $media->dir() . '/' . $media->getbasefilename() . '.webp';
+            $conversionsuccess = $image->writeImage($convertmediapath);
+        } elseif (extension_loaded('gd')) {
+            $gdfunction = $this::OPTIMIZE_IMG_ALLOWED_EXT[$media->extension()];
+            $image = $gdfunction($media->getlocalpath());
+
+            $heightdiff = $media->height() - $this::OPTIMIZE_IMG_MAX_HEIGHT;
+            $widthdiff = $media->width() - $this::OPTIMIZE_IMG_MAX_WIDTH;
+
+            if ($heightdiff > 0 || $widthdiff > 0) {
+                if ($heightdiff > $widthdiff) {
+                    $height = $this::OPTIMIZE_IMG_MAX_HEIGHT;
+                    $width = intval($media->width() * ($this::OPTIMIZE_IMG_MAX_HEIGHT / $media->height()));
+                } else {
+                    $height = intval($media->height() * ($this::OPTIMIZE_IMG_MAX_WIDTH / $media->width()));
+                    $width = $this::OPTIMIZE_IMG_MAX_WIDTH;
+                }
+
+                $image = imagescale($image, $width, $height);
+            }
+            $conversionsuccess = imagewebp($image, $convertmediapath, $this::OPTIMIZE_IMG_QUALITY);
+        } else {
+            throw new RuntimeException('Nor Imagick or gd PHP extension is not installed');
+        }
+
+        if ($conversionsuccess && $deleteoriginal && $convertmediapath !== $media->getlocalpath()) {
             Fs::deletefile($media->getlocalpath());
         }
         return new Media($convertmediapath);

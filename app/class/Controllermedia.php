@@ -80,6 +80,7 @@ class Controllermedia extends Controller
         $vars['dirlist'] = $dirlist;
         $vars['pathlist'] = $pathlist;
         $vars['mediaopt'] = $mediaopt;
+        $vars['optimizeimage'] = (extension_loaded('imagick') || extension_loaded('gd'));
 
         $this->showtemplate('media', $vars);
     }
