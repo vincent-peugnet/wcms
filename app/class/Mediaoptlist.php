@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use RuntimeException;
+
 class Mediaoptlist extends Mediaopt
 {
     /** @var string full regex match */
@@ -24,45 +26,45 @@ class Mediaoptlist extends Mediaopt
         $this->hydrate($datas);
     }
 
-    public function generatecontent()
+    /**
+     * Generate HTML displaying list of medias
+     *
+     * @throws RuntimeException             If something went wrong
+     */
+    public function generatecontent(): string
     {
         $mediamanager = new Modelmedia();
-        $medialist = $mediamanager->getlistermedia($this->dir(), $this->type);
-        if (!$medialist) {
-            return false;
-        } else {
-            $mediamanager->medialistsort($medialist, $this->sortby, $this->order);
+        $medialist = $mediamanager->medialistopt($this);
 
-            $dirid = str_replace('/', '-', $this->path);
+        $dirid = str_replace('/', '-', $this->path);
 
-            $div = "<div class=\"medialist\" id=\"$dirid\">\n";
+        $div = "<div class=\"medialist\" id=\"$dirid\">\n";
 
-            foreach ($medialist as $media) {
-                $div .= '<div class="content ' . $media->type() . '">';
-                $id = 'id="media_' . $media->filename() . '"';
-                $path = $media->getincludepath();
-                $ext = $media->extension();
-                $filename = $media->filename();
-                if ($media->type() == 'image') {
-                    $div .= '<img alt="' . $media->filename() . '" ' . $id . ' src="' . $path . '" >';
-                } elseif ($media->type() == 'sound') {
-                    $div .= '<audio ' . $id . ' controls src="' . $path . '" </audio>';
-                } elseif ($media->type() == 'video') {
-                    $source = '<source src="' . $path . '" type="video/' . $ext . '" ' . $id . '>';
-                    $div .= '<video controls>' . $source . '</video>';
-                } else {
-                    $div .= '<a href="' . $path . '" target="_blank" class="media" ' . $id . '>' . $filename . '</a>';
-                }
-                if ($this->filename && in_array($media->type(), ['image', 'sound', 'video'])) {
-                    $div .= "<div class=\"filename\">$filename</div>";
-                }
-                $div .= "</div>\n";
+        foreach ($medialist as $media) {
+            $div .= '<div class="content ' . $media->type() . '">';
+            $id = 'id="media_' . $media->filename() . '"';
+            $path = $media->getincludepath();
+            $ext = $media->extension();
+            $filename = $media->filename();
+            if ($media->type() == 'image') {
+                $div .= '<img alt="' . $media->filename() . '" ' . $id . ' src="' . $path . '" >';
+            } elseif ($media->type() == 'sound') {
+                $div .= '<audio ' . $id . ' controls src="' . $path . '" </audio>';
+            } elseif ($media->type() == 'video') {
+                $source = '<source src="' . $path . '" type="video/' . $ext . '" ' . $id . '>';
+                $div .= '<video controls>' . $source . '</video>';
+            } else {
+                $div .= '<a href="' . $path . '" target="_blank" class="media" ' . $id . '>' . $filename . '</a>';
             }
-
+            if ($this->filename && in_array($media->type(), ['image', 'sound', 'video'])) {
+                $div .= "<div class=\"filename\">$filename</div>";
+            }
             $div .= "</div>\n";
-
-            return $div;
         }
+
+        $div .= "</div>\n";
+
+        return $div;
     }
 
     public function getquery()

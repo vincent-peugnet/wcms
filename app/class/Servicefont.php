@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use RuntimeException ;
+
 class Servicefont
 {
     protected Modelmedia $mediamanager;
@@ -11,11 +13,14 @@ class Servicefont
 
     /**
      * This will import all the Media as fonts
+     *
+     * @throws RuntimeException             If font folder is not working
      */
     public function __construct(Modelmedia $mediamanager)
     {
         $this->mediamanager = $mediamanager;
-        $medias = $this->mediamanager->getlistermedia(Model::FONT_DIR, [Media::FONT]);
+        $mediaopt = new Mediaopt(['path' =>  Model::FONT_DIR, 'type' => [Media::FONT]]);
+        $medias = $this->mediamanager->medialistopt($mediaopt);
         $medias = $this->filterfonts($medias);
         $this->fonts = $this->groupfonts($medias);
     }

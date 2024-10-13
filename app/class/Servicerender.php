@@ -592,7 +592,11 @@ abstract class Servicerender
             foreach ($matches as $match) {
                 $medialist = new Mediaoptlist($match);
                 $medialist->readoptions();
-                $text = str_replace($medialist->fullmatch(), $medialist->generatecontent(), $text);
+                try {
+                    $text = str_replace($medialist->fullmatch(), $medialist->generatecontent(), $text);
+                } catch (RuntimeException $e) {
+                    Logger::errorex($e);
+                }
             }
         }
         return $text;

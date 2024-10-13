@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use RuntimeException;
 use Imagick;
 use ImagickException;
+use RangeException;
 use Wcms\Exception\Forbiddenexception;
 
 class Modelmedia extends Model
@@ -36,10 +37,12 @@ class Modelmedia extends Model
 
     /**
      * @return Media[]                      sorted array of Media
+     *
+     * @throws Folderexception              If dir is not a valid folder
      */
     public function medialistopt(Mediaopt $mediaopt): array
     {
-        $medialist = $this->getlistermedia($mediaopt->dir(), $mediaopt->type());
+        $medialist = $this->getlistermedia($mediaopt);
         $this->medialistsort($medialist, $mediaopt->sortby(), $mediaopt->order());
 
         return $medialist;
@@ -48,30 +51,34 @@ class Modelmedia extends Model
     /**
      * get a list of media of selected types
      *
-     * @param string $dir Media directory ot look at
-     * @param array $type
+     * @param Mediaopt $mediaopt            Media option filter Object
      *
-     * @return Media[] of Media objects
+     * @return Media[]                      array of Media objects
+     *
+     * @throws Folderexception              When the given folder isn't a directory
      */
-    public function getlistermedia($dir, $type = []): array
+    protected function getlistermedia(Mediaopt $mediaopt): array
     {
-        if (is_dir($dir) && $handle = opendir($dir)) {
-            $list = [];
-            while (false !== ($entry = readdir($handle))) {
-                if (!empty($entry) && $entry != "." && $entry != "..") {
-                    try {
-                        $media = new Media($dir . $entry);
-                        if (empty($type) || in_array($media->type(), $type)) {
-                            $list[] = $media;
-                        }
-                    } catch (RuntimeException $e) {
-                        Logger::errorex($e);
+        $dir = $mediaopt->dir();
+        $types = $mediaopt->type();
+        if (!is_dir($dir)) {
+            throw new Folderexception("$dir is not a directory");
+        }
+        $list = [];
+        $files = scandir($dir);
+        foreach ($files as $file) {
+            if (is_file($dir . $file)) {
+                try {
+                    $media = new Media($dir . $file);
+                    if (empty($types) || in_array($media->type(), $types)) {
+                        $list[] = $media;
                     }
+                } catch (RuntimeException $e) {
+                    Logger::errorex($e);
                 }
             }
-                return $list;
         }
-        return [];
+        return $list;
     }
 
 
@@ -82,14 +89,14 @@ class Modelmedia extends Model
      * @param string $sortby
      * @param int $order Can be 1 or -1
      */
-    public function medialistsort(array &$medialist, string $sortby = 'id', int $order = 1): bool
+    protected function medialistsort(array &$medialist, string $sortby = 'id', int $order = 1): bool
     {
         $sortby = (in_array($sortby, self::MEDIA_SORTBY)) ? $sortby : 'id';
         $order = ($order === 1 || $order === -1) ? $order : 1;
         return usort($medialist, $this->buildsorter($sortby, $order));
     }
 
-    public function buildsorter($sortby, $order)
+    protected function buildsorter($sortby, $order)
     {
         return function ($media1, $media2) use ($sortby, $order) {
             $result = $this->mediacompare($media1, $media2, $sortby, $order);
@@ -97,7 +104,7 @@ class Modelmedia extends Model
         };
     }
 
-    public function mediacompare($media1, $media2, $method = 'filename', $order = 1)
+    protected function mediacompare($media1, $media2, $method = 'filename', $order = 1)
     {
         $result = ($media1->$method() <=> $media2->$method());
         return $result * $order;
@@ -283,15 +290,14 @@ class Modelmedia extends Model
     /**
      * @param string $dir                   directory path
      *
-     * @throws Folderexception if target folder does not exist or is outside `/media` folder
+     * @return void
+     *
+     * @throws Folderexception if target folder does not exist
      */
-    public function checkdir(string $dir)
+    public function checkdir(string $dir): void
     {
         if (!is_dir($dir)) {
             throw new Folderexception("directory `$dir` does not exists");
-        }
-        if (strpos($dir, "media/") !== 0) {
-            throw new Folderexception("directory `$dir`, is not inside `/media` folder");
         }
     }
 
