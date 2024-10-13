@@ -61,7 +61,7 @@ class Routes
             ['POST', '/!admin/database', 'Controlleradmin#database', 'admindatabase'],
             ['GET', '/!user', 'Controlleruser#desktop', 'user'],
             ['POST', '/!user/add', 'Controlleruser#add', 'useradd'],
-            ['POST', '/!user/update', 'Controlleruser#update', 'userupdate'],
+            ['POST', '/!user/edit', 'Controlleruser#edit', 'useredit'],
             ['GET', '/!profile', 'Controllerprofile#desktop', 'profile'],
             ['POST', '/!profile', 'Controllerprofile#update', 'profileupdate'],
             ['POST', '/!profile/password', 'Controllerprofile#password', 'profilepassword'],

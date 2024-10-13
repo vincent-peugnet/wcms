@@ -68,7 +68,7 @@ $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'back.css',
                     ?>
                     
                     <tr>
-                    <form action="<?= $this->url('userupdate') ?>" method="post">
+                    <form action="<?= $this->url('useredit') ?>" method="post">
 
                     <td>
                     <?= $user->id() ?>

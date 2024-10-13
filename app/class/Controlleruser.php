@@ -35,25 +35,28 @@ class Controlleruser extends Controller
         if ($this->user->isadmin() && isset($_POST['id'])) {
             $user = new User($_POST);
             if (empty($user->id()) || $this->usermanager->exist($user)) {
-                $this->routedirect('user', [], ['error' => 'wrong_id']);
-            } elseif (empty($user->password()) || !$user->validpassword()) {
-                $this->routedirect('user', [], ['error' => 'change_password']);
-            } else {
-                if ($user->passwordhashed()) {
-                    $user->hashpassword();
-                }
-                try {
-                    $this->usermanager->add($user);
-                    Model::sendflashmessage('User successfully added', Model::FLASH_SUCCESS);
-                } catch (Databaseexception $e) {
-                    Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
-                }
+                Model::sendflashmessage('Error: problem with ID', Model::FLASH_ERROR);
                 $this->routedirect('user');
             }
+            if (!$user->validpassword()) {
+                Model::sendflashmessage('Error: invalid password', Model::FLASH_ERROR);
+                $this->routedirect('user');
+            }
+            if ($user->passwordhashed()) {
+                $user->hashpassword();
+            }
+            try {
+                $this->usermanager->add($user);
+                Model::sendflashmessage('User successfully added', Model::FLASH_SUCCESS);
+            } catch (Databaseexception $e) {
+                Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+            }
+            $this->addauthorbookmark($user);
+            $this->routedirect('user');
         }
     }
 
-    public function update()
+    public function edit()
     {
         if ($this->user->isadmin() && isset($_POST['action'])) {
             try {
@@ -69,7 +72,7 @@ class Controlleruser extends Controller
                         break;
 
                     case 'update':
-                        $this->change($_POST);
+                        $this->update($_POST);
                         Model::sendflashmessage('User successfully updated', Model::FLASH_SUCCESS);
                         $this->routedirect('user');
                         break;
@@ -84,10 +87,12 @@ class Controlleruser extends Controller
         }
     }
 
+    // ________________________________ F U N _________________________________________
+
     /**
      * @throws Notfoundexception            If user is not found in the database
      */
-    protected function delete(array $datas)
+    protected function delete(array $datas): void
     {
         $user = new User($datas);
         $user = $this->usermanager->get($user);
@@ -103,7 +108,7 @@ class Controlleruser extends Controller
      * @throws Databaseexception            If an error occured with database
      * @throws Runtimeexception             In case of other various problems
      */
-    protected function change(array $datas)
+    protected function update(array $datas): void
     {
         $user = $this->usermanager->get($datas['id']);
         $userupdate = clone $user;
@@ -130,6 +135,35 @@ class Controlleruser extends Controller
                 $userupdate->hashpassword();
             }
             $this->usermanager->update($userupdate);
+        }
+    }
+
+    /**
+     * Create a bookmark that filter pages where the user is an author.
+     * Send a flash message in case of error.
+     *
+     * @param User $user                    The concerned user (need to be already added in database)
+     */
+    protected function addauthorbookmark(User $user): void
+    {
+        try {
+            $bookmarkmanager = new Modelbookmark();
+            $userbookmark = new Bookmark();
+            $uid = $user->id();
+            $userbookmark->init(
+                "$uid-is-author",
+                "?authorfilter[0]=$uid&submit=filter",
+                '👤',
+                "$uid's pages",
+                "Pages where $uid is listed as an author",
+            );
+            $userbookmark->setuser($user->id());
+            $bookmarkmanager->add($userbookmark);
+        } catch (RuntimeException $e) {
+            Model::sendflashmessage(
+                'Could not create personnal user author bookmark: ' . $e->getMessage(),
+                Model::FLASH_ERROR
+            );
         }
     }
 }
