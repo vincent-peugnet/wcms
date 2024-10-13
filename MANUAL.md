@@ -669,6 +669,47 @@ When you need to use images, sound or videos in your pages, or any other type of
 
 The media menu allow you to do more powerfull function like moving medias or delete folders it is only accessible by [super editors](#super-editor) and above.
 
+
+
+
+### Media upload
+
+Editors can upload [multiple files from their computer](#from-computer) or [one file from an URL](#from-url).
+
+#### from computer
+
+You may upload many files from here as long as it does'nt reach your server upload limit, which is displayed in this menu.
+
+This upload method may have two options:
+
+##### clean filenames
+
+If this one is checked, W will remove or convert non-latin, uppercases or space caracters from the filename. It use the same filter as page IDs.
+
+##### optimize images
+
+A second option may be present if your server have `PHP-gd` and/or `PHP-Imagick` installed.
+
+Optimization will reduce image's size on the serer which will aslo fasten the load time when broadcasted in your website.
+
+W try to detect images that need optimization. Image that are considered un-optimized for Web diffusion are images that have **height or width above 1920px** or have a **bit/pixel ratio over 0.5**. Optimization only apply to PNG, JPEG, WEBP and BMP files (which is detected from file's extension).
+
+Optimization take some times as the server will encode a new image. If you have a lot of images, you may convert them on your computer using a dedicated program, or make small groups of ~10 files when uploading through W.
+
+This option is supposed to cover basic Web optimization use cases, which is why it's the default setting. You may want to disable it for complex scenarios.
+
+
+#### from URL
+
+Why should we have to go through our computer when we want to store on W a file that is already on the Web ?
+
+This upload method try to solve this.
+
+Just paste the URL of the file you want to add on your server and W will try to download it. Unfortunately, this is'nt always working. Hosted files may have obscure configurations that prevent this tool to reach them. But you still can download them on your computer and then [upload them from it](#from-computer).
+
+
+
+
 ### Media Filters
 
 Filters and sorting options can be set by choosing wich types of files to show and how to sort them. They can be used to filter and sort a [medialist](#media-list) using the __filter__ tab in the [media menu](#media-menu).

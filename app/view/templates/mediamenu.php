@@ -3,7 +3,12 @@
     <details>
         <summary>File</summary>
             <div class="submenu">
-                <h2>Upload file(s)</h2>
+                <h2>
+                    Upload file(s)
+                    <span class="right">
+                        <a href="<?= $this->url('info', [], '#media-upload') ?>" title="help !" class="help">?</a>
+                    </span>
+                </h2>
                 <h3>
                     <label for="file"><i class="fa fa-upload"></i> Upload from computer</label>
                 </h3>
