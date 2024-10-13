@@ -36,6 +36,7 @@ W try to help you create pages more spontaneously.
 - Flat file database
 - Great website architecture design freedom
 - [url based command interface](MANUAL.md#url-based-command-interface)
+- Images can be optimized for the Web when uploaded by editors
 - 100% functionnal even without javascript
 
 Screenshots
@@ -96,6 +97,7 @@ __Server requirements__
 
 - apache server
 - PHP >=7.4.0 and the following extensions: `curl mbstring xml`
+- optionally: `gd` or `imagick` PHP extensions for image optimizer feature.
 
 __W__ don't need any database manager as it use a "flat file" system.
 
@@ -124,7 +126,7 @@ Prerequisites
 -------------
 
 - PHP >=7.4.0
-- PHP extensions : curl mbstring xml
+- PHP extensions : `curl mbstring xml gd imagick`
 - [Composer](https://getcomposer.org/)
 - _Optionally_ [NPM](https://www.npmjs.com/get-npm)
 
