@@ -1,8 +1,9 @@
 <?php
 
-namespace Wcms;
+namespace Wcms\Exception\Filesystemexception;
 
 use Throwable;
+use Wcms\Exception\Filesystemexception;
 
 /**
  * File not found

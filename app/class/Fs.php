@@ -4,7 +4,12 @@ namespace Wcms;
 
 use DomainException;
 use LogicException;
-use RuntimeException;
+use Wcms\Exception\Filesystemexception;
+use Wcms\Exception\Filesystemexception\Chmodexception;
+use Wcms\Exception\Filesystemexception\Fileexception;
+use Wcms\Exception\Filesystemexception\Folderexception;
+use Wcms\Exception\Filesystemexception\Notfoundexception;
+use Wcms\Exception\Filesystemexception\Unlinkexception;
 
 /**
  * File system related tools. No Wcms specific param should be set here.

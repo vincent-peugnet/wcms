@@ -1,6 +1,8 @@
 <?php
 
-namespace Wcms;
+namespace Wcms\Exception\Filesystemexception;
+
+use Wcms\Exception\Filesystemexception;
 
 class Chmodexception extends Filesystemexception
 {

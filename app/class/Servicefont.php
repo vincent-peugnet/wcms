@@ -2,7 +2,8 @@
 
 namespace Wcms;
 
-use RuntimeException ;
+use RuntimeException;
+use Wcms\Exception\Filesystemexception;
 
 class Servicefont
 {

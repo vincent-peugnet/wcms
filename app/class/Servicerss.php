@@ -12,7 +12,10 @@ use Exception;
 use LogicException;
 use RuntimeException;
 use Wcms\Exception\Database\Notfoundexception;
-use Wcms\Notfoundexception as WcmsNotfoundexception;
+use Wcms\Exception\Filesystemexception;
+use Wcms\Exception\Filesystemexception\Folderexception;
+use Wcms\Exception\Filesystemexception\Notfoundexception as FilesystemexceptionNotfoundexception;
+use Wcms\Exception\Filesystemexception\Unlinkexception;
 
 class Servicerss
 {
@@ -233,7 +236,7 @@ class Servicerss
     {
         try {
             Fs::deletefile(self::atomfile($id));
-        } catch (WcmsNotfoundexception $e) {
+        } catch (FilesystemexceptionNotfoundexception $e) {
             // do nothing, this means file is already deleted
         } catch (Unlinkexception $e) {
             throw new RuntimeException("RSS atom file deletion error", 0, $e);

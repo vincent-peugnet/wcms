@@ -1,6 +1,6 @@
 <?php
 
-use Wcms\Folderexception;
+use Wcms\Exception\Filesystemexception\Folderexception;
 
 function readablesize($bytes, $base = 2 ** 10)
 {

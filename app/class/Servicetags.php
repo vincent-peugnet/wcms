@@ -2,7 +2,9 @@
 
 namespace Wcms;
 
-use Exception;
+use Wcms\Exception\Filesystemexception;
+use Wcms\Exception\Filesystemexception\Fileexception;
+use Wcms\Exception\Filesystemexception\Notfoundexception;
 
 class Servicetags
 {
@@ -16,7 +18,7 @@ class Servicetags
         try {
             $tagfile = Fs::readfile(Model::TAGS_FILE);
         } catch (Notfoundexception $e) {
-            // This mean the tag fille does not exist
+            // This mean the tag file does not exist
             return [];
         }
         $tagdata = json_decode($tagfile, true);

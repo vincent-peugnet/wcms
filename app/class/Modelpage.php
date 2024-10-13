@@ -10,6 +10,8 @@ use DomainException;
 use InvalidArgumentException;
 use RangeException;
 use RuntimeException;
+use Wcms\Exception\Filesystemexception;
+use Wcms\Exception\Filesystemexception\Notfoundexception;
 
 class Modelpage extends Modeldb
 {

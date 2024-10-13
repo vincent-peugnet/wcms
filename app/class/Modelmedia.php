@@ -8,7 +8,9 @@ use InvalidArgumentException;
 use RuntimeException;
 use Imagick;
 use ImagickException;
-use RangeException;
+use Wcms\Exception\Filesystemexception;
+use Wcms\Exception\Filesystemexception\Fileexception;
+use Wcms\Exception\Filesystemexception\Folderexception;
 use Wcms\Exception\Forbiddenexception;
 
 class Modelmedia extends Model

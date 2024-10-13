@@ -5,6 +5,7 @@ namespace Wcms;
 use AltoRouter;
 use Error;
 use RuntimeException;
+use Wcms\Exception\Filesystemexception;
 
 class Controllerapimedia extends Controllerapi
 {

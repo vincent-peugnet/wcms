@@ -5,6 +5,7 @@ namespace Wcms;
 use DateTime;
 use DomainException;
 use RuntimeException;
+use Wcms\Exception\Filesystemexception\Fileexception;
 
 class Media extends Item
 {

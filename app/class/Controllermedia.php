@@ -4,6 +4,7 @@ namespace Wcms;
 
 use AltoRouter;
 use RuntimeException;
+use Wcms\Exception\Filesystemexception\Folderexception;
 use Wcms\Exception\Forbiddenexception;
 
 class Controllermedia extends Controller

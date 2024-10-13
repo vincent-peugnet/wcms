@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use Wcms\Exception\Filesystemexception;
+
 abstract class Config
 {
     protected static $pagetable = 'mystore';
