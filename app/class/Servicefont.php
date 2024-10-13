@@ -21,22 +21,7 @@ class Servicefont
         $this->mediamanager = $mediamanager;
         $mediaopt = new Mediaopt(['path' =>  Model::FONT_DIR, 'type' => [Media::FONT]]);
         $medias = $this->mediamanager->medialistopt($mediaopt);
-        $medias = $this->filterfonts($medias);
         $this->fonts = $this->groupfonts($medias);
-    }
-
-    /**
-     * Remove all non-font Media from a list of Media objects
-     *
-     * @param Media[] $medias               List of Media objects
-     *
-     * @return Media[]                      Filtered list, containting only font files
-     */
-    protected function filterfonts(array $medias): array
-    {
-        return array_filter($medias, function (Media $media) {
-            return $media->type() === Media::FONT;
-        });
     }
 
     /**
