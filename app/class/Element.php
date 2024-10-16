@@ -17,14 +17,14 @@ abstract class Element extends Item
     protected $headerid = '1-6';
     /** @var bool default value is set in Config class */
     protected bool $urllinker;
-    protected int $headeranchor = self::NOHEADERANCHOR;
+    protected int $headeranchor = self::NO_HEADER_ANCHOR;
 
 
-    public const NOHEADERANCHOR = 0;
-    public const HEADERANCHORLINK = 1;
-    public const HEADERANCHORHASH = 2;
-    public const HEADERANCHORMODES = [
-        self::NOHEADERANCHOR, self::HEADERANCHORLINK, self::HEADERANCHORHASH
+    public const NO_HEADER_ANCHOR = 0;
+    public const HEADER_ANCHOR_LINK = 1;
+    public const HEADER_ANCHOR_HASH = 2;
+    public const HEADER_ANCHOR_MODES = [
+        self::NO_HEADER_ANCHOR, self::HEADER_ANCHOR_LINK, self::HEADER_ANCHOR_HASH
     ];
 
     // ______________________________________________ F U N ________________________________________________________
@@ -140,7 +140,7 @@ abstract class Element extends Item
 
     public function setheaderanchor($headeranchor)
     {
-        if (in_array($headeranchor, self::HEADERANCHORMODES)) {
+        if (in_array($headeranchor, self::HEADER_ANCHOR_MODES)) {
             $this->headeranchor = (int) $headeranchor;
         }
     }

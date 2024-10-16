@@ -3,7 +3,7 @@
 namespace Wcms;
 
 use InvalidArgumentException;
-use JamesMoss\Flywheel;
+use JamesMoss\Flywheel\Config;
 use JamesMoss\Flywheel\DocumentInterface;
 use JamesMoss\Flywheel\Document;
 use RuntimeException;
@@ -13,9 +13,9 @@ use Wcms\Flywheel\Repository;
 
 class Modeldb extends Model
 {
-    protected $database;
+    protected Config $database;
     /** @var Repository */
-    protected $repo;
+    protected Repository $repo;
 
     /**
      * Minimal disk space needed to authorize database writing.
@@ -76,14 +76,24 @@ class Modeldb extends Model
         return $this->repo->update($document);
     }
 
-    protected function dbinit($dir = Model::DATABASE_DIR)
+    /**
+     * Init database config
+     *
+     * @param string $dir                   Directory where repo is stored.
+     */
+    protected function dbinit(string $dir = Model::DATABASE_DIR): void
     {
-        $this->database = new Flywheel\Config($dir, [
+        $this->database = new Config($dir, [
             'query_class' => Query::class,
             'formatter' => new JSON(),
         ]);
     }
 
+    /**
+     * Init store.
+     *
+     * @param string $repo                  Name of the repo
+     */
     protected function storeinit(string $repo): void
     {
         try {

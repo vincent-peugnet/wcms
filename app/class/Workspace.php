@@ -23,6 +23,9 @@ class Workspace extends Item
     public const THEME_NONE = 'none';
     public const THEMES = [self::THEME_DEFAULT, self::THEME_MONOKAI, self::THEME_NONE];
 
+    /**
+     * @param mixed[] $datas
+     */
     public function __construct(array $datas)
     {
         $this->hydrate($datas);
@@ -58,22 +61,22 @@ class Workspace extends Item
         return $this->highlighttheme;
     }
 
-    public function setshoweditorleftpanel($show)
+    public function setshoweditorleftpanel(mixed $show): void
     {
         $this->showeditorleftpanel = boolval($show);
     }
 
-    public function setshoweditorrightpanel($show)
+    public function setshoweditorrightpanel(mixed $show): void
     {
         $this->showeditorrightpanel = boolval($show);
     }
 
-    public function setshoweoptionspanel($show)
+    public function setshoweoptionspanel(mixed $show): void
     {
         $this->showeoptionspanel = boolval($show);
     }
 
-    public function setfontsize($fontsize)
+    public function setfontsize(mixed $fontsize): void
     {
         $fontsize = intval($fontsize);
         if ($fontsize >= self::FONTSIZE_MIN && $fontsize <= self::FONTSIZE_MAX) {
@@ -81,14 +84,14 @@ class Workspace extends Item
         }
     }
 
-    public function setmediadisplay($mediadisplay)
+    public function setmediadisplay(string $mediadisplay): void
     {
         if (in_array($mediadisplay, self::MEDIA_DISPLAY)) {
             $this->mediadisplay = $mediadisplay;
         }
     }
 
-    public function sethighlighttheme(string $theme)
+    public function sethighlighttheme(string $theme): void
     {
         if (in_array($theme, self::THEMES)) {
             $this->highlighttheme = $theme;

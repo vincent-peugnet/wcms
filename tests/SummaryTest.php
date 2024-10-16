@@ -18,6 +18,9 @@ class SummaryTest extends TestCase
         $this->assertEquals($expected, $summary->sumparser());
     }
 
+    /**
+     * @return array[]
+     */
     public function sumparserProvider(): array
     {
         return [

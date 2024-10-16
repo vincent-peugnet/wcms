@@ -69,6 +69,9 @@ class Servicerenderv2Test extends TestCase
         $this->renderTest($name);
     }
 
+    /**
+     * @return array[]
+     */
     public function renderProvider(): array
     {
         return [

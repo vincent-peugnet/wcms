@@ -8,9 +8,8 @@ use Wcms\Exception\Filesystemexception;
 
 class Controllerpage extends Controller
 {
-    /** @var Page */
-    protected $page;
-    protected $mediamanager;
+    protected Page $page;
+    protected Modelmedia $mediamanager;
 
     public function __construct($router)
     {
@@ -19,7 +18,7 @@ class Controllerpage extends Controller
         $this->mediamanager = new Modelmedia();
     }
 
-    public function setpage(string $id, string $route)
+    protected function setpage(string $id, string $route): void
     {
         $cleanid = Model::idclean($id);
         if ($cleanid !== $id) {
@@ -38,7 +37,7 @@ class Controllerpage extends Controller
      *
      * @return bool                         If a page is found and stored in `$this->page`
      */
-    public function importpage(): bool
+    protected function importpage(): bool
     {
         try {
             if (isset($_SESSION['pageupdate']['id']) && $_SESSION['pageupdate']['id'] == $this->page->id()) {
@@ -61,7 +60,7 @@ class Controllerpage extends Controller
      * @param string $route direction to redirect after the connection form
      * @return void
      */
-    public function pageconnect(string $route)
+    protected function pageconnect(string $route): void
     {
         if ($this->user->isvisitor()) {
             http_response_code(401);
@@ -70,7 +69,7 @@ class Controllerpage extends Controller
         }
     }
 
-    public function render($page)
+    public function render(string $page): void
     {
         $this->setpage($page, 'pageupdate');
 
@@ -88,7 +87,7 @@ class Controllerpage extends Controller
      *
      * @param string[] $relatedpages        List of page ids
      */
-    public function deletelinktocache(array $relatedpages): void
+    protected function deletelinktocache(array $relatedpages): void
     {
         foreach ($relatedpages as $pageid) {
             try {
@@ -106,7 +105,7 @@ class Controllerpage extends Controller
      *
      * @todo Move this function in Modelpage
      */
-    private function templaterender(Page $page)
+    private function templaterender(Page $page): void
     {
         try {
             $templates = $this->pagemanager->getpagecsstemplates($page);
@@ -135,11 +134,10 @@ class Controllerpage extends Controller
     /**
      * @param string $page page ID
      */
-    public function read($page)
+    public function read(string $page): void
     {
         $this->setpage($page, 'pageread');
         $filedir = Model::HTML_RENDER_DIR . $page . '.html';
-        $reccursiverender = false;
 
         if (!$this->importpage()) {
             http_response_code(404);
@@ -222,7 +220,7 @@ class Controllerpage extends Controller
         $this->pagemanager->update($this->page);
     }
 
-    public function edit($page)
+    public function edit(string $page): void
     {
         $this->setpage($page, 'pageedit');
 
@@ -256,7 +254,10 @@ class Controllerpage extends Controller
         }
     }
 
-    public function log($page)
+    /**
+     * Print page's datas. Used for debug. Kind of obscure nowdays.
+     */
+    public function log($page): void
     {
         if ($this->user->issupereditor()) {
             $this->setpage($page, 'pagelog');
@@ -269,7 +270,7 @@ class Controllerpage extends Controller
         }
     }
 
-    public function add($page)
+    public function add(string $page): void
     {
         $this->setpage($page, 'pageadd');
 
@@ -290,7 +291,7 @@ class Controllerpage extends Controller
         }
     }
 
-    public function addascopy(string $page, string $copy)
+    public function addascopy(string $page, string $copy): void
     {
         $page = Model::idclean($page);
         if ($this->copy($copy, $page)) {
@@ -334,7 +335,7 @@ class Controllerpage extends Controller
     /**
      * Import page and save it into the database
      */
-    public function upload()
+    public function upload(): void
     {
         $page = $this->pagemanager->getfromfile();
 
@@ -366,7 +367,7 @@ class Controllerpage extends Controller
         $this->routedirect('home');
     }
 
-    public function logout(string $page)
+    public function logout(string $page): void
     {
         if (!$this->user->isvisitor()) {
             $this->disconnect();
@@ -376,7 +377,7 @@ class Controllerpage extends Controller
         }
     }
 
-    public function login(string $page)
+    public function login(string $page): void
     {
         if ($this->user->isvisitor()) {
             $this->showtemplate('connect', ['id' => $page, 'route' => 'pageread']);
@@ -385,7 +386,7 @@ class Controllerpage extends Controller
         }
     }
 
-    public function delete($page)
+    public function delete(string $page): void
     {
         $this->setpage($page, 'pagecdelete');
         if ($this->importpage() && $this->candelete($this->page)) {
@@ -402,7 +403,7 @@ class Controllerpage extends Controller
         }
     }
 
-    public function confirmdelete($page)
+    public function confirmdelete(string $page): void
     {
         $this->setpage($page, 'pageconfirmdelete');
         if ($this->user->iseditor() && $this->importpage()) {
@@ -414,7 +415,7 @@ class Controllerpage extends Controller
         }
     }
 
-    public function duplicate(string $page, string $duplicate)
+    public function duplicate(string $page, string $duplicate): void
     {
         $duplicate = Model::idclean($duplicate);
         if ($this->copy($page, $duplicate)) {
@@ -430,7 +431,7 @@ class Controllerpage extends Controller
      * @param string $srcid Source page ID
      * @param string $targetid Target page ID
      */
-    public function copy(string $srcid, string $targetid)
+    protected function copy(string $srcid, string $targetid): bool
     {
         if ($this->user->iseditor()) {
             try {
@@ -451,7 +452,7 @@ class Controllerpage extends Controller
         return false;
     }
 
-    public function update($page)
+    public function update(string $page): void
     {
         $this->setpage($page, 'pageupdate');
 
@@ -483,19 +484,12 @@ class Controllerpage extends Controller
     }
 
     /**
-     * Temporary redirection to a page.
-     * Send a `302` HTTP code.
-     */
-    public function pagedirect($page): void
-    {
-        $this->routedirect('pageread', ['page' => Model::idclean($page)]);
-    }
-
-    /**
      * Permanent redirection to a page.
      * Send a `301` HTTP code.
+     *
+     * Used only with Route `pageread/` redirecting to `pageread`
      */
-    public function pagepermanentredirect($page): void
+    public function pagepermanentredirect(string $page): void
     {
         $path = $this->generate('pageread', ['page' => Model::idclean($page)]);
         header("Location: $path", true, 301);
@@ -506,7 +500,7 @@ class Controllerpage extends Controller
      *
      * @todo use a dedicated view and suggest a list of W URL based command.
      */
-    public function commandnotfound($page, $command): void
+    public function commandnotfound(string $page, string $command): void
     {
         http_response_code(404);
         $this->showtemplate('alertcommandnotfound', ['command' => $command, 'id' => strip_tags($page)]);

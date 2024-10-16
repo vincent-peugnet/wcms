@@ -14,7 +14,7 @@ class Modelconnect extends Model
      * @param int $conservation
      * @throws RuntimeException if secret key is not set or cant send cookie
      */
-    public function createauthcookie(string $userid, string $wsession, int $conservation)
+    public function createauthcookie(string $userid, string $wsession, int $conservation): void
     {
         $datas = [
             "userid" => $userid,
@@ -40,7 +40,7 @@ class Modelconnect extends Model
 
     /**
      * Get decoded cookie using JWT
-     * @return array                        Associative array containing JWT token's datas
+     * @return string[]                     Associative array containing JWT token's datas
      * @throws RuntimeException             If JWT token decode failed or auth cookie is unset
      */
     public function checkcookie(): array

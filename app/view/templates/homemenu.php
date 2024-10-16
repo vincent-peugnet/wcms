@@ -433,7 +433,7 @@
                         <label for="col_id">id</label>
                     </li>
                 <?php
-                foreach (Wcms\User::COLUMNS as $col) {
+                foreach (Wcms\User::HOME_COLUMNS as $col) {
                     $name = Wcms\Model::METADATAS_NAMES[$col];
                     ?>
                     <li>

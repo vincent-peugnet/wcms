@@ -17,7 +17,7 @@ class Font
     protected ?string $weight = null;
     protected ?string $stretch = null;
 
-    /** @var Media[] $media */
+    /** @var Media[] $medias */
     protected array $medias;
 
     public const STYLE = "style";

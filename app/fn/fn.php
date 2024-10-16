@@ -2,7 +2,7 @@
 
 use Wcms\Exception\Filesystemexception\Folderexception;
 
-function readablesize($bytes, $base = 2 ** 10)
+function readablesize(float $bytes, int $base = 2 ** 10): string
 {
     $format = '%d&nbsp;%s';
 
@@ -30,11 +30,13 @@ function readablesize($bytes, $base = 2 ** 10)
     return sprintf($format, $num, $unit);
 }
 
-/* human readable date interval
- * @param DateInterval $diff - l'interval de temps
+/**
+ * Human readable date interval
+ *
+ * @param DateInterval $diff
  * @return string
  */
-function hrdi(DateInterval $diff)
+function hrdi(DateInterval $diff): string
 {
     $str = "";
     if ($diff->y > 1) {
@@ -70,22 +72,10 @@ function hrdi(DateInterval $diff)
     return $str . ' a few secondes';
 }
 
-
-
-function arrayclean($input)
-{
-    $output = [];
-    foreach ($input as $key => $value) {
-        if (is_array($value)) {
-            $output[$key] = array_filter($value);
-        } else {
-            $output[$key] = $value;
-        }
-    }
-    return $output;
-}
-
-function isreportingerrors()
+/**
+ * Check if Sentry service is enabled
+ */
+function isreportingerrors(): bool
 {
     return function_exists('Sentry\init') && !empty(Wcms\Config::sentrydsn());
 }
@@ -105,58 +95,12 @@ function getversion(): string
     return $version;
 }
 
-
-
-function array_update($base, $new)
-{
-    foreach ($base as $key => $value) {
-        if (array_key_exists($key, $new)) {
-            if (gettype($base[$key]) == gettype($new[$key])) {
-                $base[$key] = $new[$key];
-            }
-        }
-    }
-    return $base;
-}
-
-function contains($needle, $haystack)
-{
-    return strpos($haystack, $needle) !== false;
-}
-
-
-function str_clean(string $string)
-{
-    return str_replace(' ', '_', strtolower(strip_tags($string)));
-}
-
-
-
-
-function changekey($array, $oldkey, $newkey)
-{
-    if (!array_key_exists($oldkey, $array)) {
-        return $array;
-    }
-
-    $keys = array_keys($array);
-    $keys[array_search($oldkey, $keys)] = $newkey;
-
-    return array_combine($keys, $array);
-}
-
-function findsize($file)
-{
-    if (mb_substr(PHP_OS, 0, 3) == "WIN") {
-        exec('for %I in ("' . $file . '") do @echo %~zI', $output);
-        $return = $output[0];
-    } else {
-        $return = filesize($file);
-    }
-    return $return;
-}
-
-function array_diff_assoc_recursive($array1, $array2)
+/**
+ * @param mixed[] $array1
+ * @param mixed[] $array2
+ * @return mixed[]
+ */
+function array_diff_assoc_recursive(array $array1, array $array2): array
 {
     $difference = array();
     foreach ($array1 as $key => $value) {
@@ -179,9 +123,11 @@ function array_diff_assoc_recursive($array1, $array2)
 
 
 /**
- * Generate a clickable folder tree based on reccurive array
+ * Print a clickable folder tree based on reccurive array
+ *
+ * @param mixed[] $dirlist
  */
-function basictree(array $dirlist, string $dirname, int $deepness, string $path, string $currentdir)
+function basictree(array $dirlist, string $dirname, int $deepness, string $path, string $currentdir): void
 {
 
     if ($path === $currentdir) {
@@ -211,7 +157,13 @@ function basictree(array $dirlist, string $dirname, int $deepness, string $path,
     }
 }
 
-function checkboxes(string $name, array $optionlist = [], array $checkedlist = [])
+/**
+ * Generate a HTML list of checkboxes that have the same name and use array storing
+ *
+ * @param string[] $optionlist              checkbox values
+ * @param string[] $checkedlist             checkboxes that are checked
+ */
+function checkboxes(string $name, array $optionlist = [], array $checkedlist = []): string
 {
     $checkboxes = '';
     foreach ($optionlist as $option) {
@@ -228,11 +180,11 @@ function checkboxes(string $name, array $optionlist = [], array $checkedlist = [
 /**
  * Generate a list of <options> html drop down list
  *
- * @param array $options as `value => title`
- * @param string|int $selected value of actualy selected option
- * @param bool $simple Use title as value. Default : false
+ * @param string[] $options                 as `value => title`
+ * @param string|int $selected              value of currently selected option
+ * @param bool $simple                      Use title as value. Default : `false`
  *
- * @return string HTML list of options
+ * @return string                           HTML list of options
  */
 function options(array $options, $selected = null, $simple = false): string
 {
@@ -263,7 +215,7 @@ function secrethash(string $token): string
 
 // Returns a file size limit in bytes based on the PHP upload_max_filesize
 // and post_max_size
-function file_upload_max_size()
+function file_upload_max_size(): float
 {
     static $max_size = -1;
 
@@ -284,7 +236,7 @@ function file_upload_max_size()
     return $max_size;
 }
 
-function parse_size($size)
+function parse_size(string $size): float
 {
     $unit = preg_replace('/[^bkmgtpezy]/i', '', $size); // Remove the non-unit characters from the size.
     $size = preg_replace('/[^0-9\.]/', '', $size); // Remove the non-numeric characters from the size.
@@ -317,9 +269,10 @@ function randombytes(int $seed): string
 
 /**
  * @param string $url
+ * @return string output data
+ *
  * @throws ErrorException if Curl is not installed
  * @throws RuntimeException if curl_exec fail
- * @return string output data
  */
 function curl_download(string $url): string
 {

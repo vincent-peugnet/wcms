@@ -531,11 +531,11 @@ abstract class Servicerender
                 }
                 $this->sum[$element][] = new Header($id, intval($level), $content);
                 switch ($anchormode) {
-                    case Element::HEADERANCHORLINK:
+                    case Element::HEADER_ANCHOR_LINK:
                         $content = "<a href=\"#$id\">$content</a>";
                         break;
 
-                    case Element::HEADERANCHORHASH:
+                    case Element::HEADER_ANCHOR_HASH:
                         $content .= "<span class=\"nbsp\">&nbsp;</span><a class=\"headerlink\" href=\"#$id\">#</a>";
                         break;
                 }

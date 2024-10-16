@@ -17,12 +17,12 @@ class Modelhome extends Model
     /**
      * Transform list of page into list of nodes and edges
      *
-     * @param array $pagelist associative array of pages as `id => Page`
+     * @param Page[] $pagelist associative array of pages as `id => Page`
      * @param string $layout
      * @param bool $showorphans if `false`, remove orphans pages
      * @param bool $showredirection if `true`, add redirections
      *
-     * @return array
+     * @return array[]
      */
     public function cytodata(
         array $pagelist,
@@ -100,11 +100,11 @@ class Modelhome extends Model
     /**
      * Transform list of Pages into cytoscape nodes and edge datas
      *
-     * @param array $pagelist associative array of pages as `id => Page`
+     * @param Page[] $pagelist associative array of pages as `id => Page`
      * @param bool $showorphans if `false`, remove orphans pages
      * @param bool $showredirection if `true`, add redirections
      *
-     * @return array of cytoscape datas
+     * @return array[] of cytoscape datas
      */
     public function mapdata(array $pagelist, bool $showorphans = true, bool $showredirection = false): array
     {

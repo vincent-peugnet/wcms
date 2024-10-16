@@ -128,7 +128,7 @@ class Modelbookmark extends Modeldb
      * @throws Databaseexception            When ID is invalid, already exist or creation failed
      * @throws Notfoundexception            If personnal bookmark User does not exist
      */
-    public function add(Bookmark $bookmark)
+    public function add(Bookmark $bookmark): void
     {
         if (empty($bookmark->id())) {
             $id = $bookmark->id();

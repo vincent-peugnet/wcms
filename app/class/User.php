@@ -8,17 +8,17 @@ use RuntimeException;
 
 class User extends Item
 {
-    protected $id = '';
-    protected $level = 0;
-    protected $signature = '';
-    protected $password;
-    protected $passwordhashed = false;
+    protected string $id = '';
+    protected int $level = 0;
+    protected string $signature = '';
+    protected ?string $password;
+    protected bool $passwordhashed = false;
 
     /** @var string $name Displayed name */
-    protected string $name = "";
+    protected string $name = '';
 
     /** @var string $url Account associated URL */
-    protected string $url = "";
+    protected string $url = '';
 
     /** @var int $cookie Conservation time */
     protected int $cookie = 30;
@@ -29,15 +29,16 @@ class User extends Item
     /** @var int $connectcount Connections counter */
     protected int $connectcount = 0;
 
-    protected $expiredate = false;
+    /** @var DateTimeImmutable|false $expiredate */
+    protected mixed $expiredate = false;
 
-    /** @var array sessions */
+    /** @var string[] sessions */
     protected array $sessions = [];
 
     /** @var bool[] $display interface display options */
     protected array $display = ['bookmark' => false];
 
-    public const COLUMNS = [
+    public const HOME_COLUMNS = [
         'favicon',
         'download',
         'tag',
@@ -59,9 +60,7 @@ class User extends Item
 
     public function __construct($datas = [])
     {
-        if (!empty($datas)) {
-            $this->hydrate($datas);
-        }
+        $this->hydrate($datas);
     }
 
     // _________________________ G E T _______________________
@@ -234,7 +233,7 @@ class User extends Item
     public function setcolumns($columns)
     {
         if (is_array($columns)) {
-            $columns = array_filter(array_intersect(array_unique($columns), self::COLUMNS));
+            $columns = array_filter(array_intersect(array_unique($columns), self::HOME_COLUMNS));
             $this->columns = $columns;
         }
     }
@@ -364,7 +363,7 @@ class User extends Item
      */
     public function checkedcolumns(): array
     {
-        foreach (self::COLUMNS as $col) {
+        foreach (self::HOME_COLUMNS as $col) {
             $checkedcolumns[$col] = in_array($col, $this->columns);
         }
         return $checkedcolumns;
