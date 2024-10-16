@@ -42,6 +42,9 @@ abstract class Page extends Item
     protected $password;
     protected $postprocessaction;
 
+    /** @var array<string, ?bool> $urls */
+    protected array $urls = [];
+
     protected int $version;
 
     public const LATITUDE_MIN = -90;
@@ -119,6 +122,7 @@ abstract class Page extends Item
         $this->setredirection('');
         $this->setrefresh(0);
         $this->setpassword('');
+        $this->urls = [];
         $this->postprocessaction = false;
     }
 
@@ -372,6 +376,11 @@ abstract class Page extends Item
     public function postprocessaction($type = 'int'): bool
     {
         return $this->postprocessaction;
+    }
+
+    public function urls($type = 'array'): array
+    {
+        return $this->urls;
     }
 
     public function version($type = 'int'): int
@@ -715,6 +724,13 @@ abstract class Page extends Item
         $this->postprocessaction = boolval($postprocessaction);
     }
 
+    public function seturls($urls): void
+    {
+        if (is_array($urls)) {
+            $this->urls = $urls;
+        }
+    }
+
 
     // __________________________________ C O U N T E R S ______________________________
 
@@ -778,6 +794,14 @@ abstract class Page extends Item
             $tag = array_filter($tag);
             $this->tag = array_unique(array_merge($this->tag, $tag));
         }
+    }
+
+    public function deadlinkcount(): int
+    {
+        $deadurls = array_filter($this->urls, function ($ok): bool {
+            return !$ok;
+        });
+        return count($deadurls);
     }
 
 

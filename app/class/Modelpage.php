@@ -458,6 +458,7 @@ class Modelpage extends Modeldb
         }
 
         $html = $renderengine->render($page, true);
+
         Fs::dircheck(Model::ASSETS_RENDER_DIR, true, 0775);
         Fs::dircheck(Model::HTML_RENDER_DIR, true, 0775);
         Fs::writefile(Model::HTML_RENDER_DIR . $page->id() . '.html', $html);
@@ -466,6 +467,7 @@ class Modelpage extends Modeldb
 
         $page->setdaterender($now);
         $page->setlinkto($renderengine->linkto());
+        $page->seturls($renderengine->urls());
         $page->setpostprocessaction($renderengine->postprocessaction());
 
         return $page;
