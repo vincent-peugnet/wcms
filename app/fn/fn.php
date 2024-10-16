@@ -1,6 +1,7 @@
 <?php
 
 use Wcms\Exception\Filesystemexception\Folderexception;
+use Wcms\Exception\Missingextensionexception;
 
 function readablesize(float $bytes, int $base = 2 ** 10): string
 {
@@ -271,12 +272,13 @@ function randombytes(int $seed): string
  * @param string $url
  * @return string output data
  *
- * @throws RuntimeException if curl_exec fail or Curl extension is not installed
+ * @throws Missingextensionexception if PHP Curl extension is not installed
+ * @throws RuntimeException if curl_exec fail
  */
 function curl_download(string $url): string
 {
     if (!extension_loaded('curl')) {
-        throw new RuntimeException("Curl extension is not installed");
+        throw new Missingextensionexception("PHP Curl extension is not installed");
     }
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);

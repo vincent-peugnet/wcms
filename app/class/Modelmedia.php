@@ -12,6 +12,7 @@ use Wcms\Exception\Filesystemexception;
 use Wcms\Exception\Filesystemexception\Fileexception;
 use Wcms\Exception\Filesystemexception\Folderexception;
 use Wcms\Exception\Forbiddenexception;
+use Wcms\Exception\Missingextensionexception;
 
 class Modelmedia extends Model
 {
@@ -456,7 +457,7 @@ class Modelmedia extends Model
      *
      * @return Media                        Converted Media object
      *
-     * @throws RuntimeException             If nor imagick or is installed
+     * @throws Missingextensionexception    If nor imagick or is installed
      * @throws ImagickException             If an error occured during IM process
      * @throws Filesystemexception          If deleting the original media failed, or if file creation failed.
      */
@@ -516,7 +517,7 @@ class Modelmedia extends Model
             }
             $conversionsuccess = imagewebp($image, $convertmediapath, $this::OPTIMIZE_IMG_QUALITY);
         } else {
-            throw new RuntimeException('Nor Imagick or gd PHP extension is not installed');
+            throw new Missingextensionexception('Nor imagick or gd PHP extension is installed');
         }
 
         if ($conversionsuccess && $deleteoriginal && $convertmediapath !== $media->getlocalpath()) {
