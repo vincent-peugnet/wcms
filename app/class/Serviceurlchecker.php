@@ -9,8 +9,14 @@ use Wcms\Exception\Filesystemexception;
  */
 class Serviceurlchecker
 {
-    /** @var int[] $urls */
+    /** @var array[] $urls */
     protected array $urls = [];
+
+    /** @var int MAX_BOUNCE limit of redirections to follow */
+    public const MAX_BOUNCE = 8;
+
+    /** @var int CACHE_EXPIRE_TIME in days */
+    public const CACHE_EXPIRE_TIME = 30;
 
     public function __construct()
     {
@@ -27,10 +33,11 @@ class Serviceurlchecker
      */
     public function is200(string $url): bool
     {
-        if (!key_exists($url, $this->urls)) {
-            $this->urls[$url] = $this->getresponse($url);
+        if (!$this->iscached($url)) {
+            $this->urls[$url]['response'] = $this->getresponse($url);
+            $this->urls[$url]['timestamp'] = time();
         }
-        return $this->urls[$url] === 200;
+        return $this->urls[$url]['response'] === 200;
     }
 
     /**
@@ -44,7 +51,7 @@ class Serviceurlchecker
         if ($headers === false) {
             return 0;
         }
-        for ($i = 0; $i < 8; $i++) {
+        for ($i = 0; $i < self::MAX_BOUNCE; $i++) {
             if (!isset($headers[$i])) {
                 $id = $i - 1;
                 $http = $headers[$id];
@@ -52,6 +59,14 @@ class Serviceurlchecker
             }
         }
         return 0;
+    }
+
+    protected function iscached(string $url): bool
+    {
+        if (!key_exists($url, $this->urls)) {
+            return false;
+        }
+        return !($this->urls[$url]['timestamp'] < (time() - self::CACHE_EXPIRE_TIME * 3600 * 24));
     }
 
     /**
