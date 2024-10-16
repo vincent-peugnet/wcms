@@ -170,7 +170,6 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
                 <?php if ($user->issupereditor()) { ?>
                 <details>
                     <summary>
-                            <span><?= $media->filename() ?></span>
                             <i class="fa fa-pencil"></i>
                     </summary>
                     <form action="<?= $this->url('mediarename') ?>" method="post">
@@ -181,6 +180,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
                         <input type="submit" value="rename">
                     </form>
                 </details>
+                <label for="media_<?= $media->filename() ?>"><?= $media->filename() ?></label>
                 <?php } else { ?>
                     <span><?= $media->filename() ?></span>
                 <?php } ?>

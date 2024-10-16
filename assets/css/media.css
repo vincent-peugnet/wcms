@@ -18,23 +18,13 @@ table#medialist .thumbnail:hover .lightbox {
     display: block;
 }
 
-table#medialist details > summary {
-    list-style: none;
-}
-
-table#medialist details i {
-    visibility: hidden;
-}
-
-table#medialist details:hover i {
-    visibility: visible;
-}
-
-table#medialist td.filename span {
+table#medialist td.filename label {
     font-family: monospace;
     white-space: pre;
     font-size: 14px;
+    width: 100%;
 }
+
 
 table code.select-all {
     max-width: 254px;
@@ -93,6 +83,46 @@ nav a {
 nav tr.selected a, nav tr.selected td {
     background-color: var(--outline-background-color);
     color: var(--outline-color);
+}
+
+/* Renamming feature */
+
+table#medialist td.filename {
+    position: relative;
+}
+
+table#medialist td.filename label {
+     margin-right: 15px;
+}
+
+table#medialist td.filename details summary {
+    visibility: hidden;
+    display: inline;
+    position: absolute;
+    right: 0;
+}
+
+table#medialist td.filename:hover details summary {
+    visibility: visible;
+}
+
+table#medialist td.filename details[open] {
+    display: flex;
+    position: relative;
+}
+
+table#medialist td.filename details[open] ~ label {
+    display: none;
+}
+
+table#medialist td.filename details[open] form{
+    display: flex;
+     margin-right: 15px;
+}
+
+table#medialist td.filename details[open] summary {
+    visibility: visible;
+    order: 3;
 }
 
 
