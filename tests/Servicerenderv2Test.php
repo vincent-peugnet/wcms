@@ -45,7 +45,7 @@ class Servicerenderv2Test extends TestCase
     {
         $pagedata = json_decode(file_get_contents(__DIR__ . "/data/Servicerenderv2Test/$name.json"), true);
         $page = new Pagev2($pagedata);
-        $html = $this->renderengine->render($page);
+        $html = $this->renderengine->render($page, false);
 
         $expected = __DIR__ . "/data/Servicerenderv2Test/$name.html";
         $actual = self::$tmpdir . "/$name.html";

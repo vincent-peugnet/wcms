@@ -17,12 +17,12 @@ class Servicerenderv2 extends Servicerender
      *
      * @return string                       HTML render of the page
      */
-    public function render(Page $page): string
+    public function render(Page $page, bool $checkurl): string
     {
         if (!$page instanceof Pagev2) {
             throw new DomainException('Page should be only Pagev2');
         }
-        return parent::render($page);
+        return parent::render($page, $checkurl);
     }
 
     public function renderprimary(Page $page): string

@@ -23,6 +23,8 @@ abstract class Servicerender
     /** @var Modelpage */
     protected Modelpage $pagemanager;
 
+    protected ?Serviceurlchecker $urlchecker = null;
+
     protected Page $page;
 
     /** @var string[] */
@@ -71,11 +73,23 @@ abstract class Servicerender
      *
      * @return string                       HTML render of the page
      */
-    public function render(Page $page): string
+    public function render(Page $page, bool $checkurl): string
     {
         $this->page = $page;
 
-        return $this->gethmtl();
+        $this->urlchecker = $checkurl ? new Serviceurlchecker() : null;
+
+        $html = $this->gethmtl();
+
+        if ($checkurl) {
+            try {
+                $this->urlchecker->savecache();
+            } catch (RuntimeException $e) {
+                Logger::errorex($e);
+            }
+        }
+
+        return $html;
     }
 
     /**
@@ -374,6 +388,11 @@ abstract class Servicerender
                 $classes[] = 'external';
                 if (!$link->hasAttribute('target') && $this->externallinkblank) {
                     $link->setAttribute('target', '_blank');
+                }
+                if ($this->urlchecker !== null) {
+                    $url = filter_var($href, FILTER_SANITIZE_URL);
+                    $ok = $this->urlchecker->is200($url);
+                    $classes[] = $ok ? 'alive' : 'dead';
                 }
             } elseif (preg_match('~^([a-z0-9-_]+)((\/?#[a-z0-9-_]+)|(\/([\w\-\%\[\]\=\?\&]*)))?$~', $href, $out)) {
                 $classes[] = 'internal';

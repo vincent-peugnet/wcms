@@ -11,6 +11,7 @@ abstract class Model
     public const ASSETS_ATOM_DIR = 'assets/atom/';
     public const COLORS_FILE = self::ASSETS_CSS_DIR . 'tagcolors.css';
     public const TAGS_FILE = self::DATABASE_DIR . 'tags.json';
+    public const URLS_FILE = self::DATABASE_DIR . 'urls.json';
     public const THEME_DIR = self::ASSETS_CSS_DIR . 'theme/';
     public const JS_DIR = 'assets/js/';
     public const ICONS_DIR = 'assets/icons/';
