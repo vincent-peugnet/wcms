@@ -30,6 +30,9 @@ abstract class Servicerender
     /** @var string[] */
     protected $linkto = [];
 
+    /** @var array<string, ?bool> $urls */
+    protected $urls = [];
+
     protected $sum = [];
 
     /** @var bool If true, internal links target a new tab */
@@ -400,10 +403,12 @@ abstract class Servicerender
                 if (!$link->hasAttribute('target') && $this->externallinkblank) {
                     $link->setAttribute('target', '_blank');
                 }
+                $url = filter_var($href, FILTER_SANITIZE_URL);
+                $this->urls[$url] = null;
                 if ($this->urlchecker !== null) {
-                    $url = filter_var($href, FILTER_SANITIZE_URL);
                     $ok = $this->urlchecker->is200($url);
-                    $classes[] = $ok ? 'alive' : 'dead';
+                    $classes[] = $ok ? 'ok' : 'dead';
+                    $this->urls[$url] = $ok;
                 }
             } elseif (preg_match('~^([a-z0-9-_]+)((\/?#[a-z0-9-_]+)|(\/([\w\-\%\[\]\=\?\&]*)))?$~', $href, $out)) {
                 $classes[] = 'internal';
@@ -1013,6 +1018,14 @@ abstract class Servicerender
         }
         $this->linkto = [];
         return $linkto;
+    }
+
+    /**
+     * @return array<string, ?bool>
+     */
+    public function urls(): array
+    {
+        return $this->urls;
     }
 
     public function postprocessaction(): bool
