@@ -5,9 +5,9 @@ window.addEventListener('load', () => {
     activateCloseSubmenus();
 });
 
-
-// drag and drop trigger regular file input
-
+/**
+ * Drag and drop files anywhere to fill regular file input
+ */
 const fileInput = document.getElementById('file');
 const fileMenu = fileInput.closest('details');
 
