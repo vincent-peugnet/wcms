@@ -457,7 +457,7 @@ class Modelpage extends Modeldb
                 throw new DomainException('Page version is out of range');
         }
 
-        $html = $renderengine->render($page);
+        $html = $renderengine->render($page, true);
         Fs::dircheck(Model::ASSETS_RENDER_DIR, true, 0775);
         Fs::dircheck(Model::HTML_RENDER_DIR, true, 0775);
         Fs::writefile(Model::HTML_RENDER_DIR . $page->id() . '.html', $html);
