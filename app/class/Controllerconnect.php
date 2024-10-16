@@ -52,19 +52,19 @@ class Controllerconnect extends Controller
                 $this->user = $this->usermanager->get($userid); // May throw DatabaseException
                 if (!$this->usermanager->passwordcheck($this->user, $_POST['pass'])) {
                     $userid = $this->user->id();
-                    Model::sendflashmessage("Wrong credentials", Model::FLASH_ERROR);
+                    $this->sendflashmessage("Wrong credentials", self::FLASH_ERROR);
                     Logger::error("wrong credential for user : '$userid' when attempting to loggin");
                 } elseif (
                     $this->user->expiredate() !== false &&
                     $this->user->expiredate('date') < $this->now &&
                     $this->user->level() < 10
                 ) {
-                    Model::sendflashmessage("Account expired", Model::FLASH_ERROR);
+                    $this->sendflashmessage("Account expired", self::FLASH_ERROR);
                 } else {
                     $this->user->connectcounter();
                     $this->usermanager->add($this->user);
                     $this->servicesession->setuser($this->user->id());
-                    Model::sendflashmessage("Successfully logged in as " . $this->user->id(), Model::FLASH_SUCCESS);
+                    $this->sendflashmessage("Successfully logged in as " . $this->user->id(), self::FLASH_SUCCESS);
 
                     if (!empty($_POST['rememberme'])) {
                         if ($this->user->cookie() > 0) {
@@ -79,16 +79,16 @@ class Controllerconnect extends Controller
                             $this->servicesession->setwsessionid($wsessionid);
                         } else {
                             $message = "Can't remember you beccause user cookie conservation time is set to 0 days";
-                            Model::sendflashmessage($message, Model::FLASH_WARNING);
+                            $this->sendflashmessage($message, self::FLASH_WARNING);
                         }
                     }
                 }
             } catch (Notfoundexception $e) {
-                Model::sendflashmessage("Wrong credentials", Model::FLASH_ERROR);
+                $this->sendflashmessage("Wrong credentials", self::FLASH_ERROR);
                 Logger::errorex($e);
             } catch (RuntimeException $e) {
                 $message = "Can't create authentification cookie : $e";
-                Model::sendflashmessage($message, Model::FLASH_WARNING);
+                $this->sendflashmessage($message, self::FLASH_WARNING);
                 Logger::error($message);
             }
         }

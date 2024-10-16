@@ -59,9 +59,9 @@ class Controlleradmin extends Controller
             Fs::writefile(Model::GLOBAL_CSS_FILE, $_POST['globalcss'], 0664);
             Config::hydrate($_POST);
             Config::savejson();
-            Model::sendflashmessage("Configuration succesfully updated", Model::FLASH_SUCCESS);
+            $this->sendflashmessage("Configuration succesfully updated", self::FLASH_SUCCESS);
         } catch (Filesystemexception $e) {
-            Model::sendflashmessage("Can't write config file or global css file", Model::FLASH_ERROR);
+            $this->sendflashmessage("Can't write config file or global css file", self::FLASH_ERROR);
         }
         $this->routedirect('admin');
     }
@@ -82,9 +82,9 @@ class Controlleradmin extends Controller
                             $this->pagemanager->flushrendercache();
                             Config::savejson();
                         } catch (RuntimeException $e) {
-                            Model::sendflashmessage(
+                            $this->sendflashmessage(
                                 'Cannot update Config file : ' . $e->getMessage(),
-                                Model::FLASH_ERROR
+                                self::FLASH_ERROR
                             );
                         }
                     }

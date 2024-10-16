@@ -35,18 +35,6 @@ abstract class Model
         'card' => 'card'
     ];
 
-    public const FLASH_MESSAGE_TYPES = [
-        self::FLASH_INFO    => 1,
-        self::FLASH_WARNING => 2,
-        self::FLASH_SUCCESS => 3,
-        self::FLASH_ERROR   => 4,
-    ];
-
-    public const FLASH_INFO     = 'info';
-    public const FLASH_WARNING  = 'warning';
-    public const FLASH_SUCCESS  = 'success';
-    public const FLASH_ERROR    = 'error';
-
     public const METADATAS_NAMES = [
         'favicon' => 'favicon',
         'id' => 'id',
@@ -133,40 +121,6 @@ abstract class Model
     public static function iconpath()
     {
         return self::dirtopath(Model::ICONS_DIR);
-    }
-
-    /**
-     * Read then empty session to get flash messages
-     *
-     * @return array ordered array containing array with content and type as keys or empty array
-     */
-    public static function getflashmessages(): array
-    {
-        if (!empty($_SESSION['flashmessages'])) {
-            $flashmessage = $_SESSION['flashmessages'];
-            $_SESSION['flashmessages'] = [];
-            if (is_array($flashmessage)) {
-                return $flashmessage;
-            } else {
-                return [];
-            }
-        } else {
-            return [];
-        }
-    }
-
-    /**
-     * Add a message to flash message list
-     *
-     * @param string $content The message content
-     * @param string $type Message Type, can be `info|warning|success|error`
-     */
-    public static function sendflashmessage(string $content, string $type = self::FLASH_INFO): void
-    {
-        if (!key_exists($type, self::FLASH_MESSAGE_TYPES)) {
-            $type = self::FLASH_INFO;
-        }
-        $_SESSION['flashmessages'][] = ['content' => $content, 'type' => $type];
     }
 
 

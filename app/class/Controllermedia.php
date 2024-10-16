@@ -43,7 +43,7 @@ class Controllermedia extends Controller
             Fs::dircheck(Model::FAVICON_DIR, true, 0775);
             Fs::dircheck(Model::CSS_DIR, true, 0775);
         } catch (RuntimeException $e) {
-            Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+            $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);
         }
         if (isset($_POST['query'])) {
             $datas = array_merge($_GET, $_POST);
@@ -80,7 +80,7 @@ class Controllermedia extends Controller
             $this->showtemplate('media', $vars);
         } catch (Folderexception $e) {
             // TODO: instead of redirecting show an error template
-            Model::sendflashmessage($e->getMessage(), Model::FLASH_WARNING);
+            $this->sendflashmessage($e->getMessage(), self::FLASH_WARNING);
             $this->mediaopt->setpath(Model::MEDIA_DIR);
             $this->redirect($this->generate('media', [], $this->mediaopt->getpathaddress()));
         }
@@ -99,13 +99,13 @@ class Controllermedia extends Controller
                         boolval($_POST['idclean']),
                         boolval($_POST['convertimages'])
                     );
-                    Model::sendflashmessage("$count file(s) has been uploaded successfully", Model::FLASH_SUCCESS);
+                    $this->sendflashmessage("$count file(s) has been uploaded successfully", self::FLASH_SUCCESS);
                     if ($target === Model::FONT_DIR) {
                         $fontfacer = new Servicefont($this->mediamanager);
                         $fontfacer->writecss();
                     }
                 } catch (RuntimeException $e) {
-                    Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+                    $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);
                 }
             }
             $this->redirect($this->generate('media') . $_POST['route']);
@@ -123,7 +123,7 @@ class Controllermedia extends Controller
                 try {
                     $this->mediamanager->urlupload($_POST['url'], $target);
                 } catch (RuntimeException $e) {
-                    Model::sendflashmessage('Error while uploading : ' . $e->getMessage(), Model::FLASH_ERROR);
+                    $this->sendflashmessage('Error while uploading : ' . $e->getMessage(), self::FLASH_ERROR);
                 }
             }
             $this->redirect($this->generate('media') . $_POST['route']);
@@ -156,12 +156,12 @@ class Controllermedia extends Controller
             if (isset($_POST['deletefolder']) && intval($_POST['deletefolder']) && isset($_POST['dir'])) {
                 try {
                     if ($this->mediamanager->deletedir($_POST['dir'])) {
-                        Model::sendflashmessage('Deletion successfull', Model::FLASH_SUCCESS);
+                        $this->sendflashmessage('Deletion successfull', self::FLASH_SUCCESS);
                     } else {
-                        Model::sendflashmessage('Deletion failed', Model::FLASH_ERROR);
+                        $this->sendflashmessage('Deletion failed', self::FLASH_ERROR);
                     }
                 } catch (Forbiddenexception $e) {
-                    Model::sendflashmessage('Deletion failed: ' . $e->getMessage(), Model::FLASH_ERROR);
+                    $this->sendflashmessage('Deletion failed: ' . $e->getMessage(), self::FLASH_ERROR);
                 }
             }
             $this->redirect($this->generate('media') . $_POST['route']);
@@ -176,18 +176,18 @@ class Controllermedia extends Controller
         if ($this->user->issupereditor() && isset($_POST['action']) && isset($_POST['id'])) {
             if ($_POST['action'] == 'delete') {
                 if ($counter = $this->mediamanager->multifiledelete($_POST['id'])) {
-                    Model::sendflashmessage("$counter files deletion successfull", Model::FLASH_SUCCESS);
+                    $this->sendflashmessage("$counter files deletion successfull", self::FLASH_SUCCESS);
                 } else {
-                    Model::sendflashmessage('Error while deleting files', 'error');
+                    $this->sendflashmessage('Error while deleting files', self::FLASH_ERROR);
                 }
             } elseif ($_POST['action'] == 'move' && isset($_POST['dir'])) {
                 $count = $this->mediamanager->multimovefile($_POST['id'], $_POST['dir']);
 
                 $total = count($_POST['id']);
                 if ($count !== $total) {
-                    Model::sendflashmessage($count . ' / ' . $total . ' files have been moved', 'error');
+                    $this->sendflashmessage($count . ' / ' . $total . ' files have been moved', self::FLASH_ERROR);
                 } else {
-                    Model::sendflashmessage($count . ' / ' . $total . ' files have been moved', 'success');
+                    $this->sendflashmessage($count . ' / ' . $total . ' files have been moved', self::FLASH_SUCCESS);
                 }
                 $this->refreshfont = $_POST['dir'] === Model::FONT_DIR;
             }
@@ -196,7 +196,7 @@ class Controllermedia extends Controller
                     $fontfacer = new Servicefont($this->mediamanager);
                     $fontfacer->writecss();
                 } catch (RuntimeException $e) {
-                    Model::sendflashmessage('Error while updating fonts CSS : ' . $e->getMessage());
+                    $this->sendflashmessage('Error while updating fonts CSS : ' . $e->getMessage());
                 }
             }
             $this->redirect($this->generate('media') . $_POST['route']);
@@ -218,13 +218,13 @@ class Controllermedia extends Controller
             $newname = $_POST['dir'] . '/' . $_POST['newfilename'];
             try {
                 $this->mediamanager->rename($oldname, $newname);
-                Model::sendflashmessage("Media file has been successfully renamed", Model::FLASH_SUCCESS);
+                $this->sendflashmessage("Media file has been successfully renamed", self::FLASH_SUCCESS);
                 if ($_POST['dir'] . '/' === Model::FONT_DIR) {
                     $fontfacer = new Servicefont($this->mediamanager);
                     $fontfacer->writecss();
                 }
             } catch (RuntimeException $e) {
-                Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+                $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);
             }
             $this->redirect($this->generate('media') . $_POST['route']);
         } else {
@@ -242,11 +242,11 @@ class Controllermedia extends Controller
             try {
                 $fontfacer = new Servicefont($this->mediamanager);
                 $fontfacer->writecss();
-                Model::sendflashmessage("Font face CSS file  successfully generated", Model::FLASH_SUCCESS);
+                $this->sendflashmessage("Font face CSS file  successfully generated", self::FLASH_SUCCESS);
             } catch (RuntimeException $e) {
-                Model::sendflashmessage(
+                $this->sendflashmessage(
                     "Error while trying to save generated fonts file : " . $e->getMessage(),
-                    Model::FLASH_ERROR
+                    self::FLASH_ERROR
                 );
             }
             $this->redirect($this->generate("media", [], $this->mediaopt->getpathaddress()));

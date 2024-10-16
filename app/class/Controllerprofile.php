@@ -25,7 +25,7 @@ class Controllerprofile extends Controller
             $datas['user'] = $this->usermanager->get($this->user);
             $this->showtemplate('profile', $datas);
         } catch (Notfoundexception $e) {
-            Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+            $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);
             $this->routedirect('home');
         }
     }
@@ -36,13 +36,13 @@ class Controllerprofile extends Controller
             $user = $this->usermanager->get($this->user);
             $user->hydrateexception($_POST);
             $this->usermanager->update($user);
-            Model::sendflashmessage('Successfully updated', Model::FLASH_SUCCESS);
+            $this->sendflashmessage('Successfully updated', self::FLASH_SUCCESS);
         } catch (Notfoundexception $e) {
-            Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+            $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);
         } catch (RuntimeException $e) {
-            Model::sendflashmessage(
+            $this->sendflashmessage(
                 'There was a problem when updating preference : ' . $e->getMessage(),
-                Model::FLASH_ERROR
+                self::FLASH_ERROR
             );
         }
         $this->routedirect('profile');
@@ -57,7 +57,7 @@ class Controllerprofile extends Controller
             !isset($_POST['currentpassword']) ||
             !$this->usermanager->passwordcheck($this->user, $_POST['currentpassword'])
         ) {
-            Model::sendflashmessage("wrong current password", 'error');
+            $this->sendflashmessage("wrong current password", self::FLASH_ERROR);
             $this->routedirect('profile');
         }
 
@@ -66,7 +66,7 @@ class Controllerprofile extends Controller
             empty($_POST['password2']) ||
             $_POST['password1'] !== $_POST['password2']
         ) {
-            Model::sendflashmessage("passwords does not match", Model::FLASH_ERROR);
+            $this->sendflashmessage("passwords does not match", self::FLASH_ERROR);
             $this->routedirect('profile');
         }
 
@@ -74,15 +74,15 @@ class Controllerprofile extends Controller
             !$this->user->setpassword($_POST['password1']) ||
             !$this->user->hashpassword()
         ) {
-            Model::sendflashmessage("password is not compatible", Model::FLASH_ERROR);
+            $this->sendflashmessage("password is not compatible", self::FLASH_ERROR);
             $this->routedirect('profile');
         }
 
         try {
             $this->usermanager->add($this->user);
-            Model::sendflashmessage('password updated successfully', Model::FLASH_SUCCESS);
+            $this->sendflashmessage('password updated successfully', self::FLASH_SUCCESS);
         } catch (Databaseexception $e) {
-            Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+            $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);
         }
         $this->routedirect('profile');
     }

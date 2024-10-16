@@ -365,13 +365,16 @@ class Controllerpage extends Controller
 
             if ($_POST['erase'] || !$this->pagemanager->exist($page)) {
                 if ($this->pagemanager->add($page)) {
-                    Model::sendflashmessage('Page successfully uploaded', 'success');
+                    $this->sendflashmessage('Page successfully uploaded', self::FLASH_SUCCESS);
                 }
             } else {
-                Model::sendflashmessage('Page ID already exist, check remplace if you want to erase it', 'warning');
+                $this->sendflashmessage(
+                    'Page ID already exist, check remplace if you want to erase it',
+                    self::FLASH_WARNING
+                );
             }
         } else {
-            Model::sendflashmessage('Error while importing page JSON', 'error');
+            $this->sendflashmessage('Error while importing page JSON', self::FLASH_ERROR);
         }
         $this->routedirect('home');
     }
@@ -473,7 +476,7 @@ class Controllerpage extends Controller
                 $this->page->hydrate($_POST);
 
                 if ($oldpage->datemodif() != $this->page->datemodif()) {
-                    Model::sendflashmessage("Page has been modified by someone else", Model::FLASH_WARNING);
+                    $this->sendflashmessage("Page has been modified by someone else", self::FLASH_WARNING);
                     $_SESSION['pageupdate'] = $_POST;
                     $_SESSION['pageupdate']['id'] = $this->page->id();
                     $this->routedirect('pageedit', ['page' => $this->page->id()]);

@@ -35,11 +35,11 @@ class Controlleruser extends Controller
         if ($this->user->isadmin() && isset($_POST['id'])) {
             $user = new User($_POST);
             if (empty($user->id()) || $this->usermanager->exist($user)) {
-                Model::sendflashmessage('Error: problem with ID', Model::FLASH_ERROR);
+                $this->sendflashmessage('Error: problem with ID', self::FLASH_ERROR);
                 $this->routedirect('user');
             }
             if (!$user->validpassword()) {
-                Model::sendflashmessage('Error: invalid password', Model::FLASH_ERROR);
+                $this->sendflashmessage('Error: invalid password', self::FLASH_ERROR);
                 $this->routedirect('user');
             }
             if ($user->passwordhashed()) {
@@ -47,9 +47,9 @@ class Controlleruser extends Controller
             }
             try {
                 $this->usermanager->add($user);
-                Model::sendflashmessage('User successfully added', Model::FLASH_SUCCESS);
+                $this->sendflashmessage('User successfully added', self::FLASH_SUCCESS);
             } catch (Databaseexception $e) {
-                Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+                $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);
             }
             $this->addauthorbookmark($user);
             $this->routedirect('user');
@@ -73,12 +73,12 @@ class Controlleruser extends Controller
 
                     case 'update':
                         $this->update($_POST);
-                        Model::sendflashmessage('User successfully updated', Model::FLASH_SUCCESS);
+                        $this->sendflashmessage('User successfully updated', self::FLASH_SUCCESS);
                         $this->routedirect('user');
                         break;
                 }
             } catch (RuntimeException $e) {
-                Model::sendflashmessage('Error : ' . $e->getMessage(), Model::FLASH_ERROR);
+                $this->sendflashmessage('Error : ' . $e->getMessage(), self::FLASH_ERROR);
             }
         } else {
             http_response_code(403);
@@ -160,9 +160,9 @@ class Controlleruser extends Controller
             $userbookmark->setuser($user->id());
             $bookmarkmanager->add($userbookmark);
         } catch (RuntimeException $e) {
-            Model::sendflashmessage(
+            $this->sendflashmessage(
                 'Could not create personnal user author bookmark: ' . $e->getMessage(),
-                Model::FLASH_ERROR
+                self::FLASH_ERROR
             );
         }
     }

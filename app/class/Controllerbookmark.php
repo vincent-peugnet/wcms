@@ -25,13 +25,13 @@ class Controllerbookmark extends Controller
                 if (!$bookmark->ispublic() && $this->user->id() === $bookmark->user() || $this->user->isadmin()) {
                     $bookmark->setname($_POST['id']);
                     $this->bookmarkmanager->add($bookmark);
-                    Model::sendflashmessage(
+                    $this->sendflashmessage(
                         "Bookmark \"" . $bookmark->id() . "\" succesfully created",
-                        Model::FLASH_SUCCESS
+                        self::FLASH_SUCCESS
                     );
                 }
             } catch (RuntimeException $e) {
-                Model::sendflashmessage("Error while creating bookmark : " . $e->getMessage(), Model::FLASH_ERROR);
+                $this->sendflashmessage("Error while creating bookmark : " . $e->getMessage(), self::FLASH_ERROR);
             }
         }
         $this->routedirect($_POST['route'] ?? 'home');
@@ -41,18 +41,18 @@ class Controllerbookmark extends Controller
     {
         if ($this->user->iseditor() && isset($_POST['id'])) {
             if (!$_POST['confirmdelete']) {
-                Model::sendflashmessage("Confirm delete has not been checked", Model::FLASH_WARNING);
+                $this->sendflashmessage("Confirm delete has not been checked", self::FLASH_WARNING);
             } else {
                 try {
                     $bookmark = $this->bookmarkmanager->get($_POST['id']);
                     if (!$bookmark->ispublic() && $this->user->id() === $bookmark->user() || $this->user->isadmin()) {
                         $this->bookmarkmanager->delete($bookmark);
-                        Model::sendflashmessage("Bookmark successfully deleted", Model::FLASH_SUCCESS);
+                        $this->sendflashmessage("Bookmark successfully deleted", self::FLASH_SUCCESS);
                     }
                 } catch (RuntimeException $e) {
-                    Model::sendflashmessage(
+                    $this->sendflashmessage(
                         "Error while trying to delete bookmark: " . $e->getMessage(),
-                        Model::FLASH_ERROR
+                        self::FLASH_ERROR
                     );
                 }
             }
@@ -68,10 +68,10 @@ class Controllerbookmark extends Controller
                 if (!$bookmark->ispublic() && $this->user->id() === $bookmark->user() || $this->user->isadmin()) {
                     $bookmark->hydrateexception($_POST);
                     $this->bookmarkmanager->update($bookmark);
-                    Model::sendflashmessage("Bookmark successfully updated", Model::FLASH_SUCCESS);
+                    $this->sendflashmessage("Bookmark successfully updated", self::FLASH_SUCCESS);
                 }
             } catch (RuntimeException $e) {
-                Model::sendflashmessage("Impossible to update bookmark: " . $e->getMessage());
+                $this->sendflashmessage("Impossible to update bookmark: " . $e->getMessage());
             }
         }
         $this->routedirect($_POST['route'] ?? 'home');
@@ -94,10 +94,10 @@ class Controllerbookmark extends Controller
                     $bookmark->setpublished(true);
                     $this->bookmarkmanager->update($bookmark);
 
-                    Model::sendflashmessage('RSS feed successfully published', Model::FLASH_SUCCESS);
+                    $this->sendflashmessage('RSS feed successfully published', self::FLASH_SUCCESS);
                 }
             } catch (RuntimeException | DOMException $e) {
-                Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+                $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);
             }
         }
         $this->routedirect('home');
@@ -111,11 +111,11 @@ class Controllerbookmark extends Controller
                 if ($bookmark->ispublished()) {
                     Servicerss::removeatom($bookmark->id());
                     $bookmark->setpublished(false);
-                    Model::sendflashmessage("Bookmark is not published anymore", Model::FLASH_SUCCESS);
+                    $this->sendflashmessage("Bookmark is not published anymore", self::FLASH_SUCCESS);
                 }
                 $this->bookmarkmanager->update($bookmark);
             } catch (RuntimeException $e) {
-                Model::sendflashmessage($e->getMessage(), Model::FLASH_ERROR);
+                $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);
             }
         }
         $this->routedirect('home');

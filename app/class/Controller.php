@@ -4,6 +4,7 @@ namespace Wcms;
 
 use AltoRouter;
 use DateTimeImmutable;
+use DomainException;
 use Exception;
 use InvalidArgumentException;
 use League\Plates\Engine;
@@ -33,6 +34,20 @@ class Controller
 
     /** @var DateTimeImmutable */
     protected $now;
+
+
+    public const FLASH_MESSAGE_TYPES = [
+        self::FLASH_INFO    => 1,
+        self::FLASH_WARNING => 2,
+        self::FLASH_SUCCESS => 3,
+        self::FLASH_ERROR   => 4,
+    ];
+
+    public const FLASH_INFO     = 'info';
+    public const FLASH_WARNING  = 'warning';
+    public const FLASH_SUCCESS  = 'success';
+    public const FLASH_ERROR    = 'error';
+
 
     public function __construct(AltoRouter $router)
     {
@@ -75,7 +90,7 @@ class Controller
                 Logger::warning('Deleted auth cookie using non existing user');
                 $modelconnect->deleteauthcookie(); // Delete auth cookie as a non existing user was set
             } catch (RuntimeException $e) {
-                Model::sendflashmessage("Invalid Autentification cookie exist : $e", "warning");
+                $this->sendflashmessage("Invalid Autentification cookie exist : $e", self::FLASH_WARNING);
             }
         }
     }
@@ -99,7 +114,7 @@ class Controller
         $this->plates->registerFunction('candeletepage', function (Page $page) {
             return $this->candelete($page);
         });
-        $this->plates->addData(['flashmessages' => Model::getflashmessages()]);
+        $this->plates->addData(['flashmessages' => $this->getflashmessages()]);
     }
 
     public function showtemplate(string $template, array $params = [])
@@ -169,11 +184,11 @@ class Controller
     public function sendstatflashmessage(int $count, int $total, string $message)
     {
         if ($count === $total) {
-            Model::sendflashmessage($count . ' / ' . $total . ' ' . $message, Model::FLASH_SUCCESS);
+            $this->sendflashmessage($count . ' / ' . $total . ' ' . $message, self::FLASH_SUCCESS);
         } elseif ($count > 0) {
-            Model::sendflashmessage($count . ' / ' . $total . ' ' . $message, Model::FLASH_WARNING);
+            $this->sendflashmessage($count . ' / ' . $total . ' ' . $message, self::FLASH_WARNING);
         } else {
-            Model::sendflashmessage($count . ' / ' . $total . ' ' . $message, Model::FLASH_ERROR);
+            $this->sendflashmessage($count . ' / ' . $total . ' ' . $message, self::FLASH_ERROR);
         }
     }
 
@@ -226,6 +241,42 @@ class Controller
             return ($page->authors() === [$this->user->id()]);
         } else {
             return false;
+        }
+    }
+
+
+
+    /**
+     * Add a message to flash message list
+     *
+     * @param string $content The message content
+     * @param string $type Message Type, can be `info|warning|success|error`
+     */
+    protected function sendflashmessage(string $content, string $type = self::FLASH_INFO): void
+    {
+        if (!key_exists($type, self::FLASH_MESSAGE_TYPES)) {
+            throw new DomainException('invalid flash message type');
+        }
+        $_SESSION['flashmessages'][] = ['content' => $content, 'type' => $type];
+    }
+
+    /**
+     * Read then empty session to get flash messages
+     *
+     * @return array ordered array containing array with content and type as keys or empty array
+     */
+    public static function getflashmessages(): array
+    {
+        if (!empty($_SESSION['flashmessages'])) {
+            $flashmessage = $_SESSION['flashmessages'];
+            $_SESSION['flashmessages'] = [];
+            if (is_array($flashmessage)) {
+                return $flashmessage;
+            } else {
+                return [];
+            }
+        } else {
+            return [];
         }
     }
 }
