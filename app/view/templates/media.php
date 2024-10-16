@@ -100,6 +100,8 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
                     <img src="<?= $media->getabsolutepath() ?>" loading="lazy">
                 <?php } elseif($media->type() === 'video' || $media->type() === 'sound') { ?>
                     <?= $media->getcode(true) ?>
+                <?php } elseif($media->type() === 'font') { ?>
+                    <span  style="<?= $media->getcode() ?>">Abc</span>
                 <?php } else { ?>
                     <i class="fa fa-<?= $media->getsymbol() ?>"></i>
                 <?php } ?>
