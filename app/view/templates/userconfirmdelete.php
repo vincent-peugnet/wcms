@@ -11,7 +11,7 @@ if($candelete) {
 
 
 
-    <form action="<?= $this->url('userupdate') ?>" method="post">
+    <form action="<?= $this->url('useredit') ?>" method="post">
 
     <input type="hidden" name="id" value="<?= $userdelete->id() ?>">
 

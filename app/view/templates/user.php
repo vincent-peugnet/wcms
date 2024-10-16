@@ -11,11 +11,11 @@ $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'back.css',
 <main class="user">
     
     <section>
-        
+
         <div class="block">
 
-            <h1>Admin panel</h1>
             
+            <h2>Users</h2>
             <div class="scroll">
 
                 <table>
@@ -23,45 +23,7 @@ $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'back.css',
                 <th>id</th><th>password</th><th>hash</th><th>level</th><th>set expiration date</th><th>action</th><th>expire</th><th>connect</th>
                 </tr>
 
-                <tr>
-                    <form action="<?= $this->url('useradd') ?>" method="post">
-                    <td>
-                            <input type="text" name="id" maxlength="<?= Wcms\Model::MAX_ID_LENGTH ?>" required>
-                    </td>
-                    <td>
-                        <input type="password" name="password" id="password" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" maxlength="<?= Wcms\Model::PASSWORD_MAX_LENGTH ?>" required>
-                    </td>
-
-                    <td>
-                    <input type="hidden" name="passwordhashed" value="0">
-                    <input type="checkbox" name="passwordhashed" value="1" checked>
-                    </td>
-
-                    <td>
-                        <select name="level" id="level">
-                            <option value="1">reader</option>
-                            <option value="2">invite</option>
-                            <option value="3">editor</option>
-                            <option value="4">super editor</option>
-                            <option value="10">admin</option>
-                        </select>
-                    </td>
-                    <td>
-                        <input type="date" name="expiredate" id="expiredate" min="<?= $now->format('Y-m-d'); ?>">
-                    </td>
-                    <td>
-                        <input type="submit" value="add">
-                    </td>
-                    <td>
-
-                    </td>
-                    <td>
-
-                    </td>
                     
-                    </form>
-                </tr>
-
 
                 <?php
                 foreach ($userlist as $user ) {
@@ -134,6 +96,42 @@ $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'back.css',
 
     </section>
 
+    <section class="new-user">
+                
+        <div class="block">
+
+            <h2>Add new user</h2>
+            
+            <div class="scroll">
+
+
+                <form action="<?= $this->url('useradd') ?>" method="post">
+
+                    <label for="id">username</label>
+                    <input type="text" name="id" id="id" maxlength="<?= Wcms\Model::MAX_ID_LENGTH ?>" required>
+                    <label for="password">password</label>
+                    <input type="password" name="password" id="password" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" maxlength="<?= Wcms\Model::PASSWORD_MAX_LENGTH ?>" required>
+                    <div>
+                        <input type="hidden" name="passwordhashed" value="0">
+                        <input type="checkbox" name="passwordhashed" id="passwordhashed" value="1" checked>
+                        <label for="passwordhashed">hash password</label>
+                    </div>
+                    <label for="level">level</label>
+                    <select name="level" id="level">
+                        <option value="1">reader</option>
+                        <option value="2">invite</option>
+                        <option value="3">editor</option>
+                        <option value="4">super editor</option>
+                        <option value="10">admin</option>
+                    </select>
+                    <label for="expiredate">expiration date</label>
+                    <input type="date" name="expiredate" id="expiredate" min="<?= $now->format('Y-m-d'); ?>">
+                    <input type="submit" value="add">
+                </form>
+
+            </div>
+        </div>
+    </section>
 
 </main>
 

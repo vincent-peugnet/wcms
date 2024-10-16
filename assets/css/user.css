@@ -11,3 +11,8 @@ main.user table form {
 main.user td {
     white-space: nowrap;
 }
+
+
+.new-user form > * {
+    display: block;
+}
