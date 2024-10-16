@@ -302,16 +302,20 @@ class Controllerhome extends Controller
         $this->sendstatflashmessage($count, $total, 'pages have been edited');
     }
 
-    public function multirender()
+    public function multirender(): void
     {
         $pagelist = $_POST['pagesid'] ?? [];
         $total = count($pagelist);
         $pagelist = $this->pagemanager->pagelistbyid($pagelist);
         $count = 0;
         foreach ($pagelist as $page) {
-            $page = $this->pagemanager->renderpage($page, $this->router);
-            if ($this->pagemanager->update($page)) {
-                $count++;
+            try {
+                $page = $this->pagemanager->renderpage($page, $this->router);
+                if ($this->pagemanager->update($page)) {
+                    $count++;
+                }
+            } catch (RuntimeException $e) {
+                Logger::errorex($e);
             }
         }
         $this->sendstatflashmessage($count, $total, 'pages have been rendered');

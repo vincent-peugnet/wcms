@@ -271,13 +271,12 @@ function randombytes(int $seed): string
  * @param string $url
  * @return string output data
  *
- * @throws ErrorException if Curl is not installed
- * @throws RuntimeException if curl_exec fail
+ * @throws RuntimeException if curl_exec fail or Curl extension is not installed
  */
 function curl_download(string $url): string
 {
     if (!extension_loaded('curl')) {
-        throw new ErrorException("Curl extension is not installed");
+        throw new RuntimeException("Curl extension is not installed");
     }
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);

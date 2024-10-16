@@ -437,6 +437,8 @@ class Modelpage extends Modeldb
      * @param Page $page input
      *
      * @return Page rendered $page
+     *
+     * @throws Runtimeexception if whriting files to filesystem failed
      */
     public function renderpage(Page $page, AltoRouter $router): Page
     {
@@ -455,21 +457,16 @@ class Modelpage extends Modeldb
                 throw new DomainException('Page version is out of range');
         }
 
-        try {
-            $html = $renderengine->render($page);
-            Fs::dircheck(Model::ASSETS_RENDER_DIR, true, 0775);
-            Fs::dircheck(Model::HTML_RENDER_DIR, true, 0775);
-            Fs::writefile(Model::HTML_RENDER_DIR . $page->id() . '.html', $html);
-            Fs::writefile(Model::ASSETS_RENDER_DIR . $page->id() . '.css', $page->css(), 0664);
-            Fs::writefile(Model::ASSETS_RENDER_DIR . $page->id() . '.js', $page->javascript(), 0664);
+        $html = $renderengine->render($page);
+        Fs::dircheck(Model::ASSETS_RENDER_DIR, true, 0775);
+        Fs::dircheck(Model::HTML_RENDER_DIR, true, 0775);
+        Fs::writefile(Model::HTML_RENDER_DIR . $page->id() . '.html', $html);
+        Fs::writefile(Model::ASSETS_RENDER_DIR . $page->id() . '.css', $page->css(), 0664);
+        Fs::writefile(Model::ASSETS_RENDER_DIR . $page->id() . '.js', $page->javascript(), 0664);
 
-            $page->setdaterender($now);
-            $page->setlinkto($renderengine->linkto());
-            $page->setpostprocessaction($renderengine->postprocessaction());
-        } catch (RuntimeException $e) {
-            Model::sendflashmessage("Error while saving render files", Model::FLASH_ERROR);
-            Logger::errorex($e);
-        }
+        $page->setdaterender($now);
+        $page->setlinkto($renderengine->linkto());
+        $page->setpostprocessaction($renderengine->postprocessaction());
 
         return $page;
     }

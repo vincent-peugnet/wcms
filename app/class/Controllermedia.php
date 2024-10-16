@@ -181,7 +181,14 @@ class Controllermedia extends Controller
                     Model::sendflashmessage('Error while deleting files', 'error');
                 }
             } elseif ($_POST['action'] == 'move' && isset($_POST['dir'])) {
-                $this->mediamanager->multimovefile($_POST['id'], $_POST['dir']);
+                $count = $this->mediamanager->multimovefile($_POST['id'], $_POST['dir']);
+
+                $total = count($_POST['id']);
+                if ($count !== $total) {
+                    Model::sendflashmessage($count . ' / ' . $total . ' files have been moved', 'error');
+                } else {
+                    Model::sendflashmessage($count . ' / ' . $total . ' files have been moved', 'success');
+                }
                 $this->refreshfont = $_POST['dir'] === Model::FONT_DIR;
             }
             if ($this->refreshfont || $_POST['path'] === Model::FONT_DIR) {

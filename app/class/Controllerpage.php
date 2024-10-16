@@ -74,7 +74,11 @@ class Controllerpage extends Controller
         $this->setpage($page, 'pageupdate');
 
         if ($this->importpage() && $this->user->iseditor()) {
-            $this->page = $this->pagemanager->renderpage($this->page, $this->router);
+            try {
+                $this->page = $this->pagemanager->renderpage($this->page, $this->router);
+            } catch (RuntimeException $e) {
+                Logger::errorex($e);
+            }
             $this->pagemanager->update($this->page);
             $this->templaterender($this->page);
         }
@@ -180,7 +184,11 @@ class Controllerpage extends Controller
             if (Config::deletelinktocache() && $this->page->daterender() <= $this->page->datemodif()) {
                 $oldlinkto = $this->page->linkto();
             }
-            $this->page = $this->pagemanager->renderpage($this->page, $this->router);
+            try {
+                $this->page = $this->pagemanager->renderpage($this->page, $this->router);
+            } catch (RuntimeException $e) {
+                Logger::errorex($e);
+            }
             if (isset($oldlinkto)) {
                 $relatedpages = array_unique(array_merge($oldlinkto, $this->page->linkto()));
                 $this->deletelinktocache($relatedpages);
@@ -196,6 +204,7 @@ class Controllerpage extends Controller
         }
 
         // redirection using Location and 302
+        // maybe this should be before rendering
         if (!empty($this->page->redirection()) && $this->page->refresh() === 0 && $this->page->sleep() === 0) {
             try {
                 if (Model::idcheck($this->page->redirection())) {
@@ -205,7 +214,7 @@ class Controllerpage extends Controller
                     $this->redirect($url);
                 }
             } catch (RuntimeException $e) {
-                // TODO : send synthax error to editor
+                // TODO : send syntax error to editor
             }
         }
         $html = file_get_contents($filedir);

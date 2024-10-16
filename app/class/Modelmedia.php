@@ -215,25 +215,15 @@ class Modelmedia extends Model
     {
         $url = filter_var($url, FILTER_SANITIZE_URL);
         if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-            Model::sendflashmessage('invalid url: ' . strip_tags($url), 'error');
+            $url = strip_tags($url);
+            throw new RuntimeException("Invalid URL: $url");
         }
-        if (!strstr(get_headers($url)[0], "200 OK")) {
-            Model::sendflashmessage(get_headers($url)[0], 'error');
+        $firstheader = get_headers($url)[0];
+        if (!strstr($firstheader, "200 OK")) {
+            throw new RuntimeException("server response is $firstheader");
         }
-
-        try {
-            $file = curl_download($url);
-            Fs::writefile($target . basename($url), $file, 0664);
-        } catch (ErrorException $e) {
-            Model::sendflashmessage('file not uploaded beccause : ' . $e->getMessage(), Model::FLASH_ERROR);
-            // switch to fopen mothod if CURL is not installed
-            // $file = fopen($data, 'r');
-            // if ($file !== false) {
-            //     if ($target[strlen($target) - 1] != DIRECTORY_SEPARATOR) {
-            //         $target .= DIRECTORY_SEPARATOR;
-            //     }
-            // }
-        }
+        $file = curl_download($url);
+        Fs::writefile($target . basename($url), $file, 0664);
     }
 
     /**
@@ -414,9 +404,9 @@ class Modelmedia extends Model
      * @param array $filedirlist Ordered array of file list
      * @param string $dir New directory to move file to
      *
-     * @return bool False if any of moves failed, otherwise true
+     * @return int Number of moved files
      */
-    public function multimovefile(array $filedirlist, string $dir): bool
+    public function multimovefile(array $filedirlist, string $dir): int
     {
         $count = 0;
         foreach ($filedirlist as $filedir) {
@@ -426,14 +416,7 @@ class Modelmedia extends Model
                 }
             }
         }
-        $total = count($filedirlist);
-        if ($count !== $total) {
-            Model::sendflashmessage($count . ' / ' . $total . ' files have been moved', 'error');
-            return false;
-        } else {
-            Model::sendflashmessage($count . ' / ' . $total . ' files have been moved', 'success');
-            return true;
-        }
+        return $count;
     }
 
     /**

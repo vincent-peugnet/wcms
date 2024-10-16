@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use JamesMoss\Flywheel\Config;
 use JamesMoss\Flywheel\DocumentInterface;
 use JamesMoss\Flywheel\Document;
+use LogicException;
 use RuntimeException;
 use Wcms\Flywheel\Formatter\JSON;
 use Wcms\Flywheel\Query;
@@ -93,13 +94,15 @@ class Modeldb extends Model
      * Init store.
      *
      * @param string $repo                  Name of the repo
+     *
+     * @throws LogicException if this failed
      */
     protected function storeinit(string $repo): void
     {
         try {
             $this->repo = new Repository($repo, $this->database);
         } catch (RuntimeException $e) {
-            self::sendflashmessage("error while database initialisation: " . $e->getMessage(), self::FLASH_ERROR);
+            throw new LogicException($e->getMessage());
         }
     }
 
