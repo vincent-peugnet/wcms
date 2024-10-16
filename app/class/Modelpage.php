@@ -759,7 +759,7 @@ class Modelpage extends Modeldb
         } else {
             $case = 'i';
         }
-        $regex = '/' . $regex . '/' . $case;
+        $regex = '/' . preg_quote($regex, '/') . '/';
         $pageselected = [];
         foreach ($pagelist as $page) {
             $count = 0;

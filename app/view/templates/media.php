@@ -153,6 +153,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
                 </th>
                 <th>user</th>
                 <th>perms</th>
+                <th>s</th>
                 <th>code</th>
             </tr>
         </thead>
@@ -204,6 +205,14 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
             <td class="nowrap" title="<?= $media->date('dmy') ?> <?= $media->date('ptime') ?>"><?= $media->date('hrdi') ?></td>
             <td><?= $media->uid('name') ?></td>
             <td><code><?= $media->permissions() ?></code></td>
+            <td>
+                <a
+                    href="<?= $this->url('home', [], '?search=' . $media->getlocalpath() . '&id=1&title=1&description=1&content=1&other=1&case=1&submit=reset') ?>"
+                    title="search if this media is used in your pages"
+                >
+                    <i class="fa fa-search"></i>
+                </a>
+            </td>
             <td>
                 <code class="select-all"><?= $this->e($media->getcode()) ?></code>
             </td>
