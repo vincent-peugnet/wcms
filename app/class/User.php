@@ -30,7 +30,7 @@ class User extends Item
     protected int $connectcount = 0;
 
     /** @var DateTimeImmutable|false $expiredate */
-    protected mixed $expiredate = false;
+    protected $expiredate = false;
 
     /** @var string[] sessions */
     protected array $sessions = [];
