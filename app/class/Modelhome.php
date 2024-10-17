@@ -31,7 +31,7 @@ class Modelhome extends Model
         string $layout = 'random',
         bool $showorphans = false,
         bool $showredirection = false,
-        bool $showexternallinks = false,
+        bool $showexternallinks = false
     ): array {
         $datas['elements'] = $this->mapdata($pagelist, $showorphans, $showredirection, $showexternallinks);
 
