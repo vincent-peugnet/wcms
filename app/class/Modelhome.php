@@ -6,7 +6,9 @@ class Modelhome extends Model
 {
     public const GRAPH_LAYOUTS = [
         'cose' => 'cose',
+        'fcose' => 'fcose',
         'cose-bilkent' => 'cose-bilkent',
+        'euler' => 'euler',
         'circle' => 'circle',
         'breadthfirst' => 'breadthfirst',
         'concentric' => 'concentric',
