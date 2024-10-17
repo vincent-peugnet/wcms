@@ -98,11 +98,13 @@ class Controllerhome extends Controller
                 $vars['layout'] = $_GET['layout'] ?? 'cose-bilkent';
                 $vars['showorphans'] = boolval($_GET['showorphans'] ?? false);
                 $vars['showredirection'] = boolval($_GET['showredirection'] ?? false);
+                $vars['showexternallinks'] = boolval($_GET['showexternallinks'] ?? false);
                 $datas = $this->modelhome->cytodata(
                     $pagelistopt,
                     $vars['layout'],
                     $vars['showorphans'],
-                    $vars['showredirection']
+                    $vars['showredirection'],
+                    $vars['showexternallinks']
                 );
                 $vars['json'] = json_encode($datas);
             }

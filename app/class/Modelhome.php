@@ -22,68 +22,95 @@ class Modelhome extends Model
      * @param bool $showorphans if `false`, remove orphans pages
      * @param bool $showredirection if `true`, add redirections
      *
-     * @return array[]
+     * @return mixed[]
      */
     public function cytodata(
         array $pagelist,
         string $layout = 'random',
         bool $showorphans = false,
-        bool $showredirection = false
+        bool $showredirection = false,
+        bool $showexternallinks = false,
     ): array {
-        $datas['elements'] = $this->mapdata($pagelist, $showorphans, $showredirection);
+        $datas['elements'] = $this->mapdata($pagelist, $showorphans, $showredirection, $showexternallinks);
 
+        $datas['wheelSensitivity'] = 0.1;
         $datas['layout'] = [
             'name' => $layout,
             'quality' => 'proof',
-            'fit' => true,
+            // 'fit' => true,
             'randomize' => true,
             'nodeDimensionsIncludeLabels' => true,
             'tile' => false,
-            'edgeElasticity' => 0.45,
-            'gravity' => 0.25,
-            'idealEdgeLength' => 60,
-            'numIter' => 10000
+            // 'edgeElasticity' => 0.45,
+            // 'gravity' => 0.25,
+            // 'idealEdgeLength' => 60,
+            // 'numIter' => 10000,
         ];
         $datas['style'] = [
             [
                 'selector' => 'node',
                 'style' => [
-                    'label' => 'data(id)',
+                    'label' => 'data(name)',
                     'background-image' => 'data(favicon)',
                     'background-fit' => 'contain',
-                    'border-width' => 3,
-                    'border-color' => '#80b97b'
+                    // 'border-width' => 3,
+                    'background-color' => '#80b97b',
+                    'text-valign' => 'center',
+                    'font-size' => 12,
+                    'width' => 'data(size)',
+                    'height' => 'data(size)',
                 ],
             ],
             [
                 'selector' => 'node.not_published',
                 'style' => [
                     'shape' => 'round-hexagon',
-                    'border-color' => '#b97b7b'
+                    'background-color' => '#b97b7b'
                 ],
             ],
             [
                 'selector' => 'node.private',
                 'style' => [
                     'shape' => 'round-triangle',
-                    'border-color' => '#b9b67b'
+                    'background-color' => '#b9b67b'
+                ],
+            ],
+            [
+                'selector' => 'node.domain',
+                'style' => [
+                    'shape' => 'round-diamond',
+                    'border-width' => 0,
+                    'width' => 16,
+                    'height' => 16,
+                    'text-opacity' => 0.75,
+                    'font-size' => 8,
+                ],
+            ],
+            [
+                'selector' => 'node.domain.ok',
+                'style' => [
+                    'background-color' => '#80b97b',
+                ],
+            ],
+            [
+                'selector' => 'node.domain.dead',
+                'style' => [
+                    'background-color' => '#b97b7b',
                 ],
             ],
             [
                 'selector' => 'edge',
                 'style' => [
-                    'curve-style' => 'bezier',
+                    'curve-style' => 'straight',
+                    'width' => 2,
                     'target-arrow-shape' => 'triangle',
-                    'arrow-scale' => 1.5
+                    'arrow-scale' => 1.3
                 ],
             ],
             [
                 'selector' => 'edge.bidirectionnal',
                 'style' => [
-                    'curve-style' => 'bezier',
-                    'target-arrow-shape' => 'triangle',
                     'source-arrow-shape' => 'triangle',
-                    'arrow-scale' => 1.5
                 ],
             ],
             [
@@ -91,6 +118,13 @@ class Modelhome extends Model
                 'style' => [
                     'line-style' => 'dashed',
                     'label' => 'data(refresh)'
+                ],
+            ],
+            [
+                'selector' => 'edge.url',
+                'style' => [
+                    'width' => 1,
+                    'arrow-scale' => 0.7,
                 ],
             ],
         ];
@@ -106,8 +140,12 @@ class Modelhome extends Model
      *
      * @return array[] of cytoscape datas
      */
-    public function mapdata(array $pagelist, bool $showorphans = true, bool $showredirection = false): array
-    {
+    public function mapdata(
+        array $pagelist,
+        bool $showorphans = true,
+        bool $showredirection = false,
+        bool $showexternallinks = false
+    ): array {
         $idlist = array_keys($pagelist);
 
         $edges = [];
@@ -159,10 +197,35 @@ class Modelhome extends Model
             if ($showorphans || in_array($id, $notorphans)) {
                 $node['group'] = 'nodes';
                 $node['data']['id'] = $page->id();
+                $node['data']['name'] = empty($page->title()) ? $page->id() : $page->title();
+                $node['data']['leftclick'] = $page->id();
+                $node['data']['size'] = 35; // Size of page node
                 $node['data']['edit'] = $page->id() . DIRECTORY_SEPARATOR . 'edit';
                 $node['data']['favicon'] = Model::faviconpath() . $page->favicon();
-                $node['classes'] = [$page->secure('string')];
+                $node['classes'] = ['page', $page->secure('string')];
                 $nodes[] = $node;
+
+                // external links
+                if ($showexternallinks) {
+                    foreach ($page->urls() as $url => $ok) {
+                        $domain = parse_url($url, PHP_URL_HOST);
+
+
+                        $noded['group'] = 'nodes';
+                        $noded['data']['id'] = $url;
+                        $noded['data']['name'] = $domain;
+                        $noded['data']['leftclick'] = "$url";
+                        $noded['classes'] = ['domain', $ok ? 'ok' : 'dead'];
+                        $nodes[] = $noded;
+
+                        $edged['group'] = 'edges';
+                        $edged['data']['id'] = $page->id() . '>' . $url;
+                        $edged['data']['source'] = $page->id();
+                        $edged['data']['target'] = $url;
+                        $edged['classes'] = 'url';
+                        $edges[] = $edged;
+                    }
+                }
             }
         }
 
