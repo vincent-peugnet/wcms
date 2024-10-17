@@ -7,6 +7,8 @@
         "codemirror": "^5.63.3",
         "cytoscape": "^3.20.0",
         "cytoscape-cose-bilkent": "^4.1.0",
+        "cytoscape-euler": "^1.2.3",
+        "cytoscape-fcose": "^2.2.0",
         "leaflet": "^1.9.3"
     },
     "devDependencies": {
