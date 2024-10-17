@@ -77,6 +77,8 @@ use Wcms\Config;
                     <label for="showorphans">show orphans pages</label>
                     <input type="checkbox" name="showredirection" value="1" id="showredirection" <?= $showredirection ? 'checked' : '' ?>>
                     <label for="showredirection">show redirections</label>
+                    <input type="checkbox" name="showexternallinks" value="1" id="showexternallinks" <?= $showexternallinks ? 'checked' : '' ?>>
+                    <label for="showexternallinks">show external links</label>
                     <select name="layout" id="layout">
                         <?= options(Wcms\Modelhome::GRAPH_LAYOUTS, $layout) ?>
                     </select>
