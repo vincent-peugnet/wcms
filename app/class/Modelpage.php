@@ -467,7 +467,7 @@ class Modelpage extends Modeldb
 
         $page->setdaterender($now);
         $page->setlinkto($renderengine->linkto());
-        $page->seturls($renderengine->urls());
+        $page->setexternallinks($renderengine->urls());
         $page->setpostprocessaction($renderengine->postprocessaction());
 
         return $page;

@@ -179,20 +179,23 @@ use Wcms\Config;
                                 <a href="<?= $opt->sortbyorder('title') ?>">title</a>
                                 <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'title']) ?>
                             </th>
-                            <?php }
-                                if ($columns['description']) { ?>
+                            <?php } if ($columns['description']) { ?>
                             <th class="description">description</th>
-                            <?php }
-                                if ($columns['linkto']) { ?>
+                            <?php } if ($columns['linkto']) { ?>
                             <th class="linkto">
                                 <a href="<?= $opt->sortbyorder('linkto') ?>">linkto</a>
                                 <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'linkto']) ?>
                                 
                             </th>
+                            <?php } if ($columns['externallinks']) { ?>
+                            <th class="externallinks">
+                                <a href="<?= $opt->sortbyorder('externallinks') ?>">external links</a>
+                                <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'externallinks' ]) ?>
+                            </th>
                             <?php } if ($columns['geolocalisation']) { ?>
-                                <th class="geo">
-                                    geo
-                                </th>                                
+                            <th class="geo">
+                                geo
+                            </th>                                
                             <?php }
                                 if ($columns['datemodif']) { ?>
                             <th class="datemodif">
@@ -309,60 +312,55 @@ use Wcms\Config;
                             </td>
                             <?php } if ($columns['tag']) { ?>
                             <td class="tag"><?= $opt->taglinks($item->tag('array')) ?></td>
-                            <?php }
-                                    if ($columns['title']) { ?>
+                            <?php } if ($columns['title']) { ?>
                             <td class="title" title="<?= $item->title() ?>"><label for="id_<?= $item->id() ?>"><?= $item->title() ?></label></td>
-                            <?php }
-                                    if ($columns['description']) { ?>
+                            <?php } if ($columns['description']) { ?>
                             <td class="description" title="<?= $item->description() ?>"><?= $item->description('short') ?></td>
-                            <?php }
-                                    if ($columns['linkto']) { ?>
+                            <?php } if ($columns['linkto']) { ?>
                             <td class="linkto"><?= $opt->linktolink($item->linkto('array')) ?></td>
-                            <?php }
-                                    if ($columns['geolocalisation']) { ?>
+                            <?php } if ($columns['externallinks']) { ?>
+                            <td class="linkto" title="<?= $item->externallinkstitle() ?>">
+                                <?= $item->externallinks('sort') ?>
+                                <?php $deadlinks = $item->deadlinkcount(); if (!empty($deadlinks)) { ?>
+                                    <span class="deadlinks"><?= $deadlinks ?></span>
+                                <?php } ?>
+                            </td>
+                            <?php } if ($columns['geolocalisation']) { ?>
                             <td class="geo" title="This page is geolocated: <?= $item->latitude() ?> <?= $item->longitude() ?>">
                                 <a href="?<?= $opt->getfilteraddress(['geo' => 1]) ?>">
                                     <?= $item->isgeo() ? '<i class="fa fa-globe"></i>' : '' ?>
                                 </a>
                             </td>
-                            <?php }
-                                    if ($columns['datemodif']) { ?>
+                            <?php } if ($columns['datemodif']) { ?>
                             <td class="datemodif" title="<?= $item->datemodif('dmy') ?> <?= $item->datemodif('ptime') ?>">
                                 <time datetime="<?= $item->datemodif('string') ?>" title="<?= $item->datemodif('dmy') . ' ' . $item->datemodif('ptime') ?>">
                                     <?= $item->datemodif('hrdi') ?>
                                 </time>
                             </td>
-                            <?php }
-                                    if ($columns['datecreation']) { ?>
+                            <?php } if ($columns['datecreation']) { ?>
                             <td class="datecreation" title="<?= $item->datecreation('dmy') ?> <?= $item->datecreation('ptime') ?>">
                                 <time datetime="<?= $item->datecreation('string') ?>" title="<?= $item->datecreation('dmy') . ' ' . $item->datecreation('ptime') ?>">
                                     <?= $item->datecreation('hrdi') ?>
                                 </time>
                             </td>
-                            <?php }
-                                    if ($columns['date']) { ?>
+                            <?php } if ($columns['date']) { ?>
                             <td class="date" title="<?= $item->date('dmy') ?> <?= $item->date('ptime') ?>">
                                 <time datetime="<?= $item->date('string') ?>" title="<?= $item->date('dmy') . ' ' . $item->date('ptime') ?>">
                                     <?= $item->date('dmy') ?>
                                 </time>
                         </td>
-                            <?php }
-                                    if ($columns['secure']) { ?>
+                            <?php } if ($columns['secure']) { ?>
                             <td class="secure">
                                 <?= $opt->securelink($item->secure('int') , $item->secure('string')) ?>
                                 <?= !empty($item->password()) ? '<i class="fa fa-lock" title="This page is password protected"></i>' : '' ?>
                             </td>
-                            <?php }
-                                    if ($columns['authors']) { ?>
+                            <?php } if ($columns['authors']) { ?>
                             <td class="authors"><?= $opt->authorlinks($item->authors('array')) ?></td>
-                            <?php }
-                                    if ($columns['visitcount']) { ?>
+                            <?php } if ($columns['visitcount']) { ?>
                             <td class="visitcount"><?= $item->visitcount() ?></td>
-                            <?php }
-                                    if ($columns['editcount']) { ?>
+                            <?php } if ($columns['editcount']) { ?>
                             <td class="editcount"><?= $item->editcount() ?></td>
-                            <?php }
-                                    if ($columns['displaycount']) { ?>
+                            <?php } if ($columns['displaycount']) { ?>
                             <td class="displaycount"><?= $item->displaycount() ?></td>
                             <?php } if ($columns['version']) { ?>
                                 <td class="version"><?= $item->version() ?></td>                                

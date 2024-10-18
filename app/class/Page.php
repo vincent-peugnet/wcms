@@ -6,6 +6,8 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 
+use function Clue\StreamFilter\fun;
+
 abstract class Page extends Item
 {
     protected $id;
@@ -42,8 +44,8 @@ abstract class Page extends Item
     protected $password;
     protected $postprocessaction;
 
-    /** @var array<string, ?bool> $urls */
-    protected array $urls = [];
+    /** @var array<string, ?bool> $externallinks */
+    protected array $externallinks = [];
 
     protected int $version;
 
@@ -122,7 +124,7 @@ abstract class Page extends Item
         $this->setredirection('');
         $this->setrefresh(0);
         $this->setpassword('');
-        $this->urls = [];
+        $this->externallinks = [];
         $this->postprocessaction = false;
     }
 
@@ -378,9 +380,15 @@ abstract class Page extends Item
         return $this->postprocessaction;
     }
 
-    public function urls($type = 'array'): array
+    /**
+     * @return array|int
+     */
+    public function externallinks($option = 'array')
     {
-        return $this->urls;
+        if ($option === 'sort') {
+            return count($this->externallinks);
+        }
+        return $this->externallinks;
     }
 
     public function version($type = 'int'): int
@@ -724,10 +732,10 @@ abstract class Page extends Item
         $this->postprocessaction = boolval($postprocessaction);
     }
 
-    public function seturls($urls): void
+    public function setexternallinks($externallinks): void
     {
-        if (is_array($urls)) {
-            $this->urls = $urls;
+        if (is_array($externallinks)) {
+            $this->externallinks = $externallinks;
         }
     }
 
@@ -798,10 +806,25 @@ abstract class Page extends Item
 
     public function deadlinkcount(): int
     {
-        $deadurls = array_filter($this->urls, function ($ok): bool {
+        $deadurls = array_filter($this->externallinks, function ($ok): bool {
             return !$ok;
         });
         return count($deadurls);
+    }
+
+    /**
+     * Used in the title of external links column in hme view
+     *
+     * @return string                       All links separated by new lines followed by a emoji ✅ or 💀
+     */
+    public function externallinkstitle(): string
+    {
+        $links = $this->externallinks;
+        array_walk($links, function (&$value, string $key) {
+            $symbol = $value ? '✅' : '💀';
+            $value = $key . ' ' . $symbol;
+        });
+        return implode("\n", $links);
     }
 
 
