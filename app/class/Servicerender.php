@@ -325,17 +325,6 @@ abstract class Servicerender
     }
 
     /**
-     * Look for datas about pages.
-     *
-     * @param string $text the page text as html
-     */
-    protected function richlink(string $text): string
-    {
-        $text = preg_replace('#<a(.*href="(https?:\/\/(.+))".*)>\2</a>#', "<a$1>$3</a>", $text);
-        return $text;
-    }
-
-    /**
      * Replace plain URL with HTML link pointing to their address.
      *
      * This will also include `target=_blank` and `class=external` attributes.
