@@ -209,7 +209,7 @@ class Modelhome extends Model
 
                 // external links
                 if ($showexternallinks) {
-                    foreach ($page->urls() as $url => $ok) {
+                    foreach ($page->externallinks() as $url => $ok) {
                         $domain = parse_url($url, PHP_URL_HOST);
 
 

@@ -42,6 +42,7 @@ class User extends Item
         'title',
         'description',
         'linkto',
+        'externallinks',
         'geolocalisation',
         'datemodif',
         'datecreation',

@@ -44,6 +44,7 @@ abstract class Model
         'title' => 'title',
         'description' => 'description',
         'linkto' => 'internal links',
+        'externallinks' => 'external links',
         'geolocalisation' => 'geolocalisation',
         'datemodif' => 'modification date',
         'datecreation' => 'creation date',

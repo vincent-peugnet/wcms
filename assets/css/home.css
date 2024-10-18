@@ -129,6 +129,16 @@ table .favicon img {
     max-width: 32px;
 }
 
+table .deadlinks {
+    background-color: red;
+    color: white;
+    border-radius: 15px;
+    display: inline-block;
+    height: 17px;
+    width: 17px;
+    text-align: center;
+}
+
 td.title {
     max-width: 150px;
     overflow: hidden;

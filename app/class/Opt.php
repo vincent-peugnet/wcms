@@ -78,6 +78,7 @@ class Opt extends Item
         'tag',
         'title',
         'linkto',
+        'externallinks',
         'datemodif',
         'datecreation',
         'date',
@@ -209,7 +210,7 @@ class Opt extends Item
     /**
      * Used to generate links in home table header
      */
-    public function sortbyorder($sortby = "")
+    public function sortbyorder(string $sortby = ''): string
     {
         $object = $this->drylist(self::DATALIST, self::HTML_DATETIME_LOCAL);
         if (!empty($sortby)) {

@@ -185,6 +185,12 @@ use Wcms\Config;
                                     <a href="<?= $opt->sortbyorder('linkto') ?>">internal links</a>
                                     <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'linkto']) ?>                                    
                                 </th>
+                            <?php endif ?>                                   
+                            <?php if ($columns['externallinks']) : ?>
+                                <th class="externallinks">
+                                    <a href="<?= $opt->sortbyorder('externallinks') ?>">external links</a>
+                                    <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'externallinks' ]) ?>
+                                </th>
                             <?php endif ?>
                             <?php if ($columns['geolocalisation']) : ?>
                                 <th class="geo">geo</th>                                
@@ -317,6 +323,14 @@ use Wcms\Config;
                                 <?php endif ?>
                                 <?php if ($columns['linkto']) : ?>
                                     <td class="linkto"><?= $opt->linktolink($item->linkto('array')) ?></td>
+                                <?php endif ?>
+                                <?php if ($columns['externallinks']) : ?>
+                                    <td class="linkto" title="<?= $item->externallinkstitle() ?>">
+                                        <?= $item->externallinks('sort') ?>
+                                        <?php if (!empty($deadlinks = $item->deadlinkcount())) : ?>
+                                            <span class="deadlinks"><?= $deadlinks ?></span>
+                                        <?php endif ?>
+                                    </td>
                                 <?php endif ?>
                                 <?php if ($columns['geolocalisation']) : ?>
                                     <td class="geo" title="This page is geolocated: <?= $item->latitude() ?> <?= $item->longitude() ?>">
