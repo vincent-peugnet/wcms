@@ -4,6 +4,7 @@ namespace Wcms;
 
 use RuntimeException;
 use Wcms\Exception\Databaseexception;
+use Wcms\Exception\Filesystemexception\Notfoundexception;
 
 class Controllerhome extends Controller
 {
@@ -250,6 +251,25 @@ class Controllerhome extends Controller
         $this->routedirect('home');
     }
 
+    public function flushurlcache(): void
+    {
+        if (!$this->user->issupereditor()) {
+            http_response_code(304);
+            $this->showtemplate('forbidden');
+        }
+        try {
+            Fs::deletefile(Model::URLS_FILE);
+            $this->sendflashmessage('URL cache successfully deleted', self::FLASH_SUCCESS);
+        } catch (Notfoundexception $e) {
+            $this->sendflashmessage('URL cache is already deleted ' . $e->getMessage(), self::FLASH_WARNING);
+        } catch (RuntimeException $e) {
+            $fserror = $e->getMessage();
+            $this->sendflashmessage("Error while trying to flush page render cache: $fserror", self::FLASH_ERROR);
+            Logger::errorex($e);
+        }
+        $this->routedirect('home');
+    }
+
     public function multi()
     {
         if (isset($_POST['action']) && $this->user->issupereditor() && !empty($_POST['pagesid'])) {
@@ -307,12 +327,13 @@ class Controllerhome extends Controller
     public function multirender(): void
     {
         $pagelist = $_POST['pagesid'] ?? [];
+        $checkurl = $_POST['checkurl'] ?? false;
         $total = count($pagelist);
         $pagelist = $this->pagemanager->pagelistbyid($pagelist);
         $count = 0;
         foreach ($pagelist as $page) {
             try {
-                $page = $this->pagemanager->renderpage($page, $this->router);
+                $page = $this->pagemanager->renderpage($page, $this->router, $checkurl);
                 if ($this->pagemanager->update($page)) {
                     $count++;
                 }

@@ -75,7 +75,7 @@ class Controllerpage extends Controller
 
         if ($this->importpage() && $this->user->iseditor()) {
             try {
-                $this->page = $this->pagemanager->renderpage($this->page, $this->router);
+                $this->page = $this->pagemanager->renderpage($this->page, $this->router, true);
             } catch (RuntimeException $e) {
                 Logger::errorex($e);
             }
@@ -108,6 +108,7 @@ class Controllerpage extends Controller
      * @param Page $page page to check templates
      *
      * @todo Move this function in Modelpage
+     * @todo Recursively render JS templates. Currently only the first template is checked.
      */
     private function templaterender(Page $page): void
     {
@@ -115,7 +116,7 @@ class Controllerpage extends Controller
             $templates = $this->pagemanager->getpagecsstemplates($page);
             foreach ($templates as $page) {
                 if ($this->pagemanager->needtoberendered($page)) {
-                    $page = $this->pagemanager->renderpage($page, $this->router);
+                    $page = $this->pagemanager->renderpage($page, $this->router, false);
                     $this->pagemanager->update($page);
                 }
             }
@@ -126,7 +127,7 @@ class Controllerpage extends Controller
             try {
                 $templatejs = $this->pagemanager->get($page->templatejavascript());
                 if ($this->pagemanager->needtoberendered($templatejs)) {
-                    $templatejs = $this->pagemanager->renderpage($templatejs, $this->router);
+                    $templatejs = $this->pagemanager->renderpage($templatejs, $this->router, false);
                     $this->pagemanager->update($templatejs);
                 }
             } catch (RuntimeException $e) {
@@ -185,7 +186,7 @@ class Controllerpage extends Controller
                 $oldlinkto = $this->page->linkto();
             }
             try {
-                $this->page = $this->pagemanager->renderpage($this->page, $this->router);
+                $this->page = $this->pagemanager->renderpage($this->page, $this->router, true);
             } catch (RuntimeException $e) {
                 Logger::errorex($e);
             }

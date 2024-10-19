@@ -401,9 +401,9 @@ class Modelpage extends Modeldb
     /**
      * Check if a page need to be rendered
      *
-     * This will compare edit and render dates,
-     * then if render file exists,
-     * then if the templatebody is set and has been updated.
+     * 1. This will compare edit and render dates
+     * 2. then if render file exists
+     * 3. then if the templatebody is set and has been updated
      *
      * @param Page $page                    Page to be checked
      *
@@ -433,14 +433,17 @@ class Modelpage extends Modeldb
      * Render given page
      * Write HTML, CSS and JS files
      * update linkto property
+     * update external links
      *
-     * @param Page $page input
+     * @param Page $page
+     *
+     * @param bool $checkurl                If true, URLs of rendered page will be checked
      *
      * @return Page rendered $page
      *
-     * @throws Runtimeexception if whriting files to filesystem failed
+     * @throws Runtimeexception if writing files to filesystem failed
      */
-    public function renderpage(Page $page, AltoRouter $router): Page
+    public function renderpage(Page $page, AltoRouter $router, bool $checkurl = false): Page
     {
         $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
 
@@ -457,7 +460,7 @@ class Modelpage extends Modeldb
                 throw new DomainException('Page version is out of range');
         }
 
-        $html = $renderengine->render($page, true);
+        $html = $renderengine->render($page, $checkurl);
 
         Fs::dircheck(Model::ASSETS_RENDER_DIR, true, 0775);
         Fs::dircheck(Model::HTML_RENDER_DIR, true, 0775);
