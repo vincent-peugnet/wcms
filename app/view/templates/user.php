@@ -25,9 +25,7 @@ $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'back.css',
 
                     
 
-                <?php
-                foreach ($userlist as $user ) {
-                    ?>
+                <?php foreach ($userlist as $user ) : ?>
                     
                     <tr>
                     <form action="<?= $this->url('useredit') ?>" method="post">
@@ -82,9 +80,7 @@ $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'back.css',
 
                     </tr>
 
-                    <?php
-                    }
-                ?>
+                    <?php endforeach ?>
 
                 </table>
 

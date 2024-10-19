@@ -38,11 +38,11 @@
                 <option value="">
                     <?= empty($page->templatebody()) ? '--default favicon--' : '--using template BODY favicon--' ?>
                 </option>
-                <?php foreach ($faviconlist as $favicon) { ?>
+                <?php foreach ($faviconlist as $favicon) : ?>
                     <option value="<?= $favicon ?>" <?= $page->favicon() === $favicon ? 'selected' : '' ?>>
                         <?= $favicon ?>
                     </option>
-                <?php } ?>
+                <?php endforeach ?>
             </select>
 
             
@@ -51,18 +51,18 @@
                 <option value="">
                     <?= empty($page->templatebody()) ? '--default thumbnail--' : '--using template BODY thumbnail--' ?>
                 </option>
-                <?php foreach ($thumbnaillist as $thumbnail) { ?>
+                <?php foreach ($thumbnaillist as $thumbnail) : ?>
                     <option value="<?= $thumbnail ?>" <?= $page->thumbnail() === $thumbnail ? 'selected' : '' ?>>
                         <?= $thumbnail ?>
                     </option>
-                <?php } ?>
+                <?php endforeach ?>
             </select>
 
-            <?php if(!empty($page->thumbnail())) { ?>
+            <?php if(!empty($page->thumbnail())) : ?>
                 <div id="showthumbnail">
                     <img src="<?= Wcms\Model::thumbnailpath() . $page->thumbnail() ?>">
                 </div>
-            <?php } ?>
+            <?php endif ?>
 
             
 
@@ -92,57 +92,45 @@
         <summary>Template</summary>
             <fieldset>
             <label for="templatebody">BODY template</label>
-            <?php if(!empty($page->templatebody())) { ?>
+            <?php if(!empty($page->templatebody())) : ?>
                 <a href="<?= $this->upage('pageedit', $page->templatebody()) ?>" title="Edit template">
                     <i class="fa fa-pencil"></i>
                 </a>
-            <?php } ?>
+            <?php endif ?>
             <select name="templatebody" id="templatebody" form="update">
                 <option value="" <?= empty($page->templatebody()) ? 'selected' : '' ?>>--no template--</option>
-                <?php
-                foreach ($pagelist as $template) {
-                ?>
+                <?php foreach ($pagelist as $template) : ?>
                     <option value="<?= $template ?>" <?= $page->templatebody() === $template ? 'selected' : '' ?>><?= $template ?></option>
-                    <?php 
-                } 
-                ?>
+                <?php endforeach ?>
             </select>
 
 
             <label for="templatecss">CSS template</label>
-            <?php if(!empty($page->templatecss())) { ?>
+            <?php if(!empty($page->templatecss())) : ?>
                 <a href="<?= $this->upage('pageedit', $page->templatecss()) ?>" title="Edit template">
                     <i class="fa fa-pencil"></i>
                 </a>
-            <?php } ?>
+            <?php endif ?>
             <select name="templatecss" id="templatecss" form="update">
                 <option value="" <?= empty($page->templatecss()) ? 'selected' : '' ?>>--no template--</option>
-                <?php
-                foreach ($pagelist as $template) {
-                    ?>
+                <?php foreach ($pagelist as $template) : ?>
                     <option value="<?= $template ?>" <?= $page->templatecss() === $template ? 'selected' : '' ?>><?= $template ?></option>
-                    <?php 
-                }
-                ?>
+                <?php endforeach ?>
             </select>
 
 
 
             <label for="templatejavascript">Javascript template</label>
-            <?php if(!empty($page->templatejavascript())) { ?>
+            <?php if(!empty($page->templatejavascript())) : ?>
                 <a href="<?= $this->upage('pageedit', $page->templatejavascript()) ?>" title="Edit template">
                     <i class="fa fa-pencil"></i>
                 </a>
-            <?php } ?>
+            <?php endif ?>
             <select name="templatejavascript" id="templatejavascript" form="update">
                 <option value="" <?= empty($page->templatejavascript()) ? 'selected' : '' ?>>--no template--</option>
-                <?php
-                foreach ($pagelist as $template) {
-                    ?>
+                <?php foreach ($pagelist as $template) : ?>
                     <option value="<?= $template ?>" <?= $page->templatejavascript() === $template ? 'selected' : '' ?>><?= $template ?></option>
-                    <?php 
-                }
-                ?>
+                <?php endforeach ?>
             </select>
 
 
@@ -163,16 +151,12 @@
     <fieldset id="external">
         <label for="externalcss">External CSS</label>
         <input type="text" name="externalcss[]" id="externalcss" placeholder="add external address" form="update">
-        <?php
-            foreach ($page->externalcss() as $css) {
-                ?>
-                <div class="checkexternal">
-                <input type="checkbox" name="externalcss[]" id="<?= $css ?>" value="<?= $css ?>" form="update" checked>
-                <label for="<?= $css ?>" title="<?= $css ?>"><?= $css ?></label>
-                </div>
-                <?php
-            }
-        ?>
+        <?php foreach ($page->externalcss() as $css) : ?>
+            <div class="checkexternal">
+            <input type="checkbox" name="externalcss[]" id="<?= $css ?>" value="<?= $css ?>" form="update" checked>
+            <label for="<?= $css ?>" title="<?= $css ?>"><?= $css ?></label>
+            </div>
+        <?php endforeach ?>
 
         <label for="customhead">Custom head</label>
         <textarea name="customhead" wrap="off" spellcheck="false" rows="<?= $page->customhead('int') ?>" form="update"><?= $page->customhead() ?></textarea>

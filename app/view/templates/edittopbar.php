@@ -35,14 +35,14 @@
         </span>
 
 
-        <?php if($this->candeletepage($page)) { ?>
+        <?php if($this->candeletepage($page)) : ?>
             <span id="delete">
-                    <a href="<?= $this->upage('pagedelete', $page->id()) ?>">
-                        <i class="fa fa-trash"></i>
-                        <span class="text">delete</span>
-                    </a>
+                <a href="<?= $this->upage('pagedelete', $page->id()) ?>">
+                    <i class="fa fa-trash"></i>
+                    <span class="text">delete</span>
+                </a>
             </span>
-        <?php } ?>
+        <?php endif ?>
 
     </span>
     <span class="menu" id="workspacemenu">
