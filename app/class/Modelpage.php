@@ -403,7 +403,11 @@ class Modelpage extends Modeldb
      *
      * 1. This will compare edit and render dates
      * 2. then if render file exists
-     * 3. then if the templatebody is set and has been updated
+     * 3. then if page have external links and
+     *     - if some haven't been checked yet
+     *     - or if it's been a long time
+     *     - or if url cache is deleted
+     * 4. then if the templatebody is set and has been updated
      *
      * @param Page $page                    Page to be checked
      *
@@ -411,14 +415,26 @@ class Modelpage extends Modeldb
      */
     public function needtoberendered(Page $page): bool
     {
+        if ($page->daterender() <= $page->datemodif()) {
+            return true;
+        }
         if (
-            $page->daterender() <= $page->datemodif() ||
-            !file_exists(self::HTML_RENDER_DIR . $page->id() . '.html') ||
-            !file_exists(self::ASSETS_RENDER_DIR . $page->id() . '.css') ||
-            !file_exists(self::ASSETS_RENDER_DIR . $page->id() . '.js')
+            !file_exists(self::HTML_RENDER_DIR . $page->id() . '.html')
+            || !file_exists(self::ASSETS_RENDER_DIR . $page->id() . '.css')
+            || !file_exists(self::ASSETS_RENDER_DIR . $page->id() . '.js')
         ) {
             return true;
-        } elseif (!empty($page->templatebody())) {
+        }
+        if (count($page->externallinks()) > 0) {
+            $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
+            if (
+                $page->daterender()->diff($now)->days > Serviceurlchecker::CACHE_EXPIRE_TIME
+                || $page->uncheckedlinkcount() > 0
+            ) {
+                return true;
+            }
+        }
+        if (!empty($page->templatebody())) {
             try {
                 $bodytemplate = $this->get($page->templatebody());
                 return $page->daterender() <= $bodytemplate->datemodif();
@@ -437,17 +453,17 @@ class Modelpage extends Modeldb
      *
      * @param Page $page
      *
-     * @param bool $checkurl                If true, URLs of rendered page will be checked
+     * @param ?Serviceurlchecker $urlchecker
      *
      * @return Page rendered $page
      *
      * @throws Runtimeexception if writing files to filesystem failed
      */
-    public function renderpage(Page $page, AltoRouter $router, bool $checkurl = false): Page
+    public function renderpage(Page $page, AltoRouter $router, ?Serviceurlchecker $urlchecker = null): Page
     {
         $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
 
-        $params = [$router, $this, Config::externallinkblank(), Config::internallinkblank()];
+        $params = [$router, $this, Config::externallinkblank(), Config::internallinkblank(), $urlchecker];
 
         switch ($page->version()) {
             case Page::V1:
@@ -460,7 +476,7 @@ class Modelpage extends Modeldb
                 throw new DomainException('Page version is out of range');
         }
 
-        $html = $renderengine->render($page, $checkurl);
+        $html = $renderengine->render($page);
 
         Fs::dircheck(Model::ASSETS_RENDER_DIR, true, 0775);
         Fs::dircheck(Model::HTML_RENDER_DIR, true, 0775);

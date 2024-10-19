@@ -75,7 +75,7 @@ class Controllerpage extends Controller
 
         if ($this->importpage() && $this->user->iseditor()) {
             try {
-                $this->page = $this->pagemanager->renderpage($this->page, $this->router, true);
+                $this->page = $this->pagemanager->renderpage($this->page, $this->router, new Serviceurlchecker(8));
             } catch (RuntimeException $e) {
                 Logger::errorex($e);
             }
@@ -116,7 +116,7 @@ class Controllerpage extends Controller
             $templates = $this->pagemanager->getpagecsstemplates($page);
             foreach ($templates as $page) {
                 if ($this->pagemanager->needtoberendered($page)) {
-                    $page = $this->pagemanager->renderpage($page, $this->router, false);
+                    $page = $this->pagemanager->renderpage($page, $this->router, null);
                     $this->pagemanager->update($page);
                 }
             }
@@ -127,7 +127,7 @@ class Controllerpage extends Controller
             try {
                 $templatejs = $this->pagemanager->get($page->templatejavascript());
                 if ($this->pagemanager->needtoberendered($templatejs)) {
-                    $templatejs = $this->pagemanager->renderpage($templatejs, $this->router, false);
+                    $templatejs = $this->pagemanager->renderpage($templatejs, $this->router, null);
                     $this->pagemanager->update($templatejs);
                 }
             } catch (RuntimeException $e) {
@@ -186,7 +186,7 @@ class Controllerpage extends Controller
                 $oldlinkto = $this->page->linkto();
             }
             try {
-                $this->page = $this->pagemanager->renderpage($this->page, $this->router, true);
+                $this->page = $this->pagemanager->renderpage($this->page, $this->router, new Serviceurlchecker(3));
             } catch (RuntimeException $e) {
                 Logger::errorex($e);
             }

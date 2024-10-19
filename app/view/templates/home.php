@@ -321,8 +321,11 @@ use Wcms\Config;
                             <?php } if ($columns['externallinks']) { ?>
                             <td class="linkto" title="<?= $item->externallinkstitle() ?>">
                                 <?= $item->externallinks('sort') ?>
-                                <?php $deadlinks = $item->deadlinkcount(); if (!empty($deadlinks)) { ?>
-                                    <span class="deadlinks"><?= $deadlinks ?></span>
+                                <?php $deadlinkcount = $item->deadlinkcount(); if (!empty($deadlinkcount)) { ?>
+                                    <span class="deadlinkcount"><?= $deadlinkcount ?></span>
+                                <?php } ?>
+                                <?php $uncheckedlinkcount = $item->uncheckedlinkcount(); if (!empty($uncheckedlinkcount)) { ?>
+                                    <span class="uncheckedlinkcount"><?= $uncheckedlinkcount ?></span>
                                 <?php } ?>
                             </td>
                             <?php } if ($columns['geolocalisation']) { ?>

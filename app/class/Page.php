@@ -806,8 +806,8 @@ abstract class Page extends Item
 
     public function deadlinkcount(): int
     {
-        $deadurls = array_filter($this->externallinks, function ($ok): bool {
-            return !$ok;
+        $deadurls = array_filter($this->externallinks, function ($status): bool {
+            return $status === false;
         });
         return count($deadurls);
     }
@@ -821,10 +821,22 @@ abstract class Page extends Item
     {
         $links = $this->externallinks;
         array_walk($links, function (&$value, string $key) {
-            $symbol = $value ? '✅' : '💀';
+            if (is_null($value)) {
+                $symbol = '🔍️';
+            } else {
+                $symbol = $value ? '✅' : '💀';
+            }
             $value = $key . ' ' . $symbol;
         });
         return implode("\n", $links);
+    }
+
+    public function uncheckedlinkcount(): int
+    {
+        $uncheckedurls = array_filter($this->externallinks, function ($status): bool {
+            return is_null($status);
+        });
+        return count($uncheckedurls);
     }
 
 
