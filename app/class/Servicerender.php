@@ -395,9 +395,9 @@ abstract class Servicerender
                 $url = filter_var($href, FILTER_SANITIZE_URL);
                 $this->urls[$url] = null;
                 if ($this->urlchecker !== null) {
-                    $ok = $this->urlchecker->is200($url);
-                    $classes[] = $ok ? 'ok' : 'dead';
-                    $this->urls[$url] = $ok;
+                    $dead = $this->urlchecker->isdead($url);
+                    $classes[] = $dead ? 'dead' : 'ok';
+                    $this->urls[$url] = !$dead;
                 }
             } elseif (preg_match('~^([a-z0-9-_]+)((\/?#[a-z0-9-_]+)|(\/([\w\-\%\[\]\=\?\&]*)))?$~', $href, $out)) {
                 $classes[] = 'internal';

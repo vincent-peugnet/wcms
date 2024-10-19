@@ -18,6 +18,13 @@ class Serviceurlchecker
     /** @var int CACHE_EXPIRE_TIME in days */
     public const CACHE_EXPIRE_TIME = 30;
 
+    /** @var null[] URL response code considered as not dead */
+    public const ACCEPTED_CODES = [
+        200 => null,
+        401 => null,
+        403 => null,
+    ];
+
     public function __construct()
     {
         try {
@@ -29,15 +36,15 @@ class Serviceurlchecker
     }
 
     /**
-     * Check if URL response is 200
+     * Check if URL is dead according to ACCEPTED CODES
      */
-    public function is200(string $url): bool
+    public function isdead(string $url): bool
     {
         if (!$this->iscached($url)) {
             $this->urls[$url]['response'] = $this->getresponse($url);
             $this->urls[$url]['timestamp'] = time();
         }
-        return $this->urls[$url]['response'] === 200;
+        return !key_exists($this->urls[$url]['response'], self::ACCEPTED_CODES);
     }
 
     /**
@@ -47,7 +54,9 @@ class Serviceurlchecker
      */
     protected function getresponse(string $url): int
     {
-        $headers = @get_headers($url, 1); // `@` avoid throwing PHP error
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+        $context = stream_context_create([$scheme => ['method' => "HEAD",'header' => 'User-Agent: Mozilla/5.0']]);
+        $headers = @get_headers($url, 1, $context); // `@` avoid throwing PHP error
         if ($headers === false) {
             return 0;
         }
