@@ -30,7 +30,7 @@ $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [
 
 </div>
 
-<?php if(!Wcms\Config::disablejavascript()) { ?>
+<?php if(!Wcms\Config::disablejavascript()) : ?>
 
 <script>
     const pageversion = <?= $this->e($page->version()) ?>;
@@ -41,6 +41,6 @@ $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [
 </script>
 <script type="module" src="<?= Wcms\Model::jspath() ?>edit.bundle.js" async></script>
 
-<?php } ?>
+<?php endif ?>
 
 <?php $this->stop('page') ?>

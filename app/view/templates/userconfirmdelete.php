@@ -1,7 +1,5 @@
 
-<?php
-if($candelete) {
-    ?>
+<?php if($candelete) : ?>
 
 
     <h1>Delete User</h1>
@@ -24,9 +22,7 @@ if($candelete) {
 
 
 
-    <?php
-} else {
-    ?>
+<?php else : ?>
 
     <h1>You can't delete this user</h1>
 
@@ -37,6 +33,4 @@ if($candelete) {
     <a href="<?= $this->url('user') ?>">Go back to users</a>
 
 
-    <?php
-}
-?>
+<?php endif ?>
