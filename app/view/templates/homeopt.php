@@ -10,9 +10,9 @@
 
         <form action="<?= $this->url('home') ?>" method="get">
             <input type="submit" name="submit" value="filter" class="filter">
-            <?php if ($opt->isfiltered()) { ?>
+            <?php if ($opt->isfiltered()) : ?>
                 <input type="submit" name="submit" value="reset">
-            <?php } ?>
+            <?php endif ?>
 
             <div id="optfield">
 
@@ -22,12 +22,10 @@
                     <legend>Sort</legend>
                     <div>
                         <select name="sortby" id="sortby">
-                            <?php
-                            foreach (Wcms\Opt::SORTBYLIST as $col) {
-                                $name = Wcms\Model::METADATAS_NAMES[$col];
-                                echo '<option value="' . $col . '" ' . ($opt->sortby() == $col ? "selected" : "") . '>' . $name . '</option>';
-                            }
-                            ?>
+                            <?php foreach (Wcms\Opt::SORTBYLIST as $col) :
+                                $name = Wcms\Model::METADATAS_NAMES[$col]; ?>
+                                <option value="<?= $col ?>" <?= ($opt->sortby() == $col ? "selected" : "") ?> ><?= $name ?></option>
+                            <?php endforeach ?>
                         </select>
                         <div>
                             <input type="radio" id="asc" name="order" value="1" <?= $opt->order() == '1' ? "checked" : "" ?> />
@@ -81,7 +79,7 @@
                         <hr>
 
                         <ul>
-                            <?php foreach ($opt->taglist() as $tagfilter => $count) { ?>
+                            <?php foreach ($opt->taglist() as $tagfilter => $count) : ?>
                                 <li>
                                     <input
                                         type="checkbox"
@@ -95,7 +93,7 @@
                                         <span class="counter tag_<?= $tagfilter ?>"><?= $count ?></span>
                                     </label>
                                 </li>
-                            <?php } ?>
+                            <?php endforeach ?>
                         </ul>
                     </div>
                 </fieldset>
@@ -115,7 +113,7 @@
                         <label for="author_EMPTY">EMPTY</label>
                         
                         <ul>
-                            <?php foreach ($opt->authorlist() as $authorfilter => $count) { ?>
+                            <?php foreach ($opt->authorlist() as $authorfilter => $count) : ?>
 
                                 <li>
                                     <input
@@ -130,8 +128,8 @@
                                         <span class="counter"><?= $count ?></span>
                                     </label>
                                 </li>
-                            <?php } ?>
-                        </ul>
+                            <?php endforeach ?>
+                        </ul>   
                     </div>
 
                 </fieldset>
@@ -170,15 +168,11 @@
                         <select name="linkto" id="linkto">
                             <option value="" selected>-- not set --</option>
                             <?php
-                            foreach ($opt->pageidlist() as $id) {
-                                if ($id === $opt->linkto()) {
-                                    $selected = ' selected';
-                                } else {
-                                    $selected = '';
-                                }
-                                echo '<option value="' . $id . '"' . $selected . '>' . $id . '</option>';
-                            }
-                            ?>
+                            foreach ($opt->pageidlist() as $id) :
+                                $selected = $id === $opt->linkto() ? ' selected': '';
+                                ?>
+                                <option value="<?= $id ?>" <?= $selected ?> ><?= $id ?></option>
+                            <?php endforeach ?>
                         </select>
                     </div>
                 </fieldset>
@@ -226,9 +220,9 @@
 
 
             <input type="submit" name="submit" value="filter" class="filter">
-            <?php if ($opt->isfiltered()) { ?>
+            <?php if ($opt->isfiltered()) : ?>
                 <input type="submit" name="submit" value="reset">
-            <?php } ?>
+            <?php endif ?>
 
         </form>
     </div>

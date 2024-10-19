@@ -65,15 +65,9 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
                 <select name="homeredirect" id="homeredirect" form="admin">
                     <option value="" <?= Wcms\Config::homeredirect() === null ? 'selected' : '' ?>>--select page to redirect--</option>
 
-                    <?php
-                    foreach ($pagelist as $page) {
-                    ?>
+                    <?php foreach ($pagelist as $page) : ?>
                         <option value="<?= $page ?>" <?= Wcms\Config::homeredirect() === $page ? 'selected' : '' ?>><?= $page ?></option>
-                    <?php
-                    }
-
-
-                    ?>
+                    <?php endforeach ?>
                 </select>
 
 
@@ -120,12 +114,9 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
                 <label for="alertlink">Link to this page (for visitors)</label>
                 <select name="alertlink" id="alertlink" form="admin">
                     <option value="" <?= empty(Wcms\Config::alertlink()) ? 'selected' : '' ?>>--No link--</option>
-                    <?php
-                    foreach ($pagelist as $page) {
-                    ?>
+                    <?php foreach ($pagelist as $page) : ?>
                         <option value="<?= $page ?>" <?= Wcms\Config::alertlink() === $page ? 'selected' : '' ?>><?= $page ?></option>
-                    <?php    }
-                    ?>
+                    <?php endforeach ?>
                 </select>
 
 
@@ -285,13 +276,9 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
                 <label for="defaultfavicon">Default favicon</label>
                 <select name="defaultfavicon" id="defaultfavicon" form="admin">
                     <option value="">--no favicon--</option>
-                    <?php
-                    foreach ($faviconlist as $favicon) {
-                    ?>
+                    <?php foreach ($faviconlist as $favicon) : ?>
                         <option value="<?= $favicon ?>" <?= Wcms\Config::defaultfavicon() === $favicon ? 'selected' : '' ?>><?= $favicon ?></option>
-                    <?php
-                    }
-                    ?>
+                    <?php endforeach ?>
                 </select>
 
                 <h4>Thumbnail</h4>
@@ -299,11 +286,9 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
                 <label for="defaultthumbnail">Default thumbnail</label>
                 <select name="defaultthumbnail" id="defaultthumbnail" form="admin">
                     <option value="">--no thumbnail--</option>
-                    <?php
-                    foreach ($thumbnaillist as $thumbnail) {
-                    ?>
+                    <?php foreach ($thumbnaillist as $thumbnail) : ?>
                         <option value="<?= $thumbnail ?>" <?= Wcms\Config::defaultthumbnail() === $thumbnail ? 'selected' : '' ?>><?= $thumbnail ?></option>
-                    <?php } ?>
+                    <?php endforeach ?>
                 </select>
 
                 <h2 id="interface">Interface</h2>
@@ -313,13 +298,9 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
 
                 <label for="theme">select interface theme</label>
                 <select name="theme" id="theme" form="admin">
-                    <?php
-                    foreach ($themes as $theme) {
-                    ?>
+                    <?php foreach ($themes as $theme) : ?>
                         <option value="<?= $theme ?>" <?= $theme === Wcms\Config::theme() ? 'selected' : '' ?>><?= $theme ?></option>
-                    <?php
-                    }
-                    ?>
+                    <?php endforeach ?>
                 </select>
 
                 <p>
@@ -374,13 +355,9 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
 
                 <label for="dbsrc">Database to duplicate</label>
                 <select name="dbsrc" id="dbsrc">
-                    <?php
-                    foreach ($pagesdblist as $db) {
-                        ?>
+                    <?php foreach ($pagesdblist as $db) : ?>
                         <option value="<?= $db ?>" <?= $db === Wcms\Config::pagetable() ? 'selected' : '' ?>><?= $db ?></option>
-                        <?php
-                    }
-                    ?>
+                    <?php endforeach ?>
                 </select>
 
                 <label for="duplicate">New name</label>
