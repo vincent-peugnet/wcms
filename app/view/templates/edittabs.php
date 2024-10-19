@@ -1,6 +1,6 @@
 <div class="tabs">
 
-<?php foreach ($tablist as $key => $value) { ?>
+<?php foreach ($tablist as $key => $value) : ?>
 <div class="tab">
 
     <input form="update" name="interface" type="radio" value="<?= $key ?>" id="tab<?= $key ?>" class="checkboxtab" <?= $key == $opentab ? 'checked' : '' ?> >
@@ -21,6 +21,6 @@
         ><?= $this->e($value) ?></textarea>
     </div>
 </div>
-<?php } ?>
+<?php endforeach ?>
 
 </div>

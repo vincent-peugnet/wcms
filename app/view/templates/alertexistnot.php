@@ -2,17 +2,17 @@
 
 <?php $this->start('alert') ?>
 
-<?php if ($user->isvisitor() && Wcms\Config::existnotpass())  { ?>
+<?php if ($user->isvisitor() && Wcms\Config::existnotpass()) : ?>
 
     <p>
         <?php $this->insert('alertform', ['id' => $page->id()]) ?>
     </p>
 
-<?php } ?>
+<?php endif ?>
 
 
 
-<?php if ($user->iseditor()) { ?>
+<?php if ($user->iseditor()) : ?>
     <p>
         <a href="<?= $this->upage('pageadd', $page->id()) ?>">⭐ Create</a>
     </p>
@@ -26,7 +26,7 @@
     <p>
         <a href="<?= $this->url('home') ?>">🏠 Go back to home</a>
     </p>
-<?php } ?>
+<?php endif ?>
 
 
 

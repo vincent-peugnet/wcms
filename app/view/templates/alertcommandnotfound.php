@@ -8,7 +8,7 @@
 
 <p>👁️ <a href="<?= $this->upage('pageread', $id) ?>">read page</a> <code><?= $this->e($id) ?></code></p>
 
-<?php if (!$user->isvisitor()) { ?>
+<?php if (!$user->isvisitor()) : ?>
     <p>
         💡 You may want to try:
         <ul>
@@ -29,7 +29,7 @@
             </li>
         </ul>
     </p>
-<?php } ?>
+<?php endif ?>
 
 <?php $this->stop() ?>
 

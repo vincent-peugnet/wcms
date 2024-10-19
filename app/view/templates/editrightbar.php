@@ -12,10 +12,10 @@
     <div id="rightbarpanel" class="panel">
    
         
-        <?php if ($user->iseditor()) { ?>
+        <?php if ($user->iseditor()) : ?>
             <h3>Authors</h3>
 
-            <?php foreach ($editorlist as $editor) { ?>
+            <?php foreach ($editorlist as $editor) : ?>
                 <div class="checkexternal">
                 <input
                     type="checkbox"
@@ -30,9 +30,9 @@
                 >
                 <label for="<?= $editor->id() ?>" ><?= $editor->id() ?> <?= $editor->level() ?></label>
                 </div>
-            <?php } ?>
+            <?php endforeach ?>
 
-        <?php } ?>
+        <?php endif ?>
 
 
 
