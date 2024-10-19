@@ -18,12 +18,12 @@ class Servicerenderv1 extends Servicerender
      *
      * @return string                       HTML render of the page
      */
-    public function render(Page $page, bool $checkurl): string
+    public function render(Page $page): string
     {
         if (!$page instanceof Pagev1) {
             throw new DomainException('Page should be only Pagev1');
         }
-        return parent::render($page, $checkurl);
+        return parent::render($page);
     }
 
     public function renderprimary(Page $page): string

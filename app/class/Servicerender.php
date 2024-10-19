@@ -60,12 +60,14 @@ abstract class Servicerender
         AltoRouter $router,
         Modelpage $pagemanager,
         bool $externallinkblank = false,
-        bool $internallinkblank = false
+        bool $internallinkblank = false,
+        ?Serviceurlchecker $urlchecker = null
     ) {
         $this->router = $router;
         $this->pagemanager = $pagemanager;
         $this->externallinkblank = $externallinkblank;
         $this->internallinkblank = $internallinkblank;
+        $this->urlchecker = $urlchecker;
     }
 
 
@@ -76,15 +78,13 @@ abstract class Servicerender
      *
      * @return string                       HTML render of the page
      */
-    public function render(Page $page, bool $checkurl): string
+    public function render(Page $page): string
     {
         $this->page = $page;
 
-        $this->urlchecker = $checkurl ? new Serviceurlchecker() : null;
-
         $html = $this->gethmtl();
 
-        if ($checkurl) {
+        if (!is_null($this->urlchecker)) {
             try {
                 $this->urlchecker->savecache();
             } catch (RuntimeException $e) {
@@ -395,9 +395,13 @@ abstract class Servicerender
                 $url = filter_var($href, FILTER_SANITIZE_URL);
                 $this->urls[$url] = null;
                 if ($this->urlchecker !== null) {
-                    $dead = $this->urlchecker->isdead($url);
-                    $classes[] = $dead ? 'dead' : 'ok';
-                    $this->urls[$url] = !$dead;
+                    try {
+                        $dead = $this->urlchecker->isdead($url);
+                        $classes[] = $dead ? 'dead' : 'ok';
+                        $this->urls[$url] = !$dead;
+                    } catch (RuntimeException $e) {
+                        // Web search limit reached
+                    }
                 }
             } elseif (preg_match('~^([a-z0-9-_]+)((\/?#[a-z0-9-_]+)|(\/([\w\-\%\[\]\=\?\&]*)))?$~', $href, $out)) {
                 $classes[] = 'internal';

@@ -129,14 +129,21 @@ table .favicon img {
     max-width: 32px;
 }
 
-table .deadlinks {
-    background-color: red;
-    color: white;
+table .deadlinkcount, table .uncheckedlinkcount {
     border-radius: 15px;
     display: inline-block;
     height: 17px;
     width: 17px;
     text-align: center;
+    color: white;
+}
+
+table .deadlinkcount {
+    background-color: red;
+}
+
+table .uncheckedlinkcount {
+    background-color: rgb(65, 65, 65);
 }
 
 td.title {

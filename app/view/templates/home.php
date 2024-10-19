@@ -325,10 +325,13 @@ use Wcms\Config;
                                     <td class="linkto"><?= $opt->linktolink($item->linkto('array')) ?></td>
                                 <?php endif ?>
                                 <?php if ($columns['externallinks']) : ?>
-                                    <td class="linkto" title="<?= $item->externallinkstitle() ?>">
+                                    <td class="externallinks" title="<?= $item->externallinkstitle() ?>">
                                         <?= $item->externallinks('sort') ?>
                                         <?php if (!empty($deadlinks = $item->deadlinkcount())) : ?>
-                                            <span class="deadlinks"><?= $deadlinks ?></span>
+                                            <span class="deadlinkcount"><?= $deadlinks ?></span>
+                                        <?php endif ?>
+                                        <?php if (!empty($uncheckedlinkcount = $item->uncheckedlinkcount())) : ?>
+                                            <span class="uncheckedlinkcount"><?= $uncheckedlinkcount ?></span>
                                         <?php endif ?>
                                     </td>
                                 <?php endif ?>
