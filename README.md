@@ -4,15 +4,14 @@
 
 W is a lightweight CMS tool, meant to help you design a website using a unique approach. It's targeting artists, or experimental projects.
 
-To have a better idea of what W can do, you can check out the [User manual](MANUAL.md), or dicover the [ideas](#ideas) behind this specific tool.
+To have a better idea of what W can do, you can check out the [webiste](https://w.club1.fr).
 
 If tou want to try it out, you can :
 
 - follow the [install instructions](#how-to-install) to host your own instance of W.
-- be hosted for free by [club1.fr](https://club1.fr) as an official tester (please contact [vincent@club1.fr](mailto:v.peugnet@free.fr) for more info).
-- [install from sources](#install-from-sources), if you want to contribute to the code.
+- be hosted for free by [club1.fr](https://club1.fr) as an official tester (please contact [vincent+w@club1.fr](mailto:vincent+w@club1.fr) for more info).
 
-W is a free and open source tool under [the AGPLv3 License](LICENSE). The project was initiated in 2018 by Vincent Peugnet.
+W is a free and open source tool under [the AGPLv3 License](LICENSE). The project was initiated in 2018 by [Vincent Peugnet](https://246.eu/vincent-peugnet).
 
 Ideas
 -----
@@ -30,7 +29,7 @@ W try to help you create pages more spontaneously.
 
 - Very lightweight page loading and editor
 - Use standards to edit your pages : markdown, HTML, CSS and Javascript
-- [Media manager](MANUAL.md#media-manager)
+- Media manager
 - Multi-users
 - Geolocalisation : generate map using page's coordinates **(BETA)**
 - Flat file database
@@ -66,7 +65,7 @@ You can even view a graph of links.
 Rendering diagram
 -----------------
 
-W page rendering is document through [this diagram](RENDER.md).
+W page rendering is documented through [this diagram](RENDER.md).
 
 
 API
@@ -77,17 +76,17 @@ An API exist but is experimental for now (v0). Find more info [in the API docume
 Development team
 ----------------
 
-W is a project created and maintained by [Vincent Peugnet](https://github.com/vincent-peugnet), an amateur computer science enthousiast who can only code in PHP. It now includes [Nicolas Peugnet](https://github.com/n-peugnet) (his brother) as JS developer, technical advisor and every challenges that are too complicated for Vincent.
-We can also mention [Guilhem Prévost Leygonie]() as legendary number one user and now as an issue writer too.
+W is a project created and maintained by [Vincent Peugnet](https://github.com/vincent-peugnet), an amateur computer science enthousiast who can only code in PHP. It includes [Nicolas Peugnet](https://github.com/n-peugnet) (his brother) as JS developer, technical advisor. He's the one that take care of every challenges that are too complicated for Vincent.
+We can also mention *Fae Prévost Leygonie* as legendary number one user and issue writer too.
 
+### Thanks to
 
-- [James Moss's Flywheel Database](https://github.com/jamesmoss/flywheel)
-- [Michel Fortin's Markdown Extra](https://github.com/michelf/php-markdown)
-- [Plates](https://github.com/thephpleague/plates) as template engine.
-- [Nicolas Peugnet](https://nicolas.club1.fr/) for the technical support
-
-
-
+- James Moss's [Flywheel Database](https://github.com/jamesmoss/flywheel)
+- Michel Fortin's [Markdown Extra](https://github.com/michelf/php-markdown)
+- the [Plates](https://github.com/thephpleague/plates) template engine.
+- the advanced text editor [Code Mirror](https://codemirror.net/)
+- the [Cytoscape JS](https://js.cytoscape.org/) graph engine
+- interactive map library [Leaflet](https://leafletjs.com/)
 
 
 How to install
@@ -97,25 +96,39 @@ __Server requirements__
 
 - apache server
 - PHP >=7.4.0 and the following extensions: `curl mbstring xml`
-- optionally: `gd` or `imagick` PHP extensions for image optimizer feature.
+- optionally: `gd` or `imagick` PHP extensions for [image optimizer feature](MANUAL.md#optimize-images).
 
 __W__ don't need any database manager as it use a "flat file" system.
 
+You can put W at the root of your domain, or in subfolders. Then access the address in your browser and follow the differents steps.
 
-Install the latest release
---------------------------
+Install using latest release zip
+--------------------------------
 
-Simply download the [latest realease](https://github.com/vincent-peugnet/wcms/releases/latest) from github, and unzip it in your hosted folder. You can put W at the root of your domain, or in subfolders. Then access the address in your browser and follow the differents steps.
-
-W will ask you for the path you've installed it, if you installed it at the root, leave this field blank, otherwise, indiquate the subfolders like `path/to/wcms`.
+Simply download the [latest realease](https://github.com/vincent-peugnet/wcms/releases/latest) from Github, and unzip it in your hosted folder.
 
 
-Install using git
+
+Install using Git
 -----------------
 
-If you have a SSH access to your server, you can install W from sources by following thoses [three steps](#install-from-sources).
+If you have a SSH access to your server and you are familiar with Git, you can install W from sources. See [Install from sources](#install-from-sources).
 
-To update, type `git pull` to update Git files from repo, then type `make` to build the JS files.
+### updating
+
+1. update git
+
+        git pull
+
+2. choose a release tag
+
+        git checkout TAG
+    
+    Replace `TAG` with release name (for example `v3.5.0`). Check [the latest release](https://github.com/vincent-peugnet/wcms/releases/latest) to get the latest release tag.
+
+3. build what's necessary
+
+        make build
 
 Development informations
 ========================
