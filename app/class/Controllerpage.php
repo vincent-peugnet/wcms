@@ -75,7 +75,8 @@ class Controllerpage extends Controller
 
         if ($this->importpage() && $this->user->iseditor()) {
             try {
-                $this->page = $this->pagemanager->renderpage($this->page, $this->router, new Serviceurlchecker(8));
+                $urlchecker = Config::urlchecker() ? new Serviceurlchecker(8) : null;
+                $this->page = $this->pagemanager->renderpage($this->page, $this->router, $urlchecker);
             } catch (RuntimeException $e) {
                 Logger::errorex($e);
             }
@@ -186,7 +187,8 @@ class Controllerpage extends Controller
                 $oldlinkto = $this->page->linkto();
             }
             try {
-                $this->page = $this->pagemanager->renderpage($this->page, $this->router, new Serviceurlchecker(3));
+                $urlchecker = Config::urlchecker() ? new Serviceurlchecker(8) : null;
+                $this->page = $this->pagemanager->renderpage($this->page, $this->router, $urlchecker);
             } catch (RuntimeException $e) {
                 Logger::errorex($e);
             }

@@ -32,7 +32,8 @@ use Wcms\Config;
         'colors' => $colors,
         'queryaddress' => $queryaddress,
         'matchedbookmarks' => $matchedbookmarks,
-        'editablebookmarks' => $editablebookmarks
+        'editablebookmarks' => $editablebookmarks,
+        'urlchecker' => $urlchecker,
     ]);
 ?>
 
@@ -321,11 +322,13 @@ use Wcms\Config;
                             <?php } if ($columns['externallinks']) { ?>
                             <td class="linkto" title="<?= $item->externallinkstitle() ?>">
                                 <?= $item->externallinks('sort') ?>
-                                <?php $deadlinkcount = $item->deadlinkcount(); if (!empty($deadlinkcount)) { ?>
-                                    <span class="deadlinkcount"><?= $deadlinkcount ?></span>
-                                <?php } ?>
-                                <?php $uncheckedlinkcount = $item->uncheckedlinkcount(); if (!empty($uncheckedlinkcount)) { ?>
-                                    <span class="uncheckedlinkcount"><?= $uncheckedlinkcount ?></span>
+                                <?php if ($urlchecker) { ?>
+                                    <?php $deadlinkcount = $item->deadlinkcount(); if (!empty($deadlinkcount)) { ?>
+                                        <span class="deadlinkcount"><?= $deadlinkcount ?></span>
+                                    <?php } ?>
+                                    <?php $uncheckedlinkcount = $item->uncheckedlinkcount(); if (!empty($uncheckedlinkcount)) { ?>
+                                        <span class="uncheckedlinkcount"><?= $uncheckedlinkcount ?></span>
+                                    <?php } ?>
                                 <?php } ?>
                             </td>
                             <?php } if ($columns['geolocalisation']) { ?>

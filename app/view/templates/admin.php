@@ -229,6 +229,17 @@ $this->layout('layout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css'
                     <label for="internallinkblank">Open internal links in new tab</label>
                 </div>
 
+                <div class="checkbox">
+                    <input type="hidden" name="urlchecker" value="0" form="admin">
+                    <input type="checkbox" name="urlchecker" id="urlchecker" value="1" <?= Wcms\Config::urlchecker() ? 'checked' : '' ?> form="admin">
+                    <label for="urlchecker">Enalbe URL checker</label>
+                </div>
+
+                <p>
+                    URL checker try to reach URLs online to see if they are alives.
+                    This may cause longer render time if recently activated.
+                </p>
+
                 <h4>Markdown Parser</h4>
 
                 <div class="checkbox">

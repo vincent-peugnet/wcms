@@ -94,6 +94,7 @@ class Controllerhome extends Controller
             $vars['deepsearch'] = $deepsearch['regex'];
             $vars['searchopt'] = $deepsearch['searchopt'];
             $vars['display'] = $display;
+            $vars['urlchecker'] = Config::urlchecker();
 
             if ($display === 'graph') {
                 $vars['layout'] = $_GET['layout'] ?? 'cose-bilkent';
@@ -327,7 +328,7 @@ class Controllerhome extends Controller
     public function multirender(): void
     {
         $pagelist = $_POST['pagesid'] ?? [];
-        $checkurl = boolval($_POST['checkurl']);
+        $checkurl = Config::urlchecker() && boolval($_POST['checkurl']);
         $total = count($pagelist);
         $pagelist = $this->pagemanager->pagelistbyid($pagelist);
         $count = 0;

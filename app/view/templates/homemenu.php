@@ -198,9 +198,12 @@
                 <input type="submit" name="action" value="edit">
 
                 <h2>Render</h2>
-                <input type="hidden" name="checkurl" value="0">
-                <input type="checkbox" name="checkurl" id="checkurl" value="1">
-                <label for="checkurl">check external links if necessary</label>
+                <?php if($urlchecker) { ?>
+                    <input type="hidden" name="checkurl" value="0">
+                    <input type="checkbox" name="checkurl" id="checkurl" value="1">
+                    <label for="checkurl">check external links if necessary</label>
+                <?php } ?>
+
                 <input type="submit" name="action" value="render">
 
                 <h2>Delete</h2>
