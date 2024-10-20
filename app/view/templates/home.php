@@ -32,7 +32,8 @@ use Wcms\Config;
         'colors' => $colors,
         'queryaddress' => $queryaddress,
         'matchedbookmarks' => $matchedbookmarks,
-        'editablebookmarks' => $editablebookmarks
+        'editablebookmarks' => $editablebookmarks,
+        'urlchecker' => $urlchecker,
     ]);
 ?>
 

@@ -287,6 +287,17 @@
             <input type="checkbox" name="internallinkblank" id="internallinkblank" value="1" <?= Wcms\Config::internallinkblank() ? 'checked' : '' ?> form="admin">
         </p>
 
+        <p class="field">
+            <input type="hidden" name="urlchecker" value="0" form="admin">
+            <label for="urlchecker">Enalbe URL checker</label>
+            <input type="checkbox" name="urlchecker" id="urlchecker" value="1" <?= Wcms\Config::urlchecker() ? 'checked' : '' ?> form="admin">
+        </p>
+
+        <p class="info">
+            URL checker try to reach URLs online to see if they are alives.
+            This may cause longer render time if recently activated.
+        </p>
+
         <h3>Markdown Parser</h3>
 
         <p class="field">

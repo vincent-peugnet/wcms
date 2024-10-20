@@ -28,6 +28,7 @@ abstract class Config
     protected static bool $externallinkblank = true;
     protected static bool $internallinkblank = false;
     protected static bool $urllinker = true;
+    protected static bool $urlchecker = true;
     protected static bool $deletelinktocache = true;
     protected static int $defaultprivacy = 0;
     protected static string $homepage = 'default';
@@ -297,6 +298,11 @@ abstract class Config
         return self::$urllinker;
     }
 
+    public static function urlchecker(): bool
+    {
+        return self::$urlchecker;
+    }
+
     public static function deletelinktocache(): bool
     {
         return self::$deletelinktocache;
@@ -534,6 +540,11 @@ abstract class Config
     public static function seturllinker($urllinker)
     {
         self::$urllinker = boolval($urllinker);
+    }
+
+    public static function seturlchecker($urlchecker)
+    {
+        self::$urlchecker = boolval($urlchecker);
     }
 
     public static function setdeletelinktocache($deletelinktocache)
