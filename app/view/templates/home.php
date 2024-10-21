@@ -376,7 +376,7 @@ use Wcms\Config;
                     </table>
                 </div>
 
-            <?php endif; // display ? ?>
+            <?php endif ?>
 
         </div>
 
@@ -394,7 +394,7 @@ use Wcms\Config;
 <?php endif ?>
 
 
-<?php endif; // iseditor ? ?>
+<?php endif ?>
 
 
 <?php $this->stop() ?>
