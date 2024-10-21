@@ -16,13 +16,14 @@
         <li>Number of displays : <?= $page->displaycount() ?></li>
         <li>
             Page linking to this one : <?= $pageslinkingtocount ?>
-            <?php if ($pageslinkingtocount > 0) { ?>
+            <?php if ($pageslinkingtocount > 0) : ?>
                 <a href="<?= $this->url('home', [], '?linkto=' . $page->id() . '&submit=filter') ?>" title="search for pages linking to this one in home view">
                     <i class="fa fa-search"></i>
                 </a>
+            <?php endif ?>
         </li>
     </ul>
-    <?php } ?>
+    
 
 
 

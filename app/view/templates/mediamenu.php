@@ -23,13 +23,13 @@
                         <label for="idclean">clean filenames</label>
                     </div>
 
-                    <?php if ($optimizeimage) { ?>
+                    <?php if ($optimizeimage) : ?>
                     <div>
                         <input type="hidden" name="convertimages" value="0">
                         <input type="checkbox" name="convertimages" id="convertimages" value="1" checked>
                         <label for="convertimages">optimize images for the Web</label>
                     </div>
-                    <?php } ?>
+                    <?php endif ?>
 
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>">
                     <input type="submit" value="upload">
@@ -53,7 +53,7 @@
                 </form>
 
 
-                <?php if($user->issupereditor()) { ?>
+                <?php if($user->issupereditor()) : ?>
                 <h2>Delete folder</h2>
                 <form action="<?= $this->url('mediafolderdelete') ?>" id="deletefolder" method="post">
                     <input type="hidden" name="route" value="<?= $mediaopt->getpathaddress('media') ?>">
@@ -63,7 +63,7 @@
                     <br>
                     <input type="submit" value="delete folder" >
                 </form>
-                <?php } ?>
+                <?php endif ?>
 
                 <h2>Magic folders</h2>
                 <h3><i class="fa fa-font"></i> fonts</h3>
@@ -78,7 +78,7 @@
         <summary>Edit</summary>
         <div class="submenu">
 
-            <?php if($user->issupereditor()) { ?>
+            <?php if($user->issupereditor()) : ?>
             
             <h2>Move</h2>
             <form action="<?= $this->url('mediaedit') ?>" method="post" id="mediaedit">
@@ -89,11 +89,9 @@
                 <select name="dir" id="moveto" >
                     <option selected>---select destination---</option>
                     <option value="<?= Wcms\Model::MEDIA_DIR ?>">/</option>
-                    <?php
-                        foreach ($pathlist as $path) {
-                            echo '<option value="' . Wcms\Model::MEDIA_DIR . $path . '">' . $path . '</option>';
-                        }
-                        ?>
+                    <?php foreach ($pathlist as $path) : ?>
+                        <option value="<?= Wcms\Model::MEDIA_DIR . $path ?>"><?= $path ?></option>
+                    <?php endforeach ?>
                 </select>
                 <input type="submit" name="action" value="move" >
                 <h2>Delete</h2>
@@ -104,12 +102,12 @@
 
 
 
-            <?php } ?>
+            <?php endif ?>
         </div>
     </details>
 
 
-    <details<?= $filtercode ? " open" : " " ?>>
+    <details <?= $filtercode ? "open" : " " ?>>
         <summary>Filter</summary>
         <div class="submenu">
             <h2>Print folder content</h2>

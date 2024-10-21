@@ -3,13 +3,13 @@
 <?php $this->start('alert') ?>
 
 
-<?php if ($user->isvisitor() && Wcms\Config::privatepass())  { ?>
+<?php if ($user->isvisitor() && Wcms\Config::privatepass()) : ?>
 
     <p>
         <?php $this->insert('alertform', ['id' => $page->id()]) ?>
     </p>
 
-<?php } ?>
+<?php endif ?>
 
 
 

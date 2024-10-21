@@ -6,15 +6,13 @@
 <div class="block connect">
     <h2>Login</h2>
 
-    <?php if($user->isvisitor()) { ?>
+    <?php if($user->isvisitor()) : ?>
 
     <form action="<?= $this->url('log') ?>" method="post">
     <input type="hidden" name="route" value="<?= $route ?>">
-    <?php
-    if(in_array($route, ['pageedit', 'pageread', 'pageadd'])) {
-        echo '<input type="hidden" name="id" value="'. $id .'">';
-    }
-    ?>
+    <?php if(in_array($route, ['pageedit', 'pageread', 'pageadd'])) : ?>
+        <input type="hidden" name="id" value="<?= $id ?>">
+    <?php endif ?>
     <form action="<?= $this->url('log') ?>" method="post" id="connect">
     <input type="text" name="user" id="loginuser" autofocus placeholder="user" required>
     <input type="password" name="pass" id="loginpass" placeholder="password" required>
@@ -27,7 +25,7 @@
     </form>
 
 
-    <?php } else { ?>    
+    <?php else : ?>    
 
     <form action="<?= $this->url('log') ?>" method="post">
     <input name="log" type="submit" value="logout">
@@ -35,13 +33,11 @@
 
 
 
-    <?php } ?>
+    <?php endif ?>
 
-    <?php
-    if(in_array($route, ['pageedit', 'pageread', 'pageadd'])) {
-        echo '<p><a href="' . $this->upage('pageread', $id) . '">back to page read view</a></p>';
-    }
-    ?>
+    <?php if(in_array($route, ['pageedit', 'pageread', 'pageadd'])) : ?>
+        <p><a href="<?= $this->upage('pageread', $id) ?>">back to page read view</a></p>
+    <?php endif ?>
 </div>
 
 <?php $this->stop() ?>

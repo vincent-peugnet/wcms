@@ -7,7 +7,7 @@
 
         <table>
             <tbody>
-                <?php foreach ($publicbookmarks as $bookmark) { ?>
+                <?php foreach ($publicbookmarks as $bookmark) : ?>
                     <tr>
                         <td>
                             <a
@@ -25,21 +25,21 @@
                             </a>
                         </td>
                         <td class="rss">
-                            <?php if($bookmark->ispublished()){ ?>
+                            <?php if($bookmark->ispublished()) : ?>
                                 <a href="<?= Wcms\Servicerss::atomfile($bookmark->id()) ?>" target="_blank" title="show Atom XML file">
                                     <i class="fa fa-rss"></i>
                                 </a>
-                            <?php } ?>
+                            <?php endif ?>
                         </td>
                     </tr>
-                <?php } ?>
+                <?php endforeach ?>
             </tbody>
         </table>
 
             <h3>personal</h3>
         
         <table>
-            <?php foreach ($personalbookmarks as $bookmark) { ?>
+            <?php foreach ($personalbookmarks as $bookmark) : ?>
                 <tr>
                     <td>
                         <a
@@ -55,7 +55,7 @@
                         </a>
                     </td>
                 </tr>
-            <?php } ?>
+            <?php endforeach ?>
         </table>
     </div>
 </div>

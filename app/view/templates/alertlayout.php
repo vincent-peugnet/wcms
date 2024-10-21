@@ -31,22 +31,22 @@ li {
     <main class="alert">
         <?= !empty(Wcms\Config::alerttitle()) ? '<h1>' . Wcms\Config::alerttitle() . '</h1>' : '' ?>
 
-        <?php if (!empty($subtitle)) { ?>
+        <?php if (!empty($subtitle)) : ?>
             <h2>
                 <?= $subtitle ?>
             </h2>
-        <?php } ?>
+        <?php endif ?>
 
         <?=$this->section('alert')?>
 
 
-        <?php if(!empty(Wcms\Config::alertlink())) { ?>
+        <?php if(!empty(Wcms\Config::alertlink())) : ?>
             <p>
                 <a href="<?= $this->upage('pageread', Wcms\Config::alertlink()) ?>">
                     <?= empty(Wcms\Config::alertlinktext()) ? Wcms\Config::alertlink() : Wcms\Config::alertlinktext() ?>
                 </a>
             </p>
-        <?php } ?>
+        <?php endif ?>
 
     </main>
 </body>

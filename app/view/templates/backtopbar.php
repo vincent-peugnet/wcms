@@ -6,20 +6,20 @@
             <input type="submit" name="action" value="read">
             <?= $user->iseditor() ? '<input type="submit" name="action" value="edit">' : '' ?>
 
-            <?php if($user->iseditor()) { ?>
+            <?php if($user->iseditor()) : ?>
             <datalist id="searchdatalist">
-                <?php foreach ($pagelist as $id) { ?>
+                <?php foreach ($pagelist as $id) : ?>
                     <option value="<?= $id ?>"><?= $id ?></option>
-                <?php } ?>
+                <?php endforeach ?>
             </datalist>
-            <?php } ?>
+            <?php endif ?>
 
         </form>
     </span>
 
 
 
-    <?php if($user->iseditor()) { ?>
+    <?php if($user->iseditor()) : ?>
 
     <span id="menu">
         <a href="<?= $this->url('home') ?>" <?= $tab == 'home' ? 'class="currentpage"' : '' ?>>
@@ -32,13 +32,13 @@
         </a>
     </span>
 
-    <?php } ?>
+    <?php endif ?>
 
 
     <span id="user">
 
         <span>
-            <?php if($user->isadmin()) { ?>
+            <?php if($user->isadmin()) : ?>
 
             <a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="currentpage"' : '' ?>>
                 <i class="fa fa-users"></i>
@@ -50,7 +50,7 @@
                 <span>admin</span>
 
             </a>
-            <?php } ?>
+            <?php endif ?>
             <a href="<?= $this->url('info') ?>"  <?= $tab == 'info' ? 'class="currentpage"' : '' ?>>
                 <i class="fa fa-book"></i>
                 <span>documentation</span>
@@ -69,10 +69,10 @@
 
         <form action="<?= $this->url('log') ?>" method="post" id="connect">
             <input type="submit" name="log" value="logout" >
-            <?php if($tab === 'edit') { ?>
+            <?php if($tab === 'edit') : ?>
                 <input type="hidden" name="route" value="pageread">
                 <input type="hidden" name="id" value="<?= $pageid ?>">
-            <?php } ?>
+            <?php endif ?>
 
         </form>
 
