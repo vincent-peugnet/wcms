@@ -22,9 +22,10 @@
                     <legend>Sort</legend>
                     <div>
                         <select name="sortby" id="sortby">
-                            <?php foreach (Wcms\Opt::SORTBYLIST as $col) :
-                                $name = Wcms\Model::METADATAS_NAMES[$col]; ?>
-                                <option value="<?= $col ?>" <?= ($opt->sortby() == $col ? "selected" : "") ?> ><?= $name ?></option>
+                            <?php foreach (Wcms\Opt::SORTBYLIST as $col) : ?>
+                                <option value="<?= $col ?>" <?= ($opt->sortby() == $col ? "selected" : "") ?> >
+                                    <?= Wcms\Model::METADATAS_NAMES[$col] ?>
+                                </option>
                             <?php endforeach ?>
                         </select>
                         <div>
