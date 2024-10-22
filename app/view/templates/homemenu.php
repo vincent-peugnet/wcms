@@ -6,8 +6,9 @@
     <details id="json" class="dropdown">
         <summary>File</summary>
         <div class="dropdown-content">
+            <form action="<?= $this->url('pageupload') ?>" method="post" enctype="multipart/form-data" class="dropdown-section">        
                 <h2>Import page as file</h2>
-                <form action="<?= $this->url('pageupload') ?>" method="post" enctype="multipart/form-data">
+                
                 <input type="file" name="pagefile" id="pagefile" accept=".json" required>
                 <label for="pagefile">JSON Page file</label>
                 <input type="hidden" name="datecreation" value="0">
@@ -27,14 +28,14 @@
                 <label for="erase">Replace if already existing</label>
                 <br>
                 <input type="submit" value="upload">
-                </form>
-
+            </form>
+            <div class="dropdown-section">
                 <h2>Cache</h2>
                 <a href="<?= $this->url('flushrendercache') ?>">
                     <i class="fa fa-trash"></i>
                     Flush render cache
                 </a>
-
+            </div>
         </div>
     </details>
 
@@ -44,7 +45,7 @@
         <summary>Edit</summary>
         <form action="<?= $this->url('multi') ?>" method="post" id="multi" class="dropdown-content">
             <i>Edit selected pages</i>
-            
+            <div class="dropdown-section">
 
                 <h2>Edit Meta infos</h2>
                 <input type="text" name="datas[title]" id="title">
@@ -179,16 +180,18 @@
                 <br>
 
                 <input type="submit" name="action" value="edit">
-
+            </div>
+            <div class="dropdown-section">
                 <h2>Render</h2>
                 <input type="submit" name="action" value="render">
-
+            </div>
+            <div class="dropdown-section">
                 <h2>Delete</h2>
                 <input type="hidden" name="confirmdelete" value="0">
                 <input type="checkbox" name="confirmdelete" id="confirmdelete" value="1">
                 <label for="confirmdelete">confirm</label>
                 <input type="submit" name="action" value="delete">
-
+            </div>
         </form>        
     </details>
 <?php endif ?>
@@ -204,6 +207,7 @@
     <details id="selection" <?= !empty($optlist) ? 'open' : '' ?> class="dropdown">
         <summary>Filter</summary>
         <div class="dropdown-content">
+            <form action="<?= $this->url('homequery') ?>" method="post" class="dropdown-section">
             <h2>
                 List menu
                 <span class="right">
@@ -211,7 +215,7 @@
                 </span>
             </h2>
             <i>Generate code to display a list of pages</i>
-            <form action="<?= $this->url('homequery') ?>" method="post">
+            
                 <input type="hidden" name="listquery" value="1">
 
                 <select name="bookmark" id="list_bookmark">
@@ -261,11 +265,12 @@
                 <label for="list_style">style</label>
                 <br>
                 <input type="submit" value="generate">
-            </form>
+            
             <?php if(!empty($optlist)) : ?>
                 <code class="select-all"><?= $optlist->getcode() ?></code>
             <?php endif ?>
-
+            </form>
+            <div class="dropdown-section">
             <h2>
                 Map
                 <span class="right">
@@ -276,8 +281,8 @@
             <?php if(!empty($optmap)) : ?>
                 <code class="select-all"><?= $optmap->getcode() ?></code>
             <?php endif ?>
-
-
+            </div>
+            <div class="dropdown-section">
             <h2>
                 Random page
                 <span class="right">
@@ -288,6 +293,7 @@
             <?php if(!empty($optrandom)) : ?>
                 <code class="select-all">[random page](<?= $optrandom->getcode() ?>)</code>
             <?php endif ?>
+            </div>
         </div>
     </details>
 
@@ -303,7 +309,7 @@
         <div class="dropdown-content">
             <?php if(empty($matchedbookmarks)) : ?>
                 <h2>New bookmark</h2>
-                <form action="<?= $this->url('bookmarkadd') ?>" method="post">
+                <form action="<?= $this->url('bookmarkadd') ?>" method="post" class="dropdown-section">
                     <p>
                         Save those filters as a bookmark
                     </p>
@@ -329,8 +335,9 @@
                     <input type="submit" value="create">
                 </form>
                 <?php if(!empty($editablebookmarks)) : ?>
+                    <form action="<?= $this->url('bookmarkupdate') ?>" method="post" class="dropdown-section">
                     <h2>Update existing bookmark</h2>
-                    <form action="<?= $this->url('bookmarkupdate') ?>" method="post">
+                    
                         <input type="hidden" name="query" value="<?= $queryaddress ?>">
                         <select name="id" id="bookmark_id" required>
                             <option value="" selected>--choose a bookmark--</option>
@@ -345,12 +352,13 @@
                 <?php endif ?>
             <?php else : ?>
                 <?php foreach ($matchedbookmarks as $bookmark) : ?>
+                    <form action="<?= $this->url('bookmarkupdate') ?>" method="post" class="dropdown-section">
                     <?= $bookmark->icon() ?>
                     <strong>
                         <?= $bookmark->id() ?>
                     </strong>
                     <h2>Infos</h2>
-                    <form action="<?= $this->url('bookmarkupdate') ?>" method="post">
+                    
                         <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
                         <select name="icon" id="bookmark_icon">
                             <?php foreach (Wcms\Modelbookmark::BOOKMARK_ICONS as $icon) : ?>
@@ -378,6 +386,7 @@
                         <input type="submit" value="update">
                     </form>
                     <?php if($bookmark->ispublic()) : ?>
+                        <div class="dropdown-section">
                         <h2 title="you can use public bookmarks as RSS feeds">RSS feed</h2>
                         <?php if ($bookmark->ispublished()) : ?>
                             copy and paste this code in any page
@@ -393,9 +402,11 @@
                                 <i class="fa fa-rss"></i> publish !
                             </a>
                         <?php endif ?>
+                        </div>
                     <?php endif ?>
+                    <form action="<?= $this->url('bookmarkdelete') ?>" method="post" class="dropdown-section">
                     <h2>Delete</h2>
-                    <form action="<?= $this->url('bookmarkdelete') ?>" method="post">
+                    
                         <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
                         <input type="hidden" name="route" value="home">
                         <input type="hidden" name="confirmdelete" value="0">
@@ -414,8 +425,9 @@
     <details id="display" class="dropdown">
         <summary>Display</summary>
         <div class="dropdown-content">
+            <form action="<?= $this->url('homecolumns') ?>" method="post" class="dropdown-section">
             <h2>Columns</h2>
-            <form action="<?= $this->url('homecolumns') ?>" method="post">
+            
             <input type="hidden" name="columns[]" value="id">
                 <ul>
                     <li>
@@ -435,8 +447,9 @@
             </form>
 
             <?php if($user->issupereditor()) : ?>
-            <h2>Tag colors</h2>
-            <form action="<?= $this->url('homecolors') ?>" method="post">
+            <form action="<?= $this->url('homecolors') ?>" method="post" class="dropdown-section">
+                <h2>Tag colors</h2>
+            
                 <ul>
                 <?php foreach ($colors as $tag => $datas) : ?>
                     <li>
