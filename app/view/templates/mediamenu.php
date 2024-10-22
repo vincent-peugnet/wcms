@@ -1,4 +1,6 @@
-<aside class="media">
+<nav id="navbar" class="hbar">
+
+    <div class="hbar-section">
 
     <details>
         <summary>File</summary>
@@ -127,5 +129,6 @@
     </details>
 
 
+    </div>
 
-</aside>
+</nav>
