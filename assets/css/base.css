@@ -159,35 +159,36 @@ input[type="submit"], input[type="file"], button, select, .button  {
     font-weight: bold;
 }
 
-/* --------------------------------------------------------- almost untouched… */
+/* --------------------------------------------------------- horizontal bars */
 
-#topbar {
+.hbar {
     background-color: var(--main-color);
-    width: 100%;
-    padding: 4px 3px;
     display: flex;
+    justify-content: space-between;
+    padding: var(--padding);
+    gap: var(--spacing);
+    overflow-x: scroll;
+}
+.hbar a {
+    color: var(--text2-color);
+}
+.hbar-section { 
+    display: flex; 
+    gap: var(--spacing); 
+    align-items: center;
 }
 
-#topbar form {
-    display: inline;
+/* --------------------------------------------------------- topbar */
+
+#topbar input[type="text"] {
+    width: 100px;
 }
-
-
-#topbar span#menu {
-    display: inline-block;
-    margin: 0 1%;
-}
-
-#topbar input[type="text"], #topbar input[type="password"] {width: 100px;}
-
 
 #topbar a.currentpage {
-    text-decoration: underline;
+    font-weight: bold;
 }
 
-span#user {
-    margin-left: auto; /* align to the right */
-}
+/* --------------------------------------------------------- almost untouched… */
 
 aside {
     background-color: var(--secondary-background-color);
