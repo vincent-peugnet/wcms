@@ -3,8 +3,8 @@
     <div class="hbar-section">
         <div class="flexrow">
 
-    <span id="search">
-        <form action="<?= $this->url('search') ?>" method="post">
+            <form action="<?= $this->url('search') ?>" method="post"  id="search">
+        
             <input type="text" list="searchdatalist" name="id" id="search" placeholder="page id" required <?= $tab !== 'edit' && !$user->isvisitor() ? 'autofocus' : '' ?>>
             <input type="submit" name="action" value="read">
             <?= $user->iseditor() ? '<input type="submit" name="action" value="edit">' : '' ?>
@@ -17,14 +17,12 @@
             </datalist>
             <?php endif ?>
 
-        </form>
-    </span>
+            </form>
 
 
 
     <?php if($user->iseditor()) : ?>
 
-    <span id="menu">
         <a href="<?= $this->url('home') ?>" <?= $tab == 'home' ? 'class="currentpage"' : '' ?>>
             <i class="fa fa-home"></i>
             <span>home</span>
@@ -33,7 +31,6 @@
             <i class="fa fa-link"></i>
             <span>media</span>
         </a>
-    </span>
 
     <?php endif ?>
         </div>
@@ -42,9 +39,6 @@
     <div id="user" class="hbar-section">
         <div class="flexrow">
 
-    <span id="user">
-
-        <span>
             <?php if($user->isadmin()) : ?>
 
             <a href="<?= $this->url('user') ?>" <?= $tab == 'user' ? 'class="currentpage"' : '' ?>>
@@ -71,7 +65,6 @@
                 <i class="fa fa-user"></i>
                 <span><?= $user->id() ?></span>
             </a>
-        </span>
 
 
         <form action="<?= $this->url('log') ?>" method="post" id="connect">
@@ -85,7 +78,7 @@
 
 
 
-    </span>
+    
     </div>
 
 </div>
