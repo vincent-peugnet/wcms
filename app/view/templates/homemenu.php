@@ -6,7 +6,6 @@
     <details id="json" class="dropdown">
         <summary>File</summary>
         <div class="dropdown-content">
-            <div class="submenu">
                 <h2>Import page as file</h2>
                 <form action="<?= $this->url('pageupload') ?>" method="post" enctype="multipart/form-data">
                 <input type="file" name="pagefile" id="pagefile" accept=".json" required>
@@ -35,7 +34,6 @@
                     <i class="fa fa-trash"></i>
                     Flush render cache
                 </a>
-            </div>
 
         </div>
     </details>
@@ -44,10 +42,9 @@
 
     <details id="edit" class="dropdown">
         <summary>Edit</summary>
-        <div class="dropdown-content">
-        <div class="submenu">
+        <form action="<?= $this->url('multi') ?>" method="post" id="multi" class="dropdown-content">
             <i>Edit selected pages</i>
-            <form action="<?= $this->url('multi') ?>" method="post" id="multi">
+            
 
                 <h2>Edit Meta infos</h2>
                 <input type="text" name="datas[title]" id="title">
@@ -192,9 +189,7 @@
                 <label for="confirmdelete">confirm</label>
                 <input type="submit" name="action" value="delete">
 
-            </form>
-        </div>
-        </div>
+        </form>        
     </details>
 <?php endif ?>
 
@@ -209,7 +204,6 @@
     <details id="selection" <?= !empty($optlist) ? 'open' : '' ?> class="dropdown">
         <summary>Filter</summary>
         <div class="dropdown-content">
-        <div class="submenu">
             <h2>
                 List menu
                 <span class="right">
@@ -295,7 +289,6 @@
                 <code class="select-all">[random page](<?= $optrandom->getcode() ?>)</code>
             <?php endif ?>
         </div>
-        </div>
     </details>
 
 
@@ -308,7 +301,6 @@
     <details id="bookmark" class="dropdown">
         <summary>Bookmark</summary>
         <div class="dropdown-content">
-        <div class="submenu">
             <?php if(empty($matchedbookmarks)) : ?>
                 <h2>New bookmark</h2>
                 <form action="<?= $this->url('bookmarkadd') ?>" method="post">
@@ -415,7 +407,6 @@
                 <?php endforeach ?>
             <?php endif ?>
         </div>
-        </div>
     </details>
 
 
@@ -423,7 +414,6 @@
     <details id="display" class="dropdown">
         <summary>Display</summary>
         <div class="dropdown-content">
-        <div class="submenu">
             <h2>Columns</h2>
             <form action="<?= $this->url('homecolumns') ?>" method="post">
             <input type="hidden" name="columns[]" value="id">
@@ -458,7 +448,6 @@
                 <input type="submit" value="update tag colors">
             </form>
             <?php endif ?>
-        </div>
         </div>
     </details>
 

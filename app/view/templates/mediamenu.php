@@ -5,7 +5,6 @@
     <details class="dropdown">
         <summary>File</summary>
         <div class="dropdown-content">
-            <div class="submenu">
                 <h2>
                     Upload file(s)
                     <span class="right">
@@ -73,7 +72,6 @@
                 <a href="<?= $this->url('mediafontface', [], $mediaopt->getpathaddress()) ?>">
                     <i class="fa fa-refresh"></i>regenerate @fontface CSS file
                 </a>
-            </div>
         </div>
     </details>
 
@@ -81,7 +79,6 @@
     <details class="dropdown">
         <summary>Edit</summary>
         <div class="dropdown-content">
-        <div class="submenu">
 
             <?php if($user->issupereditor()) : ?>
             
@@ -109,14 +106,12 @@
 
             <?php endif ?>
         </div>
-        </div>
     </details>
 
 
     <details <?= $filtercode ? "open" : " " ?> class="dropdown">
         <summary>Filter</summary>
         <div class="dropdown-content">
-        <div class="submenu">
             <h2>Print folder content</h2>
             <form action="" method="post">
                 <input type="hidden" name="query" value="1">
@@ -130,7 +125,6 @@
 
             <p>Use this code to print the content of the current folder in a page</p>
             <code class="select-all" ><?= $mediaopt->getcode() ?></code>
-        </div>
         </div>
     </details>
 
