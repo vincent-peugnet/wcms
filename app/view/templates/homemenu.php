@@ -5,6 +5,7 @@
 <?php if($user->issupereditor()) : ?>
     <details id="json" class="dropdown">
         <summary>File</summary>
+        <div class="dropdown-content">
             <div class="submenu">
                 <h2>Import page as file</h2>
                 <form action="<?= $this->url('pageupload') ?>" method="post" enctype="multipart/form-data">
@@ -36,12 +37,14 @@
                 </a>
             </div>
 
+        </div>
     </details>
 
 
 
     <details id="edit" class="dropdown">
         <summary>Edit</summary>
+        <div class="dropdown-content">
         <div class="submenu">
             <i>Edit selected pages</i>
             <form action="<?= $this->url('multi') ?>" method="post" id="multi">
@@ -191,6 +194,7 @@
 
             </form>
         </div>
+        </div>
     </details>
 <?php endif ?>
 
@@ -204,6 +208,7 @@
 
     <details id="selection" <?= !empty($optlist) ? 'open' : '' ?> class="dropdown">
         <summary>Filter</summary>
+        <div class="dropdown-content">
         <div class="submenu">
             <h2>
                 List menu
@@ -290,6 +295,7 @@
                 <code class="select-all">[random page](<?= $optrandom->getcode() ?>)</code>
             <?php endif ?>
         </div>
+        </div>
     </details>
 
 
@@ -301,6 +307,7 @@
 
     <details id="bookmark" class="dropdown">
         <summary>Bookmark</summary>
+        <div class="dropdown-content">
         <div class="submenu">
             <?php if(empty($matchedbookmarks)) : ?>
                 <h2>New bookmark</h2>
@@ -408,12 +415,14 @@
                 <?php endforeach ?>
             <?php endif ?>
         </div>
+        </div>
     </details>
 
 
 
     <details id="display" class="dropdown">
         <summary>Display</summary>
+        <div class="dropdown-content">
         <div class="submenu">
             <h2>Columns</h2>
             <form action="<?= $this->url('homecolumns') ?>" method="post">
@@ -449,6 +458,7 @@
                 <input type="submit" value="update tag colors">
             </form>
             <?php endif ?>
+        </div>
         </div>
     </details>
 
