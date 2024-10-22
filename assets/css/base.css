@@ -248,6 +248,12 @@ input[type="submit"], input[type="file"], button, select, .button  {
     font-weight: bold;
 }
 
+/* --------------------------------------------------------- navbar */
+
+#navbar {
+    background-color: var(--secondary-background-color);
+}
+
 /* --------------------------------------------------------- almost untouched… */
 
 aside {
