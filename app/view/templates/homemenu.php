@@ -1,5 +1,6 @@
-<aside class="home">
+<nav id="navbar" class="hbar">
 
+    <div class="hbar-section">
 
 <?php if($user->issupereditor()) : ?>
     <details id="json">
@@ -467,4 +468,5 @@
 </form>
 </span>
 
-</aside>
+    </div>
+</nav>
