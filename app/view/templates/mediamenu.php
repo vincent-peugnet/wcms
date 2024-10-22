@@ -64,7 +64,7 @@
                     <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>/">
                     <input type="checkbox" name="deletefolder" id="confirmdeletefolder" value="1">
                     <label for="confirmdeletefolder">Delete current folder and all it's content</label>
-                    <br>
+                    
                     <input type="submit" value="delete folder" >
             </form>
                 <?php endif ?>
@@ -92,7 +92,7 @@
                 <input type="hidden" name="route" value="<?= $mediaopt->getpathaddress() ?>">
                 <input type="hidden" name="path" value="<?= $mediaopt->dir() ?>">
                 <label for="moveto">Move selected medias to a new directory</label>
-                <br>
+                
                 <select name="dir" id="moveto" >
                     <option selected>---select destination---</option>
                     <option value="<?= Wcms\Model::MEDIA_DIR ?>">/</option>
@@ -105,7 +105,7 @@
                 <div class="dropdown-section">
                 <h2>Delete</h2>
                 Delete selected medias
-                <br>
+                
                 <input type="submit" name="action" value="delete" >
                 </div>
             </form>
@@ -126,7 +126,7 @@
                 <input type="hidden" name="filename" value="0">
                 <input type="checkbox" name="filename" id="filename" value="1" <?= $mediaopt->filename() ? "checked" : "" ?> >
                 <label for="filename">add filenames under images, sounds and videos</label>
-                <br>
+                
                 <input type="submit" value="generate">
             <p>Use this code to print the content of the current folder in a page</p>
             <code class="select-all" ><?= $mediaopt->getcode() ?></code>

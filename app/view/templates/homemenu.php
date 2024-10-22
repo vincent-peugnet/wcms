@@ -14,19 +14,19 @@
                 <input type="hidden" name="datecreation" value="0">
                 <input type="hidden" name="author" value="0">
                 <input type="hidden" name="erase" value="0">
-                <br>
+                
                 <input type="text" name="id" id="id" placeholder="new id (optionnal)">
                 <label for="id">change ID</label>
-                <br>
+                
                 <input type="checkbox" name="datecreation" id="datecreation" value="1">
                 <label for="datecreation">Reset date creation as now</label>
-                <br>
+                
                 <input type="checkbox" name="author" id="author" value="1">
                 <label for="author">Reset author(s) as just you</label>
-                <br>
+                
                 <input type="checkbox" name="erase" id="erase" value="1">
                 <label for="erase">Replace if already existing</label>
-                <br>
+                
                 <input type="submit" value="upload">
             </form>
             <div class="dropdown-section">
@@ -50,33 +50,33 @@
                 <h2>Edit Meta infos</h2>
                 <input type="text" name="datas[title]" id="title">
                 <label for="title">title</label>
-                <br>
+                
                 <input type="text" name="datas[description]" id="description">
                 <label for="description">description</label>
-                <br>
+                
                 <strong>Tag</strong>
-                <br>
+                
                 <input type="hidden" name="reset[tag]" value="0">
                 <input type="checkbox" name="reset[tag]" id="resettag" value="1">
                 <label for="resettag">reset tag(s)</label>
-                <br>
+                
                 <input type="text" name="addtag" id="addtag">
                 <label for="addtag">add tag(s)</label>
-                <br>
+                
                 <strong>Date</strong>
-                <br>
+                
                 <input type="hidden" name="reset[date]" value="0">
                 <input type="checkbox" name="reset[date]" id="resetdate" value="1">
                 <label for="resetdate">reset date as now</label>
-                <br>
+                
                 <input type="date" name="datas[pdate]" id="date">
                 <label for="date">Date</label>
-                <br>
+                
                 <input type="time" name="datas[ptime]" id="time">
                 <label for="time">Time</label>
-                <br>
+                
                 <strong>Privacy</strong>
-                <br>
+                
                 <select name="datas[secure]" id="setlevel">
                     <option value=""  selected>--keep privacy--</option>
                     <option value="0">public</option>
@@ -84,9 +84,9 @@
                     <option value="2">not_published</option>
                 </select>
                 <label for="setlevel">Privacy level</label>
-                <br>
+                
                 <strong>Images</strong>
-                <br>
+                
                 <select name="datas[favicon]" id="favicon">
                 <option value=""  selected>--keep favicon--</option>
                 <option value="!" >--unset favicon--</option>
@@ -95,7 +95,7 @@
                     <?php endforeach ?>
                 </select>
                 <label for="favicon">Favicon</label>
-                <br>
+                
 
                 <select name="datas[thumbnail]" id="thumbnail">
                 <option value="" selected>--keep thumbnail--</option>
@@ -105,17 +105,17 @@
                     <?php endforeach ?>
                 </select>
                 <label for="thumbnail">Thumnail</label>
-                <br>
+                
 
                 <strong>Geolocalisation</strong>
-                <br>
+                
                 <input type="hidden" name="reset[geo]" value="0">
                 <input type="checkbox" name="reset[geo]" id="resetgeo" value="1">
                 <label for="resetgeo">delete geo datas</label>
-                <br>
+                
 
                 <strong>Templates</strong>
-                <br>
+                
                 <select name="datas[templatebody]" id="templatebody">
                     <option value="" selected>--keep template body--</option>
                     <option value="!" >--unset template body--</option>
@@ -124,7 +124,7 @@
                     <?php endforeach ?>
                 </select>
                 <label for="templatebody">Body</label>
-                <br>
+                
 
                 <select name="datas[templatecss]" id="templatecss">
                     <option value="" selected>--keep css template--</option>
@@ -134,7 +134,7 @@
                     <?php endforeach ?>                
                 </select>
                 <label for="templatecss">CSS</label>
-                <br>
+                
 
                 <select name="datas[templatejavascript]" id="templatejavascript">
                     <option value="" selected>--keep javascript template--</option>
@@ -144,24 +144,24 @@
                     <?php endforeach ?>
                 </select>
                 <label for="templatejavascript">Javascript</label>
-                <br>
+                
                 <strong>Advanced</strong>
-                <br>
+                
                 <input type="number" name="datas[sleep]" id="sleep" min="0" max="180">
                 <label for="sleep">Sleep time (seconds)</label>
-                <br>
+                
                 <input type="hidden" name="reset[redirection]" value="0">
                 <input type="checkbox" name="reset[redirection]" id="resetredirection" value="1">
                 <label for="resetredirection">reset redirection</label>
-                <br>
+                
                 <input type="text" name="datas[redirection]" id="redirection" list="searchdatalist">     
                 <label for="redirection" title="page_id or URL like https://domain.org">Redirection</label>
-                <br>
+                
                 <input type="number" name="datas[refresh]" id="refresh" min="0" max="180">
                 <label for="refresh">refresh time (seconds)</label>
-                <br>
+                
                 <strong>Author</strong>
-                <br>
+                
                 <select name="addauthor" id="addauthor">
                     <option value="" disabled selected>--add author--</option>
                     <?php foreach ($editorlist as $editor) : ?>
@@ -169,15 +169,15 @@
                     <?php endforeach ?>
                 </select>
                 <label for="addauthor">Author</label>
-                <br>
+                
                 <input type="hidden" name="reset[author]" value="0">
                 <input type="checkbox" name="reset[author]" id="resetauthor" value="1">
                 <label for="resetauthor">Empty Authors</label>
-                <br>
+                
                 <input type="hidden" name="reset[datemodif]" value="0">
                 <input type="checkbox" name="reset[datemodif]" id="resetdatemodif" value="1" checked>
                 <label for="resetdatemodif">update modification date</label>
-                <br>
+                
 
                 <input type="submit" name="action" value="edit">
             </div>
@@ -230,40 +230,40 @@
                     <?php endforeach ?>
                 </select>
                 <label for="list_bookmark" title="use bookmark instead of filters">bookmark</label>
-                <br>
+                
                 <input type="hidden" name="title" value="0">
                 <input type="checkbox" name="title" id="list_title" value="1" <?= !empty($optlist) && !$optlist->title() ? '' : 'checked' ?>>
                 <label for="list_title">Show title</label>
-                <br>
+                
                 <input type="hidden" name="description" value="0">
                 <input type="checkbox" name="description" id="list_description" value="1" <?= !empty($optlist) && $optlist->description() ? 'checked' : '' ?>>
                 <label for="list_description">Show description</label>
-                <br>
+                
                 <input type="hidden" name="thumbnail" value="0">
                 <input type="checkbox" name="thumbnail" id="list_thumbnail" value="1" <?= !empty($optlist) && $optlist->thumbnail() ? 'checked' : '' ?>>
                 <label for="list_thumbnail">Show thumbnail</label>
-                <br>
+                
                 <input type="hidden" name="date" value="0">
                 <input type="checkbox" name="date" id="list_date" value="1" <?= !empty($optlist) && $optlist->date() ? 'checked' : '' ?>>
                 <label for="list_date">Show date</label>
-                <br>
+                
                 <input type="hidden" name="time" value="0">
                 <input type="checkbox" name="time" id="list_time" value="1" <?= !empty($optlist) && $optlist->time() ? 'checked' : '' ?>>
                 <label for="list_time">Show time</label>
-                <br>
+                
                 <input type="hidden" name="author" value="0">
                 <input type="checkbox" name="author" id="list_author" value="1" <?= !empty($optlist) && $optlist->author() ? 'checked' : '' ?>>
                 <label for="list_author">Show author(s)</label>
-                <br>
+                
                 <input type="hidden" name="hidecurrent" value="0">
                 <input type="checkbox" name="hidecurrent" id="list_hidecurrent" value="1" <?= !empty($optlist) && $optlist->hidecurrent() ? 'checked' : '' ?>>
                 <label for="list_hidecurrent">Hide current page</label>
-                <br>
+                
                 <select name="style" id="list_style">
                     <?= options(Wcms\Model::LIST_STYLES , !empty($optlist) ? $optlist->style() : null) ?>
                 </select>
                 <label for="list_style">style</label>
-                <br>
+                
                 <input type="submit" value="generate">
             
             <?php if(!empty($optlist)) : ?>
@@ -317,21 +317,21 @@
                     <input type="hidden" name="query" value="<?= $queryaddress ?>">
                     <input type="text" name="id" id="bookmark_id" required minlength="3">
                     <label for="bookmark_id">id</label>
-                    <br>
+                    
                     <select name="icon" id="bookmark_icon">
                         <?php foreach (Wcms\Modelbookmark::BOOKMARK_ICONS as $icon) : ?>
                             <option value="<?= $icon ?>"><?= $icon ?></option>
                         <?php endforeach ?>
                     </select>
                     <label for="bookmark_icon">icon</label>
-                    <br>
+                    
                     <select name="user" id="bookmark_type">
                         <?php if($user->isadmin()) : ?>
                             <option value="">public</option>
                         <?php endif ?>
                         <option value="<?= $user->id() ?>">personal</option>
                     </select>
-                    <br>
+                    
                     <input type="submit" value="create">
                 </form>
                 <?php if(!empty($editablebookmarks)) : ?>
@@ -346,7 +346,7 @@
                             <?php endforeach ?>
                         </select>
                         <label for="bookmark_id">bookmark</label>
-                        <br>
+                        
                         <input type="submit" value="update">
                     </form>
                 <?php endif ?>
@@ -366,13 +366,13 @@
                             <?php endforeach ?>
                         </select>
                         <label for="bookmark_icon">icon</label>
-                        <br>
+                        
                         <input type="text" name="name" id="bookmark_name" value="<?= $bookmark->name() ?>" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>">
                         <label for="bookmark_name">name</label>
-                        <br>
+                        
                         <input type="text" name="description" id="bookmark_description" value="<?= $bookmark->description() ?>" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>">
                         <label for="bookmark_description">description</label>
-                        <br>
+                        
                         <?php if ($bookmark->ispublished()) : ?>
                             <select name="ref" id="bookmark_ref">
                                 <option value="">--no ref page--</option>
@@ -381,7 +381,7 @@
                                 <?php endforeach ?>
                             </select>
                             <label for="bookmark_ref">reference page</label>
-                            <br>
+                            
                         <?php endif ?>
                         <input type="submit" value="update">
                     </form>
@@ -412,7 +412,7 @@
                         <input type="hidden" name="confirmdelete" value="0">
                         <input type="checkbox" name="confirmdelete" id="bookmark_confirmdelete" value="1">
                         <label for="bookmark_confirmdelete">confirm</label>
-                        <br>
+                        
                         <input type="submit" value="delete">
                     </form>
                 <?php endforeach ?>
