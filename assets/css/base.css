@@ -230,6 +230,8 @@ input[type="submit"], input[type="file"], button, select, .button  {
     background-color: var(--outline-background-color);
     padding: 0 0 var(--padding); 
     margin: var(--reset-padding) var(--reset-padding) 0;
+    display: flex;
+    justify-content: space-between;
 }
 .dropdown h3 {
     font-size: 1em;
