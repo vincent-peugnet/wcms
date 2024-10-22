@@ -240,6 +240,20 @@ input[type="submit"], input[type="file"], button, select, .button  {
     margin: 0 var(--reset-padding) 0;
 } 
 
+
+/* --------------------------------------------------------- help button */
+.help {
+    background: var(--outline-color);
+    color: var(--outline-background-color) !important;
+    border-radius: 100%;
+    display: flex;
+    width: 1.2em;
+    height: 1.2em;
+    font-size: var(--size-small);
+    justify-content: center;
+    align-items: center;
+}
+  
 /* --------------------------------------------------------- topbar */
 
 #topbar input[type="text"] {
