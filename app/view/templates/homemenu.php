@@ -54,7 +54,7 @@
                 <input type="text" name="datas[description]" id="description">
                 <label for="description">description</label>
                 
-                <strong>Tag</strong>
+                <h3>Tag</h3>
                 
                 <input type="hidden" name="reset[tag]" value="0">
                 <input type="checkbox" name="reset[tag]" id="resettag" value="1">
@@ -63,7 +63,7 @@
                 <input type="text" name="addtag" id="addtag">
                 <label for="addtag">add tag(s)</label>
                 
-                <strong>Date</strong>
+                <h3>Date</h3>
                 
                 <input type="hidden" name="reset[date]" value="0">
                 <input type="checkbox" name="reset[date]" id="resetdate" value="1">
@@ -75,7 +75,7 @@
                 <input type="time" name="datas[ptime]" id="time">
                 <label for="time">Time</label>
                 
-                <strong>Privacy</strong>
+                <h3>Privacy</h3>
                 
                 <select name="datas[secure]" id="setlevel">
                     <option value=""  selected>--keep privacy--</option>
@@ -85,7 +85,7 @@
                 </select>
                 <label for="setlevel">Privacy level</label>
                 
-                <strong>Images</strong>
+                <h3>Images</h3>
                 
                 <select name="datas[favicon]" id="favicon">
                 <option value=""  selected>--keep favicon--</option>
@@ -107,14 +107,14 @@
                 <label for="thumbnail">Thumnail</label>
                 
 
-                <strong>Geolocalisation</strong>
+                <h3>Geolocalisation</h3>
                 
                 <input type="hidden" name="reset[geo]" value="0">
                 <input type="checkbox" name="reset[geo]" id="resetgeo" value="1">
                 <label for="resetgeo">delete geo datas</label>
                 
 
-                <strong>Templates</strong>
+                <h3>Templates</h3>
                 
                 <select name="datas[templatebody]" id="templatebody">
                     <option value="" selected>--keep template body--</option>
@@ -145,7 +145,7 @@
                 </select>
                 <label for="templatejavascript">Javascript</label>
                 
-                <strong>Advanced</strong>
+                <h3>Advanced</h3>
                 
                 <input type="number" name="datas[sleep]" id="sleep" min="0" max="180">
                 <label for="sleep">Sleep time (seconds)</label>
@@ -160,7 +160,7 @@
                 <input type="number" name="datas[refresh]" id="refresh" min="0" max="180">
                 <label for="refresh">refresh time (seconds)</label>
                 
-                <strong>Author</strong>
+                <h3>Author</h3>
                 
                 <select name="addauthor" id="addauthor">
                     <option value="" disabled selected>--add author--</option>
@@ -354,9 +354,9 @@
                 <?php foreach ($matchedbookmarks as $bookmark) : ?>
                     <form action="<?= $this->url('bookmarkupdate') ?>" method="post" class="dropdown-section">
                     <?= $bookmark->icon() ?>
-                    <strong>
+                    <h3>
                         <?= $bookmark->id() ?>
-                    </strong>
+                    </h3>
                     <h2>Infos</h2>
                     
                         <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
