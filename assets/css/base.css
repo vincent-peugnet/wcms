@@ -1,3 +1,16 @@
+:root {
+    --spacing: 1rem; /* better when non zero */
+    --padding: .5rem; /* can be zero to remind old style w look */
+    --radius: .25rem; /* border-radius on buttons and inputs */
+    --size-small: .85em; /* small sizes */
+    /* padding adjustments : */
+    --reset-padding: calc(var(--padding) * -1);
+    --half-padding: calc(var(--padding) / 2);
+    --double-padding: calc(var(--padding) * 2);
+    --gap: 1px; /* 1px for separated columns & panels, 0 for collapsed ones */
+    --font-family: sans-serif;
+}
+
 * {
     box-sizing: border-box;
     scrollbar-color: var(--main-color) transparent;
@@ -16,48 +29,137 @@ body {
     margin: 0;
     height: 100%;
     background-color: var(--tertiary-background-color);
-    font-family: sans-serif;
+    font-family: var(--font-family);
     font-size: 15px;
     position: fixed;
     display: flex;
     flex-direction: column;
     width: 100%;
     color: var(--text-color);
+    gap: var(--gap, 0);
+    user-select: none;
 }
 
-input, textarea, button, select, .field {
-    border: none;
-    accent-color: var(--main-color);
-}
-
-input, textarea, .field {
-    color: var(--input-color)!important;
-    border-color: var(--input-color);
-    background-color: var(--input-background-color);
-}
-
-input[type="submit"], button, select {
-    color: var(--button-color)!important;
-    border-color: var(--button-color);
-    background-color: var(--button-background-color);
-}
+/* --------------------------------------------------------- common elements */
 
 h1, h2 {
+    margin: 0;
     color: var(--text2-color);
     background-color: var(--main-color);
 }
 
-a, button, input, select, textarea, .field {
+p, code {
+    user-select: text;
+}
+
+code.select-all {
+    user-select: all;
+}
+
+a {
     text-decoration: none;
-    color: var(--text2-color);
+    color: currentColor;
 }
 
 
+/* --------------------------------------------------------- layout helpers */
 
-h1, h2 {
+.flexrow {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing);
+}
+.flexrow-reverse { 
+    flex-direction: row-reverse;
+}
+.flexrow > * { 
+    flex: 1 auto;
+    align-items: center;
+    justify-content: center;
+    gap: var(--padding);
+    display: flex;
+}
+.flexcol {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+}
+
+
+/* --------------------------------------------------------- inputs and buttons */
+
+input, textarea, button, select, .button {
+    font: inherit;
+    border: none;
+    accent-color: var(--main-color);
+    font-size: var(--size-small);
+    padding: var(--half-padding) var(--padding);
+    border-radius: var(--radius);
+}
+
+input, textarea {
+    color: var(--input-color);
+    border-color: var(--input-color);
+    background-color: var(--input-background-color);
+}
+
+input[type="submit"], input[type="file"], button, select, .button  {
+    color: var(--button-color);
+    border-color: var(--button-color);
+    background-color: var(--button-background-color);
+    cursor: pointer;
+}
+
+
+/* --------------------------------------------------------- fields */
+
+.field { 
     margin: 0;
-    font-size: larger;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0;
 }
+.field label { 
+    display: block; 
+    font-size: var(--size-small); 
+    padding-bottom: var(--half-padding);
+}
+
+.field label + input[type="text"],
+.field label + input[type="number"],
+.field label + input[type="color"],
+.field label + select { width: 100%; }
+    
+.field:has([type="checkbox"]),
+.field:has([type="radio"]),
+.field:has([type="color"]) { 
+    flex-direction: row-reverse; 
+    align-items: start;
+    gap: var(--padding);
+}    
+.field:has([type="checkbox"]) label,
+.field:has([type="radio"]) label,
+.field:has([type="color"]) label { 
+    flex: 1; 
+}
+.field:has([type="color"]) input { 
+    flex: 1; 
+    padding: 0;
+}
+
+.submit-field {
+    flex-direction: row;
+    justify-content: end;
+    align-items: end;
+}
+.submit-field [type=submit], .submit-field button {
+    background: var(--outline-background-color);
+    color: var(--text2-color);
+    font-weight: bold;
+}
+
+/* --------------------------------------------------------- almost untouched… */
 
 #topbar {
     background-color: var(--main-color);
@@ -136,17 +238,6 @@ label.toogle {
 }
 
 
-body {
-    user-select: none;
-}
-
-p, code {
-    user-select: text;
-}
-
-code.select-all {
-    user-select: all;
-}
 
 
 @media (max-width: 750px) {
