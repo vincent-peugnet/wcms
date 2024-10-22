@@ -1,4 +1,7 @@
-<header id="topbar">
+<header class="hbar" id="topbar">
+
+    <div class="hbar-section">
+        <div class="flexrow">
 
     <span id="search">
         <form action="<?= $this->url('search') ?>" method="post">
@@ -33,7 +36,11 @@
     </span>
 
     <?php endif ?>
+        </div>
+    </div>
 
+    <div id="user" class="hbar-section">
+        <div class="flexrow">
 
     <span id="user">
 
@@ -79,5 +86,8 @@
 
 
     </span>
+    </div>
+
+</div>
 
 </header>
