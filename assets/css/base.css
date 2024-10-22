@@ -153,7 +153,7 @@ input[type="submit"], input[type="file"], button, select, .button  {
     justify-content: end;
     align-items: end;
 }
-.submit-field [type=submit], .submit-field button {
+.submit-field [type=submit], .submit-field button, .submit-field .button {
     background: var(--outline-background-color);
     color: var(--text2-color);
     font-weight: bold;
