@@ -2,7 +2,7 @@
 
     <div class="hbar-section">
 
-    <details>
+    <details class="dropdown">
         <summary>File</summary>
             <div class="submenu">
                 <h2>
@@ -76,7 +76,7 @@
     </details>
 
 
-    <details>
+    <details class="dropdown">
         <summary>Edit</summary>
         <div class="submenu">
 
@@ -109,7 +109,7 @@
     </details>
 
 
-    <details <?= $filtercode ? "open" : " " ?>>
+    <details <?= $filtercode ? "open" : " " ?> class="dropdown">
         <summary>Filter</summary>
         <div class="submenu">
             <h2>Print folder content</h2>

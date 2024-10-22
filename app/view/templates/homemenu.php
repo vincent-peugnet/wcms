@@ -3,7 +3,7 @@
     <div class="hbar-section">
 
 <?php if($user->issupereditor()) : ?>
-    <details id="json">
+    <details id="json" class="dropdown">
         <summary>File</summary>
             <div class="submenu">
                 <h2>Import page as file</h2>
@@ -40,7 +40,7 @@
 
 
 
-    <details id="edit">
+    <details id="edit" class="dropdown">
         <summary>Edit</summary>
         <div class="submenu">
             <i>Edit selected pages</i>
@@ -202,7 +202,7 @@
 
 
 
-    <details id="selection" <?= !empty($optlist) ? 'open' : '' ?>>
+    <details id="selection" <?= !empty($optlist) ? 'open' : '' ?> class="dropdown">
         <summary>Filter</summary>
         <div class="submenu">
             <h2>
@@ -299,7 +299,7 @@
 
 
 
-    <details id="bookmark">
+    <details id="bookmark" class="dropdown">
         <summary>Bookmark</summary>
         <div class="submenu">
             <?php if(empty($matchedbookmarks)) : ?>
@@ -412,7 +412,7 @@
 
 
 
-    <details id="display">
+    <details id="display" class="dropdown">
         <summary>Display</summary>
         <div class="submenu">
             <h2>Columns</h2>
