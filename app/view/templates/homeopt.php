@@ -1,14 +1,12 @@
-<div class="bar" id="filter">
-
+<aside id="filter" class="toggle-panel-container">
     
-    <input id="showeoptionspanel" name="showeoptionspanel" value="1" class="toggle" type="checkbox" form="workspace-form" <?= $workspace->showeoptionspanel() === true ? 'checked' : '' ?>>
-    <label for="showeoptionspanel" class="toogle">◧</label>
+    <input id="showeoptionspanel" name="showeoptionspanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" <?= $workspace->showeoptionspanel() === true ? 'checked' : '' ?>>
+    <label for="showeoptionspanel" class="toggle-panel-label"><span><i class="fa fa-filter"></i></span></label>
     
-    <div class="panel" id="optionspanel">
+    <div class="toggle-panel" id="optionspanel">
         <h2>Filters</h2>
 
-
-        <form action="<?= $this->url('home') ?>" method="get">
+        <form action="<?= $this->url('home') ?>" method="get" class="toggle-panel-content">
             <input type="submit" name="submit" value="filter" class="filter">
             <?php if ($opt->isfiltered()) : ?>
                 <input type="submit" name="submit" value="reset">
@@ -228,5 +226,4 @@
         </form>
     </div>
 
-
-</div>
+</aside>

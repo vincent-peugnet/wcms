@@ -34,8 +34,12 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
     </div>
 </nav>
 
-<div id="filter">
-    <div class="block">
+<aside id="filter" class="toggle-panel">
+    
+    <input id="showeoptionspanel" name="showeoptionspanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" >
+    <label for="showeoptionspanel" class="toggle-panel-label"><span><i class="fa fa-filter"></i></span></label>
+    
+    <div class="toggle-panel-content" id="optionspanel">
         <h2>filter</h2>
         <div class="scroll">
             <form action="" method="get">
@@ -62,7 +66,7 @@ $this->layout('layout', ['title' => 'media', 'stylesheets' => [$css . 'back.css'
             </form>
         </div>
     </div>
-        </div>
+</aside>
 
 
 
