@@ -1,21 +1,72 @@
-section.admin .scroll {
-    padding-bottom: 300px;
+.admin.hbar {
+    /* background-color: var(--secondary-background-color); */
+}
+.admin-shortcuts {
+    display: flex;
+    gap: var(--spacing);
+}
+.admin.hbar a {
+    /* color: var(--reset-padding); */
+}
+.admin.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--padding);
+    padding: var(--padding);
 }
 
-nav li a {
-    display: block;
+.grid-item {
+    background: var(--primary-background-color);
+    padding: var(--padding);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding);
+    scroll-margin-top: var(--padding) ;
+}
+.grid-item form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding);
+}
+.grid-item p {
+    margin: 0;
+}
+.grid-item a {
+    text-decoration: underline;
 }
 
-nav li a:hover {
-    background-color: var(--outline-background-color);
-    color: var(--outline-color);
+
+.grid-item textarea {
+    width: 100%;
+}
+.grid-item h2 {
+    margin: var(--reset-padding) var(--reset-padding) 0 var(--reset-padding);
+    border-radius: var(--radius) var(--radius) 0 0 ;
+}
+.grid-item h3 {
+    margin: 0;
+    font-size: 1em;
+    padding: var(--padding) var(--padding) var(--half-padding); 
+    border-bottom: 1px solid var(--outline-background-color);
+    margin: 0 var(--reset-padding) 0;
 }
 
-section.admin h2 {
-    margin-top: 100px;
-    margin-bottom: 25px;
+.info{
+    line-height: 1.4;
 }
-
-section.admin h4 {
-    margin-bottom: 15px;
+.info::before {
+    content: "i";
+    font-family: 'Courier New', Courier, monospace;
+    background: var(--outline-color);
+    color: var(--outline-background-color) !important;
+    border-radius: 100%;
+    position: relative;
+    top: -.25em;
+    display: inline-flex;
+    width: 1.2em;
+    height: 1.2em;
+    font-size: var(--size-small);
+    justify-content: center;
+    align-items: center;
 }
