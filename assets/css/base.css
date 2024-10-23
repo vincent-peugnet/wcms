@@ -270,6 +270,52 @@ input[type="submit"], input[type="file"], button, select, .button  {
     background-color: var(--secondary-background-color);
 }
 
+/* --------------------------------------------------------- toggle panels (collapsibles) */
+
+.toggle-panel-container {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.toggle-panel {
+    display: none;
+    background: var(--primary-background-color);
+}
+.toggle-panel-content {
+    padding: var(--padding);
+    overflow-y: auto;
+}
+
+.toggle-panel-label {
+    height: 100%;
+    font-size: 1em;
+    cursor: pointer;
+    background: var(--primary-background-color);
+}
+
+.toggle-panel-label span {
+    background-color: var(--main-color);
+    color: var(--text2-color);
+    padding: var(--padding) var(--half-padding);    
+    display: block;     
+}
+
+.toggle-panel-label:hover {
+    background-color: var(--main-color);
+}
+
+:checked ~ .toggle-panel {
+    display: flex;
+    flex-direction: column;
+    max-width: min-content;
+}
+
+input.toggle-panel-toggle {
+    display: none;
+}
+
+
+
 /* --------------------------------------------------------- almost untouched… */
 
 .bar {
