@@ -272,25 +272,6 @@ input[type="submit"], input[type="file"], button, select, .button  {
 
 /* --------------------------------------------------------- almost untouched… */
 
-aside {
-    background-color: var(--secondary-background-color);
-}
-
-aside summary {
-    list-style: none;
-}
-
-
-
-summary {
-    white-space: nowrap;
-}
-
-summary:hover, input[type="submit"], input[type="file"], button {
-    cursor: pointer;
-}
-
-
 .bar {
     background-color: var(--primary-background-color);
 }
