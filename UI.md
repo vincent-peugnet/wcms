@@ -98,7 +98,7 @@ The content itself is wrapped within one or multiple `.dropdown-section` that ca
 HEADER.hbar#topbar 
 
 	div.hbar-section
-		div.flexrow
+		(div.flexrow)
 			div | form | input | button | a | span
 	
 NAV.hbar#navbar
@@ -108,12 +108,12 @@ NAV.hbar#navbar
 			summary
 			{div|form}.dropdown-content
 				{div|form}.dropdown-section
-					h2.dropdown-section-title
-					div.dropdown-section-content
-						(p.help)
-						p.field
-							label
-							input | button | a | span
+					h2 (> a.help)
+					p.field
+						label
+						input | select …
+					p.field.submit-field
+						input[type=submit] | a
 						
 MAIN
 	
@@ -121,21 +121,21 @@ MAIN
 		(h1.panel-title)
 		div.scrollable
 			? {div|form}.panel-section
-				h2.panel-section-title
+				h2
 				{div|form}.panel-section-content
 					(.list | .tree | fieldset)
 			? details
 	
-	? aside.collapsible
-		label + input[type=checkbox]
-		.collapsible-content
-			(h1.panel-title)
-			div.scrollable	
+	? aside.toggle-panel-container
+		label.toggle-panel-label + input[type=checkbox].toggle-panel-toggle
+		.toggle-panel
+			h2
+			div.toggle-panel-content	
 				{div|form}.panel-section
-					h2.panel-section-title
+					h3
 					{div|form}.panel-section-content
 						(.list | .tree | fieldset)
-							(h3 | legend)
+							(h4 | legend)
 							(p.help)
 							p.field
 								label
