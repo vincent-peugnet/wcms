@@ -1,24 +1,58 @@
-#workspace {
-    display: flex;
-    height: calc(100% - 50px);
+
+#edittopbar {
+    background-color: var(--secondary-background-color);
 }
 
-.panel {
+#edittopbar a {
+    color: var(--text-color);
+}
+
+/* overwrites global behavior */
+:checked ~ .toggle-panel {
     width: 250px;
-    height: 100%;
-    overflow-y: auto;
-    height: 100%;
+    max-width: none;
+}
+/* overwrites global behavior */
+.toggle-panel-content {
+    padding: 0;
+    background-color: var(--tertiary-background-color);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap, 0);
+}
+/* overwrites global behavior */
+.toggle-panel-content summary {
+    list-style: none;
+    background-color: var(--secondary-background-color);
+    font-size: 1em;
+    padding: var(--padding);
+    color: var(--text-color);
 }
 
-/* #leftbar label.toogle {
-    float: right;
+/*  */
+aside details summary::before {
+    content: "+ "
 }
 
-#rightbar label.toogle {
-    float: left;
-} */
+aside details[open] summary::before {
+    content: "- "
+}
+/* right bar has reversed order */
+#rightbar{
+    flex-direction: row;
+}
 
-
+fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding);
+}
+input[type="text"],input[type="number"],input[type="time"], textarea {
+    width: 100%;
+}
+textarea {
+    resize: vertical;
+}
 
 /* clip the tabs names */
 
@@ -26,13 +60,13 @@
     flex: 2;
     position: relative;
     height: 100%;
-    background-color: var(--primary-background-color);
+    background: var(--main-color);
     display: flex;
     overflow: hidden;
+    gap: var(--padding);
 }
 
-.tabs .tab .content
-{
+.tabs .tab .content {
 	position: absolute;
 	left: 0px;
 	width: 100%;
@@ -40,42 +74,38 @@
 	visibility: hidden;
 }
 
-.checkboxtab
-{
+.checkboxtab {
 	display: none;
 }
-
-.tab label
-{
-	margin-right: 8px;
+.tab:first-child {
+    margin-left: 1.75em;
+}
+.tab label {
 	display: inline-block;
+    position: relative;
+    padding: var(--half-padding) var(--padding) calc(var(--padding) + var(--half-padding));
+    top: 4px;
+    left: 4px;
+    vertical-align: top;
+    color: var(--text2-color);
 }
 
-.tab label.edited {
-    text-decoration: underline dotted red;
+.tab label.edited::before {
+    content: "~ "
 }
 
 .tab label.template {
     color: var(--text2-color);
 }
 
-.checkboxtab:checked ~label
-{
-    background: var(--outline-background-color);
-    color: var(--outline-color);
+.checkboxtab:checked ~label {
+    background: var(--input-background-color);
+    color: var(--code-background-color);
+    border-radius: var(--radius) var(--radius) 0 0;
 }
 
-.checkboxtab:checked ~.content
-{
+.checkboxtab:checked ~.content {
 	visibility: visible;
-}
-
-
-
-div.editor {
-    position: fixed;
-    width: 100%;
-    height: 100%;
 }
 
 .tabs textarea {
@@ -83,55 +113,16 @@ div.editor {
 	width: 100%;
 	border: none;
 	resize: none;
-	padding: 1%;
-}
-
-.editor .tabs label {
-    padding: 1px;
-    height: 22px;
-}
-
-input#editfontsize {
-    width: 3em;
+	padding: var(--padding);
+    border-radius: 0;
 }
 
 
-/* .editor aside {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    padding: 2px 3px;
-} */
-
-
-
-.editor ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.editor .bar select {
-    width: 100%;
-}
-
-
-
+/* custom head */
 .editor .panel textarea {resize: vertical;}
 
-.editor .panel input, .editor .panel textarea {width: 100%;}
 
 
-
-
-details {
-    background-color: var(--secondary-background-color);
-}
-
-input#fontsize {
-    width: 50px;
-}
 
 span#headid {
 	color: var(--outline-color);
@@ -150,7 +141,7 @@ a:hover {
 
 
 
-
+/* favicopnn */
 img.icon {
     height: 15px;
 }
@@ -182,6 +173,7 @@ a.icon {
 
 .editor fieldset {
     border: none;
+    margin: 0;
 }
 
 .panel summary {
@@ -292,7 +284,12 @@ div#geomap {
     --tag-inset-shadow-size: 0;
     --loader-size: 0;
     --tags-focus-border-color: transparent;
+    background: var(--input-background-color);
+    border:none;
+    border-radius: var(--radius);
     display: block;
+    width: 100%;
+    font-size: var(--size-small);
 }
 
 :root {
@@ -302,10 +299,7 @@ div#geomap {
 }
 
 .tagify__tag {
-    border-radius: 10px;
-    padding-left: 4px;
-    padding-right: 0;
-    padding-bottom: 1px;
+    border-radius: var(--radius);
     animation: none;
 }
 
