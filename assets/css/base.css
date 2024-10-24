@@ -61,6 +61,14 @@ a {
     color: currentColor;
 }
 
+/* --------------------------------------------------------- main layout */
+
+main {
+    display: flex;
+    height: 100%;
+    overflow-y: auto;
+    gap: var(--gap, 0);
+}
 
 /* --------------------------------------------------------- layout helpers */
 

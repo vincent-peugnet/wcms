@@ -1,15 +1,4 @@
 
-main {
-    display: flex;
-    height: 100%;
-    overflow-y: auto;
-    gap: var(--gap, 0);
-}
-main h1,
-main h2 {
-    font-size: 1em;
-    padding: var(--padding);
-}
 
 .block {
     background-color: var(--primary-background-color);
