@@ -3,14 +3,6 @@
     height: calc(100% - 50px);
 }
 
-#showeditorleftpanel:checked ~ #leftbarpanel {
-    display: block;
-}
-
-#showeditorrightpanel:checked ~ #rightbarpanel {
-    display: block;
-}
-
 .panel {
     width: 250px;
     height: 100%;
@@ -18,13 +10,13 @@
     height: 100%;
 }
 
-#leftbar label.toogle {
+/* #leftbar label.toogle {
     float: right;
 }
 
 #rightbar label.toogle {
     float: left;
-}
+} */
 
 
 
@@ -104,23 +96,15 @@ input#editfontsize {
 }
 
 
-.editor aside {
+/* .editor aside {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: nowrap;
     padding: 2px 3px;
-}
+} */
 
-aside#edittopbar .menu {
-    display: flex;
-  }
-  aside #pagemenu > span {
-    margin-right: 14px;
-  }
-  aside #workspacemenu > span {
-    margin-left: 10px;
-  }
+
 
 .editor ul {
     list-style: none;
