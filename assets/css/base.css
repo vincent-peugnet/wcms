@@ -329,38 +329,14 @@ input.toggle-panel-toggle {
 
 
 
-/* --------------------------------------------------------- almost untouched… */
+/* --------------------------------------------------------- media queries */
 
-.bar {
-    background-color: var(--primary-background-color);
+
+@media (max-width: 900px) {
+    header a span, footer {
+        display: none;
+    }
 }
-
-.panel {
-    display: none;
-}
-
-label.toogle {
-    height: 100%;
-    line-height: 100%;
-    text-align: center;
-}
-
-label.toogle:hover {
-    color: var(--outline-color);
-    cursor: pointer;
-    background-color: var(--outline-background-color);
-}
-
-/* Used for interface modification using hidden checkboxes */
-input.toggle {
-    display: none;
-}
-
-label.toogle {
-    width: 15px;
-}
-
-
 
 
 @media (max-width: 750px) {
@@ -376,14 +352,32 @@ label.toogle {
         display: none;
     }
 
-    aside summary {
-        min-width: 45px !important;
-        padding-right: 15px;
+    .toggle-panel-container {
+        display: block;
     }
-
-    aside .submenu {
-        left: 0;
-        max-width: inherit !important;
+    .toggle-panel-label {
+        height: min-content;
+        width: 100%;
+        background: none;
+        position: absolute;
+        text-align: right;
+    }
+    .toggle-panel-label span,
+    .toggle-panel-label:hover {
+        background: none;
+    }
+    .toggle-panel {
+        grid-row: 1;
+        display: block;
+    }
+    :checked ~ .toggle-panel {
+        max-width: none;
+    }
+    .toggle-panel-content {
+        display: none;
+    }
+    :checked ~ .toggle-panel .toggle-panel-content {
+        display: block;
     }
 
     .bar {
@@ -403,7 +397,7 @@ label.toogle {
     }
 
     body, input, select, button {
-        font-size: 20px;
+        /* font-size: 20px; */
     }
 
     input[type="checkbox"], input[type="radio"] {
@@ -412,7 +406,7 @@ label.toogle {
     }
 
     header a {
-        font-size: 35px;
+        /* font-size: 35px; */
     }
     
 }

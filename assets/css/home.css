@@ -139,7 +139,12 @@ div#geomap {
 
 
 @media (max-width: 900px) and (min-width: 550px) {
-    #bookmarks td.rss, #bookmarks a span.name, #bookmarks h3, #bookmarks h2 {
+    #bookmarks h2{
+        width: 2.5em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    #bookmarks td.rss, #bookmarks a span.name, #bookmarks h3 {
         display: none;
     }
 }
