@@ -1,9 +1,8 @@
 <aside id="leftbar" class="toggle-panel-container">
     <input id="showeditorleftpanel" name="showeditorleftpanel" value="1" class="toggle-panel-toggle" type="checkbox" <?= $workspace->showeditorleftpanel() === true ? 'checked' : '' ?> form="workspace-form" >
-    <label for="showeditorleftpanel" class="toggle-panel-label"><span><i class="fa fa-info"></i></span></label>
+    <label for="showeditorleftpanel" class="toggle-panel-label"><span><i class="fa fa-cog"></i></span></label>
 
     <div class="toggle-panel" id="leftbarpanel">
-        <h2>Metadata</h2>
         <div class="toggle-panel-content">
 
         <input type="hidden" name="datemodif" value="<?= $page->datemodif('string') ?>" form="update">

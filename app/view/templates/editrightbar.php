@@ -7,7 +7,7 @@
         <h2>Infos</h2>
         
         <?php if ($user->iseditor()) : ?>
-            <h3>Authors</h3>
+            <h4>Authors</h4>
 
             <?php foreach ($editorlist as $editor) : ?>
                 <div class="checkexternal">
@@ -30,7 +30,7 @@
 
 
 
-        <h3>Stats</h3>
+        <h4>Stats</h4>
 
         <table>
             <tbody>
