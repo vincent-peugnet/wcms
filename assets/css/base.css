@@ -103,6 +103,7 @@ input, textarea, button, select, .button {
     font-size: var(--size-small);
     padding: var(--half-padding) var(--padding);
     border-radius: var(--radius);
+    margin: 0;
 }
 
 input, textarea {
