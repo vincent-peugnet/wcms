@@ -1,16 +1,10 @@
-<div id="rightbar" class="bar">
-    <input
-        id="showeditorrightpanel"
-        name="showeditorrightpanel"
-        value="1"
-        class="toggle"
-        type="checkbox"
-        form="workspace-form"
-        <?= $workspace->showeditorrightpanel() === true ? 'checked' : '' ?>
-    >
-    <label for="showeditorrightpanel" class="toogle">◧</label>
-    <div id="rightbarpanel" class="panel">
-   
+<aside id="rightbar" class="toggle-panel-container">
+    <input id="showeditorrightpanel" name="showeditorrightpanel" value="1" class="toggle-panel-toggle" type="checkbox" <?= $workspace->showeditorrightpanel() === true ? 'checked' : '' ?> form="workspace-form" >
+    <label for="showeditorrightpanel" class="toggle-panel-label"><span><i class="fa fa-info"></i></span></label>
+
+    <div class="toggle-panel" id="rightbarpanel">
+
+        <h2>Infos</h2>
         
         <?php if ($user->iseditor()) : ?>
             <h3>Authors</h3>
@@ -57,4 +51,4 @@
 
     </div>
 
-</div>
+</aside>
