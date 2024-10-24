@@ -46,6 +46,8 @@ h1, h2 {
     margin: 0;
     color: var(--text2-color);
     background-color: var(--main-color);
+    font-size: 1em;
+    padding: var(--padding); 
 }
 
 p, code {
