@@ -298,7 +298,9 @@ input[type="submit"], input[type="file"], button, select, .button  {
 .toggle-panel-label {
     height: 100%;
     font-size: 1em;
+    width: 1.4em;
     cursor: pointer;
+    text-align: center;
     background: var(--primary-background-color);
 }
 
