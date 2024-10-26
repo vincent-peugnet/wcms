@@ -409,6 +409,8 @@ table a {
     display: flex;
     flex-direction: row-reverse;
     background: var(--primary-background-color);
+    /* needed for absolutely positionned labels on mobile */
+    position: relative;
 }
 
 .toggle-panel {
