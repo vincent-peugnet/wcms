@@ -388,8 +388,11 @@ table a {
     width: 100px;
 }
 
-#topbar a.currentpage {
-    font-weight: bold;
+#topbar a.currentpage,
+#topbar a:focus-visible {
+    outline: 1px solid rgba(255,255,255, .3);
+    padding: calc(var(--spacing) / 4) var(--spacing);
+    border-radius: var(--radius);
 }
 
 /* --------------------------------------------------------- navbar */
