@@ -158,27 +158,31 @@ main {
 
 input, textarea, button, select, .button {
     font: inherit;
+    margin: 0;
+    line-height: 1rem;
     border: none;
+    border-color: var(--button-color);
     accent-color: var(--main-color);
     font-size: var(--size-small);
     padding: var(--half-padding) var(--padding);
     border-radius: var(--radius);
-    margin: 0;
-}
-
-input, textarea {
     color: var(--input-color);
-    border-color: var(--input-color);
     background-color: var(--input-background-color);
 }
 
 input[type="submit"], input[type="file"], button, select, .button  {
-    color: var(--button-color);
-    border-color: var(--button-color);
-    background-color: var(--button-background-color);
     cursor: pointer;
+    white-space: nowrap;
+    background: var(--button-background-color);
+    color: var(--button-color) !important;    
 }
 
+input[type=submit]:hover, button:hover, .button:hover,
+input[type=submit]:focus, button:focus, .button:focus {
+    color: var(--button-background-color) !important;
+    background: var(--button-color);
+    outline: none;
+}
 
 /* --------------------------------------------------------- fields */
 
@@ -188,30 +192,36 @@ input[type="submit"], input[type="file"], button, select, .button  {
     flex-direction: column;
     align-items: start;
     gap: 0;
+    width: 100%;
 }
+
 .field label { 
     display: block; 
     font-size: var(--size-small); 
-    padding-bottom: var(--half-padding);
+    padding-bottom: var(--half-spacing);
 }
 
-.field label + input[type="text"],
-.field label + input[type="number"],
-.field label + input[type="color"],
-.field label + select { width: 100%; }
+.field input[type="text"],
+.field input[type="password"],
+.field input[type="number"],
+.field input[type="color"],
+.field input[type="date"],
+.field select { width: 100%; }
     
 .field:has([type="checkbox"]),
 .field:has([type="radio"]),
 .field:has([type="color"]) { 
     flex-direction: row-reverse; 
     align-items: start;
-    gap: var(--padding);
+    gap: var(--spacing);
 }    
+
 .field:has([type="checkbox"]) label,
 .field:has([type="radio"]) label,
 .field:has([type="color"]) label { 
     flex: 1; 
 }
+
 .field:has([type="color"]) input { 
     flex: 1; 
     padding: 0;
@@ -221,11 +231,7 @@ input[type="submit"], input[type="file"], button, select, .button  {
     flex-direction: row;
     justify-content: end;
     align-items: end;
-}
-.submit-field [type=submit], .submit-field button, .submit-field .button {
-    background: var(--outline-background-color);
-    color: var(--text2-color);
-    font-weight: bold;
+    gap: var(--spacing);
 }
 
 /* --------------------------------------------------------- horizontal bars */
