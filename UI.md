@@ -4,7 +4,17 @@ A (work-in-progress) guide to help in building bars, dropdowns, panels, fields a
 
 ## Main principles
 
-Never rely on a first level tag name to style elements but prefer classnames. Tag names might be used within a child selector (so they can benefit from the cascade) :
+### Stylesheets
+
+- `base.css` is loaded everywhere.
+- `back.css` is loaded everywhere except for the Edit view.
+- Each view also loads its own stylesheet where base styles can be overidden, or specific elements be defined. 
+
+Long stylesheets are divided via comments dividers. A summary of its sections can be found at the start of the file.
+
+Apart from common reset, defined in `base.css`, never rely on a first level tag name to style elements but prefer descriptive classnames. 
+
+Tag names might be used within a child selector (so they can benefit from the cascade) :
 ```css
 /* instead of */
 details { }
@@ -14,6 +24,16 @@ details { }
 ```
 
 ## Elements
+
+
+### Common elements
+
+`h1` and `h2` are used as `section` or `aside` titles, and are style the same way.  
+`h3` and `h4` are used as sub-titles in various places, and are style differently according where they are used:
+- Bookmarks
+- Filters (both Home and Media)
+- Dropdowns sections
+
 
 ### Layout helpers
 
@@ -67,10 +87,12 @@ Each section should contain one or many `.flexrow` to properly layout any kind o
 ### Dropdown menus
 
 Like stated above, these menus should be put in a `.hbar-section` within a `.hbar`.
+They are used in Home and Media.
 
 They are based on `<details>` element – so that they can be closed and opened without js – that receive à `.dropdown` class.
 
 The inner content is wrapped within a `.dropdown-content`.
+
 ```html
 <details class="dropdown">
 	<summary>Menu name</summary>
@@ -79,8 +101,8 @@ The inner content is wrapped within a `.dropdown-content`.
 	</div>
 </details>
 ```
-
 The content itself is wrapped within one or multiple `.dropdown-section` that can be a `div` or a `form`.
+
 ```html
 <form class="dropdown-section" method="">
 	<h2>Section title</h2>
@@ -90,7 +112,127 @@ The content itself is wrapped within one or multiple `.dropdown-section` that ca
 </form>
 ```
 
+### Collapsible panels
 
+Every side panel is collapsible, thanks to a checkbox+label behavior.
+
+```html
+<aside class="toggle-panel-container">
+	<input class="toggle-panel-toggle" type="checkbox" >
+	<label class="toggle-panel-label">
+	<div class="toggle-panel">
+		<h2>Panel title</h2>
+		<div class="toggle-panel-content">
+			…
+		</div>
+	</div>
+</aside>
+```
+
+On mobile view, the `label` switch to horizontal layout.
+
+### Grid layouts
+
+User and Profile view are displayed through a responsive grid layout. 
+
+Each subsection is a `.grid-item`.
+
+```html
+<main class="grid">
+	<div class="grid-item">
+		<h2>Item title</h2>	
+		…
+	</div>
+</main>
+```
+
+## Main screens
+
+```
+# Home
+--------------------------------------------------
+HEADER.hbar#topbar 
+--------------------------------------------------
+NAV.hbar#navbar
+--------------------------------------------------
+Aside ×| Aside ×| Section                
+       |        |   > Deep search
+       |        |   > Table | Graph | Map         
+       |        |                        
+       |        |                        
+       |        |                        
+
+
+# Media
+--------------------------------------------------
+HEADER.hbar#topbar 
+--------------------------------------------------
+NAV.hbar#navbar
+--------------------------------------------------
+Aside ×| Aside ×| Section                
+       |        |   > Table
+       |        | 
+       |        |  
+       |        |                        
+       |        |         
+
+
+# Edit
+--------------------------------------------------
+HEADER.hbar#topbar 
+--------------------------------------------------
+NAV.hbar#navbar
+--------------------------------------------------
+Aside ×| Section                       | × Aside
+       |  > Tabs                       |
+       |                               |
+       |                               |
+       |                               |
+       |                               |
+
+
+# Users
+--------------------------------------------------
+HEADER.hbar#topbar 
+--------------------------------------------------
+Add new user
+  > Form
+--------------------------------------------------
+Users
+  > Table
+--------------------------------------------------
+       
+
+# Admin
+--------------------------------------------------
+HEADER.hbar#topbar 
+--------------------------------------------------
+NAV.hbar#navbar
+--------------------------------------------------
+Item    | Item    | Item    | Item    | Item     | 
+Item    | Item    | 
+
+
+# Profile
+--------------------------------------------------
+HEADER.hbar#topbar 
+--------------------------------------------------
+Item    | Item    | Item    
+
+
+# Help
+--------------------------------------------------
+HEADER.hbar#topbar 
+--------------------------------------------------
+Nav    | Section
+       |   
+       |        
+       |        
+       |        
+       |        
+
+
+```
 
 ## Main structure
 
@@ -98,8 +240,7 @@ The content itself is wrapped within one or multiple `.dropdown-section` that ca
 HEADER.hbar#topbar 
 
 	div.hbar-section
-		(div.flexrow)
-			div | form | input | button | a | span
+		div | form | input | button | a | span
 	
 NAV.hbar#navbar
 
@@ -117,70 +258,72 @@ NAV.hbar#navbar
 						
 MAIN
 	
-	? aside.panel
-		(h1.panel-title)
-		div.scrollable
-			? {div|form}.panel-section
-				h2
-				{div|form}.panel-section-content
-					(.list | .tree | fieldset)
-			? details
-	
 	? aside.toggle-panel-container
 		label.toggle-panel-label + input[type=checkbox].toggle-panel-toggle
 		.toggle-panel
 			h2
+				(a.help)
 			div.toggle-panel-content	
 				{div|form}.panel-section
 					h3
+						(a.help)
 					{div|form}.panel-section-content
-						(.list | .tree | fieldset)
+						(.tree | fieldset)
 							(h4 | legend)
-							(p.help)
+							(p.info)
 							p.field
 								label
 								input | button | a
 	
-	? section.main#pages
-		h1
-			text
-			div.flexrow
-				input | button | a
-		div#searchbar
-			…
-		div.scrollable	
-			table
+	? .home
+		aside#bookmarks
+		aside#filter
+		section.pages
+			h2
+				text
+				(.filter)
+					.button
+				.display-mode
+					a
+			div#searchbar
 				…
+			div.scrollable	
+				table
+					…
 
-	? section.main#page
+	? &.editor
+		aside#leftbar
 		div.tabs
 			div.tab
 				label + input[type=checkbox]
 				div.tab-content
 					textarea
+		aside#rightbar
 
-	? section.main#medias
-		h1
-		div.scrollable	
+	? &.media
+		aside (dirlist)
+		aside (filters)
+		section
+			h2
+			div.scroll
+				table	| ul.gallery
+
+	? &.grid
+		div.grid-item
+			h2
+			p | h3 | form …
+
+	? &.user
+		section.new-user
+			h2
+			form
+		section.all-users
+			h2
 			table		
 
-	? section.main#admin
-		div.scrollable	
-			div.admin-section
-				h2.admin-section-title
-				div.admin-section-content
-
-	? section.main#users
-		h1
-		div.scrollable	
-			table		
-
-	? section.main#account
-		div.scrollable	
-			div.admin-section
-				h2.admin-section-title
-				div.admin-section-content
-
-	? section.main#info
-		div.scrollable	
+	? &.main-info
+		nav#toc
+		section#doc
 ```
+
+
