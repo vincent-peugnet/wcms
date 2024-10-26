@@ -370,6 +370,7 @@ table a {
 
 
 /* --------------------------------------------------------- help button */
+
 .help {
     background: var(--outline-color);
     color: var(--outline-background-color) !important;
