@@ -90,6 +90,8 @@ main section {
     width: 100%;
 }
 
+/* --------------------------------------------------------- footer */
+
 footer {
     background-color: black;
     color: white;
@@ -134,11 +136,6 @@ footer {
 }
 
 
-
-
-div.checkbox [type="checkbox"] {
-    display: inline-block;
-    width: auto;
 /* --------------------------------------------------------- .info icon before paragraphs */
 p.info {
     line-height: 1.4;
@@ -162,10 +159,7 @@ p.info::before {
 }
 
 
-div.radio input[type="radio"] {
-    display: inline-block;
-    width: inherit;
-}
+/* --------------------------------------------------------- icon */
 
 img.icon {
     height: 12px;
@@ -176,22 +170,7 @@ a:hover img.icon {
 }
 
 
-
-
-
-
-
-
-li.event:hover span.details {
-    display: inline;
-}
-
-span.details {
-    display: none;
-}
-
-
-
+/* --------------------------------------------------------- media queries */
 
 @media (max-width: 550px) {
     main {
@@ -211,10 +190,3 @@ span.details {
         padding-top: 5px;
     }
 }
-
-
-h2 a {
-    color: var(--outline-background-color);
-}
-
-h2 .right a.selected, h2 a:hover {color: var(--text2-color);}
