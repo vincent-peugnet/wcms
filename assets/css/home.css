@@ -1,59 +1,74 @@
-aside #edit input[type="submit"] {
-    width: 100%;
-}
-
-.panel {
-    overflow-y: auto;
-    height: 100%;
-    width: 200px;
-}
+/* HOME */
 
 
-main article#main {
-    width: 100%;
-}
+/* --------------------------------------------------------- bookmarks */
 
-main div#main {
+.bookmark {
     display: flex;
-    align-items: flex-start;
-    flex-direction: column;
+    gap: var(--spacing);
 }
 
-
-main div#graph {
-    height: 1000px;
-    width: 800px;
+a.bookmark {
+    display: block;
+    white-space: nowrap;
+    max-width: 10em;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-main table td.id label {
-    font-family: monospace;
-    font-size: 0.9em;
-}
-
-
-
-#home2table a.linkto {
-    font-family: monospace;
-    font-size: medium;
-    background-color: var(--main-color);
-    text-wrap: nowrap;
-}
-
-main a.bookmark[data-current="1"] {
+/* currently selected bookmark */
+a.bookmark[data-current="1"] {
     background-color: var(--outline-background-color);
     color: var(--outline-color);
+    padding: var(--half-spacing) var(--spacing);
+    border-radius: var(--radius);
 }
 
-main a.bookmark {
-    display: block;
+
+/* --------------------------------------------------------- filters */
+
+/* for tags and authors, manage space between label and counter  */
+.field .label-with-counter {
+    display: flex;
+}
+
+.field .label-with-counter .label {
+    flex:1;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.field .label-with-counter .counter {
+    border-radius: 100%;
+    width: 1.2em;
+    height: 1.2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--size-small);
+}
+
+fieldset.tag input[type="radio"], fieldset.authors input[type="radio"] {
+    /* make input/label closer on authors and tags radios */
+    margin-right: -2px;
+}
+
+td label, td time,
+td.tag, td.description {
     white-space: nowrap;
 }
 
+details#display input[type="color"] {
+    /* limit color input height widthin Display dropdown */
+    height: 1.5em;
+}
+
+
+/* --------------------------------------------------------- deep search */
 
 div#deepsearchbar {
     background-color: var(--secondary-background-color);
-    line-height: 24px;
-    padding-left: 5px;
+    padding: var(--spacing);
 }
 
 #deepsearchbar input[type=text] {
@@ -64,24 +79,22 @@ div#deepsearchbar {
     display: inline;
 }
 
+/* --------------------------------------------------------- list view */
 
-#filter span.list-label {
-    width: 122px;
-    text-overflow: ellipsis;
-    display: inline-block;
-    overflow: hidden;
-    vertical-align: text-bottom;
+main table td.id label {
+    font-family: monospace;
+    font-size: 0.9em;
 }
 
-#filter span.counter {
-    border-radius: 100%;
-    width: 17px;
-    height: 17px;
-    display: inline-block;
-    text-align: center;
-    font-size: smaller;
+#home2table a.linkto {
+    font-family: monospace;
+    font-size: var(--size-small);
+    background-color: var(--main-color);
+    color: var(--text2-color);
+    text-wrap: nowrap;
+    padding: 0 var(--padding);
+    border-radius: var(--radius);
 }
-
 
 table td a.tag, table a.author {
     border-radius: 10px;
@@ -110,12 +123,10 @@ table td a.secure.public {
     background-color: #80b97b;
 }
 
-
 table .favicon img {
     height: 16px;
     max-width: 32px;
 }
-
 
 td.title {
     max-width: 150px;
@@ -123,53 +134,31 @@ td.title {
     text-overflow: ellipsis;
 }
 
-td label, td time {white-space: nowrap;}
 
-a.redirection {
-    background-color: var(--secondary-background-color);
-    border-radius: 5px;
+/* --------------------------------------------------------- graph view */
+
+main div#graph {
+    height: 100%;
+    width: 100%;
 }
 
 
-div#geomap {
-    width: 800px;
-    height: 570px;
+/* --------------------------------------------------------- map view */
+
+#map,
+#geomap {
+    width: 100%;
+    height: 100%;
+}
+#map p {
+    padding: var(--spacing);
+}
+.leaflet-control-container {
+    position: absolute;
 }
 
 
-
-@media (max-width: 900px) and (min-width: 550px) {
-    #bookmarks h2{
-        width: 2.5em;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    #bookmarks td.rss, #bookmarks a span.name, #bookmarks h3 {
-        display: none;
-    }
-}
-
-@media (max-width: 550px) {
-    section.pages {
-        max-width: 100%;
-    }
-
-    main nav {
-        flex-direction: column;
-    }
-
-    main #filter {
-        flex-direction: column-reverse;
-    }
-
-    #bookmarks table {
-        width: 100%;
-    }
-
-    main .panel {
-        width: auto;
-    }
-}
+/* --------------------------------------------------------- media queries */
 
 @media (pointer: coarse) {
 
@@ -186,29 +175,4 @@ div#geomap {
         font-size: 22px;
         padding: 0 10px;
     }
-}
-
-
-fieldset.tag input[type="radio"], fieldset.authors input[type="radio"] {
-    margin-right: -2px;
-}
-
-nav {
-    display: flex;
-}
-
-
-.pages h2, .pages #deepsearchbar {
-    z-index: 1;
-}
-
-
-td.tag, td.authors, td.description {
-    white-space: nowrap;
-}
-
-
-details#display input[type="color"] {
-    height: 1.5em;
-    width: 1.5em;
 }
