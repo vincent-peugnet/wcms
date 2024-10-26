@@ -58,28 +58,36 @@ main section {
     overflow: hidden;
 }
 
-main #filter fieldset {
+
+/* --------------------------------------------------------- filters */
+/* #filter is common to Home and Media */
+
+#filter fieldset {
     padding: 0;
     border: none;
-    margin: 15px 0;
+    margin: 0;
 }
 
-
-main #filter fieldset[data-default="0"] div {
-    background: var(--outline-background-color);
-    color: var(--outline-color);
+#filter fieldset[data-default="0"] legend::before {
+    content: "~ ";
+    display: inline;
+    position: absolute;
+    width: 1em;
+    left: var(--spacing);
+    text-indent: 0;
 }
 
-main #filter legend {
-    font-weight: bold;
+#filter fieldset[data-default="0"] legend {
+    text-indent: 1em;
+    position: relative;
+}
+
+#filter legend .help {
+    text-indent: 0;
+}
+
+#filter input[type="submit"] {
     width: 100%;
-    background-color: var(--secondary-background-color);
-}
-
-#filter select, #filter input[type="datetime-local"], #filter input[type="submit"] {
-    width: 100%;
-    margin-top: 5px;
-    display: block;
 }
 
 footer {
