@@ -5,10 +5,10 @@
             <summary>File</summary>
             <div class="dropdown-content">
                 <form id=addmedia action="<?= $this->url('mediaupload') ?>" method="post" enctype="multipart/form-data" class="dropdown-section">
-                    <h2>
+                    <h3>
                         Upload file(s)
                         <a href="<?= $this->url('info', [], '#media-upload') ?>" title="help !" class="help">?</a>
-                    </h2>
+                    </h3>
                     <p class="field">
                         <label for="file">
                             <i class="fa fa-upload"></i> Upload from computer<br>
@@ -48,7 +48,7 @@
                 </form>
 
                 <form id="folderadd" action="<?= $this->url('mediafolderadd') ?>" method="post" class="dropdown-section">
-                    <h2>New folder</h2>                
+                    <h3>New folder</h3>                
                     <p class="field">
                         <input type="hidden" name="route" value="<?= $mediaopt->getpathaddress() ?>">
                         <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>">
@@ -62,7 +62,7 @@
 
                 <?php if($user->issupereditor()) : ?>
                     <form action="<?= $this->url('mediafolderdelete') ?>" id="deletefolder" method="post" class="dropdown-section">
-                        <h2>Delete folder</h2>
+                        <h3>Delete folder</h3>
                         <p class="field">
                             <input type="hidden" name="route" value="<?= $mediaopt->getpathaddress('media') ?>">
                             <input type="hidden" name="dir" value="<?= $mediaopt->dir() ?>/">
@@ -76,7 +76,7 @@
                 <?php endif ?>
 
                 <div class="dropdown-section">
-                    <h2>Magic folders</h2>
+                    <h3>Magic folders</h3>
                     <label><i class="fa fa-font"></i> Fonts</label>
                     <p class="field submit-field">
                         <a href="<?= $this->url('mediafontface', [], $mediaopt->getpathaddress()) ?>" class="button">
@@ -93,7 +93,7 @@
             <?php if($user->issupereditor()) : ?>                
                 <form action="<?= $this->url('mediaedit') ?>" method="post" id="mediaedit" class="dropdown-content">
                     <div class="dropdown-section">
-                        <h2>Move</h2>
+                        <h3>Move</h3>
                         <p class="field">
                             <input type="hidden" name="route" value="<?= $mediaopt->getpathaddress() ?>">
                             <input type="hidden" name="path" value="<?= $mediaopt->dir() ?>">
@@ -111,7 +111,7 @@
                         </p>
                     </div>    
                     <div class="dropdown-section">
-                        <h2>Delete</h2>
+                        <h3>Delete</h3>
                         <p class="field submit">
                             <input type="submit" name="action" value="Delete selected medias" >
                         </p>
@@ -125,7 +125,7 @@
             <summary>Filter</summary>
             <div class="dropdown-content">
                 <form action="" method="post" class="dropdown-section">
-                    <h2>Print folder content</h2>
+                    <h3>Print folder content</h3>
                     <input type="hidden" name="query" value="1">
                     <input type="hidden" name="filename" value="0">
                     <p class="field">
