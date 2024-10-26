@@ -484,25 +484,27 @@ input.toggle-panel-toggle {
 
 
 @media (max-width: 900px) {
-    header a span, footer {
+    /* anchortext within topbar */
+    #topbar a span, 
+    /* version footer on home */
+    footer {
         display: none;
     }
 }
 
 
-@media (max-width: 750px) {
-    header a span, footer, aside a span {
-        display: none;
-    }
+@media (max-width: 700px) {
+    .text {display: none;}
 }
-
 
 @media (max-width: 550px) {
 
-    header a span, footer, header span#search, aside a span, .text {
+    /* quick access form in topbar */
+    header #search {
         display: none;
     }
 
+    /* collapsible panels behavior */
     .toggle-panel-container {
         display: block;
     }
@@ -512,32 +514,22 @@ input.toggle-panel-toggle {
         background: none;
         position: absolute;
         text-align: right;
+        padding-right: var(--spacing);
     }
     .toggle-panel-label span,
-    .toggle-panel-label:hover {
-        background: none;
-    }
-    .toggle-panel {
-        grid-row: 1;
-        display: block;
-    }
-    :checked ~ .toggle-panel {
-        max-width: none;
-    }
-    .toggle-panel-content {
-        display: none;
-    }
-    :checked ~ .toggle-panel .toggle-panel-content {
-        display: block;
-    }
-
-    .bar {
-        flex-direction: column;
-    }
+    .toggle-panel-label:hover { background: none; }
+    .toggle-panel { grid-row: 1; display: block; }
+    :checked ~ .toggle-panel { max-width: none; }
+    .toggle-panel-content { display: none; }
+    :checked ~ .toggle-panel .toggle-panel-content { display: block }
 
     label.toogle {
         width: 100%;
         height: 30px;
+    }
+    .dropdown-content {
+        /* dropdown at left:0 when navbar is scrollable */
+        left: 0;
     }
 }
 
