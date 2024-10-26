@@ -34,6 +34,14 @@ media queries
 }
 
 
+/* Display mode links */
+
+h2 a {
+    color: var(--outline-background-color);
+}
+
+h2 a.selected, h2 a:hover {
+    color: var(--text2-color);
 }
 
 
