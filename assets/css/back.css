@@ -97,56 +97,41 @@ footer {
 }
 
 
-.nowrap {
-    white-space: nowrap;
+/* --------------------------------------------------------- grid layout */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    overflow: auto;
 }
-
-fieldset li {
-    text-wrap: nowrap;
+.grid-item {
+    background: var(--primary-background-color);
+    padding: var(--double-spacing);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
 }
-
-
-div#options, article#main {
-    min-width: 180px;
-    overflow-y: auto;
+.grid-item form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-h2 .right {
-    float: right;
+.grid-item a {
+    text-decoration: underline;
 }
-
-
-
-
-tbody tr:hover {
-    background-color: var(--outline-background-color);
-    color: var(--outline-color);
+.grid-item textarea {
+    width: 100%;
 }
-
-ul {
-    list-style: none;
-    padding-inline-start: 0;
-    margin: 0;
+.grid-item h2 {
+    margin: calc(-1 * var(--double-spacing)) calc(-1 * var(--double-spacing))  0 calc(-1 * var(--double-spacing));
 }
-
-th {
-    background-color: var(--secondary-background-color);
+.grid-item h3 {
+    margin: 1.2em 0 0;
+    font-size: 1em;
+    padding: var(--spacing) 0 var(--half-spacing); 
+    border-bottom: 1px solid var(--outline-background-color);
+    
 }
-
 
 
 
