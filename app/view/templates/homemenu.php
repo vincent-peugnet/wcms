@@ -9,7 +9,7 @@
                 <div class="dropdown-content">
                     <form action="<?= $this->url('pageupload') ?>" method="post" enctype="multipart/form-data" class="dropdown-section">              
                         
-                        <h2>Import page as file</h2>
+                        <h3>Import page as file</h3>
                         <p class="field">
                             <label for="pagefile">JSON Page file</label>    
                             <input type="hidden" name="datecreation" value="0">
@@ -39,7 +39,7 @@
                     </form>
 
                     <div class="dropdown-section">
-                        <h2>Cache</h2>
+                        <h3>Cache</h3>
                         <p class="field submit-field">
                             <a href="<?= $this->url('flushrendercache') ?>" class="button">
                                 <i class="fa fa-trash"></i> Flush render cache
@@ -55,7 +55,7 @@
                 <form action="<?= $this->url('multi') ?>" method="post" id="multi" class="dropdown-content">
                     <i>Edit selected pages</i>        
                     <div class="dropdown-section">
-                        <h2>Edit Meta infos</h2>
+                        <h3>Edit Meta infos</h3>
                         <p class="field">
                             <label for="title">title</label>
                             <input type="text" name="datas[title]" id="title">
@@ -65,7 +65,7 @@
                             <input type="text" name="datas[description]" id="description">
                         </p>
 
-                        <h3>Tags</h3>
+                        <h4>Tags</h4>
                         <p class="field">
                             <input type="hidden" name="reset[tag]" value="0">
                             <label for="resettag">reset tag(s)</label>
@@ -76,7 +76,7 @@
                             <input type="text" name="addtag" id="addtag">
                         </p>
 
-                        <h3>Date</h3>
+                        <h4>Date</h4>
                         <p class="field">
                             <input type="hidden" name="reset[date]" value="0">
                             <label for="resetdate">reset date as now</label>
@@ -98,7 +98,7 @@
                             </p>
                         </div>
 
-                        <h3>Privacy</h3>
+                        <h4>Privacy</h4>
                         <p class="field">
                             <label for="setlevel">Privacy level</label>
                             <select name="datas[secure]" id="setlevel">
@@ -109,7 +109,7 @@
                             </select>
                         </p>
 
-                        <h3>Images</h3>
+                        <h4>Images</h4>
                         <p class="field">
                             <label for="favicon">Favicon</label>
                             <select name="datas[favicon]" id="favicon">
@@ -131,14 +131,14 @@
                             </select>
                         </p>
 
-                        <h3>Geolocalisation</h3>
+                        <h4>Geolocalisation</h4>
                         <p class="field">
                             <input type="hidden" name="reset[geo]" value="0">
                             <label for="resetgeo">delete geo datas</label>
                             <input type="checkbox" name="reset[geo]" id="resetgeo" value="1">
                         </p>
 
-                        <h3>Templates</h3>
+                        <h4>Templates</h4>
                         <p class="field">
                             <label for="templatebody">Body</label>
                             <select name="datas[templatebody]" id="templatebody">
@@ -170,7 +170,7 @@
                             </select>
                         </p>
 
-                        <h3>Advanced</h3>
+                        <h4>Advanced</h4>
                         <div class="flexrow">
                             <p class="field">
                                 <label for="sleep">Sleep (s.)</label>
@@ -191,7 +191,7 @@
                             <input type="text" name="datas[redirection]" id="redirection" list="searchdatalist">     
                         </p>
                         
-                        <h3>Authors</h3> 
+                        <h4>Authors</h4> 
                         <p class="field">
                             <label for="addauthor">Author</label>
                             <select name="addauthor" id="addauthor">
@@ -213,14 +213,14 @@
                     </div>
                     
                     <div class="dropdown-section">
-                        <h2>Render</h2>
+                        <h3>Render</h3>
                         <p class="field submit-field">
                             <input type="submit" name="action" value="render">
                         </p>
                     </div>
 
                     <div class="dropdown-section">                
-                        <h2>Delete</h2>
+                        <h3>Delete</h3>
                         <div class="flexrow">
                             <input type="hidden" name="confirmdelete" value="0">
                             <p class="field">                        
@@ -243,10 +243,10 @@
             <summary>Filter</summary>
             <div class="dropdown-content">
                 <form action="<?= $this->url('homequery') ?>" method="post" class="dropdown-section">
-                    <h2>
+                    <h3>
                         List menu
                         <a href="<?= $this->url('info', [], '#page-list') ?>" title="help !" class="help">?</a>
-                    </h2>
+                    </h3>
                     <i>Generate code to display a list of pages</i>
                 
                     <input type="hidden" name="listquery" value="1">
@@ -313,10 +313,10 @@
                 </form>
 
                 <div class="dropdown-section">
-                    <h2>
+                    <h3>
                         Map
                         <a href="<?= $this->url('info', [], '#map') ?>" title="help !" class="help">?</a>                        
-                    </h2>
+                    </h3>
                     <i>A code to insert a map on a page</i>
                     <?php if(!empty($optmap)) : ?>
                         <code class="select-all"><?= $optmap->getcode() ?></code>
@@ -324,10 +324,10 @@
                 </div>
 
                 <div class="dropdown-section">
-                    <h2>
+                    <h3>
                         Random page
                         <a href="<?= $this->url('info', [], '#random-page') ?>" title="help !" class="help">?</a>
-                    </h2>
+                    </h3>
                     <i>Generate a code to create a link to a random page using the current filtering options.</i>
                     <?php if(!empty($optrandom)) : ?>
                         <code class="select-all">[random page](<?= $optrandom->getcode() ?>)</code>
@@ -343,7 +343,7 @@
         <div class="dropdown-content">
             <?php if(empty($matchedbookmarks)) : ?>
                 <form action="<?= $this->url('bookmarkadd') ?>" method="post" class="dropdown-section">
-                    <h2>New bookmark</h2>
+                    <h3>New bookmark</h3>
                     <p>
                         Save those filters as a bookmark
                     </p>
@@ -377,7 +377,7 @@
 
                 <?php if(!empty($editablebookmarks)) : ?>
                     <form action="<?= $this->url('bookmarkupdate') ?>" method="post" class="dropdown-section">
-                        <h2>Update existing bookmark</h2>
+                        <h3>Update existing bookmark</h3>
                     
                         <input type="hidden" name="query" value="<?= $queryaddress ?>">
                         <p class="field">
@@ -397,12 +397,12 @@
             <?php else : ?>
                 <?php foreach ($matchedbookmarks as $bookmark) : ?>
                     <form action="<?= $this->url('bookmarkupdate') ?>" method="post" class="dropdown-section">
-                        <h2>
+                        <h3>
                             <strong>
-                                <?= $bookmark->icon() ?>
+                                <?= $bookmark->icon() ?>    
                                 <?= $bookmark->id() ?>
                             </strong>
-                        </h2>
+                        </h3>
                         <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
                         <p class="field">       
                             <label for="bookmark_icon">icon</label>
@@ -438,7 +438,7 @@
 
                     <?php if($bookmark->ispublic()) : ?>
                         <div class="dropdown-section">
-                            <h2 title="you can use public bookmarks as RSS feeds">RSS feed</h2>
+                            <h3 title="you can use public bookmarks as RSS feeds">RSS feed</h3>
                             <?php if ($bookmark->ispublished()) : ?>
                                 copy and paste this code in any page
                                 <code class="select-all">%RSS?bookmark=<?= $bookmark->id() ?>%</code>
@@ -463,7 +463,7 @@
                     <?php endif ?>
                     
                     <form action="<?= $this->url('bookmarkdelete') ?>" method="post" class="dropdown-section">
-                        <h2>Delete</h2>
+                        <h3>Delete</h3>
                     
                         <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
                         <input type="hidden" name="route" value="home">
@@ -489,7 +489,7 @@
         <summary>Display</summary>
         <div class="dropdown-content">
             <form action="<?= $this->url('homecolumns') ?>" method="post" class="dropdown-section">
-                <h2>Columns</h2>
+                <h3>Columns</h3>
                                 
                 <input type="hidden" name="columns[]" value="id">
                 <p class="field">
@@ -509,7 +509,7 @@
 
             <?php if($user->issupereditor()) : ?>
                 <form action="<?= $this->url('homecolors') ?>" method="post" class="dropdown-section">
-                    <h2>Tag colors</h2>
+                    <h3>Tag colors</h3>
                     <?php foreach ($colors as $tag => $datas) : ?>
                         <p class="field">
                             <input type="color" name="<?= $tag ?>" value="<?= $datas['background-color'] ?>" id="color_<?= $tag ?>">
