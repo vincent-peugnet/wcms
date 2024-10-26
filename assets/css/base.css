@@ -262,6 +262,45 @@ input[type=submit]:focus, button:focus, .button:focus {
     align-items: center;
 }
 
+/* --------------------------------------------------------- data tables */
+
+main section table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+main section table th, 
+main section table td {
+    text-align: left;
+    padding: var(--spacing);
+    /* white-space: nowrap; */
+}
+
+main section table td.nowrap {
+    white-space: nowrap;
+}
+
+main section table tr td {
+  border-bottom: 1px solid var(--tertiary-background-color);
+}
+
+main section table tbody tr:hover {
+    background-color: var(--outline-background-color);
+    color: var(--outline-color);
+}
+
+main section table th {
+    background-color: var(--secondary-background-color);
+    white-space: nowrap; 
+}
+
+  
+/* --------------------------------------------------------- all tables */
+
+table a {
+    color: var(--text3-color);
+}
+
 
 /* --------------------------------------------------------- dropdowns */
 
