@@ -2,22 +2,28 @@
 <?php $this->start('page') ?>
 <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'admin', 'pagelist' => $pagelist]) ?>
 
-<nav class="admin hbar">
+<nav id="navbar" class="hbar">
+
     <div class="hbar-section">
-        <ul class="admin-shortcuts">
-            <li><a href="#home-page">Home page</a></li>
-            <li><a href="#databases">Databases</a></li>
-            <li><a href="#interface">Interface</a></li>
-            <li><a href="#page-creation">Page creation</a></li>
-            <li><a href="#alert-pages">Alert Pages</a></li>
-            <li><a href="#render">Render</a></li>
-            <li><a href="#style">Style</a></li>
-        </ul>
+        <details id="json" class="dropdown">
+            <summary>Configuration</summary>
+            <div class="dropdown-content">
+                <ul class="dropdown-section">
+                    <li><a href="#home-page">Home page</a></li>
+                    <li><a href="#databases">Databases</a></li>
+                    <li><a href="#interface">Interface</a></li>
+                    <li><a href="#page-creation">Page creation</a></li>
+                    <li><a href="#alert-pages">Alert Pages</a></li>
+                    <li><a href="#render">Render</a></li>
+                    <li><a href="#style">Style</a></li>
+                </ul>
+            </div>
+        </details>
     </div>
     <form action="<?= $this->url('adminupdate') ?>" method="post" id="admin" calss="hbar-section">            
-        <button type="submit">
+        <button type="submit" accesskey="s" >
             <i class="fa fa-save"></i>
-            <span>Save configuration</span>
+            <span>Save</span>
         </button>
     </form>
 </nav>
@@ -26,8 +32,7 @@
 
     <div class="grid-item"  id="home-page">
         <h2>Home page</h2>
-        <p class="info">
-            By default, W has no home page for visitors without an account.
+        <p class="info">By default, W has no home page for visitors without an account.
             But if you wish, you can define a page to which visitors who are not logged in will be redirected.
         </p>
 
@@ -98,8 +103,7 @@
 
         <h3>Theme</h3>
 
-        <p class="info">
-            See <a href="<?= $this->url('info', [], '#theming') ?>">📖 manual section</a> for more infos.
+        <p class="info">See <a href="<?= $this->url('info', [], '#theming') ?>">📖 manual section</a> for more infos.
         </p>
 
         <p class="field">
@@ -113,8 +117,7 @@
 
         <h3>Javascript</h3>
 
-        <p class="info">
-            Disables javascript in the user interface.
+        <p class="info">Disables javascript in the user interface.
             Syntax highlighting, depend on it and will therefore not be displayed.
             This also reduces comfort a little, but full functionality is retained.
         </p>
@@ -131,8 +134,7 @@
 
         <h2>Page creation</h2>
 
-        <p class="info">
-            What really happend when you create a new page.
+        <p class="info">What really happend when you create a new page.
         </p>
         
         <h3>Privacy of new pages</h3>
@@ -148,8 +150,7 @@
 
         <h3>Page version</h3>
 
-        <p class="info">
-            Choose W page version you want to use when a new page is created.
+        <p class="info">Choose W page version you want to use when a new page is created.
         </p>
 
         <p class="field">
@@ -173,8 +174,7 @@
     
         <h2>Alert pages</h2>
 
-        <p class="info">
-            Set the style and text to show when a page does not exist, or when a visitor don't have access to it.
+        <p class="info">Set the style and text to show when a page does not exist, or when a visitor don't have access to it.
         </p>
 
         <h3>Common options</h3>
@@ -246,8 +246,7 @@
             <input type="checkbox" name="alertcss" id="alertcss" value="1" <?= Wcms\Config::alertcss() ? 'checked' : '' ?> form="admin">
         </p>
 
-        <p class="info">
-            <i>You can use <code>body.alert</code> class to specify style.</i>
+        <p class="info"><i>You can use <code>body.alert</code> class to specify style.</i>
         </p>
     </div>
 
@@ -255,13 +254,11 @@
         
         <h2>Render</h2>
 
-        <p class="info">
-            To be applied, these modifications need the re-rendering of all pages.
+        <p class="info">To be applied, these modifications need the re-rendering of all pages.
         </p>
 
         <h3>Rendering details</h3>
-        <p class="info">
-            When a page is modified, this may affect the rendering of other pages linked to it.
+        <p class="info">When a page is modified, this may affect the rendering of other pages linked to it.
             The pages to which it points have a strong possibility of needing to be updated too.
             This option will invalidate their rendering each time the page pointing to them is updated.
             They will therefore be re-rendered the next time they are viewed.
@@ -275,8 +272,7 @@
 
         <h3>Base page language</h3>
 
-        <p class="info">
-            If the page language is not specified in metadatas, then this default will be used.
+        <p class="info">If the page language is not specified in metadatas, then this default will be used.
         </p>
 
         <p class="field">
@@ -286,8 +282,7 @@
 
         <h3>Title</h3>
 
-        <p class="info">
-            This add a suffix to the title of all your pages.
+        <p class="info">This add a suffix to the title of all your pages.
         </p>
 
         <p class="field">
@@ -319,8 +314,7 @@
 
         <h3>Url linker</h3>
 
-        <p class="info">
-            This can be overide individualy for each element using render options. See <a href="<?= $this->url('info', [], '#url-linker') ?>">📖 manual section</a> for more infos.
+        <p class="info">This can be overide individualy for each element using render options. See <a href="<?= $this->url('info', [], '#url-linker') ?>">📖 manual section</a> for more infos.
         </p>
 
         <p class="field">
@@ -331,8 +325,7 @@
 
         <h3>HTML tags (page V1)</h3>
 
-        <p class="info">
-            This can be overide individualy for each element using render options. See <a href="<?= $this->url('info', [], '#html-tags') ?>">📖 manual section</a> for more infos.
+        <p class="info">This can be overide individualy for each element using render options. See <a href="<?= $this->url('info', [], '#html-tags') ?>">📖 manual section</a> for more infos.
         </p>
 
         <p class="field">
