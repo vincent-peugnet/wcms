@@ -31,17 +31,21 @@
 
     <div class="hbar-section" id="workspacemenu">
 
-        <label for="fontsize">
-            <i class="fa fa-text-height"></i>
-        </label>
-        <input type="number" name="fontsize" value="<?= $workspace->fontsize() ?>" id="editfontsize" min="<?= Wcms\Workspace::FONTSIZE_MIN ?>" max="<?= Wcms\Workspace::FONTSIZE_MAX ?>" form="workspace-form">
+        <span class="fontsize">
+            <label for="editfontsize">
+                <i class="fa fa-text-height"></i>
+            </label>
+            <input type="number" name="fontsize" value="<?= $workspace->fontsize() ?>" id="editfontsize" min="<?= Wcms\Workspace::FONTSIZE_MIN ?>" max="<?= Wcms\Workspace::FONTSIZE_MAX ?>" form="workspace-form">
+        </span>
                 
-        <label for="edithighlighttheme">
-            <i class="fa fa-adjust"></i>
-        </label>
-        <select name="highlighttheme" form="workspace-form" id="edithighlighttheme">
-            <?= options(Wcms\Workspace::THEMES, $workspace->highlighttheme(), true) ?>
-        </select>
+        <span class="highlighttheme">
+            <label for="edithighlighttheme">
+                <i class="fa fa-adjust"></i>
+            </label>
+            <select name="highlighttheme" form="workspace-form" id="edithighlighttheme">
+                <?= options(Wcms\Workspace::THEMES, $workspace->highlighttheme(), true) ?>
+            </select>
+        </span>
 
         <div id="save-workspace">
             <form action="<?= $this->url('workspaceupdate') ?>" method="post" id="workspace-form" data-api="<?= $this->url('apiworkspaceupdate') ?>" >
