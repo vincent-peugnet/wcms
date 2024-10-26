@@ -66,17 +66,18 @@ flash messages
 
 body {
     margin: 0;
+    position: fixed;
+    width: 100%;
     height: 100%;
     background-color: var(--tertiary-background-color);
     font-family: var(--font-family);
     font-size: 15px;
-    position: fixed;
+    color: var(--text-color);
+    line-height: 1;
+    user-select: none;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    color: var(--text-color);
     gap: var(--gap, 0);
-    user-select: none;
 }
 
 /* --------------------------------------------------------- common elements */
