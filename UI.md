@@ -34,12 +34,42 @@ details { }
 - Filters (both Home and Media)
 - Dropdowns sections
 
+### CSS layout variables
+    
+- `--radius` helps define the border-radius on buttons and inputs
+- `--size-small` homogenize small sizes
+- `--gap` separate sidebars & main panels, set to 0 for collapsed ones
+- `--font-family`: main font preference
+- `--spacing` set “white” space around and between elements, can be 4px to remind old style W look.
+- `--reset-spacing` spacing adjustment (negates the spacing, allowing elements inside padded parent to go full bleed)
+- `--half-spacing` narrow spacing
+- `--double-spacing` double spacing 
+- `--padding` used inside fields, inputs and buttons, can be closed to 3px to remind old style w look 
+- `--reset-padding`, `--half-padding`, `--double-padding` same than `--spacing` adjustments
 
-### Layout helpers
+### CSS color variables
+    
+- `--main-color` should be light (light theme), used both as background and text color
+- `--text-color` should be dark (light theme)
+- `--text2-color` should be light (light theme)
+- `--text3-color` should be dark (light theme)
+- `--primary-background-color` should be light (light theme), visible erverywhere
+- `--secondary-background-color` should be light (light theme), accent color used on navbars, dropdowns sections, table headings
+- `--tertiary-background-color`, should be light (light theme), used on body, page metadata
+- `--code-background-color`, `--code-color` should be contrasted enough
+- `--outline-background-color`, `--outline-color` should be contrasted enough, highlights slected items, hovered table rows
+- `--button-background-color`, `--button-color` should be contrasted enough
+- `--input-background-color`, `--input-color` should be contrasted enough
 
-`.flexrow` helps to layout horizontal items, whichever is their inline/block natural behavior.
 
-`.flexcol` is the same for vertical layouts.
+### Flex layout helpers
+
+Layouts, both macro and micro, _heavily_ rely on Flexbox, varying `flex-direction`, often using `--spacing` for `padding` and `gap`.
+
+To allow less classnames and duplicates, two layout helpers are set:
+
+- `.flexrow` helps to layout horizontal items, whichever is their inline/block natural behavior.
+- `.flexcol` is the same for vertical layouts.
 
 ### Fields
 
