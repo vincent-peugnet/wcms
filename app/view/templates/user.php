@@ -85,7 +85,7 @@ $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'back.css',
                             </select>
                         </td>
 
-                        <td class="field">                            
+                        <td class="field nowrap">                            
                             <label><input type="checkbox" name="expiredate" id="expiredate" value="null"> reset</label>   
                             <input type="date" name="expiredate" id="expiredate" <?= $user->expiredate() !== false ?  'value="' . $user->expiredate('string') . '"' : '' ?>  min="<?= $now->format('Y-m-d'); ?>">                    
                         </td>
