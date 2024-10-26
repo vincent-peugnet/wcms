@@ -45,9 +45,17 @@ h2 a.selected, h2 a:hover {
 }
 
 
+/* --------------------------------------------------------- main layout */
+
 main section {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    background: var(--primary-background-color);
+    gap: var(--gap, 0);
+    flex-wrap: nowrap;
+    width: 100%;
+    overflow: hidden;
 }
 
 main #filter fieldset {
