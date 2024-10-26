@@ -125,9 +125,9 @@ a {
 /* --------------------------------------------------------- main layout */
 
 main {
-    display: flex;
     height: 100%;
-    overflow-y: auto;
+    display: flex;
+    overflow: hidden;
     gap: var(--gap, 0);
 }
 
