@@ -175,6 +175,7 @@ a:hover img.icon {
 @media (max-width: 550px) {
     main {
         flex-direction: column;
+        overflow: auto;
     }
 
     main > * {
