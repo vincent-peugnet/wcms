@@ -405,8 +405,10 @@ table a {
 /* --------------------------------------------------------- toggle panels (collapsibles) */
 
 .toggle-panel-container {
+    --toggle-label-width: 1.5em;
     display: flex;
     flex-direction: row-reverse;
+    background: var(--primary-background-color);
 }
 
 .toggle-panel {
@@ -414,23 +416,23 @@ table a {
     background: var(--primary-background-color);
 }
 .toggle-panel-content {
-    padding: var(--padding);
+    padding: var(--spacing);
     overflow-y: auto;
 }
 
 .toggle-panel-label {
     height: 100%;
     font-size: 1em;
-    width: 1.4em;
+    width: var(--toggle-label-width);
     cursor: pointer;
     text-align: center;
-    background: var(--primary-background-color);
+    cursor: ew-resize;
 }
 
 .toggle-panel-label span {
     background-color: var(--main-color);
     color: var(--text2-color);
-    padding: var(--padding) var(--half-padding);    
+    padding: var(--spacing) var(--half-spacing);    
     display: block;     
 }
 
@@ -448,6 +450,18 @@ input.toggle-panel-toggle {
     display: none;
 }
 
+/* section-subtitle: bookmarks h3, #filters legend, .edit #rightbar h3… */
+.toggle-panel-content h3,
+.toggle-panel-content legend {
+    font-weight: bold;
+    width: calc(100% + var(--double-spacing));
+    font-size: 1em;
+    padding: var(--half-spacing) var(--spacing);
+    border-bottom: 1px solid var(--tertiary-background-color);
+    margin: 0 0 var(--spacing) var(--reset-spacing);
+    display: flex;
+    justify-content: space-between;
+}
 
 
 /* --------------------------------------------------------- media queries */
