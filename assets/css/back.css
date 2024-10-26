@@ -1,12 +1,18 @@
+/* BACK */
+/* Used everywhere except in Edit view */
 
+/* --------------------------------------------------------- content 
 
-.block {
-    background-color: var(--primary-background-color);
-    display: flex;
-    flex-direction: column;
-    max-height: 100%;
-    width: 100%;
-}
+content 
+main layout 
+filters 
+footer 
+grid layout 
+.info icon before paragraphs 
+icon 
+media queries 
+
+/* --------------------------------------------------------- variables */
 
 .scroll {
     overflow: auto;
