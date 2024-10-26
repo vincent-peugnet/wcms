@@ -136,18 +136,17 @@ main {
 .flexrow {
     display: flex;
     flex-direction: row;
-    gap: var(--spacing);
+    gap: var(--double-spacing);
 }
-.flexrow-reverse { 
-    flex-direction: row-reverse;
-}
+
 .flexrow > * { 
     flex: 1 auto;
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--padding);
-    display: flex;
+    gap: var(--spacing);
 }
+
 .flexcol {
     display: flex;
     flex-direction: column;
