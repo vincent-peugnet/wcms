@@ -76,12 +76,36 @@
                     </div>
                 <?php endif ?>
             
-            </fieldset>
-        </details>
+                </fieldset>
+            </details>
 
-        <details <?= $page->isgeo() ? 'open' : '' ?> id="geomap-details">
-            <summary>Geolocalisation</summary>
-            <div id="geomap"></div>
+            <?php if ($user->iseditor()) : ?>
+                <details id="editinfo">
+                    <summary>Authors</summary>
+                    <fieldset>  
+                        <?php foreach ($editorlist as $editor) : ?>
+                            <p class="field">
+                                <label for="<?= $editor->id() ?>" ><?= $editor->id() ?> <?= $editor->level() ?></label>    
+                                <input
+                                    type="checkbox"
+                                    name="authors[]"
+                                    id="<?= $editor->id() ?>"
+                                    value="<?= $editor->id() ?>"
+                                    form="update"
+                                    <?= in_array($editor->id(), $page->authors()) ? 'checked' : '' ?>
+
+                                    <?php /* safeguard against editor removing themself from authors too easily */ ?>
+                                    <?= !$user->issupereditor() && $editor->id() === $user->id() ? 'disabled=""' : '' ?>
+                                >
+                            </p>
+                        <?php endforeach ?>
+                    </fieldset>
+                </details>
+            <?php endif ?>
+
+            <details <?= $page->isgeo() ? 'open' : '' ?> id="geomap-details">
+                <summary>Geolocalisation</summary>
+                <div id="geomap"></div>
             <fieldset class="flexrow">
                 <p class="field">
                     <label for="latitude">latitude</label>
@@ -188,15 +212,12 @@
                     <label for="password" title="specific page password protection">Password</label>
                     <input type="text" name="password" value="<?= $page->password() ?>" id="password" min="0" max="64" form="update">
                 </p>
-            </fieldset>
-        </details>
+                </fieldset>
+            </details>
 
-        <details id="help">
-            <summary>Help</summary>
-            <div>
-                <?php $this->insert('edithelp') ?>
-            </div>                    
-        </details>
+            
+        
+        </div>
         
     </div>
 
