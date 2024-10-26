@@ -1,14 +1,53 @@
+/* BASE */
+
+/* --------------------------------------------------------- content 
+
+variables
+common elements 
+icons 
+main layout 
+layout helpers 
+inputs and buttons 
+fields 
+horizontal bars 
+data tables 
+all tables 
+dropdowns 
+help button 
+topbar 
+navbar 
+toggle panels (collapsibles) 
+delete 
+workspace button (no-js) 
+media queries 
+flash messages 
+
+/* --------------------------------------------------------- variables */
+
 :root {
-    --spacing: 1rem; /* better when non zero */
-    --padding: .5rem; /* can be zero to remind old style w look */
+    
     --radius: .25rem; /* border-radius on buttons and inputs */
-    --size-small: .85em; /* small sizes */
+    --size-small: .85rem; /* small sizes */
+    --gap: 1px; /* 1px for separated columns & panels, 0 for collapsed ones */
+    --font-family: sans-serif;
+    
+    /* used to set “white” space around and between elements */
+    --spacing: .5rem; /* can be 4px to remind old style w look */
+    /* spacing adjustments : */
+    --reset-spacing: calc(var(--spacing) * -1);
+    --half-spacing: calc(var(--spacing) / 2);
+    --double-spacing: calc(var(--spacing) * 2);
+
+    /* used inside fields, inputs and buttons */
+    --padding: .5rem; /* can be closed to 3px to remind old style w look */
     /* padding adjustments : */
     --reset-padding: calc(var(--padding) * -1);
     --half-padding: calc(var(--padding) / 2);
     --double-padding: calc(var(--padding) * 2);
-    --gap: 1px; /* 1px for separated columns & panels, 0 for collapsed ones */
-    --font-family: sans-serif;
+
+    /* header has --spacing top and bottom + input font-size + input padding on top and bottom */
+    /* unused ! */
+    --header-height: calc( var(--spacing) * 2 + var(--size-small) + var(--half-spacing) * 2);
 }
 
 * {
