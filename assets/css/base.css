@@ -472,6 +472,14 @@ input.toggle-panel-toggle {
     padding: var(--spacing);
 }
 
+/* --------------------------------------------------------- workspace button (no-js) */
+#save-workspace {
+    position: absolute;
+    right: var(--spacing);
+}
+.js #save-workspace {
+    display: none;
+}
 /* --------------------------------------------------------- media queries */
 
 
