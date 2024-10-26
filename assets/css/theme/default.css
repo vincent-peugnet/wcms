@@ -19,5 +19,6 @@
 
 :root {
     --radius: 3px;
-    --padding:4px;
+    --spacing: 6px;
+    --padding: 3px;
 }
