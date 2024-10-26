@@ -555,18 +555,21 @@ input.toggle-panel-toggle {
 }
 
 
-/* __________________________ Flash Messages ___________________________ */
+/* --------------------------------------------------------- flash messages */
 
 #flashmessage {
     color: white;
-    border: solid white 1px;
+    border-bottom: solid white 1px;
     position: fixed;
     animation-delay: 5s;
-    animation-name: flash;
+    /* animation-name: flash; */
     animation-duration: 2s;
     animation-fill-mode: forwards;
     max-height: 200px;
     width: 100%;
+    position: absolute;
+    top: 0;
+    z-index: 200;
 }
 
 div#flashmessage:target {
@@ -580,7 +583,9 @@ div#flashmessage:target {
     z-index: 5;
 }
 
-
+#flashmessage li {
+    padding: var(--double-spacing);
+}
 #flashmessage li.alert-info {
     background-color: grey;
 }
@@ -597,23 +602,7 @@ div#flashmessage:target {
     background-color: red;
 }
 
-
 @keyframes flash {
-    from {
-      top: 0;
-    }
-  
-    to {
-      top: -200px;
-    }
-  }
-  
-
-table a, li a {
-    color: var(--text3-color);
-}
-
-
-.panel input, .panel select, .panel textarea {
-    margin-bottom: 3px;
+    from { top: 0; }
+    to { top: -200px; }
 }
