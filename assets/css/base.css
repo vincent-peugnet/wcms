@@ -385,7 +385,7 @@ table a {
   
 /* --------------------------------------------------------- topbar */
 
-#topbar input[type="text"] {
+#search input[type="text"] {
     width: 100px;
 }
 
