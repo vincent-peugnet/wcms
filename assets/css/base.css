@@ -535,17 +535,17 @@ input.toggle-panel-toggle {
 
 @media (pointer: coarse) {
 
-    header a span, footer, header span#search, aside a span, .text {
+    header a span, footer, header span#search, .text {
         display: none;
     }
 
     body, input, select, button {
-        /* font-size: 20px; */
+        /* font-size: 120%; */
     }
 
     input[type="checkbox"], input[type="radio"] {
-        height: 22px;
-        width: 22px !important;
+        height: 1.5em;
+        width: 1.5em !important;
     }
 
     header a {
