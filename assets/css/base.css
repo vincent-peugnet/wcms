@@ -240,16 +240,25 @@ input[type=submit]:focus, button:focus, .button:focus {
     background-color: var(--main-color);
     display: flex;
     justify-content: space-between;
-    padding: var(--padding);
-    gap: var(--spacing);
-    overflow-x: scroll;
+    padding: var(--spacing);
+    gap: var(--double-spacing);
+    -webkit-overflow-scrolling: touch;
+    /* @check */
+    /* should be neeeded for mobile views, but might cause unwanted height */
+    /* overflow-x: scroll; */
+    /* &::-webkit-scrollbar {
+        display: none;
+    } */
 }
+
 .hbar a {
+    /* @move in topbar? */
     color: var(--text2-color);
 }
+
 .hbar-section { 
     display: flex; 
-    gap: var(--spacing); 
+    gap: var(--double-spacing); 
     align-items: center;
 }
 
