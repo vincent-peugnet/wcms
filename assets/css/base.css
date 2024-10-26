@@ -87,11 +87,25 @@ h1, h2 {
     color: var(--text2-color);
     background-color: var(--main-color);
     font-size: 1em;
-    padding: var(--padding); 
+    padding: var(--spacing); 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+h3, h4 {
+    margin: 0;
+    font-size: 1em;
 }
 
 p, code {
     user-select: text;
+    margin: 0;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 code.select-all {
