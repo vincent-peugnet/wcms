@@ -139,6 +139,26 @@ footer {
 div.checkbox [type="checkbox"] {
     display: inline-block;
     width: auto;
+/* --------------------------------------------------------- .info icon before paragraphs */
+p.info {
+    line-height: 1.4;
+    margin: 1.5em 0 var(--spacing);
+}
+p.info::before {
+    content: "i";
+    font-family: 'Courier New', Courier, monospace;
+    background: var(--outline-color);
+    color: var(--outline-background-color) !important;
+    border-radius: 100%;
+    position: relative;
+    top: -.25em;
+    display: inline-flex;
+    width: 1.2em;
+    height: 1.2em;
+    font-size: var(--size-small);
+    justify-content: center;
+    align-items: center;
+    margin-right: 1ch;
 }
 
 
