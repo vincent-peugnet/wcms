@@ -3,7 +3,6 @@
 namespace Wcms;
 
 use RuntimeException;
-use Wcms\Exception\Database\Notfoundexception;
 
 class Controllerconnect extends Controller
 {
@@ -16,9 +15,14 @@ class Controllerconnect extends Controller
             $id = $_POST['id'] ?? null;
             $route = $_POST['route'] ?? 'home';
             if ($_POST['log'] === 'login') {
-                $this->login($route, $id);
+                $this->login();
             } elseif ($_POST['log'] === 'logout') {
-                $this->logout($route, $id);
+                $this->logout();
+            }
+            if (is_string($id)) {
+                $this->routedirect($route, ['page' => $id]);
+            } else {
+                $this->routedirect($route);
             }
         }
     }
@@ -39,74 +43,84 @@ class Controllerconnect extends Controller
 
 
     /**
-     * Will login an user using POST datas and redirect
-     *
-     * @param string $route     For redirection
-     * @param ?string $paramid  For redirection (optionnal, can be used for pages redirection)
+     * Will try to login an user using POST datas
      */
-    protected function login(string $route, ?string $paramid = null): void
+    protected function login(): void
     {
         if (!empty($_POST['pass']) && !empty($_POST['user'])) {
+            $this->modelconnect = new Modelconnect();
             $userid = $_POST['user'];
+            $pass = false;
+
             try {
                 $this->user = $this->usermanager->get($userid); // May throw DatabaseException
-                if (!$this->usermanager->passwordcheck($this->user, $_POST['pass'])) {
-                    $userid = $this->user->id();
-                    $this->sendflashmessage("Wrong credentials", self::FLASH_ERROR);
-                    Logger::error("wrong credential for user : '$userid' when attempting to loggin");
-                } elseif (
-                    $this->user->expiredate() !== false &&
-                    $this->user->expiredate('date') < $this->now &&
-                    $this->user->level() < 10
-                ) {
-                    $this->sendflashmessage("Account expired", self::FLASH_ERROR);
-                } else {
-                    $this->user->connectcounter();
-                    $this->usermanager->add($this->user);
-                    $this->servicesession->setuser($this->user->id());
-                    $this->sendflashmessage("Successfully logged in as " . $this->user->id(), self::FLASH_SUCCESS);
+            } catch (RuntimeException $e) {
+                $this->sendflashmessage('Wrong credentials', self::FLASH_ERROR);
+                Logger::errorex($e);
+                return;
+            }
 
-                    if (!empty($_POST['rememberme'])) {
-                        if ($this->user->cookie() > 0) {
-                            $this->modelconnect = new Modelconnect();
-                            $wsessionid = $this->user->newsession();
-                            $this->modelconnect->createauthcookie(
-                                $this->user->id(),
-                                $wsessionid,
-                                $this->user->cookie()
-                            );
-                            $this->usermanager->add($this->user);
-                            $this->servicesession->setwsessionid($wsessionid);
-                        } else {
-                            $message = "Can't remember you beccause user cookie conservation time is set to 0 days";
-                            $this->sendflashmessage($message, self::FLASH_WARNING);
-                        }
+            if (Config::club1ldap()) {
+                // use ldap for password
+                try {
+                    $ldap = new Modelclub1ldap();
+                    $pass = $ldap->auth($userid, $_POST['pass']);
+                    $ldap->disconnect();
+                } catch (RuntimeException $e) {
+                    $this->sendflashmessage('Error with LDAP connection', self::FLASH_ERROR);
+                    Logger::errorex($e);
+                    return;
+                }
+            } else {
+                // compare password
+                $pass = $this->usermanager->passwordcheck($this->user, $_POST['pass']);
+            }
+
+            if (!$pass) {
+                $this->sendflashmessage("Wrong credentials", self::FLASH_ERROR);
+                return;
+            }
+
+            if (
+                $this->user->expiredate() !== false &&
+                $this->user->expiredate('date') < $this->now &&
+                $this->user->level() < 10
+            ) {
+                $this->sendflashmessage("Account expired", self::FLASH_ERROR);
+                return;
+            }
+
+            try {
+                $this->user->connectcounter();
+                $this->usermanager->add($this->user);
+                $this->servicesession->setuser($this->user->id());
+                $this->sendflashmessage("Successfully logged in as " . $this->user->id(), self::FLASH_SUCCESS);
+
+                if (!empty($_POST['rememberme'])) {
+                    if ($this->user->cookie() > 0) {
+                        $wsessionid = $this->user->newsession();
+                        $this->modelconnect->createauthcookie(
+                            $this->user->id(),
+                            $wsessionid,
+                            $this->user->cookie()
+                        );
+                        $this->usermanager->add($this->user);
+                        $this->servicesession->setwsessionid($wsessionid);
+                    } else {
+                        $message = "Can't remember you beccause user cookie conservation time is set to 0 days";
+                        $this->sendflashmessage($message, self::FLASH_WARNING);
                     }
                 }
-            } catch (Notfoundexception $e) {
-                $this->sendflashmessage("Wrong credentials", self::FLASH_ERROR);
-                Logger::errorex($e);
             } catch (RuntimeException $e) {
                 $message = "Can't create authentification cookie : $e";
                 $this->sendflashmessage($message, self::FLASH_WARNING);
                 Logger::error($message);
             }
         }
-        if (is_string($paramid)) {
-            $this->routedirect($route, ['page' => $paramid]);
-        } else {
-            $this->routedirect($route);
-        }
     }
 
-    public function logout($route, $id = null): void
+    protected function logout(): void
     {
         $this->disconnect();
-
-        if ($id !== null && $route !== 'home') {
-            $this->routedirect($route, ['page' => $id]);
-        } else {
-            $this->routedirect($route);
-        }
     }
 }
