@@ -4,28 +4,35 @@ namespace Wcms;
 
 use RuntimeException;
 
-class Modelclub1ldap extends Model
+class Modelldap extends Model
 {
-    protected string $ldapserver = 'ldap://localhost:389';
-
-    protected string $d = 'ou=People,dc=club1,dc=fr';
-    protected string $u = 'uid';
+    protected string $ldapserver;
+    protected string $tree;
+    protected string $u;
 
 
     /** @var mixed $connection resource (PHP 7) or LDAPConnection (PHP 8)*/
     protected $connection;
 
-    private const LDAP_INVALID_CREDENTIALS = 0x31;
+    protected const LDAP_INVALID_CREDENTIALS = 0x31;
 
     /**
+     * @param string $ldapserver            LDAP server, like `ldap://server.tld:port` or just `ldap://localhost`
+     * @param string $tree                  LDAP structure tree without the username part.
+     *                                      Like `ou=people,dc=server,dc=tld`
+     * @param string $u                     Username storing name, something like `uid`.
+     *
      * @throws RuntimeException
      */
-    public function __construct()
+    public function __construct(string $ldapserver, string $tree, string $u)
     {
+        $this->ldapserver = $ldapserver;
         $this->connection = @ldap_connect($this->ldapserver);
         if ($this->connection === false) {
             throw new RuntimeException('bad LDAP server syntax');
         }
+        $this->tree = $tree;
+        $this->u = $u;
         ldap_set_option($this->connection, LDAP_OPT_PROTOCOL_VERSION, 3);
     }
 
@@ -41,7 +48,7 @@ class Modelclub1ldap extends Model
      */
     public function auth(string $username, string $password): bool
     {
-        $binddn = "$this->u=$username,$this->d";
+        $binddn = "$this->u=$username,$this->tree";
 
         $ldapbind = @ldap_bind($this->connection, $binddn, $password);
         if ($ldapbind === false) {
