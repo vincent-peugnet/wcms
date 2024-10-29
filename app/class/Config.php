@@ -59,6 +59,9 @@ abstract class Config
     /** Indicate if img should have loading="lazy" attribute */
     protected static bool $lazyloadimg = true;
 
+    /** Use club1 LDAP auth */
+    protected static bool $club1ldap = false;
+
     public const LANG_MIN = 2;
     public const LANG_MAX = 16;
 
@@ -349,6 +352,11 @@ abstract class Config
         return self::$lazyloadimg;
     }
 
+    public static function club1ldap(): bool
+    {
+        return self::$club1ldap;
+    }
+
 
     // __________________________________________ S E T ______________________________________
 
@@ -591,5 +599,10 @@ abstract class Config
     public static function setlazyloadimg($lazyloadimg): bool
     {
         return self::$lazyloadimg = boolval($lazyloadimg);
+    }
+
+    public static function setclub1ldap($club1ldap): void
+    {
+        self::$club1ldap = boolval($club1ldap);
     }
 }
