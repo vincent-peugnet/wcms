@@ -436,7 +436,6 @@ table a {
     height: 100%;
     font-size: 1em;
     width: var(--toggle-label-width);
-    cursor: pointer;
     text-align: center;
     cursor: ew-resize;
 }
@@ -527,9 +526,11 @@ input.toggle-panel-toggle {
         position: absolute;
         text-align: right;
         padding-right: var(--spacing);
+        cursor: ns-resize;
     }
     .toggle-panel-label span,
     .toggle-panel-label:hover { background: none; }
+    .toggle-panel-label span { padding: var(--spacing); }
     .toggle-panel { grid-row: 1; display: block; }
     :checked ~ .toggle-panel { max-width: none; }
     .toggle-panel-content { display: none; }
