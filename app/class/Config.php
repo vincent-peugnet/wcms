@@ -59,8 +59,10 @@ abstract class Config
     /** Indicate if img should have loading="lazy" attribute */
     protected static bool $lazyloadimg = true;
 
-    /** Use club1 LDAP auth */
-    protected static bool $club1ldap = false;
+    /** LDAP auth */
+    protected static string $ldapserver = '';
+    protected static string $ldaptree = '';
+    protected static string $ldapu = '';
 
     public const LANG_MIN = 2;
     public const LANG_MAX = 16;
@@ -157,6 +159,18 @@ abstract class Config
     public static function url($endslash = true): string
     {
         return self::$domain . (!empty(self::$basepath) ? '/' . self::$basepath : "") . ($endslash ? '/' : '');
+    }
+
+    /**
+     * @return bool                         Indicate if ldap is configured. (all 3 params are not empty)
+     */
+    public static function isldap(): bool
+    {
+        return (
+            !empty(self::$ldapserver)
+            && !empty(self::$ldaptree)
+            && !empty(self::$ldapu)
+        );
     }
 
     // ________________________________________ G E T _______________________________________
@@ -352,9 +366,19 @@ abstract class Config
         return self::$lazyloadimg;
     }
 
-    public static function club1ldap(): bool
+    public static function ldapserver(): string
     {
-        return self::$club1ldap;
+        return self::$ldapserver;
+    }
+
+    public static function ldaptree(): string
+    {
+        return self::$ldaptree;
+    }
+
+    public static function ldapu(): string
+    {
+        return self::$ldapu;
     }
 
 
@@ -601,8 +625,18 @@ abstract class Config
         return self::$lazyloadimg = boolval($lazyloadimg);
     }
 
-    public static function setclub1ldap($club1ldap): void
+    public static function setldapserver($ldapserver): void
     {
-        self::$club1ldap = boolval($club1ldap);
+        self::$ldapserver = $ldapserver;
+    }
+
+    public static function setldaptree($ldaptree): void
+    {
+        self::$ldaptree = $ldaptree;
+    }
+
+    public static function setldapu($ldapu): void
+    {
+        self::$ldapu = $ldapu;
     }
 }

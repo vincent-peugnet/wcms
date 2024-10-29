@@ -60,10 +60,10 @@ class Controllerconnect extends Controller
                 return;
             }
 
-            if (Config::club1ldap()) {
+            if (Config::isldap()) {
                 // use ldap for password
                 try {
-                    $ldap = new Modelclub1ldap();
+                    $ldap = new Modelldap(Config::ldapserver(), Config::ldaptree(), Config::ldapu());
                     $pass = $ldap->auth($userid, $_POST['pass']);
                     $ldap->disconnect();
                 } catch (RuntimeException $e) {
@@ -72,7 +72,7 @@ class Controllerconnect extends Controller
                     return;
                 }
             } else {
-                // compare password
+                // compare password using database password
                 $pass = $this->usermanager->passwordcheck($this->user, $_POST['pass']);
             }
 
