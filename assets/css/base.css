@@ -460,7 +460,7 @@ input.toggle-panel-toggle {
     font-size: 1em;
     padding: var(--half-spacing) var(--spacing);
     border-bottom: 1px solid var(--tertiary-background-color);
-    margin: 0 0 var(--spacing) var(--reset-spacing);
+    margin: 0 var(--reset-spacing) var(--spacing);
     display: flex;
     justify-content: space-between;
 }
