@@ -282,7 +282,7 @@ span.cm-wkeyword {
 @media (max-width: 550px) {
     main {
       flex-direction: column;
-      overflow: scroll;
+      overflow-y: scroll;
     }
 
     #leftbar :checked ~ .toggle-panel,
