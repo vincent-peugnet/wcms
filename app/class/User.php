@@ -11,7 +11,7 @@ class User extends Item
     protected string $id = '';
     protected int $level = 0;
     protected string $signature = '';
-    protected ?string $password;
+    protected ?string $password = null;
     protected bool $passwordhashed = false;
 
     /** @var string $name Displayed name */
@@ -58,6 +58,15 @@ class User extends Item
     public function __construct($datas = [])
     {
         $this->hydrate($datas);
+    }
+
+    /**
+     * Indicate if User is authenticated using LDAP.
+     * It is if password is set to null.
+     */
+    public function isldap(): bool
+    {
+        return (is_null($this->password));
     }
 
     // _________________________ G E T _______________________
