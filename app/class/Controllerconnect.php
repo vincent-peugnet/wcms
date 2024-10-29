@@ -60,7 +60,7 @@ class Controllerconnect extends Controller
                 return;
             }
 
-            if (Config::isldap()) {
+            if ($this->user->isldap()) {
                 // use ldap for password
                 try {
                     $ldap = new Modelldap(Config::ldapserver(), Config::ldaptree(), Config::ldapu());
