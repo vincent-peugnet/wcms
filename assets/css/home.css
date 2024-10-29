@@ -6,6 +6,7 @@
 .bookmark {
     display: flex;
     gap: var(--spacing);
+    align-items: center;
 }
 
 a.bookmark {
