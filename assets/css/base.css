@@ -564,7 +564,7 @@ input.toggle-panel-toggle {
     border-bottom: solid white 1px;
     position: fixed;
     animation-delay: 5s;
-    /* animation-name: flash; */
+    animation-name: flash;
     animation-duration: 2s;
     animation-fill-mode: forwards;
     max-height: 200px;
