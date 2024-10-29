@@ -388,11 +388,21 @@ table a {
 #search input[type="text"] {
     width: 100px;
 }
-
-#topbar a.currentpage,
+#topbar a {
+    /* allow absolute positionning of outline pseudo-element  */
+    position: relative;
+}
 #topbar a:focus-visible {
-    outline: 1px solid rgba(255,255,255, .3);
-    padding: calc(var(--spacing) / 4) var(--spacing);
+    /* disable default outline */
+    outline: none;
+}
+#topbar a.currentpage::before,
+#topbar a:focus-visible::before {
+    /* pseudo element to outline item */
+    content: "";
+    position: absolute;
+    inset: calc(var(--half-padding) * -1);
+    outline: 1px solid rgba(255,255,255, .5);
     border-radius: var(--radius);
 }
 
