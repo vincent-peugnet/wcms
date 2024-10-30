@@ -14,9 +14,6 @@
         <form action="<?= $this->url('useredit') ?>" method="post">
             <input type="hidden" name="id" value="<?= $userdelete->id() ?>">
             <input type="submit" name="action" value="Confirm delete">
-            
-            <?php $previous = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "javascript:history.go(-1)"; ?>
-            <a class="button" href="<?= $previous ?>">Cancel</a>
         </form>
 
     </div>

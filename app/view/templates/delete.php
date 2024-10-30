@@ -23,9 +23,6 @@
     <form action="<?= $this->upage('pagedelete', $page->id()) ?>" method="post">
         <input type="hidden" name="deleteconfirm" value="true">
         <input type="submit" value="Confirm delete">
-        
-        <?php $previous = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "javascript:history.go(-1)"; ?>
-        <a class="button" href="<?= $previous ?>">Cancel</a>
     </form>
 
 </div>
