@@ -251,6 +251,15 @@ input[type=submit]:focus, button:focus, .button:focus {
     } */
 }
 
+.hbar {
+    overflow-x: scroll;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+.hbar::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}
+
 .hbar a {
     /* @move in topbar? */
     color: var(--text2-color);
@@ -552,17 +561,21 @@ input.toggle-panel-toggle {
         display: none;
     }
 
-    body, input, select, button {
-        /* font-size: 120%; */
+    body {
+        /* bigger font-size */
+        font-size: 100%;
+        /* even bigger on small sizes */
+        --size-small: 1rem;
+    }
+
+    .hbar a {
+        /* even bigger on icon-only buttons */
+        font-size: 120%;
     }
 
     input[type="checkbox"], input[type="radio"] {
-        height: 1.5em;
-        width: 1.5em !important;
-    }
-
-    header a {
-        /* font-size: 35px; */
+        height: 1.2em;
+        width: 1.2em !important;
     }
     
 }

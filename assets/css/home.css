@@ -84,7 +84,7 @@ div#deepsearchbar {
 
 main table td.id label {
     font-family: monospace;
-    font-size: 0.9em;
+    font-size: var(--size-small);
 }
 
 #home2table a.linkto {
