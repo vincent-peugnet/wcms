@@ -308,7 +308,9 @@ span.cm-wkeyword {
         margin-left: var(--half-spacing);
     }
 
-    /* editor font-size input + label */
+    /* hide page name within save button */
+    .pageid, 
+    /* hide editor font-size input + label */
     .fontsize {
         display: none;
     }
