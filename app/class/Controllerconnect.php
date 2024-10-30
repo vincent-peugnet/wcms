@@ -55,13 +55,16 @@ class Controllerconnect extends Controller
             try {
                 $this->user = $this->usermanager->get($userid); // May throw DatabaseException
             } catch (RuntimeException $e) {
-                $this->sendflashmessage('Wrong credentials', self::FLASH_ERROR);
-                Logger::errorex($e);
-                return;
+                if (Config::ldapuserlevel() > 0) {
+                    $this->user = new User(['password' => null, 'level' => Config::ldapuserlevel(), 'id' => $userid]);
+                } else {
+                    $this->sendflashmessage('Wrong credentials', self::FLASH_ERROR);
+                    Logger::errorex($e);
+                    return;
+                }
             }
 
             if ($this->user->isldap()) {
-                // use ldap for password
                 try {
                     $ldap = new Modelldap(Config::ldapserver(), Config::ldaptree(), Config::ldapu());
                     $pass = $ldap->auth($userid, $_POST['pass']);
@@ -72,7 +75,6 @@ class Controllerconnect extends Controller
                     return;
                 }
             } else {
-                // compare password using database password
                 $pass = $this->usermanager->passwordcheck($this->user, $_POST['pass']);
             }
 

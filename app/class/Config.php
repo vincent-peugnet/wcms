@@ -63,6 +63,7 @@ abstract class Config
     protected static string $ldapserver = '';
     protected static string $ldaptree = '';
     protected static string $ldapu = '';
+    protected static int $ldapuserlevel = 0;
 
     public const LANG_MIN = 2;
     public const LANG_MAX = 16;
@@ -381,6 +382,11 @@ abstract class Config
         return self::$ldapu;
     }
 
+    public static function ldapuserlevel(): int
+    {
+        return self::$ldapuserlevel;
+    }
+
 
     // __________________________________________ S E T ______________________________________
 
@@ -638,5 +644,12 @@ abstract class Config
     public static function setldapu($ldapu): void
     {
         self::$ldapu = $ldapu;
+    }
+
+    public static function setldapuserlevel($ldapuserlevel): void
+    {
+        if (is_int($ldapuserlevel) && $ldapuserlevel >= 0 && $ldapuserlevel <= 10) {
+            self::$ldapuserlevel = $ldapuserlevel;
+        }
     }
 }
