@@ -252,9 +252,13 @@ span.cm-wkeyword {
     background: var(--input-background-color);
     border:none;
     border-radius: var(--radius);
-    display: block;
     width: 100%;
     font-size: var(--size-small);
+    display: flex;
+    flex-direction: row;
+    padding: var(--half-padding);
+    gap: var(--half-padding);
+    flex-wrap: wrap;
 }
 
 :root {
@@ -266,16 +270,20 @@ span.cm-wkeyword {
 .tagify__tag {
     border-radius: var(--radius);
     animation: none;
+    margin: 0;
+    padding: var(--half-spacing) var(--spacing);
+    gap: var(--half-spacing);
+    background: #eee;
 }
 
 .tagify__tag__removeBtn {
     color: inherit;
-    margin-left: 1px;
+    margin: 0;
 }
 
 .tagify__dropdown span.tag {
-    border-radius: 10px;
-	padding: 1px 4px;
+    /* border-radius: 10px;
+	padding: 1px 4px; */
 }
 
 .tagify--focus {
