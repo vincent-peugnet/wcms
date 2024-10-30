@@ -3,24 +3,7 @@
 <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'admin', 'pagelist' => $pagelist]) ?>
 
 <nav id="navbar" class="hbar">
-
-    <div class="hbar-section">
-        <details id="json" class="dropdown">
-            <summary>Configuration</summary>
-            <div class="dropdown-content">
-                <ul class="dropdown-section">
-                    <li><a href="#home-page">Home page</a></li>
-                    <li><a href="#databases">Databases</a></li>
-                    <li><a href="#interface">Interface</a></li>
-                    <li><a href="#page-creation">Page creation</a></li>
-                    <li><a href="#alert-pages">Alert Pages</a></li>
-                    <li><a href="#render">Render</a></li>
-                    <li><a href="#style">Style</a></li>
-                </ul>
-            </div>
-        </details>
-    </div>
-    <form action="<?= $this->url('adminupdate') ?>" method="post" id="admin" calss="hbar-section">            
+    <form action="<?= $this->url('adminupdate') ?>" method="post" id="admin" class="hbar-section">            
         <button type="submit" accesskey="s" >
             <i class="fa fa-save"></i>
             <span>Save</span>
