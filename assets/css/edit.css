@@ -77,7 +77,7 @@ div#geomap {
     background: var(--main-color);
     display: flex;
     overflow: hidden;
-    gap: var(--spacing);
+    gap: var(--half-spacing);
 }
 
 .tabs .tab .content {
@@ -109,8 +109,11 @@ div#geomap {
 }
 
 /* if the tab contains anything */
-.tab label.edited::before {
-    content: "~"
+.tab label.edited {
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    text-decoration-color: color-mix(in srgb, var(--text2-color) 70%, var(--main-color) 30%);
+    text-underline-offset: .15em;
 }
 
 /* @todo: report an issue: $templates[$key] never returns anything */
@@ -118,10 +121,13 @@ div#geomap {
     color: var(--text2-color);
 }
 
-.checkboxtab:checked ~label {
+.checkboxtab:checked ~ label {
     background: var(--input-background-color);
     color: var(--input-color);
     border-radius: var(--radius) var(--radius) 0 0;
+}
+.checkboxtab:checked ~ label.edited {
+    text-decoration-color: color-mix(in srgb, var(--input-color) 70%, var(--input-background-color) 30%);
 }
 
 .checkboxtab:checked ~.content {
@@ -299,24 +305,11 @@ span.cm-wkeyword {
     
     /* no js / codemirror ? reset first tab spacing */
     .js .tab:first-child {
-        margin-left: var(--spacing);
+        margin-left: var(--half-spacing);
     }
 
     /* editor font-size input + label */
     .fontsize {
         display: none;
     }
-}
-
-@media (pointer: coarse) {
-	.editor .tabs label {
-	    height: 35px;
-	    margin-right: 4px;
-	}
-	aside#edittopbar {
-	    padding: 5px;
-	    font-size: 25px;
-	    padding-top: 7px;
-	    padding-bottom: 7px;
-	}
 }
