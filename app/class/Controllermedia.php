@@ -173,14 +173,23 @@ class Controllermedia extends Controller
 
     public function edit()
     {
-        if ($this->user->issupereditor() && isset($_POST['action']) && isset($_POST['id'])) {
-            if ($_POST['action'] == 'delete') {
+        if ($this->user->issupereditor() && isset($_POST['action'])) {
+            if (!isset($_POST['id']) || empty($_POST['id'])) {
+                $this->sendflashmessage('no media selected', self::FLASH_ERROR);
+                $this->redirect($this->generate('media') . $_POST['route']);
+            }
+            if ($_POST['action'] === 'delete') {
                 if ($counter = $this->mediamanager->multifiledelete($_POST['id'])) {
                     $this->sendflashmessage("$counter files deletion successfull", self::FLASH_SUCCESS);
                 } else {
                     $this->sendflashmessage('Error while deleting files', self::FLASH_ERROR);
                 }
-            } elseif ($_POST['action'] == 'move' && isset($_POST['dir'])) {
+            }
+            if ($_POST['action'] === 'move') {
+                if (!isset($_POST['dir']) || empty($_POST['dir'])) {
+                    $this->sendflashmessage('no direction selected', self::FLASH_ERROR);
+                    $this->redirect($this->generate('media') . $_POST['route']);
+                }
                 $count = $this->mediamanager->multimovefile($_POST['id'], $_POST['dir']);
 
                 $total = count($_POST['id']);

@@ -61,22 +61,22 @@ class Workspace extends Item
         return $this->highlighttheme;
     }
 
-    public function setshoweditorleftpanel(mixed $show): void
+    public function setshoweditorleftpanel($show): void
     {
         $this->showeditorleftpanel = boolval($show);
     }
 
-    public function setshoweditorrightpanel(mixed $show): void
+    public function setshoweditorrightpanel($show): void
     {
         $this->showeditorrightpanel = boolval($show);
     }
 
-    public function setshoweoptionspanel(mixed $show): void
+    public function setshoweoptionspanel($show): void
     {
         $this->showeoptionspanel = boolval($show);
     }
 
-    public function setfontsize(mixed $fontsize): void
+    public function setfontsize($fontsize): void
     {
         $fontsize = intval($fontsize);
         if ($fontsize >= self::FONTSIZE_MIN && $fontsize <= self::FONTSIZE_MAX) {
