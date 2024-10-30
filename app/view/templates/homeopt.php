@@ -63,7 +63,6 @@
             <fieldset class="flexcol tag" data-default="<?= $opt->isdefault('tagfilter') && $opt->tagcompare() != 'EMPTY' ? '1' : '0' ?>">
                 <legend>
                     Tag 
-                    <a href="#example-help" class="help">?</a>
                 </legend>
                 <input type="hidden" name="tagnot" value="0" <?= !$opt->tagnot() ? "checked" : '' ?>>
                 
