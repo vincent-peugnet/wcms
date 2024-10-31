@@ -1,12 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
 
-    <?php if(!Wcms\Config::disablejavascript()) : ?>
-        <script>document.getElementsByTagName('html')[0].className = 'js'</script>
-    <?php endif ?>
-    
     <meta name="viewport" content="width=device-width" />
     
     <title><?= $title ?></title>
