@@ -193,6 +193,28 @@ class Modelbookmark extends Modeldb
     }
 
     /**
+     * Create a bookmark that filter pages where the given user is an author.
+     *
+     * @param User $user                    The concerned user (need to be already added in database)
+     *
+     * @throws RuntimeException             If the process failed
+     */
+    public function addauthorbookmark(User $user): void
+    {
+        $userbookmark = new Bookmark();
+        $uid = $user->id();
+        $userbookmark->init(
+            "$uid-is-author",
+            "?authorfilter[0]=$uid&submit=filter",
+            '👤',
+            "$uid's pages",
+            "Pages where $uid is listed as an author",
+        );
+        $userbookmark->setuser($user->id());
+        $this->add($userbookmark);
+    }
+
+    /**
      * @param Bookmark|string $id           string ID or bookmark
      *
      * @throws InvalidArgumentException     if $id is not a string or a Bookmark

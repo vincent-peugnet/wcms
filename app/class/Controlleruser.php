@@ -50,8 +50,18 @@ class Controlleruser extends Controller
                 $this->sendflashmessage('User successfully added', self::FLASH_SUCCESS);
             } catch (Databaseexception $e) {
                 $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);
+                Logger::errorex($e);
             }
-            $this->addauthorbookmark($user);
+            try {
+                $bookmarkmanager = new Modelbookmark();
+                $bookmarkmanager->addauthorbookmark($user);
+            } catch (RuntimeException $e) {
+                $this->sendflashmessage(
+                    'error while creating user\'s personnal author bookmark',
+                    self::FLASH_WARNING
+                );
+                Logger::errorex($e);
+            }
             $this->routedirect('user');
         }
     }
@@ -135,35 +145,6 @@ class Controlleruser extends Controller
                 $userupdate->hashpassword();
             }
             $this->usermanager->update($userupdate);
-        }
-    }
-
-    /**
-     * Create a bookmark that filter pages where the user is an author.
-     * Send a flash message in case of error.
-     *
-     * @param User $user                    The concerned user (need to be already added in database)
-     */
-    protected function addauthorbookmark(User $user): void
-    {
-        try {
-            $bookmarkmanager = new Modelbookmark();
-            $userbookmark = new Bookmark();
-            $uid = $user->id();
-            $userbookmark->init(
-                "$uid-is-author",
-                "?authorfilter[0]=$uid&submit=filter",
-                '👤',
-                "$uid's pages",
-                "Pages where $uid is listed as an author",
-            );
-            $userbookmark->setuser($user->id());
-            $bookmarkmanager->add($userbookmark);
-        } catch (RuntimeException $e) {
-            $this->sendflashmessage(
-                'Could not create personnal user author bookmark: ' . $e->getMessage(),
-                self::FLASH_ERROR
-            );
         }
     }
 }
