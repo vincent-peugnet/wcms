@@ -54,7 +54,9 @@ class Controllerconnect extends Controller
 
             try {
                 $this->user = $this->usermanager->get($userid); // May throw DatabaseException
+                $userisindb = true;
             } catch (RuntimeException $e) {
+                $userisindb = false;
                 if (Config::ldapuserlevel() > 0) {
                     $this->user = new User(['password' => null, 'level' => Config::ldapuserlevel(), 'id' => $userid]);
                 } else {
@@ -97,8 +99,16 @@ class Controllerconnect extends Controller
                 $this->usermanager->add($this->user);
                 $this->servicesession->setuser($this->user->id());
                 $this->sendflashmessage("Successfully logged in as " . $this->user->id(), self::FLASH_SUCCESS);
+            } catch (RuntimeException $e) {
+                $this->sendflashmessage('Error while trying to persist user in database', self::FLASH_ERROR);
+                Logger::errorex($e);
+                if (! $userisindb) { // if user was'nt in database, this mean creation failed. In this case, abort.
+                    return;
+                }
+            }
 
-                if (!empty($_POST['rememberme'])) {
+            if (!empty($_POST['rememberme'])) {
+                try {
                     if ($this->user->cookie() > 0) {
                         $wsessionid = $this->user->newsession();
                         $this->modelconnect->createauthcookie(
@@ -112,11 +122,25 @@ class Controllerconnect extends Controller
                         $message = "Can't remember you beccause user cookie conservation time is set to 0 days";
                         $this->sendflashmessage($message, self::FLASH_WARNING);
                     }
+                } catch (RuntimeException $e) {
+                    $message = "Can't create authentification cookie : $e";
+                    $this->sendflashmessage($message, self::FLASH_WARNING);
+                    Logger::error($message);
                 }
-            } catch (RuntimeException $e) {
-                $message = "Can't create authentification cookie : $e";
-                $this->sendflashmessage($message, self::FLASH_WARNING);
-                Logger::error($message);
+            }
+
+            // if user was not in database before, we can creat it's author personnal bookmark
+            if (!$userisindb) {
+                try {
+                    $bookmarkmanager = new Modelbookmark();
+                    $bookmarkmanager->addauthorbookmark($this->user);
+                } catch (RuntimeException $e) {
+                    $this->sendflashmessage(
+                        'error while creating user\'s personnal author bookmark',
+                        self::FLASH_WARNING
+                    );
+                    Logger::errorex($e);
+                }
             }
         }
     }
