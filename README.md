@@ -76,7 +76,7 @@ An API exist but is experimental for now (v0). Find more info [in the API docume
 Development team
 ----------------
 
-W is a project created and maintained by [Vincent Peugnet](https://github.com/vincent-peugnet), an amateur computer science enthousiast who can only code in PHP. It includes [Nicolas Peugnet](https://github.com/n-peugnet) (his brother) as JS developer, technical advisor. He's the one that take care of every challenges that are too complicated for Vincent.
+W is a project created and maintained by [Vincent Peugnet](https://github.com/vincent-peugnet), an amateur computer science enthousiast who can only code in PHP. It includes [Nicolas Peugnet](https://github.com/n-peugnet) (his brother) as JS developer, technical advisor. He's the one that take care of every challenges that are too complicated for Vincent. And more recently, [Julien Bidoret](https://accentgrave.net/) joined the project and did an excellent job of refreshing the user interface.
 We can also mention *Fae Prévost Leygonie* as legendary number one user and issue writer too.
 
 ### Thanks to
