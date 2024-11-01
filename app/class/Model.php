@@ -42,7 +42,7 @@ abstract class Model
         'tag' => 'tag',
         'title' => 'title',
         'description' => 'description',
-        'linkto' => 'linkto',
+        'linkto' => 'internal links',
         'geolocalisation' => 'geolocalisation',
         'datemodif' => 'modification date',
         'datecreation' => 'creation date',

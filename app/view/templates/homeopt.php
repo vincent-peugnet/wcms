@@ -156,9 +156,9 @@
             </fieldset>
 
             <fieldset class="flexcol" data-default="<?= $opt->isdefault('linkto') ? '1' : '0' ?>">
-                <legend>Link to</legend>
+                <legend>Internal links</legend>
                 <p class="field">
-                    <label for="linkto" title="filter pages that have links pointing to the following selected page">Link pointing to</label>
+                    <label for="linkto" title="filter pages that have links pointing to the following selected page">page have a link to...</label>
                     <select name="linkto" id="linkto">
                         <option value="" selected>-- not set --</option>
                         <?php

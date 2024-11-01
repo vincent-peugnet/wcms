@@ -367,12 +367,15 @@ You can use an existing [bookmark](#bookmarks) as filter and sorting preset. For
 
 It is even possible to combine bookmark and filters! Specific filters and sorting will overide bookmark settings.
 
-##### Linkto in templates
+##### Backlinks
 
-A specific case exist when if you want to use the [linkto](#linkto) filter in templates: If you want to list all the pages that point to the current page, you can use the wildcard character `*` as a value.
+A specific case exist when if you want to use the [internal links](#linkto) filter in templates: Let's say you want to list all the pages that point to the current page. This is a traditionnal wiki feature called [backlinks](https://en.wikipedia.org/wiki/Backlink#Wikis).
+
+If you want to do this, you can use the wildcard character `*` as a value of `linkto` parameter.
 
     %LIST?linkto=*%
 
+It will be replaced by the [id](#page-id) of the currently displayed page.
 
 
 
@@ -431,11 +434,15 @@ You can use an existing [bookmark](#bookmarks) as filter and sorting preset. For
 
 It is even possible to combine bookmark and filters! Specific filters and sorting will overide bookmark settings.
 
-##### Linkto in templates
+##### Using internal link filter in templates
 
-A specific case exist when if you want to use the [linkto](#linkto) filter in templates: If you want to create a selection of all the pages that point to the current page, you can use the wildcard character `*` as a value.
+Just like the [backlinks](#backlinks) strategy, it's possible use the internal links filter in template for this specific use case: A template that have a link pointing to a random page, which is linking to the current one.
+
+If you want to do this, you can use the wildcard character `*` as a value of `linkto` parameter.
 
     %RANDOM?linkto=*%
+
+It will be replaced by the [id](#page-id) of the currently displayed page.
 
 
 
@@ -946,7 +953,7 @@ List of [users](#user-levels) that have edited the page, or that can do it. You 
 
 *read only*
 
-It's a list of all pages that are linked from the current page. This is analysed when the page is rendered.
+It's a list of all internal links contained by a page. A link is considered internal if it point to anoter page of your W. This is analysed when the page is rendered. This metadata is also used to display the page graph in the home view.
 
 ##### Visitcount
 

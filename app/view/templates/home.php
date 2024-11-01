@@ -180,7 +180,7 @@ use Wcms\Config;
                             <?php endif ?>
                             <?php if ($columns['linkto']) : ?>
                                 <th class="linkto">
-                                    <a href="<?= $opt->sortbyorder('linkto') ?>">linkto</a>
+                                    <a href="<?= $opt->sortbyorder('linkto') ?>">internal links</a>
                                     <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'linkto']) ?>                                    
                                 </th>
                             <?php endif ?>
