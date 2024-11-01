@@ -35,9 +35,6 @@ class User extends Item
     /** @var string[] sessions */
     protected array $sessions = [];
 
-    /** @var bool[] $display interface display options */
-    protected array $display = ['bookmark' => false];
-
     public const HOME_COLUMNS = [
         'favicon',
         'download',
@@ -146,11 +143,6 @@ class User extends Item
     public function sessions()
     {
         return $this->sessions;
-    }
-
-    public function display()
-    {
-        return $this->display;
     }
 
 
@@ -262,13 +254,6 @@ class User extends Item
     {
         if (is_array($sessions)) {
             $this->sessions = $sessions;
-        }
-    }
-
-    public function setdisplay($display)
-    {
-        if (is_array($display)) {
-            $this->display = $display;
         }
     }
 
