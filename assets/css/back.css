@@ -1,33 +1,23 @@
+/* BACK */
+/* Used everywhere except in Edit view */
 
-main {
-    display: flex;
-    height: 100%;
-    overflow-y: auto;
-}
+/* --------------------------------------------------------- content 
 
+content 
+main layout 
+filters 
+footer 
+grid layout 
+.info icon before paragraphs 
+icon 
+media queries 
 
-.block {
-    background-color: var(--primary-background-color);
-    display: flex;
-    flex-direction: column;
-    max-height: 100%;
-    width: 100%;
-}
+/* --------------------------------------------------------- variables */
 
 .scroll {
     overflow: auto;
     height: 100%;
     max-width: 100%;
-}
-
-aside summary:hover {
-    background-color: var(--outline-background-color);
-    color: var(--outline-color);
-}
-
-
-aside {
-    display: flex;
 }
 
 .code, code {
@@ -43,70 +33,64 @@ aside {
     overflow: hidden;
 }
 
-aside details, aside span {
-    max-width: 280px;
+
+/* Display mode links */
+
+h2 a {
+    color: var(--outline-background-color);
 }
 
-aside details .submenu, aside summary {
-    background-color: var(--secondary-background-color);
-    min-width: 100px;
-    max-width: 300px;
-}
-
-
-aside .submenu {
-    position: absolute;
-    max-height: 85%;
-    overflow-y: auto;
-    z-index: 10000;
-    box-shadow: 0px 14px 14px #24242430;
-}
-
-aside code {
-    overflow-x: auto;
-}
-
-aside #save-workspace {
-    position: absolute;
-    right: 0;
-}
-
-.submenu h3 {
-    margin: 0;
-    font-size: inherit;
-    margin-top: 5px;
+h2 a.selected, h2 a:hover {
+    color: var(--text2-color);
 }
 
 
+/* --------------------------------------------------------- main layout */
 
 main section {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    background: var(--primary-background-color);
+    gap: var(--gap, 0);
+    flex-wrap: nowrap;
+    width: 100%;
+    overflow: hidden;
 }
 
-main #filter fieldset {
+
+/* --------------------------------------------------------- filters */
+/* #filter is common to Home and Media */
+
+#filter fieldset {
     padding: 0;
     border: none;
-    margin: 15px 0;
+    margin: 0;
 }
 
-
-main #filter fieldset[data-default="0"] div {
-    background: var(--outline-background-color);
-    color: var(--outline-color);
+#filter fieldset[data-default="0"] legend::before {
+    content: "~ ";
+    display: inline;
+    position: absolute;
+    width: 1em;
+    left: var(--spacing);
+    text-indent: 0;
 }
 
-main #filter legend {
-    font-weight: bold;
+#filter fieldset[data-default="0"] legend {
+    text-indent: 1em;
+    position: relative;
+}
+
+#filter legend .help {
+    text-indent: 0;
+}
+
+#filter input[type="submit"] {
     width: 100%;
-    background-color: var(--secondary-background-color);
 }
 
-#filter select, #filter input[type="datetime-local"], #filter input[type="submit"] {
-    width: 100%;
-    margin-top: 5px;
-    display: block;
-}
+/* --------------------------------------------------------- footer */
 
 footer {
     background-color: black;
@@ -115,84 +99,67 @@ footer {
 }
 
 
-.nowrap {
-    white-space: nowrap;
+/* --------------------------------------------------------- grid layout */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    overflow: auto;
 }
-
-fieldset li {
-    text-wrap: nowrap;
+.grid-item {
+    background: var(--primary-background-color);
+    padding: var(--double-spacing);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
 }
-
-
-div#options, article#main {
-    min-width: 180px;
-    overflow-y: auto;
+.grid-item form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-h2 .right {
-    float: right;
+.grid-item a {
+    text-decoration: underline;
 }
-
-
-p {
-    padding: 0 1%;
-}
-
-
-
-
-tbody tr:hover {
-    background-color: var(--outline-background-color);
-    color: var(--outline-color);
-}
-
-ul {
-    list-style: none;
-    padding-inline-start: 0;
-    margin: 0;
-}
-
-th {
-    background-color: var(--secondary-background-color);
-}
-
-main.admin input, main.admin select, main.admin textarea {
-    display: block;
+.grid-item textarea {
     width: 100%;
 }
-
-
-
-main section.admin {
-    max-width: 400px;
+.grid-item h2 {
+    margin: calc(-1 * var(--double-spacing)) calc(-1 * var(--double-spacing))  0 calc(-1 * var(--double-spacing));
+}
+.grid-item h3 {
+    margin: 1.2em 0 0;
+    font-size: 1em;
+    padding: var(--spacing) 0 var(--half-spacing); 
+    border-bottom: 1px solid var(--outline-background-color);
+    
 }
 
 
-
-div.checkbox [type="checkbox"] {
-    display: inline-block;
-    width: auto;
+/* --------------------------------------------------------- .info icon before paragraphs */
+p.info {
+    line-height: 1.4;
+    margin: 1.5em 0 var(--spacing);
+}
+p.info::before {
+    content: "i";
+    font-family: 'Courier New', Courier, monospace;
+    background: var(--outline-color);
+    color: var(--outline-background-color) !important;
+    border-radius: 100%;
+    position: relative;
+    top: -.25em;
+    display: inline-flex;
+    width: 1.2em;
+    height: 1.2em;
+    font-size: var(--size-small);
+    justify-content: center;
+    align-items: center;
+    margin-right: 1ch;
 }
 
 
-div.radio input[type="radio"] {
-    display: inline-block;
-    width: inherit;
-}
+/* --------------------------------------------------------- icon */
 
 img.icon {
     height: 12px;
@@ -203,26 +170,12 @@ a:hover img.icon {
 }
 
 
-
-
-
-
-
-
-li.event:hover span.details {
-    display: inline;
-}
-
-span.details {
-    display: none;
-}
-
-
-
+/* --------------------------------------------------------- media queries */
 
 @media (max-width: 550px) {
     main {
         flex-direction: column;
+        overflow-y: auto;
     }
 
     main > * {
@@ -238,10 +191,3 @@ span.details {
         padding-top: 5px;
     }
 }
-
-
-h2 a {
-    color: var(--outline-background-color);
-}
-
-h2 .right a.selected, h2 a:hover {color: var(--text2-color);}

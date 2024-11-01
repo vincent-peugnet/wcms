@@ -38,8 +38,8 @@ export function activateCheckall(checkboxesName, checkallId) {
  * @param {MouseEvent} e
  */
 function closeSubmenus(e) {
-    let details = document.querySelectorAll('aside details');
-    let currentDetail = e.target.closest('details');
+    let details = document.querySelectorAll('.dropdown');
+    let currentDetail = e.target.closest('.dropdown');
     for (const detail of details) {
         if (!detail.isSameNode(currentDetail)) {
             detail.removeAttribute('open');

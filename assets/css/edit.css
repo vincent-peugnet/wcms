@@ -1,46 +1,86 @@
-#workspace {
+/* EDIT */
+
+
+/* --------------------------------------------------------- top bar */
+
+#edittopbar {
+    background-color: var(--secondary-background-color);
+}
+
+#edittopbar a {
+    color: var(--text-color);
+}
+.fontsize, .highlighttheme {
     display: flex;
-    height: calc(100% - 50px);
+    gap: var(--spacing);
+    align-items: center;
 }
 
-#showeditorleftpanel:checked ~ #leftbarpanel {
-    display: block;
+/* --------------------------------------------------------- side bar collapsible panels */
+
+/* overwrites global behavior */
+#leftbar :checked ~ .toggle-panel {
+    width: 280px;
+    max-width: none;
+}
+/* overwrites global behavior */
+#leftbar .toggle-panel-content {
+    padding: 0;
+    background-color: var(--tertiary-background-color);
+}
+/* overwrites global behavior */
+#leftbar .toggle-panel-content summary {
+    list-style: none;
+    background-color: var(--secondary-background-color);
+    font-size: 1em;
+    padding: var(--spacing);
+    color: var(--text-color);
 }
 
-#showeditorrightpanel:checked ~ #rightbarpanel {
-    display: block;
+/* open / closed metadata informations */
+aside details summary::before { content: "+ " }
+aside details[open] summary::before { content: "- " }
+
+
+
+/* --------------------------------------------------------- left bar fieldsets */
+
+fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+    padding: var(--spacing);
+    border: none;
+    margin: 0;
+}
+input[type="text"],input[type="number"],input[type="time"], textarea {
+    width: 100%;
+}
+textarea {
+    resize: vertical;
 }
 
-.panel {
-    width: 250px;
-    height: 100%;
-    overflow-y: auto;
-    height: 100%;
+
+/* --------------------------------------------------------- left bar geomap */
+
+div#geomap {
+    width: 100%;
+    height: 250px;
 }
 
-#leftbar label.toogle {
-    float: right;
-}
-
-#rightbar label.toogle {
-    float: left;
-}
-
-
-
-/* clip the tabs names */
+/* --------------------------------------------------------- tabs */
 
 .tabs {
     flex: 2;
     position: relative;
     height: 100%;
-    background-color: var(--primary-background-color);
+    background: var(--main-color);
     display: flex;
     overflow: hidden;
+    gap: var(--half-spacing);
 }
 
-.tabs .tab .content
-{
+.tabs .tab .content {
 	position: absolute;
 	left: 0px;
 	width: 100%;
@@ -48,42 +88,50 @@
 	visibility: hidden;
 }
 
-.checkboxtab
-{
+.checkboxtab {
 	display: none;
 }
 
-.tab label
-{
-	margin-right: 8px;
+/* align first tab with CodeMirror line numbering column */
+.js .tab:first-child {
+    margin-left: 1.75em;
+}
+
+.tab label {
 	display: inline-block;
+    position: relative;
+    padding: var(--half-spacing) var(--spacing) calc(var(--spacing) + var(--half-spacing));
+    top: 4px;
+    left: 4px;
+    vertical-align: top;
+    color: var(--text2-color);
+    white-space: nowrap;
 }
 
+/* if the tab contains anything */
 .tab label.edited {
-    text-decoration: underline dotted red;
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    text-decoration-color: color-mix(in srgb, var(--text2-color) 70%, var(--main-color) 30%);
+    text-underline-offset: .15em;
 }
 
+/* @todo: report an issue: $templates[$key] never returns anything */
 .tab label.template {
     color: var(--text2-color);
 }
 
-.checkboxtab:checked ~label
-{
-    background: var(--outline-background-color);
-    color: var(--outline-color);
+.checkboxtab:checked ~ label {
+    background: var(--input-background-color);
+    color: var(--input-color);
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+.checkboxtab:checked ~ label.edited {
+    text-decoration-color: color-mix(in srgb, var(--input-color) 70%, var(--input-background-color) 30%);
 }
 
-.checkboxtab:checked ~.content
-{
+.checkboxtab:checked ~.content {
 	visibility: visible;
-}
-
-
-
-div.editor {
-    position: fixed;
-    width: 100%;
-    height: 100%;
 }
 
 .tabs textarea {
@@ -91,122 +139,11 @@ div.editor {
 	width: 100%;
 	border: none;
 	resize: none;
-	padding: 1%;
+	padding: var(--spacing);
+    border-radius: 0;
 }
 
-.editor .tabs label {
-    padding: 1px;
-    height: 22px;
-}
-
-input#editfontsize {
-    width: 3em;
-}
-
-
-.editor aside {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    padding: 2px 3px;
-}
-
-aside#edittopbar .menu {
-    display: flex;
-  }
-  aside #pagemenu > span {
-    margin-right: 14px;
-  }
-  aside #workspacemenu > span {
-    margin-left: 10px;
-  }
-
-.editor ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.editor .bar select {
-    width: 100%;
-}
-
-
-
-.editor .panel textarea {resize: vertical;}
-
-.editor .panel input, .editor .panel textarea {width: 100%;}
-
-
-
-
-details {
-    background-color: var(--secondary-background-color);
-}
-
-input#fontsize {
-    width: 50px;
-}
-
-span#headid {
-	color: var(--outline-color);
-	background-color: var(--outline-background-color);
-	text-wrap: nowrap;
-}
-
-a {
-    /* color: black; */
-    text-decoration: none;
-}
-
-a:hover {
-    color: white;
-}
-
-
-
-
-img.icon {
-    height: 15px;
-}
-
-a:hover img.icon {
-    filter: invert(1);
-}
-
-
-
-#fonts select {
-	height: 150px;
-}
-
-a.icon {
-    font-size: 25px;
-}
-
-
-.editor .panel input[type="checkbox"] {
-    width: auto;
-    vertical-align: middle;
-}
-
-
-.panel .subtemplate {
-    margin-left: 20px;
-}
-
-.editor fieldset {
-    border: none;
-}
-
-.panel summary {
-    background-color: var(--main-color);
-}
-
-.panel summary:hover {
-    cursor: pointer;
-}
+/* --------------------------------------------------------- tabs */
 
 #external label {
     width: 150px;
@@ -216,16 +153,20 @@ a.icon {
     text-overflow: ellipsis;
 }
 
+/* --------------------------------------------------------- help */
+
 #help kbd {
     border: 1px solid #000000c7;
     padding: 1px 4px;
     background-color: var(--main-color);
+    color: var(--text2-color);
     box-shadow: 3px 2px #000000c7;
     border-radius: 4px;
 }
 
-#help div {
-    padding: 2%;
+#help {
+    line-height: 1.4;
+    min-width: 250px;
 }
 
 #help code {
@@ -237,18 +178,21 @@ a.icon {
 }
 
 #help code i {
-    color: var(--main-color);
+    color: var(--text2-color);
+    opacity: .7;
 }
 
-
+#help h4:not(:first-of-type){
+    margin-top: 1.5em;
+}
+#help p,
 #help li {
+    margin: .5em 0;
     margin-bottom: 8px;
 }
 
 
-
-
-
+/* --------------------------------------------------------- thumbnail */
 
 div#showthumbnail img {
     width: 100%;
@@ -258,7 +202,9 @@ div#showthumbnail img {
     padding: 2%;
 }
 
-/* Custom CodeMirror CSS */
+
+/* --------------------------------------------------------- Custom CodeMirror CSS */
+
 .CodeMirror {
     height: 100% !important;
     cursor: text;
@@ -294,12 +240,7 @@ span.cm-wkeyword {
 }
 
 
-div#geomap {
-    width: 100%;
-    height: 250px;
-}
-
-/* __________ Tags _____________ */
+/* --------------------------------------------------------- Tagify field */
 
 .tagify {
     --tag-pad: 0 0;
@@ -308,7 +249,16 @@ div#geomap {
     --tag-inset-shadow-size: 0;
     --loader-size: 0;
     --tags-focus-border-color: transparent;
-    display: block;
+    background: var(--input-background-color);
+    border:none;
+    border-radius: var(--radius);
+    width: 100%;
+    font-size: var(--size-small);
+    display: flex;
+    flex-direction: row;
+    padding: var(--half-padding);
+    gap: var(--half-padding);
+    flex-wrap: wrap;
 }
 
 :root {
@@ -318,21 +268,22 @@ div#geomap {
 }
 
 .tagify__tag {
-    border-radius: 10px;
-    padding-left: 4px;
-    padding-right: 0;
-    padding-bottom: 1px;
+    border-radius: var(--radius);
     animation: none;
+    margin: 0;
+    padding: var(--half-spacing) var(--spacing);
+    gap: var(--half-spacing);
+    background: #eee;
 }
 
 .tagify__tag__removeBtn {
     color: inherit;
-    margin-left: 1px;
+    margin: 0;
 }
 
 .tagify__dropdown span.tag {
-    border-radius: 10px;
-	padding: 1px 4px;
+    /* border-radius: 10px;
+	padding: 1px 4px; */
 }
 
 .tagify--focus {
@@ -340,38 +291,35 @@ div#geomap {
 }
 
 
-
+/* --------------------------------------------------------- Media queries */
 
 @media (max-width: 550px) {
-    .bar{
-        display: none;
+    main {
+      flex-direction: column;
+      overflow-y: scroll;
     }
 
-    span#fontsize {
-        display: none;
+    #leftbar :checked ~ .toggle-panel,
+    :checked ~ .toggle-panel {
+        /* full width panels */
+        width: 100%;
+        max-width: none;
     }
 
-	span#headid .pageid {
-		display: none;
-	}
-}
+    /* reorder panels */
+    #leftvar { order: 1 }
+    #rightbar { order: 2; }
+    .tabs { order: 3 }
+    
+    /* no js / codemirror ? reset first tab spacing */
+    .js .tab:first-child {
+        margin-left: var(--half-spacing);
+    }
 
-
-@media (pointer: coarse) {
-	.editor .tabs label {
-	    height: 35px;
-	    margin-right: 4px;
-	}
-	aside#edittopbar {
-	    padding: 5px;
-	    font-size: 25px;
-	    padding-top: 7px;
-	    padding-bottom: 7px;
-	}
-}
-
-@media (max-width: 750px) and (pointer: coarse) {
-	span#headid .pageid {
-		display: none;
-	}
+    /* hide page name within save button */
+    .pageid, 
+    /* hide editor font-size input + label */
+    .fontsize {
+        display: none;
+    }
 }

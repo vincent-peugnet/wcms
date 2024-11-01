@@ -15,10 +15,13 @@
     --input-background-color: #ffffff;
     --input-color: #303030;
     color-scheme: light;
+
+    --radius: 0;
 }
 
-input, textarea, .field {
+input, textarea  {
     border: inset 2px;
+    border-color: #333 #666 #666 #333; 
 }
 
 input[type="submit"], button, select {

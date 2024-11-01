@@ -1,79 +1,82 @@
-section {
-    max-width: 650px;
+/* INFO — DOCUMENTATION */
+
+
+/* --------------------------------------------------------- manual */
+
+#manual {
+    hyphens: auto;
+    font-size: 1.1em;
+    max-width: 60em;
+    user-select: text;
+    margin: auto;
+    padding: var(--double-spacing);
+}
+#manual a {
+    text-decoration: underline;
+    text-underline-offset: .15em;
+    color: currentColor;
 }
 
-
-main ul i {
-    color: grey;
+#manual p {
+    line-height: 1.4em;
+    margin: 1em 0;
+}
+#manual li {
+    margin: 5px 0;
+    line-height: 23px;
 }
 
-main a {
-    text-decoration: underline var(--text2-color);
-    color: inherit;
+#manual a[href^="https://"]::after {
+    content: " ◥";
+    color: var(--main-color);
 }
 
-nav {
-    min-width: 180px;
+#manual a[href^="#"]::after {
+    content: " ✻";
+    color: var(--main-color);
+    white-space: nowrap;
 }
 
-nav ul {
-    padding-inline-start: 30px;
-}
-
-#manual code {
-    width: fit-content;
-    font-family: monospace;
-    white-space: pre-wrap;
-    display: inline;
-    padding: 1px 4px;
-    border-radius: 3px;
-    font-size: 0.99em;
-}
-
-main blockquote i {
+#manual i {
     font-style: normal;
     color: #7b97b9;
 }
 
-main article#manual h1 {
-    text-align: center;
-    font-size: 50px;
-    background-color: transparent;
-    font-weight: lighter;
-    margin: 6%;
-    border-top: solid;
-    border-bottom: solid;
+#manual h1 {
+    display: none;
 }
 
-
-main article#manual h2 {
-    text-align: center;
+#manual h2 {
     font-size: 40px;
-    margin-top: 200px;
-    margin-bottom: 90px;
+    margin-block: 2em .5em;
+    font-size: clamp(3em, 3vw, 6em);
+    background: none;
+    color: var(--text3-color);
+    padding: 0;
+    scroll-margin-top: 1em;
 }
 
-main article#manual h3 {
-    border-bottom: solid 2px var(--secondary-background-color);
-    margin-top: 130px;
-    margin-bottom: 70px;
-    padding-top: 15px;
-    font-size: 35px;
-}
-
-#manual table {
-    margin-top: 12px;
-  }
-
-main article h4 {
+#manual h3 {
     background-color: var(--main-color);
-    font-size: x-large;
-    margin-top: 80px;
-    margin-bottom: 25px;
-    padding: 0 20px;
+    margin: 2em 0 1em;
+    padding: var(--spacing);
+    font-size: 35px;
+    width: auto;
+    border-width: 2px;
+    border-radius: var(--radius);
+    background: var(--secondary-background-color);
+    display: inline-block;
+    scroll-margin-top: 1em;
 }
 
-main article#manual h5 {
+#manual h4 {
+    border-bottom: solid 2px var(--main-color);
+    font-size: x-large;
+    margin: 1em 0;
+    scroll-margin-top: 1em;
+}
+
+#manual h5 {
     text-transform: uppercase;
     margin-top: 50px;
     margin-bottom: 0;
@@ -86,14 +89,54 @@ main article#manual h5 {
     border-color: var(--main-color);
 }
 
+#manual table {
+    margin-top: 12px;
+}
+#manual th {
+    background-color: unset;
+    border-bottom: 1px solid;
+}
 
-section ul {
+#manual th,
+#manual td {
+    padding: var(--spacing) 0;
+}
+
+#manual ul {
     list-style: inside disc;
     padding-inline-start: 10px;
 }
 
+#manual pre {
+    padding: var(--half-spacing) var(--spacing);
+    background-color: var(--code-color);
+    white-space: pre-wrap;
+    border-radius: var(--radius);
+    line-height: 1.4;
+}
 
-main pre {padding: 1%;background-color: var(--code-background-color);white-space: pre-wrap;border-radius: 3px;}
+#manual kbd {
+    background-color: var(--main-color);
+    color: var(--text2-color);
+    padding: 1px 4px;
+    border-radius: 7px;
+    box-shadow: 2px 2px;
+    margin: 0 2px;
+}
+#manual code {
+    width: fit-content;
+    font-family: monospace;
+    white-space: pre-wrap;
+    display: inline;
+    padding: var(--half-spacing);
+    border-radius: var(--radius);
+    background-color: var(--code-color);
+    color: var(--code-background-color) !important;
+}
+
+#manual pre code  {
+    padding: 0;
+}
 
 #manual blockquote {
     margin: 30px 0;
@@ -102,53 +145,40 @@ main pre {padding: 1%;background-color: var(--code-background-color);white-space
     border-left: solid 3px var(--main-color);
 }
 
-main article code i {
-    font-style: normal;
-    color: #7b97b9;
+
+/* --------------------------------------------------------- media queries */
+
+@media (max-width: 750px) {
+    #manual {
+        font-size: 1em;
+    }
 }
 
 
-
-nav ul.summary {
-    margin: 3%;
-    padding: 0;
-    margin-bottom: 200px;
+@media (max-width: 550px) {
+    main {
+      display: block;
+      overflow: scroll;
+    }
 }
 
 
-#manual {
-    hyphens: auto;
-    font-size: 1.1em;
-    margin: 6%;
-    user-select: text;
+/* --------------------------------------------------------- toc */
+
+#toc {
+    overflow: hidden; /* allow scroll */
+    min-width: 180px;
+    background: var(--primary-background-color);
+    padding-bottom: 2em;
 }
 
-#manual p {
-    line-height: 1.4em;
+#toc .scroll > :not(h2){
+    padding: var(--double-spacing);
 }
 
-#manual li {
-    margin: 5px 0;
-    line-height: 23px;
-}
-
-#manual a[href^="https://"]::after {
-    content: "◥";
-    color: var(--text2-color);
-}
-
-#manual a[href^="#"]::after {
-    content: " ✻";
-    color: var(--text2-color);
-    white-space: nowrap;
-}
-
-#manual kbd {
-    background-color: var(--main-color);
-    padding: 1px 4px;
-    border-radius: 7px;
-    box-shadow: 2px 2px;
-    margin: 0 2px;
+.summary {
+    padding: var(--spacing);
+    line-height: 1.4;
 }
 
 .summary li a {
@@ -156,11 +186,7 @@ nav ul.summary {
 }
 
 .summary li a:hover {
-    text-decoration: underline var(--text2-color);
-}
-
-.summary li {
-    margin: 2px 1px;
+    text-decoration: underline;
 }
 
 .summary > li {
@@ -169,29 +195,18 @@ nav ul.summary {
 
 .summary > li > a {
     font-weight: bold;
-    margin-bottom: 5px;
-    display: block;
     font-size: 1.15em;
 }
 
 .summary > li > ul > li > ul {
-    /* display: none; */
-    font-size: 0.8em;
+    font-size: var(--size-small);
     border-left: solid 2px var(--main-color);
     padding-left: 5px;
     margin-left: 5px;
-    margin-bottom: 6px;
+    margin-block: 6px;
     opacity: 0.9;
 }
 
 .summary > li > ul {
     padding-left: 15px;
-    margin-bottom: 15px;
-}
-
-@media (max-width: 750px) {
-    #manual {
-        margin: 2%;
-        font-size: 1em;
-    }
 }

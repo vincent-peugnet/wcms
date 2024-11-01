@@ -1,21 +1,2 @@
-section.admin .scroll {
-    padding-bottom: 300px;
-}
+/* ADMIN */
 
-nav li a {
-    display: block;
-}
-
-nav li a:hover {
-    background-color: var(--outline-background-color);
-    color: var(--outline-color);
-}
-
-section.admin h2 {
-    margin-top: 100px;
-    margin-bottom: 25px;
-}
-
-section.admin h4 {
-    margin-bottom: 15px;
-}

@@ -15,13 +15,11 @@
     --input-background-color: #002152;
     --input-color: #ffffff;
     color-scheme: dark;
+
+    --radius: 1em;
 }
 
-input, button, select, textarea, legend, .field {
-    border-radius: 10px;
-}
-
-button, input[type="submit"] {
+button, input[type="submit"], input[type="text"] {
     border: solid 1px var(--text-color);
 }
 

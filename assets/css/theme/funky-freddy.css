@@ -14,11 +14,10 @@
     --button-color: #000000;
     --input-background-color: #ffffff;
     --input-color: #303030;
-    color-scheme: light;      
+    color-scheme: light;     
+    
+    --radius: 5px
 }
 
-input, button, select, textarea, .field {
-    border-radius: 5px;
-}
 
 

@@ -15,21 +15,23 @@
     --input-background-color: #000000;
     --input-color: #ff662c;
     color-scheme: dark;
+    --font-family: monospace;
+    --radius: 0;
 }
 
-input, button, select, textarea, .field, .submenu, .block, .bar {
+input, button, select, textarea, .dropdown, .dropdown-content {
     border-radius: 0px;
     border: solid 1px;
 }
-
-body, input {
-    font-family: monospace;
-    font-size: 13px;
+.dropdown-content  {
+    border: solid 1px;
+    margin-left: -1px;
+    padding-top: 3px;
 }
 
-
-main > * {
-    padding: 1%;
+body {
+    font-family: monospace;
+    font-size: 13px;
 }
 
 aside {

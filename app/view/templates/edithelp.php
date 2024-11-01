@@ -1,28 +1,38 @@
 
 
     <h4>update shortcut</h4>
-    <kbd>CTRL</kbd> + <kbd>S</kbd>
-    <br><br>
-    <kbd>ALT</kbd> + <kbd>S</kbd>
+    <ul>
+        <li><kbd>CTRL</kbd> + <kbd>S</kbd></li>
+        <li><kbd>ALT</kbd> + <kbd>S</kbd></li>
+    </ul>
+    
     <h4>display shortcut</h4>
-    <kbd>CTRL</kbd> + <kbd>D</kbd>
+    <ul>
+        <li><kbd>CTRL</kbd> + <kbd>D</kbd></li>
+    </ul>
+    
     <h4>Search</h4>
-    <kbd>ALT</kbd> + <kbd>F</kbd>
-    <p><kbd>ENTER</kbd> to find next.</p>
+    <ul>
+        <li><kbd>ALT</kbd> + <kbd>F</kbd></li>
+        <li><kbd>ENTER</kbd> to find next.</li>
+    </ul>
+
     <h4>Replace</h4>
-    <kbd>CTRL</kbd> + <kbd>SHIFT</kbd> + <kbd>F</kbd>
+    <ul>
+        <li><kbd>CTRL</kbd> + <kbd>SHIFT</kbd> + <kbd>F</kbd></li>
+    </ul>
 
     <h4>Markdown synthax</h4>
     <ul>
         <li><code>[<i>hello</i>](<i>PAGE_ID/URL</i>)</code>link</li>
         <li><code>![<i>alt</i>](<i>imagepath</i>)</code>img</li>
-        <li><code><<i>e@mail.net</i>></code></li>
+        <li><code>&lt;<i>e@mail.net</i>&gt;</code></li>
         <li><code># <i>h1 title</i></code></li>
         <li><code>## <i>h2 title</i></code></li>
         <li><code>*<i>emphasis</i>*</code></li>
         <li><code>**<i><b>strong</b></i>**</code></li>
         <li><code>- <i>list item</i></code></li>
-        <li><code>><i>blockquote</i></code></li>
+        <li><code>&gt; <i>blockquote</i></code></li>
         <li><code>    <i>code</i></code></li>
         <li><code>------</code>horizontal line</li>
     </ul>
@@ -42,10 +52,12 @@
 
     <h4>BODY synthax</h4>
     <ul>
-    <li><code>%<i>ELEMENT</i>?<i>option</i>=<i>value</i>%</code> include specified element</li>
+        <li><code>%<i>ELEMENT</i>?<i>option</i>=<i>value</i>%</code> include specified element</li>
     </ul>
 
-    BODY don't support <strong>Markdown</strong> encoding.
+    <p>
+        BODY don't support <strong>Markdown</strong> encoding.
+    </p>
 
     <h4>More infos</h4>
 

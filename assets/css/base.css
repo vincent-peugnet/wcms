@@ -1,3 +1,55 @@
+/* BASE */
+
+/* --------------------------------------------------------- content 
+
+variables
+common elements 
+icons 
+main layout 
+layout helpers 
+inputs and buttons 
+fields 
+horizontal bars 
+data tables 
+all tables 
+dropdowns 
+help button 
+topbar 
+navbar 
+toggle panels (collapsibles) 
+delete 
+workspace button (no-js) 
+media queries 
+flash messages 
+
+/* --------------------------------------------------------- variables */
+
+:root {
+    
+    --radius: .25rem; /* border-radius on buttons and inputs */
+    --size-small: .85rem; /* small sizes */
+    --gap: 1px; /* 1px for separated columns & panels, 0 for collapsed ones */
+    --font-family: sans-serif;
+    
+    /* used to set “white” space around and between elements */
+    --spacing: .5rem; /* can be 4px to remind old style w look */
+    /* spacing adjustments : */
+    --reset-spacing: calc(var(--spacing) * -1);
+    --half-spacing: calc(var(--spacing) / 2);
+    --double-spacing: calc(var(--spacing) * 2);
+
+    /* used inside fields, inputs and buttons */
+    --padding: .5rem; /* can be closed to 3px to remind old style w look */
+    /* padding adjustments : */
+    --reset-padding: calc(var(--padding) * -1);
+    --half-padding: calc(var(--padding) / 2);
+    --double-padding: calc(var(--padding) * 2);
+
+    /* header has --spacing top and bottom + input font-size + input padding on top and bottom */
+    /* unused ! */
+    --header-height: calc( var(--spacing) * 2 + var(--size-small) + var(--half-spacing) * 2);
+}
+
 * {
     box-sizing: border-box;
     scrollbar-color: var(--main-color) transparent;
@@ -14,201 +66,526 @@
 
 body {
     margin: 0;
+    position: fixed;
+    width: 100%;
     height: 100%;
     background-color: var(--tertiary-background-color);
-    font-family: sans-serif;
+    font-family: var(--font-family);
     font-size: 15px;
-    position: fixed;
+    color: var(--text-color);
+    line-height: 1;
+    user-select: none;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    color: var(--text-color);
+    gap: var(--gap, 0);
 }
 
-input, textarea, button, select, .field {
-    border: none;
-    accent-color: var(--main-color);
-}
-
-input, textarea, .field {
-    color: var(--input-color)!important;
-    border-color: var(--input-color);
-    background-color: var(--input-background-color);
-}
-
-input[type="submit"], button, select {
-    color: var(--button-color)!important;
-    border-color: var(--button-color);
-    background-color: var(--button-background-color);
-}
-
-h1, h2 {
-    color: var(--text2-color);
-    background-color: var(--main-color);
-}
-
-a, button, input, select, textarea, .field {
-    text-decoration: none;
-    color: var(--text2-color);
-}
-
-
+/* --------------------------------------------------------- common elements */
 
 h1, h2 {
     margin: 0;
-    font-size: larger;
-}
-
-#topbar {
+    color: var(--text2-color);
     background-color: var(--main-color);
-    width: 100%;
-    padding: 4px 3px;
+    font-size: 1em;
+    padding: var(--spacing); 
     display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
-
-#topbar form {
-    display: inline;
-}
-
-
-#topbar span#menu {
-    display: inline-block;
-    margin: 0 1%;
-}
-
-#topbar input[type="text"], #topbar input[type="password"] {width: 100px;}
-
-
-#topbar a.currentpage {
-    text-decoration: underline;
-}
-
-span#user {
-    margin-left: auto; /* align to the right */
-}
-
-aside {
-    background-color: var(--secondary-background-color);
-}
-
-aside summary {
-    list-style: none;
-}
-
-
-
-summary {
-    white-space: nowrap;
-}
-
-summary:hover, input[type="submit"], input[type="file"], button {
-    cursor: pointer;
-}
-
-
-.bar {
-    background-color: var(--primary-background-color);
-}
-
-.panel {
-    display: none;
-}
-
-label.toogle {
-    height: 100%;
-    line-height: 100%;
-    text-align: center;
-}
-
-label.toogle:hover {
-    color: var(--outline-color);
-    cursor: pointer;
-    background-color: var(--outline-background-color);
-}
-
-/* Used for interface modification using hidden checkboxes */
-input.toggle {
-    display: none;
-}
-
-label.toogle {
-    width: 15px;
-}
-
-
-body {
-    user-select: none;
+h3, h4 {
+    margin: 0;
+    font-size: 1em;
 }
 
 p, code {
     user-select: text;
+    margin: 0;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 code.select-all {
     user-select: all;
 }
 
+a {
+    text-decoration: none;
+    color: currentColor;
+}
 
-@media (max-width: 750px) {
-    header a span, footer, aside a span {
+/* --------------------------------------------------------- icons */
+.fa {
+    line-height: 0 !important;
+}
+
+/* --------------------------------------------------------- main layout */
+
+main {
+    height: 100%;
+    display: flex;
+    overflow: hidden;
+    gap: var(--gap, 0);
+}
+
+/* --------------------------------------------------------- layout helpers */
+
+.flexrow {
+    display: flex;
+    flex-direction: row;
+    gap: var(--double-spacing);
+}
+
+.flexrow > * { 
+    flex: 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing);
+}
+
+.flexcol {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+}
+
+
+/* --------------------------------------------------------- inputs and buttons */
+
+input, textarea, button, select, .button {
+    font: inherit;
+    margin: 0;
+    line-height: 1rem;
+    border: none;
+    border-color: var(--button-color);
+    accent-color: var(--main-color);
+    font-size: var(--size-small);
+    padding: var(--half-padding) var(--padding);
+    border-radius: var(--radius);
+    color: var(--input-color);
+    background-color: var(--input-background-color);
+}
+
+input[type="submit"], input[type="file"], button, select, .button  {
+    cursor: pointer;
+    white-space: nowrap;
+    background: var(--button-background-color);
+    color: var(--button-color) !important;    
+}
+
+input[type=submit]:hover, button:hover, .button:hover,
+input[type=submit]:focus, button:focus, .button:focus {
+    color: var(--button-background-color) !important;
+    background: var(--button-color);
+    outline: none;
+}
+
+/* --------------------------------------------------------- fields */
+
+.field { 
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0;
+    width: 100%;
+}
+
+.field label { 
+    display: block; 
+    font-size: var(--size-small); 
+    padding-bottom: var(--half-spacing);
+}
+
+.field input[type="text"],
+.field input[type="password"],
+.field input[type="number"],
+.field input[type="color"],
+.field input[type="date"],
+.field select { width: 100%; }
+    
+.field:has([type="checkbox"]),
+.field:has([type="radio"]),
+.field:has([type="color"]) { 
+    flex-direction: row-reverse; 
+    align-items: start;
+    gap: var(--spacing);
+}    
+
+.field:has([type="checkbox"]) label,
+.field:has([type="radio"]) label,
+.field:has([type="color"]) label { 
+    flex: 1; 
+}
+
+.field:has([type="color"]) input { 
+    flex: 1; 
+    padding: 0;
+}
+
+.submit-field {
+    flex-direction: row;
+    justify-content: end;
+    align-items: end;
+    gap: var(--spacing);
+}
+
+/* --------------------------------------------------------- horizontal bars */
+
+.hbar {
+    background-color: var(--main-color);
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing);
+    gap: var(--double-spacing);
+    -webkit-overflow-scrolling: touch;
+    /* @check */
+    /* should be neeeded for mobile views, but might cause unwanted height */
+    /* overflow-x: scroll; */
+    /* &::-webkit-scrollbar {
+        display: none;
+    } */
+}
+
+.hbar {
+    overflow-x: scroll;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+.hbar::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}
+
+.hbar a {
+    /* @move in topbar? */
+    color: var(--text2-color);
+}
+
+.hbar-section { 
+    display: flex; 
+    gap: var(--double-spacing); 
+    align-items: center;
+}
+
+/* --------------------------------------------------------- data tables */
+
+main section table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+main section table th, 
+main section table td {
+    text-align: left;
+    padding: var(--spacing);
+    /* white-space: nowrap; */
+}
+
+main section table td.nowrap {
+    white-space: nowrap;
+}
+
+main section table tr td {
+  border-bottom: 1px solid var(--tertiary-background-color);
+}
+
+main section table tbody tr:hover {
+    background-color: var(--outline-background-color);
+    color: var(--outline-color);
+}
+
+main section table th {
+    background-color: var(--secondary-background-color);
+    white-space: nowrap; 
+}
+
+  
+/* --------------------------------------------------------- all tables */
+
+table a {
+    color: var(--text3-color);
+}
+
+
+/* --------------------------------------------------------- dropdowns */
+
+.dropdown summary {
+    list-style: none;
+    padding: var(--half-spacing) var(--spacing);
+    border-radius: var(--radius);
+    white-space: nowrap;
+}
+
+.dropdown-content {
+    background-color: var(--outline-background-color);
+    width: min-content;    
+    border: var(--spacing) solid var(--outline-background-color);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+    overflow-x: hidden;
+    position: absolute;
+    max-width: 350px;
+    max-height: 85%;
+    overflow-y: auto;
+    z-index: 10000;
+    box-shadow: 0px 14px 14px #24242430;
+    border-radius: 0 var(--radius) var(--radius) var(--radius);
+}
+
+.dropdown summary:hover,
+.dropdown[open] summary {
+    background-color: var(--outline-background-color);
+    color: var(--outline-color);
+}
+
+.dropdown[open] summary {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.dropdown code {
+    overflow-x: auto;
+}
+
+.dropdown-section {
+    background: var(--secondary-background-color);
+    padding: var(--spacing); 
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+}
+
+.dropdown h3 {
+    font-size: 1em;
+    background-color: var(--outline-background-color);
+    padding: 0 0 var(--spacing); 
+    margin: var(--reset-spacing) var(--reset-spacing) 0;
+    display: flex;
+    justify-content: space-between;
+    color: var(--text2-color);
+}
+
+.dropdown h4 {
+    font-size: 1em;
+    padding: var(--spacing) var(--spacing) var(--half-spacing); 
+    border-bottom: 1px solid var(--outline-background-color);
+    margin: 0 var(--reset-spacing) 0;
+} 
+
+
+/* --------------------------------------------------------- help button */
+
+.help {
+    background: var(--outline-color);
+    color: var(--outline-background-color) !important;
+    border-radius: 100%;
+    display: flex;
+    width: 1.2em;
+    height: 1.2em;
+    font-size: var(--size-small);
+    justify-content: center;
+    align-items: center;
+}
+  
+/* --------------------------------------------------------- topbar */
+
+#search input[type="text"] {
+    width: 100px;
+}
+#topbar a {
+    /* allow absolute positionning of outline pseudo-element  */
+    position: relative;
+}
+#topbar a:focus-visible {
+    /* disable default outline */
+    outline: none;
+}
+#topbar a.currentpage::before,
+#topbar a:focus-visible::before {
+    /* pseudo element to outline item */
+    content: "";
+    position: absolute;
+    inset: calc(var(--half-padding) * -1);
+    outline: 1px solid rgba(255,255,255, .5);
+    border-radius: var(--radius);
+}
+
+/* --------------------------------------------------------- navbar */
+
+#navbar {
+    background-color: var(--secondary-background-color);
+}
+
+/* --------------------------------------------------------- toggle panels (collapsibles) */
+
+.toggle-panel-container {
+    --toggle-label-width: 1.5em;
+    display: flex;
+    flex-direction: row-reverse;
+    background: var(--primary-background-color);
+    /* needed for absolutely positionned labels on mobile */
+    position: relative;
+}
+
+.toggle-panel {
+    display: none;
+    background: var(--primary-background-color);
+}
+.toggle-panel-content {
+    padding: var(--spacing);
+    overflow-y: auto;
+}
+
+.toggle-panel-label {
+    height: 100%;
+    font-size: 1em;
+    width: var(--toggle-label-width);
+    text-align: center;
+    cursor: ew-resize;
+}
+
+.toggle-panel-label span {
+    background-color: var(--main-color);
+    color: var(--text2-color);
+    padding: var(--spacing) var(--half-spacing);    
+    display: block;     
+}
+
+.toggle-panel-label:hover {
+    background-color: var(--main-color);
+}
+
+:checked ~ .toggle-panel {
+    display: flex;
+    flex-direction: column;
+    max-width: min-content;
+}
+
+input.toggle-panel-toggle {
+    display: none;
+}
+
+/* section-subtitle: bookmarks h3, #filters legend, .edit #rightbar h3… */
+.toggle-panel-content h3,
+.toggle-panel-content legend {
+    font-weight: bold;
+    width: calc(100% + var(--double-spacing));
+    font-size: 1em;
+    padding: var(--half-spacing) var(--spacing);
+    border-bottom: 1px solid var(--tertiary-background-color);
+    margin: 0 var(--reset-spacing) var(--spacing);
+    display: flex;
+    justify-content: space-between;
+}
+
+/* --------------------------------------------------------- delete */
+/* to be moved in dedicated CSS? */
+.confirm-delete {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+    padding: var(--spacing);
+}
+
+/* --------------------------------------------------------- workspace button (no-js) */
+#save-workspace {
+    position: absolute;
+    right: var(--spacing);
+}
+.js #save-workspace {
+    display: none;
+}
+/* --------------------------------------------------------- media queries */
+
+
+@media (max-width: 900px) {
+    /* anchortext within topbar */
+    #topbar a span, 
+    /* version footer on home */
+    footer {
         display: none;
     }
 }
 
 
+@media (max-width: 700px) {
+    .text {display: none;}
+}
+
 @media (max-width: 550px) {
 
-    header a span, footer, header span#search, aside a span, .text {
+    /* quick access form in topbar */
+    header #search {
         display: none;
     }
 
-    aside summary {
-        min-width: 45px !important;
-        padding-right: 15px;
+    /* collapsible panels behavior */
+    .toggle-panel-container {
+        display: block;
     }
-
-    aside .submenu {
-        left: 0;
-        max-width: inherit !important;
+    .toggle-panel-label {
+        height: min-content;
+        width: 100%;
+        background: none;
+        position: absolute;
+        text-align: right;
+        padding-right: var(--spacing);
+        cursor: ns-resize;
     }
-
-    .bar {
-        flex-direction: column;
-    }
+    .toggle-panel-label span,
+    .toggle-panel-label:hover { background: none; }
+    .toggle-panel-label span { padding: var(--spacing); }
+    .toggle-panel { grid-row: 1; display: block; }
+    :checked ~ .toggle-panel { max-width: none; }
+    .toggle-panel-content { display: none; }
+    :checked ~ .toggle-panel .toggle-panel-content { display: block }
 
     label.toogle {
         width: 100%;
         height: 30px;
     }
+    .dropdown-content {
+        /* dropdown at left:0 when navbar is scrollable */
+        left: 0;
+    }
 }
 
 @media (pointer: coarse) {
 
-    header a span, footer, header span#search, aside a span, .text {
+    header a span, footer, header span#search, .text {
         display: none;
     }
 
-    body, input, select, button {
-        font-size: 20px;
+    body {
+        /* bigger font-size */
+        font-size: 100%;
+        /* even bigger on small sizes */
+        --size-small: 1rem;
+    }
+
+    .hbar a {
+        /* even bigger on icon-only buttons */
+        font-size: 120%;
     }
 
     input[type="checkbox"], input[type="radio"] {
-        height: 22px;
-        width: 22px !important;
-    }
-
-    header a {
-        font-size: 35px;
+        height: 1.2em;
+        width: 1.2em !important;
     }
     
 }
 
 
-/* __________________________ Flash Messages ___________________________ */
+/* --------------------------------------------------------- flash messages */
 
 #flashmessage {
     color: white;
-    border: solid white 1px;
+    border-bottom: solid white 1px;
     position: fixed;
     animation-delay: 5s;
     animation-name: flash;
@@ -216,6 +593,9 @@ code.select-all {
     animation-fill-mode: forwards;
     max-height: 200px;
     width: 100%;
+    position: absolute;
+    top: 0;
+    z-index: 200;
 }
 
 div#flashmessage:target {
@@ -229,7 +609,9 @@ div#flashmessage:target {
     z-index: 5;
 }
 
-
+#flashmessage li {
+    padding: var(--double-spacing);
+}
 #flashmessage li.alert-info {
     background-color: grey;
 }
@@ -246,23 +628,7 @@ div#flashmessage:target {
     background-color: red;
 }
 
-
 @keyframes flash {
-    from {
-      top: 0;
-    }
-  
-    to {
-      top: -200px;
-    }
-  }
-  
-
-table a, li a {
-    color: var(--text3-color);
-}
-
-
-.panel input, .panel select, .panel textarea {
-    margin-bottom: 3px;
+    from { top: 0; }
+    to { top: -200px; }
 }

@@ -1,18 +1,54 @@
-
-main.user section#user {
-    max-width: 500px;
-}
+/* USER */
 
 
-main.user table form {
-    display: inline-block;
-}
-
-main.user td {
-    white-space: nowrap;
-}
-
-
-.new-user form > * {
+main.user {
     display: block;
+    overflow: scroll;
+}
+.flexrow {
+    padding: var(--spacing);
+    align-items: end;
+}
+
+table {
+    background-color: var(--primary-background-color);
+}
+
+.new-user {
+    /* minimum height for new user section */
+    flex: 0;
+}
+
+.submit-field {
+    /* minimum width for new user submit button */
+    flex: 0;
+}
+
+/* --------------------------------------------------------- media queries */
+
+@media (max-width: 750px) {
+    #manual {
+        font-size: 1em;
+    }
+}
+
+@media (max-width:700px) {
+    /* inverse direction for new user form */
+    .flexrow {
+        flex-direction: column;
+        align-items: start;
+        justify-content: stretch;
+    }
+}
+
+@media (max-width: 550px) {
+    /* quick n dirty barely ussable table */
+    th {
+        display: none;
+    }
+    tr {
+        display: flex;
+        flex-direction: column;
+        border-bottom: 3px solid;
+    }
 }

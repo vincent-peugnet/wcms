@@ -17,8 +17,8 @@
     color-scheme: light;
 }
 
-input, button, select, textarea, .field {
-    border-radius: 3px;
+:root {
+    --radius: 3px;
+    --spacing: 6px;
+    --padding: 3px;
 }
-
-
