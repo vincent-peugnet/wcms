@@ -8,13 +8,16 @@ entrypoints   = $(wildcard src/*.js)
 
 # Misc variables.
 export PATH             := vendor/bin:node_modules/.bin:$(PATH)
+NPROC                   := 1
 
 ifneq ($(OS),Windows_NT) # Not for Windows
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin) # For Mac
 SHELL                   := PATH=$(PATH) /bin/bash
+NPROC                   := $(shell sysctl -n hw.logicalcpu)
 else
 SHELL                   := /bin/bash
+NPROC                   := $(shell nproc)
 endif
 endif
 override GIT_VERSION    := $(shell git --no-pager describe --always --tags)
@@ -173,6 +176,8 @@ lint: lint-php lint-js
 # Lint php code with phpcs.
 .PHONY: lint-php
 lint-php: $(phpcs_dir) vendor
+# Run PHP syntax check on template files in parallel thanks to xargs
+	echo app/view/templates/*.php | xargs -P$(NPROC) -n1 php --syntax-check > /dev/null
 	phpcs --report-full --report-summary --cache=$(phpcs_dir)/result.cache || { printf "run 'make fix'\n\n"; exit 1; }
 
 .PHONY: lint-js
