@@ -1,7 +1,7 @@
 <aside id="filter" class="toggle-panel-container">
     
-    <input id="showeoptionspanel" name="showeoptionspanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" <?= $workspace->showeoptionspanel() === true ? 'checked' : '' ?>>
-    <label for="showeoptionspanel" class="toggle-panel-label"><span><i class="fa fa-filter"></i></span></label>
+    <input id="showhomeoptionspanel" name="showhomeoptionspanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" <?= $workspace->showhomeoptionspanel() === true ? 'checked' : '' ?>>
+    <label for="showhomeoptionspanel" class="toggle-panel-label"><span><i class="fa fa-filter"></i></span></label>
     
     <div class="toggle-panel" id="optionspanel">
         <h2>Filters</h2>
