@@ -10,10 +10,21 @@ class Controllerworkspace extends Controller
             $this->workspace->hydrate($_POST);
             $this->servicesession->setworkspace($this->workspace);
         }
-        if (isset($_POST['page'])) {
-            $this->routedirect('pageedit', ['page' => $_POST['page']]);
-        } else {
-            $this->routedirect('home');
+
+        switch ($_POST['route']) {
+            case 'pageedit':
+                if (isset($_POST['page'])) {
+                    $this->routedirect('pageedit', ['page' => $_POST['page']]);
+                }
+                break;
+
+            case 'home':
+                $this->routedirect('home');
+                break;
+
+            case 'media':
+                $this->routedirect('media');
+                break;
         }
     }
 }

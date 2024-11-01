@@ -49,6 +49,7 @@
 
         <div id="save-workspace">
             <form action="<?= $this->url('workspaceupdate') ?>" method="post" id="workspace-form" data-api="<?= $this->url('apiworkspaceupdate') ?>" >
+                <input type="hidden" name="route" value="pageedit">
                 <input type="hidden" name="page" value="<?= $page->id() ?>">
                 <input type="hidden" name="showeditorleftpanel" value="0">
                 <input type="hidden" name="showeditorrightpanel" value="0">

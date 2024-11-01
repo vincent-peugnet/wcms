@@ -531,6 +531,7 @@
                 data-api="<?= $this->url('apiworkspaceupdate') ?>"
                 id="workspace-form"
             >
+                <input type="hidden" name="route" value="home">
                 <input type="hidden" name="showhomeoptionspanel" value="0">
                 <input type="hidden" name="showhomebookmarkspanel" value="0">
                 <button type="submit">

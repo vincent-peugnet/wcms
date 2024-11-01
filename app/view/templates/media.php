@@ -9,7 +9,7 @@
 <main class="media">
 
     <aside id="media" class="toggle-panel-container">
-        <input id="showmediatreepanel" name="showmediatreepanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" checked>
+        <input id="showmediatreepanel" name="showmediatreepanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" <?= $workspace->showmediatreepanel() === true ? 'checked' : '' ?>>
         <label for="showmediatreepanel" class="toggle-panel-label"><span><i class="fa fa-folder"></i></span></label>
         <div class="toggle-panel" id="mediapanel">
             <h2>Explorer</h2>
@@ -23,7 +23,7 @@
 
     <aside id="filter" class="toggle-panel-container">
 
-        <input id="showmediaoptionspanel" name="showmediaoptionspanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" >
+        <input id="showmediaoptionspanel" name="showmediaoptionspanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" <?= $workspace->showmediaoptionspanel() === true ? 'checked' : '' ?>>
         <label for="showmediaoptionspanel" class="toggle-panel-label"><span><i class="fa fa-filter"></i></span></label>
         
         <div class="toggle-panel" id="optionspanel">

@@ -143,6 +143,23 @@
             </div>
         </details>
 
+        <div id="save-workspace">
+            <form
+                action="<?= $this->url('workspaceupdate') ?>"
+                method="post"
+                data-api="<?= $this->url('apiworkspaceupdate') ?>"
+                id="workspace-form"
+            >
+                <input type="hidden" name="route" value="media">
+                <input type="hidden" name="showmediatreepanel" value="0">
+                <input type="hidden" name="showmediaoptionspanel" value="0">
+                <button type="submit">
+                    <i class="fa fa-edit"></i>
+                    <span class="text">save workspace</span>
+                </button>
+            </form>
+        </div>
+
     </div>
 
 </nav>

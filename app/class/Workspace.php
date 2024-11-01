@@ -8,6 +8,8 @@ class Workspace extends Item
     protected bool $showeditorrightpanel = false;
     protected bool $showhomeoptionspanel = false;
     protected bool $showhomebookmarkspanel = true;
+    protected bool $showmediaoptionspanel = false;
+    protected bool $showmediatreepanel = true;
 
     protected int $fontsize = 15;
     protected string $mediadisplay = self::LIST;
@@ -53,6 +55,16 @@ class Workspace extends Item
         return $this->showhomebookmarkspanel;
     }
 
+    public function showmediaoptionspanel(): bool
+    {
+        return $this->showmediaoptionspanel;
+    }
+
+    public function showmediatreepanel(): bool
+    {
+        return $this->showmediatreepanel;
+    }
+
     public function fontsize(): int
     {
         return $this->fontsize;
@@ -86,6 +98,16 @@ class Workspace extends Item
     public function setshowhomebookmarkspanel($show): void
     {
         $this->showhomebookmarkspanel = boolval($show);
+    }
+
+    public function setshowmediaoptionspanel($show): void
+    {
+        $this->showmediaoptionspanel = boolval($show);
+    }
+
+    public function setshowmediatreepanel($show): void
+    {
+        $this->showmediatreepanel = boolval($show);
     }
 
     public function setfontsize($fontsize): void
