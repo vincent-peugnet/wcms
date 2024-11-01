@@ -173,11 +173,18 @@ check: lint analyse test
 .PHONY: lint
 lint: lint-php lint-js
 
-# Lint php code with phpcs.
+# Lint php code.
 .PHONY: lint-php
-lint-php: $(phpcs_dir) vendor
+lint-php: lint-templates lint-app
+
 # Run PHP syntax check on template files in parallel thanks to xargs
+.PHONY: lint-templates
+lint-templates:
 	echo app/view/templates/*.php | xargs -P$(NPROC) -n1 php --syntax-check > /dev/null
+
+# Lint backend php code with phpcs.
+.PHONY: lint-app
+lint-app: $(phpcs_dir) vendor
 	phpcs --report-full --report-summary --cache=$(phpcs_dir)/result.cache || { printf "run 'make fix'\n\n"; exit 1; }
 
 .PHONY: lint-js

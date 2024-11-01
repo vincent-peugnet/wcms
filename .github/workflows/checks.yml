@@ -112,7 +112,10 @@ jobs:
       - name: Install dependencies
         run: make vendor
 
-      - name: PHPCS
+      - name: Lint templates
+        run: make lint-templates
+
+      - name: Lint app
         if: always()
         run: |
           echo "::add-matcher::.github/matchers/phpcs.json"
