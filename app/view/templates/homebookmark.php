@@ -22,8 +22,8 @@
                             <a href="<?= Wcms\Servicerss::atomfile($bookmark->id()) ?>" target="_blank" title="show Atom XML file">
                                 <i class="fa fa-rss"></i>
                             </a>
+                        <?php endif ?>
                     </p>
-                    <?php endif ?>
                 <?php endforeach ?>
         
                 <h3>Personal</h3>

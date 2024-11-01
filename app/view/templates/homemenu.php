@@ -338,205 +338,207 @@
 
 
 
-    <details id="bookmark" class="dropdown">
-        <summary>Bookmark</summary>
-        <div class="dropdown-content">
-            <?php if(empty($matchedbookmarks)) : ?>
-                <form action="<?= $this->url('bookmarkadd') ?>" method="post" class="dropdown-section">
-                    <h3>New bookmark</h3>
-                    <p>
-                        Save those filters as a bookmark
-                    </p>
-                    <input type="hidden" name="route" value="home">
-                    <input type="hidden" name="query" value="<?= $queryaddress ?>">
-                    <p class="field">
-                        <label for="bookmark_id">id</label>
-                        <input type="text" name="id" id="bookmark_id" required minlength="3">
-                    </p>                                       
-                    <p class="field">
-                        <label for="bookmark_icon">icon</label>
-                        <select name="icon" id="bookmark_icon">
-                            <?php foreach (Wcms\Modelbookmark::BOOKMARK_ICONS as $icon) : ?>
-                                <option value="<?= $icon ?>"><?= $icon ?></option>
-                            <?php endforeach ?>
-                        </select>
-                    </p>
-                    <p class="field">
-                        <label for="bookmark_type">type</label>
-                        <select name="user" id="bookmark_type">
-                            <?php if($user->isadmin()) : ?>
-                                <option value="">public</option>
-                            <?php endif ?>
-                            <option value="<?= $user->id() ?>">personal</option>
-                        </select>
-                    </p>
-                    <p class="field submit">
-                        <input type="submit" value="create bookmark">
-                    </p>
-                </form>
-
-                <?php if(!empty($editablebookmarks)) : ?>
-                    <form action="<?= $this->url('bookmarkupdate') ?>" method="post" class="dropdown-section">
-                        <h3>Update existing bookmark</h3>
-                    
+        <details id="bookmark" class="dropdown">
+            <summary>Bookmark</summary>
+            <div class="dropdown-content">
+                <?php if(empty($matchedbookmarks)) : ?>
+                    <form action="<?= $this->url('bookmarkadd') ?>" method="post" class="dropdown-section">
+                        <h3>New bookmark</h3>
+                        <p>
+                            Save those filters as a bookmark
+                        </p>
+                        <input type="hidden" name="route" value="home">
                         <input type="hidden" name="query" value="<?= $queryaddress ?>">
                         <p class="field">
-                            <label for="bookmark_id">bookmark</label>
-                            <select name="id" id="bookmark_id" required>
-                                <option value="" selected>--choose a bookmark--</option>
-                                <?php foreach ($editablebookmarks as $id => $bookmark) : ?>
-                                    <option value="<?= $bookmark->id() ?>"><?= $bookmark->name() ?></option>
-                                <?php endforeach ?>
-                            </select>
-                        </p>
-                        <p class="field submit">                        
-                            <input type="submit" value="update">
-                        </p>
-                    </form>
-                <?php endif ?>
-            <?php else : ?>
-                <?php foreach ($matchedbookmarks as $bookmark) : ?>
-                    <form action="<?= $this->url('bookmarkupdate') ?>" method="post" class="dropdown-section">
-                        <h3>
-                            <strong>
-                                <?= $bookmark->icon() ?>    
-                                <?= $bookmark->id() ?>
-                            </strong>
-                        </h3>
-                        <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
-                        <p class="field">       
+                            <label for="bookmark_id">id</label>
+                            <input type="text" name="id" id="bookmark_id" required minlength="3">
+                        </p>                                       
+                        <p class="field">
                             <label for="bookmark_icon">icon</label>
                             <select name="icon" id="bookmark_icon">
                                 <?php foreach (Wcms\Modelbookmark::BOOKMARK_ICONS as $icon) : ?>
-                                    <option value="<?= $icon ?>" <?= $icon === $bookmark->icon() ? 'selected' : '' ?>><?= $icon ?></option>
+                                    <option value="<?= $icon ?>"><?= $icon ?></option>
                                 <?php endforeach ?>
                             </select>
                         </p>
-                        <p class="field">       
-                            <label for="bookmark_name">name</label>
-                            <input type="text" name="name" id="bookmark_name" value="<?= $bookmark->name() ?>" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>">                        
+                        <p class="field">
+                            <label for="bookmark_type">type</label>
+                            <select name="user" id="bookmark_type">
+                                <?php if($user->isadmin()) : ?>
+                                    <option value="">public</option>
+                                <?php endif ?>
+                                <option value="<?= $user->id() ?>">personal</option>
+                            </select>
                         </p>
-                        <p class="field">       
-                            <label for="bookmark_description">description</label>
-                            <input type="text" name="description" id="bookmark_description" value="<?= $bookmark->description() ?>" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>">                        
+                        <p class="field submit">
+                            <input type="submit" value="create bookmark">
                         </p>
-                        <?php if ($bookmark->ispublished()) : ?>
-                            <p class="field">       
-                                <label for="bookmark_ref">reference page</label>
-                                <select name="ref" id="bookmark_ref">
-                                    <option value="">--no ref page--</option>
-                                    <?php foreach ($pagelist as $page) : ?>
-                                        <option value="<?= $page ?>" <?= $bookmark->ref() === $page ? 'selected' : '' ?>><?= $page ?></option>
+                    </form>
+
+                    <?php if(!empty($editablebookmarks)) : ?>
+                        <form action="<?= $this->url('bookmarkupdate') ?>" method="post" class="dropdown-section">
+                            <h3>Update existing bookmark</h3>
+                        
+                            <input type="hidden" name="query" value="<?= $queryaddress ?>">
+                            <p class="field">
+                                <label for="bookmark_id">bookmark</label>
+                                <select name="id" id="bookmark_id" required>
+                                    <option value="" selected>--choose a bookmark--</option>
+                                    <?php foreach ($editablebookmarks as $id => $bookmark) : ?>
+                                        <option value="<?= $bookmark->id() ?>"><?= $bookmark->name() ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </p>
-                        <?php endif ?>
-                        <p class="field submit-field">
-                            <input type="submit" value="update">
-                        </p>
-                    </form>
-
-                    <?php if($bookmark->ispublic()) : ?>
-                        <div class="dropdown-section">
-                            <h3 title="you can use public bookmarks as RSS feeds">RSS feed</h3>
+                            <p class="field submit">                        
+                                <input type="submit" value="update">
+                            </p>
+                        </form>
+                    <?php endif ?>
+                <?php else : ?>
+                    <?php foreach ($matchedbookmarks as $bookmark) : ?>
+                        <form action="<?= $this->url('bookmarkupdate') ?>" method="post" class="dropdown-section">
+                            <h3>
+                                <strong>
+                                    <?= $bookmark->icon() ?>    
+                                    <?= $bookmark->id() ?>
+                                </strong>
+                            </h3>
+                            <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
+                            <p class="field">       
+                                <label for="bookmark_icon">icon</label>
+                                <select name="icon" id="bookmark_icon">
+                                    <?php foreach (Wcms\Modelbookmark::BOOKMARK_ICONS as $icon) : ?>
+                                        <option value="<?= $icon ?>" <?= $icon === $bookmark->icon() ? 'selected' : '' ?>><?= $icon ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </p>
+                            <p class="field">       
+                                <label for="bookmark_name">name</label>
+                                <input type="text" name="name" id="bookmark_name" value="<?= $bookmark->name() ?>" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>">                        
+                            </p>
+                            <p class="field">       
+                                <label for="bookmark_description">description</label>
+                                <input type="text" name="description" id="bookmark_description" value="<?= $bookmark->description() ?>" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>">                        
+                            </p>
                             <?php if ($bookmark->ispublished()) : ?>
-                                copy and paste this code in any page
-                                <code class="select-all">%RSS?bookmark=<?= $bookmark->id() ?>%</code>
-                                <p class="field submit-field">
-                                    <a href="<?= $this->ubookmark('bookmarkpublish', $bookmark->id()) ?>" title="update the RSS feed" class="button">
-                                        <i class="fa fa-refresh"></i> refresh
-                                    </a>
-                                </p>
-                                <p class="field submit-field">
-                                    <a href="<?= $this->ubookmark('bookmarkunpublish', $bookmark->id()) ?>" class="button">
-                                        <i class="fa fa-ban"></i> stop publishing
-                                    </a>
-                                </p>
-                            <?php else : ?>
-                                <p class="field submit-field">
-                                    <a href="<?= $this->ubookmark('bookmarkpublish', $bookmark->id()) ?>" class="button">
-                                        <i class="fa fa-rss"></i> publish !
-                                    </a>
+                                <p class="field">       
+                                    <label for="bookmark_ref">reference page</label>
+                                    <select name="ref" id="bookmark_ref">
+                                        <option value="">--no ref page--</option>
+                                        <?php foreach ($pagelist as $page) : ?>
+                                            <option value="<?= $page ?>" <?= $bookmark->ref() === $page ? 'selected' : '' ?>><?= $page ?></option>
+                                        <?php endforeach ?>
+                                    </select>
                                 </p>
                             <?php endif ?>
-                        </div>
-                    <?php endif ?>
-                    
-                    <form action="<?= $this->url('bookmarkdelete') ?>" method="post" class="dropdown-section">
-                        <h3>Delete</h3>
-                    
-                        <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
-                        <input type="hidden" name="route" value="home">
-                        <input type="hidden" name="confirmdelete" value="0">
-                        <dif class="flexrow">
-                            <p class="field">
-                                <label for="bookmark_confirmdelete">confirm</label>    
-                                <input type="checkbox" name="confirmdelete" id="bookmark_confirmdelete" value="1">
-                            </p>
                             <p class="field submit-field">
-                                <input type="submit" value="delete">
+                                <input type="submit" value="update">
                             </p>
-                        </dif>
-                    </form>
-                <?php endforeach ?>
-            <?php endif ?>
-        </div>
-    </details>
+                        </form>
+
+                        <?php if($bookmark->ispublic()) : ?>
+                            <div class="dropdown-section">
+                                <h3 title="you can use public bookmarks as RSS feeds">RSS feed</h3>
+                                <?php if ($bookmark->ispublished()) : ?>
+                                    copy and paste this code in any page
+                                    <code class="select-all">%RSS?bookmark=<?= $bookmark->id() ?>%</code>
+                                    <p class="field submit-field">
+                                        <a href="<?= $this->ubookmark('bookmarkpublish', $bookmark->id()) ?>" title="update the RSS feed" class="button">
+                                            <i class="fa fa-refresh"></i> refresh
+                                        </a>
+                                    </p>
+                                    <p class="field submit-field">
+                                        <a href="<?= $this->ubookmark('bookmarkunpublish', $bookmark->id()) ?>" class="button">
+                                            <i class="fa fa-ban"></i> stop publishing
+                                        </a>
+                                    </p>
+                                <?php else : ?>
+                                    <p class="field submit-field">
+                                        <a href="<?= $this->ubookmark('bookmarkpublish', $bookmark->id()) ?>" class="button">
+                                            <i class="fa fa-rss"></i> publish !
+                                        </a>
+                                    </p>
+                                <?php endif ?>
+                            </div>
+                        <?php endif ?>
+                        
+                        <form action="<?= $this->url('bookmarkdelete') ?>" method="post" class="dropdown-section">
+                            <h3>Delete</h3>
+                        
+                            <input type="hidden" name="id" value="<?= $bookmark->id() ?>">
+                            <input type="hidden" name="route" value="home">
+                            <input type="hidden" name="confirmdelete" value="0">
+                            <dif class="flexrow">
+                                <p class="field">
+                                    <label for="bookmark_confirmdelete">confirm</label>    
+                                    <input type="checkbox" name="confirmdelete" id="bookmark_confirmdelete" value="1">
+                                </p>
+                                <p class="field submit-field">
+                                    <input type="submit" value="delete">
+                                </p>
+                            </dif>
+                        </form>
+                    <?php endforeach ?>
+                <?php endif ?>
+            </div>
+        </details>
 
 
 
-    <details id="display" class="dropdown">
-        <summary>Display</summary>
-        <div class="dropdown-content">
-            <form action="<?= $this->url('homecolumns') ?>" method="post" class="dropdown-section">
-                <h3>Columns</h3>
-                                
-                <input type="hidden" name="columns[]" value="id">
-                <p class="field">
-                    <label for="col_id">id</label>
-                    <input type="checkbox" name="columns[]" id="col_id" checked disabled>
-                </p>
-                <?php foreach (Wcms\User::HOME_COLUMNS as $col) : ?>
+        <details id="display" class="dropdown">
+            <summary>Display</summary>
+            <div class="dropdown-content">
+                <form action="<?= $this->url('homecolumns') ?>" method="post" class="dropdown-section">
+                    <h3>Columns</h3>
+                                    
+                    <input type="hidden" name="columns[]" value="id">
                     <p class="field">
-                        <label for="col_<?= $col ?>"><?= Wcms\Model::METADATAS_NAMES[$col] ?></label>
-                        <input type="checkbox" name="columns[]" value="<?= $col ?>" id="col_<?= $col ?>" <?= in_array($col, $user->columns()) ? 'checked' : '' ?>>                
+                        <label for="col_id">id</label>
+                        <input type="checkbox" name="columns[]" id="col_id" checked disabled>
                     </p>
-                <?php endforeach ?>
-                <p class="field submit-field">
-                    <input type="submit" value="update columns">
-                </p>
-            </form>
-
-            <?php if($user->issupereditor()) : ?>
-                <form action="<?= $this->url('homecolors') ?>" method="post" class="dropdown-section">
-                    <h3>Tag colors</h3>
-                    <?php foreach ($colors as $tag => $datas) : ?>
+                    <?php foreach (Wcms\User::HOME_COLUMNS as $col) : ?>
                         <p class="field">
-                            <input type="color" name="<?= $tag ?>" value="<?= $datas['background-color'] ?>" id="color_<?= $tag ?>">
-                            <label for="color_<?= $tag ?>"><?= $tag ?></label>
+                            <label for="col_<?= $col ?>"><?= Wcms\Model::METADATAS_NAMES[$col] ?></label>
+                            <input type="checkbox" name="columns[]" value="<?= $col ?>" id="col_<?= $col ?>" <?= in_array($col, $user->columns()) ? 'checked' : '' ?>>                
                         </p>
                     <?php endforeach ?>
                     <p class="field submit-field">
-                        <input type="submit" value="update tag colors">
+                        <input type="submit" value="update columns">
                     </p>
                 </form>
-            <?php endif ?>
-        </div>
-    </details>
 
-    <div id="save-workspace">
-        <form
-            action="<?= $this->url('workspaceupdate') ?>"
-            method="post"
-            data-api="<?= $this->url('apiworkspaceupdate') ?>"
-            id="workspace-form" >
-            <input type="hidden" name="showhomeoptionspanel" value="0">
-            <input type="hidden" name="showhomebookmarkspanel" value="0">
-            <button type="submit">
-                <i class="fa fa-edit"></i>
-                <span class="text">save workspace</span>
-            </button>
-        </form>
+                <?php if($user->issupereditor()) : ?>
+                    <form action="<?= $this->url('homecolors') ?>" method="post" class="dropdown-section">
+                        <h3>Tag colors</h3>
+                        <?php foreach ($colors as $tag => $datas) : ?>
+                            <p class="field">
+                                <input type="color" name="<?= $tag ?>" value="<?= $datas['background-color'] ?>" id="color_<?= $tag ?>">
+                                <label for="color_<?= $tag ?>"><?= $tag ?></label>
+                            </p>
+                        <?php endforeach ?>
+                        <p class="field submit-field">
+                            <input type="submit" value="update tag colors">
+                        </p>
+                    </form>
+                <?php endif ?>
+            </div>
+        </details>
+
+        <div id="save-workspace">
+            <form
+                action="<?= $this->url('workspaceupdate') ?>"
+                method="post"
+                data-api="<?= $this->url('apiworkspaceupdate') ?>"
+                id="workspace-form"
+            >
+                <input type="hidden" name="showhomeoptionspanel" value="0">
+                <input type="hidden" name="showhomebookmarkspanel" value="0">
+                <button type="submit">
+                    <i class="fa fa-edit"></i>
+                    <span class="text">save workspace</span>
+                </button>
+            </form>
+        </div>
     </div>
     
 </nav>

@@ -86,7 +86,7 @@
                 </div>
                 <?php foreach ($opt->taglist() as $tagfilter => $count) : ?>
                     <p class="field">
-                        <label for="tag_<?= $tagfilter ?>"class="label-with-counter">
+                        <label for="tag_<?= $tagfilter ?>" class="label-with-counter">
                             <span class="label"><?= $tagfilter ?></span>
                             <span class="counter tag_<?= $tagfilter ?>"><?= $count ?></span>
                         </label>    

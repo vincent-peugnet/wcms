@@ -132,7 +132,7 @@ function basictree(array $dirlist, string $dirname, int $deepness, string $path,
 {
 
     if ($path === $currentdir) {
-        $folder = '├─<i class="fa fa-folder-open-o"></i> <span id="currentdir">' . $dirname . '<span>';
+        $folder = '├─<i class="fa fa-folder-open-o"></i> <span id="currentdir">' . $dirname . '</span>';
         $checked = 'checked';
     } else {
         $folder = '├─<i class="fa fa-folder-o"></i> ' . $dirname;

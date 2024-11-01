@@ -57,7 +57,7 @@
                     <span class="text">save workspace</span>
                 </button>
             </form>
-        </span>
+        </div>
 
     </div>
 

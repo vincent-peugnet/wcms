@@ -540,7 +540,7 @@ class Modelmedia extends Model
     ) {
         $selected = $path . '/' === $currentdir;
         if ($selected) {
-            $folder = '├─<i class="fa fa-folder-open-o"></i> <span>' . $dirname . '<span>';
+            $folder = '├─<i class="fa fa-folder-open-o"></i> <span>' . $dirname . '</span>';
         } else {
             $folder = '├─<i class="fa fa-folder-o"></i> ' . $dirname;
         }
