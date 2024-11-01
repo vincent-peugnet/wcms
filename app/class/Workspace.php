@@ -7,6 +7,8 @@ class Workspace extends Item
     protected bool $showeditorleftpanel = true;
     protected bool $showeditorrightpanel = false;
     protected bool $showeoptionspanel = false;
+    protected bool $showebookmarkspanel = true;
+
     protected int $fontsize = 15;
     protected string $mediadisplay = self::LIST;
     protected string $highlighttheme = self::THEME_DEFAULT;
@@ -46,6 +48,11 @@ class Workspace extends Item
         return $this->showeoptionspanel;
     }
 
+    public function showebookmarkspanel(): bool
+    {
+        return $this->showebookmarkspanel;
+    }
+
     public function fontsize(): int
     {
         return $this->fontsize;
@@ -74,6 +81,11 @@ class Workspace extends Item
     public function setshoweoptionspanel($show): void
     {
         $this->showeoptionspanel = boolval($show);
+    }
+
+    public function setshowebookmarkspanel($show): void
+    {
+        $this->showebookmarkspanel = boolval($show);
     }
 
     public function setfontsize($fontsize): void

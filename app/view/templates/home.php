@@ -40,7 +40,7 @@ use Wcms\Config;
 
 <main class="home">
 
-    <?php $this->insert('homebookmark', ['publicbookmarks' => $publicbookmarks, 'personalbookmarks' => $personalbookmarks, 'queryaddress' => $queryaddress, 'display' => $display]) ?>
+    <?php $this->insert('homebookmark', ['publicbookmarks' => $publicbookmarks, 'personalbookmarks' => $personalbookmarks, 'queryaddress' => $queryaddress, 'display' => $display, 'workspace' => $workspace]) ?>
 
     <?php $this->insert('homeopt', ['opt' => $opt, 'user' => $user, 'display' => $display, 'workspace' => $workspace]) ?>
 

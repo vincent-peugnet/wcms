@@ -531,6 +531,7 @@
             data-api="<?= $this->url('apiworkspaceupdate') ?>"
             id="workspace-form" >
             <input type="hidden" name="showeoptionspanel" value="0">
+            <input type="hidden" name="showebookmarkspanel" value="0">
             <button type="submit">
                 <i class="fa fa-edit"></i>
                 <span class="text">save workspace</span>

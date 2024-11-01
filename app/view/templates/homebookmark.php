@@ -1,5 +1,5 @@
 <aside id="bookmarks" class="toggle-panel-container">
-    <input id="showebookmarkspanel" name="showebookmarkspanel" value="1" class="toggle-panel-toggle" type="checkbox" checked form="workspace-form" >
+    <input id="showebookmarkspanel" name="showebookmarkspanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form"  <?= $workspace->showebookmarkspanel() === true ? 'checked' : '' ?>>
     <label for="showebookmarkspanel" class="toggle-panel-label"><span><i class="fa fa-bookmark"></i></span></label>
 
     <div class="toggle-panel" id="optionspanel">
