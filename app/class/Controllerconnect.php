@@ -67,6 +67,11 @@ class Controllerconnect extends Controller
             }
 
             if ($this->user->isldap()) {
+                if (!Config::isldap()) {
+                    $this->sendflashmessage('Error with LDAP connection', self::FLASH_ERROR);
+                    Logger::error("User $userid tried to authenticate against LDAP, but LDAP is not configured");
+                    return;
+                }
                 try {
                     $ldap = new Modelldap(Config::ldapserver(), Config::ldaptree(), Config::ldapu());
                     $pass = $ldap->auth($userid, $_POST['pass']);

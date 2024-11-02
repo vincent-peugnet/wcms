@@ -362,6 +362,71 @@
         </p>
     </div>
 
+    <div class="grid-item" id="ldap">
+        <h2>LDAP auth</h2>
+
+        <p class="info">
+            W authenticates users with a password linked to their account, stored in your instance database.
+            If you have an LDAP server, you can choose to authenticate your users with this server instead,
+            rather than using W's database to store their password.
+            In this case, W will no longer allow user's passwords to be changed.
+        </p>
+
+        <h3>LDAP connection infos</h3>
+
+        <p class="info">
+            Address of the LDAP server. Should start with:
+            <em>ldap://</em> or <em>ldaps://</em>.
+            Followed by the server address.
+            For a local server, put <em>localhost</em>.
+            A port can be specified by adding <em>:port</em> at the end.
+        </p>
+
+        <p class="field">
+            <label for="ldapserver">LDAP server address</label>
+            <input type="text" name="ldapserver" id="ldapserver" value="<?= Wcms\Config::ldapserver() ?>" form="admin" placeholder="ldap://localhost:389">
+        </p>
+
+        <p class="info">
+            The LDAP tree structure, but without the part containing user identifier.
+        </p>
+
+        <p class="field">
+            <label for="ldaptree">LDAP hierarchical structure</label>
+            <input type="text" name="ldaptree" id="ldaptree" value="<?= Wcms\Config::ldaptree() ?>" form="admin" placeholder="ou=People,dc=domain,dc=tld">
+        </p>
+
+        <p class="info">
+            The name of the user field in the LDAP database.
+        </p>
+
+        <p class="field">
+            <label for="ldapu">LDAP user field</label>
+            <input type="text" name="ldapu" id="ldapu" value="<?= Wcms\Config::ldapu() ?>" form="admin" placeholder="uid">
+        </p>
+
+
+
+        <h3>New account creation</h3>
+
+        <p class="info">
+            Users can be registered in LDAP but not have an account in W.
+            In this case, you can choose to have accounts created by defining the level of these new users.
+        </p>
+
+        <p class="field">
+            <label for="ldapuserlevel">Level of user that are created.</label>
+            <select name="ldapuserlevel" id="ldapuserlevel" form="admin">
+                <option value="0">--don't create new users--</option>
+                <option value="1"  <?= Wcms\Config::ldapuserlevel() === 1 ? 'selected' : '' ?>>reader</option>
+                <option value="2"  <?= Wcms\Config::ldapuserlevel() === 2 ? 'selected' : '' ?>>invite</option>
+                <option value="3"  <?= Wcms\Config::ldapuserlevel() === 3 ? 'selected' : '' ?>>editor</option>
+                <option value="4"  <?= Wcms\Config::ldapuserlevel() === 4 ? 'selected' : '' ?>>super editor</option>
+                <option value="10" <?= Wcms\Config::ldapuserlevel() === 10 ? 'selected' : '' ?>>admin</option>
+            </select>
+        </p>
+    </div>
+
 </main>
 
 <?php $this->stop('page') ?>

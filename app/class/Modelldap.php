@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use RuntimeException;
+use Wcms\Exception\Missingextensionexception;
 
 class Modelldap extends Model
 {
@@ -22,10 +23,14 @@ class Modelldap extends Model
      *                                      Like `ou=people,dc=server,dc=tld`
      * @param string $u                     Username storing name, something like `uid`.
      *
-     * @throws RuntimeException
+     * @throws RuntimeException if LDAP server syntax did pass the sanity test
+     * @throws Missingextensionexception if LDAP extension is not installed
      */
     public function __construct(string $ldapserver, string $tree, string $u)
     {
+        if (!extension_loaded('ldap')) {
+            throw new Missingextensionexception('PHP LDAP extension is not installed');
+        }
         $this->ldapserver = $ldapserver;
         $this->connection = @ldap_connect($this->ldapserver);
         if ($this->connection === false) {
