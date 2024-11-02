@@ -68,11 +68,17 @@ $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'back.css',
                         </td>
 
                         <td>
-                            <input type="password" name="password" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" maxlength="<?= Wcms\Model::PASSWORD_MAX_LENGTH ?>" >
+                            <?php if ($user->isldap()) : ?>
+                                LDAP auth
+                            <?php else : ?>
+                                <input type="password" name="password" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" maxlength="<?= Wcms\Model::PASSWORD_MAX_LENGTH ?>" >
+                            <?php endif ?>
                         </td>
 
                         <td>
-                            <?= $user->passwordhashed() ? '<i class="fa fa-key"></i>' : '<input type="hidden" name="passwordhashed" value="0"><input type="checkbox" name="passwordhashed" value="1">' ?>
+                            <?php if (!$user->isldap()) : ?>
+                                <?= $user->passwordhashed() ? '<i class="fa fa-key"></i>' : '<input type="hidden" name="passwordhashed" value="0"><input type="checkbox" name="passwordhashed" value="1">' ?>
+                            <?php endif ?>
                         </td>
 
                         <td>
