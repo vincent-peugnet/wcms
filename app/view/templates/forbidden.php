@@ -23,7 +23,7 @@
 <?php if(in_array($route, ['pageedit', 'pageread', 'pageadd', 'pagedownload'])) :?>
     <p><a href="<?= $this->upage('pageread', $id) ?>">back to page read view</a></p>
 <?php else : ?>
-    <p><a href="<?= $this->url('home') ?>">Go back to home</a>
+    <p><a href="<?= $this->url($route) ?>">Go back</a>
 <?php endif ?>
 
 <?php $this->stop() ?>

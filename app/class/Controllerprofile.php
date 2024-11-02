@@ -53,6 +53,12 @@ class Controllerprofile extends Controller
      */
     public function password()
     {
+        if ($this->user->isldap()) {
+            http_response_code(403);
+            $this->showtemplate('forbidden', ['route' => 'profile']);
+            exit;
+        }
+
         if (
             !isset($_POST['currentpassword']) ||
             !$this->usermanager->passwordcheck($this->user, $_POST['currentpassword'])
