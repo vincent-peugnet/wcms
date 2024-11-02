@@ -91,11 +91,9 @@ export function initWorkspaceForm() {
     for (const input of inputs) {
         input.oninput = workspaceChanged;
     }
-    let submits = form.querySelectorAll('[type="submit"]');
-    for (const submit of submits) {
-        if (submit instanceof HTMLElement) {
-            submit.style.display = 'none';
-        }
+    let saveworkspace = document.getElementById('save-workspace');
+    if (saveworkspace instanceof HTMLElement) {
+        saveworkspace.style.display = 'none';
     }
 
     form.addEventListener('submit', function(event) {
