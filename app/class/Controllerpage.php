@@ -405,10 +405,12 @@ class Controllerpage extends Controller
             $linksto = new Opt();
             $linksto->setlinkto($this->page->id());
             $pageslinkingto = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $linksto);
+            $cancelroute = isset($_GET['route']) ? $_GET['route'] : 'pageread';
             $this->showtemplate('delete', [
                 'page' => $this->page,
                 'pageexist' => true,
                 'pageslinkingtocount' => count($pageslinkingto),
+                'cancelroute' => $cancelroute,
             ]);
         } else {
             $this->routedirect('pageread', ['page' => $this->page->id()]);

@@ -290,7 +290,7 @@ use Wcms\Config;
                                 </td>
                                 <td class="delete">
                                     <?php if($this->candeletepage($item)) : ?>
-                                        <a href="<?= $this->upage('pagedelete', $item->id()) ?>" class="button">
+                                        <a href="<?= $this->upage('pagedelete', $item->id()) ?>?route=home" class="button">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     <?php endif ?>
