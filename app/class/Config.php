@@ -631,24 +631,24 @@ abstract class Config
         return self::$lazyloadimg = boolval($lazyloadimg);
     }
 
-    public static function setldapserver($ldapserver): void
+    public static function setldapserver(string $ldapserver): void
     {
         self::$ldapserver = $ldapserver;
     }
 
-    public static function setldaptree($ldaptree): void
+    public static function setldaptree(string $ldaptree): void
     {
         self::$ldaptree = $ldaptree;
     }
 
-    public static function setldapu($ldapu): void
+    public static function setldapu(string $ldapu): void
     {
         self::$ldapu = $ldapu;
     }
 
-    public static function setldapuserlevel($ldapuserlevel): void
+    public static function setldapuserlevel(int $ldapuserlevel): void
     {
-        if (is_int($ldapuserlevel) && $ldapuserlevel >= 0 && $ldapuserlevel <= 10) {
+        if ($ldapuserlevel >= 0 && $ldapuserlevel <= 10) {
             self::$ldapuserlevel = $ldapuserlevel;
         }
     }
