@@ -1,0 +1,23 @@
+:root {
+  --text-color: black;
+  --text2-color: #e8e8e8;
+  --text3-color: #13173b;
+  --main-color: rgb(38, 39, 43);
+  --secondary-background-color: #a5c12b;
+  --code-background-color: hsl(213 21% 10% / 1);
+  --code-color: hsl(0deg 0% 100%);
+  --primary-background-color: #d6d6d6;
+  --tertiary-background-color: #909090;
+  --outline-background-color: #527028;
+  --outline-color: #ffffff;
+  --button-background-color: #ecf0f5;
+  --button-color: #0f0f1b;
+  --input-background-color: #ffffff;
+  --input-color: #303030;
+  color-scheme: light;
+  
+  --spacing: .5rem;
+  --radius: .25rem;
+  --font-family: "CommitMono", "Fira Mono", monospace;
+  --gap: 1px;
+}
