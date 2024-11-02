@@ -62,35 +62,37 @@
         </form>
     </div>
 
-    <div class="grid-item" id="preferences">
-        <h2>Password</h2>
+    <?php if (!$user->isldap()) : ?>
+        <div class="grid-item" id="password">
+            <h2>Password</h2>
 
-        <form action="<?= $this->url('profilepassword') ?>" method="post" id="password">
+            <form action="<?= $this->url('profilepassword') ?>" method="post" id="password">
 
-            <p class="info">Password have to be between <?= Wcms\Model::PASSWORD_MIN_LENGTH ?> and <?= Wcms\Model::PASSWORD_MAX_LENGTH ?> characters long.</p>
+                <p class="info">Password have to be between <?= Wcms\Model::PASSWORD_MIN_LENGTH ?> and <?= Wcms\Model::PASSWORD_MAX_LENGTH ?> characters long.</p>
 
-            <p class="field">
-                <label for="currentpassword">Actual password</label>
-                <input type="password" name="currentpassword" id="currentpassword" required>
-            </p>
+                <p class="field">
+                    <label for="currentpassword">Actual password</label>
+                    <input type="password" name="currentpassword" id="currentpassword" required>
+                </p>
 
-            <p class="field">
-                <label for="password1">New password</label>
-                <input type="password" name="password1" id="password1" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" required>
-            </p>
+                <p class="field">
+                    <label for="password1">New password</label>
+                    <input type="password" name="password1" id="password1" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" required>
+                </p>
 
-            <p class="field">
-                <label for="password2">Confirm new password</label>
-                <input type="password" name="password2" id="password2" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" required>
-            </p>
+                <p class="field">
+                    <label for="password2">Confirm new password</label>
+                    <input type="password" name="password2" id="password2" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" required>
+                </p>
 
-            <p class="field">
-                <input type="submit" value="update password">
-            </p>
+                <p class="field">
+                    <input type="submit" value="update password">
+                </p>
 
-        </form>
+            </form>
 
-    </div>   
+        </div>
+    <?php endif ?>
 
 </main>
 
