@@ -117,6 +117,8 @@ class Controlleruser extends Controller
      * @throws Notfoundexception            If User is not found in the database
      * @throws Databaseexception            If an error occured with database
      * @throws Runtimeexception             In case of other various problems
+     *
+     * @todo move this to Modeluser
      */
     protected function update(array $datas): void
     {
@@ -137,14 +139,18 @@ class Controlleruser extends Controller
             && $this->user->id() === $user->id()
         ) {
             throw new RuntimeException('You cannot quit administration job');
-        } else {
-            if ($userupdate->password() !== $user->password() && $user->passwordhashed()) {
-                $userupdate->setpasswordhashed(false);
-            }
-            if ($userupdate->passwordhashed() && !$user->passwordhashed()) {
-                $userupdate->hashpassword();
-            }
-            $this->usermanager->update($userupdate);
         }
+
+        if ($userupdate->password() !== $user->password() && $user->passwordhashed()) {
+            $userupdate->setpasswordhashed(false);
+        }
+        if ($userupdate->passwordhashed() && !$user->passwordhashed()) {
+            $userupdate->hashpassword();
+        }
+        if ($user->isldap()) {
+            $userupdate->removepassword();
+            $userupdate->setpasswordhashed(false);
+        }
+        $this->usermanager->update($userupdate);
     }
 }

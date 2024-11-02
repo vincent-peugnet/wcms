@@ -310,6 +310,14 @@ class User extends Item
     }
 
     /**
+     * Set password to null value. This mean authentication depends on LDAP.
+     */
+    public function removepassword(): void
+    {
+        $this->password = null;
+    }
+
+    /**
      * Generate new unique session ID and store it
      * @param string $info session info to store
      * @return string session key
