@@ -142,6 +142,9 @@
                 </form>
             </div>
         </details>
+    </div>
+
+    <div class="hbar-section">
 
         <div id="save-workspace">
             <form
