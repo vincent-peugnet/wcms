@@ -43,23 +43,23 @@ Screenshots
 
 Homepage, showing your pages database.
 
-![home](https://w.club1.fr/images/10.png)
+![home](https://w.club1.fr/images/home.png)
 
 Quickly edit pages as if you where taking notes. You need to connect as editor, then just type `../edit` at the end of the page you want to edit ot use the menu.
 
-![edit](https://w.club1.fr/images/13.png)
+![edit](https://w.club1.fr/images/windowededit.png)
 
 Edit metadata on the left panel.
 
-![advanced edit](https://w.club1.fr/images/14.png)
+![advanced edit](https://w.club1.fr/images/edit.png)
 
 Manage your assets using the media manager.
 
-![media manager](https://w.club1.fr/images/12.png)
+![media manager](https://w.club1.fr/images/media.png)
 
 You can even view a graph of links.
 
-![graph](https://w.club1.fr/images/11.png)
+![graph](https://w.club1.fr/images/graph.png)
 
 
 Rendering diagram
