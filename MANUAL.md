@@ -124,6 +124,8 @@ This is not part of the markdown syntax.
 
 ##### Wiki links
 
+Wiki links can be used both in [content elements](#content-elements) and in the [BODY](#body).
+
 Wiki style links are __only for internal links__. Their main interest compared to markdon links is that the clickable part of the link will be replaced by page's [title](#page-title) if it exist.
 
     [[<page_id>]]
