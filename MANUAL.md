@@ -832,6 +832,18 @@ Acces to admin interface is reserved to [admin](#administrator) users. This is m
 You change the interface theme in the admin panel, under *interface*. There is a kit of presets, but you can even add your own themes ! And it is actualy *super easy* 😎. To do so, go to the folder `/assets/css/themes/` and duplicate one of the preset you prefer. Then you can edit the CSS variables to quickly stylise your theme colors.
 
 
+### LDAP auth
+
+In addition to the traditionnal internal authentication (password is checked against W internal users database), external authentication can be used through [the LDAP protocol](https://fr.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol). In order to do that, W need to be able to read data from an existing LDAP server. LDAP connexion can be configured int the admin panel.
+
+Users authenticated through LDAP and users using internal authentication can coexist ! One major diference, is that W won't allow to edit the password of LDAP users.
+
+#### User creation
+
+LDAP users cannot be created from the user management interface. User may be converted to LDAP auth by setting password to `null`, in their associated JSON file in W's database.
+
+But it's possible to automatically create new user as they connect for the first time using LDAP. To do this, __a default user class__ must be set in the admin panel.
+
 
 
 Profile

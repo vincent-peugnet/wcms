@@ -33,6 +33,7 @@ W try to help you create pages more spontaneously.
 - Multi-users
 - Geolocalisation : generate map using page's coordinates **(BETA)**
 - Flat file database
+- LDAP authentication **(BETA)**
 - Great website architecture design freedom
 - [url based command interface](MANUAL.md#url-based-command-interface)
 - Images can be optimized for the Web when uploaded by editors
