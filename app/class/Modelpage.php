@@ -403,10 +403,7 @@ class Modelpage extends Modeldb
      *
      * 1. This will compare edit and render dates
      * 2. then if render file exists
-     * 3. then if page have external links and
-     *     - if some haven't been checked yet
-     *     - or if it's been a long time
-     *     - or if url cache is deleted
+     * 3. then if page have external links and some haven't been checked yet
      * 4. then if the templatebody is set and has been updated
      *
      * @param Page $page                    Page to be checked
@@ -425,14 +422,8 @@ class Modelpage extends Modeldb
         ) {
             return true;
         }
-        if (count($page->externallinks()) > 0) {
-            $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
-            if (
-                $page->daterender()->diff($now)->days > Serviceurlchecker::CACHE_EXPIRE_TIME
-                || $page->uncheckedlinkcount() > 0
-            ) {
-                return true;
-            }
+        if (!empty(($page->externallinks()))) {
+            return $page->uncheckedlinkcount() > 0;
         }
         if (!empty($page->templatebody())) {
             try {

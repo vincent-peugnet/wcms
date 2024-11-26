@@ -26,8 +26,11 @@ class Serviceurlchecker
     /** @var int MAX_BOUNCE limit of redirections to follow */
     public const MAX_BOUNCE = 8;
 
-    /** @var int CACHE_EXPIRE_TIME in days */
-    public const CACHE_EXPIRE_TIME = 90;
+    /** @var int OK_CACHE_EXPIRE_TIME in days */
+    public const OK_CACHE_EXPIRE_TIME = 90;
+
+    /** @var int DEAD_CACHE_EXPIRE_TIME in minutes */
+    public const DEAD_CACHE_EXPIRE_TIME = 1;
 
     /** @var null[] URL response code considered as not dead */
     public const ACCEPTED_RESPONSE_CODES = [
@@ -38,10 +41,9 @@ class Serviceurlchecker
 
     /**
      * Tool that check for urls status, first in the cache, then on the Web
-     * The cache expires according to CACHE_EXPIRE_TIME constant
      * A timeout have to be set to limit Web checking time
      *
-     * @param int $timeout             allocated time for looking URL on the Web (in seconds)
+     * @param int $timeout                  allocated time for looking URL on the Web (in seconds)
      *                                      if set to `0`, Check on the Web is disabled: only the cache is used
      */
     public function __construct(int $timeout = 0)
@@ -60,6 +62,7 @@ class Serviceurlchecker
 
     /**
      * Check status of URL
+     * If the URL status is not cached and valid, it's added to the queue.
      *
      * @param string $url                   The URL to verify
      *
@@ -69,12 +72,11 @@ class Serviceurlchecker
      */
     public function check(string $url): bool
     {
-        // $url = filter_var($url, FILTER_SANITIZE_URL);
         if ($this->iscachedandvalid($url)) {
-            return key_exists($this->urls[$url]['response'], self::ACCEPTED_RESPONSE_CODES);
+            return $this->isalive($this->urls[$url]['response']);
         } else {
             $this->queue[] = $url;
-            throw new RuntimeException('unchecked URL');
+            throw new RuntimeException('no status about this URL');
         }
     }
 
@@ -91,8 +93,7 @@ class Serviceurlchecker
         if (!key_exists($url, $this->urls)) {
             return false;
         }
-        if (($this->urls[$url]['timestamp'] + self::CACHE_EXPIRE_TIME * 3600 * 24) < time()) {
-            unset($this->urls[$url]);
+        if ($this->urls[$url]['expire'] < time()) {
             return false;
         }
         return true;
@@ -160,27 +161,28 @@ class Serviceurlchecker
         $newurls = [];
 
         foreach ($curlhandles as $url => $curlhandle) {
-            switch (curl_errno($curlhandle)) {
-                case CURLE_OK:
-                    $newurls[$url] = [
-                        'response' => curl_getinfo($curlhandle, CURLINFO_HTTP_CODE),
-                        'timestamp' => time()
-                    ];
-                    break;
-                case CURLE_OPERATION_TIMEDOUT:
-                    if (count($this->queue) < 5 && $this->timeout >= 3) {
-                        $newurls[$url] = [
-                            'response' => 0,
-                            'timestamp' => time() - ( self::CACHE_EXPIRE_TIME - 1 ) * 24 * 3600,
-                        ];
-                    }
-                    break;
-                case CURLE_COULDNT_RESOLVE_HOST:
-                default:
-                    $newurls[$url] = [
-                        'response' => 0,
-                        'timestamp' => time(),
-                    ];
+            $curlerror = curl_errno($curlhandle);
+
+            if ($curlerror === CURLE_OK) {
+                $newurls[$url] = [
+                    'response' => curl_getinfo($curlhandle, CURLINFO_HTTP_CODE),
+                    'timestamp' => time(),
+                    'expire' => time() + self::OK_CACHE_EXPIRE_TIME * 24 * 3600,
+                ];
+            } elseif ($curlerror === CURLE_OPERATION_TIMEDOUT && count($this->queue) > 10) {
+                // if queue was big, there is chances that timeout is due to curl saturation
+                // consider the link as unchecked
+            } else {
+                if (key_exists($url, $this->urls) && $this->isalive($this->urls[$url]['response'])) {
+                    $expire = time() + (time() - $this->urls[$url]['timestamp']) * 2;
+                } else {
+                    $expire = time() + self::DEAD_CACHE_EXPIRE_TIME * 60;
+                }
+                $newurls[$url] = [
+                    'response' => $curlerror,
+                    'timestamp' => time(),
+                    'expire' => $expire,
+                ];
             }
         }
 
@@ -189,6 +191,16 @@ class Serviceurlchecker
         $this->urls = array_merge($this->urls, $newurls);
 
         return count($newurls);
+    }
+
+    /**
+     * @param int $response                 HTTP response code
+     *
+     * @return bool                         Indicate if code mean alive or not.
+     */
+    public static function isalive(int $response): bool
+    {
+        return key_exists($response, self::ACCEPTED_RESPONSE_CODES);
     }
 
     /**
