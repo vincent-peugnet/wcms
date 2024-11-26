@@ -159,6 +159,23 @@ During the render process, some semantic datas are added to the __HTML classes o
 - `public`, `private`, `not_published` if page exist, indicate it's [privacy](#privacy) level
 - `current_page` the link point to the current page
 
+
+#### URL checker
+
+If this option is activated in admin panel, W can verify if external links are still working. If a link have been checked, a class is added to the link:
+
+- `ok` if the url is considered as working
+- `dead` if the url seems to be dead
+
+URL check is done every time a page is displayed, if the page has been edited and new urls have been added.
+
+Status of all checked URLs is stored in cache and stay valid during 90 days.
+
+To avoid taking to much time, if a lot of links have been added or need to be re-checked: all links may not be processed at once. The rest will be checked the next time the page is displayed.
+
+
+
+
 #### CSS examples
 
 To color in red internal links to page that does not exist:
@@ -173,7 +190,13 @@ Add a symbol after external links:
 
 ```css
 a.external::after {
-  content: "➚";
+    content: "➚";
+}
+```
+
+```css
+a.dead::after {
+    content: " ☠️";
 }
 ```
 

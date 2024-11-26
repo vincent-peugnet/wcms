@@ -47,7 +47,7 @@ flowchart TD
 ```
 
 - *every link: rendering option that transform every word as a link
-- *HTML tag: rendering option that does not print Element's corresponding HTML tags
+- *HTML tag: [rendering option](MANUAL.md#html-tags) that does not print Element's corresponding HTML tags (only for pages V1)
 
 
 

@@ -333,7 +333,11 @@ class Controllerhome extends Controller
         $count = 0;
         foreach ($pagelist as $page) {
             try {
-                $page = $this->pagemanager->renderpage($page, $this->router, Config::urlchecker() ? new Serviceurlchecker(0) : 0);
+                $page = $this->pagemanager->renderpage(
+                    $page,
+                    $this->router,
+                    Config::urlchecker() ? new Serviceurlchecker(0) : 0
+                );
                 if ($this->pagemanager->update($page)) {
                     $count++;
                 }
