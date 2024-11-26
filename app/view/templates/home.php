@@ -328,10 +328,10 @@ use Wcms\Config;
                                 <?php if ($columns['externallinks']) : ?>
                                     <td class="externallinks" title="<?= $item->externallinkstitle() ?>">
                                         <?= $item->externallinks('sort') ?>
-                                        <?php if (!empty($deadlinks = $item->deadlinkcount())) : ?>
+                                        <?php if (Config::urlchecker() && !empty($deadlinks = $item->deadlinkcount())) : ?>
                                             <span class="deadlinkcount"><?= $deadlinks ?></span>
                                         <?php endif ?>
-                                        <?php if (!empty($uncheckedlinkcount = $item->uncheckedlinkcount())) : ?>
+                                        <?php if (Config::urlchecker() && !empty($uncheckedlinkcount = $item->uncheckedlinkcount())) : ?>
                                             <span class="uncheckedlinkcount"><?= $uncheckedlinkcount ?></span>
                                         <?php endif ?>
                                     </td>

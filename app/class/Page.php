@@ -6,8 +6,6 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 
-use function Clue\StreamFilter\fun;
-
 abstract class Page extends Item
 {
     protected $id;
@@ -813,21 +811,25 @@ abstract class Page extends Item
     }
 
     /**
-     * Used in the title of external links column in hme view
+     * Used in the title of external links column in home view
      *
      * @return string                       All links separated by new lines followed by a emoji ✅ or 💀
      */
     public function externallinkstitle(): string
     {
-        $links = $this->externallinks;
-        array_walk($links, function (&$value, string $key) {
-            if (is_null($value)) {
-                $symbol = '🔍️';
-            } else {
-                $symbol = $value ? '✅' : '💀';
-            }
-            $value = $key . ' ' . $symbol;
-        });
+        if (Config::urlchecker()) {
+            $links = $this->externallinks;
+            array_walk($links, function (&$value, string $key) {
+                if (is_null($value)) {
+                    $symbol = '🔍️';
+                } else {
+                    $symbol = $value ? '✅' : '💀';
+                }
+                $value = $key . ' ' . $symbol;
+            });
+        } else {
+            $links = array_keys($this->externallinks);
+        }
         return implode("\n", $links);
     }
 

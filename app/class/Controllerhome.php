@@ -328,14 +328,12 @@ class Controllerhome extends Controller
     public function multirender(): void
     {
         $pagelist = $_POST['pagesid'] ?? [];
-        $checkurl = Config::urlchecker() && boolval($_POST['checkurl']);
         $total = count($pagelist);
         $pagelist = $this->pagemanager->pagelistbyid($pagelist);
         $count = 0;
-        $urlchecker = $checkurl ? new Serviceurlchecker(12) : null; // time to check URLs is limited to 12s
         foreach ($pagelist as $page) {
             try {
-                $page = $this->pagemanager->renderpage($page, $this->router, $urlchecker);
+                $page = $this->pagemanager->renderpage($page, $this->router, Config::urlchecker() ? new Serviceurlchecker(0) : 0);
                 if ($this->pagemanager->update($page)) {
                     $count++;
                 }

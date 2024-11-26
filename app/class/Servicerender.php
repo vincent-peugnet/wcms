@@ -6,6 +6,7 @@ use AltoRouter;
 use DOMDocument;
 use DOMElement;
 use DOMNodeList;
+use DOMXPath;
 use Exception;
 use InvalidArgumentException;
 use LogicException;
@@ -392,15 +393,15 @@ abstract class Servicerender
                 if (!$link->hasAttribute('target') && $this->externallinkblank) {
                     $link->setAttribute('target', '_blank');
                 }
-                $url = filter_var($href, FILTER_SANITIZE_URL);
-                $this->urls[$url] = null;
+                $this->urls[$href] = null;
                 if ($this->urlchecker !== null) {
                     try {
-                        $dead = $this->urlchecker->isdead($url);
-                        $classes[] = $dead ? 'dead' : 'ok';
-                        $this->urls[$url] = !$dead;
+                        $response = $this->urlchecker->check($href);
+                        $classes[] = $response ? 'ok' : 'dead';
+                        $link->setAttribute('data-urlcheck', '1');
+                        $this->urls[$href] = $response;
                     } catch (RuntimeException $e) {
-                        // Web search limit reached
+                        $link->setAttribute('data-urlcheck', '0');
                     }
                 }
             } elseif (preg_match('~^([a-z0-9-_]+)((\/?#[a-z0-9-_]+)|(\/([\w\-\%\[\]\=\?\&]*)))?$~', $href, $out)) {
@@ -443,6 +444,31 @@ abstract class Servicerender
                 $link->setAttribute('class', implode(' ', array_unique($classes)));
             }
         }
+
+        // check for URLs that where not cached
+        try {
+            if ($this->urlchecker !== null && $this->urlchecker->processqueue()) {
+                $selector = new DOMXPath($dom);
+                $links = $selector->query('//a[ @data-urlcheck = 0 ]');
+                foreach ($links as $link) {
+                    assert($link instanceof DOMElement);
+                    $href = $link->getAttribute('href');
+                    $class = $link->getAttribute('class');
+                    $classes = explode(' ', $class);
+                    try {
+                        $response = $this->urlchecker->check($href);
+                        $classes[] = $response ? 'ok' : 'dead';
+                        $link->setAttribute('class', implode(' ', array_unique($classes)));
+                        $link->setAttribute('data-urlcheck', '1');
+                        $this->urls[$href] = $response;
+                    } catch (RuntimeException $e) {
+                    }
+                }
+            }
+        } catch (RuntimeException $e) {
+            Logger::errorex($e);
+        }
+
         $images = $dom->getElementsByTagName('img');
         $this->sourceparser($images);
         $sources = $dom->getElementsByTagName('source');
