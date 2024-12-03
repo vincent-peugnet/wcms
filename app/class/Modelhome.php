@@ -4,40 +4,26 @@ namespace Wcms;
 
 class Modelhome extends Model
 {
-    public const GRAPH_LAYOUTS = [
-        'cose' => 'cose',
-        'fcose' => 'fcose',
-        'cose-bilkent' => 'cose-bilkent',
-        'euler' => 'euler',
-        'circle' => 'circle',
-        'breadthfirst' => 'breadthfirst',
-        'concentric' => 'concentric',
-        'grid' => 'grid',
-        'random' => 'random',
-    ];
-
     /**
      * Transform list of page into list of nodes and edges
      *
-     * @param Page[] $pagelist associative array of pages as `id => Page`
-     * @param string $layout
-     * @param bool $showorphans if `false`, remove orphans pages
-     * @param bool $showredirection if `true`, add redirections
+     * @param Page[] $pagelist              associative array of pages as `id => Page`
+     * @param Graph $graph                  Graph settings
      *
      * @return mixed[]
      */
-    public function cytodata(
-        array $pagelist,
-        string $layout = 'random',
-        bool $showorphans = false,
-        bool $showredirection = false,
-        bool $showexternallinks = false
-    ): array {
-        $datas['elements'] = $this->mapdata($pagelist, $showorphans, $showredirection, $showexternallinks);
+    public function cytodata(array $pagelist, Graph $graph): array
+    {
+        $datas['elements'] = $this->mapdata(
+            $pagelist,
+            $graph->showorphans(),
+            $graph->showredirection(),
+            $graph->showexternallinks()
+        );
 
         $datas['wheelSensitivity'] = 0.1;
         $datas['layout'] = [
-            'name' => $layout,
+            'name' => $graph->layout(),
             'quality' => 'proof',
             // 'fit' => true,
             'randomize' => true,

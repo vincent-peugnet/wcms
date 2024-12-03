@@ -74,14 +74,17 @@ use Wcms\Config;
             <div id="deepsearchbar">
                 <form action="" method="get">
                     <input type="hidden" name="display" value="graph">
-                    <input type="checkbox" name="showorphans" value="1" id="showorphans" <?= $showorphans ? 'checked' : '' ?>>
+                    <input type="hidden" name="showorphans" value="0">
+                    <input type="checkbox" name="showorphans" value="1" id="showorphans" <?= $graph->showorphans() ? 'checked' : '' ?>>
                     <label for="showorphans">show orphans pages</label>
-                    <input type="checkbox" name="showredirection" value="1" id="showredirection" <?= $showredirection ? 'checked' : '' ?>>
+                    <input type="hidden" name="showredirection" value="0">
+                    <input type="checkbox" name="showredirection" value="1" id="showredirection" <?= $graph->showredirection() ? 'checked' : '' ?>>
                     <label for="showredirection">show redirections</label>
-                    <input type="checkbox" name="showexternallinks" value="1" id="showexternallinks" <?= $showexternallinks ? 'checked' : '' ?>>
+                    <input type="hidden" name="showexternallinks" value="0">
+                    <input type="checkbox" name="showexternallinks" value="1" id="showexternallinks" <?= $graph->showexternallinks() ? 'checked' : '' ?>>
                     <label for="showexternallinks">show external links</label>
                     <select name="layout" id="layout">
-                        <?= options(Wcms\Modelhome::GRAPH_LAYOUTS, $layout) ?>
+                        <?= options(Wcms\Graph::LAYOUTS, $graph->layout()) ?>
                     </select>
                     <label for="layout">graph layout</label>
                     <input type="submit" value="update">

@@ -98,18 +98,10 @@ class Controllerhome extends Controller
             $vars['hiddencolumncount'] = count(User::HOME_COLUMNS) - count($this->user->columns());
 
             if ($display === 'graph') {
-                $vars['layout'] = $_GET['layout'] ?? 'cose-bilkent';
-                $vars['showorphans'] = boolval($_GET['showorphans'] ?? false);
-                $vars['showredirection'] = boolval($_GET['showredirection'] ?? false);
-                $vars['showexternallinks'] = boolval($_GET['showexternallinks'] ?? false);
-                $datas = $this->modelhome->cytodata(
-                    $pagelistopt,
-                    $vars['layout'],
-                    $vars['showorphans'],
-                    $vars['showredirection'],
-                    $vars['showexternallinks']
-                );
+                $graph = new Graph($_GET);
+                $datas = $this->modelhome->cytodata($pagelistopt, $graph);
                 $vars['json'] = json_encode($datas);
+                $vars['graph'] = $graph;
             }
 
             if ($display === 'map') {
