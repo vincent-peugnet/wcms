@@ -98,7 +98,9 @@ class Controllerhome extends Controller
             $vars['hiddencolumncount'] = count(User::HOME_COLUMNS) - count($this->user->columns());
 
             if ($display === 'graph') {
-                $graph = new Graph($_GET);
+                $graph = $this->servicesession->getgraph();
+                $graph->hydrate($_GET);
+                $this->servicesession->setgraph($graph);
                 $datas = $this->modelhome->cytodata($pagelistopt, $graph);
                 $vars['json'] = json_encode($datas);
                 $vars['graph'] = $graph;

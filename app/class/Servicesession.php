@@ -55,6 +55,17 @@ class Servicesession
         return new Workspace($datas);
     }
 
+    public function setgraph(Graph $graph): void
+    {
+        $_SESSION['graph'] = $graph->dry();
+    }
+
+    public function getgraph(): Graph
+    {
+        $datas = $_SESSION['graph'] ?? [];
+        return new Graph($datas);
+    }
+
     /**
      * Empty current user session
      */
