@@ -95,6 +95,7 @@ class Controllerhome extends Controller
             $vars['searchopt'] = $deepsearch['searchopt'];
             $vars['display'] = $display;
             $vars['urlchecker'] = Config::urlchecker();
+            $vars['hiddencolumncount'] = count(User::HOME_COLUMNS) - count($this->user->columns());
 
             if ($display === 'graph') {
                 $vars['layout'] = $_GET['layout'] ?? 'cose-bilkent';

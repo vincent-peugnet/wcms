@@ -323,7 +323,15 @@ use Wcms\Config;
                                     <td class="description" title="<?= $item->description() ?>"><?= $item->description('short') ?></td>
                                 <?php endif ?>
                                 <?php if ($columns['linkto']) : ?>
-                                    <td class="linkto"><?= $opt->linktolink($item->linkto('array')) ?></td>
+                                    <td class="linkto">
+                                        <?php if (($linktocount = count($item->linkto())) > ($hiddencolumncount - 5 )) : ?>
+                                            <span class="counter" title="<?= implode("\n", $item->linkto()) ?>">
+                                                <?= $linktocount ?>
+                                            </span>
+                                        <?php else : ?>
+                                            <?= $opt->linktolink($item->linkto('array')) ?>
+                                        <?php endif ?>
+                                    </td>
                                 <?php endif ?>
                                 <?php if ($columns['externallinks']) : ?>
                                     <td class="externallinks" title="<?= $item->externallinkstitle() ?>">
