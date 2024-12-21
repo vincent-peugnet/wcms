@@ -561,7 +561,7 @@ abstract class Servicerender
         }
 
         $text = preg_replace_callback(
-            "/<h([$min-$max])((.*)id=\"([^\"]*)\"(.*)|.*)>(.+)<\/h[$min-$max]>/mU",
+            "/<h([$min-$max])((.*)id=\"([^\"]*)\"(.*)|.*)?>(.+)<\/h[$min-$max]>/mU",
             function ($matches) use ($element, $anchormode) {
                 $level = $matches[1];
                 $beforeid = $matches[3];
