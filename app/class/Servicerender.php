@@ -34,6 +34,9 @@ abstract class Servicerender
     /** @var array<string, ?bool> $urls */
     protected $urls = [];
 
+    /** @var array<int, string> $codetags */
+    protected $codetags = [];
+
     protected $sum = [];
 
     /** @var bool If true, internal links target a new tab */
@@ -130,8 +133,8 @@ abstract class Servicerender
     {
 
         $body = $this->bodyconstructor($this->readbody());
+        $this->postprocessaction = $this->checkpostprocessaction($body);
         $parsebody = $this->bodyparser($body);
-        $this->postprocessaction = $this->checkpostprocessaction($parsebody);
         $head = $this->gethead();
 
         $lang = !empty($this->page->lang()) ? $this->page->lang() : Config::lang();
@@ -477,6 +480,21 @@ abstract class Servicerender
         $this->sourceparser($audios);
         $videos = $dom->getElementsByTagName('video');
         $this->sourceparser($videos);
+
+        # replace <code> tags contents
+        if (!empty($this->codetags)) {
+            $codes = $dom->getElementsByTagName('code');
+            foreach ($codes as $code) {
+                assert($code instanceof DOMElement);
+                $value = $code->nodeValue;
+                if ($value !== null) {
+                    if (key_exists($value, $this->codetags)) {
+                        $code->nodeValue = $this->codetags[$value];
+                    }
+                }
+            }
+        }
+
         // By passing the documentElement to saveHTML, special chars are not converted to entities
         return $dom->saveHTML($dom->documentElement);
     }
@@ -509,6 +527,35 @@ abstract class Servicerender
                 $sourcable->setAttribute('loading', 'lazy');
             }
         }
+    }
+
+    /**
+     * Replace every code tag content with a hash of the previous content.
+     * Content is kept in array with associated hash as key
+     */
+    protected function extractcodetag(string $html): string
+    {
+        $dom = new DOMDocument('1.0', 'UTF-8');
+        /** Force UTF-8 encoding for loadHTML by defining it in the content itself with an XML tag that need to be removed later */
+        $xhtml = '<?xml encoding="utf-8" ?>' . $html;
+        /** @phpstan-ignore-next-line Error supposed to be thrown here but is'nt */
+        $dom->loadHTML($xhtml, LIBXML_NOERROR | LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED);
+        $dom->removeChild($dom->firstChild);
+        $codes = $dom->getElementsByTagName('code');
+        if ($codes->count() === 0) {
+            return $html;
+        }
+        foreach ($codes as $code) {
+            assert($code instanceof DOMElement);
+            $value = $code->nodeValue;
+            if ($value !== null) {
+                $hash = strval(crc32($value));
+                $this->codetags[$hash] = $value;
+                $code->nodeValue = $hash;
+            }
+        }
+        // By passing the documentElement to saveHTML, special chars are not converted to entities
+        return $dom->saveHTML($dom);
     }
 
     /**
@@ -596,7 +643,22 @@ abstract class Servicerender
         // $fortin->header_id_func = function ($header) {
         //  return preg_replace('/[^\w]/', '', strtolower($header));
         // };
-        $fortin->hard_wrap = Config::markdownhardwrap();
+        // $fortin->code_block_content_func = function ($code) {
+        //     // $code = trim($code);
+        //     $str = mb_convert_encoding($code , 'UTF-32', 'UTF-8');
+        //     $t = unpack("N*", $str);
+        //     $t = array_map(function($n) { return "&#$n;"; }, $t);
+        //     $t = implode("", $t);
+        //     return $t;
+        // };
+        // $fortin->code_span_content_func = function ($code) {
+        //     $code = rtrim($code, ' ');
+        //     $str = mb_convert_encoding($code , 'UTF-32', 'UTF-8');
+        //     $t = unpack("N*", $str);
+        //     $t = array_map(function($n) { return "&#$n;"; }, $t);
+        //     return implode("", $t);
+        // };
+        // $fortin->hard_wrap = Config::markdownhardwrap();
         $text = $fortin->transform($text);
         return $text;
     }

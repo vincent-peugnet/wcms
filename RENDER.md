@@ -10,17 +10,25 @@ flowchart TD
     0A(Head generation) -->
     0rss(RSS feed declaration) --> 3B
 
+    1A[[Element]] -->
+    md?{markdown ?} -->|no| wi
+    md? --> |yes| md(Markdown to HTML) -->
+    ec[extract code tags] -->
+    wi(W inclusion) -->
+    el(every link*) -->
+    hi(header ID) -->
+    1F(URL linker) -->
+    1G(HTML tag*) --> 2C
+
     2A[[Body]] -->
-    2B(W inclusion)  ------->
-    2C((Element inclusion)) --> 2D
-    subgraph "post inclusion parser"
-        2D(Summary) -->
-        2rss(RSS detection) -->
-        2H(Wiki links) -->
-        2I(Link and media analysis) -->
-        2pp(check for post render actions)
-    end
-    2pp -->
+    2B(W inclusion)  --------->
+    2C((Element inclusion)) -->
+    2pp(check for post render actions) -->
+    2D(Summary inclusion) -->
+    2rss(RSS detection) -->
+    2H(Wiki links) -->
+    lma(Link and media analysis) -->
+    ic(insert code tags) -->
     3B((Head and Body gathering)) -->
     3C[[Rendered HTML]] --> 4c
     subgraph "post render actions"
@@ -30,18 +38,10 @@ flowchart TD
     4j --> 5[\served web page/]
 
 
-    1A[[Element]] -->
-    1B(W inclusion) -->
-    1C(every link*) -->
-    1D(Markdown) --> 1E
-    subgraph "post MD parser"
-        1E(header ID) -->
-        1F(URL linker) -->
-        1G(HTML tag*)
-    end
-    1G --> 2C
 
-    1E -. "send TOC structure" .-> 2D
+
+    ec -. code tags content .-> ic
+    hi -. "send TOC structure" .-> 2D
     2rss -. "send rss links" .-> 0rss
     2pp -. trigger post render action .-> 4c
 ```
@@ -71,3 +71,10 @@ List of W inclusions
 1. replace `%CONNECT%` code
 
 The point of doing those inclusions early is to be before __Header ID__ parser. That way, when they are used inside HTML headings, they will generate nicer IDs.
+
+
+Code tag extraction have to be done before W inclusions in order to avoid this inclusion to occured.
+
+
+
+

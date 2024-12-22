@@ -65,13 +65,18 @@ class Servicerenderv2 extends Servicerender
     protected function elementparser(Elementv2 $element)
     {
         $content = $element->content();
+
+        if ($element->markdown()) {
+            $content = $this->markdown($content);
+            // $content = $this->extractcodetag($content);
+        }
+
         $content = $this->winclusions($content);
+
         if ($element->everylink() > 0) {
             $content = $this->everylink($content, $element->everylink());
         }
-        if ($element->markdown()) {
-            $content = $this->markdown($content);
-        }
+        
         if ($element->headerid()) {
             $content = $this->headerid(
                 $content,
@@ -80,6 +85,7 @@ class Servicerenderv2 extends Servicerender
                 $element->headeranchor(),
             );
         }
+    
         if ($element->urllinker()) {
             $content = $this->autourl($content);
         }
