@@ -96,7 +96,7 @@ How to install
 __Server requirements__
 
 - apache server
-- PHP >=7.4.0 and the following extensions: `curl mbstring xml`
+- PHP >=7.4.0 and the following extensions: `curl mbstring xml intl`
 - optionally: `gd` or `imagick` PHP extensions for [image optimizer feature](MANUAL.md#optimize-images).
 
 __W__ don't need any database manager as it use a "flat file" system.
