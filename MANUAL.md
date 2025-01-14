@@ -3,7 +3,7 @@ USER MANUAL
 
 Welcome to W's manual !
 
-See an introduction on [W's website](https://w.club1.fr/usage.html).
+To understand the key concepts of W, you should check the introduction on [W's website](https://w.club1.fr/usage.html).
 
 
 
@@ -117,18 +117,40 @@ It's important to notice that you can mix  Markdown and HTML. But beware, as HTM
 - [Markdown Guide](https://www.markdownguide.org/) Markdown Syntax guide
 - [Michel Fortin's Markdown extra](https://michelf.ca/projects/php-markdown/extra/) The library used in W.
 
+#### Internal links
 
-#### W specific syntax
+Internal links are links that point to the pages that are managed by this instance of W. As those pages are all under the same domain and path, you don't need to use the full `https://...` adress to create internal links.
+You just need to use the [page identifier](#page-id).
 
-This is not part of the markdown syntax.
+Here are some examples
 
-##### Wiki links
+Using __Markdown__:
 
-Wiki links can be used both in [content elements](#content-elements) and in the [BODY](#body).
+    [a link to my nice page](PAGE_ID)
 
-Wiki style links are __only for internal links__. Their main interest compared to markdon links is that the clickable part of the link will be replaced by page's [title](#page-title) if it exist.
+With __HTML__:
 
-    [[<page_id>]]
+    <a href="PAGE_ID">link to my page</a>
+
+As you can see, you always need to setup the text of the link. But what if we could just have [page's title](#page-title) instead ? [Wiki links are here for that purpose](#wiki-links).
+
+##### Combine with commands
+
+Internal links can be combined with the [URL commands](#url-based-command-interface) to achieve diabolic means.
+
+For example, you can create a link to directly edit a page using like this:
+
+    [edit the page](PAGE_ID/edit)
+
+
+
+#### Wiki links
+
+Wiki links can be used both in [content](#content-elements) and in the [BODY](#body).
+
+Wiki style links are __only for internal links__. Their main interest compared to markdon links is that the clickable part of the link will be replaced by [page's title](#page-title) if it exist.
+
+    [[PAGE_ID]]
 
 Will generate :
 
@@ -137,8 +159,6 @@ Will generate :
 Where `DESCRIPTION`, `TITLE` and `ID` are the [description](#description) and [title](#page-title) of the page related to the [id](#page-id).
 
 Note that the `.internal` class have been added to the `a` html link, allowing you to differenciate internal link styling from `.external`.
-
-
 
 
 
@@ -214,7 +234,7 @@ Inclusion is an advanced feature of W that allow editors to insert metadatas, ge
 
 #### Basic inclusions
 
-Those codes are mainly used to print page's [metadatas](#metadatas).
+Those codes are mainly used to print page's [metadatas](#metadatas). They are very usefull combined with [BODY templating](#body-template)
 
 ##### Title inclusion
 
@@ -272,6 +292,17 @@ This will print a HTML list of every [authors](#authors) of the page. If they ha
     %PAGEID% | %ID%
 
 You have two options to print the page ID.
+
+This is powerfull when combined with [URL commands](#url-based-command-interface) and [BODY templating](#body-template).
+
+For instance, use this in a BODY template to create an edition link for the current page:
+
+    <a href="%PAGEID%/edit">edit me !</a>
+
+Or to add a manual render button:
+
+    <a href="%PAGEID%/render">refresh me !</a>
+
 
 ##### path inclusion
 
@@ -671,6 +702,27 @@ There is 3 types of templating in W :
 This will call the BODY of another page instead of current page's BODY.
 
 If they are sets, BODY template also provide a page [thumbnail](#thumbnail) and [favicon](#favicon).
+
+You can use [inclusions](#inclusions) to take advantage of BODY templating.
+
+Example of a basic but efficient BODY template, basic inclusions and some [URL commands](#url-based-command-interface).
+
+```
+<header>
+    <h1>%TITLE%</h1>
+    <p>%DESCRIPTION%</p>
+</header>
+<main>
+    %CONTENT%
+</main>
+<footer>
+    <a href="%PAGEID%/edit">edit page</a>
+    <a href="%PAGEID%/delete">delete page</a>
+</footer>
+```
+
+
+
 
 #### CSS template
 
