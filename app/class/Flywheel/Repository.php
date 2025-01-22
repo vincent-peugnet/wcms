@@ -9,15 +9,33 @@ use Wcms\Model;
 class Repository extends \JamesMoss\Flywheel\Repository
 {
     /**
-     * @throws RuntimeException when error in writing repo folder
+     * Constructor
+     *
+     * @param string $name   The name of the repository. Must match /[A-Za-z0-9_-]{1,63}+/
+     * @param Config $config The config to use for this repo
      */
     public function __construct($name, Config $config)
     {
-        parent::__construct($name, $config);
-        if (!chmod($this->path, Model::FOLDER_PERMISSION)) {
-            throw new RuntimeException("error while trying to change permission of database folder: " . $this->path);
+        // Setup class properties
+        $this->name          = $name;
+        $this->path          = $config->getPath() . DIRECTORY_SEPARATOR . $name;
+        $this->formatter     = $config->getOption('formatter');
+        $this->queryClass    = $config->getOption('query_class');
+        $this->documentClass = $config->getOption('document_class');
+
+        // Ensure the repo name is valid
+        $this->validateName($this->name);
+
+        // Ensure directory exists and we can write there
+        if (!is_dir($this->path)) {
+            if (!@mkdir($this->path, Model::FOLDER_PERMISSION, true)) {
+                throw new \RuntimeException(sprintf('`%s` doesn\'t exist and can\'t be created.', $this->path));
+            }
+        } else if (!is_writable($this->path)) {
+            throw new \RuntimeException(sprintf('`%s` is not writable.', $this->path));
         }
     }
+
 
     /**
      * Get an array containing the path of all files in this repository
