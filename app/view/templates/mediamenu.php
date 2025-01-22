@@ -107,13 +107,19 @@
                             </select>
                         </p>
                         <p class="field submit-field">
-                            <input type="submit" name="action" value="move" >
+                            <button type="submit" name="action" value="move">
+                                <i class="fa fa-send"></i>
+                                Move selected files
+                            </button>
                         </p>
                     </div>    
                     <div class="dropdown-section">
                         <h3>Delete</h3>
                         <p class="field submit">
-                            <input type="submit" name="action" value="Delete selected medias" >
+                            <button type="submit" name="action" value="delete">
+                                <i class="fa fa-trash"></i>
+                                Delete selected files
+                            </button>
                         </p>
                     </div>
                 </form>
