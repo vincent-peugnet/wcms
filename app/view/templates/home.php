@@ -155,7 +155,7 @@ use Wcms\Config;
                             <?php if($user->issupereditor()) : ?><th id="checkall">x</th> <?php endif ?>
                             <?php if($columns['favicon']) : ?>
                                 <th class="favicon">
-                                    <a href="<?= $opt->sortbyorder('favicon') ?>">ico</a>
+                                    <a href="<?= $opt->sortbyorder('favicon') ?>">favicon</a>
                                     <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'favicon']) ?>
                                 </th>
                             <?php endif ?>

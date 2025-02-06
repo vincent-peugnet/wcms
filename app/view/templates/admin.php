@@ -86,7 +86,7 @@
 
         <h3>Theme</h3>
 
-        <p class="info">See <a href="<?= $this->url('info', [], '#theming') ?>">📖 manual section</a> for more infos.
+        <p class="info">See <a href="<?= $this->url('info', [], '#themes') ?>">📖 manual section</a> for more infos.
         </p>
 
         <p class="field">

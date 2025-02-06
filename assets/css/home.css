@@ -78,6 +78,7 @@ div#deepsearchbar {
 
 #deepsearchbar details, #deepsearchbar summary {
     display: inline;
+    cursor: pointer;
 }
 
 /* --------------------------------------------------------- list view */

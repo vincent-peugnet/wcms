@@ -302,6 +302,12 @@ main section table th {
     white-space: nowrap; 
 }
 
+main section thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    box-shadow: 0 0 15px #0000001f;
+}
   
 /* --------------------------------------------------------- all tables */
 
