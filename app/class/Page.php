@@ -142,6 +142,14 @@ abstract class Page extends Item
     }
 
     /**
+     * Indicate if the page rendered HTML can be cached by the Web browser client.
+     */
+    public function canbecached(): bool
+    {
+        return $this->ispublic() && empty($this->password) && !$this->postprocessaction;
+    }
+
+    /**
      * Indicate if Page is geolocated. Meaning it's latitude and longitude are both set (they are not null)
      */
     public function isgeo(): bool

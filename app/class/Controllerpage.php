@@ -2,7 +2,9 @@
 
 namespace Wcms;
 
+use DateTime;
 use DateTimeImmutable;
+use DateTimeZone;
 use RuntimeException;
 use Wcms\Exception\Filesystemexception;
 
@@ -138,12 +140,15 @@ class Controllerpage extends Controller
     }
 
     /**
+     * When a client want to display a page
+     * Match domain.com/PAGE_ID
+     * May send HTML, or redirect, or just 304 headers
+     *
      * @param string $page page ID
      */
     public function read(string $page): void
     {
         $this->setpage($page, 'pageread');
-        $filedir = Model::HTML_RENDER_DIR . $page . '.html';
 
         if (!$this->importpage()) {
             http_response_code(404);
@@ -205,9 +210,9 @@ class Controllerpage extends Controller
         if ($this->user->isvisitor()) {
             $this->page->addvisitcount();
         }
+        $this->pagemanager->update($this->page);
 
         // redirection using Location and 302
-        // maybe this should be before rendering
         if (!empty($this->page->redirection()) && $this->page->refresh() === 0 && $this->page->sleep() === 0) {
             try {
                 if (Model::idcheck($this->page->redirection())) {
@@ -217,19 +222,50 @@ class Controllerpage extends Controller
                     $this->redirect($url);
                 }
             } catch (RuntimeException $e) {
+                // This mean the redirect field did'nt contain an existing page or URL
                 // TODO : send syntax error to editor
             }
         }
-        $html = file_get_contents($filedir);
 
+        // read rendered HTML and apply post process render if necessary
+        $html = file_get_contents(Model::HTML_RENDER_DIR . $page . '.html');
         $postprocessor = new Servicepostprocess($this->page, $this->user);
         $html = $postprocessor->process($html);
 
+        // Do some sleep if the page need to
         sleep($this->page->sleep());
 
-        echo $html;
+        // Check if page can be cached by the Web browser
+        if ($this->page->canbecached()) {
+            // Remove HTTP headers added by PHP session_start()
+            header_remove("Expires");
+            header_remove("Cache-Control");
+            header_remove("Pragma");
 
-        $this->pagemanager->update($this->page);
+            // Activate cache strategy and send 'Last modified' which corrspond to page render date.
+            $lastmodified = date_format($this->page->daterender()->setTimezone(new DateTimeZone('GMT')), DATE_RFC7231);
+            header('Cache-Control: max-age=0, must-revalidate');
+            header("Last-Modified: $lastmodified");
+
+            // Check if the client already have a version of the page
+            if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+                $ifmodifiedsince = DateTime::createFromFormat(
+                    DATE_RFC7231,
+                    $_SERVER['HTTP_IF_MODIFIED_SINCE'],
+                    new DateTimeZone('GMT')
+                );
+
+                // If the version is still valid (not modified since download), we can send a 304 response and exit.
+                if ($ifmodifiedsince >= $this->page->daterender()) {
+                    http_response_code(304);
+                    exit;
+                }
+            }
+        }
+
+        // If the page cannot be cached, or the client don't have an old version of the page, we send the HTML
+        http_response_code(200);
+        echo $html;
     }
 
     public function edit(string $page): void
