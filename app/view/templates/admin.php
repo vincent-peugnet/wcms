@@ -14,8 +14,8 @@
 <main class="admin grid">
 
     <div class="grid-item"  id="home-page">
-        <h2>Home page</h2>
-        <p class="info">By default, W has no home page for visitors without an account.
+        <h2>Landing page</h2>
+        <p class="info">By default, W has no landing page for visitors without an account.
             But if you wish, you can define a page to which visitors who are not logged in will be redirected.
         </p>
 

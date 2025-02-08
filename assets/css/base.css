@@ -500,7 +500,7 @@ input.toggle-panel-toggle {
 /* --------------------------------------------------------- media queries */
 
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
     /* anchortext within topbar */
     #topbar a span, 
     /* version footer on home */

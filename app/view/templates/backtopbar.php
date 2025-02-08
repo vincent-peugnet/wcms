@@ -22,6 +22,13 @@
                 <i class="fa fa-link"></i> <span>media</span>
             </a>
         <?php endif ?>
+
+        <?php if (Wcms\Config::homepage() === 'redirect' && !empty(Wcms\Config::homeredirect())) : ?>
+            <a href="<?= $this->url('pageread', ['page' => Wcms\Config::homeredirect()]) ?>" title="open landing page">
+                <i class="fa fa-external-link-square"></i>
+                <span><?= Wcms\Config::homeredirect() ?></span>
+            </a>
+        <?php endif ?>
     </div>
 
     <div id="user" class="hbar-section">
