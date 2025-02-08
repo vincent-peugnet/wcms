@@ -11,7 +11,8 @@
 
     <form action="<?= $this->url('useredit') ?>" method="post">
         <input type="hidden" name="id" value="<?= $userdelete->id() ?>">
-        <input type="submit" name="action" value="Confirm delete">
+        <input type="hidden" name="action" value="confirmdelete">
+        <input type="submit" value="Confirm delete">
     </form>
 
 

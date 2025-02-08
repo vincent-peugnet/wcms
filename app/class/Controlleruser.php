@@ -78,6 +78,7 @@ class Controlleruser extends Controller
                     case 'confirmdelete':
                         $user = new User($_POST);
                         $this->usermanager->delete($user);
+                        $this->sendflashmessage('User successfully deleted', self::FLASH_SUCCESS);
                         $this->routedirect('user');
                         break;
 
