@@ -488,14 +488,6 @@ input.toggle-panel-toggle {
     justify-content: space-between;
 }
 
-/* --------------------------------------------------------- delete */
-/* to be moved in dedicated CSS? */
-.confirm-delete {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing);
-    padding: var(--spacing);
-}
 
 /* --------------------------------------------------------- media queries */
 
