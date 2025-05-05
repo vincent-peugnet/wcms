@@ -10,11 +10,17 @@ use DomainException;
 use InvalidArgumentException;
 use RangeException;
 use RuntimeException;
+use Wcms\Exception\Databaseexception;
 use Wcms\Exception\Filesystemexception;
 use Wcms\Exception\Filesystemexception\Notfoundexception;
 
 class Modelpage extends Modeldb
 {
+    public const RESERVED_IDS = [
+        'media',
+        'assets',
+    ];
+
     public const SECURE_LEVELS = [
         0 => 'public',
         1 => 'private',
@@ -82,14 +88,21 @@ class Modelpage extends Modeldb
      * Store new page in the database
      *
      * @param Page $page                    Page object
-     * @return bool                         depending on database storing
+     *
+     * @throws RuntimeException if page ID is illegal
+     * @throws Databaseexception if error occured whiling saving document
      */
-    public function add(Page $page): bool
+    public function add(Page $page): void
     {
-
+        if (in_array($page->id(), self::RESERVED_IDS)) {
+            $id = $page->id();
+            throw new RuntimeException("'$id' is a reserved page ID");
+        }
         $pagedata = new Document($page->dry());
         $pagedata->setId($page->id());
-        return $this->storedoc($pagedata);
+        if (!$this->storedoc($pagedata)) {
+            throw new Databaseexception('Error wile trying to save document to database. Check logs for more info');
+        }
     }
 
     /**

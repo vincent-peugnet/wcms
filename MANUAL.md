@@ -291,7 +291,7 @@ This will print a HTML list of every [authors](#authors) of the page. If they ha
 
     %PAGEID% | %ID%
 
-You have two options to print the page ID.
+You have two options to print the [page ID](#page-id).
 
 This is powerfull when combined with [URL commands](#url-based-command-interface) and [BODY templating](#body-template).
 
@@ -954,6 +954,8 @@ Page metadatas can be set through the page [edition interface](#edition-interfac
 ##### Page ID
 
 __The unique identifier of a page__. It can only contain lowercases characters from `a-z`, numbers `0-9`, underscore `_` and hyphen `-`.
+Also, `assets` and `media` are reserved paths, therefore cannot be used as page ID.
+
 Normaly W will take care of cleaning your pages's ID, by lowering uppercases, removing some accents, and remplacing special characters or spaces with hyphens.
 
 

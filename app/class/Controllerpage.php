@@ -20,6 +20,13 @@ class Controllerpage extends Controller
         $this->mediamanager = new Modelmedia();
     }
 
+    /**
+     * Check a given page ID. If it's not a valid ID, then redirect to the clean ID version.
+     * If it's valid, setup $this->page` with a new empty Page using given ID.
+     *
+     * @param $id                           The id received by the router
+     * @param $route                        The route that was used
+     */
     protected function setpage(string $id, string $route): void
     {
         $cleanid = Model::idclean($id);
@@ -318,25 +325,39 @@ class Controllerpage extends Controller
         }
     }
 
+    /**
+     * When a client want to add a page.
+     * Match domain.com/PAGE_ID/add
+     *
+     * @throws RuntimeException if page creation failed
+     */
     public function add(string $page): void
     {
         $this->setpage($page, 'pageadd');
 
         $this->pageconnect('pageadd');
 
-        if ($this->user->iseditor() && !$this->importpage()) {
-            $this->page->reset();
-            if (isset($_SESSION['dirtyid'])) {
-                $this->page->settitle($_SESSION['dirtyid'][$page]);
-                unset($_SESSION['dirtyid']);
-            }
-            $this->page->addauthor($this->user->id());
-            $this->pagemanager->add($this->page);
-            $this->routedirect('pageedit', ['page' => $this->page->id()]);
-        } else {
+        if (!$this->user->iseditor()) {
             http_response_code(403);
             $this->showtemplate('forbidden', ['route' => 'pageedit', 'id' => $this->page->id()]);
+            exit;
         }
+
+        if ($this->importpage()) {
+            http_response_code(403);
+            $message = 'page already exist with this ID';
+            $this->showtemplate('forbidden', ['route' => 'pageedit', 'id' => $this->page->id(), 'message' => $message]);
+            exit;
+        }
+
+        $this->page->reset();
+        if (isset($_SESSION['dirtyid'])) {
+            $this->page->settitle($_SESSION['dirtyid'][$page]);
+            unset($_SESSION['dirtyid']);
+        }
+        $this->page->addauthor($this->user->id());
+        $this->pagemanager->add($this->page);
+        $this->routedirect('pageedit', ['page' => $this->page->id()]);
     }
 
     public function addascopy(string $page, string $copy): void
@@ -403,8 +424,12 @@ class Controllerpage extends Controller
             $page->setdaterender($page->datecreation('date'));
 
             if ($_POST['erase'] || !$this->pagemanager->exist($page)) {
-                if ($this->pagemanager->add($page)) {
+                try {
+                    $this->pagemanager->add($page);
                     $this->sendflashmessage('Page successfully uploaded', self::FLASH_SUCCESS);
+                } catch (RuntimeException $e) {
+                    $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);
+                    Logger::errorex($e);
                 }
             } else {
                 $this->sendflashmessage(

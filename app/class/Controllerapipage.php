@@ -97,6 +97,9 @@ class Controllerapipage extends Controllerapi
         }
     }
 
+    /**
+     * @throws RuntimeException when saving page fails
+     */
     public function add(string $page)
     {
         if (!Model::idcheck($page)) {
@@ -111,13 +114,12 @@ class Controllerapipage extends Controllerapi
 
         $this->page = $this->pagemanager->newpage(array_merge($this->recievejson(), ['id' => $page]));
         $this->page->addauthor($this->user->id());
-        if ($this->pagemanager->add($this->page)) {
-            http_response_code(200);
-        } else {
-            http_response_code(500);
-        }
+        $this->pagemanager->add($this->page);
     }
 
+    /**
+     * @throws RuntimeException when saving page fails
+     */
     public function put(string $page)
     {
         if (!Model::idcheck($page)) {
@@ -134,11 +136,8 @@ class Controllerapipage extends Controllerapi
         if (!$exist) { // If it's a page creation, add the user as an author
             $this->page->addauthor($this->user->id());
         }
-        if ($this->pagemanager->add($this->page)) {
-            http_response_code($exist ? 200 : 201);
-        } else {
-            $this->shortresponse(500, "Error while trying to save page in database");
-        }
+        $this->pagemanager->add($this->page);
+        http_response_code($exist ? 200 : 201);
     }
 
     public function delete(string $page)

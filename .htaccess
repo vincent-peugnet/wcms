@@ -1,3 +1,7 @@
+# prevent Apache from adding trailing slash for names that match folder
+# in order to avoid conflict with Controllerpage::pagepermanentredirect()
+# and 'assets' and 'media' folder
+DirectorySlash off
 RewriteEngine on
 # everything that does not contain asssets|media
 RewriteCond %{REQUEST_URI} !^(.*)/(assets|media)/ [OR]
@@ -5,3 +9,4 @@ RewriteCond %{REQUEST_URI} !^(.*)/(assets|media)/ [OR]
 RewriteCond %{REQUEST_FILENAME} !-f
 # is redirect to index
 RewriteRule . index.php [L]
+
