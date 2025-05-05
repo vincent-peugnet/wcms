@@ -373,27 +373,41 @@ class User extends Item
     }
 
 
-
+    /**
+     * User is just a visitor
+     */
     public function isvisitor()
     {
         return $this->level === Modeluser::FREE;
     }
 
-    public function iseditor()
-    {
-        return $this->level >= Modeluser::EDITOR;
-    }
-
-    public function issupereditor()
-    {
-        return $this->level >= Modeluser::SUPEREDITOR;
-    }
-
+    /**
+     * User is at least invite editor
+     */
     public function isinvite()
     {
         return $this->level >= Modeluser::INVITE;
     }
 
+    /**
+     * User is at least editor
+     */
+    public function iseditor()
+    {
+        return $this->level >= Modeluser::EDITOR;
+    }
+
+    /**
+     * User is at least super editor
+     */
+    public function issupereditor()
+    {
+        return $this->level >= Modeluser::SUPEREDITOR;
+    }
+
+    /**
+     * User is admin
+     */
     public function isadmin()
     {
         return $this->level === Modeluser::ADMIN;

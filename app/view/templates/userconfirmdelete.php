@@ -15,6 +15,7 @@
         <input type="submit" value="Confirm delete">
     </form>
 
+    <a href="<?= $this->url('user') ?>" class="button">abort</a>
 
 <?php else : ?>
 
