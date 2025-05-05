@@ -31,6 +31,7 @@ class Serviceurlchecker
         200 => null,
         401 => null,
         403 => null,
+        405 => null,
     ];
 
     /**
@@ -123,7 +124,9 @@ class Serviceurlchecker
             curl_setopt($curlhandles[$url], CURLOPT_NOBODY, true);
             curl_setopt($curlhandles[$url], CURLOPT_HEADER, true);
             curl_setopt($curlhandles[$url], CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curlhandles[$url], CURLOPT_HTTPGET, true);
+            // Forcing HTTPGET may give a little more accurate result as it use GET instead of HEAD method.
+            // But it cause downloading a lot of data and crash on big files. See issue #505
+            // curl_setopt($curlhandles[$url], CURLOPT_HTTPGET, true);
             curl_setopt($curlhandles[$url], CURLOPT_TIMEOUT, $this->timeout);
             curl_setopt($curlhandles[$url], CURLOPT_FOLLOWLOCATION, true);
             curl_setopt($curlhandles[$url], CURLOPT_MAXREDIRS, self::MAX_BOUNCE);
