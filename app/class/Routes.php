@@ -70,6 +70,7 @@ class Routes
             ['GET', '/[cid:page]/', 'Controllerpage#pagepermanentredirect', 'pageread/'],
             ['POST', '/[cid:page]', 'Controllerpage#read', 'pagereadpost'],
             ['GET', '/[cid:page]', 'Controllerpage#read', 'pageread'],
+            ['HEAD', '/[cid:page]', 'Controllerpage#readhead', 'pagereadhead'],
             ['GET', '/[cid:page]/add', 'Controllerpage#add', 'pageadd'],
             ['GET', '/[cid:page]/add:[cid:copy]', 'Controllerpage#addascopy', 'pageaddascopy'],
             ['GET', '/[cid:page]/edit', 'Controllerpage#edit', 'pageedit'],
@@ -96,7 +97,11 @@ class Routes
 
             call_user_func_array(array($controller, $methodName), $match['params']);
         } else {
-            header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+            if ($_SERVER['REQUEST_METHOD'] === 'HEAD') {
+                http_response_code(405);
+            } else {
+                header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+            }
         }
     }
 }

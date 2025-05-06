@@ -147,6 +147,21 @@ class Controllerpage extends Controller
     }
 
     /**
+     * Minimal response to HEAD request.
+     * Return either 200, 308 or 404 response codes.
+     * Password protected, private and not_published Pages are considered as 200 OK
+     */
+    public function readhead(string $page): void
+    {
+        $this->setpage($page, 'pageread');
+        if ($this->importpage()) {
+            http_response_code(200);
+        } else {
+            http_response_code(404);
+        }
+    }
+
+    /**
      * When a client want to display a page
      * Match domain.com/PAGE_ID
      * May send HTML, or redirect, or just 304 headers
