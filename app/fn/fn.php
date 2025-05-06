@@ -159,26 +159,6 @@ function basictree(array $dirlist, string $dirname, int $deepness, string $path,
 }
 
 /**
- * Generate a HTML list of checkboxes that have the same name and use array storing
- *
- * @param string[] $optionlist              checkbox values
- * @param string[] $checkedlist             checkboxes that are checked
- */
-function checkboxes(string $name, array $optionlist = [], array $checkedlist = []): string
-{
-    $checkboxes = '';
-    foreach ($optionlist as $option) {
-        $checkboxes .= '<li><input type="checkbox" name="' . $name . '[]" id="' . $option . '" value="' . $option . '"';
-        if (in_array($option, $checkedlist)) {
-            $checkboxes .= ' checked';
-        }
-        $checkboxes .= "><label for=\"$option\">$option</label></li>\n";
-    }
-    return "<ul>$checkboxes</ul>";
-}
-
-
-/**
  * Generate a list of <options> html drop down list
  *
  * @param string[] $options                 as `value => title`
@@ -305,7 +285,7 @@ function curl_download(string $url): string
 /**
  * @param string $input                     string to be checked
  * @return string                           first occurence of url in input string
- * @throws RangeException                   when no string is founded
+ * @throws RangeException                   when no URL string is founded
  */
 function getfirsturl(string $input): string
 {
