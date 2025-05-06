@@ -13,8 +13,8 @@
             <?php if(in_array($route, ['pageedit', 'pageread', 'pageadd'])) : ?>
                 <input type="hidden" name="id" value="<?= $id ?>">
             <?php endif ?>
-            <input type="text" name="user" id="loginuser" autofocus placeholder="user" required>
-            <input type="password" name="pass" id="loginpass" placeholder="password" required>
+            <input type="text" name="user" id="loginuser" autofocus placeholder="user" enterkeyhint="next" required>
+            <input type="password" name="pass" id="loginpass" placeholder="password" enterkeyhint="go" required>
             <input type="hidden" name="rememberme" value="0">
             <span>
                 <input type="checkbox" name="rememberme" id="rememberme" value="1">
