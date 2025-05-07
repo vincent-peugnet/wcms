@@ -67,7 +67,12 @@ export function submitHandler(form, onSuccess = () => {}) {
         if (httpOk(xhr.status)) {
             onSuccess(xhr.response);
         } else {
-            alert('Error while trying to update: ' + xhr.statusText);
+            alert(
+                '⚠️ Error while trying to update:\ncopy your work and refresh the current page\n\nAPI response code: ' +
+                    xhr.status +
+                    ' ' +
+                    xhr.statusText
+            );
         }
     });
     xhr.addEventListener('error', function(event) {
