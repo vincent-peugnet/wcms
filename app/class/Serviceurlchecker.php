@@ -118,8 +118,16 @@ class Serviceurlchecker
 
         $multihandle = curl_multi_init();
         curl_multi_setopt($multihandle, CURLMOPT_MAX_TOTAL_CONNECTIONS, 10);
+        // domains that have already been visited once, to avoid rate limit
+        $visiteddomains = [];
+        $curlhandles = [];
 
         foreach ($this->queue as $url) {
+            $domain = parse_url($url, PHP_URL_HOST);
+            if (key_exists($domain, $visiteddomains)) {
+                continue;
+            }
+
             $curlhandles[$url] = curl_init($url);
             curl_setopt($curlhandles[$url], CURLOPT_NOBODY, true);
             curl_setopt($curlhandles[$url], CURLOPT_HEADER, true);
@@ -132,6 +140,8 @@ class Serviceurlchecker
             curl_setopt($curlhandles[$url], CURLOPT_MAXREDIRS, self::MAX_BOUNCE);
 
             curl_multi_add_handle($multihandle, $curlhandles[$url]);
+
+            $visiteddomains[$domain] = true;
         }
 
 
