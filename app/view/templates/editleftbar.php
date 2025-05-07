@@ -176,7 +176,7 @@
             <details id="advanced" <?= !empty($page->externalcss()) || !empty($page->customhead()) || !empty($page->sleep()) || !empty($page->redirection()) ? 'open' : '' ?>>
                 <summary>Advanced</summary>
                         
-                <fieldset id="external" >
+                <fieldset>
                     <p class="field">
                         <label for="externalcss">External CSS</label>
                         <input type="text" name="externalcss[]" id="externalcss" placeholder="add external address" form="update">

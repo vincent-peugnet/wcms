@@ -145,12 +145,45 @@ div#geomap {
 
 /* --------------------------------------------------------- tabs */
 
-#external label {
+#advanced label {
     width: 150px;
     display: inline-block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+/* --------------------------------------------------------- right bar links */
+
+ul.internallinks li {
+    margin-bottom: 10px;
+}
+
+ul.internallinks a.read {
+    display: inline-block;
+    overflow: hidden;
+    text-wrap: nowrap;
+    width: 215px;
+    text-overflow: ellipsis;
+}
+
+ul.externallinks a {
+    width: 90%;
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-wrap: nowrap;
+}
+
+ul.externallinks li {
+    width: 250px;
+    font-size: smaller;
+    padding: 1px;
+}
+
+ul.externallinks li:hover {
+    background-color: var(--outline-background-color);
+    color: var(--outline-color);
 }
 
 /* --------------------------------------------------------- help */

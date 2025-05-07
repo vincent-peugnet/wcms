@@ -318,6 +318,9 @@ class Controllerpage extends Controller
             $datas['editorlist'] = $this->usermanager->getlisterbylevel(2, '>=', true);
             $datas['page'] = $this->page;
 
+            $backlinkopt = new Opt(['linkto' => $this->page->id()]);
+            $datas['homebacklink'] = $backlinkopt->getaddress();
+
             $this->showtemplate('edit', $datas);
         } else {
             $this->routedirect('pageread', ['page' => $this->page->id()]);

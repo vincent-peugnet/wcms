@@ -26,6 +26,43 @@
                 </tbody>
             </table>
 
+            <h3>internal links: <?= count($page->linkto()) ?></h3>
+
+            <ul class="internallinks">
+                <?php foreach ($page->linkto() as $link) : ?>
+                    <li>
+                        <a href="<?= $this->upage('pageread', $link) ?>" class="read" target="_blank" <?= strlen($link) > 30 ? "title=\"$link\"" : '' ?>>
+                            <?= $link ?>
+                        </a>
+                        <a href="<?= $this->upage('pageedit', $link) ?>" class="button">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </li>
+                <?php endforeach ?>
+            </ul>
+
+            <h3>back links</h3>
+
+            <a href="<?= $this->url('home', [], $homebacklink) ?>" class="button">
+                <i class="fa fa-search"></i>
+                search pages that link here
+            </a>
+
+            <h3>external links: <?= count($page->externallinks()) ?></h3>
+
+            <ul class="externallinks">
+                <?php foreach ($page->externallinks() as $url => $status) : ?>
+                    <li>
+                        <a href="<?= $url ?>" target="_blank" <?= strlen($url) > 40 ? "title=\"$url\"" : '' ?>>
+                            <?= ltrim(substr($url, 6), "\/") ?>
+                        </a>
+                        <span>
+                            <?= is_bool($status) ? ($status ? '✅' : '💀') : '' ?>
+                        </span>
+                    </li>
+                <?php endforeach ?>
+            </ul>
+
             <h3>Help</h3>
             <div id="help">
                 <?php $this->insert('edithelp') ?>
