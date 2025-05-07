@@ -396,10 +396,10 @@ abstract class Servicerender
                 $this->urls[$href] = null;
                 if ($this->urlchecker !== null) {
                     try {
-                        $response = $this->urlchecker->check($href);
-                        $classes[] = $response ? 'ok' : 'dead';
+                        $status = $this->urlchecker->check($href);
+                        $classes[] = $status ? 'ok' : 'dead';
                         $link->setAttribute('data-urlcheck', '1');
-                        $this->urls[$href] = $response;
+                        $this->urls[$href] = $status;
                     } catch (RuntimeException $e) {
                         $link->setAttribute('data-urlcheck', '0');
                     }
@@ -456,11 +456,11 @@ abstract class Servicerender
                     $class = $link->getAttribute('class');
                     $classes = explode(' ', $class);
                     try {
-                        $response = $this->urlchecker->check($href);
-                        $classes[] = $response ? 'ok' : 'dead';
+                        $status = $this->urlchecker->check($href);
+                        $classes[] = $status ? 'ok' : 'dead';
                         $link->setAttribute('class', implode(' ', array_unique($classes)));
                         $link->setAttribute('data-urlcheck', '1');
-                        $this->urls[$href] = $response;
+                        $this->urls[$href] = $status;
                     } catch (RuntimeException $e) {
                     }
                 }
