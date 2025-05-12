@@ -30,6 +30,7 @@ abstract class Config
     protected static bool $urllinker = true;
     protected static bool $urlchecker = true;
     protected static bool $deletelinktocache = true;
+    protected static bool $titlefromalt = false;
     protected static int $defaultprivacy = 0;
     protected static string $homepage = 'default';
     protected static ?string $homeredirect = null;
@@ -308,6 +309,11 @@ abstract class Config
         return self::$deletelinktocache;
     }
 
+    public static function titlefromalt(): bool
+    {
+        return self::$titlefromalt;
+    }
+
     public static function defaultprivacy()
     {
         return self::$defaultprivacy;
@@ -550,6 +556,11 @@ abstract class Config
     public static function setdeletelinktocache($deletelinktocache)
     {
         self::$deletelinktocache = boolval($deletelinktocache);
+    }
+
+    public static function settitlefromalt($titlefromalt)
+    {
+        self::$titlefromalt = boolval($titlefromalt);
     }
 
     public static function setdefaultprivacy($defaultprivacy)

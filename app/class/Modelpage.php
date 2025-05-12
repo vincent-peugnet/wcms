@@ -463,7 +463,14 @@ class Modelpage extends Modeldb
     {
         $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
 
-        $params = [$router, $this, Config::externallinkblank(), Config::internallinkblank(), $urlchecker];
+        $params = [
+            $router,
+            $this,
+            Config::externallinkblank(),
+            Config::internallinkblank(),
+            Config::titlefromalt(),
+            $urlchecker
+        ];
 
         switch ($page->version()) {
             case Page::V1:

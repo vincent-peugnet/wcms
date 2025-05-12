@@ -42,6 +42,9 @@ abstract class Servicerender
     /** @var bool If true, external links target a new tab */
     protected bool $externallinkblank;
 
+    /** @var bool If true, images with no title can have one based on alt attribute */
+    protected bool $titlefromalt = false;
+
     /** @var bool True if the page need post process */
     protected bool $postprocessaction = false;
 
@@ -62,12 +65,14 @@ abstract class Servicerender
         Modelpage $pagemanager,
         bool $externallinkblank = false,
         bool $internallinkblank = false,
+        bool $titlefromalt = false,
         ?Serviceurlchecker $urlchecker = null
     ) {
         $this->router = $router;
         $this->pagemanager = $pagemanager;
         $this->externallinkblank = $externallinkblank;
         $this->internallinkblank = $internallinkblank;
+        $this->titlefromalt = $titlefromalt;
         $this->urlchecker = $urlchecker;
     }
 
@@ -477,6 +482,20 @@ abstract class Servicerender
         $this->sourceparser($audios);
         $videos = $dom->getElementsByTagName('video');
         $this->sourceparser($videos);
+
+        // if not title attr, and has alt attr, copy alt to title attr
+        if ($this->titlefromalt) {
+            foreach ($images as $image) {
+                if (
+                    !$image->hasAttribute('title') &&
+                    $image->hasAttribute('alt') &&
+                    !empty($image->getAttribute('alt'))
+                ) {
+                    $image->setAttribute('title', $image->getAttribute('alt'));
+                }
+            }
+        }
+
         // By passing the documentElement to saveHTML, special chars are not converted to entities
         return $dom->saveHTML($dom->documentElement);
     }

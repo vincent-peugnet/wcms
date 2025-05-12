@@ -298,6 +298,20 @@
             This may cause longer render time if recently activated.
         </p>
 
+        <h3>Images</h3>
+
+        <p class="field">
+            <label for="lazyloadimg">Add <em>loading="lazy"</em> attribute to images</label>
+            <input type="hidden" name="lazyloadimg" value="0" form="admin">
+            <input type="checkbox" name="lazyloadimg" id="lazyloadimg" value="1" <?= Wcms\Config::lazyloadimg() ? 'checked' : '' ?> form="admin">
+        </p>
+
+        <p class="field">
+            <label for="titlefromalt">Copy <em>alt</em> attribute to <em>title</em> if not set</label>
+            <input type="hidden" name="titlefromalt" value="0" form="admin">
+            <input type="checkbox" name="titlefromalt" id="titlefromalt" value="1" <?= Wcms\Config::titlefromalt() ? 'checked' : '' ?> form="admin">
+        </p>
+
         <h3>Markdown Parser</h3>
 
         <p class="field">
@@ -326,14 +340,6 @@
             <input type="hidden" name="htmltag" value="0" form="admin">
             <label for="htmltag">Print HTML tags around V1 page's contents</label>
             <input type="checkbox" name="htmltag" id="htmltag" value="1" <?= Wcms\Config::htmltag() ? 'checked' : '' ?> form="admin">                        
-        </p>
-
-        <h3>Lazy load images</h3>
-
-        <p class="field">
-            <label for="lazyloadimg">Add <em>loading="lazy"</em> attribute to images</label>
-            <input type="hidden" name="lazyloadimg" value="0" form="admin">
-            <input type="checkbox" name="lazyloadimg" id="lazyloadimg" value="1" <?= Wcms\Config::lazyloadimg() ? 'checked' : '' ?> form="admin">
         </p>
     </div>
 
