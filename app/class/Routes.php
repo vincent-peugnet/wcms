@@ -43,6 +43,7 @@ class Routes
             ['GET', '/!random', 'Controllerrandom#direct', 'randomdirect'],
             ['GET', '/!flushrendercache', 'Controllerhome#flushrendercache', 'flushrendercache'],
             ['GET', '/!flushurlcache', 'Controllerhome#flushurlcache', 'flushurlcache'],
+            ['GET', '/!cleanurlcache', 'Controllerhome#cleanurlcache', 'cleanurlcache'],
             ['POST', '/multi', 'Controllerhome#multi', 'multi'],
             ['POST', '/upload', 'Controllerpage#upload', 'pageupload'],
             ['POST', '/!co', 'Controllerconnect#log', 'log'],

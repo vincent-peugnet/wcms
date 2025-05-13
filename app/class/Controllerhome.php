@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use RuntimeException;
+use Wcms\Exception\Filesystemexception;
 use Wcms\Exception\Databaseexception;
 use Wcms\Exception\Filesystemexception\Notfoundexception;
 
@@ -237,6 +238,11 @@ class Controllerhome extends Controller
 
     public function flushrendercache(): void
     {
+        if (!$this->user->issupereditor()) {
+            http_response_code(304);
+            $this->showtemplate('forbidden');
+            exit;
+        }
         try {
             $this->pagemanager->flushrendercache();
             $this->sendflashmessage('Render cache successfully deleted', self::FLASH_SUCCESS);
@@ -252,6 +258,7 @@ class Controllerhome extends Controller
         if (!$this->user->issupereditor()) {
             http_response_code(304);
             $this->showtemplate('forbidden');
+            exit;
         }
         try {
             Fs::deletefile(Model::URLS_FILE);
@@ -261,6 +268,28 @@ class Controllerhome extends Controller
         } catch (RuntimeException $e) {
             $fserror = $e->getMessage();
             $this->sendflashmessage("Error while trying to flush page render cache: $fserror", self::FLASH_ERROR);
+            Logger::errorex($e);
+        }
+        $this->routedirect('home');
+    }
+
+    /**
+     * Remove unused URLs from cache
+     */
+    public function cleanurlcache(): void
+    {
+        if (!$this->user->issupereditor()) {
+            http_response_code(304);
+            $this->showtemplate('forbidden');
+            exit;
+        }
+        try {
+            $urlchecker = new Serviceurlchecker(0);
+            $removed = $urlchecker->cleancache($this->pagemanager);
+            $urlchecker->savecache();
+            $this->sendflashmessage("$removed unused url(s) where removed from cache.", self::FLASH_SUCCESS);
+        } catch (RuntimeException $e) {
+            $this->sendflashmessage($e, self::FLASH_ERROR);
             Logger::errorex($e);
         }
         $this->routedirect('home');

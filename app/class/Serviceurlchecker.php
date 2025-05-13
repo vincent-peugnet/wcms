@@ -53,7 +53,8 @@ class Serviceurlchecker
             $urlfile = Fs::readfile(Model::URLS_FILE);
             $this->urls = json_decode($urlfile, true);
         } catch (Filesystemexception $e) {
-            // This mean the url cache file does not exist
+            // This surely beccause the url cache file does not exist
+            Logger::warningex($e);
         }
     }
 
@@ -99,28 +100,28 @@ class Serviceurlchecker
     }
 
     /**
-     * Get the list of all cached URLs
+     * Remove unused URL from cache.
+     * (This does't save edits to cache file)
      *
-     * @return array[]                      Assoc array with same structure as `urls.json` file.
-     *                                      key is the url. Value is an array that contain:
-     *                                      `response (int)`, `timestamp (string)` and `expire (string)` values.
-     */
-    public function urls(): array
-    {
-        return $this->urls;
-    }
-
-    /**
-     * Remove URL from cache
+     * @param Modelpage $pagemanager        to get the Pages external links
      *
-     * @throws RuntimeException             If URL is not present in cache
+     * @return int                          number of removed URLs
      */
-    public function removeurl(string $url): void
+    public function cleancache(Modelpage $pagemanager): int
     {
-        if (!key_exists($url, $this->urls)) {
-            throw new RuntimeException("failed to remove non-existing URL from cache: '$url'");
+        $pages = $pagemanager->pagelist();
+        $externallinks = [];
+        foreach ($pages as $page) {
+            $externallinks = array_merge($externallinks, $page->externallinks());
         }
-        unset($this->urls[$url]);
+        $removed = 0;
+        foreach ($this->urls as $url => $infos) {
+            if (!key_exists($url, $externallinks)) {
+                unset($this->urls[$url]);
+                $removed++;
+            }
+        }
+        return $removed;
     }
 
     /**
@@ -268,7 +269,7 @@ class Serviceurlchecker
     }
 
     /**
-     * Save the cache
+     * Save the cache on filesystem
      *
      * @throws Filesystemexception          if the process failed
      */
