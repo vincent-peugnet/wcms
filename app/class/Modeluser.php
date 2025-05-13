@@ -145,7 +145,7 @@ class Modeluser extends Modeldb
     /**
      * @param string|User $id               Can be an User object or a string ID
      *
-     * @return User                         User object or false in case of error
+     * @return User                         User object
      *
      * @throws Notfoundexception            If User cant be founded
      * @throws InvalidArgumentException     If $id param is not a string or an User
@@ -189,5 +189,31 @@ class Modeluser extends Modeldb
     public function delete(User $user)
     {
         $this->repo->delete($user->id());
+    }
+
+    /**
+     * Get the Users that are author of a page
+     *
+     * @param Page $page                    the page that have authors
+     *
+     * @param bool $onlyexisting            return only Users found in the database
+     *                                      If set to false, basic User object are added to the list.
+     *
+     * @return User[]                       Associative array of User object with ID as key
+     */
+    public function pageauthors(Page $page, bool $onlyexisting = true): array
+    {
+        $users = [];
+        foreach ($page->authors() as $author) {
+            try {
+                $user = $this->get($author);
+                $users[$user->id()] = $user;
+            } catch (Notfoundexception) {
+                if ($onlyexisting === false) {
+                    $users[$author] = new User(['id' => $author]);
+                }
+            }
+        }
+        return $users;
     }
 }

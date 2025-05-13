@@ -2,8 +2,11 @@
 
 namespace Wcms;
 
+use DateTimeInterface;
+use DOMDocument;
+use DOMException;
 use IntlDateFormatter;
-use Wcms\Exception\Database\Notfoundexception;
+use LogicException;
 
 class Optlist extends Optcode
 {
@@ -14,9 +17,15 @@ class Optlist extends Optcode
     protected bool $time = false;
     protected bool $author = false;
     protected bool $hidecurrent = false;
-    protected $style = 'list';
+    protected bool $tags = false;
+    protected string $style = self::LIST;
 
-    private Servicerender $render;
+    public const LIST = 'list';
+    public const CARD = 'card';
+    public const STYLES = [
+        self::LIST => self::LIST,
+        self::CARD, self::CARD,
+    ];
 
     public function __construct(array $datas = [])
     {
@@ -32,17 +41,14 @@ class Optlist extends Optcode
     }
 
     /**
+     * Generate HTML list of links to pages
+     *
      * @param Page[] $pagelist              Assoc array of Page objects, key must be ID of page.
-     * @param Servicerender $render
      * @param Page $currentpage             Current page
      * @return string HTML formated string
      */
-    public function listhtml(array $pagelist, Servicerender $render, Page $currentpage): string
+    public function listhtml(array $pagelist, Page $currentpage): string
     {
-        $this->render = $render;
-
-        $li = '';
-
         if ($this->hidecurrent && key_exists($currentpage->id(), $pagelist)) {
             unset($pagelist[$currentpage->id()]);
         }
@@ -51,79 +57,92 @@ class Optlist extends Optcode
         $dateformatter = new IntlDateFormatter($lang, IntlDateFormatter::SHORT, IntlDateFormatter::NONE);
         $datetitleformatter = new IntlDateFormatter($lang, IntlDateFormatter::FULL, IntlDateFormatter::NONE);
         $timeformatter = new IntlDateFormatter($lang, IntlDateFormatter::NONE, IntlDateFormatter::SHORT);
-        foreach ($pagelist as $page) {
-            // ================ Content
 
-            $content = '';
+        try {
+            $dom = new DOMDocument();
+            $dom = new DOMDocument('1.0', 'UTF-8');
 
-            $title = !$this->description() && $page->ispublic() ? $page->description() : '';
-            $title = '<span class="title" title="' . $title . '">' . $page->title() . '</span>';
-            if ($this->description()) {
-                $content .= '<span class="description">' . $page->description() . '</span>';
-            }
-            if ($this->date()) {
-                $dateattr = $page->date('pdate');
-                $date = $dateformatter->format($page->date());
-                $datetitle = $datetitleformatter->format($page->date());
-                $content .= "<time datetime=\"$dateattr\" title=\"$datetitle\">$date</time>\n";
-            }
-            if ($this->time()) {
-                $timeattr = $page->date('ptime');
-                $time = $timeformatter->format($page->date());
-                $content .= "<time datetime=\"$timeattr\">$time</time>\n";
-            }
-            if ($this->author()) {
-                $usermanager = new Modeluser();
-                foreach ($page->authors() as $author) {
-                    try {
-                        $user = $usermanager->get($author);
-                        $content .= "\n" . $this->render->user($user) . "\n";
-                    } catch (Notfoundexception $e) {
+            $ul = $dom->createElement('ul');
+            $ul->setAttribute('class', 'pagelist');
+
+            foreach ($pagelist as $page) {
+                switch ($this->style) {
+                    case self::LIST:
+                        $parent = $dom->createElement('li');
+                        $a = $dom->createElement('a', htmlspecialchars($page->title()));
+                        $a->setAttribute('href', $page->id());
+                        $parent->appendChild($a);
+                        $ul->appendChild($parent);
+                        break;
+                    case self::CARD:
+                        $li = $dom->createElement('li');
+                        $parent = $dom->createElement('a', htmlspecialchars($page->title()));
+                        $parent->setAttribute('href', $page->id());
+                        $li->appendChild($parent);
+                        $ul->appendChild($li);
+                        break;
+                    default:
+                        throw new LogicException('bad LIST style');
+                }
+
+                if ($this->description) {
+                    $description = $dom->createElement('span', htmlspecialchars($page->description()));
+                    $description->setAttribute('class', 'description');
+                    $parent->appendChild($description);
+                }
+                if ($this->date || $this->time) {
+                    $values = [];
+                    if ($this->date) {
+                        $values[] = $dateformatter->format($page->date());
                     }
+                    if ($this->time) {
+                        $values[] = $timeformatter->format($page->date());
+                    }
+                    $datetime = $dom->createElement('time', implode(' ', $values));
+                    if ($this->date) {
+                        $datetime->setAttribute('title', $datetitleformatter->format($page->date()));
+                    }
+                    $datetime->setAttribute('datetime', $page->date()->format(DateTimeInterface::ATOM));
+                    $parent->appendChild($datetime);
+                }
+                if ($this->author) {
+                    $usermanager = new Modeluser();
+                    $authors = $dom->createElement('span');
+                    $authors->setAttribute('class', 'authors');
+                    $users = $usermanager->pageauthors($page);
+                    foreach ($users as $user) {
+                        $author = $dom->createElement(
+                            'a',
+                            !empty($user->name()) ? htmlspecialchars($user->name()) : $user->id()
+                        );
+                        $userclasses = ['user', 'user-' . $user->id()];
+                        $author->setAttribute('class', implode(' ', $userclasses));
+                        $author->setAttribute('data-user-id', $user->id());
+                        if (!empty($user->url())) {
+                            $author->setAttribute('href', $user->url());
+                        }
+                        $authors->appendChild($author);
+                    }
+                    $parent->appendChild($authors);
+                }
+                if ($this->thumbnail) {
+                    $thumbnail = $dom->createElement('img');
+                    if (!empty($page->thumbnail())) {
+                        $thumbnail->setAttribute('src', Model::thumbnailpath() . $page->thumbnail());
+                    } elseif (!empty(Config::defaultthumbnail())) {
+                        $thumbnail->setAttribute('src', Model::thumbnailpath() . Config::defaultthumbnail());
+                    }
+                    $thumbnail->setAttribute('alt', htmlspecialchars($page->title()));
+                    $parent->appendChild($thumbnail);
                 }
             }
-            if ($this->thumbnail) {
-                if (!empty($page->thumbnail())) {
-                    $src = Model::thumbnailpath() . $page->thumbnail();
-                } elseif (!empty(Config::defaultthumbnail())) {
-                    $src = Model::thumbnailpath() . Config::defaultthumbnail();
-                } else {
-                    $src = "";
-                }
-                $content .= '<img class="thumbnail" src="' . $src . '" alt="' . $page->title() . '">';
-            }
 
+            $dom->appendChild($ul);
 
-
-            switch ($this->style) {
-                case 'card':
-                    $li .= $this->li($this->a($title . $content, $page->id()), $page->id());
-                    break;
-
-                case 'list':
-                    $li .= $this->li($this->a($title, $page->id()) . $content, $page->id());
-                    break;
-            }
+            return $dom->saveHTML($dom->documentElement);
+        } catch (DOMException $e) {
+            throw new LogicException('bad DOM node used', 0, $e);
         }
-
-        $html = $this->ul($li);
-
-        return $html;
-    }
-
-    private function ul(string $content)
-    {
-        return "<ul class=\"pagelist\">\n$content\n</ul>\n";
-    }
-
-    private function li(string $content, string $class)
-    {
-        return "<li class=\"pagelistitem $class\">\n$content\n</li>\n";
-    }
-
-    private function a(string $content, string $id)
-    {
-        return "<a href=\"$id\">$content</a>";
     }
 
 
@@ -212,7 +231,7 @@ class Optlist extends Optcode
 
     public function setstyle($style)
     {
-        if (is_string($style) && key_exists($style, Model::LIST_STYLES)) {
+        if (is_string($style) && key_exists($style, self::STYLES)) {
             $this->style = $style;
         }
     }

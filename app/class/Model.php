@@ -31,11 +31,6 @@ abstract class Model
     public const FILE_PERMISSION    = 0660;
     public const FOLDER_PERMISSION  = 0770;
 
-    public const LIST_STYLES = [
-        'list' => 'list',
-        'card' => 'card'
-    ];
-
     public const METADATAS_NAMES = [
         'favicon' => 'favicon',
         'id' => 'id',

@@ -84,7 +84,7 @@ class Servicerss
         $feed->setAttribute('xml:lang', Config::lang());
 
         $title = $xml->createElement("title");
-        $title->appendChild(new DOMText($bookmark->name()));
+        $title->appendChild(new DOMText(htmlspecialchars($bookmark->name())));
         $feed->appendChild($title);
 
         $id = $xml->createElement("id", Config::domain() . self::atompath($bookmark->id()));
@@ -92,7 +92,7 @@ class Servicerss
 
         if (!empty($bookmark->description())) {
             $subtitle = $xml->createElement("subtitle");
-            $subtitle->appendChild(new DOMText($bookmark->description()));
+            $subtitle->appendChild(new DOMText(htmlspecialchars($bookmark->description())));
             $feed->appendChild($subtitle);
         }
 
@@ -108,7 +108,7 @@ class Servicerss
             $link->setAttribute("hreflang", !empty($ref->lang()) ? $ref->lang() : Config::lang());
             $link->setAttribute("rel", "alternate");
             if (!empty($ref->description())) {
-                $link->setAttribute("title", $ref->description());
+                $link->setAttribute("title", htmlspecialchars($ref->description()));
             }
             $feed->appendChild($link);
         }
@@ -140,7 +140,7 @@ class Servicerss
             $feed->appendChild($entry);
 
             $title = $xml->createElement("title");
-            $title->appendChild(new DOMText($page->title()));
+            $title->appendChild(new DOMText(htmlspecialchars($page->title())));
             $entry->appendChild($title);
 
             $id = $xml->createElement("id", $this->href($page));
@@ -158,21 +158,20 @@ class Servicerss
             $entry->appendChild($updated);
 
             $usermanager = new Modeluser();
-            foreach ($page->authors() as $author) {
-                try {
-                    $user = $usermanager->get($author);
-                    $author = $xml->createElement("author");
-                    $name = $xml->createElement("name");
-                    $name->appendChild(new DOMText(empty($user->name()) ? $user->id() : $user->name()));
-                    $author->appendChild($name);
-                    $entry->appendChild($author);
-                } catch (Notfoundexception $e) {
-                }
+            $users = $usermanager->pageauthors($page);
+            foreach ($users as $user) {
+                $author = $xml->createElement("author");
+                $name = $xml->createElement("name");
+                $name->appendChild(
+                    new DOMText(empty($user->name()) ? $user->id() : htmlspecialchars($user->name()))
+                );
+                $author->appendChild($name);
+                $entry->appendChild($author);
             }
 
             if (!empty($page->description())) {
                 $summary = $xml->createElement("summary");
-                $summary->appendChild(new DOMText($page->description()));
+                $summary->appendChild(new DOMText(htmlspecialchars($page->description())));
                 $entry->appendChild($summary);
             }
 
