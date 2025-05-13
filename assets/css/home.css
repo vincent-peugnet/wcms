@@ -153,6 +153,10 @@ td.title {
     text-overflow: ellipsis;
 }
 
+td.date, td.datemodif, td.datecreation {
+    text-wrap: nowrap;
+}
+
 
 /* --------------------------------------------------------- graph view */
 

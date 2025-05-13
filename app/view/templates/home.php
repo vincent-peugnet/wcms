@@ -355,24 +355,18 @@ use Wcms\Config;
                                     </td>
                                 <?php endif ?>
                                 <?php if ($columns['datemodif']) : ?>
-                                    <td class="datemodif" title="<?= $item->datemodif('dmy') ?> <?= $item->datemodif('ptime') ?>">
-                                        <time datetime="<?= $item->datemodif('string') ?>" title="<?= $item->datemodif('dmy') . ' ' . $item->datemodif('ptime') ?>">
-                                            <?= $item->datemodif('hrdi') ?>
-                                        </time>
+                                    <td class="datemodif" title="<?= $this->datemedium($item->datemodif()) ?>">
+                                        <?= $item->datemodif('hrdi') ?>
                                     </td>
                                 <?php endif ?>
                                 <?php if ($columns['datecreation']) : ?>
-                                    <td class="datecreation" title="<?= $item->datecreation('dmy') ?> <?= $item->datecreation('ptime') ?>">
-                                        <time datetime="<?= $item->datecreation('string') ?>" title="<?= $item->datecreation('dmy') . ' ' . $item->datecreation('ptime') ?>">
-                                            <?= $item->datecreation('hrdi') ?>
-                                        </time>
+                                    <td class="datecreation" title="<?= $this->datemedium($item->datecreation()) ?>">
+                                        <?= $item->datecreation('hrdi') ?>
                                     </td>
                                 <?php endif ?>
                                 <?php if ($columns['date']) : ?>
-                                    <td class="date" title="<?= $item->date('dmy') ?> <?= $item->date('ptime') ?>">
-                                        <time datetime="<?= $item->date('string') ?>" title="<?= $item->date('dmy') . ' ' . $item->date('ptime') ?>">
-                                            <?= $item->date('dmy') ?>
-                                        </time>
+                                    <td class="date" title="<?= $this->datemedium($item->date()) ?>">
+                                        <?= $this->dateshort($item->date()) ?>
                                     </td>
                                 <?php endif ?>
                                 <?php if ($columns['secure']) : ?>

@@ -4,8 +4,10 @@ namespace Wcms;
 
 use AltoRouter;
 use DateTimeImmutable;
+use DateTimeInterface;
 use DomainException;
 use Exception;
+use IntlDateFormatter;
 use InvalidArgumentException;
 use League\Plates\Engine;
 use RuntimeException;
@@ -98,6 +100,8 @@ class Controller
     public function initplates()
     {
         $router = $this->router;
+        $formatershort = new IntlDateFormatter(Config::lang(), IntlDateFormatter::SHORT, IntlDateFormatter::SHORT);
+        $formatermedium = new IntlDateFormatter(Config::lang(), IntlDateFormatter::MEDIUM, IntlDateFormatter::MEDIUM);
         $this->plates = new Engine(Model::TEMPLATES_DIR);
         $this->plates->registerFunction('url', function (string $string, array $vars = [], string $get = '') {
             return $this->generate($string, $vars, $get);
@@ -113,6 +117,12 @@ class Controller
         });
         $this->plates->registerFunction('candeletepage', function (Page $page) {
             return $this->candelete($page);
+        });
+        $this->plates->registerFunction('dateshort', function (DateTimeInterface $date) use ($formatershort) {
+            return $formatershort->format($date);
+        });
+        $this->plates->registerFunction('datemedium', function (DateTimeInterface $date) use ($formatermedium) {
+            return $formatermedium->format($date);
         });
         $this->plates->addData(['flashmessages' => $this->getflashmessages()]);
     }
