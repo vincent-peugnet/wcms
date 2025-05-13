@@ -1,5 +1,5 @@
 <?php
-    $this->layout('layout', ['title' => '✏ '.$page->title(), 'stylesheets' => [
+    $this->layout('layout', ['title' => '✏ ' . $this->e($page->title()), 'stylesheets' => [
         Wcms\Model::jspath() . 'edit.bundle.css',
         $css . 'edit.css',
         $css . 'tagcolors.css'

@@ -148,7 +148,7 @@
         <?php $defaultbody = 'defaultv' . Wcms\Config::pageversion() . 'body' ?>
         <p class="field">
             <label for="defaultbody">Edit default page V<?= Wcms\Config::pageversion() ?> BODY content</label>
-            <textarea name="<?= $defaultbody ?>" id="defaultbody" cols="30" rows="10" form="admin"><?= Wcms\Config::defaultbody() ?></textarea>
+            <textarea name="<?= $defaultbody ?>" id="defaultbody" cols="30" rows="10" form="admin"><?= $this->e(Wcms\Config::defaultbody()) ?></textarea>
         </p>
 
     </div>
@@ -164,7 +164,7 @@
 
         <p class="field">
             <label for="alerttitle">H1 Title</label>
-            <input type="text" name="alerttitle" id="alerttitle" value="<?= Wcms\Config::alerttitle() ?>" form="admin">
+            <input type="text" name="alerttitle" id="alerttitle" value="<?= $this->e(Wcms\Config::alerttitle()) ?>" form="admin">
         </p>
 
         <p class="field">
@@ -179,14 +179,14 @@
 
         <p class="field">
             <label for="alertlinktext">Link text</label>
-            <input type="text" name="alertlinktext" id="alertlinktext" value="<?= Wcms\Config::alertlinktext() ?>" form="admin">
+            <input type="text" name="alertlinktext" id="alertlinktext" value="<?= $this->e(Wcms\Config::alertlinktext()) ?>" form="admin">
         </p>
 
         <h3>Un-existing</h3>
 
         <p class="field">
             <label for="existnot">Text to show when a page does not exist yet. (This will also be shown as a tooltip over links.)</label>
-            <input type="text" name="existnot" id="existnot" value="<?= Wcms\Config::existnot() ?>" form="admin">
+            <input type="text" name="existnot" id="existnot" value="<?= $this->e(Wcms\Config::existnot()) ?>" form="admin">
         </p>
 
         <p class="field">
@@ -199,7 +199,7 @@
 
         <p class="field">
             <label for="private">Text to show when a page is private.</label>
-            <input type="text" name="private" id="private" value="<?= Wcms\Config::private() ?>" form="admin">
+            <input type="text" name="private" id="private" value="<?= $this->e(Wcms\Config::private()) ?>" form="admin">
         </p>
 
         <p class="field">
@@ -212,7 +212,7 @@
 
         <p class="field">
             <label for="notpublished">Text to show when a page is not published.</label>
-            <input type="text" name="notpublished" id="notpublished" value="<?= Wcms\Config::notpublished() ?>" form="admin">
+            <input type="text" name="notpublished" id="notpublished" value="<?= $this->e(Wcms\Config::notpublished()) ?>" form="admin">
         </p>
 
         <p class="field">
@@ -260,7 +260,7 @@
 
         <p class="field">
             <label for="lang">Default language</label>
-            <input type="text" name="lang" id="lang" value="<?= Wcms\Config::lang() ?>" form="admin" minlength="<?= Wcms\Config::LANG_MIN ?>" maxlength="<?= Wcms\Config::LANG_MAX ?>" required>
+            <input type="text" name="lang" id="lang" value="<?= $this->e(Wcms\Config::lang()) ?>" form="admin" minlength="<?= Wcms\Config::LANG_MIN ?>" maxlength="<?= Wcms\Config::LANG_MAX ?>" required>
         </p>
 
         <h3>Title</h3>
@@ -270,7 +270,7 @@
 
         <p class="field">
             <label for="suffix">suffix</label>
-            <input type="text" name="suffix" id="suffix" value="<?= Wcms\Config::suffix() ?>" form="admin" maxlength="<?= Wcms\Config::SUFFIX_MAX ?>">
+            <input type="text" name="suffix" id="suffix" value="<?= $this->e(Wcms\Config::suffix()) ?>" form="admin" maxlength="<?= Wcms\Config::SUFFIX_MAX ?>">
         </p>
 
         <h3>Links</h3>
@@ -351,7 +351,7 @@
 
         <p class="field">
             <label for="globalcss">Global CSS will be loaded with every page</label>
-            <textarea name="globalcss" id="globalcss" cols="30" rows="30" form="admin"><?= $globalcss ?></textarea>
+            <textarea name="globalcss" id="globalcss" cols="30" rows="30" form="admin"><?= $this->e($globalcss) ?></textarea>
         </p>
 
         <h3>Favicon</h3>
@@ -401,7 +401,7 @@
 
         <p class="field">
             <label for="ldapserver">LDAP server address</label>
-            <input type="text" name="ldapserver" id="ldapserver" value="<?= Wcms\Config::ldapserver() ?>" form="admin" placeholder="ldap://localhost:389">
+            <input type="text" name="ldapserver" id="ldapserver" value="<?= $this->e(Wcms\Config::ldapserver()) ?>" form="admin" placeholder="ldap://localhost:389">
         </p>
 
         <p class="info">
@@ -410,7 +410,7 @@
 
         <p class="field">
             <label for="ldaptree">LDAP hierarchical structure</label>
-            <input type="text" name="ldaptree" id="ldaptree" value="<?= Wcms\Config::ldaptree() ?>" form="admin" placeholder="ou=People,dc=domain,dc=tld">
+            <input type="text" name="ldaptree" id="ldaptree" value="<?= $this->e(Wcms\Config::ldaptree()) ?>" form="admin" placeholder="ou=People,dc=domain,dc=tld">
         </p>
 
         <p class="info">
@@ -419,7 +419,7 @@
 
         <p class="field">
             <label for="ldapu">LDAP user field</label>
-            <input type="text" name="ldapu" id="ldapu" value="<?= Wcms\Config::ldapu() ?>" form="admin" placeholder="uid">
+            <input type="text" name="ldapu" id="ldapu" value="<?= $this->e(Wcms\Config::ldapu()) ?>" form="admin" placeholder="uid">
         </p>
 
 

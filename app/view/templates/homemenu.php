@@ -267,7 +267,7 @@
                             <option value="">--no bookmark--</option>
                             <?php foreach ($matchedbookmarks as $bookmark) : ?>
                             <option value="<?= $bookmark->id() ?>" <?= !empty($optlist) && $optlist->bookmark() === $bookmark->id() ? 'selected' : '' ?> >
-                                <?= $bookmark->name() ?>
+                                <?= $this->e($bookmark->name()) ?>
                             </option>
                         <?php endforeach ?>
                         </select>
@@ -311,7 +311,7 @@
                     <p class="field">                
                         <label for="list_style">Style</label>                
                         <select name="style" id="list_style">
-                            <?= options(Wcms\Model::LIST_STYLES , !empty($optlist) ? $optlist->style() : null) ?>
+                            <?= options(Wcms\Optlist::STYLES , !empty($optlist) ? $optlist->style() : null) ?>
                         </select>
                     </p>
                     <p class="field submit-field">
@@ -395,7 +395,7 @@
                                 <select name="id" id="bookmark_id" required>
                                     <option value="" selected>--choose a bookmark--</option>
                                     <?php foreach ($editablebookmarks as $id => $bookmark) : ?>
-                                        <option value="<?= $bookmark->id() ?>"><?= $bookmark->name() ?></option>
+                                        <option value="<?= $bookmark->id() ?>"><?= $this->e($bookmark->name()) ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </p>
@@ -424,11 +424,11 @@
                             </p>
                             <p class="field">       
                                 <label for="bookmark_name">name</label>
-                                <input type="text" name="name" id="bookmark_name" value="<?= $bookmark->name() ?>" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>">                        
+                                <input type="text" name="name" id="bookmark_name" value="<?= $this->e($bookmark->name()) ?>" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>">                        
                             </p>
                             <p class="field">       
                                 <label for="bookmark_description">description</label>
-                                <input type="text" name="description" id="bookmark_description" value="<?= $bookmark->description() ?>" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>">                        
+                                <input type="text" name="description" id="bookmark_description" value="<?= $this->e($bookmark->description()) ?>" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>">                        
                             </p>
                             <?php if ($bookmark->ispublished()) : ?>
                                 <p class="field">       

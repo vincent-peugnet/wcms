@@ -5,7 +5,7 @@
 
 <p>URL : <a href="<?= $this->upage('pageread', $page->id()) ?>" ><?= $this->upage('pageread', $page->id()) ?></a></p>
 <p>Id : <?= $page->id() ?></p>
-<p>Title : <?= $page->title() ?></p>
+<p>Title : <?= $this->e($page->title()) ?></p>
 <p>Number of edits : <?= $page->editcount() ?></p>
 <p>Number of displays : <?= $page->displaycount() ?></p>
 <p>

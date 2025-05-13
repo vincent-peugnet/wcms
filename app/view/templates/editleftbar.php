@@ -13,11 +13,11 @@
                 <fieldset >                        
                     <p class="field">
                         <label for="title">Title</label>
-                        <input type="text" name="title" id="title" value="<?= $page->title(); ?>" form="update">
+                        <input type="text" name="title" id="title" value="<?= $this->e($page->title()) ?>" form="update">
                     </p>
                     <p class="field">
                         <label for="description">Description</label>
-                        <input type="text" name="description" id="description" value="<?= $page->description(); ?>" form="update">
+                        <input type="text" name="description" id="description" value="<?= $this->e($page->description()) ?>" form="update">
                     </p>
                     <p class="field">
                         <label for="tag">Tag(s)</label>
@@ -183,13 +183,13 @@
                     </p>
                     <?php foreach ($page->externalcss() as $css) : ?>
                         <p class="checkexternal field">
-                            <label for="<?= $css ?>" title="<?= $css ?>"><?= $css ?></label>    
-                            <input type="checkbox" name="externalcss[]" id="<?= $css ?>" value="<?= $css ?>" form="update" checked>
+                            <label for="<?= hash('crc32', $css) ?>" title="<?= $this->e($css) ?>"><?= $this->e($css) ?></label>    
+                            <input type="checkbox" name="externalcss[]" id="<?= hash('crc32', $css) ?>" value="<?= $this->e($css) ?>" form="update" checked>
                         </p>
                     <?php endforeach ?>
                     <p class="field">
                         <label for="customhead">Custom head</label>
-                        <textarea name="customhead" wrap="off" spellcheck="false" rows="<?= $page->customhead('int') ?>" form="update"><?= $page->customhead() ?></textarea>
+                        <textarea name="customhead" wrap="off" spellcheck="false" rows="<?= $page->customhead('int') ?>" form="update"><?= $this->e($page->customhead()) ?></textarea>
                     </p>
                     <p class="field">
                         <label for="lang">Language</label>
@@ -202,7 +202,7 @@
                     </p>
                     <p class="field">
                         <label for="redirection" title="page_id or URL like https://domain.org">Redirection</label>
-                        <input type="text" name="redirection" id="redirection" value="<?= $page->redirection() ?>" list="searchdatalist" form="update">
+                        <input type="text" name="redirection" id="redirection" value="<?= $this->e($page->redirection()) ?>" list="searchdatalist" form="update">
                     </p>
                     <p class="field">
                         <label for="refresh" title="Time before redirection (in seconds)">Refresh time</label>
@@ -210,7 +210,7 @@
                     </p>
                     <p class="field">
                         <label for="password" title="specific page password protection">Password</label>
-                        <input type="text" name="password" value="<?= $page->password() ?>" id="password" min="0" max="64" form="update">
+                        <input type="text" name="password" value="<?= $this->e($page->password()) ?>" id="password" min="0" max="64" form="update">
                     </p>
                 </fieldset>
             </details>

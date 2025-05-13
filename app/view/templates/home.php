@@ -272,7 +272,7 @@ use Wcms\Config;
                                     </td>
                                 <?php endif ?>
                                 <td class="id">
-                                    <label title="<?= $item->title() ?>" for="id_<?= $item->id() ?>">
+                                    <label title="<?= $this->e($item->title()) ?>" for="id_<?= $item->id() ?>">
                                         <?= $item->id() ?>
                                     </label>
                                     <?php if (!empty($item->redirection())) : ?>
@@ -320,10 +320,10 @@ use Wcms\Config;
                                     <td class="tag"><?= $opt->taglinks($item->tag('array')) ?></td>
                                 <?php endif ?>
                                 <?php if ($columns['title']) : ?>
-                                    <td class="title" title="<?= $item->title() ?>"><label for="id_<?= $item->id() ?>"><?= $item->title() ?></label></td>
+                                    <td class="title" title="<?= $this->e($item->title()) ?>"><label for="id_<?= $item->id() ?>"><?= $this->e($item->title()) ?></label></td>
                                 <?php endif ?>
                                 <?php if ($columns['description']) : ?>
-                                    <td class="description" title="<?= $item->description() ?>"><?= $item->description('short') ?></td>
+                                    <td class="description" title="<?= $this->e($item->description()) ?>"><?= $this->e($item->description('short')) ?></td>
                                 <?php endif ?>
                                 <?php if ($columns['linkto']) : ?>
                                     <td class="linkto">

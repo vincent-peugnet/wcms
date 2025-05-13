@@ -13,10 +13,10 @@
                             href="<?= $this->url("home", [], $bookmark->query()) ?>&display=<?= $display ?>"
                             data-current="<?= isset($queryaddress) && $bookmark->query() === $queryaddress ? '1' : '0' ?>"
                             class="bookmark"
-                            title="<?= $bookmark->description() ?>"
+                            title="<?= $this->e($bookmark->description()) ?>"
                         >
                             <span class="icon"><?= $bookmark->icon() ?></span>
-                            <span class="name"><?= empty($bookmark->name()) ? $bookmark->id() : $bookmark->name() ?></span>
+                            <span class="name"><?= empty($bookmark->name()) ? $bookmark->id() : $this->e($bookmark->name()) ?></span>
                         </a>                            
                         <?php if($bookmark->ispublished()) : ?>
                             <a href="<?= Wcms\Servicerss::atomfile($bookmark->id()) ?>" target="_blank" title="show Atom XML file">
@@ -33,10 +33,10 @@
                             href="<?= $this->url("home", [], $bookmark->query()) ?>&display=<?= $display ?>"
                             data-current="<?= isset($queryaddress) && $bookmark->query() === $queryaddress ? '1' : '0' ?>"
                             class="bookmark"
-                            title="<?= $bookmark->description() ?>"
+                            title="<?= $this->e($bookmark->description()) ?>"
                         >
                             <span class="icon"><?= $bookmark->icon() ?></span>
-                            <span class="name"><?= empty($bookmark->name()) ? $bookmark->id() : $bookmark->name() ?></span>
+                            <span class="name"><?= empty($bookmark->name()) ? $bookmark->id() : $this->e($bookmark->name()) ?></span>
                         </a>
                     </p>
                 <?php endforeach ?>

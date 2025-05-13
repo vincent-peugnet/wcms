@@ -40,12 +40,12 @@
 
             <p class="field">
                 <label for="name">Display name (if none, user ID will be used)</label>
-                <input type="text" name="name" id="name" value="<?= $user->name() ?>" placeholder="<?= $user->id() ?> " maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>">
+                <input type="text" name="name" id="name" value="<?= $this->e($user->name()) ?>" placeholder="<?= $user->id() ?> " maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>">
             </p>
             
             <p class="field">
                 <label for="url">Associated url (can be a page ID)</label>
-                <input type="text" name="url" id="url" value="<?= $user->url() ?>" list="searchdatalist" placeholder="URL or page ID" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>" >
+                <input type="text" name="url" id="url" value="<?= $this->e($user->url()) ?>" list="searchdatalist" placeholder="URL or page ID" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>" >
             </p>
             
             <p class="info">When you tick the <em>remember-me</em> checkbox during login, you can choose how much time <strong>W</strong> will remember you.</p>
