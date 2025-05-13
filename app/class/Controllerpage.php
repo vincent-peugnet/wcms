@@ -321,6 +321,18 @@ class Controllerpage extends Controller
             $backlinkopt = new Opt(['linkto' => $this->page->id()]);
             $datas['homebacklink'] = $backlinkopt->getaddress();
 
+            $datas['urls'] = [];
+            if (count($this->page->externallinks()) > 0) {
+                $urlchecker = new Serviceurlchecker();
+                foreach ($this->page->externallinks() as $url => $status) {
+                    try {
+                        $datas['urls'][$url] = $urlchecker->info($url);
+                    } catch (RuntimeException $e) {
+                        // No cached infos about this URL
+                    }
+                }
+            }
+
             $this->showtemplate('edit', $datas);
         } else {
             $this->routedirect('pageread', ['page' => $this->page->id()]);

@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use DateTime;
+use DateTimeImmutable;
 use RuntimeException;
 use Wcms\Exception\Filesystemexception;
 use Wcms\Exception\Missingextensionexception;
@@ -73,6 +75,52 @@ class Serviceurlchecker
             $this->queue[] = $url;
         }
         throw new RuntimeException('no status about this URL');
+    }
+
+    /**
+     * Read infos about a cached URL
+     *
+     * @return mixed[]                      Assoc array with same structure as `urls.json` file.
+     *                                      keys are: `response (int)`, `timestamp (DateTime)` and `expire (DateTime)`
+     *
+     * @throws RuntimeException             If the URL is not part of the cache
+     */
+    public function info(string $url): array
+    {
+        if (key_exists($url, $this->urls)) {
+            $infos['response'] = $this->urls[$url]['response'];
+            // $infos['timestamp'] = new DateTimeImmutable('@' . $this->urls[$url]['timestamp']);
+            $infos['timestamp'] = DateTimeImmutable::createFromFormat('U', $this->urls[$url]['timestamp']);
+            $infos['expire'] = DateTimeImmutable::createFromFormat('U', $this->urls[$url]['expire']);
+            return $infos;
+        } else {
+            throw new RuntimeException('URL is not stored in cache');
+        }
+    }
+
+    /**
+     * Get the list of all cached URLs
+     *
+     * @return array[]                      Assoc array with same structure as `urls.json` file.
+     *                                      key is the url. Value is an array that contain:
+     *                                      `response (int)`, `timestamp (string)` and `expire (string)` values.
+     */
+    public function urls(): array
+    {
+        return $this->urls;
+    }
+
+    /**
+     * Remove URL from cache
+     *
+     * @throws RuntimeException             If URL is not present in cache
+     */
+    public function removeurl(string $url): void
+    {
+        if (!key_exists($url, $this->urls)) {
+            throw new RuntimeException("failed to remove non-existing URL from cache: '$url'");
+        }
+        unset($this->urls[$url]);
     }
 
     /**

@@ -52,8 +52,12 @@
 
             <ul class="externallinks">
                 <?php foreach ($page->externallinks() as $url => $status) : ?>
-                    <li>
-                        <a href="<?= $url ?>" target="_blank" <?= strlen($url) > 40 ? "title=\"$url\"" : '' ?>>
+                    <?php if(Wcms\Config::urlchecker() && key_exists($url, $urls)) : ?>
+                        <li title="<?= $url ?>&#013;&#013;response: <?= $urls[$url]['response'] ?>&#013;checked <?= hrdi($urls[$url]['timestamp']->diff($now)) ?> ago">
+                    <?php else : ?>
+                        <li title="<?= $url ?>">
+                    <?php endif ?>
+                        <a href="<?= $url ?>" target="_blank">
                             <?= ltrim(substr($url, 6), "\/") ?>
                         </a>
                         <span>
