@@ -19,7 +19,7 @@ class Optlist extends Optcode
     protected bool $timemodif = false;
     protected bool $author = false;
     protected bool $hidecurrent = false;
-    protected bool $tags = false;
+    protected bool $checkbox = false;
     protected string $style = self::LIST;
 
     public const LIST = 'list';
@@ -28,6 +28,8 @@ class Optlist extends Optcode
         self::LIST => self::LIST,
         self::CARD => self::CARD,
     ];
+
+    protected array $usefulltags = [];
 
     /**
      * @param array<string, mixed> $datas
@@ -54,6 +56,9 @@ class Optlist extends Optcode
      */
     public function listhtml(array $pagelist, Page $currentpage): string
     {
+        $pagecount = count($pagelist);
+        $html = '';
+
         if ($this->hidecurrent && key_exists($currentpage->id(), $pagelist)) {
             unset($pagelist[$currentpage->id()]);
         }
@@ -154,13 +159,60 @@ class Optlist extends Optcode
                     $thumbnail->setAttribute('alt', htmlspecialchars($page->title()));
                     $parent->appendChild($thumbnail);
                 }
+                if ($this->checkbox) {
+                    $tags = $page->tag();
+                    $this->addusefulltags($tags);
+                    foreach ($tags as $tag) {
+                        $parent->setAttribute("data-tag_$tag", '1');
+                    }
+                }
             }
-
             $dom->appendChild($ul);
 
-            return $dom->saveHTML($dom->documentElement);
+            if ($this->checkbox) {
+                $domform = new DOMDocument('1.0', 'UTF-8');
+                $form = $domform->createElement('form');
+                foreach ($this->usefulltags as $tag => $count) {
+                    if ($count === $pagecount) {
+                        continue; // skip this tag as it's used by all pages
+                    }
+                    $span = $domform->createElement('span');
+                    $id = "checkbox-tag_$tag";
+                    $input = $domform->createElement('input');
+                    $input->setAttribute('id', $id);
+                    $input->setAttribute('value', $tag);
+                    $input->setAttribute('type', 'checkbox');
+                    $label = $domform->createElement('label', $tag);
+                    $label->setAttribute('for', $id);
+                    $span->appendChild($input);
+                    $span->appendChild($label);
+                    $form->appendChild($span);
+                }
+                $domform->appendChild($form);
+                $html .= $domform->saveHTML($domform->documentElement);
+                $html .= "\n";
+            }
+
+            $html .= $dom->saveHTML($dom->documentElement);
+
+            return $html;
         } catch (DOMException $e) {
             throw new LogicException('bad DOM node used', 0, $e);
+        }
+    }
+
+    /**
+     * merge list of tags within the list of usefull tags.
+     * Tag names are stored as key and value count the time it's used.
+     */
+    private function addusefulltags(array $tags): void
+    {
+        foreach ($tags as $tag) {
+            if (key_exists($tag, $this->usefulltags)) {
+                $this->usefulltags[$tag] ++;
+            } else {
+                $this->usefulltags[$tag] = 1;
+            }
         }
     }
 
@@ -213,6 +265,11 @@ class Optlist extends Optcode
     public function hidecurrent(): bool
     {
         return $this->hidecurrent;
+    }
+
+    public function checkbox(): bool
+    {
+        return $this->checkbox;
     }
 
     public function style(): string
@@ -268,7 +325,12 @@ class Optlist extends Optcode
         $this->hidecurrent = $hidecurrent;
     }
 
-    public function setstyle(string $style): void
+    public function setcheckbox($checkbox)
+    {
+        $this->checkbox = boolval($checkbox);
+    }
+
+    public function setstyle(string $style)
     {
         if (key_exists($style, self::STYLES)) {
             $this->style = $style;
