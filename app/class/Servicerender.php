@@ -49,6 +49,9 @@ abstract class Servicerender
     /** @var bool True if the page need post process */
     protected bool $postprocessaction = false;
 
+    /** @var bool True if the page need to join a JS checkbox file */
+    protected bool $checkboxjs = false;
+
     /**
      * @var Bookmark[]                      Associative array of Bookmarks using fullmatch as key
      * */
@@ -259,6 +262,10 @@ abstract class Servicerender
             }
         } catch (RuntimeException $e) {
             Logger::warningex($e);
+        }
+        if ($this->checkboxjs) {
+            $checkboxjs = Model::jspath() . 'pagecheckbox.bundle.js';
+            $head .= "<script type=\"module\" src=\"$checkboxjs\" async/></script>\n";
         }
         if (!empty($this->page->javascript())) {
             $head .= "<script src=\"$renderpath$id.js\" async/></script>\n";
@@ -706,6 +713,10 @@ abstract class Servicerender
                 }
 
                 $optlist->hydrate($options);
+
+                if ($optlist->checkbox()) {
+                    $this->checkboxjs = true;
+                }
 
                 $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optlist);
                 $content = $optlist->listhtml($pagetable, $this->page);
