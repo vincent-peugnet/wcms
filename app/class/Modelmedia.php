@@ -162,6 +162,64 @@ class Modelmedia extends Model
         return $list;
     }
 
+    /**
+     * Create a tree structure of folders that lead to the given path.
+     *
+     * @param string $path
+     *
+     * @return Folder                       a Folder object containing any number of childs
+     *
+     * @throws RuntimeException if path does not exist
+     */
+    public function foldercrumb(string $path): Folder
+    {
+        $path = rtrim($path, '/');
+        $levels = explode('/', $path);
+        $currentpath = '';
+        $deepness = 0;
+        foreach ($levels as $level) {
+            $currentpath .= $level;
+            if (isset($f)) {
+                if (!key_exists($level, $f->childs)) {
+                    throw new RuntimeException('invalid path');
+                }
+                $f = $f->childs[$level];
+            } else {
+                $p = new Folder($level, [], filecount($currentpath), $currentpath, $deepness);
+                $f = $p;
+            }
+            $f->open = true;
+            $deepness++;
+            foreach (subfolders($currentpath) as $folder) {
+                $folderpath = "$currentpath/$folder";
+                $f->childs[$folder] = new Folder($folder, [], filecount($folderpath), $folderpath, $deepness);
+            }
+            $currentpath .= '/';
+        }
+        $f->selected = true;
+        if (!isset($p)) {
+            throw new RuntimeException('invalid path');
+        }
+        return $p;
+    }
+
+    /**
+     * Convert tree of Node into list of Folders
+     *
+     * @param Folder $folder                A tree stored as Folder
+     *
+     * @return Folder[]                     List of folders
+     */
+    public function crumb(Folder $folder): array
+    {
+        $list[] = $folder;
+        foreach ($folder->childs as $folder) {
+            $list = array_merge($list, $this->crumb($folder));
+        }
+        return $list;
+    }
+
+
 
     /**
      * Generate an recursive array where each folder is a array and containing a filecount in each folder

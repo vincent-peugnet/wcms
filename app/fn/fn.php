@@ -388,3 +388,51 @@ function mktmpdir(string $prefix): string
     }
     return $path;
 }
+
+/**
+ * List subfoder of a folder
+ *
+ * @param string $path                  a path to a folder
+ *
+ * @return string[]                     list of folder names
+ *
+ * @throws RuntimeException             If given path is not a valid directory
+ */
+function subfolders(string $path): array
+{
+    $subfolders = [];
+    $path = rtrim($path, '/');
+    $files = scandir($path);
+    if ($files === false) {
+        throw new RuntimeException("'$path' is not a directory");
+    }
+    foreach ($files as $file) {
+        if (is_dir("$path/$file") && $file !== '.' && $file !== '..') {
+            $subfolders[] = $file;
+        }
+    }
+    return $subfolders;
+}
+
+/**
+ * @param string $path                  a path to a folder
+ *
+ * @return int                          Number of file inside the folder
+ *
+ * @throws RuntimeException             If given path is not a valid directory
+ */
+function filecount($path): int
+{
+    $path = rtrim($path, '/');
+    $files = scandir($path);
+    if ($files === false) {
+        throw new RuntimeException("'$path' is not a directory");
+    }
+    $count = 0;
+    foreach ($files as $file) {
+        if (is_file("$path/$file")) {
+            $count++;
+        }
+    }
+    return $count;
+}

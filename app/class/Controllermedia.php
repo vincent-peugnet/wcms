@@ -76,9 +76,10 @@ class Controllermedia extends Controller
             $vars['pathlist'] = $pathlist;
             $vars['mediaopt'] = $mediaopt;
             $vars['optimizeimage'] = (extension_loaded('imagick') || extension_loaded('gd'));
+            $vars['foldercrumb'] = $this->mediamanager->crumb($this->mediamanager->foldercrumb($this->mediaopt->dir()));
 
             $this->showtemplate('media', $vars);
-        } catch (Folderexception $e) {
+        } catch (RuntimeException $e) {
             // TODO: instead of redirecting show an error template
             $this->sendflashmessage($e->getMessage(), self::FLASH_WARNING);
             $this->mediaopt->setpath(Model::MEDIA_DIR);

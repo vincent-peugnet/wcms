@@ -15,7 +15,22 @@
             <h2>Explorer</h2>
             <div class="toggle-panel-content">
                 <table id="dirlist">
-                    <?php \Wcms\Modelmedia::treecount($dirlist, 'media', 0, 'media', $mediaopt->dir(), $mediaopt); ?>
+                    <?php foreach ($foldercrumb as $folder) : ?>
+                        <tr class="<?= $folder->selected ? 'selected' : '' ?>">
+                            <td>
+                                <a href="<?= $mediaopt->getpathaddress($folder->path) ?>">
+                                    <?= str_repeat('&nbsp;&nbsp;&nbsp;', $folder->deepness) ?>
+                                    <?php if ($folder->open) : ?>
+                                        <i class="fa fa-folder-open-o"></i>
+                                    <?php else : ?>
+                                        <i class="fa fa-folder-o"></i>
+                                    <?php endif ?>
+                                    <?= $folder->name ?>
+                                </a>
+                            </td>
+                            <td><?= $folder->filecount ?></td>
+                        </tr>
+                    <?php endforeach ?>
                 </table>
             </div>        
         </div>
