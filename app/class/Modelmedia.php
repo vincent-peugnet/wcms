@@ -171,7 +171,7 @@ class Modelmedia extends Model
      *
      * @throws RuntimeException if path does not exist
      */
-    public function foldercrumb(string $path): Folder
+    public function foldercrumb(string $path, array $dirlist): Folder
     {
         $path = rtrim($path, '/');
         $levels = explode('/', $path);
@@ -179,6 +179,9 @@ class Modelmedia extends Model
         $deepness = 0;
         foreach ($levels as $level) {
             $currentpath .= $level;
+            if (!key_exists($level, $dirlist)) {
+                throw new RuntimeException('path do not match given tree of directories');
+            }
             if (isset($f)) {
                 if (!key_exists($level, $f->childs)) {
                     throw new RuntimeException('invalid path');
@@ -190,7 +193,8 @@ class Modelmedia extends Model
             }
             $f->open = true;
             $deepness++;
-            foreach (subfolders($currentpath) as $folder) {
+            $dirlist = $dirlist[$level];
+            foreach ($dirlist as $folder => $content) {
                 $folderpath = "$currentpath/$folder";
                 $f->childs[$folder] = new Folder($folder, [], filecount($folderpath), $folderpath, $deepness);
             }
@@ -204,7 +208,7 @@ class Modelmedia extends Model
     }
 
     /**
-     * Convert tree of Node into list of Folders
+     * Convert tree of Folders into list of Folders
      *
      * @param Folder $folder                A tree stored as Folder
      *
@@ -222,24 +226,19 @@ class Modelmedia extends Model
 
 
     /**
-     * Generate an recursive array where each folder is a array and containing a filecount in each folder
+     * Generate an recursive array where each folder is a array
      *
      * @return array[]
+     *
+     * @throws RuntimeException             If dir is not a valid directory
      */
     public function listdir(string $dir): array
     {
-        $result = array();
+        $result = [];
 
-        $cdir = scandir($dir);
-        $result['dirfilecount'] = 0;
-        foreach ($cdir as $key => $value) {
-            if (!in_array($value, array(".", ".."))) {
-                if (is_dir($dir . DIRECTORY_SEPARATOR . $value)) {
-                    $result[$value] = $this->listdir($dir . DIRECTORY_SEPARATOR . $value);
-                } else {
-                    $result['dirfilecount']++;
-                }
-            }
+        $cdir = subfolders($dir);
+        foreach ($cdir as $value) {
+            $result[$value] = $this->listdir("$dir/$value");
         }
 
         return $result;
@@ -256,8 +255,8 @@ class Modelmedia extends Model
     {
         foreach ($dirlist as $dir => $content) {
             if (is_array($content)) {
-                $pathlist[] = $parent . $dir . DIRECTORY_SEPARATOR;
-                $this->listpath($content, $parent . $dir . DIRECTORY_SEPARATOR, $pathlist);
+                $pathlist[] = "$parent$dir/";
+                $this->listpath($content, "$parent$dir/", $pathlist);
             }
         }
         return $pathlist;
@@ -582,44 +581,5 @@ class Modelmedia extends Model
             Fs::deletefile($media->getlocalpath());
         }
         return new Media($convertmediapath);
-    }
-
-
-    /**
-     * Generate a clickable folder tree based on reccurive array
-     */
-    public static function treecount(
-        array $dirlist,
-        string $dirname,
-        int $deepness,
-        string $path,
-        string $currentdir,
-        Mediaopt $mediaopt
-    ) {
-        $selected = $path . '/' === $currentdir;
-        if ($selected) {
-            $folder = '├─<i class="fa fa-folder-open-o"></i> <span>' . $dirname . '</span>';
-        } else {
-            $folder = '├─<i class="fa fa-folder-o"></i> ' . $dirname;
-        }
-        $class = $selected ? ' class="selected"' : '';
-        echo "<tr$class>";
-        $href = $mediaopt->getpathaddress($path);
-        $foldername = str_repeat('&nbsp;&nbsp;', $deepness) . $folder;
-        echo "<td><a href=\"$href\">$foldername</a></td>";
-        echo '<td>' . $dirlist['dirfilecount'] . '</td>';
-        echo '</tr>';
-        foreach ($dirlist as $key => $value) {
-            if (is_array($value)) {
-                self::treecount(
-                    $value,
-                    $key,
-                    $deepness + 1,
-                    $path . DIRECTORY_SEPARATOR . $key,
-                    $currentdir,
-                    $mediaopt
-                );
-            }
-        }
     }
 }

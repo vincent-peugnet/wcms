@@ -149,7 +149,7 @@ function basictree(array $dirlist, string $dirname, int $deepness, string $path,
     echo '<tr>';
     echo '<td>' . $radio . '</td>';
     echo '<td><label for="db_' . $path . '">' . str_repeat('&nbsp;&nbsp;', $deepness) . $folder . '</label></td>';
-    echo '<td>' . $dirlist['dirfilecount'] . '</td>';
+    echo '<td></td>';
     echo '</tr>';
     foreach ($dirlist as $key => $value) {
         if (is_array($value)) {
@@ -402,7 +402,7 @@ function subfolders(string $path): array
 {
     $subfolders = [];
     $path = rtrim($path, '/');
-    $files = scandir($path);
+    $files = @scandir($path); // avoid throwing E_WARNING errors
     if ($files === false) {
         throw new RuntimeException("'$path' is not a directory");
     }

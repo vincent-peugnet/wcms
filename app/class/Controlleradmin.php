@@ -2,6 +2,7 @@
 
 namespace Wcms;
 
+use DomainException;
 use RuntimeException;
 use Wcms\Exception\Filesystemexception;
 
@@ -29,7 +30,6 @@ class Controlleradmin extends Controller
             exit;
         }
     }
-
     public function desktop()
     {
         $datas['pagelist'] = $this->pagemanager->list();
@@ -47,7 +47,11 @@ class Controlleradmin extends Controller
         }
 
         $datas['pagesdblist'] = $this->adminmanager->pagesdblist();
-        $datas['pagesdbtree'] = $this->mediamanager->listdir(Model::PAGES_DIR);
+        try {
+            $datas['pagesdbtree'] = $this->mediamanager->listdir(Model::PAGES_DIR);
+        } catch (RuntimeException $e) {
+            throw new DomainException($e->getMessage());
+        }
 
         $this->showtemplate('admin', $datas);
     }
