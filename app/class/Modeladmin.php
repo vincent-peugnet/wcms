@@ -2,19 +2,36 @@
 
 namespace Wcms;
 
+use RuntimeException;
+
 class Modeladmin extends Model
 {
     /**
-     * List all availalble pages databases
+     * List all availalble pages tables
      *
-     * @return array
+     * @return Folder[]                     Array of Folder objects.
+     *
+     * @throws RuntimeException            If pages folder is broken
      */
-    public function pagesdblist(): array
+    public function pagetables(): array
     {
-        $dblist = glob(self::PAGES_DIR . '*', GLOB_ONLYDIR);
-        $dblist = array_map('basename', $dblist);
-
-        return $dblist;
+        try {
+            $dbs = subfolders(Model::PAGES_DIR);
+            $folders = [];
+            foreach ($dbs as $db) {
+                $path = Model::PAGES_DIR . $db;
+                $filecount = filecount($path);
+                $folder = new Folder($db, [], $filecount, $path, 1);
+                if ($db === Config::pagetable()) {
+                    $folder->selected = true;
+                }
+                $folders[] = $folder;
+            }
+            return $folders;
+        } catch (RuntimeException $e) {
+            $m = $e->getMessage();
+            throw new RuntimeException("Error when trying to list page tables: $m");
+        }
     }
 
     /**

@@ -30,6 +30,7 @@ class Controlleradmin extends Controller
             exit;
         }
     }
+
     public function desktop()
     {
         $datas['pagelist'] = $this->pagemanager->list();
@@ -46,11 +47,11 @@ class Controlleradmin extends Controller
             $datas['globalcss'] = "";
         }
 
-        $datas['pagesdblist'] = $this->adminmanager->pagesdblist();
         try {
-            $datas['pagesdbtree'] = $this->mediamanager->listdir(Model::PAGES_DIR);
+            $datas['pagetables'] = $this->adminmanager->pagetables();
         } catch (RuntimeException $e) {
-            throw new DomainException($e->getMessage());
+            Logger::errorex($e);
+            $datas['pagetables'] = [];
         }
 
         $this->showtemplate('admin', $datas);

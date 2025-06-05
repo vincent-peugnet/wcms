@@ -122,42 +122,6 @@ function array_diff_assoc_recursive(array $array1, array $array2): array
 }
 
 
-
-/**
- * Print a clickable folder tree based on reccurive array
- *
- * @param mixed[] $dirlist
- */
-function basictree(array $dirlist, string $dirname, int $deepness, string $path, string $currentdir): void
-{
-
-    if ($path === $currentdir) {
-        $folder = '├─<i class="fa fa-folder-open-o"></i> <span id="currentdir">' . $dirname . '</span>';
-        $checked = 'checked';
-    } else {
-        $folder = '├─<i class="fa fa-folder-o"></i> ' . $dirname;
-        $checked = '';
-    }
-
-    if ($deepness === 1) {
-        // phpcs:ignore Generic.Files.LineLength.TooLong
-        $radio = '<input type="radio" name="pagetable" value="' . $dirname . '" id="db_' . $path . '" ' . $checked . '>';
-    } else {
-        $radio = '';
-    }
-
-    echo '<tr>';
-    echo '<td>' . $radio . '</td>';
-    echo '<td><label for="db_' . $path . '">' . str_repeat('&nbsp;&nbsp;', $deepness) . $folder . '</label></td>';
-    echo '<td></td>';
-    echo '</tr>';
-    foreach ($dirlist as $key => $value) {
-        if (is_array($value)) {
-            basictree($value, $key, $deepness + 1, $path . DIRECTORY_SEPARATOR . $key, $currentdir);
-        }
-    }
-}
-
 /**
  * Generate a list of <options> html drop down list
  *

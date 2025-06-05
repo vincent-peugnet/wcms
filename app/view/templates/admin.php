@@ -48,7 +48,25 @@
         <form action="<?= $this->url('admindatabase') ?>" method="post">
             <table id="dirlsit" >
                 <tr><th>using</th><th>databases</th><th>pages</th></tr>                            
-                <?php basictree($pagesdbtree, 'pages', 0, '', DIRECTORY_SEPARATOR . Wcms\Config::pagetable()); ?>
+                <?php foreach($pagetables as $folder) : ?>
+                    <tr>
+                        <td>
+                            <input
+                                type="radio"
+                                name="pagetable"
+                                value="<?= $folder->name ?>"
+                                id="db_<?= $folder->name ?>"
+                                <?= $folder->selected ? 'checked' : '' ?>
+                            >
+                        </td>
+                        <td>
+                            <label for="db_<?= $folder->name ?>"><?= $folder->name ?></label>
+                        </td>
+                        <td>
+                            <?= $folder->filecount ?>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
             </table>
 
             <p class="field submit-field">
@@ -64,8 +82,8 @@
             <p class="field">
                 <label for="dbsrc">Database to duplicate</label>
                 <select name="dbsrc" id="dbsrc">
-                    <?php foreach ($pagesdblist as $db) : ?>
-                        <option value="<?= $db ?>" <?= $db === Wcms\Config::pagetable() ? 'selected' : '' ?>><?= $db ?></option>
+                    <?php foreach ($pagetables as $table) : ?>
+                        <option value="<?= $table->name ?>" <?= $table->selected ? 'selected' : '' ?>><?= $table->name ?></option>
                     <?php endforeach ?>
                 </select>
             </p>
