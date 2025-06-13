@@ -68,6 +68,7 @@ class Routes
             ['POST', '/!profile', 'Controllerprofile#update', 'profileupdate'],
             ['POST', '/!profile/password', 'Controllerprofile#password', 'profilepassword'],
             ['GET', '/!info', 'Controllerinfo#desktop', 'info'],
+            ['GET', '/!url', 'Controllerurl#desktop', 'url'],
             ['GET', '/[cid:page]/', 'Controllerpage#pagepermanentredirect', 'pageread/'],
             ['HEAD', '/[cid:page]/', 'Controllerpage#pagepermanentredirect', 'pageread/head'],
             ['POST', '/[cid:page]', 'Controllerpage#read', 'pagereadpost'], /** Used for password protected pages */

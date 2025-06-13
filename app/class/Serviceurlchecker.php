@@ -78,6 +78,17 @@ class Serviceurlchecker
         throw new RuntimeException('no status about this URL');
     }
 
+    public function list()
+    {
+        $urls = [];
+        foreach ($this->urls as $url => $infos) {
+            $urls[$url]['response'] = $infos['response'];
+            $urls[$url]['timestamp'] = DateTimeImmutable::createFromFormat('U', $infos['timestamp']);
+            $urls[$url]['expire'] = DateTimeImmutable::createFromFormat('U', $infos['expire']);
+        }
+        return $urls;
+    }
+
     /**
      * Read infos about a cached URL
      *
@@ -90,7 +101,6 @@ class Serviceurlchecker
     {
         if (key_exists($url, $this->urls)) {
             $infos['response'] = $this->urls[$url]['response'];
-            // $infos['timestamp'] = new DateTimeImmutable('@' . $this->urls[$url]['timestamp']);
             $infos['timestamp'] = DateTimeImmutable::createFromFormat('U', $this->urls[$url]['timestamp']);
             $infos['expire'] = DateTimeImmutable::createFromFormat('U', $this->urls[$url]['expire']);
             return $infos;
