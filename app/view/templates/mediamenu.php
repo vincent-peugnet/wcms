@@ -99,7 +99,7 @@
                             <input type="hidden" name="path" value="<?= $mediaopt->dir() ?>">
                             <label for="moveto">Move selected medias to a new directory</label>
                             <select name="dir" id="moveto" >
-                                <option selected>---select destination---</option>
+                                <option value="" selected>---select destination---</option>
                                 <option value="<?= Wcms\Model::MEDIA_DIR ?>">/</option>
                                 <?php foreach ($pathlist as $path) : ?>
                                     <option value="<?= Wcms\Model::MEDIA_DIR . $path ?>"><?= $path ?></option>

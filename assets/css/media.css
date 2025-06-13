@@ -23,6 +23,7 @@ table#medialist .thumbnail .lightbox {
 
 table#medialist .thumbnail:hover .lightbox {
     display: block;
+    z-index: 1;
 }
 
 
