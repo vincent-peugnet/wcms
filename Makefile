@@ -175,16 +175,16 @@ lint: lint-php lint-js
 
 # Lint php code.
 .PHONY: lint-php
-lint-php: lint-templates lint-app
+lint-php: lint-phpsyntax lint-phpstyle
 
-# Run PHP syntax check on template files in parallel thanks to xargs
-.PHONY: lint-templates
-lint-templates:
-	echo app/view/templates/*.php | xargs -P$(NPROC) -n1 php --syntax-check > /dev/null
+# Run PHP syntax check on all PHP files in parallel thanks to xargs
+.PHONY: lint-phpsyntax
+lint-phpsyntax:
+	find app tests -name '*.php' | xargs -P$(NPROC) -n1 php --syntax-check > /dev/null
 
 # Lint backend php code with phpcs.
-.PHONY: lint-app
-lint-app: $(phpcs_dir) vendor
+.PHONY: lint-phpstyle
+lint-phpstyle: $(phpcs_dir) vendor
 	phpcs --report-full --report-summary --cache=$(phpcs_dir)/result.cache || { printf "run 'make fix'\n\n"; exit 1; }
 
 .PHONY: lint-js
