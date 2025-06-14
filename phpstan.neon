@@ -1,6 +1,5 @@
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
-    - vendor/pepakriz/phpstan-exception-rules/extension.neon
 
 parameters:
     level: 5
@@ -12,13 +11,17 @@ parameters:
         - app/view/*
     dynamicConstantNames:
         - INTL_ICU_VERSION
-    exceptionRules:
+    exceptions:
         # ignore some exceptions and their chlidrens
-        uncheckedExceptions:
+        uncheckedExceptionClasses:
             - Error
             - LogicException
-        # ignore all exceptions errors in tests classes
-        methodWhitelist:
-            PHPUnit\Framework\TestCase: '#.*#i'
+        check:
+            missingCheckedExceptionInThrows: true
     tmpDir: build/phpstan
     treatPhpDocTypesAsCertain: false
+
+    ignoreErrors:
+        -   # ignore all exceptions errors in tests classes
+            message: '#missing from the PHPDoc @throws tag#'
+            path: tests/*

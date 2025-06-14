@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "82ed2b5956bd8c599faeb3d1d1e8f1ed",
+    "content-hash": "a3de3375b7bd5909c16bdc77513e2d8f",
     "packages": [
         {
             "name": "altorouter/altorouter",
@@ -1094,63 +1094,6 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v4.13.2"
             },
             "time": "2021-11-30T19:35:32+00:00"
-        },
-        {
-            "name": "pepakriz/phpstan-exception-rules",
-            "version": "v0.12.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/pepakriz/phpstan-exception-rules.git",
-                "reference": "c5f3fe501e5a6c57c33fb678ad9278131bc1b9bd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/pepakriz/phpstan-exception-rules/zipball/c5f3fe501e5a6c57c33fb678ad9278131bc1b9bd",
-                "reference": "c5f3fe501e5a6c57c33fb678ad9278131bc1b9bd",
-                "shasum": ""
-            },
-            "require": {
-                "nikic/php-parser": "^4.13",
-                "php": ">=7.1",
-                "phpstan/phpstan": "^1.0"
-            },
-            "require-dev": {
-                "nette/utils": "^3.0",
-                "php-parallel-lint/php-console-highlighter": "^0.4.0",
-                "php-parallel-lint/php-parallel-lint": "^1.2.0",
-                "phpstan/phpstan-nette": "^1.0",
-                "phpstan/phpstan-phpunit": "^1.0",
-                "phpstan/phpstan-strict-rules": "^1.0",
-                "phpunit/phpunit": "^7.5.6 || ^9.4.2",
-                "slevomat/coding-standard": "^6.4.1",
-                "squizlabs/php_codesniffer": "~3.5.2"
-            },
-            "type": "phpstan-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.12-dev"
-                },
-                "phpstan": {
-                    "includes": [
-                        "extension.neon"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Pepakriz\\PHPStanExceptionRules\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Exception rules for PHPStan",
-            "support": {
-                "issues": "https://github.com/pepakriz/phpstan-exception-rules/issues",
-                "source": "https://github.com/pepakriz/phpstan-exception-rules/tree/v0.12.0"
-            },
-            "time": "2021-11-07T19:03:56+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -3809,12 +3752,12 @@
             "version": "3.6.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
+                "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
                 "reference": "5e4e71592f69da17871dba6e80dd51bce74a351a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/5e4e71592f69da17871dba6e80dd51bce74a351a",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/5e4e71592f69da17871dba6e80dd51bce74a351a",
                 "reference": "5e4e71592f69da17871dba6e80dd51bce74a351a",
                 "shasum": ""
             },
@@ -4668,13 +4611,13 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.4.0"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "platform-overrides": {
         "php": "7.4"
     },
