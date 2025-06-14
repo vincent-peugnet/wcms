@@ -18,6 +18,7 @@ parameters:
             - LogicException
         check:
             missingCheckedExceptionInThrows: true
+            tooWideThrowType: true
     tmpDir: build/phpstan
     treatPhpDocTypesAsCertain: false
 

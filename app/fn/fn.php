@@ -206,6 +206,9 @@ function flatten(array $array): array
 function randombytes(int $seed): string
 {
     try {
+        /**
+         * PHPStan don't get that RandomException is a child of Exception
+         * @phpstan-ignore missingType.checkedException */
         return random_bytes($seed);
     } catch (Exception $e) {
         throw new \LogicException("random_bytes failed", 0, $e);
