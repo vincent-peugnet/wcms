@@ -188,9 +188,9 @@ abstract class Servicerender
         $globalpath = Model::dirtopath(Model::GLOBAL_CSS_FILE);
         $fontcsspath = Model::dirtopath(Model::FONTS_CSS_FILE);
         $renderpath = Model::renderpath();
-        $description = htmlspecialchars($this->page->description());
-        $title = htmlspecialchars($this->page->title());
-        $suffix = htmlspecialchars(Config::suffix());
+        $description = $this->page->description();
+        $title = $this->page->title();
+        $suffix = Config::suffix();
         $url = Config::url();
 
         $head = '';
@@ -230,14 +230,13 @@ abstract class Servicerender
 
         foreach ($this->rsslist as $bookmark) {
             $atompath = Servicerss::atompath($bookmark->id());
-            $title = htmlspecialchars($bookmark->name());
+            $title = $bookmark->name();
             $head .= "<link href=\"$atompath\" type=\"application/atom+xml\" rel=\"alternate\" title=\"$title\" />";
         }
 
         $head .= "\n" . $this->page->customhead() . "\n";
 
         foreach ($this->page->externalcss() as $externalcss) {
-            $externalcss = htmlspecialchars($externalcss);
             $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
         }
 
@@ -544,7 +543,7 @@ abstract class Servicerender
                     $matchpage = $rend->pagemanager->get($matches[1]);
                     $fragment = $matches[2] ?? '';
                     $href = $matches[1] . $fragment;
-                    $a = htmlspecialchars($matchpage->title());
+                    $a = $matchpage->title();
                 } catch (RuntimeException $e) {
                     $href = $matches[1];
                     $a = $matches[1];
@@ -707,7 +706,7 @@ abstract class Servicerender
                 }
 
                 $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optlist);
-                $content = $optlist->listhtml($pagetable, $this->page);
+                $content = $optlist->listhtml($pagetable, $this, $this->page);
                 $text = str_replace($match['fullmatch'], $content, $text);
             } catch (RuntimeException $e) {
                 Logger::errorex($e);
@@ -858,7 +857,8 @@ abstract class Servicerender
     protected function thumbnail(string $text): string
     {
         $src = Model::thumbnailpath() . $this->pagemanager->getpagethumbnail($this->page);
-        $img = '<img class="thumbnail" src="' . $src . '">';
+        $alt = $this->page->title();
+        $img = '<img class="thumbnail" src="' . $src . '" alt="' . $alt . '">';
         $img = "\n$img\n";
         $text = str_replace('%THUMBNAIL%', $img, $text);
 
@@ -970,7 +970,7 @@ abstract class Servicerender
      */
     public function user(User $user): string
     {
-        $name   = !empty($user->name()) ? htmlspecialchars($user->name()) : $user->id();
+        $name   = !empty($user->name()) ? $user->name() : $user->id();
         $id     = $user->id();
         if (!empty($user->url())) {
             $url = $user->url();
