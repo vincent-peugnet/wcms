@@ -24,7 +24,7 @@ class Optlist extends Optcode
     public const CARD = 'card';
     public const STYLES = [
         self::LIST => self::LIST,
-        self::CARD, self::CARD,
+        self::CARD => self::CARD,
     ];
 
     public function __construct(array $datas = [])
