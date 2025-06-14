@@ -56,6 +56,9 @@ class Controllerapi extends Controller
      *
      * @param int $code         HTTP response code header
      * @param string $message   Error message to display
+     *
+     * @throws void             Indicate to PHPStan that no exception is
+     *                          thrown despite the use of `never` return type
      */
     protected function shortresponse(int $code, string $message = ""): never
     {

@@ -382,7 +382,6 @@ abstract class Servicerender
         $dom = new DOMDocument('1.0', 'UTF-8');
         /** Force UTF-8 encoding for loadHTML by defining it in the content itself with an XML tag that need to be removed later */
         $html = '<?xml encoding="utf-8" ?>' . $html;
-        /** @phpstan-ignore-next-line Error supposed to be thrown here but is'nt */
         $dom->loadHTML($html, LIBXML_NOERROR | LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED);
         $dom->removeChild($dom->firstChild);
         $links = $dom->getElementsByTagName('a');
