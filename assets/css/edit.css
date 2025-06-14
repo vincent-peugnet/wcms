@@ -97,7 +97,7 @@ div#geomap {
     margin-left: 1.75em;
 }
 
-.tab label {
+.tab>label {
 	display: inline-block;
     position: relative;
     padding: var(--half-spacing) var(--spacing) calc(var(--spacing) + var(--half-spacing));
@@ -109,7 +109,7 @@ div#geomap {
 }
 
 /* if the tab contains anything */
-.tab label.edited {
+.tab>label.edited {
     text-decoration: underline;
     text-decoration-style: dashed;
     text-decoration-color: color-mix(in srgb, var(--text2-color) 70%, var(--main-color) 30%);
@@ -117,7 +117,7 @@ div#geomap {
 }
 
 /* @todo: report an issue: $templates[$key] never returns anything */
-.tab label.template {
+.tab>label.template {
     color: var(--text2-color);
 }
 
