@@ -208,7 +208,7 @@ class Modeluser extends Modeldb
             try {
                 $user = $this->get($author);
                 $users[$user->id()] = $user;
-            } catch (Notfoundexception) {
+            } catch (Notfoundexception $e) {
                 if ($onlyexisting === false) {
                     $users[$author] = new User(['id' => $author]);
                 }
