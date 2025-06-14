@@ -13,7 +13,6 @@
     },
     "require-dev": {
         "filp/whoops": "^2.7",
-        "pepakriz/phpstan-exception-rules": "^0.12",
         "phpstan/phpstan": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
         "phpunit/phpunit": "^9.0",
