@@ -14,7 +14,7 @@
     "devDependencies": {
         "@sentry/browser": "^7.119.1",
         "@sentry/cli": "^2.8.1",
-        "esbuild": "^0.20.0",
+        "esbuild": "^0.25.0",
         "prettier": "^1.19.1",
         "semver": "^7.3.8"
     },
