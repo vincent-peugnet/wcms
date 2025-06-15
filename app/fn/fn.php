@@ -194,6 +194,11 @@ function parse_size(string $size): float
     }
 }
 
+/**
+ * @param mixed[] $array
+ *
+ * @return mixed[]
+ */
 function flatten(array $array): array
 {
     $return = array();
@@ -299,7 +304,7 @@ if (!function_exists('str_contains')) {
 /**
  * Insert a string after the first occurence of a string. If the string does not exist, nothing is inserted.
  */
-function insert_after(string $text, string $after, string $insert)
+function insert_after(string $text, string $after, string $insert): string
 {
     $afterpos = strpos($text, $after);
     if ($afterpos === false) {

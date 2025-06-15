@@ -2,7 +2,7 @@
 
 namespace Wcms;
 
-use DomainException;
+use AltoRouter;
 use RuntimeException;
 use Wcms\Exception\Filesystemexception;
 
@@ -13,7 +13,7 @@ class Controlleradmin extends Controller
     /** @var Modeladmin */
     protected $adminmanager;
 
-    public function __construct($router)
+    public function __construct(AltoRouter $router)
     {
         parent::__construct($router);
 
@@ -31,7 +31,7 @@ class Controlleradmin extends Controller
         }
     }
 
-    public function desktop()
+    public function desktop(): void
     {
         $datas['pagelist'] = $this->pagemanager->list();
         $this->mediamanager = new Modelmedia();
@@ -57,7 +57,7 @@ class Controlleradmin extends Controller
         $this->showtemplate('admin', $datas);
     }
 
-    public function update()
+    public function update(): void
     {
         try {
             Fs::accessfile(Model::GLOBAL_CSS_FILE, true);
@@ -71,7 +71,7 @@ class Controlleradmin extends Controller
         $this->routedirect('admin');
     }
 
-    public function database()
+    public function database(): void
     {
         if (!empty($_POST['action'])) {
             switch ($_POST['action']) {

@@ -18,6 +18,8 @@ class Optmap extends Optcode
 
     /**
      * Generate the HTML code for the map
+     *
+     * @param Page[] $pages
      */
     public function maphtml(array $pages, AltoRouter $router): string
     {

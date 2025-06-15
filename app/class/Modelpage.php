@@ -592,7 +592,7 @@ class Modelpage extends Modeldb
     /**
      * @todo It can go in great-parent class Model to be used as well by Modelmedia. Using Item instead of Page
      */
-    protected function pagecompare(Page $page1, Page $page2, $method = 'id', $order = 1): int
+    protected function pagecompare(Page $page1, Page $page2, string $method = 'id', int $order = 1): int
     {
         $result = ($page1->$method('sort') <=> $page2->$method('sort'));
         return $result * $order;
@@ -612,7 +612,7 @@ class Modelpage extends Modeldb
      *
      * @todo remove this method and put the content inside sort() method
      */
-    protected function pagelistsort(array &$pagelist, string $sortby, $order = 1): bool
+    protected function pagelistsort(array &$pagelist, string $sortby, int $order = 1): bool
     {
         return uasort($pagelist, $this->buildsorter($sortby, $order));
     }
@@ -752,7 +752,7 @@ class Modelpage extends Modeldb
         }
     }
 
-    protected function fgeo(Page $page, bool $geo)
+    protected function fgeo(Page $page, bool $geo): bool
     {
         if (!$geo) {
             return true;
@@ -820,7 +820,7 @@ class Modelpage extends Modeldb
     /**
      * Create a page
      *
-     * @param array $datas                  Page's datas
+     * @param mixed[] $datas                Page's datas
      * @return Page                         V1 or V2 depending of config file setting
      */
     public function newpage(array $datas = []): Page
@@ -841,7 +841,7 @@ class Modelpage extends Modeldb
      * This function will check for page version in datas and will retrun coresponding page version object
      * If no version is specified and `content` field is not used, it will return Pagev1
      *
-     * @param array|object $datas           Page's datas
+     * @param mixed[]|object $datas           Page's datas
      * @return Page                         V1 or V2
      * @throws RangeException               If page version is defined but out of range
      */

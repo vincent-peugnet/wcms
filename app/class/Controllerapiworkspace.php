@@ -4,7 +4,7 @@ namespace Wcms;
 
 class Controllerapiworkspace extends Controllerapi
 {
-    public function update()
+    public function update(): void
     {
         if (!empty($_POST)) {
             $this->workspace->hydrate($_POST);

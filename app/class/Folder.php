@@ -5,7 +5,8 @@ namespace Wcms;
 class Folder
 {
     public string $name;
-    /** @var Folder[] $childs */
+
+    /** @var Folder[] */
     public array $childs;
     public int $filecount;
     public string $path;

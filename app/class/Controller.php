@@ -32,7 +32,7 @@ class Controller
     /** @var Modelpage */
     protected $pagemanager;
 
-    protected $plates;
+    protected Engine $plates;
 
     /** @var DateTimeImmutable */
     protected $now;
@@ -65,7 +65,7 @@ class Controller
         $this->now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
     }
 
-    protected function setuser()
+    protected function setuser(): void
     {
         // check session, then cookies
         if (!is_null($this->servicesession->getuser())) {
@@ -97,9 +97,8 @@ class Controller
         }
     }
 
-    public function initplates()
+    public function initplates(): void
     {
-        $router = $this->router;
         $formatershort = new IntlDateFormatter(Config::lang(), IntlDateFormatter::SHORT, IntlDateFormatter::SHORT);
         $formatermedium = new IntlDateFormatter(Config::lang(), IntlDateFormatter::MEDIUM, IntlDateFormatter::MEDIUM);
         $this->plates = new Engine(Model::TEMPLATES_DIR);
@@ -130,13 +129,16 @@ class Controller
     /**
      *
      */
-    public function showtemplate(string $template, array $params = [])
+    public function showtemplate(string $template, array $params = []): void
     {
         $params = array_merge($this->commonsparams(), $params);
         echo $this->plates->render($template, $params);
     }
 
-    public function commonsparams()
+    /**
+     * @return mixed[]
+     */
+    public function commonsparams(): array
     {
         $commonsparams = [];
         $commonsparams['router'] = $this->router;
@@ -178,14 +180,14 @@ class Controller
         exit;
     }
 
-    public function routedirect(string $route, array $vars = [], $gets = [])
+    public function routedirect(string $route, array $vars = [], $gets = []): void
     {
 
         $get = empty($gets) ? "" : "?" . http_build_query($gets);
         $this->redirect($this->generate($route, $vars, $get));
     }
 
-    public function error(int $code)
+    public function error(int $code): never
     {
         http_response_code($code);
         exit;
@@ -194,7 +196,7 @@ class Controller
     /**
      * Used to display a count / total stat
      */
-    public function sendstatflashmessage(int $count, int $total, string $message)
+    public function sendstatflashmessage(int $count, int $total, string $message): void
     {
         if ($count === $total) {
             $this->sendflashmessage($count . ' / ' . $total . ' ' . $message, self::FLASH_SUCCESS);
@@ -208,7 +210,7 @@ class Controller
     /**
      * Destroy session and cookie token in user database
      */
-    protected function disconnect()
+    protected function disconnect(): void
     {
         try {
             $this->user->destroysession($this->servicesession->getwsessionid());

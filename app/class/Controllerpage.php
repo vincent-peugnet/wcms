@@ -2,6 +2,7 @@
 
 namespace Wcms;
 
+use AltoRouter;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -13,7 +14,7 @@ class Controllerpage extends Controller
     protected Page $page;
     protected Modelmedia $mediamanager;
 
-    public function __construct($router)
+    public function __construct(AltoRouter $router)
     {
         parent::__construct($router);
 
@@ -342,7 +343,7 @@ class Controllerpage extends Controller
     /**
      * Print page's datas. Used for debug. Kind of obscure nowdays.
      */
-    public function log($page): void
+    public function log(string $page): void
     {
         if ($this->user->issupereditor()) {
             $this->setpage($page, 'pagelog');
@@ -400,7 +401,7 @@ class Controllerpage extends Controller
         }
     }
 
-    public function download($page)
+    public function download(string $page): void
     {
         $this->setpage($page, 'pagedownload');
 

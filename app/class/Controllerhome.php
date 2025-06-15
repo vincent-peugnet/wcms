@@ -2,8 +2,8 @@
 
 namespace Wcms;
 
+use AltoRouter;
 use RuntimeException;
-use Wcms\Exception\Filesystemexception;
 use Wcms\Exception\Databaseexception;
 use Wcms\Exception\Filesystemexception\Notfoundexception;
 
@@ -20,7 +20,7 @@ class Controllerhome extends Controller
     /** @var Modelmedia */
     protected $mediamanager;
 
-    public function __construct($router)
+    public function __construct(AltoRouter $router)
     {
         parent::__construct($router);
         $this->modelhome = new Modelhome();
@@ -31,7 +31,7 @@ class Controllerhome extends Controller
 
 
 
-    public function desktop()
+    public function desktop(): void
     {
         if ($this->user->isvisitor()) {
             if (Config::homepage() === 'redirect' && !empty(Config::homeredirect())) {
@@ -188,7 +188,7 @@ class Controllerhome extends Controller
         }
     }
 
-    public function columns()
+    public function columns(): void
     {
         if (isset($_POST['columns']) && $this->user->iseditor()) {
             try {
@@ -203,7 +203,7 @@ class Controllerhome extends Controller
         $this->routedirect('home');
     }
 
-    public function colors()
+    public function colors(): void
     {
         if ($this->user->issupereditor()) {
             try {
@@ -217,7 +217,7 @@ class Controllerhome extends Controller
         $this->routedirect('home');
     }
 
-    public function search()
+    public function search(): void
     {
         if (isset($_POST['id']) && !empty($_POST['id'])) {
             if (isset($_POST['action'])) {
@@ -295,7 +295,7 @@ class Controllerhome extends Controller
         $this->routedirect('home');
     }
 
-    public function multi()
+    public function multi(): void
     {
         if (isset($_POST['action']) && $this->user->issupereditor() && !empty($_POST['pagesid'])) {
             switch ($_POST['action']) {
@@ -318,7 +318,7 @@ class Controllerhome extends Controller
         $this->routedirect('home');
     }
 
-    public function multiedit()
+    public function multiedit(): void
     {
         $pagelist = $_POST['pagesid'] ?? [];
         $datas = $_POST['datas'] ?? [];
@@ -372,7 +372,7 @@ class Controllerhome extends Controller
         $this->sendstatflashmessage($count, $total, 'pages have been rendered');
     }
 
-    public function multidelete()
+    public function multidelete(): void
     {
         if (isset($_POST['confirmdelete']) && $_POST['confirmdelete']) {
             $pagelist = $_POST['pagesid'] ?? [];

@@ -2,13 +2,14 @@
 
 namespace Wcms;
 
+use AltoRouter;
 use RuntimeException;
 use Wcms\Exception\Databaseexception;
 use Wcms\Exception\Database\Notfoundexception;
 
 class Controlleruser extends Controller
 {
-    public function __construct($router)
+    public function __construct(AltoRouter $router)
     {
         parent::__construct($router);
 
@@ -19,7 +20,7 @@ class Controlleruser extends Controller
         }
     }
 
-    public function desktop()
+    public function desktop(): void
     {
         if ($this->user->isadmin()) {
             $datas['userlist'] = $this->usermanager->getlister();
@@ -30,7 +31,7 @@ class Controlleruser extends Controller
         }
     }
 
-    public function add()
+    public function add(): void
     {
         if ($this->user->isadmin() && isset($_POST['id'])) {
             $user = new User($_POST);
@@ -66,7 +67,7 @@ class Controlleruser extends Controller
         }
     }
 
-    public function edit()
+    public function edit(): void
     {
         if ($this->user->isadmin() && isset($_POST['action'])) {
             try {

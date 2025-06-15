@@ -6,6 +6,7 @@ use DomainException;
 
 class Elementv1 extends Element
 {
+    /** @var string[] */
     protected array $sources = [];
     protected string $type;
 
@@ -13,7 +14,7 @@ class Elementv1 extends Element
     protected bool $tag;
 
 
-    public function __construct($pageid, string $fullmatch, string $type, string $options)
+    public function __construct(string $pageid, string $fullmatch, string $type, string $options)
     {
         $this->tag = Config::htmltag();
         $this->urllinker = Config::urllinker();
@@ -28,7 +29,7 @@ class Elementv1 extends Element
         $this->analyse($pageid);
     }
 
-    protected function analyse(string $pageid)
+    protected function analyse(string $pageid): void
     {
         if (!empty($this->options)) {
             $this->options = str_replace('*', $pageid, $this->options);
@@ -47,6 +48,9 @@ class Elementv1 extends Element
 
     // ______________________________________________ G E T ________________________________________________________
 
+    /**
+     * @return string[]
+     */
     public function sources(): array
     {
         return $this->sources;

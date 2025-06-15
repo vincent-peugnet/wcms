@@ -12,7 +12,7 @@ class Routes
      *
      * @throws Exception if addRoutes fails (maybe it should be catched).
      */
-    public function match()
+    public function match(): void
     {
         $router = new AltoRouter();
         if (!empty(Config::basepath())) {

@@ -12,7 +12,7 @@ class Controllerapiuser extends Controllerapi
      * - Send `401` If user is unauthorized
      * - Send `404` If user is not found
      */
-    public function get(string $user)
+    public function get(string $user): void
     {
         if (!$this->user->isadmin()) {
             $this->shortresponse(401, 'Access unauthrozed, you need to be admin');

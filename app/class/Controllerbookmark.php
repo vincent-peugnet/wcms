@@ -2,6 +2,7 @@
 
 namespace Wcms;
 
+use AltoRouter;
 use DOMException;
 use RuntimeException;
 
@@ -9,13 +10,13 @@ class Controllerbookmark extends Controller
 {
     protected ?Modelbookmark $bookmarkmanager = null;
 
-    public function __construct($router)
+    public function __construct(AltoRouter $router)
     {
         parent::__construct($router);
         $this->bookmarkmanager = new Modelbookmark();
     }
 
-    public function add()
+    public function add(): void
     {
         if ($this->user->iseditor() && isset($_POST['id'])) {
             try {
@@ -37,7 +38,7 @@ class Controllerbookmark extends Controller
         $this->routedirect($_POST['route'] ?? 'home');
     }
 
-    public function delete()
+    public function delete(): void
     {
         if ($this->user->iseditor() && isset($_POST['id'])) {
             if (!$_POST['confirmdelete']) {
@@ -60,7 +61,7 @@ class Controllerbookmark extends Controller
         $this->routedirect($_POST['route'] ?? 'home');
     }
 
-    public function update()
+    public function update(): void
     {
         if ($this->user->iseditor() && isset($_POST['id'])) {
             try {

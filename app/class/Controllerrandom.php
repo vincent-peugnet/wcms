@@ -8,7 +8,7 @@ class Controllerrandom extends Controller
 {
     protected ?Optrandom $optrandom;
 
-    public function direct()
+    public function direct(): void
     {
         $this->optrandom = new Optrandom($_GET);
 

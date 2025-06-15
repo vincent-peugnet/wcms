@@ -3,7 +3,6 @@
 namespace Wcms;
 
 use DomainException;
-use ErrorException;
 use InvalidArgumentException;
 use RuntimeException;
 use Imagick;
@@ -107,7 +106,7 @@ class Modelmedia extends Model
         };
     }
 
-    protected function mediacompare(Media $media1, Media $media2, string $method = 'filename', int $order = 1)
+    protected function mediacompare(Media $media1, Media $media2, string $method = 'filename', int $order = 1): int
     {
         $result = ($media1->$method() <=> $media2->$method());
         return $result * $order;
@@ -143,6 +142,7 @@ class Modelmedia extends Model
     }
 
     /**
+     * @param string[] $extensions
      * @return string[]                     List of paths
      */
     public function globlist(string $dir = '', array $extensions = []): array

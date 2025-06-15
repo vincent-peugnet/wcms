@@ -21,7 +21,7 @@ class Optcode extends Opt
         $this->hydrate($datas);
     }
 
-    public function bookmark()
+    public function bookmark(): string
     {
         return $this->bookmark;
     }
@@ -29,7 +29,7 @@ class Optcode extends Opt
     /**
      * @param string $bookmark              Bookmark ID
      */
-    public function setbookmark(string $bookmark)
+    public function setbookmark(string $bookmark): void
     {
         if (Model::idcheck($bookmark)) {
             $this->bookmark = $bookmark;

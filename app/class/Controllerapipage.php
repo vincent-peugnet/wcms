@@ -38,7 +38,7 @@ class Controllerapipage extends Controllerapi
     /**
      * - Send `401` if user can't edit page
      */
-    public function get(string $page)
+    public function get(string $page): void
     {
         if ($this->importpage($page)) {
             if ($this->canedit($this->page)) {
@@ -60,7 +60,7 @@ class Controllerapipage extends Controllerapi
      * - Send `409` in case of conflict
      * - Send `500`
      */
-    public function update(string $page)
+    public function update(string $page): void
     {
         if ($this->importpage($page)) {
             if ($this->canedit($this->page)) {
@@ -100,7 +100,7 @@ class Controllerapipage extends Controllerapi
     /**
      * @throws RuntimeException when saving page fails
      */
-    public function add(string $page)
+    public function add(string $page): void
     {
         if (!Model::idcheck($page)) {
             $this->shortresponse(406, 'ID is not valid');
@@ -120,7 +120,7 @@ class Controllerapipage extends Controllerapi
     /**
      * @throws RuntimeException when saving page fails
      */
-    public function put(string $page)
+    public function put(string $page): void
     {
         if (!Model::idcheck($page)) {
             $this->shortresponse(406, 'ID is not valid');
@@ -140,7 +140,7 @@ class Controllerapipage extends Controllerapi
         http_response_code($exist ? 200 : 201);
     }
 
-    public function delete(string $page)
+    public function delete(string $page): void
     {
         if ($this->importpage($page)) {
             if ($this->user->issupereditor() || $this->page->authors() === [$this->user->id()]) {
@@ -155,7 +155,7 @@ class Controllerapipage extends Controllerapi
         }
     }
 
-    public function list()
+    public function list(): void
     {
         if (!$this->user->iseditor()) {
             http_response_code(401);
@@ -165,7 +165,7 @@ class Controllerapipage extends Controllerapi
         echo json_encode($this->pagemanager->list());
     }
 
-    public function query()
+    public function query(): void
     {
         if (!$this->user->iseditor()) {
             http_response_code(401);

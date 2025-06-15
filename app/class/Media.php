@@ -20,20 +20,20 @@ class Media extends Item
 
     protected string $type;
 
-    protected $size;
+    protected int $size;
 
-    protected $date;
+    protected DateTime $date;
 
     protected ?int $width = null;
 
     protected ?int $height = null;
 
-    protected $length;
+    protected int $length;
 
     /** @var int Owner of file ID */
     protected ?int $uid = null;
 
-    protected $permissions;
+    protected string $permissions;
 
     public const IMAGE      = "image";
     public const SOUND      = "sound";
@@ -358,7 +358,7 @@ class Media extends Item
         }
     }
 
-    public function permissions()
+    public function permissions(): string
     {
         return $this->permissions;
     }
@@ -422,7 +422,7 @@ class Media extends Item
 
     public function setlength($length)
     {
-        if ($this->type == 'sound') {
+        if ($this->type == 'sound' && is_int($length)) {
             $this->length = $length;
         }
     }

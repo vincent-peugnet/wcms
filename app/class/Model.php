@@ -60,7 +60,7 @@ abstract class Model
     public const MAX_QUERY_LENGH            = 512;
 
 
-    public static function dirtopath($dir)
+    public static function dirtopath(string $dir): string
     {
         $basepath = '';
         if (!empty(Config::basepath())) {
@@ -70,52 +70,52 @@ abstract class Model
         return '/' . $basepath . $dir;
     }
 
-    public static function renderpath()
+    public static function renderpath(): string
     {
         return self::dirtopath(Model::ASSETS_RENDER_DIR);
     }
 
-    public static function csspath()
+    public static function csspath(): string
     {
         return self::dirtopath(Model::CSS_DIR);
     }
 
-    public static function assetscsspath()
+    public static function assetscsspath(): string
     {
         return self::dirtopath(Model::ASSETS_CSS_DIR);
     }
 
-    public static function themepath()
+    public static function themepath(): string
     {
         return self::dirtopath(Model::THEME_DIR);
     }
 
-    public static function jspath()
+    public static function jspath(): string
     {
         return self::dirtopath(Model::JS_DIR);
     }
 
-    public static function mediapath()
+    public static function mediapath(): string
     {
         return self::dirtopath(Model::MEDIA_DIR);
     }
 
-    public static function faviconpath()
+    public static function faviconpath(): string
     {
         return self::dirtopath(Model::FAVICON_DIR);
     }
 
-    public static function thumbnailpath()
+    public static function thumbnailpath(): string
     {
         return self::dirtopath(Model::THUMBNAIL_DIR);
     }
 
-    public static function fontpath()
+    public static function fontpath(): string
     {
         return self::dirtopath(Model::FONT_DIR);
     }
 
-    public static function iconpath()
+    public static function iconpath(): string
     {
         return self::dirtopath(Model::ICONS_DIR);
     }

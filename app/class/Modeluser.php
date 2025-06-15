@@ -25,7 +25,7 @@ class Modeluser extends Modeldb
     }
 
 
-    public function logout()
+    public function logout(): User
     {
         $user = new User(['level' => self::FREE]);
         return $user;
@@ -36,7 +36,7 @@ class Modeluser extends Modeldb
     /**
      * @return User[] associative array of User objects `id => User`
      */
-    public function getlister()
+    public function getlister(): array
     {
         $userlist = [];
         $list = $this->repo->findAll();
@@ -63,7 +63,7 @@ class Modeluser extends Modeldb
         return $userlist;
     }
 
-    public function admincount()
+    public function admincount(): int
     {
         $userdatalist = $this->repo->query()
             ->where('level', '==', 10)
@@ -186,7 +186,7 @@ class Modeluser extends Modeldb
         }
     }
 
-    public function delete(User $user)
+    public function delete(User $user): void
     {
         $this->repo->delete($user->id());
     }

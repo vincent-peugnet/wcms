@@ -6,8 +6,8 @@ use Wcms\Exception\Filesystemexception;
 
 abstract class Config
 {
-    protected static $pagetable = 'mystore';
-    protected static $domain = '';
+    protected static string $pagetable = 'mystore';
+    protected static string $domain = '';
     protected static bool $secure = true;
     protected static string $basepath = '';
     protected static string $alerttitle = '';
@@ -82,7 +82,7 @@ abstract class Config
 
 
 
-    public static function hydrate(array $datas)
+    public static function hydrate(array $datas): void
     {
         foreach ($datas as $key => $value) {
             $method = 'set' . $key;
@@ -108,7 +108,7 @@ abstract class Config
         }
     }
 
-    public static function createconfig(array $datas)
+    public static function createconfig(array $datas): void
     {
         self::hydrate($datas);
     }
@@ -116,7 +116,7 @@ abstract class Config
     /**
      * @throws Filesystemexception          If file cant be saved
      */
-    public static function savejson()
+    public static function savejson(): bool
     {
         $json = self::tojson();
 
@@ -124,7 +124,7 @@ abstract class Config
     }
 
 
-    public static function tojson()
+    public static function tojson(): string
     {
         $arr = get_class_vars(get_class());
         // get_class_vars returns default values, we need to update each of them with the current one
@@ -150,7 +150,7 @@ abstract class Config
     /**
      * Calculate Domain name
      */
-    public static function getdomain()
+    public static function getdomain(): void
     {
         self::$domain = 'http' . (self::issecure() ? 's' : '') . '://' . $_SERVER['HTTP_HOST'];
     }
@@ -178,12 +178,12 @@ abstract class Config
 
     // ________________________________________ G E T _______________________________________
 
-    public static function pagetable()
+    public static function pagetable(): string
     {
         return self::$pagetable;
     }
 
-    public static function domain()
+    public static function domain(): string
     {
         return self::$domain;
     }
@@ -200,52 +200,53 @@ abstract class Config
     {
         return self::$basepath;
     }
-    public static function alerttitle()
+
+    public static function alerttitle(): string
     {
         return self::$alerttitle;
     }
 
-    public static function alertlink()
+    public static function alertlink(): string
     {
         return self::$alertlink;
     }
 
-    public static function alertlinktext()
+    public static function alertlinktext(): string
     {
         return self::$alertlinktext;
     }
 
-    public static function existnot()
+    public static function existnot(): string
     {
         return self::$existnot;
     }
 
-    public static function private()
+    public static function private(): string
     {
         return self::$private;
     }
 
-    public static function notpublished()
+    public static function notpublished(): string
     {
         return self::$notpublished;
     }
 
-    public static function existnotpass()
+    public static function existnotpass(): bool
     {
         return self::$existnotpass;
     }
 
-    public static function privatepass()
+    public static function privatepass(): bool
     {
         return self::$privatepass;
     }
 
-    public static function notpublishedpass()
+    public static function notpublishedpass(): bool
     {
         return self::$notpublishedpass;
     }
 
-    public static function alertcss()
+    public static function alertcss(): bool
     {
         return self::$alertcss;
     }
@@ -269,12 +270,12 @@ abstract class Config
         return self::$defaultv2body;
     }
 
-    public static function defaultfavicon()
+    public static function defaultfavicon(): string
     {
         return self::$defaultfavicon;
     }
 
-    public static function defaultthumbnail()
+    public static function defaultthumbnail(): string
     {
         return self::$defaultthumbnail;
     }
@@ -284,12 +285,12 @@ abstract class Config
         return self::$suffix;
     }
 
-    public static function externallinkblank()
+    public static function externallinkblank(): bool
     {
         return self::$externallinkblank;
     }
 
-    public static function internallinkblank()
+    public static function internallinkblank(): bool
     {
         return self::$internallinkblank;
     }
@@ -314,32 +315,32 @@ abstract class Config
         return self::$titlefromalt;
     }
 
-    public static function defaultprivacy()
+    public static function defaultprivacy(): int
     {
         return self::$defaultprivacy;
     }
 
-    public static function homepage()
+    public static function homepage(): string
     {
         return self::$homepage;
     }
 
-    public static function homeredirect()
+    public static function homeredirect(): ?string
     {
         return self::$homeredirect;
     }
 
-    public static function theme()
+    public static function theme(): string
     {
         return self::$theme;
     }
 
-    public static function secretkey()
+    public static function secretkey(): ?string
     {
         return self::$secretkey;
     }
 
-    public static function sentrydsn()
+    public static function sentrydsn(): string
     {
         return self::$sentrydsn;
     }
@@ -349,7 +350,7 @@ abstract class Config
         return self::$debug;
     }
 
-    public static function markdownhardwrap()
+    public static function markdownhardwrap(): bool
     {
         return self::$markdownhardwrap;
     }

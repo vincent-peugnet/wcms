@@ -4,7 +4,7 @@ namespace Wcms;
 
 class Controllerworkspace extends Controller
 {
-    public function update()
+    public function update(): void
     {
         if ($this->user->isinvite()) {
             $this->workspace->hydrate($_POST);

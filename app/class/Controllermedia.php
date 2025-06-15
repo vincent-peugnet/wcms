@@ -30,7 +30,7 @@ class Controllermedia extends Controller
 
 
 
-    public function desktop()
+    public function desktop(): void
     {
         if (!$this->user->iseditor()) {
             http_response_code(403);
@@ -92,7 +92,7 @@ class Controllermedia extends Controller
         }
     }
 
-    public function upload()
+    public function upload(): void
     {
         if ($this->user->iseditor()) {
             $target = $_POST['dir'] ?? Model::MEDIA_DIR;
@@ -121,7 +121,7 @@ class Controllermedia extends Controller
         }
     }
 
-    public function urlupload()
+    public function urlupload(): void
     {
         if ($this->user->iseditor()) {
             $target = $_POST['dir'] ?? Model::MEDIA_DIR;
@@ -139,7 +139,7 @@ class Controllermedia extends Controller
         }
     }
 
-    public function folderadd()
+    public function folderadd(): void
     {
         if ($this->user->iseditor()) {
             $dir = $_POST['dir'] ?? Model::MEDIA_DIR;
@@ -156,7 +156,7 @@ class Controllermedia extends Controller
         $this->showtemplate('forbidden');
     }
 
-    public function folderdelete()
+    public function folderdelete(): void
     {
         if ($this->user->issupereditor()) {
             if (isset($_POST['deletefolder']) && intval($_POST['deletefolder']) && isset($_POST['dir'])) {
@@ -177,7 +177,7 @@ class Controllermedia extends Controller
         }
     }
 
-    public function edit()
+    public function edit(): void
     {
         if ($this->user->issupereditor() && isset($_POST['action'])) {
             if (!isset($_POST['id']) || empty($_POST['id'])) {
@@ -221,7 +221,7 @@ class Controllermedia extends Controller
         }
     }
 
-    public function rename()
+    public function rename(): void
     {
         if (
             $this->user->issupereditor()
@@ -251,7 +251,7 @@ class Controllermedia extends Controller
     /**
      * Generate the CSS file with the @fontface
      */
-    public function fontface()
+    public function fontface(): void
     {
         if ($this->user->iseditor()) {
             try {

@@ -2,13 +2,14 @@
 
 namespace Wcms;
 
+use AltoRouter;
 use RuntimeException;
 
 class Controllerinfo extends Controller
 {
-    public function __construct($render)
+    public function __construct(AltoRouter $router)
     {
-        parent::__construct($render);
+        parent::__construct($router);
 
         if ($this->user->isvisitor()) {
             http_response_code(401);
@@ -17,7 +18,7 @@ class Controllerinfo extends Controller
         }
     }
 
-    public function desktop()
+    public function desktop(): void
     {
         if ($this->user->isinvite()) {
             $version = getversion();

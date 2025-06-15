@@ -14,7 +14,7 @@ abstract class Element extends Item
     protected string $content = '';
     protected int $minheaderid = 1;
     protected int $maxheaderid = 6;
-    protected $headerid = '1-6';
+    protected string $headerid = '1-6';
     /** @var bool default value is set in Config class */
     protected bool $urllinker;
     protected int $headeranchor = self::NO_HEADER_ANCHOR;
@@ -31,7 +31,7 @@ abstract class Element extends Item
 
 
 
-    abstract protected function analyse(string $pageid);
+    abstract protected function analyse(string $pageid): void;
 
 
     // ______________________________________________ G E T ________________________________________________________
@@ -129,8 +129,8 @@ abstract class Element extends Item
 
     public function setheaderid(string $headerid)
     {
-        if ($headerid == 0) {
-            $this->headerid = 0;
+        if ($headerid === '0') {
+            $this->headerid = '0';
         } else {
             preg_match('~([1-6])\-([1-6])~', $headerid, $out);
             $this->minheaderid = intval($out[1]);

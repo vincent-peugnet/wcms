@@ -20,7 +20,7 @@ class Optrandom extends Optcode
         return $this->origin;
     }
 
-    public function setorigin($origin)
+    public function setorigin(string $origin): void
     {
         if (Model::idcheck($origin)) {
             $this->origin = $origin;
