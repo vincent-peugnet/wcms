@@ -39,7 +39,7 @@ class Controlleruser extends Controller
                 $this->sendflashmessage('Error: problem with ID', self::FLASH_ERROR);
                 $this->routedirect('user');
             }
-            if (!$user->validpassword()) {
+            if ($user->password() === null) {
                 $this->sendflashmessage('Error: invalid password', self::FLASH_ERROR);
                 $this->routedirect('user');
             }
@@ -91,6 +91,7 @@ class Controlleruser extends Controller
                 }
             } catch (RuntimeException $e) {
                 $this->sendflashmessage('Error : ' . $e->getMessage(), self::FLASH_ERROR);
+                $this->routedirect('user');
             }
         } else {
             http_response_code(403);
@@ -129,8 +130,7 @@ class Controlleruser extends Controller
         $userupdate->hydrate($datas);
         if (
             !empty($datas['password'])
-            && (empty($userupdate->password())
-            || !$userupdate->validpassword())
+            && !$userupdate->setpassword($datas['password'])
         ) {
             throw new RuntimeException('Unvalid password');
         }
@@ -150,7 +150,7 @@ class Controlleruser extends Controller
             $userupdate->hashpassword();
         }
         if ($user->isldap()) {
-            $userupdate->removepassword();
+            $userupdate->setpassword(null);
             $userupdate->setpasswordhashed(false);
         }
         $this->usermanager->update($userupdate);

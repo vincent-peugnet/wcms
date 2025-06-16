@@ -92,7 +92,7 @@ class Controllerconnect extends Controller
 
             if (
                 $this->user->expiredate() !== false &&
-                $this->user->expiredate('date') < $this->now &&
+                $this->user->expiredate() < $this->now &&
                 $this->user->level() < 10
             ) {
                 $this->sendflashmessage("Account expired", self::FLASH_ERROR);

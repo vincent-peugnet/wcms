@@ -4,7 +4,7 @@ namespace Wcms;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use RuntimeException;
+use DomainException;
 
 class User extends Item
 {
@@ -55,10 +55,12 @@ class User extends Item
         'version',
     ];
 
-
-    public function __construct($datas = [])
+    /**
+     * @param mixed[]|object $data
+     */
+    public function __construct(mixed $data = [])
     {
-        $this->hydrate($datas);
+        $this->hydrate($data);
     }
 
     /**
@@ -72,27 +74,27 @@ class User extends Item
 
     // _________________________ G E T _______________________
 
-    public function id()
+    public function id(): string
     {
         return $this->id;
     }
 
-    public function level()
+    public function level(): int
     {
         return $this->level;
     }
 
-    public function password()
+    public function password(): ?string
     {
         return $this->password;
     }
 
-    public function signature()
+    public function signature(): string
     {
         return $this->signature;
     }
 
-    public function passwordhashed()
+    public function passwordhashed(): bool
     {
         return $this->passwordhashed;
     }
@@ -107,36 +109,44 @@ class User extends Item
         return $this->url;
     }
 
-    public function cookie()
+    public function cookie(): int
     {
         return $this->cookie;
     }
 
-    public function columns()
+    /**
+     * @return string[]
+     */
+    public function columns(): array
     {
         return $this->columns;
     }
 
-    public function connectcount()
+    public function connectcount(): int
     {
         return $this->connectcount;
     }
 
-    public function expiredate(string $type = 'string')
+    /**
+     * @throws DomainException if provided type is invalid
+     *
+     * @return false|string|DateTimeImmutable
+     */
+    public function expiredate(string $type = 'date'): mixed
     {
-        if ($type == 'string') {
+        if ($type === 'string') {
             if (!empty($this->expiredate)) {
                 return $this->expiredate->format('Y-m-d');
             } else {
                 return false;
             }
-        } elseif ($type == 'date') {
+        } elseif ($type === 'date') {
             if (!empty($this->expiredate)) {
                 return $this->expiredate;
             } else {
                 return false;
             }
-        } elseif ($type == 'hrdi') {
+        } elseif ($type === 'hrdi') {
             if (empty($this->expiredate)) {
                 return 'never';
             } else {
@@ -144,13 +154,17 @@ class User extends Item
                 if ($this->expiredate < $now) {
                     return 'expired';
                 } else {
-                    return hrdi($this->expiredate->diff($now));
+                    return 'in ' . hrdi($this->expiredate->diff($now));
                 }
             }
         }
+        throw new DomainException("'$type' is not a valid type");
     }
 
-    public function sessions()
+    /**
+     * @return string[]
+     */
+    public function sessions(): array
     {
         return $this->sessions;
     }
@@ -158,21 +172,18 @@ class User extends Item
 
     // _______________________ S E T _______________________
 
-    public function setid($id): bool
+    public function setid(string $id): bool
     {
-        if (is_string($id)) {
-            $id = Model::idclean($id);
-            if (!empty($id)) {
-                $this->id = $id;
-                return true;
-            }
+        $id = Model::idclean($id);
+        if (!empty($id)) {
+            $this->id = $id;
+            return true;
         }
         return false;
     }
 
-    public function setlevel($level)
+    public function setlevel(int $level): bool
     {
-        $level = intval($level);
         if ($level >= 0 && $level <= 10) {
             $this->level = $level;
             return true;
@@ -184,46 +195,47 @@ class User extends Item
     /**
      * @return bool if password is compatible and set, otherwise flase
      */
-    public function setpassword($password): bool
+    public function setpassword(?string $password): bool
     {
-        if (!empty($password) && is_string($password)) {
-            if (strlen($password) >= Model::PASSWORD_MIN_LENGTH && strlen($password) <= Model::PASSWORD_MAX_LENGTH) {
-                $this->password = $password;
-                return true;
-            }
+        if (
+            is_string($password) &&
+            strlen($password) < Model::PASSWORD_MIN_LENGTH ||
+            strlen($password) > Model::PASSWORD_MAX_LENGTH
+        ) {
+            return false;
         }
-        return false;
+        $this->password = $password;
+        return true;
     }
 
-    public function setsignature(string $signature)
+    public function setsignature(string $signature): void
     {
         if (strlen($signature) <= 128) {
             $this->signature = $signature;
         }
     }
 
-    public function setpasswordhashed($passwordhashed)
+    public function setpasswordhashed(bool $passwordhashed): void
     {
-        $this->passwordhashed = boolval($passwordhashed);
+        $this->passwordhashed = $passwordhashed;
     }
 
-    public function setname($name): void
+    public function setname(string $name): void
     {
-        if (is_string($name) && strlen($name) < self::LENGTH_SHORT_TEXT) {
+        if (strlen($name) < self::LENGTH_SHORT_TEXT) {
             $this->name = strip_tags(trim($name));
         }
     }
 
-    public function seturl($url): void
+    public function seturl(string $url): void
     {
-        if (is_string($url) && strlen($url) < self::LENGTH_SHORT_TEXT) {
+        if (strlen($url) < self::LENGTH_SHORT_TEXT) {
             $this->url = strip_tags(trim($url));
         }
     }
 
-    public function setcookie($cookie)
+    public function setcookie(int $cookie): bool
     {
-        $cookie = intval($cookie);
         if ($cookie <= Model::MAX_COOKIE_CONSERVATION && $cookie >= 0) {
             $this->cookie = $cookie;
             return true;
@@ -232,24 +244,28 @@ class User extends Item
         }
     }
 
-    public function setcolumns($columns)
+    /**
+     * @param string[] $columns
+     */
+    public function setcolumns(array $columns): void
     {
-        if (is_array($columns)) {
-            $columns = array_filter(array_intersect(array_unique($columns), self::HOME_COLUMNS));
-            $this->columns = $columns;
-        }
+        $columns = array_filter(array_intersect(array_unique($columns), self::HOME_COLUMNS));
+        $this->columns = $columns;
     }
 
-    public function setconnectcount($connectcount)
+    public function setconnectcount(int $connectcount): void
     {
-        if (is_int($connectcount) && $connectcount >= 0) {
+        if ($connectcount >= 0) {
             $this->connectcount = $connectcount;
         }
     }
 
-    public function setexpiredate($expiredate)
+    /**
+     * @param DateTimeImmutable|string|false $expiredate accepted string format is `Y-m-d`
+     */
+    public function setexpiredate(mixed $expiredate): void
     {
-        if ($expiredate instanceof DateTimeImmutable) {
+        if ($expiredate instanceof DateTimeImmutable || $expiredate === false) {
             $this->expiredate = $expiredate;
         } else {
             $this->expiredate = DateTimeImmutable::createFromFormat(
@@ -260,11 +276,12 @@ class User extends Item
         }
     }
 
-    public function setsessions($sessions)
+    /**
+     * @param string[] $sessions
+     */
+    public function setsessions(array $sessions): void
     {
-        if (is_array($sessions)) {
-            $this->sessions = $sessions;
-        }
+        $this->sessions = $sessions;
     }
 
 
@@ -295,27 +312,6 @@ class User extends Item
         } else {
             return false;
         }
-    }
-
-    public function validpassword()
-    {
-        if (is_string($this->password)) {
-            if (
-                strlen($this->password) >= Model::PASSWORD_MIN_LENGTH
-                && strlen($this->password) <= Model::PASSWORD_MAX_LENGTH
-            ) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Set password to null value. This mean authentication depends on LDAP.
-     */
-    public function removepassword(): void
-    {
-        $this->password = null;
     }
 
     /**
@@ -376,7 +372,7 @@ class User extends Item
     /**
      * User is just a visitor
      */
-    public function isvisitor()
+    public function isvisitor(): bool
     {
         return $this->level === Modeluser::FREE;
     }
@@ -384,7 +380,7 @@ class User extends Item
     /**
      * User is at least invite editor
      */
-    public function isinvite()
+    public function isinvite(): bool
     {
         return $this->level >= Modeluser::INVITE;
     }
@@ -392,7 +388,7 @@ class User extends Item
     /**
      * User is at least editor
      */
-    public function iseditor()
+    public function iseditor(): bool
     {
         return $this->level >= Modeluser::EDITOR;
     }
@@ -400,7 +396,7 @@ class User extends Item
     /**
      * User is at least super editor
      */
-    public function issupereditor()
+    public function issupereditor(): bool
     {
         return $this->level >= Modeluser::SUPEREDITOR;
     }
@@ -408,13 +404,13 @@ class User extends Item
     /**
      * User is admin
      */
-    public function isadmin()
+    public function isadmin(): bool
     {
         return $this->level === Modeluser::ADMIN;
     }
 
 
-    public function connectcounter()
+    public function connectcounter(): void
     {
         $this->connectcount ++;
     }

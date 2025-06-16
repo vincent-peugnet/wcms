@@ -22,7 +22,7 @@ $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'back.css',
             </p>
             <p class="field">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" maxlength="<?= Wcms\Model::PASSWORD_MAX_LENGTH ?>" required>
+                <input type="password" name="password" id="password" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" required>
             </p>
             <p class="field">
                 <input type="hidden" name="passwordhashed" value="0">
@@ -74,7 +74,7 @@ $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'back.css',
                                 <?php if ($user->isldap()) : ?>
                                     LDAP auth
                                 <?php else : ?>
-                                    <input type="password" name="password" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>" maxlength="<?= Wcms\Model::PASSWORD_MAX_LENGTH ?>" >
+                                    <input type="password" name="password" minlength="<?= Wcms\Model::PASSWORD_MIN_LENGTH ?>">
                                 <?php endif ?>
                             </td>
 
@@ -94,9 +94,20 @@ $this->layout('layout', ['title' => 'user', 'stylesheets' => [$css . 'back.css',
                                 </select>
                             </td>
 
-                            <td class="field nowrap">                            
-                                <label><input type="checkbox" name="expiredate" id="expiredate" value="null"> reset</label>   
-                                <input type="date" name="expiredate" id="expiredate" <?= $user->expiredate() !== false ?  'value="' . $user->expiredate('string') . '"' : '' ?>  min="<?= $now->format('Y-m-d'); ?>">                    
+                            <td class="nowrap">
+                                <span>
+                                    <input
+                                        type="date"
+                                        name="expiredate"
+                                        id="expiredate"
+                                        <?= $user->expiredate() !== false ?  'value="' . $user->expiredate('string') . '"' : '' ?>
+                                    >                    
+                                </span>
+                                <span>
+                                    <input type="checkbox" name="expiredate" id="expiredatereset_<?= $user->id() ?>" value="0">
+                                    <label for="expiredatereset_<?= $user->id() ?>">reset</label>
+
+                                </span>
                             </td>
 
                             <td>
