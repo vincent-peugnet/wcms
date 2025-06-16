@@ -24,7 +24,7 @@ class Graph extends Item
     /**
      * @param mixed[] $datas
      */
-    public function __construct(array $datas)
+    public function __construct(array $datas = [])
     {
         $this->hydrate($datas);
     }
@@ -49,22 +49,22 @@ class Graph extends Item
         return $this->layout;
     }
 
-    public function setshowredirection($showredirection): void
+    public function setshowredirection(bool $showredirection): void
     {
-        $this->showredirection = boolval($showredirection);
+        $this->showredirection = $showredirection;
     }
 
-    public function setshoworphans($showorphans): void
+    public function setshoworphans(bool $showorphans): void
     {
-        $this->showorphans = boolval($showorphans);
+        $this->showorphans = $showorphans;
     }
 
-    public function setshowexternallinks($showexternallinks): void
+    public function setshowexternallinks(bool $showexternallinks): void
     {
-        $this->showexternallinks = boolval($showexternallinks);
+        $this->showexternallinks = $showexternallinks;
     }
 
-    public function setlayout($layout): void
+    public function setlayout(string $layout): void
     {
         if (key_exists($layout, $this::LAYOUTS)) {
             $this->layout = $layout;

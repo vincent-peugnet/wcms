@@ -60,13 +60,16 @@ class Servicesession
 
     public function setgraph(Graph $graph): void
     {
-        $_SESSION['graph'] = $graph->dry();
+        $_SESSION['graph'] = $graph;
     }
 
     public function getgraph(): Graph
     {
-        $datas = $_SESSION['graph'] ?? [];
-        return new Graph($datas);
+        if (isset($_SESSION['graph']) && $_SESSION['graph'] instanceof Graph) {
+            return $_SESSION['graph'];
+        } else {
+            return new Graph();
+        }
     }
 
     /**
