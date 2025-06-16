@@ -30,7 +30,7 @@ class Workspace extends Item
     /**
      * @param mixed[] $datas
      */
-    public function __construct(array $datas)
+    public function __construct(array $datas = [])
     {
         $this->hydrate($datas);
     }
@@ -80,39 +80,38 @@ class Workspace extends Item
         return $this->highlighttheme;
     }
 
-    public function setshoweditorleftpanel($show): void
+    public function setshoweditorleftpanel(bool $show): void
     {
-        $this->showeditorleftpanel = boolval($show);
+        $this->showeditorleftpanel = $show;
     }
 
-    public function setshoweditorrightpanel($show): void
+    public function setshoweditorrightpanel(bool $show): void
     {
-        $this->showeditorrightpanel = boolval($show);
+        $this->showeditorrightpanel = $show;
     }
 
-    public function setshowhomeoptionspanel($show): void
+    public function setshowhomeoptionspanel(bool $show): void
     {
-        $this->showhomeoptionspanel = boolval($show);
+        $this->showhomeoptionspanel = $show;
     }
 
-    public function setshowhomebookmarkspanel($show): void
+    public function setshowhomebookmarkspanel(bool $show): void
     {
-        $this->showhomebookmarkspanel = boolval($show);
+        $this->showhomebookmarkspanel = $show;
     }
 
-    public function setshowmediaoptionspanel($show): void
+    public function setshowmediaoptionspanel(bool $show): void
     {
-        $this->showmediaoptionspanel = boolval($show);
+        $this->showmediaoptionspanel = $show;
     }
 
-    public function setshowmediatreepanel($show): void
+    public function setshowmediatreepanel(bool $show): void
     {
-        $this->showmediatreepanel = boolval($show);
+        $this->showmediatreepanel = $show;
     }
 
-    public function setfontsize($fontsize): void
+    public function setfontsize(int $fontsize): void
     {
-        $fontsize = intval($fontsize);
         if ($fontsize >= self::FONTSIZE_MIN && $fontsize <= self::FONTSIZE_MAX) {
             $this->fontsize = $fontsize;
         }

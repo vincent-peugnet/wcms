@@ -6,10 +6,13 @@ class Controllerworkspace extends Controller
 {
     public function update(): void
     {
-        if ($this->user->isinvite()) {
-            $this->workspace->hydrate($_POST);
-            $this->servicesession->setworkspace($this->workspace);
+        if (!$this->user->isinvite()) {
+            http_response_code(403);
+            $this->showtemplate('forbidden');
+            exit;
         }
+        $this->workspace->hydrate($_POST);
+        $this->servicesession->setworkspace($this->workspace);
 
         switch ($_POST['route']) {
             case 'pageedit':

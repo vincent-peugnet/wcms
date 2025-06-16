@@ -46,13 +46,16 @@ class Servicesession
 
     public function setworkspace(Workspace $workspace): void
     {
-        $_SESSION['workspace'] = $workspace->dry();
+        $_SESSION['workspace'] = $workspace;
     }
 
     public function getworkspace(): Workspace
     {
-        $datas = $_SESSION['workspace'] ?? [];
-        return new Workspace($datas);
+        if (isset($_SESSION['workspace']) && $_SESSION['workspace'] instanceof Workspace) {
+            return $_SESSION['workspace'];
+        } else {
+            return new Workspace();
+        }
     }
 
     public function setgraph(Graph $graph): void
