@@ -14,7 +14,7 @@ class Optcode extends Opt
      * @param string $encoded               Options encoded as HTTP params. May start with a `?` or not.
      * @param Page $currentpage             Used to substitute wildcard `*` with Page id.
      */
-    public function parsehydrate(string $encoded, Page $currentpage)
+    public function parsehydrate(string $encoded, Page $currentpage): void
     {
         $encoded = str_replace('*', $currentpage->id(), $encoded);
         parse_str(ltrim($encoded, "?"), $datas);

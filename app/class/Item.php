@@ -72,7 +72,7 @@ abstract class Item
      * Export Item Object as an array in order to store it in the database
      *
      * @param string $dateformat        Date formating for DateTime properties {@see Item::datetransform()}
-     * @return array                    Item as an associative array
+     * @return array<string, mixed>     Item as an associative array
      */
     public function dry(string $dateformat = "string"): array
     {
@@ -119,7 +119,7 @@ abstract class Item
      * @param string[]                  $vars list of vars
      * @param string $dateformat        Date formating for DateTime properties {@see Item::datetransform()}
      * @throws InvalidArgumentException if a listed property does not exist or is an object or array
-     * @return array                    Associative array `$var => $value`
+     * @return array<string, mixed>     Associative array `var => value`
      */
     public function drylist(array $vars, string $dateformat = "string"): array
     {

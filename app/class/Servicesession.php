@@ -34,11 +34,17 @@ class Servicesession
         return $_SESSION['wsession'] ?? '';
     }
 
+    /**
+     * @param array<string, mixed> $opt
+     */
     public function setopt(array $opt): void
     {
         $_SESSION['opt'] = $opt;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getopt(): array
     {
         return $_SESSION['opt'] ?? [];

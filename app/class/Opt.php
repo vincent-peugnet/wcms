@@ -20,11 +20,16 @@ class Opt extends Item
     /**  */
     protected bool $tagnot = false;
 
+    /** @var string[] $authorfilter */
     protected array $authorfilter = [];
     protected string $authorcompare = 'AND';
     protected int $secure = 4;
     protected string $linkto = '';
+
+    /** @var array<string, int> $taglist */
     protected array $taglist = [];
+
+    /** @var  array<string, int> $authorlist */
     protected array $authorlist = [];
     protected bool $invert = false;
     protected int $limit = 0;
@@ -39,9 +44,10 @@ class Opt extends Item
 
     protected int $version = 0;
 
+    /** @var string[] $pageidlist */
     protected $pageidlist = [];
 
-    /** @var array $pagevarlist List fo every properties of an Page object */
+    /** @var string[] $pagevarlist List fo every properties of an Page object */
     protected array $pagevarlist = [];
 
     public const OR             = 'OR';
@@ -90,6 +96,9 @@ class Opt extends Item
         'version',
     ];
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public function __construct(array $data = [])
     {
         $this->pagevarlist = Page::getclassvars();
@@ -129,9 +138,10 @@ class Opt extends Item
     }
 
     /**
-     * @param string $var Opt property
+     * @param string $var                   Opt property
+     * @return bool                         true if propery is set to default value, otherwhise : false
+     *
      * @throws InvalidArgumentException if $var isn't a Opt property
-     * @return bool true if propery is set to default value, otherwhise : false
      */
     public function isdefault(string $var): bool
     {
@@ -145,7 +155,7 @@ class Opt extends Item
     /**
      * Reset specific default for specified object property
      *
-     *  @param string $var
+     * @param string $var
      */
     public function reset(string $var): void
     {
@@ -158,7 +168,7 @@ class Opt extends Item
     /**
      * @todo Move this out of this Class
      */
-    public function submit()
+    public function submit(): void
     {
         if (isset($_GET['submit'])) {
             if ($_GET['submit'] == 'reset') {
@@ -174,7 +184,7 @@ class Opt extends Item
     /**
      * @todo Move this out of this Class
      */
-    public function getall()
+    public function getall(): void
     {
         foreach (self::DATALIST as $method) {
             if (method_exists($this, $method)) {
@@ -189,7 +199,10 @@ class Opt extends Item
         }
     }
 
-    public function sessionall()
+    /**
+     * @todo Move this out of this Class
+     */
+    public function sessionall(): void
     {
         if (isset($_SESSION['opt'])) {
             $this->hydrate($_SESSION['opt']);
@@ -225,7 +238,7 @@ class Opt extends Item
     /**
      * Get the link list for each tags of a page
      *
-     * @param array $taglist List of tag to be abalysed
+     * @param string[] $taglist List of tag to be analysed
      * @return string html code to be printed
      */
     public function taglinks(array $taglist = []): string
@@ -241,7 +254,7 @@ class Opt extends Item
     /**
      * Get the link list for each authors of an page
      *
-     * @param array $authorlist List of author to be
+     * @param string[] $authorlist List of author to be
      * @return string html code to be printed
      */
     public function authorlinks(array $authorlist = []): string
@@ -254,13 +267,16 @@ class Opt extends Item
         return $authorstring;
     }
 
-    public function securelink(int $level, string $secure)
+    public function securelink(int $level, string $secure): string
     {
         $href = $this->getfilteraddress(['secure' => $level]);
         return "<a class=\"secure $secure\" href=\"?$href\">$secure</a>\n";
     }
 
-    public function linktolink(array $linktolist)
+    /**
+     * @param string[] $linktolist
+     */
+    public function linktolink(array $linktolist): string
     {
         $linktostring = "";
         foreach ($linktolist as $linkto) {
@@ -270,10 +286,11 @@ class Opt extends Item
         return $linktostring;
     }
 
-
-    public function getfilteraddress(array $vars = [])
+    /**
+     * @param array<string, mixed> $vars
+     */
+    public function getfilteraddress(array $vars = []): string
     {
-        // array_filter($vars, function ())
         $object = $this->drylist(self::DATALIST, self::HTML_DATETIME_LOCAL);
         $object = array_merge($object, $vars);
         $object['submit'] = 'filter';
@@ -296,11 +313,12 @@ class Opt extends Item
     }
 
     /**
-     * @return array                        associative array of object's filtering and sorting values
+     * @return array<string, mixed>         associative array of object's filtering and sorting values
      *                                      that are not default ones.
      */
     protected function paramdiff(): array
     {
+        /** @var array<string, mixed> */
         $class = get_class_vars(get_class($this));
         $object = $this->dry(self::HTML_DATETIME_LOCAL);
         $class['pageidlist'] = $object['pageidlist'];
@@ -328,6 +346,9 @@ class Opt extends Item
         return $this->secure;
     }
 
+    /**
+     * @return string[]
+     */
     public function tagfilter(): array
     {
         return $this->tagfilter;
@@ -338,11 +359,14 @@ class Opt extends Item
         return $this->tagcompare;
     }
 
-    public function tagnot()
+    public function tagnot(): bool
     {
         return $this->tagnot;
     }
 
+    /**
+     * @return string[]
+     */
     public function authorfilter(): array
     {
         return $this->authorfilter;
@@ -359,13 +383,16 @@ class Opt extends Item
     }
 
     /**
-     * @return int[]                        Array where keys are tags and value the number of pages
+     * @return array<string, int>           Array where keys are tags and value the number of pages
      */
     public function taglist(): array
     {
         return $this->taglist;
     }
 
+    /**
+     * @return array<string, int>
+     */
     public function authorlist(): array
     {
         return $this->authorlist;
@@ -374,7 +401,7 @@ class Opt extends Item
     /**
      * @return DateTimeImmutable|string|null
      */
-    public function since($option = "date")
+    public function since(string $option = 'date')
     {
         return $this->datetransform('since', $option);
     }
@@ -382,7 +409,7 @@ class Opt extends Item
     /**
      * @return DateTimeImmutable|string|null
      */
-    public function until($option = "date")
+    public function until(string $option = 'date')
     {
         return $this->datetransform('until', $option);
     }
@@ -410,11 +437,17 @@ class Opt extends Item
         return $this->limit;
     }
 
+    /**
+     * @return string[]
+     */
     public function pagevarlist(): array
     {
         return $this->pagevarlist;
     }
 
+    /**
+     * @return string[]
+     */
     public function pageidlist(): array
     {
         return $this->pageidlist;
@@ -423,79 +456,87 @@ class Opt extends Item
 
     // __________________________________________________ S E T _____________________________________________
 
-    public function setsortby($sortby)
+    public function setsortby(string $sortby): void
     {
-        if (is_string($sortby) && in_array($sortby, $this->pagevarlist) && in_array($sortby, self::SORTBYLIST)) {
+        if (in_array($sortby, $this->pagevarlist) && in_array($sortby, self::SORTBYLIST)) {
             $this->sortby = strtolower(strip_tags($sortby));
         }
     }
 
-    public function setorder($order)
+    /**
+     * @param int $order
+     */
+    public function setorder(int $order): void
     {
-        $order = intval($order);
-        if (in_array($order, [-1, 0, 1])) {
+        if (in_array($order, [-1, 1])) {
             $this->order = $order;
         }
     }
 
-    public function settagfilter($tagfilter)
+    /**
+     * @param string[] $tagfilter
+     */
+    public function settagfilter(array $tagfilter): void
     {
         if (is_array($tagfilter)) {
             $this->tagfilter = $tagfilter;
         }
     }
 
-    public function settagcompare($tagcompare)
+    public function settagcompare(string $tagcompare): void
     {
         if (in_array($tagcompare, self::COMPARE)) {
             $this->tagcompare = $tagcompare;
         }
     }
 
-    public function settagnot($tagnot)
+    public function settagnot(bool $tagnot): void
     {
-        $this->tagnot = boolval($tagnot);
+        $this->tagnot = $tagnot;
     }
 
-    public function setauthorfilter($authorfilter)
+    /**
+     * @param string[] $authorfilter
+     */
+    public function setauthorfilter(array $authorfilter): void
     {
-        if (is_array($authorfilter)) {
-            $this->authorfilter = $authorfilter;
-        }
+        $this->authorfilter = $authorfilter;
     }
 
-    public function setauthorcompare($authorcompare)
+    public function setauthorcompare(string $authorcompare): void
     {
         if (in_array($authorcompare, self::COMPARE)) {
             $this->authorcompare = $authorcompare;
         }
     }
 
-    public function setsecure($secure)
+    /**
+     * @param int<0, 5> $secure
+     */
+    public function setsecure(int $secure): void
     {
         if ($secure >= 0 && $secure <= 5) {
-            $this->secure = intval($secure);
+            $this->secure = $secure;
         }
     }
 
-    public function setlinkto($linkto): bool
+    public function setlinkto(string $linkto): bool
     {
-        if (is_string($linkto)) {
-            if (empty($this->pageidlist)) {
-                $this->linkto = Model::idclean($linkto);
-                return true;
-            } elseif (in_array($linkto, $this->pageidlist)) {
-                $this->linkto = Model::idclean($linkto);
-                return true;
-            } else {
-                return false;
-            }
+        if (empty($this->pageidlist)) {
+            $this->linkto = Model::idclean($linkto);
+            return true;
+        } elseif (in_array($linkto, $this->pageidlist)) {
+            $this->linkto = Model::idclean($linkto);
+            return true;
         } else {
             return false;
         }
     }
 
-    public function settaglist(array $pagelist)
+    /**
+     * @param Page[] $pagelist
+     */
+    public function settaglist(array $pagelist): void
     {
         $taglist = [];
         foreach ($pagelist as $page) {
@@ -507,11 +548,14 @@ class Opt extends Item
                 }
             }
         }
-        $taglistsorted = arsort($taglist);
+        arsort($taglist);
         $this->taglist = $taglist;
     }
 
-    public function setauthorlist(array $pagelist)
+    /**
+     * @param Page[] $pagelist
+     */
+    public function setauthorlist(array $pagelist): void
     {
         $authorlist = [];
         foreach ($pagelist as $page) {
@@ -523,7 +567,7 @@ class Opt extends Item
                 }
             }
         }
-        $authorlistsorted = arsort($authorlist);
+        arsort($authorlist);
         $this->authorlist = $authorlist;
     }
 
@@ -571,27 +615,25 @@ class Opt extends Item
         }
     }
 
-    public function setgeo($geo)
+    public function setgeo(bool $geo): void
     {
-        $this->geo = boolval($geo);
+        $this->geo = $geo;
     }
 
-    public function setversion($version): void
+    public function setversion(int $version): void
     {
-        $version = intval($version);
         if ($version === 0 || key_exists($version, Page::VERSIONS)) {
             $this->version = $version;
         }
     }
 
-    public function setinvert($invert)
+    public function setinvert(bool $invert): void
     {
-        $this->invert = boolval($invert);
+        $this->invert = $invert;
     }
 
-    public function setlimit($limit)
+    public function setlimit(int $limit): void
     {
-        $limit = intval($limit);
         if ($limit < 0) {
             $limit = 0;
         } elseif ($limit >= 10000) {
@@ -603,7 +645,7 @@ class Opt extends Item
     /**
      * Import list of pages IDs
      *
-     * @param array $pageidlist could be array of IDs or array of Page Object
+     * @param array<string|Page> $pageidlist could be array of IDs or Page Object
      *
      * @return bool false if array content isn't string or Pages, otherwise : true
      */

@@ -17,11 +17,11 @@ class Application
         $this->usermanager = new Modeluser();
     }
 
-    public function wakeup()
+    public function wakeup(): void
     {
         if (isset($_POST['configinit'])) {
             if (Config::readconfig()) {
-                Config::createconfig($_POST['configinit']);
+                Config::hydrate($_POST['configinit']);
             } else {
                 Config::hydrate($_POST['configinit']);
             }
@@ -91,7 +91,7 @@ class Application
         }
     }
 
-    protected function configform()
+    protected function configform(): void
     {
         ?>
         <h1>Configuration</h1>
@@ -172,7 +172,7 @@ class Application
         <?php
     }
 
-    protected function adminform()
+    protected function adminform(): void
     {
         ?>
 
@@ -207,7 +207,7 @@ class Application
     /**
      * Create default bookmarks set during install
      */
-    protected function defaultbookmarks()
+    protected function defaultbookmarks(): void
     {
         $bookmarkmanager = new Modelbookmark();
         if (empty($bookmarkmanager->list())) {

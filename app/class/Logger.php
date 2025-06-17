@@ -11,6 +11,7 @@ use Throwable;
  */
 class Logger
 {
+    /** @var resource|false */
     private static $file = false;
     private static int $verbosity = 4;
 

@@ -62,7 +62,7 @@ class Servicerenderv2 extends Servicerender
         return $body;
     }
 
-    protected function elementparser(Elementv2 $element)
+    protected function elementparser(Elementv2 $element): string
     {
         $content = $element->content();
         $content = $this->winclusions($content);

@@ -12,10 +12,10 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class FilesTest extends TestCase
 {
-    protected $ds = DIRECTORY_SEPARATOR;
-    protected $testdir = 'build/test';
-    protected $notwritabledir = 'build/test/notwritabledir';
-    protected $notwritablefile = 'build/test/notwritablefile';
+    protected string $ds = DIRECTORY_SEPARATOR;
+    protected string $testdir = 'build/test';
+    protected string $notwritabledir = 'build/test/notwritabledir';
+    protected string $notwritablefile = 'build/test/notwritablefile';
 
     protected function setUp(): void
     {

@@ -70,7 +70,7 @@ class Servicerenderv2Test extends TestCase
     }
 
     /**
-     * @return array[]
+     * @return array<array<string>>
      */
     public function renderProvider(): array
     {

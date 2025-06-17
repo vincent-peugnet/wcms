@@ -19,7 +19,7 @@ class SummaryTest extends TestCase
     }
 
     /**
-     * @return array[]
+     * @return array<array<mixed>>
      */
     public function sumparserProvider(): array
     {

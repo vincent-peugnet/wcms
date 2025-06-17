@@ -31,6 +31,8 @@ class Bookmark extends Item
     protected string $ref = "";
 
     /**
+     * @param object|array $datas
+     *
      * @throws RuntimeException
      */
     public function __construct($datas = [])
@@ -44,7 +46,7 @@ class Bookmark extends Item
         string $icon = '⭐',
         string $name = '',
         string $description = ''
-    ) {
+    ): void {
         $this->setid($id);
         $this->setquery($query);
         $this->seticon($icon);
@@ -66,7 +68,7 @@ class Bookmark extends Item
     // _____________________________ G E T __________________________________
 
 
-    public function id()
+    public function id(): string
     {
         return $this->id;
     }
@@ -81,12 +83,12 @@ class Bookmark extends Item
         return $this->description;
     }
 
-    public function query()
+    public function query(): string
     {
         return $this->query;
     }
 
-    public function icon()
+    public function icon(): string
     {
         return $this->icon;
     }
@@ -140,30 +142,24 @@ class Bookmark extends Item
         }
     }
 
-    public function setquery($query)
+    public function setquery(string $query): void
     {
-        if (is_string($query)) {
-            $this->query = strip_tags(mb_substr($query, 0, Model::MAX_QUERY_LENGH));
+        $this->query = strip_tags(mb_substr($query, 0, Model::MAX_QUERY_LENGH));
+    }
+
+    public function seticon(string $icon): void
+    {
+        $this->icon = mb_substr(strip_tags($icon), 0, 16);
+    }
+
+    public function setuser(string $user): void
+    {
+        if (Model::idcheck($user)) {
+            $this->user = $user;
         }
     }
 
-    public function seticon($icon)
-    {
-        if (is_string($icon)) {
-            $this->icon = mb_substr(strip_tags($icon), 0, 16);
-        }
-    }
-
-    public function setuser($user)
-    {
-        if (is_string($user)) {
-            $this->user = Model::idclean($user);
-            return true;
-        }
-        return false;
-    }
-
-    public function setpublished(bool $published)
+    public function setpublished(bool $published): void
     {
         $this->published = $published;
     }

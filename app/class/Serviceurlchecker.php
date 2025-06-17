@@ -13,7 +13,7 @@ use Wcms\Exception\Missingextensionexception;
  */
 class Serviceurlchecker
 {
-    /** @var array[] $urls cached URLs */
+    /** @var array<string, array{'response': int, 'timestamp': int, 'expire': int}> $urls cached URLs */
     protected array $urls = [];
 
     /** @var string[] $queue ULRs that need to be checked */
@@ -81,8 +81,8 @@ class Serviceurlchecker
     /**
      * Read infos about a cached URL
      *
-     * @return mixed[]                      Assoc array with same structure as `urls.json` file.
-     *                                      keys are: `response (int)`, `timestamp (DateTime)` and `expire (DateTime)`
+     * @return array{'response': int, 'timestamp': DateTimeImmutable, 'expire': DateTimeImmutable}
+     * Assoc array with same structure as `urls.json` file.
      *
      * @throws RuntimeException             If the URL is not part of the cache
      */
@@ -91,8 +91,14 @@ class Serviceurlchecker
         if (key_exists($url, $this->urls)) {
             $infos['response'] = $this->urls[$url]['response'];
             // $infos['timestamp'] = new DateTimeImmutable('@' . $this->urls[$url]['timestamp']);
-            $infos['timestamp'] = DateTimeImmutable::createFromFormat('U', $this->urls[$url]['timestamp']);
-            $infos['expire'] = DateTimeImmutable::createFromFormat('U', $this->urls[$url]['expire']);
+            $infos['timestamp'] = DateTimeImmutable::createFromFormat(
+                'U',
+                strval($this->urls[$url]['expire']),
+            );
+            $infos['expire'] = DateTimeImmutable::createFromFormat(
+                'U',
+                strval($this->urls[$url]['expire']),
+            );
             return $infos;
         } else {
             throw new RuntimeException('URL is not stored in cache');

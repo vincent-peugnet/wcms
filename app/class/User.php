@@ -56,9 +56,9 @@ class User extends Item
     ];
 
     /**
-     * @param mixed[]|object $data
+     * @param array|object $data
      */
-    public function __construct(mixed $data = [])
+    public function __construct($data = [])
     {
         $this->hydrate($data);
     }
@@ -132,7 +132,7 @@ class User extends Item
      *
      * @return false|string|DateTimeImmutable
      */
-    public function expiredate(string $type = 'date'): mixed
+    public function expiredate(string $type = 'date')
     {
         if ($type === 'string') {
             if (!empty($this->expiredate)) {
@@ -263,7 +263,7 @@ class User extends Item
     /**
      * @param DateTimeImmutable|string|false $expiredate accepted string format is `Y-m-d`
      */
-    public function setexpiredate(mixed $expiredate): void
+    public function setexpiredate($expiredate): void
     {
         if ($expiredate instanceof DateTimeImmutable || $expiredate === false) {
             $this->expiredate = $expiredate;

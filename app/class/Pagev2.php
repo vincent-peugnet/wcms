@@ -6,11 +6,11 @@ class Pagev2 extends Page
 {
     protected int $version = self::V2;
 
-    protected $content;
+    protected string $content;
 
     public const TABS = ['content', 'css', 'body', 'javascript'];
 
-    public function reset()
+    public function reset(): void
     {
         parent::reset();
 
@@ -19,20 +19,18 @@ class Pagev2 extends Page
         $this->setinterface('content');
     }
 
-    public function content($type = ''): string
+    public function content(string $type = ''): string
     {
         return $this->content;
     }
 
-    public function primary($type = ''): string
+    public function primary(string $type = ''): string
     {
         return $this->content;
     }
 
-    public function setcontent($content)
+    public function setcontent(string $content): void
     {
-        if (is_string($content)) {
-            $this->content = $content;
-        }
+        $this->content = $content;
     }
 }

@@ -27,6 +27,9 @@ class Optlist extends Optcode
         self::CARD => self::CARD,
     ];
 
+    /**
+     * @param array<string, mixed> $datas
+     */
     public function __construct(array $datas = [])
     {
         parent::__construct($datas);
@@ -186,7 +189,7 @@ class Optlist extends Optcode
         return $this->hidecurrent;
     }
 
-    public function style()
+    public function style(): string
     {
         return $this->style;
     }

@@ -148,7 +148,7 @@ abstract class Servicerender
     }
 
 
-    protected function readbody()
+    protected function readbody(): string
     {
         if (!empty($this->page->templatebody())) {
             $templateid = $this->page->templatebody();
@@ -299,7 +299,7 @@ abstract class Servicerender
     /**
      * Perfom W syntax inclusions
      */
-    protected function winclusions($text)
+    protected function winclusions(string $text): string
     {
         $text = $this->date($text);
         $text = $this->thumbnail($text);
@@ -317,7 +317,7 @@ abstract class Servicerender
         return $text;
     }
 
-    protected function bodyparser(string $html)
+    protected function bodyparser(string $html): string
     {
         $html = $this->summary($html);
 
@@ -334,7 +334,7 @@ abstract class Servicerender
     /**
      * Replace `%TITLE%` code with page's title
      */
-    protected function title($text)
+    protected function title(string $text): string
     {
         return str_replace('%TITLE%', $this->page->title(), $text);
     }
@@ -343,7 +343,7 @@ abstract class Servicerender
     /**
      * Replace `%DESCRIPTION%` code with page's description
      */
-    protected function description($text)
+    protected function description(string $text): string
     {
         return str_replace('%DESCRIPTION%', $this->page->description(), $text);
     }
@@ -353,7 +353,7 @@ abstract class Servicerender
      *
      * This will also include `target=_blank` and `class=external` attributes.
      */
-    protected function autourl($text): string
+    protected function autourl(string $text): string
     {
         $options = ["class" => "external"];
         if ($this->externallinkblank) {
@@ -608,7 +608,7 @@ abstract class Servicerender
         return $text;
     }
 
-    protected function markdown($text)
+    protected function markdown(string $text): string
     {
         $fortin = new MarkdownExtra();
         // id in headers
@@ -626,7 +626,7 @@ abstract class Servicerender
      * @param string $text                  Input text to scan
      * @param string $include               Word to match `%$include%`
      *
-     * @return array Ordered array containing an array of `fullmatch`, `type` and `options`
+     * @return array<int, array{'fullmatch': string, 'type': string, 'options': string}>
      */
     protected function match(string $text, string $include): array
     {
@@ -1021,7 +1021,7 @@ abstract class Servicerender
      * Generate the URL for a named route. Replace regexes with supplied parameters.
      *
      * @param string $route The name of the route.
-     * @param array $params Associative array of parameters to replace placeholders with.
+     * @param array<string, mixed> $params Associative array of parameters to replace placeholders with.
      * @param string $get Optionnal query GET parameters formated
      * @return string The URL of the route with named parameters in place.
      * @throws InvalidArgumentException If the route does not exist.
@@ -1045,7 +1045,10 @@ abstract class Servicerender
         return $this->sum;
     }
 
-    public function linkto()
+    /**
+     * @return string[]
+     */
+    public function linkto(): array
     {
         sort($this->linkto);
         $linkto = array_unique($this->linkto);

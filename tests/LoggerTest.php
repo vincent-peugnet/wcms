@@ -10,7 +10,7 @@ use Wcms\Logger;
 
 class LoggerTest extends FilesTest
 {
-    protected $logfile;
+    protected string $logfile;
 
     protected function setUp(): void
     {

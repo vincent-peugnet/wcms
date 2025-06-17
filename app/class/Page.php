@@ -249,7 +249,7 @@ abstract class Page extends Item
         return $this->datetransform('daterender', $option);
     }
 
-    public function primary($type = ''): string
+    public function primary(string $type = ''): string
     {
         return '';
     }

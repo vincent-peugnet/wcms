@@ -29,11 +29,12 @@ class Servicetags
      * Update the tag JSON cache file with the last tag list.
      * This also re-generate the CSS file.
      *
-     * @param array $tags                   Array of tags as keys
+     * @param array<string, int> $tags      Array of tags as keys
      *
-     * @return array[]                      Array of tags as keys and two sub-arrays: background-color and color
+     * @return array<string, array{'background-color': string, 'color': string}>
+     * Array of tags as keys and two sub-arrays: background-color and color
      *
-     * @throws Filesystemexception           If an error occured with file reading or saving
+     * @throws Filesystemexception          If an error occured with file reading or saving
      */
     public function synctags(array $tags): array
     {
@@ -67,9 +68,11 @@ class Servicetags
      * update tag colors
      * This also re-generate the CSS file.
      *
+     * @param array<string, string> $post
+     *
      * @throws Filesystemexception          When error occured with writing files
      */
-    public function updatecolors($post): void
+    public function updatecolors(array $post): void
     {
         $tagdata = [];
         foreach ($post as $tag => $color) {
@@ -88,7 +91,8 @@ class Servicetags
     /**
      * Generate CSS file according to tag datas
      *
-     * @param array $tagdata                Array of tags as keys and two sub-arrays: background-color and color
+     * @param array<string, array{'background-color': string, 'color': string}> $tagdata
+     * Array of tags as keys and two sub-arrays: background-color and color
      *
      * @throws Filesystemexception          If an error while saving CSS file
      */

@@ -159,9 +159,9 @@ class Clock extends Item
         }
     }
 
-    public function setlang($lang)
+    public function setlang(string $lang): void
     {
-        if (is_string($lang) && strlen($lang) < Config::LANG_MAX && strlen($lang) >= Config::LANG_MIN) {
+        if (strlen($lang) < Config::LANG_MAX && strlen($lang) >= Config::LANG_MIN) {
             $this->lang = $lang;
         }
     }

@@ -81,8 +81,10 @@ abstract class Config
     // _______________________________________ F U N _______________________________________
 
 
-
-    public static function hydrate(array $datas): void
+    /**
+     * @param object|array $datas
+     */
+    public static function hydrate($datas): void
     {
         foreach ($datas as $key => $value) {
             $method = 'set' . $key;
@@ -108,11 +110,6 @@ abstract class Config
         }
     }
 
-    public static function createconfig(array $datas): void
-    {
-        self::hydrate($datas);
-    }
-
     /**
      * @throws Filesystemexception          If file cant be saved
      */
@@ -124,7 +121,7 @@ abstract class Config
     }
 
 
-    public static function tojson(): string
+    protected static function tojson(): string
     {
         $arr = get_class_vars(get_class());
         // get_class_vars returns default values, we need to update each of them with the current one
