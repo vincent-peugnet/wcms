@@ -5,6 +5,7 @@ namespace Wcms;
 use DateTime;
 use DomainException;
 use RuntimeException;
+use DateTimeInterface;
 use Wcms\Exception\Filesystemexception\Fileexception;
 
 class Media extends Item
@@ -88,6 +89,8 @@ class Media extends Item
 
     /**
      * Retrun a list of Media types
+     *
+     * @return string[]
      */
     public static function mediatypes(): array
     {
@@ -112,7 +115,7 @@ class Media extends Item
     /**
      * This will analyse the media file. Set the extension, date, perms
      */
-    public function analyse()
+    public function analyse(): void
     {
         $this->extension = strtolower(pathinfo($this->filename, PATHINFO_EXTENSION));
 
@@ -173,7 +176,7 @@ class Media extends Item
      * @param bool $fullpath option to use fullpath of file instead of W rendered one. default is false
      * @return string html code
      */
-    public function getcode($fullpath = false): string
+    public function getcode(bool $fullpath = false): string
     {
         if ($fullpath) {
             $src = $this->getabsolutepath();
@@ -293,27 +296,30 @@ class Media extends Item
 
     // _________________________________________________ G E T ____________________________________________________
 
-    public function filename()
+    public function filename(): string
     {
         return $this->filename;
     }
 
-    public function dir()
+    public function dir(): string
     {
         return $this->dir;
     }
 
-    public function extension()
+    public function extension(): string
     {
         return $this->extension;
     }
 
-    public function type()
+    public function type(): string
     {
         return $this->type;
     }
 
-    public function size($display = 'binary')
+    /**
+     * @return int|string
+     */
+    public function size(string $display = 'binary')
     {
         if ($display == 'hr') {
             return readablesize($this->size) . 'o';
@@ -322,17 +328,20 @@ class Media extends Item
         }
     }
 
-    public function date($option = 'date')
+    /**
+     * @return DateTimeInterface|string
+     */
+    public function date(string $option = 'date')
     {
         return $this->datetransform('date', $option);
     }
 
-    public function width()
+    public function width(): ?int
     {
         return $this->width;
     }
 
-    public function height()
+    public function height(): ?int
     {
         return $this->height;
     }
@@ -341,7 +350,7 @@ class Media extends Item
      * @param string $option could be `id` or `name`
      * @return string|int
      */
-    public function uid($option = 'id')
+    public function uid(string $option = 'id')
     {
         if ($option === 'name') {
             $userinfo = posix_getpwuid($this->uid);
@@ -358,25 +367,21 @@ class Media extends Item
 
     // ___________________________________________________ S E T __________________________________________________
 
-    public function setfilename($filename)
+    public function setfilename(string $filename): void
     {
-        if (is_string($filename)) {
-            $this->filename = $filename;
-        }
+        $this->filename = $filename;
     }
 
-    public function setdir($dir)
+    public function setdir(string $dir): void
     {
-        if (is_string($dir)) {
-            $this->dir = strip_tags(strtolower($dir));
-        }
+        $this->dir = strip_tags(strtolower($dir));
     }
 
     /**
      * Automaticaly set the type of the Media using extension
      * If extension is unknown, type will be set to `other`
      */
-    public function settype()
+    public function settype(): void
     {
         if (!empty($this->extension) && isset(self::MEDIA_EXT[$this->extension])) {
             $this->type = self::MEDIA_EXT[$this->extension];
@@ -385,42 +390,34 @@ class Media extends Item
         }
     }
 
-    public function setsize($size)
+    public function setsize(int $size): void
     {
-        if (is_int($size)) {
-            $this->size = $size;
-        }
+        $this->size = $size;
     }
 
-    public function setdate()
+    public function setdate(): void
     {
         $timestamp = filemtime($this->getlocalpath());
         $this->date = new DateTime();
         $this->date->setTimestamp($timestamp);
     }
 
-    public function setwidth($width)
+    public function setwidth(int $width): void
     {
-        if (is_int($width)) {
-            $this->width = $width;
-        }
+        $this->width = $width;
     }
 
-    public function setheight($height)
+    public function setheight(int $height): void
     {
-        if (is_int($height)) {
-            $this->height = $height;
-        }
+        $this->height = $height;
     }
 
-    public function setuid($uid)
+    public function setuid(int $uid): void
     {
-        if (is_int($uid)) {
-            $this->uid = $uid;
-        }
+        $this->uid = $uid;
     }
 
-    public function setpermissions($permissions)
+    public function setpermissions(string $permissions): void
     {
         $this->permissions = $permissions;
     }

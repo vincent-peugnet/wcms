@@ -62,7 +62,6 @@ class Optlist extends Optcode
         $timeformatter = new IntlDateFormatter($lang, IntlDateFormatter::NONE, IntlDateFormatter::SHORT);
 
         try {
-            $dom = new DOMDocument();
             $dom = new DOMDocument('1.0', 'UTF-8');
 
             $ul = $dom->createElement('ul');
@@ -197,44 +196,44 @@ class Optlist extends Optcode
 
     // _______________________________________ S E T _____________________________________
 
-    public function settitle($title)
+    public function settitle(bool $title): void
     {
-        $this->title = boolval($title);
+        $this->title = $title;
     }
 
-    public function setdescription($description)
+    public function setdescription(bool $description): void
     {
-        $this->description = boolval($description);
+        $this->description = $description;
     }
 
-    public function setthumbnail($thumbnail)
+    public function setthumbnail(bool $thumbnail): void
     {
-        $this->thumbnail = boolval($thumbnail);
+        $this->thumbnail = $thumbnail;
     }
 
-    public function setdate($date)
+    public function setdate(bool $date): void
     {
-        $this->date = boolval($date);
+        $this->date = $date;
     }
 
-    public function settime($time)
+    public function settime(bool $time): void
     {
-        $this->time = boolval($time);
+        $this->time = $time;
     }
 
-    public function setauthor($author)
+    public function setauthor(bool $author): void
     {
-        $this->author = boolval($author);
+        $this->author = $author;
     }
 
-    public function sethidecurrent($hidecurrent)
+    public function sethidecurrent(bool $hidecurrent): void
     {
-        $this->hidecurrent = boolval($hidecurrent);
+        $this->hidecurrent = $hidecurrent;
     }
 
-    public function setstyle($style)
+    public function setstyle(string $style): void
     {
-        if (is_string($style) && key_exists($style, self::STYLES)) {
+        if (key_exists($style, self::STYLES)) {
             $this->style = $style;
         }
     }

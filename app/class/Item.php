@@ -150,33 +150,37 @@ abstract class Item
      *
      * @param string $property DateTimeImmutable var to access
      * @param string $option Can be date|string|hrdi|pdate|ptime|dmy|self::HTML_DATETIME_LOCAL
-     * @throws InvalidArgumentException if property does not exist
+     * @throws InvalidArgumentException if property does not exist, is'nt date or option is not valid
      *
-     * @return mixed string or false if propriety does not exist
+     * @return DateTimeInterface|string
      */
     protected function datetransform(string $property, string $option = 'date')
     {
-        if (property_exists($this, $property)) {
-            if ($option == 'string') {
-                return $this->$property->format(DateTime::ISO8601);
-            } elseif ($option == 'date' || $option == 'sort') {
-                return $this->$property;
-            } elseif ($option == 'hrdi') {
-                $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
-                return hrdi($this->$property->diff($now));
-            } elseif ($option == 'pdate') {
-                return $this->$property->format('Y-m-d');
-            } elseif ($option == 'ptime') {
-                return $this->$property->format('H:i');
-            } elseif ($option == 'dmy') {
-                return $this->$property->format('d/m/Y');
-            } elseif ($option == self::HTML_DATETIME_LOCAL) {
-                return $this->$property->format(self::HTML_DATETIME_LOCAL);
-            } else {
-                throw new InvalidArgumentException("$option format for datetransform does not exist");
-            }
-        } else {
+        if (!property_exists($this, $property)) {
             throw new InvalidArgumentException("Property $property does not exist in " . get_class($this));
+        }
+        $property = $this->$property;
+        if (!$property instanceof DateTimeInterface) {
+            throw new InvalidArgumentException("Property $property do not a date property in " . get_class($this));
+        }
+
+        if ($option == 'string') {
+            return $property->format(DateTime::ISO8601);
+        } elseif ($option == 'date' || $option == 'sort') {
+            return $property;
+        } elseif ($option == 'hrdi') {
+            $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
+            return hrdi($property->diff($now));
+        } elseif ($option == 'pdate') {
+            return $property->format('Y-m-d');
+        } elseif ($option == 'ptime') {
+            return $property->format('H:i');
+        } elseif ($option == 'dmy') {
+            return $property->format('d/m/Y');
+        } elseif ($option == self::HTML_DATETIME_LOCAL) {
+            return $property->format(self::HTML_DATETIME_LOCAL);
+        } else {
+            throw new InvalidArgumentException("$option format for datetransform does not exist");
         }
     }
 }

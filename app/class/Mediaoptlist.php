@@ -12,10 +12,13 @@ class Mediaoptlist extends Mediaopt
     /** @var string full options code line */
     protected $options = '';
 
-    /** @var int display the file name of the file */
-    protected int $filename = 0;
+    /** @var bool display the file name of the file */
+    protected bool $filename = false;
 
-    public function __construct(array $datas = [])
+    /**
+     * @param object|array $datas
+     */
+    public function __construct($datas = [])
     {
         parent::__construct($datas);
     }
@@ -67,7 +70,7 @@ class Mediaoptlist extends Mediaopt
         return $div;
     }
 
-    public function getquery()
+    public function getquery(): string
     {
         $query = [
             'path' => $this->path,
@@ -108,7 +111,7 @@ class Mediaoptlist extends Mediaopt
         return $this->options;
     }
 
-    public function filename(): int
+    public function filename(): bool
     {
         return $this->filename;
     }
@@ -116,21 +119,21 @@ class Mediaoptlist extends Mediaopt
     // ______________________________________________ S E T ________________________________________________________
 
 
-    public function setfullmatch(string $fullmatch)
+    public function setfullmatch(string $fullmatch): void
     {
         $this->fullmatch = $fullmatch;
     }
 
 
-    public function setoptions(string $options)
+    public function setoptions(string $options): void
     {
         if (!empty($options)) {
             $this->options = $options;
         }
     }
 
-    public function setfilename($filename)
+    public function setfilename(bool $filename): void
     {
-        $this->filename = (int) (bool) $filename;
+        $this->filename = $filename;
     }
 }

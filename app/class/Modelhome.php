@@ -126,7 +126,7 @@ class Modelhome extends Model
      * @param bool $showorphans if `false`, remove orphans pages
      * @param bool $showredirection if `true`, add redirections
      *
-     * @return array[] of cytoscape datas
+     * @return array<string, string|array>[] of cytoscape datas
      */
     public function mapdata(
         array $pagelist,

@@ -5,16 +5,16 @@ namespace Wcms;
 class Mediaopt extends Item
 {
     /** @var string With a `/media` at the beginning and no trailing slash */
-    protected $path;
+    protected string $path;
 
     /** @var string */
-    protected $sortby = 'filename';
+    protected string $sortby = 'filename';
 
     /** @var int */
-    protected $order = 1;
+    protected int $order = 1;
 
-    /** @var array list of media type to display */
-    protected $type = [];
+    /** @var string[] list of media type to display */
+    protected array $type = [];
 
 
 
@@ -22,7 +22,10 @@ class Mediaopt extends Item
 
 
 
-    public function __construct(array $datas = [])
+    /**
+     * @param object|array $datas
+     */
+    public function __construct($datas = [])
     {
         $this->path = "/" . rtrim(Model::MEDIA_DIR, "/");
         $this->type = Media::mediatypes();
@@ -58,7 +61,7 @@ class Mediaopt extends Item
      * @param string $path                  Media path to display. Default is the current path.
      * @return string                       URL-encoded path, filter and sort parameters, startiting with a `?`
      */
-    public function getpathaddress(string $path = null): string
+    public function getpathaddress(?string $path = null): string
     {
         $path = is_null($path) ? $this->path : "/$path";
         $query = ['path' => $path, 'sortby' => $this->sortby, 'order' => $this->order];
@@ -98,7 +101,7 @@ class Mediaopt extends Item
     /**
      * @return string formated like `/media/<folder>`
      */
-    public function path()
+    public function path(): string
     {
         return $this->path;
     }
@@ -106,22 +109,25 @@ class Mediaopt extends Item
     /**
      * @return string formated like `media/<folder>/`
      */
-    public function dir()
+    public function dir(): string
     {
         return trim($this->path, '/') . '/';
     }
 
-    public function sortby()
+    public function sortby(): string
     {
         return $this->sortby;
     }
 
-    public function order()
+    public function order(): int
     {
         return $this->order;
     }
 
-    public function type()
+    /**
+     * @return string[]
+     */
+    public function type(): array
     {
         return $this->type;
     }
@@ -132,31 +138,32 @@ class Mediaopt extends Item
     /**
      * @param string $path
      */
-    public function setpath(string $path)
+    public function setpath(string $path): void
     {
         // gather nested slashs
         $path = preg_replace("%\/{2,}%", "/", $path);
         $this->path = "/" . trim($path, "/");
     }
 
-    public function setsortby(string $sortby)
+    public function setsortby(string $sortby): void
     {
         if (in_array($sortby, Modelmedia::MEDIA_SORTBY)) {
             $this->sortby = $sortby;
         }
     }
 
-    public function setorder(int $order)
+    public function setorder(int $order): void
     {
         if ($order === -1 || $order === 1) {
             $this->order = $order;
         }
     }
 
-    public function settype($type)
+    /**
+     * @param string[] $type
+     */
+    public function settype(array $type): void
     {
-        if (is_array($type)) {
-            $this->type = array_intersect(Media::mediatypes(), array_unique($type));
-        }
+        $this->type = array_intersect(Media::mediatypes(), array_unique($type));
     }
 }
