@@ -141,7 +141,6 @@ class Controller
     public function commonsparams(): array
     {
         $commonsparams = [];
-        $commonsparams['router'] = $this->router;
         $commonsparams['user'] = $this->user;
         $commonsparams['pagelist'] = $this->pagemanager->list();
         $commonsparams['css'] = Model::assetscsspath();

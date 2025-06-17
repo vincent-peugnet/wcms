@@ -28,8 +28,6 @@ class Media extends Item
 
     protected ?int $height = null;
 
-    protected int $length;
-
     /** @var int Owner of file ID */
     protected ?int $uid = null;
 
@@ -339,11 +337,6 @@ class Media extends Item
         return $this->height;
     }
 
-    public function length()
-    {
-        return $this->length;
-    }
-
     /**
      * @param string $option could be `id` or `name`
      * @return string|int
@@ -417,13 +410,6 @@ class Media extends Item
     {
         if (is_int($height)) {
             $this->height = $height;
-        }
-    }
-
-    public function setlength($length)
-    {
-        if ($this->type == 'sound' && is_int($length)) {
-            $this->length = $length;
         }
     }
 
