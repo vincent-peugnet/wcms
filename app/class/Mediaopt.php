@@ -23,7 +23,7 @@ class Mediaopt extends Item
 
 
     /**
-     * @param object|array $datas
+     * @param object|array<string, mixed> $datas
      */
     public function __construct($datas = [])
     {

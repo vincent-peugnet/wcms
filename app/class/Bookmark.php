@@ -31,7 +31,7 @@ class Bookmark extends Item
     protected string $ref = "";
 
     /**
-     * @param object|array $datas
+     * @param object|array<string, mixed> $datas
      *
      * @throws RuntimeException
      */
@@ -110,7 +110,7 @@ class Bookmark extends Item
 
     // _____________________________ S E T __________________________________
 
-    public function setid($id): bool
+    public function setid(string $id): bool
     {
         if (is_string($id)) {
             $id = Model::idclean($id);

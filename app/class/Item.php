@@ -50,7 +50,7 @@ abstract class Item
     /**
      * Concrete action of hydrate
      * @param array<string, mixed>|object $datas
-     * @return array associative array where key are methods and value is bool
+     * @return string[] set mothods names that failed
      */
     public function hydratejob($datas = []): array
     {
@@ -93,10 +93,12 @@ abstract class Item
      * Recursive function used to walk into array in search for Objects to converts
      * Only used with self::dry()
      *
-     * @param array $arr                Associative array of datas
+     * @param array<mixed, mixed> $arr  Associative array of datas
      * @param string $dateformat        Date formating for DateTime properties {@see Item::datetransform()}
+     *
+     * @return array<mixed, mixed>
      */
-    public function aa(array $arr, string $dateformat = 'string'): array
+    private function aa(array $arr, string $dateformat = 'string'): array
     {
         $ret = [];
         foreach ($arr as $key => $value) {

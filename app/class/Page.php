@@ -96,7 +96,7 @@ abstract class Page extends Item
         return array_keys(get_class_vars(self::class));
     }
 
-    public function reset()
+    public function reset(): void
     {
         $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
 
@@ -831,7 +831,7 @@ abstract class Page extends Item
     /**
      * Merge new tag with actual tags
      *
-     * @param string|array $tag Could be tags as string or array
+     * @param string|string[] $tag Could be tags as string or array
      */
 
     public function addtag($tag): void

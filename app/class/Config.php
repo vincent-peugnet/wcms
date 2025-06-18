@@ -82,7 +82,7 @@ abstract class Config
 
 
     /**
-     * @param object|array $datas
+     * @param object|array<string, mixed> $datas
      */
     public static function hydrate($datas): void
     {
@@ -156,7 +156,7 @@ abstract class Config
      * Generate full url address where W is installed
      * @return string url address finished by a slash "/"
      */
-    public static function url($endslash = true): string
+    public static function url(bool $endslash = true): string
     {
         return self::$domain . (!empty(self::$basepath) ? '/' . self::$basepath : "") . ($endslash ? '/' : '');
     }
@@ -342,6 +342,9 @@ abstract class Config
         return self::$sentrydsn;
     }
 
+    /**
+     * @return string|false
+     */
     public static function debug()
     {
         return self::$debug;
@@ -400,183 +403,157 @@ abstract class Config
 
     // __________________________________________ S E T ______________________________________
 
-    public static function setpagetable($pagetable)
+    public static function setpagetable(string $pagetable): void
     {
         self::$pagetable = strip_tags($pagetable);
     }
 
-    public static function setdomain($domain)
+    public static function setdomain(string $domain): void
     {
         self::$domain = strip_tags(strtolower($domain));
     }
 
-    public static function setsecure($secure)
+    public static function setsecure(bool $secure): void
     {
-        self::$secure = boolval($secure);
+        self::$secure = $secure;
     }
 
-    public static function setbasepath($basepath)
+    public static function setbasepath(string $basepath): void
     {
-        self::$basepath = strip_tags($basepath);
+        self::$basepath = $basepath;
     }
 
-    public static function setalerttitle($alerttitle)
+    public static function setalerttitle(string $alerttitle): void
     {
-        if (is_string($alerttitle)) {
-            self::$alerttitle = strip_tags($alerttitle);
-        }
+        self::$alerttitle = strip_tags($alerttitle);
     }
 
-    public static function setalertlink($alertlink)
+    public static function setalertlink(string $alertlink): void
     {
-        if (is_string($alertlink)) {
-            self::$alertlink = Model::idclean($alertlink);
-        }
+        self::$alertlink = Model::idclean($alertlink);
     }
 
-    public static function setalertlinktext($alertlinktext)
+    public static function setalertlinktext(string $alertlinktext): void
     {
-        if (is_string($alertlinktext)) {
-            self::$alertlinktext = strip_tags($alertlinktext);
-        }
+        self::$alertlinktext = strip_tags($alertlinktext);
     }
 
-    public static function setexistnot($existnot)
+    public static function setexistnot(string $existnot): void
     {
-        if (is_string($existnot)) {
-            self::$existnot = strip_tags($existnot);
-        }
+        self::$existnot = strip_tags($existnot);
     }
 
-    public static function setprivate($private)
+    public static function setprivate(string $private): void
     {
-        if (is_string($private)) {
-            self::$private = strip_tags($private);
-        }
+        self::$private = strip_tags($private);
     }
 
-    public static function setnotpublished($notpublished)
+    public static function setnotpublished(string $notpublished): void
     {
-        if (is_string($notpublished)) {
-            self::$notpublished = strip_tags($notpublished);
-        }
+        self::$notpublished = strip_tags($notpublished);
     }
 
-    public static function setexistnotpass($existnotpass)
+    public static function setexistnotpass(bool $existnotpass): void
     {
-        self::$existnotpass = boolval($existnotpass);
+        self::$existnotpass = $existnotpass;
     }
 
-    public static function setprivatepass($privatepass)
+    public static function setprivatepass(bool $privatepass): void
     {
-        self::$privatepass = boolval($privatepass);
+        self::$privatepass = $privatepass;
     }
 
-    public static function setnotpublishedpass($notpublishedpass)
+    public static function setnotpublishedpass(bool $notpublishedpass): void
     {
-        self::$notpublishedpass = boolval($notpublishedpass);
+        self::$notpublishedpass = $notpublishedpass;
     }
 
-    public static function setalertcss($alertcss)
+    public static function setalertcss(bool $alertcss): void
     {
-        self::$alertcss = boolval($alertcss);
+        self::$alertcss = $alertcss;
     }
 
     /**
-     * Used to convert old Config version. Save
+     * @deprecated Used to convert old Config version. Save
      * `defaultbody` param as `defaultv1body`.
      */
-    public static function setdefaultbody($defaultbody)
+    public static function setdefaultbody(string $defaultbody): void
     {
-        if (is_string($defaultbody)) {
-            $defaultbody = crlf2lf($defaultbody);
-            self::$defaultv1body = $defaultbody;
-        }
+        self::$defaultv1body = crlf2lf($defaultbody);
     }
 
-    public static function setdefaultv1body($defaultbody)
+    public static function setdefaultv1body(string $defaultbody): void
     {
-        if (is_string($defaultbody)) {
-            $defaultbody = crlf2lf($defaultbody);
-            self::$defaultv1body = $defaultbody;
-        }
+        self::$defaultv1body = crlf2lf($defaultbody);
     }
 
-    public static function setdefaultv2body($defaultbody)
+    public static function setdefaultv2body(string $defaultbody): void
     {
-        if (is_string($defaultbody)) {
-            $defaultbody = crlf2lf($defaultbody);
-            self::$defaultv2body = $defaultbody;
-        }
+        self::$defaultv2body = crlf2lf($defaultbody);
     }
 
-    public static function setdefaultfavicon($defaultfavicon)
+    public static function setdefaultfavicon(string $defaultfavicon): void
     {
-        if (is_string($defaultfavicon)) {
-            self::$defaultfavicon = $defaultfavicon;
-        }
+        self::$defaultfavicon = $defaultfavicon;
     }
 
-    public static function setdefaultthumbnail($defaultthumbnail)
+    public static function setdefaultthumbnail(string $defaultthumbnail): void
     {
-        if (is_string($defaultthumbnail)) {
-            self::$defaultthumbnail = $defaultthumbnail;
-        }
+        self::$defaultthumbnail = $defaultthumbnail;
     }
 
-    public static function setsuffix($suffix)
+    public static function setsuffix(string $suffix): void
     {
-        if (is_string($suffix) && strlen($suffix) <= self::SUFFIX_MAX) {
+        if (strlen($suffix) <= self::SUFFIX_MAX) {
             self::$suffix = strip_tags($suffix);
         }
     }
 
-    public static function setexternallinkblank($externallinkblank)
+    public static function setexternallinkblank(bool $externallinkblank): void
     {
-        self::$externallinkblank = boolval($externallinkblank);
+        self::$externallinkblank = $externallinkblank;
     }
 
-    public static function setinternallinkblank($internallinkblank)
+    public static function setinternallinkblank(bool $internallinkblank): void
     {
-        self::$internallinkblank = boolval($internallinkblank);
+        self::$internallinkblank = $internallinkblank;
     }
 
-    public static function seturllinker($urllinker)
+    public static function seturllinker(bool $urllinker): void
     {
-        self::$urllinker = boolval($urllinker);
+        self::$urllinker = $urllinker;
     }
 
-    public static function seturlchecker($urlchecker)
+    public static function seturlchecker(bool $urlchecker): void
     {
-        self::$urlchecker = boolval($urlchecker);
+        self::$urlchecker = $urlchecker;
     }
 
-    public static function setdeletelinktocache($deletelinktocache)
+    public static function setdeletelinktocache(bool $deletelinktocache): void
     {
-        self::$deletelinktocache = boolval($deletelinktocache);
+        self::$deletelinktocache = $deletelinktocache;
     }
 
-    public static function settitlefromalt($titlefromalt)
+    public static function settitlefromalt(bool $titlefromalt): void
     {
-        self::$titlefromalt = boolval($titlefromalt);
+        self::$titlefromalt = $titlefromalt;
     }
 
-    public static function setdefaultprivacy($defaultprivacy)
+    public static function setdefaultprivacy(int $defaultprivacy): void
     {
-        $defaultprivacy = intval($defaultprivacy);
         if ($defaultprivacy >= 0 && $defaultprivacy <= 2) {
             self::$defaultprivacy = $defaultprivacy;
         }
     }
 
-    public static function sethomepage($homepage)
+    public static function sethomepage(string $homepage): void
     {
         if (in_array($homepage, self::HOMEPAGE)) {
             self::$homepage = $homepage;
         }
     }
 
-    public static function sethomeredirect($homeredirect)
+    public static function sethomeredirect(?string $homeredirect): void
     {
         if (is_string($homeredirect) && strlen($homeredirect) > 0) {
             self::$homeredirect = Model::idclean($homeredirect);
@@ -585,70 +562,68 @@ abstract class Config
         }
     }
 
-    public static function settheme($theme)
+    public static function settheme(string $theme): void
     {
-        if (is_string($theme) && file_exists(Model::THEME_DIR . $theme)) {
+        if (file_exists(Model::THEME_DIR . $theme)) {
             self::$theme = $theme;
         }
     }
 
-    public static function setsecretkey($secretkey)
+    public static function setsecretkey(string $secretkey): void
     {
-        if (is_string($secretkey)) {
-            $stripedsecretkey = strip_tags($secretkey);
-            if ($stripedsecretkey === $secretkey) {
-                $length = strlen($secretkey);
-                if ($length < self::SECRET_KEY_MAX && $length > self::SECRET_KEY_MIN) {
-                    self::$secretkey = $secretkey;
-                }
+        $stripedsecretkey = strip_tags($secretkey);
+        if ($stripedsecretkey === $secretkey) {
+            $length = strlen($secretkey);
+            if ($length < self::SECRET_KEY_MAX && $length > self::SECRET_KEY_MIN) {
+                self::$secretkey = $secretkey;
             }
         }
     }
 
-    public static function setsentrydsn($sentrydsn)
+    public static function setsentrydsn(string $sentrydsn): void
     {
-        if (is_string($sentrydsn)) {
-            self::$sentrydsn = $sentrydsn;
-        }
+        self::$sentrydsn = $sentrydsn;
     }
 
-    public static function setdebug($debug)
+    /**
+     * @param string|false $debug
+     */
+    public static function setdebug($debug): void
     {
-        if (is_string($debug)) {
-            self::$debug = $debug;
-        }
+
+        self::$debug = $debug;
     }
 
-    public static function setmarkdownhardwrap($markdownhardwrap)
+    public static function setmarkdownhardwrap(bool $markdownhardwrap): void
     {
-        self::$markdownhardwrap = boolval($markdownhardwrap);
+        self::$markdownhardwrap = $markdownhardwrap;
     }
 
-    public static function setlang(string $lang)
+    public static function setlang(string $lang): void
     {
         self::$lang = mb_substr(strip_tags($lang), 0, self::LANG_MAX);
     }
 
-    public static function sethtmltag($htmltag)
+    public static function sethtmltag(bool $htmltag): void
     {
-        self::$htmltag = boolval($htmltag);
+        self::$htmltag = $htmltag;
     }
 
-    public static function setdisablejavascript($disablejavascript)
+    public static function setdisablejavascript(bool $disablejavascript): void
     {
-        self::$disablejavascript = boolval($disablejavascript);
+        self::$disablejavascript = $disablejavascript;
     }
 
-    public static function setpageversion($pageversion): void
+    public static function setpageversion(int $pageversion): void
     {
         if (key_exists($pageversion, Page::VERSIONS)) {
             self::$pageversion = $pageversion;
         }
     }
 
-    public static function setlazyloadimg($lazyloadimg): bool
+    public static function setlazyloadimg(bool $lazyloadimg): bool
     {
-        return self::$lazyloadimg = boolval($lazyloadimg);
+        return self::$lazyloadimg = $lazyloadimg;
     }
 
     public static function setldapserver(string $ldapserver): void

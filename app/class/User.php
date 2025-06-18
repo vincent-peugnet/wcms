@@ -56,7 +56,7 @@ class User extends Item
     ];
 
     /**
-     * @param array|object $data
+     * @param array<string, mixed>|object $data
      */
     public function __construct($data = [])
     {
