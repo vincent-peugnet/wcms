@@ -504,7 +504,7 @@ abstract class Page extends Item
     {
         if (is_numeric($latitude)) {
             $latitude = floatval($latitude);
-            if ($latitude >= -90 && $latitude <= 90) {
+            if ($latitude >= self::LATITUDE_MIN && $latitude <= self::LATITUDE_MAX) {
                 $this->latitude = $latitude;
             }
         } else {
@@ -519,7 +519,7 @@ abstract class Page extends Item
     {
         if (is_numeric($longitude)) {
             $longitude = floatval($longitude);
-            if ($longitude >= -90 && $longitude <= 90) {
+            if ($longitude >= self::LONGITUDE_MIN && $longitude <= self::LONGITUDE_MAX) {
                 $this->longitude = $longitude;
             }
         } else {
