@@ -516,7 +516,8 @@ class Modelpage extends Modeldb
      * @param Opt $opt
      *
      * @param string $regex                 Regex to match.
-     * @param string[] $searchopt              Option search, could be `content` `title` `description`.
+     * @param array<string, bool> $searchopt
+     * Option search, could be `content` `title` `description`
      *
      * @return Page[]                       associative array of `Page` objects
      */
@@ -776,7 +777,7 @@ class Modelpage extends Modeldb
      *
      * @param Page[] $pagelist              list Array of Pages.
      * @param string $regex                 Regex to match.
-     * @param string[] $options             Option search, could be `content` `title` `description`.
+     * @param array<string, bool> $options             Option search, could be `content` `title` `description`.
      *
      * @return Page[] associative array of `Page` objects
      */
@@ -820,7 +821,7 @@ class Modelpage extends Modeldb
     /**
      * Create a page
      *
-     * @param mixed[] $datas                Page's datas
+     * @param array<string, mixed> $datas   Page's datas
      * @return Page                         V1 or V2 depending of config file setting
      */
     public function newpage(array $datas = []): Page
@@ -841,7 +842,7 @@ class Modelpage extends Modeldb
      * This function will check for page version in datas and will retrun coresponding page version object
      * If no version is specified and `content` field is not used, it will return Pagev1
      *
-     * @param mixed[]|object $datas           Page's datas
+     * @param mixed[]|object $datas         Page's datas
      * @return Page                         V1 or V2
      * @throws RangeException               If page version is defined but out of range
      */

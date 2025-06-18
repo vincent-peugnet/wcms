@@ -19,7 +19,7 @@ abstract class Item
 
     /**
      * Hydrate Object with corresponding `set__VAR__`
-     * @param array|object $datas associative array using key as var name or object
+     * @param array<string, mixed>|object $datas associative array using key as var name or object
      * @return bool true if no error, otherwise false
      */
     public function hydrate($datas = []): bool
@@ -34,10 +34,10 @@ abstract class Item
 
     /**
      * Hydrate Object with corresponding `set__VAR__`
-     * @param array|object $datas associative array using key as var name or object
+     * @param array<string, mixed>|object $datas associative array using key as var name or object
      * @throws RuntimeException listing var settings errors
      */
-    public function hydrateexception($datas = [])
+    public function hydrateexception($datas = []): void
     {
         $errors = $this->hydratejob($datas);
         if (!empty($errors)) {
@@ -49,19 +49,17 @@ abstract class Item
 
     /**
      * Concrete action of hydrate
-     * @param mixed $datas
+     * @param array<string, mixed>|object $datas
      * @return array associative array where key are methods and value is bool
      */
     public function hydratejob($datas = []): array
     {
         $seterrors = [];
-        if (is_array($datas) || is_object($datas)) {
-            foreach ($datas as $key => $value) {
-                $method = 'set' . $key;
-                if (method_exists($this, $method)) {
-                    if ($this->$method($value) === false) {
-                        $seterrors[] = $key;
-                    }
+        foreach ($datas as $key => $value) {
+            $method = 'set' . $key;
+            if (method_exists($this, $method)) {
+                if ($this->$method($value) === false) {
+                    $seterrors[] = $key;
                 }
             }
         }
@@ -98,7 +96,7 @@ abstract class Item
      * @param array $arr                Associative array of datas
      * @param string $dateformat        Date formating for DateTime properties {@see Item::datetransform()}
      */
-    public function aa(array $arr, string $dateformat): array
+    public function aa(array $arr, string $dateformat = 'string'): array
     {
         $ret = [];
         foreach ($arr as $key => $value) {
@@ -161,7 +159,7 @@ abstract class Item
         }
         $property = $this->$property;
         if (!$property instanceof DateTimeInterface) {
-            throw new InvalidArgumentException("Property $property do not a date property in " . get_class($this));
+            throw new InvalidArgumentException("Property $property is not a date property in " . get_class($this));
         }
 
         if ($option == 'string') {

@@ -42,6 +42,6 @@
     "sleep": 0,
     "redirection": "",
     "refresh": 0,
-    "password": null,
+    "password": "",
     "version": 1
 }

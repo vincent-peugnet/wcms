@@ -39,7 +39,7 @@
     "sleep": 0,
     "redirection": "",
     "refresh": 0,
-    "password": null,
+    "password": "",
     "postprocessaction": false,
     "version": 2,
     "content": "<https:\/\/club1.fr>\r\n\r\n[link to my external life using Michel Fortin's Markdown extra](https:\/\/club1.fr) {.testclass#testid}\r\n\r\nhttps:\/\/club1.fr\r\n\r\n<a href=\"https:\/\/club1.fr\" class=\"yolo  f     boooomer f\">test de lien vers CLUB1<\/a>\r\n\r\n<a href=\"https:\/\/club1.fr\" class=\"fff external\">test de lien vers CLUB1<\/a>\r\n\r\n<script>\r\ndocument.getElementById(\"demo\").innerHTML = \"Hello JavaScript!\";\r\n<\/script>\r\n\r\n    <a href=\"https:\/\/club1.fr\" class=\"total  shell\">dans un codeblock<\/a>\r\n    \r\n"

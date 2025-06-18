@@ -320,7 +320,7 @@ class Opt extends Item
     {
         /** @var array<string, mixed> */
         $class = get_class_vars(get_class($this));
-        $object = $this->dry(self::HTML_DATETIME_LOCAL);
+        $object = $this->dry();
         $class['pageidlist'] = $object['pageidlist'];
         $class['pagevarlist'] = $object['pagevarlist'];
         $class['taglist'] = $object['taglist'];
@@ -403,6 +403,9 @@ class Opt extends Item
      */
     public function since(string $option = 'date')
     {
+        if ($this->since === null) {
+            return null;
+        }
         return $this->datetransform('since', $option);
     }
 
@@ -411,6 +414,9 @@ class Opt extends Item
      */
     public function until(string $option = 'date')
     {
+        if ($this->until === null) {
+            return null;
+        }
         return $this->datetransform('until', $option);
     }
 

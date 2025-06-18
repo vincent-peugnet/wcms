@@ -39,7 +39,7 @@
     "sleep": 0,
     "redirection": "",
     "refresh": 0,
-    "password": null,
+    "password": "",
     "postprocessaction": false,
     "version": 2,
     "content": "\n\n# my first title\n\n## my second title\n\n## This is another title again and again, but this one is loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooonnnnnnnnger with lot of words\n\n### sub sub title\n\n#### sub sub sub title\n\nDû tëxte encodé àveç dès châräctères nôn ASCII\n\nイリノイ州シカゴにて、アイルランド系の家庭に、9\n\nhttps:\/\/club1.fr"

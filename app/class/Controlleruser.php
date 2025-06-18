@@ -103,6 +103,8 @@ class Controlleruser extends Controller
     // ________________________________ F U N _________________________________________
 
     /**
+     * @param array<string, mixed> $datas
+     *
      * @throws Notfoundexception            If user is not found in the database
      */
     protected function delete(array $datas): void
@@ -117,6 +119,8 @@ class Controlleruser extends Controller
     }
 
     /**
+     * @param array<string, mixed> $datas
+     *
      * @throws Notfoundexception            If User is not found in the database
      * @throws Databaseexception            If an error occured with database
      * @throws Runtimeexception             In case of other various problems

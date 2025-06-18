@@ -39,6 +39,8 @@ class Controllerapi extends Controller
 
     /**
      * Send `400` HTTP Error if the JSON decoding failed
+     *
+     * @return array<string, mixed>
      */
     protected function recievejson(): array
     {

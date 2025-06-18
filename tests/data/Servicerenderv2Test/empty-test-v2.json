@@ -41,7 +41,7 @@
     "sleep": 0,
     "redirection": "",
     "refresh": 0,
-    "password": null,
+    "password": "",
     "postprocessaction": false,
     "version": 2,
     "content": ""

@@ -30,7 +30,7 @@ class Elementv2 extends Element
         return $this->id;
     }
 
-    public function setid($id): void
+    public function setid(string $id): void
     {
         $this->id = $id;
     }

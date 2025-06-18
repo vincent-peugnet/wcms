@@ -152,7 +152,7 @@ class Controllerhome extends Controller
     /**
      * Look for GET deepsearch datas and transform it an array
      *
-     * @return array containing `string $regex` and `array $searchopt`
+     * @return array{'regex': string, 'searchopt': array<string, bool>}
      */
     protected function deepsearch(): array
     {

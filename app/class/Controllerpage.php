@@ -266,7 +266,9 @@ class Controllerpage extends Controller
             header_remove("Pragma");
 
             // Activate cache strategy and send 'Last modified' which corrspond to page render date.
-            $lastmodified = date_format($this->page->daterender()->setTimezone(new DateTimeZone('GMT')), DATE_RFC7231);
+            $daterender = $this->page->daterender();
+            assert($daterender instanceof DateTimeImmutable);
+            $lastmodified = date_format($daterender->setTimezone(new DateTimeZone('GMT')), DATE_RFC7231);
             header('Cache-Control: max-age=0, must-revalidate');
             header("Last-Modified: $lastmodified");
 

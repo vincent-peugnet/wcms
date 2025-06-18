@@ -66,8 +66,8 @@ class Elementv1 extends Element
         return $this->tag;
     }
 
-    public function settag($tag)
+    public function settag(bool $tag): void
     {
-        $this->tag = boolval($tag);
+        $this->tag = $tag;
     }
 }

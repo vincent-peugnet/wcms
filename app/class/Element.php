@@ -95,19 +95,19 @@ abstract class Element extends Item
     // ______________________________________________ S E T ________________________________________________________
 
 
-    public function setfullmatch(string $fullmatch)
+    public function setfullmatch(string $fullmatch): void
     {
         $this->fullmatch = $fullmatch;
     }
 
-    public function setoptions(string $options)
+    public function setoptions(string $options): void
     {
         if (!empty($options)) {
             $this->options = $options;
         }
     }
 
-    public function seteverylink(int $level)
+    public function seteverylink(int $level): bool
     {
         if ($level >= 0 && $level <= 16) {
             $this->everylink = $level;
@@ -117,17 +117,17 @@ abstract class Element extends Item
         }
     }
 
-    public function setmarkdown($markdown)
+    public function setmarkdown(bool $markdown): void
     {
-        $this->markdown = boolval($markdown);
+        $this->markdown = $markdown;
     }
 
-    public function setcontent(string $content)
+    public function setcontent(string $content): void
     {
         $this->content = $content;
     }
 
-    public function setheaderid(string $headerid)
+    public function setheaderid(string $headerid): void
     {
         if ($headerid === '0') {
             $this->headerid = '0';
@@ -138,15 +138,15 @@ abstract class Element extends Item
         }
     }
 
-    public function setheaderanchor($headeranchor)
+    public function setheaderanchor(int $headeranchor): void
     {
         if (in_array($headeranchor, self::HEADER_ANCHOR_MODES)) {
-            $this->headeranchor = (int) $headeranchor;
+            $this->headeranchor = $headeranchor;
         }
     }
 
-    public function seturllinker($urllinker)
+    public function seturllinker(bool $urllinker): void
     {
-        $this->urllinker = boolval($urllinker);
+        $this->urllinker = $urllinker;
     }
 }

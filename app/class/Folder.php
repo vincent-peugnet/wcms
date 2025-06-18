@@ -14,6 +14,9 @@ class Folder
     public bool $open = false;
     public bool $selected = false;
 
+    /**
+     * @param Folder[] $childs
+     */
     public function __construct(string $name, array $childs, int $filecount, string $path, int $deepness)
     {
         $this->name = $name;

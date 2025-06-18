@@ -127,7 +127,7 @@ class Controller
     }
 
     /**
-     *
+     * @param array<string, mixed> $params
      */
     public function showtemplate(string $template, array $params = []): void
     {
@@ -136,7 +136,7 @@ class Controller
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     public function commonsparams(): array
     {
@@ -155,7 +155,7 @@ class Controller
      * Generate the URL for a named route. Replace regexes with supplied parameters.
      *
      * @param string $route The name of the route.
-     * @param array $params Associative array of parameters to replace placeholders with.
+     * @param array<string, mixed> $params Associative array of parameters to replace placeholders with.
      * @param string $get Optionnal query GET parameters formated
      * @return string The URL of the route with named parameters in place.
      * @throws InvalidArgumentException If the route does not exist.
@@ -179,7 +179,11 @@ class Controller
         exit;
     }
 
-    public function routedirect(string $route, array $vars = [], $gets = []): void
+    /**
+     * @param array<string, mixed> $vars
+     * @param array<string, mixed> $gets
+     */
+    public function routedirect(string $route, array $vars = [], array $gets = []): void
     {
 
         $get = empty($gets) ? "" : "?" . http_build_query($gets);
@@ -277,7 +281,7 @@ class Controller
     /**
      * Read then empty session to get flash messages
      *
-     * @return array ordered array containing array with content and type as keys or empty array
+     * @return array<array{'content': string, 'type': string}>
      */
     public static function getflashmessages(): array
     {

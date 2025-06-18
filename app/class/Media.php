@@ -132,7 +132,10 @@ class Media extends Item
         }
 
         $this->permissions = decoct(fileperms($path) & 0777);
-        $this->hydrate(stat($path));
+        $stats = stat($path);
+        if ($stats !== false) {
+            $this->hydrate();
+        }
     }
 
     /**

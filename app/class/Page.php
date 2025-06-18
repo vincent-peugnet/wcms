@@ -4,43 +4,49 @@ namespace Wcms;
 
 use DateTime;
 use DateTimeImmutable;
+use DateTimeInterface;
 use DateTimeZone;
+use DomainException;
 
 abstract class Page extends Item
 {
-    protected $id;
-    protected $title;
-    protected $description;
-    protected $lang;
-    protected $tag;
-    protected ?float $latitude;
-    protected ?float $longitude;
-    protected $date;
-    protected $datecreation;
-    protected $datemodif;
-    protected $daterender;
-    protected $css;
-    protected $javascript;
-    protected $body;
-    protected $externalcss;
-    protected $customhead;
-    protected $secure;
-    protected $interface;
-    protected $linkto;
-    protected $templatebody;
-    protected $templatecss;
-    protected $templatejavascript;
-    protected $favicon;
-    protected $thumbnail;
-    protected $authors;
-    protected $displaycount;
-    protected $visitcount;
-    protected $editcount;
-    protected $sleep;
-    protected $redirection;
-    protected $refresh;
-    protected $password;
-    protected $postprocessaction;
+    protected ?string $id = null;
+    protected string $title = '';
+    protected string $description = '';
+    protected string $lang = '';
+    /** @var string[] $tag */
+    protected array $tag = [];
+    protected ?float $latitude = null;
+    protected ?float $longitude = null;
+    protected DateTimeImmutable $date;
+    protected DateTimeImmutable $datecreation;
+    protected DateTimeImmutable $datemodif;
+    protected DateTimeImmutable $daterender;
+    protected string $css = '';
+    protected string $javascript = '';
+    protected string $body = '';
+    /** @var string[] $externalcss */
+    protected array $externalcss = [];
+    protected string $customhead = '';
+    protected int $secure = 0;
+    protected string $interface = '';
+    /** @var string[] $linkto */
+    protected array $linkto = [];
+    protected string $templatebody = '';
+    protected string $templatecss = '';
+    protected string $templatejavascript = '';
+    protected string $favicon = '';
+    protected string $thumbnail = '';
+    /** @var string[] $authors */
+    protected array $authors = [];
+    protected int $displaycount = 0;
+    protected int $visitcount = 0;
+    protected int $editcount = 0;
+    protected int $sleep = 0;
+    protected string $redirection = '';
+    protected int $refresh = 0;
+    protected string $password = '';
+    protected bool $postprocessaction = false;
 
     /** @var array<string, ?bool> $externallinks */
     protected array $externallinks = [];
@@ -71,6 +77,9 @@ abstract class Page extends Item
 
 // _____________________________________________________ F U N ____________________________________________________
 
+    /**
+     * @param array<string, mixed>|object $datas
+     */
     public function __construct($datas = [])
     {
         $this->reset();
@@ -91,7 +100,9 @@ abstract class Page extends Item
     {
         $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
 
-        $this->settitle($this->id());
+        if ($this->id !== null) {
+            $this->settitle($this->id);
+        }
         $this->setdescription('');
         $this->setlang('');
         $this->settag([]);
@@ -150,7 +161,7 @@ abstract class Page extends Item
     }
 
     /**
-     * Indicate if Page is geolocated. Meaning it's latitude and longitude are both set (they are not null)
+     * Indicate if Page is geolocated. Meaning it's latitude and longitude are both set (they are not null): void
      */
     public function isgeo(): bool
     {
@@ -179,12 +190,12 @@ abstract class Page extends Item
 
     // _____________________________________________________ G E T ____________________________________________________
 
-    public function id($type = 'string')
+    public function id(string $type = 'string'): ?string
     {
         return $this->id;
     }
 
-    public function title($type = 'string')
+    public function title(string $type = 'string'): string
     {
         if ($type == 'sort') {
             return strtolower($this->title);
@@ -193,7 +204,7 @@ abstract class Page extends Item
         }
     }
 
-    public function description($type = 'string')
+    public function description(string $type = 'string'): string
     {
         if ($type == 'short' && strlen($this->description) > 15) {
                 return mb_substr($this->description, 0, 20) . '...';
@@ -207,7 +218,12 @@ abstract class Page extends Item
         return $this->lang;
     }
 
-    public function tag($option = 'array')
+    /**
+     * @return string[]|int|string
+     *
+     * @throws DomainException if given option is invalid
+     */
+    public function tag(string $option = 'array')
     {
         if ($option == 'string') {
             return implode(", ", $this->tag);
@@ -216,35 +232,47 @@ abstract class Page extends Item
         } elseif ($option == 'sort') {
             return count($this->tag);
         }
+        throw new DomainException('invalid option given');
     }
 
-    public function latitude($option = 'float'): ?float
+    public function latitude(string $option = 'float'): ?float
     {
         return $this->latitude;
     }
 
-    public function longitude($optiob = 'float'): ?float
+    public function longitude(string $option = 'float'): ?float
     {
         return $this->longitude;
     }
 
-    public function date($option = 'date')
+    /**
+     * @return DateTimeInterface|string
+     */
+    public function date(string $option = 'date')
     {
         return $this->datetransform('date', $option);
     }
 
-    public function datecreation($option = 'date')
+    /**
+     * @return DateTimeInterface|string
+     */
+    public function datecreation(string $option = 'date')
     {
         return $this->datetransform('datecreation', $option);
     }
 
-
-    public function datemodif($option = 'date')
+    /**
+     * @return DateTimeInterface|string
+     */
+    public function datemodif(string $option = 'date')
     {
         return $this->datetransform('datemodif', $option);
     }
 
-    public function daterender($option = 'date')
+    /**
+     * @return DateTimeInterface|string
+     */
+    public function daterender(string $option = 'date')
     {
         return $this->datetransform('daterender', $option);
     }
@@ -254,35 +282,48 @@ abstract class Page extends Item
         return '';
     }
 
-    public function css($type = 'string')
+    public function css(string $type = 'string'): string
     {
         return $this->css;
     }
 
-    public function javascript($type = 'string')
+    public function javascript(string $type = 'string'): string
     {
         return $this->javascript;
     }
 
-    public function body($type = 'string')
+    public function body(string $type = 'string'): string
     {
         return $this->body;
     }
-    public function externalcss($type = "array")
+
+    /**
+     * @return string[]
+     */
+    public function externalcss(string $type = "array"): array
     {
         return $this->externalcss;
     }
 
-    public function customhead($type = "string")
+    /**
+     * @return string|int
+     *
+     * @throws DomainException if type is invalid
+     */
+    public function customhead(string $type = "string")
     {
         if ($type === 'string') {
             return $this->customhead;
         } elseif ($type === 'int') {
             return substr_count($this->customhead, "\n") + 1;
         }
+        throw new DomainException('invalid type given');
     }
 
-    public function secure($type = 'int')
+    /**
+     * @return string|int
+     */
+    public function secure(string $type = 'int')
     {
         if ($type == 'string') {
             return Modelpage::SECURE_LEVELS[$this->secure];
@@ -291,16 +332,17 @@ abstract class Page extends Item
         }
     }
 
-    public function interface($type = 'string')
+    public function interface(string $type = 'string'): string
     {
         return $this->interface;
     }
 
-    public function linkto($option = 'array')
+    /**
+     * @return int|string|string[]
+     */
+    public function linkto(string $option = 'array')
     {
-        if ($option == 'json') {
-            return json_encode($this->linkto);
-        } elseif ($option == 'array') {
+        if ($option == 'array') {
             return $this->linkto;
         } elseif ($option == 'sort') {
             return count($this->linkto);
@@ -310,32 +352,37 @@ abstract class Page extends Item
         return $this->linkto;
     }
 
-    public function templatebody($type = 'string')
+    public function templatebody(string $type = 'string'): string
     {
         return $this->templatebody;
     }
 
-    public function templatecss($type = 'string')
+    public function templatecss(string $type = 'string'): string
     {
         return $this->templatecss;
     }
 
-    public function templatejavascript($type = 'string')
+    public function templatejavascript(string $type = 'string'): string
     {
         return $this->templatejavascript;
     }
 
-    public function favicon($type = 'string')
+    public function favicon(string $type = 'string'): string
     {
         return $this->favicon;
     }
 
-    public function thumbnail($type = 'string')
+    public function thumbnail(string $type = 'string'): string
     {
         return $this->thumbnail;
     }
 
-    public function authors($type = 'array')
+    /**
+     * @return int|string|string[]
+     *
+     * @throws DomainException in cas of invalid type
+     */
+    public function authors(string $type = 'array')
     {
         if ($type == 'string') {
             return implode(', ', $this->authors);
@@ -344,52 +391,53 @@ abstract class Page extends Item
         } elseif ($type == 'sort') {
             return count($this->authors);
         }
+        throw new DomainException('invalid type given');
     }
 
-    public function displaycount($type = 'int'): int
+    public function displaycount(string $type = 'int'): int
     {
         return $this->displaycount;
     }
 
-    public function visitcount($type = 'int'): int
+    public function visitcount(string $type = 'int'): int
     {
         return $this->visitcount;
     }
 
-    public function editcount($type = 'int'): int
+    public function editcount(string $type = 'int'): int
     {
         return $this->editcount;
     }
 
-    public function sleep($type = 'int')
+    public function sleep(string $type = 'int'): int
     {
         return $this->sleep;
     }
 
-    public function redirection($type = 'string')
+    public function redirection(string $type = 'string'): string
     {
         return $this->redirection;
     }
 
-    public function refresh($type = 'int')
+    public function refresh(string $type = 'int'): int
     {
         return $this->refresh;
     }
 
-    public function password($type = 'string')
+    public function password(string $type = 'string'): string
     {
         return $this->password;
     }
 
-    public function postprocessaction($type = 'int'): bool
+    public function postprocessaction(string $type = 'int'): bool
     {
         return $this->postprocessaction;
     }
 
     /**
-     * @return array|int
+     * @return array<string, ?bool>|int
      */
-    public function externallinks($option = 'array')
+    public function externallinks(string $option = 'array')
     {
         if ($option === 'sort') {
             return count($this->externallinks);
@@ -397,7 +445,7 @@ abstract class Page extends Item
         return $this->externallinks;
     }
 
-    public function version($type = 'int'): int
+    public function version(string $type = 'int'): int
     {
         return $this->version;
     }
@@ -407,38 +455,40 @@ abstract class Page extends Item
 
     // _____________________________________________________ S E T ____________________________________________________
 
-    public function setid($id)
+    public function setid(string $id): void
     {
         if (is_string($id) && strlen($id) <= Model::MAX_ID_LENGTH) {
             $this->id = strip_tags(strtolower(str_replace(" ", "", $id)));
         }
     }
 
-    public function settitle($title)
+    public function settitle(string $title): void
     {
         if (strlen($title) < self::LENGTH_SHORT_TEXT and is_string($title)) {
             $this->title = strip_tags(trim($title));
         }
     }
 
-    public function setdescription($description)
+    public function setdescription(string $description): void
     {
         if (strlen($description) < self::LENGTH_SHORT_TEXT and is_string($description)) {
             $this->description = strip_tags(trim($description));
         }
     }
 
-    public function setlang(string $lang)
+    public function setlang(string $lang): void
     {
         $this->lang = mb_substr(strip_tags($lang), 0, Config::LANG_MAX);
     }
 
-    public function settag($tag)
+    /**
+     * @param string[]|string $tag
+     */
+    public function settag($tag): void
     {
         if (is_string($tag) && strlen($tag) < self::LENGTH_SHORT_TEXT) {
-                $tag = $this->tagtoarray($tag);
-        }
-        if (is_array($tag)) {
+            $tag = $this->tagtoarray($tag);
+        } elseif (is_array($tag)) {
             $tag = array_map(function ($id) {
                 return Model::idclean($id);
             }, $tag);
@@ -477,7 +527,10 @@ abstract class Page extends Item
         }
     }
 
-    public function setdate($date)
+    /**
+     * @param DateTimeImmutable|string $date
+     */
+    public function setdate($date): void
     {
         if ($date instanceof DateTimeImmutable) {
             $this->date = $date;
@@ -490,19 +543,19 @@ abstract class Page extends Item
         }
     }
 
-    public function setptime($ptime)
+    public function setptime(string $ptime): void
     {
-        if (is_string($ptime) && DateTime::createFromFormat('H:i', $ptime) !== false) {
+        if (DateTime::createFromFormat('H:i', $ptime) !== false) {
             $time = explode(':', $ptime);
-            $this->date = $this->date->setTime($time[0], $time[1]);
+            $this->date = $this->date->setTime(intval($time[0]), intval($time[1]));
         }
     }
 
-    public function setpdate($pdate)
+    public function setpdate(string $pdate): void
     {
-        if (is_string($pdate) &&  DateTime::createFromFormat('Y-m-d', $pdate) !== false) {
+        if (DateTime::createFromFormat('Y-m-d', $pdate) !== false) {
             $date = explode('-', $pdate);
-            $this->date = $this->date->setDate($date[0], $date[1], $date[2]);
+            $this->date = $this->date->setDate(intval($date[0]), intval($date[1]), intval($date[2]));
         }
     }
 
@@ -513,7 +566,7 @@ abstract class Page extends Item
      *
      * @param string|DateTimeImmutable|true $datecreation Set or reset date of creation
      */
-    public function setdatecreation($datecreation)
+    public function setdatecreation($datecreation): void
     {
         if ($datecreation instanceof DateTimeImmutable) {
             $this->datecreation = $datecreation;
@@ -528,7 +581,10 @@ abstract class Page extends Item
         }
     }
 
-    public function setdatemodif($datemodif)
+    /**
+     * @param DateTimeImmutable|string $datemodif
+     */
+    public function setdatemodif($datemodif): void
     {
         if ($datemodif instanceof DateTimeImmutable) {
             $this->datemodif = $datemodif;
@@ -541,7 +597,10 @@ abstract class Page extends Item
         }
     }
 
-    public function setdaterender($daterender)
+    /**
+     * @param DateTimeImmutable|string $daterender
+     */
+    public function setdaterender($daterender): void
     {
         if ($daterender instanceof DateTimeImmutable) {
             $this->daterender = $daterender;
@@ -555,61 +614,62 @@ abstract class Page extends Item
     }
 
 
-    public function setcss($css)
+    public function setcss(string $css): void
     {
-        if (strlen($css) < self::LENGTH_LONG_TEXT and is_string($css)) {
+        if (strlen($css) < self::LENGTH_LONG_TEXT) {
             $this->css = trim($css);
         }
     }
 
 
 
-    public function setjavascript($javascript)
+    public function setjavascript(string $javascript): void
     {
-        if (strlen($javascript) < self::LENGTH_LONG_TEXT && is_string($javascript)) {
+        if (strlen($javascript) < self::LENGTH_LONG_TEXT) {
             $this->javascript = $javascript;
         }
     }
 
 
-    public function setbody($body)
+    public function setbody(string $body): void
     {
-        if (strlen($body) < self::LENGTH_LONG_TEXT && is_string($body)) {
+        if (strlen($body) < self::LENGTH_LONG_TEXT) {
             $body = crlf2lf($body);
             $this->body = $body;
         }
     }
 
-    public function setexternalcss($externalcss)
+    /**
+     * @param string[] $externalcss
+     */
+    public function setexternalcss(array $externalcss): void
     {
-        if (is_array($externalcss)) {
-            $this->externalcss = array_values(array_filter($externalcss));
-        }
+        $this->externalcss = array_values(array_filter($externalcss));
     }
 
-    public function setcustomhead(string $customhead)
+    public function setcustomhead(string $customhead): void
     {
-        if (is_string($customhead)) {
-            $customhead = crlf2lf($customhead);
-            $this->customhead = $customhead;
-        }
+        $this->customhead = crlf2lf($customhead);
     }
 
-    public function setsecure($secure)
+    public function setsecure(int $secure): void
     {
         if ($secure >= 0 and $secure <= self::SECUREMAX) {
-            $this->secure = intval($secure);
+            $this->secure = $secure;
         }
     }
 
-    public function setinterface($interface)
+    public function setinterface(string $interface): void
     {
         if (in_array($interface, $this::TABS)) {
             $this->interface = $interface;
         }
     }
 
-    public function setlinkto($linkto)
+    /**
+     * @param string[]|string|null $linkto
+     */
+    public function setlinkto($linkto): void
     {
         if (is_array($linkto)) {
             $this->linkto = $linkto;
@@ -623,86 +683,73 @@ abstract class Page extends Item
         }
     }
 
-    public function settemplatebody($templatebody)
+    public function settemplatebody(string $templatebody): void
     {
-        if (is_string($templatebody)) {
-            $this->templatebody = $templatebody;
-        }
+        $this->templatebody = $templatebody;
     }
 
-    public function settemplatecss($templatecss)
+    public function settemplatecss(string $templatecss): void
     {
-        if (is_string($templatecss)) {
-            $this->templatecss = $templatecss;
-        }
+        $this->templatecss = $templatecss;
     }
 
-    public function settemplatejavascript($templatejavascript)
+    public function settemplatejavascript(string $templatejavascript): void
     {
-        if (is_string($templatejavascript)) {
-            $this->templatejavascript = $templatejavascript;
-        }
+        $this->templatejavascript = $templatejavascript;
     }
 
-    public function setfavicon($favicon)
+    public function setfavicon(string $favicon): void
     {
-        if (is_string($favicon)) {
-            $this->favicon = $favicon;
-        }
+        $this->favicon = $favicon;
     }
 
-    public function setthumbnail($thumbnail)
+    public function setthumbnail(string $thumbnail): void
     {
-        if (is_string($thumbnail)) {
-            $this->thumbnail = $thumbnail;
-        }
+        $this->thumbnail = $thumbnail;
     }
 
-    public function setauthors($authors)
+    /**
+     * @param string[] $authors
+     */
+    public function setauthors(array $authors): void
     {
-        if (is_array($authors)) {
-            $this->authors = array_unique(array_values(array_filter($authors)));
-        }
+        $this->authors = array_unique(array_values(array_filter($authors)));
     }
 
     /**
      * @deprecated 2.4.0 Replaced by displaycount
      */
-    public function setaffcount($affcount)
+    public function setaffcount(int $affcount): void
     {
         $this->setdisplaycount($affcount);
     }
 
-    public function setdisplaycount($displaycount)
+    public function setdisplaycount(int $displaycount): void
     {
-        if (is_int($displaycount)) {
-            $this->displaycount = $displaycount;
-        } elseif (is_numeric($displaycount)) {
-            $this->displaycount = intval($displaycount);
-        }
+        $this->displaycount = $displaycount;
     }
 
-    public function setvisitcount($visitcount)
+    public function setvisitcount(int $visitcount): void
     {
-        if (is_int($visitcount)) {
-            $this->visitcount = $visitcount;
-        } elseif (is_numeric($visitcount)) {
-            $this->visitcount = intval($visitcount);
-        }
+        $this->visitcount = $visitcount;
     }
 
-    public function seteditcount($editcount)
+    public function seteditcount(int $editcount): void
     {
-        if (is_int($editcount)) {
-            $this->editcount = $editcount;
-        } elseif (is_numeric($editcount)) {
-            $this->editcount = intval($editcount);
-        }
+        $this->editcount = $editcount;
     }
 
-    public function setredirection($redirection)
+    public function setsleep(int $sleep): void
     {
-        if (is_string($redirection) && strlen($redirection) <= 64) {
+        if ($sleep > 180) {
+            $sleep = 180;
+        }
+        $this->sleep = $sleep;
+    }
+
+    public function setredirection(string $redirection): void
+    {
+        if (strlen($redirection) <= 64) {
             $redirection = strip_tags($redirection);
             if (preg_match('%https?:\/\/\S*%', $redirection, $out)) {
                 $this->redirection = $out[0];
@@ -715,9 +762,8 @@ abstract class Page extends Item
         }
     }
 
-    public function setrefresh($refresh)
+    public function setrefresh(int $refresh): void
     {
-        $refresh = intval($refresh);
         if ($refresh > 180) {
             $refresh = 180;
         } elseif ($refresh < 0) {
@@ -726,40 +772,41 @@ abstract class Page extends Item
         $this->refresh = $refresh;
     }
 
-    public function setpassword($password)
+    public function setpassword(string $password): void
     {
-        if (is_string($password) && strlen($password) < 64) {
+        if (strlen($password) < 64) {
             $this->password = $password;
         }
     }
 
-    public function setpostprocessaction($postprocessaction): void
+    public function setpostprocessaction(bool $postprocessaction): void
     {
-        $this->postprocessaction = boolval($postprocessaction);
+        $this->postprocessaction = $postprocessaction;
     }
 
-    public function setexternallinks($externallinks): void
+    /**
+     * @param array<string, ?bool> $externallinks
+     */
+    public function setexternallinks(array $externallinks): void
     {
-        if (is_array($externallinks)) {
-            $this->externallinks = $externallinks;
-        }
+        $this->externallinks = $externallinks;
     }
 
 
     // __________________________________ C O U N T E R S ______________________________
 
 
-    public function addeditcount()
+    public function addeditcount(): void
     {
         $this->editcount++;
     }
 
-    public function adddisplaycount()
+    public function adddisplaycount(): void
     {
         $this->displaycount++;
     }
 
-    public function addvisitcount()
+    public function addvisitcount(): void
     {
         $this->visitcount++;
     }
@@ -767,27 +814,18 @@ abstract class Page extends Item
     /**
      * Update last edited date
      */
-    public function updateedited()
+    public function updateedited(): void
     {
         $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
         $this->setdatemodif($now);
         $this->addeditcount();
     }
 
-    public function addauthor(string $id)
+    public function addauthor(string $id): void
     {
         if (!in_array($id, $this->authors)) {
             $this->authors[] = $id;
         }
-    }
-
-    public function setsleep($sleep)
-    {
-        $sleep = abs(intval($sleep));
-        if ($sleep > 180) {
-            $sleep = 180;
-        }
-        $this->sleep = $sleep;
     }
 
     /**
@@ -796,7 +834,7 @@ abstract class Page extends Item
      * @param string|array $tag Could be tags as string or array
      */
 
-    public function addtag($tag)
+    public function addtag($tag): void
     {
         if (is_string($tag)) {
                 $tag = $this->tagtoarray($tag);
@@ -856,7 +894,7 @@ abstract class Page extends Item
      * Convert a tag string to an array ready to be stored
      *
      * @param string $tagstring Tag as string separated by commas
-     * @return array Tags stored as an array
+     * @return string[] Tags stored as an array
      */
 
     private function tagtoarray(string $tagstring): array

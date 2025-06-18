@@ -16,7 +16,7 @@ class Mediaoptlist extends Mediaopt
     protected bool $filename = false;
 
     /**
-     * @param object|array $datas
+     * @param object|array<string, mixed> $datas
      */
     public function __construct($datas = [])
     {

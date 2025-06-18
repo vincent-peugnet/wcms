@@ -41,7 +41,7 @@
     "sleep": 0,
     "redirection": "",
     "refresh": 0,
-    "password": null,
+    "password": "",
     "postprocessaction": false,
     "version": 2,
     "content": "%DATE%\r\n%TIME%\r\n%DATE?format=full&lang=fr%\r\n%TIME?format=medium&lang=ja%\r\n"
