@@ -4,12 +4,6 @@ namespace Wcms;
 
 class Summary extends Item
 {
-    /** @var string full regex match */
-    protected $fullmatch;
-
-    /** @var string full options code line */
-    protected $options = '';
-
     /** @var int Minimum summary level*/
     protected $min = 1;
 
@@ -28,14 +22,6 @@ class Summary extends Item
 
     public function __construct(array $datas = [])
     {
-        $this->hydrate($datas);
-        $this->readoptions();
-    }
-
-
-    protected function readoptions(): void
-    {
-        parse_str(htmlspecialchars_decode($this->options), $datas);
         $this->hydrate($datas);
     }
 
@@ -87,16 +73,6 @@ class Summary extends Item
     // ________________________________________________ G E T ________________________________________________________
 
 
-    public function fullmatch(): string
-    {
-        return $this->fullmatch;
-    }
-
-    public function options(): string
-    {
-        return $this->options;
-    }
-
     public function element()
     {
         return $this->element;
@@ -105,19 +81,6 @@ class Summary extends Item
 
     // ________________________________________________ S E T ________________________________________________________
 
-
-    public function setfullmatch(string $fullmatch): void
-    {
-        $this->fullmatch = $fullmatch;
-    }
-
-
-    public function setoptions(string $options): void
-    {
-        if (!empty($options)) {
-            $this->options = $options;
-        }
-    }
 
     public function setmin($min)
     {

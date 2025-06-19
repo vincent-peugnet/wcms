@@ -8,10 +8,6 @@ use IntlDateFormatter;
 
 class Clock extends Item
 {
-    protected string $fullmatch;
-
-    protected string $options;
-
     protected DateTimeInterface $datetime;
 
     protected string $type;
@@ -53,31 +49,18 @@ class Clock extends Item
      *
      * @param string $type                  Define if it must display time or date.
      * @param Page $page                    The page which is rendered
-     * @param string $fullmatch
-     * @param string $options
      */
     public function __construct(
         string $type,
         Page $page,
-        string $fullmatch,
-        string $options,
-        string $lang = null
+        ?string $lang = null,
+        string $format = self::SHORT
     ) {
         $this->settype($type);
         $datetype = self::TYPES[$this->type];
         $this->datetime = $page->$datetype();
-        $this->fullmatch = $fullmatch;
-        $this->options = $options;
         $this->lang = empty($lang) ? Config::lang() : $lang;
-
-        $this->readoptions();
-    }
-
-    protected function readoptions(): void
-    {
-        parse_str(htmlspecialchars_decode($this->options), $datas);
-        $datas = array_diff_key($datas, ['type' => 0]); // To avoid erasing type
-        $this->hydrate($datas);
+        $this->format = $format;
     }
 
     protected function visible(): string
@@ -114,27 +97,13 @@ class Clock extends Item
     /**
      * Produce HTML time tag ready to be included.
      */
-    public function format(): string
+    public function render(): string
     {
         $attribute = $this->attribute();
         $title = $this->title();
         $visible = $this->visible();
         $type = self::TYPES[$this->type];
         return "<time datetime=\"$attribute\" title=\"$title\" class=\"$type\">$visible</time>";
-    }
-
-
-
-    // ______________________ G E T _____________________________
-
-    public function fullmatch(): string
-    {
-        return $this->fullmatch;
-    }
-
-    public function options(): string
-    {
-        return $this->options;
     }
 
     // _______________________ S E T ______________________________

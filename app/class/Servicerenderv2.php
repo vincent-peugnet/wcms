@@ -52,10 +52,11 @@ class Servicerenderv2 extends Servicerender
         // First, analyse the synthax and call the corresponding methods
         if (!empty($matches)) {
             foreach ($matches as $match) {
-                $element = new Elementv2($this->page->id(), $match['fullmatch'], $match['options']);
+                $element = new Elementv2($this->page->id());
+                $element->hydrate($match->readoptions());
                 $element->setcontent($this->getelementcontent($element->id()));
                 $element->setcontent($this->elementparser($element));
-                $body = str_replace($element->fullmatch(), $element->content(), $body);
+                $body = str_replace($match->fullmatch(), $element->content(), $body);
             }
         }
 

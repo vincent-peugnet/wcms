@@ -6,12 +6,6 @@ use RuntimeException;
 
 class Mediaoptlist extends Mediaopt
 {
-    /** @var string full regex match */
-    protected $fullmatch;
-
-    /** @var string full options code line */
-    protected $options = '';
-
     /** @var bool display the file name of the file */
     protected bool $filename = false;
 
@@ -21,12 +15,6 @@ class Mediaoptlist extends Mediaopt
     public function __construct($datas = [])
     {
         parent::__construct($datas);
-    }
-
-    public function readoptions(): void
-    {
-        parse_str(htmlspecialchars_decode($this->options), $datas);
-        $this->hydrate($datas);
     }
 
     /**
@@ -101,16 +89,6 @@ class Mediaoptlist extends Mediaopt
     // ______________________________________________ G E T ________________________________________________________
 
 
-    public function fullmatch(): string
-    {
-        return $this->fullmatch;
-    }
-
-    public function options(): string
-    {
-        return $this->options;
-    }
-
     public function filename(): bool
     {
         return $this->filename;
@@ -118,19 +96,6 @@ class Mediaoptlist extends Mediaopt
 
     // ______________________________________________ S E T ________________________________________________________
 
-
-    public function setfullmatch(string $fullmatch): void
-    {
-        $this->fullmatch = $fullmatch;
-    }
-
-
-    public function setoptions(string $options): void
-    {
-        if (!empty($options)) {
-            $this->options = $options;
-        }
-    }
 
     public function setfilename(bool $filename): void
     {
