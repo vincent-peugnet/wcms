@@ -7,8 +7,6 @@ namespace Wcms;
  */
 abstract class Element extends Item
 {
-    protected string $fullmatch;
-    protected string $options;
     protected int $everylink = 0;
     protected bool $markdown = true;
     protected string $content = '';
@@ -27,25 +25,7 @@ abstract class Element extends Item
         self::NO_HEADER_ANCHOR, self::HEADER_ANCHOR_LINK, self::HEADER_ANCHOR_HASH
     ];
 
-    // ______________________________________________ F U N ________________________________________________________
-
-
-
-    abstract protected function analyse(string $pageid): void;
-
-
     // ______________________________________________ G E T ________________________________________________________
-
-
-    public function fullmatch(): string
-    {
-        return $this->fullmatch;
-    }
-
-    public function options(): string
-    {
-        return $this->options;
-    }
 
     public function everylink(): int
     {
@@ -94,18 +74,6 @@ abstract class Element extends Item
 
     // ______________________________________________ S E T ________________________________________________________
 
-
-    public function setfullmatch(string $fullmatch): void
-    {
-        $this->fullmatch = $fullmatch;
-    }
-
-    public function setoptions(string $options): void
-    {
-        if (!empty($options)) {
-            $this->options = $options;
-        }
-    }
 
     public function seteverylink(int $level): bool
     {

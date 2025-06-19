@@ -64,6 +64,16 @@ class Bookmark extends Item
         return $this->published;
     }
 
+    /**
+     * @return array<string, mixed> Assoc array representing the query
+     */
+    public function querydata(): array
+    {
+        parse_str(ltrim($this->query, "?"), $data);
+        return $data;
+    }
+
+
 
     // _____________________________ G E T __________________________________
 

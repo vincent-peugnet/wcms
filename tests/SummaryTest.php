@@ -40,7 +40,7 @@ class SummaryTest extends TestCase
                         new Header('test-1', 1, 'Test 1'),
                         new Header('test-1-2', 2, 'Test 1.2')
                     ],
-                    'options' => 'min=2'
+                    'min' => 2
                 ],
                 '<ul class="summary"><li><a href="#test-1-2">Test 1.2</a></li></ul>'
             ],
@@ -50,7 +50,7 @@ class SummaryTest extends TestCase
                         new Header('test-1', 1, 'Test 1'),
                         new Header('test-1-2', 2, 'Test 1.2')
                     ],
-                    'options' => 'max=1'
+                    'max' => 1
                 ],
                 '<ul class="summary"><li><a href="#test-1">Test 1</a></li></ul>'
             ]

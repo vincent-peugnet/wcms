@@ -626,7 +626,7 @@ abstract class Servicerender
      * @param string $text                  Input text to scan
      * @param string $include               Word to match `%$include%`
      *
-     * @return array<int, array{'fullmatch': string, 'type': string, 'options': string}>
+     * @return Inclusion[]
      */
     protected function match(string $text, string $include): array
     {
@@ -635,7 +635,7 @@ abstract class Servicerender
         $matches = [];
 
         foreach ($out[0] as $key => $match) {
-            $matches[$key] = ['fullmatch' => $match, 'type' => $out[1][$key], 'options' => $out[3][$key]];
+            $matches[$key] = new Inclusion($match, $out[1][$key], $out[3][$key], $this->page);
         }
         return $matches;
     }
@@ -652,10 +652,9 @@ abstract class Servicerender
 
         if (!empty($matches)) {
             foreach ($matches as $match) {
-                $medialist = new Mediaoptlist($match);
-                $medialist->readoptions();
+                $medialist = new Mediaoptlist($match->readoptions());
                 try {
-                    $text = str_replace($medialist->fullmatch(), $medialist->generatecontent(), $text);
+                    $text = str_replace($match->fullmatch(), $medialist->generatecontent(), $text);
                 } catch (RuntimeException $e) {
                     Logger::errorex($e);
                 }
@@ -677,9 +676,9 @@ abstract class Servicerender
 
         if (!empty($matches)) {
             foreach ($matches as $match) {
-                $data = array_merge($match, ['sum' => $this->sum]);
+                $data = array_merge($match->readoptions(), ['sum' => $this->sum]);
                 $summary = new Summary($data);
-                $text = str_replace($summary->fullmatch(), $summary->sumparser(), $text);
+                $text = str_replace($match->fullmatch(), $summary->sumparser(), $text);
             }
         }
         return $text;
@@ -695,15 +694,15 @@ abstract class Servicerender
         foreach ($matches as $match) {
             try {
                 $optlist = new Optlist();
-                $optlist->parsehydrate($match['options'], $this->page);
+                $options = $match->readoptions();
 
-                if (!empty($optlist->bookmark())) {
+                if (isset($options['bookmark']) && !empty($options['bookmark'])) {
                     $bookmarkmanager = new Modelbookmark();
-                    $bookmark = $bookmarkmanager->get($optlist->bookmark());
-                    $optlist->resetall();
-                    $optlist->parsehydrate($bookmark->query(), $this->page);
-                    $optlist->parsehydrate($match['options'], $this->page); // Erase bookmark options with LIST ones
+                    $bookmark = $bookmarkmanager->get($options['bookmark']);
+                    $optlist->hydrate($bookmark->querydata()); // may be erased by the Inclusion options
                 }
+
+                $optlist->hydrate($options);
 
                 $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optlist);
                 $content = $optlist->listhtml($pagetable, $this->page);
@@ -724,23 +723,23 @@ abstract class Servicerender
         $matches = $this->match($text, 'MAP');
         foreach ($matches as $match) {
             try {
+                $options = $match->readoptions();
                 $optmap = new Optmap();
-                $optmap->parsehydrate($match['options'], $this->page);
 
-                if (!empty($optmap->bookmark())) {
+                if (isset($options['bookmark']) && !empty($options['bookmark'])) {
                     $bookmarkmanager = new Modelbookmark();
-                    $bookmark = $bookmarkmanager->get($optmap->bookmark());
-                    $optmap->resetall();
-                    $optmap->parsehydrate($bookmark->query(), $this->page);
-                    $optmap->parsehydrate($match['options'], $this->page); // Erase bookmark options with LIST ones
+                    $bookmark = $bookmarkmanager->get($options['bookmark']);
+                    $optmap->hydrate($bookmark->querydata()); // may be erased by the Inclusion options
                 }
+
+                $optmap->hydrate($options);
 
                 $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optmap);
                 $geopt = new Opt(['geo' => true]);
                 $pagetable = $this->pagemanager->pagetable($pagetable, $geopt);
                 $this->linkto = array_merge($this->linkto, array_keys($pagetable));
                 $content = $optmap->maphtml($pagetable, $this->router);
-                $text = str_replace($match['fullmatch'], $content, $text);
+                $text = str_replace($match->fullmatch(), $content, $text);
                 $this->map = true;
             } catch (RuntimeException $e) {
                 Logger::errorex($e);
@@ -756,26 +755,26 @@ abstract class Servicerender
     {
         $matches = $this->match($text, 'RANDOM');
         foreach ($matches as $match) {
-            $optrandom = new Optrandom();
-            $optrandom->parsehydrate($match['options'], $this->page);
+            try {
+                $options = $match->readoptions();
+                $optrandom = new Optrandom();
 
-            if (!empty($optrandom->bookmark())) {
-                try {
+                if (isset($options['bookmark']) && !empty($options['bookmark'])) {
                     $bookmarkmanager = new Modelbookmark();
-                    $bookmark = $bookmarkmanager->get($optrandom->bookmark());
-                    $optrandom->resetall();
-                    $optrandom->parsehydrate($bookmark->query(), $this->page);
-                    $optrandom->parsehydrate($match['options'], $this->page); // Erase bookmark options with LIST ones
-                } catch (RuntimeException $e) {
-                    Logger::errorex($e); // bookmark does not exist
+                    $bookmark = $bookmarkmanager->get($options['bookmark']);
+                    $optrandom->hydrate($bookmark->querydata());
                 }
-            }
 
-            $randompages = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optrandom);
-            $this->linkto = array_merge($this->linkto, array_keys($randompages));
-            $optrandom->setorigin($this->page->id());
-            $content = $this->generate('randomdirect', [], $optrandom->getquery());
-            $text = str_replace($match['fullmatch'], $content, $text);
+                $optrandom->hydrate($options);
+
+                $randompages = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optrandom);
+                $this->linkto = array_merge($this->linkto, array_keys($randompages));
+                $optrandom->setorigin($this->page->id());
+                $content = $this->generate('randomdirect', [], $optrandom->getquery());
+                $text = str_replace($match->fullmatch(), $content, $text);
+            } catch (RuntimeException $e) {
+                Logger::errorex($e); // bookmark does not exist
+            }
         }
         return $text;
     }
@@ -809,13 +808,13 @@ abstract class Servicerender
         $rsslist = [];
         $matches = $this->match($text, "RSS");
         foreach ($matches as $match) {
-            parse_str($match['options'], $datas);
-            if (isset($datas['bookmark'])) {
+            $options = $match->readoptions();
+            if (isset($options['bookmark'])) {
                 $bookmarkmanager = new Modelbookmark();
                 try {
-                    $bookmark = $bookmarkmanager->get($datas['bookmark']);
+                    $bookmark = $bookmarkmanager->get($options['bookmark']);
                     if ($bookmark->ispublished()) {
-                        $rsslist[$match['fullmatch']] = $bookmark;
+                        $rsslist[$match->fullmatch()] = $bookmark;
                     }
                 } catch (RuntimeException $e) {
                     // log a render error
@@ -835,14 +834,13 @@ abstract class Servicerender
         $replaces = [];
         foreach ($matches as $match) {
             $clock = new Clock(
-                $match['type'],
+                $match->type(),
                 $this->page,
-                $match['fullmatch'],
-                $match['options'],
-                $this->page->lang()
+                $this->page->lang(),
             );
-            $searches[] = $clock->fullmatch();
-            $replaces[] = $clock->format();
+            $clock->hydrate($match->readoptions());
+            $searches[] = $match->fullmatch();
+            $replaces[] = $clock->render();
         }
         return str_replace($searches, $replaces, $text);
     }

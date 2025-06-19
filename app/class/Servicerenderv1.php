@@ -49,20 +49,15 @@ class Servicerenderv1 extends Servicerender
 
         // Elements that can be detected
         $types = array_map("strtoupper", Pagev1::HTML_ELEMENTS);
-
-        // First level regex
         $regex = implode("|", $types);
-
         $matches = $this->match($body, $regex);
 
-        // First, analyse the synthax and call the corresponding methods
-        if (!empty($matches)) {
-            foreach ($matches as $match) {
-                $element = new Elementv1($this->page->id(), $match['fullmatch'], $match['type'], $match['options']);
-                $element->setcontent($this->getelementcontent($element->sources(), $element->type()));
-                $element->setcontent($this->elementparser($element));
-                $body = str_replace($element->fullmatch(), $element->content(), $body);
-            }
+        foreach ($matches as $match) {
+            $element = new Elementv1($this->page->id(), $match->type());
+            $element->hydrate($match->readoptions());
+            $element->setcontent($this->getelementcontent($element->id(), $element->type()));
+            $element->setcontent($this->elementparser($element));
+            $body = str_replace($match->fullmatch(), $element->content(), $body);
         }
 
         return $body;
