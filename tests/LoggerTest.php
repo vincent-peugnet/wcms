@@ -4,7 +4,6 @@ namespace Wcms\Tests;
 
 use Exception;
 use RuntimeException;
-use PHPUnit\Framework\TestCase;
 use Throwable;
 use Wcms\Logger;
 
@@ -88,6 +87,7 @@ class LoggerTest extends FilesTest
         $this->assertEmpty(file_get_contents($this->logfile));
     }
 
+    /** @return mixed[][] */
     public function errorNotLoggedProvider(): array
     {
         return [[0]];
@@ -95,16 +95,18 @@ class LoggerTest extends FilesTest
 
     /**
      * @test
+     * @param mixed[] $args
      * @dataProvider errorLoggedProvider
      */
     public function errorLoggedTest(int $verbosity, string $msg, array $args, string $expected): void
     {
         Logger::init($this->logfile, $verbosity);
         Logger::error($msg, ...$args);
-        $expected = " [ ERROR ] tests{$this->ds}LoggerTest.php(103) $expected\n";
+        $expected = " [ ERROR ] tests{$this->ds}LoggerTest.php(104) $expected\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
+    /** @return mixed[][] */
     public function errorLoggedProvider(): array
     {
         return [
@@ -126,6 +128,7 @@ class LoggerTest extends FilesTest
         $this->assertEmpty(file_get_contents($this->logfile));
     }
 
+    /** @return mixed[][] */
     public function warningNotLoggedProvider(): array
     {
         return [[0], [1]];
@@ -133,16 +136,18 @@ class LoggerTest extends FilesTest
 
     /**
      * @test
+     * @param mixed[] $args
      * @dataProvider warningLoggedProvider
      */
     public function warningLoggedTest(int $verbosity, string $msg, array $args, string $expected): void
     {
         Logger::init($this->logfile, $verbosity);
         Logger::warning($msg, ...$args);
-        $expected = " [ WARN ]  tests{$this->ds}LoggerTest.php(141) $expected\n";
+        $expected = " [ WARN ]  tests{$this->ds}LoggerTest.php(145) $expected\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
+    /** @return mixed[][] */
     public function warningLoggedProvider(): array
     {
         return [
@@ -163,6 +168,7 @@ class LoggerTest extends FilesTest
         $this->assertEmpty(file_get_contents($this->logfile));
     }
 
+    /** @return mixed[][] */
     public function infoNotLoggedProvider(): array
     {
         return [[0], [1], [2]];
@@ -170,16 +176,18 @@ class LoggerTest extends FilesTest
 
     /**
      * @test
+     * @param mixed[] $args
      * @dataProvider infoLoggedProvider
      */
     public function infoLoggedTest(int $verbosity, string $msg, array $args, string $expected): void
     {
         Logger::init($this->logfile, $verbosity);
         Logger::info($msg, ...$args);
-        $expected = " [ INFO ]  tests{$this->ds}LoggerTest.php(178) $expected\n";
+        $expected = " [ INFO ]  tests{$this->ds}LoggerTest.php(185) $expected\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
+    /** @return mixed[][] */
     public function infoLoggedProvider(): array
     {
         return [
@@ -199,6 +207,7 @@ class LoggerTest extends FilesTest
         $this->assertEmpty(file_get_contents($this->logfile));
     }
 
+    /** @return mixed[][] */
     public function debugNotLoggedProvider(): array
     {
         return [[0], [1], [2], [3]];
@@ -206,16 +215,18 @@ class LoggerTest extends FilesTest
 
     /**
      * @test
+     * @param mixed[] $args
      * @dataProvider debugLoggedProvider
      */
     public function debugLoggedTest(int $verbosity, string $msg, array $args, string $expected): void
     {
         Logger::init($this->logfile, $verbosity);
         Logger::debug($msg, ...$args);
-        $expected = " [ DEBUG ] tests{$this->ds}LoggerTest.php(214) $expected\n";
+        $expected = " [ DEBUG ] tests{$this->ds}LoggerTest.php(224) $expected\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
+    /** @return mixed[][] */
     public function debugLoggedProvider(): array
     {
         return [
@@ -234,6 +245,7 @@ class LoggerTest extends FilesTest
         $this->assertEmpty(file_get_contents($this->logfile));
     }
 
+    /** @return mixed[][] */
     public function errorexNotLoggedProvider(): array
     {
         return [[0]];
@@ -243,16 +255,17 @@ class LoggerTest extends FilesTest
      * @test
      * @dataProvider errorexLoggedProvider
      */
-    public function errorexLoggedTest(int $verbosity, Throwable $e, string $expected, int $line)
+    public function errorexLoggedTest(int $verbosity, Throwable $e, string $expected, int $line): void
     {
         Logger::init($this->logfile, $verbosity);
         Logger::errorex($e);
         $file = __FILE__;
-        $line += 259;
-        $expected = " [ ERROR ] tests{$this->ds}LoggerTest.php(249) $expected in $file($line)\n";
+        $line += 272;
+        $expected = " [ ERROR ] tests{$this->ds}LoggerTest.php(261) $expected in $file($line)\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
+    /** @return mixed[][] */
     public function errorexLoggedProvider(): array
     {
         return [
@@ -272,7 +285,7 @@ class LoggerTest extends FilesTest
         Logger::init($this->logfile, 1);
         Logger::errorex(new Exception('Error'), true);
         $content = file_get_contents($this->logfile);
-        $expected = " [ ERROR ] tests{$this->ds}LoggerTest.php(273) Error ";
+        $expected = " [ ERROR ] tests{$this->ds}LoggerTest.php(286) Error ";
         $this->assertEquals($expected, substr($content, 25, 43));
         $this->assertMatchesRegularExpression('/(#\d+ [\w\/\.]*\(\d+\): .*\)\n)+#\d+ \{main\}\n/U', $content);
     }
@@ -288,25 +301,27 @@ class LoggerTest extends FilesTest
         $this->assertEmpty(file_get_contents($this->logfile));
     }
 
+    /** @return mixed[][] */
     public function warningexNotLoggedProvider(): array
     {
-        return [[0],[1]];
+        return [[0], [1]];
     }
 
     /**
      * @test
      * @dataProvider warningexLoggedProvider
      */
-    public function warningexLoggedTest(int $verbosity, Throwable $e, string $expected, int $line)
+    public function warningexLoggedTest(int $verbosity, Throwable $e, string $expected, int $line): void
     {
         Logger::init($this->logfile, $verbosity);
         Logger::warningex($e);
         $file = __FILE__;
-        $line += 313;
-        $expected = " [ WARN ]  tests{$this->ds}LoggerTest.php(303) $expected in $file($line)\n";
+        $line += 328;
+        $expected = " [ WARN ]  tests{$this->ds}LoggerTest.php(317) $expected in $file($line)\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
+    /** @return mixed[][] */
     public function warningexLoggedProvider(): array
     {
         return [
@@ -327,25 +342,27 @@ class LoggerTest extends FilesTest
         $this->assertEmpty(file_get_contents($this->logfile));
     }
 
+    /** @return mixed[][] */
     public function infoexNotLoggedProvider(): array
     {
-        return [[0],[1],[2]];
+        return [[0], [1], [2]];
     }
 
     /**
      * @test
      * @dataProvider infoexLoggedProvider
      */
-    public function infoexLoggedTest(int $verbosity, Throwable $e, string $expected, int $line)
+    public function infoexLoggedTest(int $verbosity, Throwable $e, string $expected, int $line): void
     {
         Logger::init($this->logfile, $verbosity);
         Logger::infoex($e);
         $file = __FILE__;
-        $line += 352;
-        $expected = " [ INFO ]  tests{$this->ds}LoggerTest.php(342) $expected in $file($line)\n";
+        $line += 369;
+        $expected = " [ INFO ]  tests{$this->ds}LoggerTest.php(358) $expected in $file($line)\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
+    /** @return mixed[][] */
     public function infoexLoggedProvider(): array
     {
         return [
@@ -365,25 +382,27 @@ class LoggerTest extends FilesTest
         $this->assertEmpty(file_get_contents($this->logfile));
     }
 
+    /** @return mixed[][] */
     public function debugexNotLoggedProvider(): array
     {
-        return [[0],[1],[2],[3]];
+        return [[0], [1], [2], [3]];
     }
 
     /**
      * @test
      * @dataProvider debugexLoggedProvider
      */
-    public function debugexLoggedTest(int $verbosity, Throwable $e, string $expected, int $line)
+    public function debugexLoggedTest(int $verbosity, Throwable $e, string $expected, int $line): void
     {
         Logger::init($this->logfile, $verbosity);
         Logger::debugex($e);
         $file = __FILE__;
-        $line += 390;
-        $expected = " [ DEBUG ] tests{$this->ds}LoggerTest.php(380) $expected in $file($line)\n";
+        $line += 409;
+        $expected = " [ DEBUG ] tests{$this->ds}LoggerTest.php(398) $expected in $file($line)\n";
         $this->assertEquals($expected, substr(file_get_contents($this->logfile), 25));
     }
 
+    /** @return mixed[][] */
     public function debugexLoggedProvider(): array
     {
         return [

@@ -10,6 +10,7 @@ class SummaryTest extends TestCase
 {
     /**
      * @test
+     * @param mixed[] $options
      * @dataProvider sumparserProvider
      */
     public function sumparserTest(array $options, string $expected): void
@@ -18,9 +19,7 @@ class SummaryTest extends TestCase
         $this->assertEquals($expected, $summary->sumparser());
     }
 
-    /**
-     * @return array<array<mixed>>
-     */
+    /** @return mixed[][] */
     public function sumparserProvider(): array
     {
         return [
