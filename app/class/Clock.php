@@ -54,7 +54,7 @@ class Clock extends Item
         string $type,
         Page $page,
         ?string $lang = null,
-        string $format = self::SHORT,
+        string $format = self::SHORT
     ) {
         $this->settype($type);
         $datetype = self::TYPES[$this->type];
