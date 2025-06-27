@@ -22,7 +22,7 @@ class Repository extends \JamesMoss\Flywheel\Repository
     /**
      * Get an array containing the path of all files in this repository
      *
-     * @return array An array, item is a file
+     * @return string[]|false An array, item is a file
      */
     public function getAllFiles()
     {
@@ -34,9 +34,9 @@ class Repository extends \JamesMoss\Flywheel\Repository
     /**
      * Get an array containing the id of all files in this repository
      *
-     * @return array An array, item is a id
+     * @return string[] An array, item is a id
      */
-    public function getAllIds()
+    public function getAllIds(): array
     {
         $ext = $this->formatter->getFileExtension();
         return array_map(function ($path) use ($ext) {
@@ -44,6 +44,10 @@ class Repository extends \JamesMoss\Flywheel\Repository
         }, $this->getAllFiles());
     }
 
+    /**
+     * @param string $path
+     * @param string $contents
+     */
     protected function write($path, $contents): bool
     {
         $ret = parent::write($path, $contents);

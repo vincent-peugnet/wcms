@@ -10,16 +10,19 @@ class Summary extends Item
     /** @var int Maximum summary level*/
     protected $max = 6;
 
-    /** @var array[] Headers datas */
+    /** @var array<string, Header[]> Headers datas */
     protected $sum = [];
 
-    /** @var string|null Name of element to display */
+    /** @var ?string Name of element to display */
     protected $element = null;
 
 
 
 
 
+    /**
+     * @param array<string, mixed> $datas
+     */
     public function __construct(array $datas = [])
     {
         $this->hydrate($datas);
@@ -31,7 +34,7 @@ class Summary extends Item
      *
      * @return string html list with anchor link
      */
-    public function sumparser()
+    public function sumparser(): string
     {
         // check if a element is specified
         if (!is_null($this->element) && isset($this->sum[$this->element])) {
@@ -73,6 +76,9 @@ class Summary extends Item
     // ________________________________________________ G E T ________________________________________________________
 
 
+    /**
+     * @return ?string
+     */
     public function element()
     {
         return $this->element;
@@ -82,7 +88,7 @@ class Summary extends Item
     // ________________________________________________ S E T ________________________________________________________
 
 
-    public function setmin($min)
+    public function setmin(int $min): void
     {
         $min = intval($min);
         if ($min >= 1 && $min <= 6) {
@@ -90,7 +96,7 @@ class Summary extends Item
         }
     }
 
-    public function setmax($max)
+    public function setmax(int $max): void
     {
         $max = intval($max);
         if ($max >= 1 && $max <= 6) {
@@ -98,12 +104,15 @@ class Summary extends Item
         }
     }
 
-    public function setsum(array $sum)
+    /**
+     * @param array<string, Header[]> $sum
+     */
+    public function setsum(array $sum): void
     {
         $this->sum = $sum;
     }
 
-    public function setelement(string $element)
+    public function setelement(string $element): void
     {
         if (in_array($element, Pagev1::HTML_ELEMENTS)) {
             $this->element = $element;

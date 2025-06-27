@@ -34,6 +34,7 @@ abstract class Servicerender
     /** @var array<string, ?bool> $urls */
     protected $urls = [];
 
+    /** @var array<string, Header[]> */
     protected $sum = [];
 
     /** @var bool If true, internal links target a new tab */
@@ -502,6 +503,8 @@ abstract class Servicerender
 
     /**
      * Edit `src` attributes in media HTML tags
+     *
+     * @param DOMNodeList<DOMElement> $sourcables
      */
     protected function sourceparser(DOMNodeList $sourcables): void
     {
@@ -1038,7 +1041,10 @@ abstract class Servicerender
 
     // _________________________ G E T ___________________________________
 
-    public function sum()
+    /**
+     * @return array<string, Header[]>
+     */
+    public function sum(): array
     {
         return $this->sum;
     }
