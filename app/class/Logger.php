@@ -47,6 +47,9 @@ class Logger
         }
     }
 
+    /**
+     * @param mixed[] $args
+     */
     protected static function write(string $level, string $msg, array $args = []): void
     {
         $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1];
@@ -66,6 +69,8 @@ class Logger
 
     /**
      * Log an error message using printf format.
+     *
+     * @param mixed[] $args
      */
     public static function error(string $msg, ...$args): void
     {
@@ -76,6 +81,8 @@ class Logger
 
     /**
      * Log a warning message using printf format.
+     *
+     * @param mixed[] $args
      */
     public static function warning(string $msg, ...$args): void
     {
@@ -86,6 +93,8 @@ class Logger
 
     /**
      * Log an info message using printf format.
+     *
+     * @param mixed[] $args
      */
     public static function info(string $msg, ...$args): void
     {
@@ -96,6 +105,8 @@ class Logger
 
     /**
      * Log a debug message using printf format.
+     *
+     * @param mixed[] $args
      */
     public static function debug(string $msg, ...$args): void
     {
