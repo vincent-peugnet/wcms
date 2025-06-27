@@ -227,6 +227,6 @@ To only build the release zip, simply run `make dist`. This will create a zip fi
 [github]: https://img.shields.io/github/actions/workflow/status/vincent-peugnet/wcms/checks.yml?branch=master&label=checks
 [action]: https://github.com/vincent-peugnet/wcms/actions?query=branch%3Amaster+workflow%3Achecks
 [codestyle]: https://img.shields.io/badge/code%20style-PSR12-brightgreen
-[phpstan]: https://img.shields.io/badge/phpstan-level%205-green
+[phpstan]: https://img.shields.io/badge/phpstan-level%206-green
 [coverage]: https://img.shields.io/codecov/c/gh/vincent-peugnet/wcms
 [codecov]: https://codecov.io/gh/vincent-peugnet/wcms
