@@ -10,6 +10,7 @@ use DomainException;
 use InvalidArgumentException;
 use RangeException;
 use RuntimeException;
+use Wcms\Exception\Database\Notfoundexception as DatabaseNotfoundexception;
 use Wcms\Exception\Databaseexception;
 use Wcms\Exception\Filesystemexception;
 use Wcms\Exception\Filesystemexception\Notfoundexception;
@@ -112,30 +113,23 @@ class Modelpage extends Modeldb
      *
      * @return Page                         The Page object
      *
-     * @throws InvalidArgumentException     If $id argument is not a string or a Page
      * @throws RuntimeException             If page is'nt found
+     * @throws RangeException               If page version is specified but invalid
      */
     public function get($id): Page
     {
         if ($id instanceof Page) {
             $id = $id->id();
         }
-        if (is_int($id)) {
-            $id = strval($id);
-        }
-        if (is_string($id)) {
-            $pagedata = $this->repo->findById($id);
-            if ($pagedata === false) {
-                throw new RuntimeException("Could not find Page with the following ID: \"$id\"");
-            }
-            try {
-                return $this->parsepage($pagedata);
-            } catch (RuntimeException $e) {
-                throw new RuntimeException("Could not load Page with ID \"$id\": $e");
-            }
-        } else {
+        if (!is_string($id)) {
             throw new InvalidArgumentException("argument of Modelpage->get() should be a ID string or Page");
         }
+
+        $pagedata = $this->repo->findById($id);
+        if ($pagedata === false) {
+            throw new DatabaseNotfoundexception("Could not find Page with the following ID: '$id'");
+        }
+        return $this->parsepage($pagedata);
     }
 
     /**
@@ -186,40 +180,66 @@ class Modelpage extends Modeldb
     }
 
     /**
-     * Get all the pages that are called in css templating
+     * Get all the existing pages that are called in css templating
      *
      * @param Page $page                    page to retrieve css templates
-     * @return Page[]                       array of pages with ID as index
      *
-     * @throws RuntimeException             If css template is not found in database
+     * @param array<string, Page> $templates
+     *
+     * @return array<string, Page>          array of pages with ID as index
+     *
+     * @throws RuntimeException             If a loop occured in templates
      */
-    public function getpagecsstemplates(Page $page): array
+    public function getpagecsstemplates(Page $page, array $templates = []): array
     {
-        $templates = [];
-        if (!empty($page->templatecss()) && $page->templatecss() !== $page->id()) {
+        if (empty($page->templatecss())) {
+            return [];
+        }
+        if ($page->templatecss() === $page->id() || key_exists($page->templatecss(), $templates)) {
+            throw new RuntimeException('there is a loop in CSS templates');
+        }
+
+        try {
             $template = $this->get($page->templatecss());
             $templates[$template->id()] = $template;
-            $templates = array_merge($this->getpagecsstemplates($template), $templates);
+            $templates = $this->getpagecsstemplates($template, $templates);
+        } catch (Databaseexception | RangeException $e) {
+            // This mean page do not exist or is invalid
+            Logger::errorex($e);
         }
+
         return $templates;
     }
 
     /**
-     * Get all the pages that are called in Javascript templating
+     * Get all the existing pages that are called in Javascript templating
      *
      * @param Page $page                    page to retrieve JS templates
-     * @return Page[]                       array of pages with ID as index
      *
-     * @throws RuntimeException             If JS template is not found in database
+     * @param array<string, Page> $templates
+     *
+     * @return array<string, Page>          array of pages with ID as index
+     *
+     * @throws RuntimeException             If a loop occured in templates
      */
-    public function getpagejavascripttemplates(Page $page): array
+    public function getpagejavascripttemplates(Page $page, array $templates = []): array
     {
-        $templates = [];
-        if (!empty($page->templatejavascript()) && $page->templatejavascript() !== $page->id()) {
+        if (empty($page->templatejavascript())) {
+            return [];
+        }
+        if ($page->templatejavascript() === $page->id() || key_exists($page->templatejavascript(), $templates)) {
+            throw new RuntimeException('there is a loop in Javascript templates');
+        }
+
+        try {
             $template = $this->get($page->templatejavascript());
             $templates[$template->id()] = $template;
-            $templates = array_merge($this->getpagejavascripttemplates($template), $templates);
+            $templates = $this->getpagejavascripttemplates($template, $templates);
+        } catch (Databaseexception | RangeException $e) {
+            // This mean page do not exist or is invalid
+            Logger::errorex($e);
         }
+
         return $templates;
     }
 
@@ -414,19 +434,24 @@ class Modelpage extends Modeldb
     /**
      * Check if a page need to be rendered
      *
-     * 1. This will compare edit and render dates
-     * 2. then if render file exists
-     * 3. then if the templatebody is set and has been updated
+     * A page need to be rendered if:
+     *
+     * 1. render file(s) are missing
+     * 2. edit date is more recent than render date
+     * 3. if the templatebody is set, exist and has been updated
      *
      * @param Page $page                    Page to be checked
      *
+     * @param int<1, max> $level
+     *
      * @return bool                         true if the page need to be rendered otherwise false
      */
-    public function needtoberendered(Page $page): bool
+    public function needtoberendered(Page $page, int $level = 3): bool
     {
-        if ($page->daterender() <= $page->datemodif()) {
-            return true;
+        if ($level < 1) {
+            throw new DomainException('minimum level is 1');
         }
+
         if (
             !file_exists(self::HTML_RENDER_DIR . $page->id() . '.html')
             || !file_exists(self::ASSETS_RENDER_DIR . $page->id() . '.css')
@@ -434,12 +459,15 @@ class Modelpage extends Modeldb
         ) {
             return true;
         }
-        if (!empty($page->templatebody())) {
+        if ($level >= 2 && $page->daterender() <= $page->datemodif()) {
+            return true;
+        }
+        if ($level >= 3 && !empty($page->templatebody())) {
             try {
                 $bodytemplate = $this->get($page->templatebody());
                 return $page->daterender() <= $bodytemplate->datemodif();
             } catch (RuntimeException $e) {
-                return false;
+                Logger::errorex($e);
             }
         }
         return false;
@@ -497,6 +525,28 @@ class Modelpage extends Modeldb
         $page->setpostprocessaction($renderengine->postprocessaction());
 
         return $page;
+    }
+
+    /**
+     * Render page's JS and CSS templates if they need to
+     * If a page template do not exist, it won't trigger an error
+     *
+     * @param Page $page                    page to check templates
+     *
+     * @throws RuntimeException if writing render to filesystem failed or if there is a loop
+     */
+    public function templaterender(Page $page, AltoRouter $router): void
+    {
+        $templates = array_merge(
+            $this->getpagecsstemplates($page),
+            $this->getpagejavascripttemplates($page)
+        );
+        foreach ($templates as $template) {
+            if ($this->needtoberendered($template, 2)) { // we don't care of content or body here
+                $template = $this->renderpage($template, $router, null);
+                $this->update($template);
+            }
+        }
     }
 
 

@@ -87,11 +87,12 @@ class Controllerpage extends Controller
             try {
                 $urlchecker = Config::urlchecker() ? new Serviceurlchecker(6) : null;
                 $this->page = $this->pagemanager->renderpage($this->page, $this->router, $urlchecker);
+                $this->pagemanager->update($this->page);
+                $this->pagemanager->templaterender($this->page, $this->router);
             } catch (RuntimeException $e) {
-                Logger::errorex($e);
+                $msg = $e->getMessage();
+                Logger::error("Error while trying to render '$page': $msg");
             }
-            $this->pagemanager->update($this->page);
-            $this->templaterender($this->page);
         }
         http_response_code(307);
         $this->routedirect('pageread', ['page' => $this->page->id()]);
@@ -107,40 +108,6 @@ class Controllerpage extends Controller
         foreach ($relatedpages as $pageid) {
             try {
                 $this->pagemanager->unlink($pageid);
-            } catch (RuntimeException $e) {
-                Logger::errorex($e, true);
-            }
-        }
-    }
-
-    /**
-     * Render page's JS and CSS templates if they need to
-     *
-     * @param Page $page page to check templates
-     *
-     * @todo Move this function in Modelpage
-     * @todo Recursively render JS templates. Currently only the first template is checked.
-     */
-    private function templaterender(Page $page): void
-    {
-        try {
-            $templates = $this->pagemanager->getpagecsstemplates($page);
-            foreach ($templates as $page) {
-                if ($this->pagemanager->needtoberendered($page)) {
-                    $page = $this->pagemanager->renderpage($page, $this->router, null);
-                    $this->pagemanager->update($page);
-                }
-            }
-        } catch (RuntimeException $e) {
-            Logger::errorex($e);
-        }
-        if (!empty($page->templatejavascript())) {
-            try {
-                $templatejs = $this->pagemanager->get($page->templatejavascript());
-                if ($this->pagemanager->needtoberendered($templatejs)) {
-                    $templatejs = $this->pagemanager->renderpage($templatejs, $this->router, null);
-                    $this->pagemanager->update($templatejs);
-                }
             } catch (RuntimeException $e) {
                 Logger::errorex($e, true);
             }
@@ -210,24 +177,24 @@ class Controllerpage extends Controller
             exit;
         }
 
-        if ($this->pagemanager->needtoberendered($this->page)) {
-            if (Config::deletelinktocache() && $this->page->daterender() <= $this->page->datemodif()) {
-                $oldlinkto = $this->page->linkto();
-            }
-            try {
+        try {
+            if ($this->pagemanager->needtoberendered($this->page)) {
+                if (Config::deletelinktocache()) {
+                    $oldlinkto = $this->page->linkto();
+                }
                 $urlchecker = Config::urlchecker() ? new Serviceurlchecker(3) : null;
                 $this->page = $this->pagemanager->renderpage($this->page, $this->router, $urlchecker);
-            } catch (RuntimeException $e) {
-                Logger::errorex($e);
+                if (isset($oldlinkto)) {
+                    $relatedpages = array_unique(array_merge($oldlinkto, $this->page->linkto()));
+                    $this->deletelinktocache($relatedpages);
+                }
             }
-            if (isset($oldlinkto)) {
-                $relatedpages = array_unique(array_merge($oldlinkto, $this->page->linkto()));
-                $this->deletelinktocache($relatedpages);
-            }
+
+            $this->pagemanager->templaterender($this->page, $this->router);
+        } catch (RuntimeException $e) {
+            $msg = $e->getMessage();
+            Logger::error("Error while trying to read page '$page': $msg");
         }
-
-        $this->templaterender($this->page);
-
 
         $this->page->adddisplaycount();
         if ($this->user->isvisitor()) {
