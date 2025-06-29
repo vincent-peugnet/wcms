@@ -7,6 +7,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use RuntimeException;
+use Wcms\Exception\Databaseexception;
 use Wcms\Exception\Filesystemexception;
 
 class Controllerpage extends Controller
@@ -46,6 +47,8 @@ class Controllerpage extends Controller
      * Try yo import by multiple way the called page
      *
      * @return bool                         If a page is found and stored in `$this->page`
+     *
+     * @todo maybe throw error instead of logging to let the upper code choose what to do
      */
     protected function importpage(): bool
     {
@@ -59,7 +62,7 @@ class Controllerpage extends Controller
                 return true;
             }
         } catch (RuntimeException $e) {
-            Logger::errorex($e);
+            Logger::warningex($e);
             return false;
         }
     }
@@ -191,18 +194,19 @@ class Controllerpage extends Controller
             }
 
             $this->pagemanager->templaterender($this->page, $this->router);
+
+            $this->page->adddisplaycount();
+            if ($this->user->isvisitor()) {
+                $this->page->addvisitcount();
+            }
+            $this->pagemanager->update($this->page);
         } catch (RuntimeException $e) {
-            $msg = $e->getMessage();
-            Logger::error("Error while trying to read page '$page': $msg");
+            Logger::error("Error while trying to read page '$page':" . $e->getMessage());
         }
 
-        $this->page->adddisplaycount();
-        if ($this->user->isvisitor()) {
-            $this->page->addvisitcount();
-        }
-        $this->pagemanager->update($this->page);
 
         // redirection using Location and 302
+        // If redirecting to a dead page or an invalid URL, redirection is canceled
         if (!empty($this->page->redirection()) && $this->page->refresh() === 0 && $this->page->sleep() === 0) {
             try {
                 if (Model::idcheck($this->page->redirection())) {
@@ -212,8 +216,7 @@ class Controllerpage extends Controller
                     $this->redirect($url);
                 }
             } catch (RuntimeException $e) {
-                // This mean the redirect field did'nt contain an existing page or URL
-                // TODO : send syntax error to editor
+                Logger::warning("Page '$page' redirect to existing page or a valid URL");
             }
         }
 
@@ -481,16 +484,28 @@ class Controllerpage extends Controller
         }
     }
 
+    /**
+     * @todo maybe show an error view if deletion failed
+     */
     public function confirmdelete(string $page): void
     {
         $this->setpage($page, 'pageconfirmdelete');
-        if ($this->user->iseditor() && $this->importpage()) {
-            $this->pagemanager->delete($this->page);
-            $this->routedirect('pageread', ['page' => $this->page->id()]);
-        } else {
+        if (!$this->importpage() || !$this->candelete($this->page)) {
             http_response_code(403);
             $this->showtemplate('forbidden', ['route' => 'pageread', 'id' => $this->page->id()]);
+            exit;
         }
+
+        try {
+            $this->pagemanager->delete($this->page);
+            $user = $this->user->id();
+            Logger::info("User '$user' uccessfully deleted Page '$page'");
+        } catch (Filesystemexception $e) {
+            Logger::warning("Error while deleting Page '$page'" . $e->getMessage());
+        } catch (Databaseexception $e) {
+            Logger::error("Could not delete Page $page: " . $e->getMessage());
+        }
+        $this->routedirect('pageread', ['page' => $this->page->id()]);
     }
 
     public function duplicate(string $page, string $duplicate): void
@@ -547,9 +562,14 @@ class Controllerpage extends Controller
                     $_SESSION['pageupdate']['id'] = $this->page->id();
                     $this->routedirect('pageedit', ['page' => $this->page->id()]);
                 } else {
-                    $this->page->updateedited();
-
-                    $this->pagemanager->update($this->page);
+                    try {
+                        $this->page->updateedited();
+                        $this->pagemanager->update($this->page);
+                        $this->sendflashmessage('Page succesfully updated', self::FLASH_SUCCESS);
+                    } catch (RuntimeException $e) {
+                        $this->sendflashmessage('Error while trying to update', self::FLASH_ERROR);
+                        Logger::error("Error while trying to update Page '$page': " . $e->getMessage());
+                    }
                 }
             } else {
                 // If the editor session finished during the editing, let's try to reconnect to save the editing
@@ -575,8 +595,6 @@ class Controllerpage extends Controller
 
     /**
      * Send a `404` HTTP code and display 'Command not found'
-     *
-     * @todo use a dedicated view and suggest a list of W URL based command.
      */
     public function commandnotfound(string $page, string $command): void
     {

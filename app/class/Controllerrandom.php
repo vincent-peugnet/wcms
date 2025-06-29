@@ -28,9 +28,6 @@ class Controllerrandom extends Controller
         } catch (RuntimeException $e) {
             $message = 'Origin page does not exist';
         }
-
-        if (isset($message)) {
-            $this->showtemplate('alertrandom', ['message' => $message]);
-        }
+        $this->showtemplate('alertrandom', ['message' => $message]);
     }
 }

@@ -5,6 +5,7 @@ namespace Wcms;
 use AltoRouter;
 use RuntimeException;
 use Wcms\Exception\Databaseexception;
+use Wcms\Exception\Filesystemexception;
 use Wcms\Exception\Filesystemexception\Notfoundexception;
 
 class Controllerhome extends Controller
@@ -224,11 +225,9 @@ class Controllerhome extends Controller
                 switch ($_POST['action']) {
                     case 'read':
                         $this->routedirect('pageread', ['page' => $_POST['id']]);
-                        break;
 
                     case 'edit':
                         $this->routedirect('pageedit', ['page' => $_POST['id']]);
-                        break;
                 }
             }
         } else {
@@ -362,11 +361,11 @@ class Controllerhome extends Controller
                     $this->router,
                     Config::urlchecker() ? new Serviceurlchecker(0) : 0
                 );
-                if ($this->pagemanager->update($page)) {
-                    $count++;
-                }
+                $this->pagemanager->update($page);
+                $count++;
             } catch (RuntimeException $e) {
-                Logger::errorex($e);
+                $p = $page->id();
+                Logger::error("Error while trying to render page $p: " . $e->getMessage());
             }
         }
         $this->sendstatflashmessage($count, $total, 'pages have been rendered');
@@ -378,12 +377,25 @@ class Controllerhome extends Controller
             $pagelist = $_POST['pagesid'] ?? [];
             $total = count($pagelist);
             $count = 0;
+            $unlinkerror = false;
             foreach ($pagelist as $id) {
-                if ($this->pagemanager->delete(new Pagev2(['id' => $id]))) {
+                try {
+                    $this->pagemanager->delete(new Pagev2(['id' => $id]));
+                    $user = $this->user->id();
+                    Logger::info("User '$user' successfully deleted Page '$id'");
                     $count++;
+                } catch (Filesystemexception $e) {
+                    Logger::warning("Error while deleting Page '$id'" . $e->getMessage());
+                    $unlinkerror = true;
+                    $count++;
+                } catch (Databaseexception $e) {
+                    Logger::error("Could not delete Page $id: " . $e->getMessage());
                 }
             }
             $this->sendstatflashmessage($count, $total, 'pages have been deleted');
+            if ($unlinkerror) {
+                $this->sendflashmessage('Could not delete some render files', self::FLASH_WARNING);
+            }
         } else {
             $this->sendflashmessage('Confirm delete has not been cheked', self::FLASH_WARNING);
         }

@@ -81,13 +81,11 @@ class Controlleruser extends Controller
                         $this->usermanager->delete($user);
                         $this->sendflashmessage('User successfully deleted', self::FLASH_SUCCESS);
                         $this->routedirect('user');
-                        break;
 
                     case 'update':
                         $this->update($_POST);
                         $this->sendflashmessage('User successfully updated', self::FLASH_SUCCESS);
                         $this->routedirect('user');
-                        break;
                 }
             } catch (RuntimeException $e) {
                 $this->sendflashmessage('Error : ' . $e->getMessage(), self::FLASH_ERROR);

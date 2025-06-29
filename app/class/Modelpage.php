@@ -101,9 +101,7 @@ class Modelpage extends Modeldb
         }
         $pagedata = new Document($page->dry());
         $pagedata->setId($page->id());
-        if (!$this->storedoc($pagedata)) {
-            throw new Databaseexception('Error wile trying to save document to database. Check logs for more info');
-        }
+        $this->storedoc($pagedata);
     }
 
     /**
@@ -113,7 +111,7 @@ class Modelpage extends Modeldb
      *
      * @return Page                         The Page object
      *
-     * @throws RuntimeException             If page is'nt found
+     * @throws DatabaseNotfoundexception    If page is'nt found
      * @throws RangeException               If page version is specified but invalid
      */
     public function get($id): Page
@@ -304,18 +302,16 @@ class Modelpage extends Modeldb
      *
      * @param Page $page                    Page to delete
      *
-     * @return bool                         true if success otherwise false
+     * @throws Databaseexception            If deletion from database failed
      *
-     * @todo use Exception istead of returning boolean
+     * @throws Filesystemexception          If deleting rendered files failed (which is less severe)
      */
-    public function delete(Page $page): bool
+    public function delete(Page $page): void
     {
-        try {
-            $this->unlink($page->id());
-        } catch (Filesystemexception $e) {
-            return false;
+        if (!$this->repo->delete($page->id())) {
+            throw new Databaseexception('Impossible to delete document from database');
         }
-        return $this->repo->delete($page->id());
+        $this->unlink($page->id());
     }
 
     /**
@@ -361,18 +357,15 @@ class Modelpage extends Modeldb
     /**
      * Update a page in the database
      *
-     * @todo Use Exceptions instead of returning bool
-     *
      * @param Page $page                    The page that is going to be updated
      *
-     * @return bool                         True if success otherwise, false
-     *
+     * @throws Databaseexception            in case of error
      */
-    public function update(Page $page)
+    public function update(Page $page): void
     {
         $pagedata = new Document($page->dry());
         $pagedata->setId($page->id());
-        return $this->updatedoc($pagedata);
+        $this->updatedoc($pagedata);
     }
 
     /**
@@ -393,9 +386,7 @@ class Modelpage extends Modeldb
         $page->hydrate($datas);
         $page->addtag($addtag);
         $page->addauthor($addauthor);
-        if (!$this->update($page)) {
-            throw new RuntimeException("Error while trying to update page $pageid");
-        }
+        $this->update($page);
     }
 
     /**

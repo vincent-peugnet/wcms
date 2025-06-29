@@ -23,11 +23,9 @@ class Controllerworkspace extends Controller
 
             case 'home':
                 $this->routedirect('home');
-                break;
 
             case 'media':
                 $this->routedirect('media');
-                break;
         }
     }
 }

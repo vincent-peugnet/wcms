@@ -143,10 +143,7 @@ class Modelbookmark extends Modeldb
         }
         $bookmarkdata = new Document($bookmark->dry());
         $bookmarkdata->setId($bookmark->id());
-        $success = $this->storedoc($bookmarkdata);
-        if (!$success) {
-            throw new Databaseexception("Error while adding Bookmark to database");
-        }
+        $this->storedoc($bookmarkdata);
     }
 
     /**
@@ -170,10 +167,9 @@ class Modelbookmark extends Modeldb
 
     /**
      * @param Bookmark $bookmark            Bookmark to update
-     * @return Bookmark                     updated Bookmark
      * @throws RuntimeException             if Bookmark does not exist or if an error occured at database level
      */
-    public function update(Bookmark $bookmark): Bookmark
+    public function update(Bookmark $bookmark): void
     {
         $oldbookmark = $this->get($bookmark);
         $bookmark->setuser($oldbookmark->user());
@@ -185,11 +181,7 @@ class Modelbookmark extends Modeldb
 
         $bookmarkdata = new Document($bookmark->dry());
         $bookmarkdata->setId($bookmark->id());
-        $success = $this->updatedoc($bookmarkdata);
-        if (!$success) {
-            throw new RuntimeException("Error while updating Bookmark to database");
-        }
-        return $bookmark;
+        $this->updatedoc($bookmarkdata);
     }
 
     /**

@@ -2,12 +2,12 @@
 
 namespace Wcms;
 
-use InvalidArgumentException;
 use JamesMoss\Flywheel\Config;
 use JamesMoss\Flywheel\DocumentInterface;
 use JamesMoss\Flywheel\Document;
 use LogicException;
 use RuntimeException;
+use Wcms\Exception\Databaseexception;
 use Wcms\Flywheel\Formatter\JSON;
 use Wcms\Flywheel\Query;
 use Wcms\Flywheel\Repository;
@@ -39,7 +39,7 @@ class Modeldb extends Model
         try {
             return (disk_free_space_ex(self::DATABASE_DIR) > self::MINIMAL_DISK_SPACE);
         } catch (RuntimeException $e) {
-            throw new InvalidArgumentException($e->getMessage());
+            throw new LogicException($e->getMessage());
         }
     }
 
@@ -47,34 +47,34 @@ class Modeldb extends Model
      * Store Document but only if there is enough space left on disk
      *
      * @param Document $document   Flywheel Document
-     * @return bool                         True in case of success, otherwise false
      *
-     * @todo use exceptions to create a disctinction between differents possible problems
+     * @throws Databaseexception if minimum disk space is reached or if an error occured
      */
-    protected function storedoc(DocumentInterface $document): bool
+    protected function storedoc(DocumentInterface $document): void
     {
         if (!$this->isdiskfree()) {
-            Logger::error("Not enough free space on disk to store datas in database");
-            return false;
+            throw new Databaseexception('Not enough free space on disk');
         }
-        return $this->repo->store($document);
+        if (!$this->repo->store($document)) {
+            throw new Databaseexception('Impossible to store the document to database');
+        }
     }
 
     /**
      * Update Document but only if there is enough space left on disk
      *
      * @param Document $document   Flywheel Document
-     * @return bool                         True in case of success, otherwise false
      *
-     * @todo use exceptions to create a disctinction between differents possible problems
+     * @throws Databaseexception if minimum disk space is reached or if an error occured
      */
-    protected function updatedoc(DocumentInterface $document): bool
+    protected function updatedoc(DocumentInterface $document): void
     {
         if (!$this->isdiskfree()) {
-            Logger::error("Not enough free space on disk to update datas in database");
-            return false;
+            throw new Databaseexception('Not enough free space on disk');
         }
-        return $this->repo->update($document);
+        if (!$this->repo->update($document)) {
+            throw new Databaseexception('Impossible to update the document to database');
+        }
     }
 
     /**

@@ -172,8 +172,11 @@ class Controller
     /**
      * Redirect to URL and send 302 code
      * @param string $url to redirect to
+     *
+     * @throws void             Indicate to PHPStan that no exception is
+     *                          thrown despite the use of `never` return type
      */
-    public function redirect(string $url): void
+    public function redirect(string $url): never
     {
         header('Location: ' . $url);
         exit;
@@ -182,10 +185,11 @@ class Controller
     /**
      * @param array<string, mixed> $vars
      * @param array<string, mixed> $gets
+     *
+     * @throws InvalidArgumentException
      */
-    public function routedirect(string $route, array $vars = [], array $gets = []): void
+    public function routedirect(string $route, array $vars = [], array $gets = []): never
     {
-
         $get = empty($gets) ? "" : "?" . http_build_query($gets);
         $this->redirect($this->generate($route, $vars, $get));
     }

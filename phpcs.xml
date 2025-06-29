@@ -17,7 +17,10 @@
     <arg value="p" />
 
     <!-- Include the whole PSR12 standard -->
-    <rule ref="PSR12"></rule>
+    <rule ref="PSR12">
+        <!-- In order to allow using functions that exit without break in switch/cases -->
+        <exclude name="PSR2.ControlStructures.SwitchDeclaration.TerminatingComment"/>
+    </rule>
 
     <!-- Add some rules -->
     <rule ref="Generic.Metrics.NestingLevel"></rule>

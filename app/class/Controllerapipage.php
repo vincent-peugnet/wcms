@@ -3,6 +3,8 @@
 namespace Wcms;
 
 use RuntimeException;
+use Wcms\Exception\Databaseexception;
+use Wcms\Exception\Filesystemexception;
 
 class Controllerapipage extends Controllerapi
 {
@@ -79,13 +81,15 @@ class Controllerapipage extends Controllerapi
                 $this->page->hydrate($datas);
 
                 if ($this->page->datemodif() == $oldpage->datemodif()) {
-                    $this->page->updateedited();
-                    if ($this->pagemanager->update($this->page)) {
+                    try {
+                        $this->page->updateedited();
+                        $this->pagemanager->update($this->page);
                         http_response_code(200);
                         header('Content-type: application/json; charset=utf-8');
                         echo json_encode($this->page->dry(), JSON_PRETTY_PRINT);
-                    } else {
-                        $this->shortresponse(500, "Error while trying to save page in database");
+                    } catch (RuntimeException $e) {
+                        Logger::error("Error while trying to update Page '$page' through API: " . $e->getMessage());
+                        $this->shortresponse(500, $e->getMessage());
                     }
                 } else {
                     $this->shortresponse(409, "Conflict : A more recent version of the page is stored in the database");
@@ -144,10 +148,17 @@ class Controllerapipage extends Controllerapi
     {
         if ($this->importpage($page)) {
             if ($this->user->issupereditor() || $this->page->authors() === [$this->user->id()]) {
-                if ($this->pagemanager->delete($this->page)) {
-                    http_response_code(200);
-                } else {
-                    http_response_code(500);
+                try {
+                    $this->pagemanager->delete($this->page);
+                    $user = $this->user->id();
+                    Logger::info("User '$user' uccessfully deleted Page '$page'");
+                    $this->shortresponse(200);
+                } catch (Filesystemexception $e) {
+                    Logger::warning("Error while deleting Page '$page'" . $e->getMessage());
+                    $this->shortresponse(200, $e->getMessage());
+                } catch (Databaseexception $e) {
+                    Logger::error("Could not delete Page $page: " . $e->getMessage());
+                    $this->shortresponse(500, $e->getMessage());
                 }
             } else {
                 http_response_code(401);

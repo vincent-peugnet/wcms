@@ -120,9 +120,7 @@ class Modeluser extends Modeldb
     {
         $userdata = new Document($user->dry());
         $userdata->setId($user->id());
-        if (!$this->storedoc($userdata)) {
-            throw new Databaseexception("Database error while editing user.");
-        }
+        $this->storedoc($userdata);
     }
 
     /**
@@ -136,9 +134,7 @@ class Modeluser extends Modeldb
     {
         $userdata = new Document($user->dry());
         $userdata->setId($user->id());
-        if (!$this->updatedoc($userdata)) {
-            throw new Databaseexception("Database error while editing user.");
-        }
+        $this->updatedoc($userdata);
     }
 
 
