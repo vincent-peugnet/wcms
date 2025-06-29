@@ -6,20 +6,39 @@
     border-radius: var(--radius);
 }
 
-.level div.warn {
-    background-color: orange;
+.level .warn {
+    background-color: rgb(221, 144, 0);
 }
 
-.level div.error {
+.level .error {
     background-color: red;
 
 }
 
-.level div.info {
+.level .info {
     background-color: green;
 
 }
 
 .date {
     white-space: nowrap;
+}
+
+tbody {
+    user-select: text;
+}
+
+#options {
+    display: flex;
+}
+
+#options form {
+    padding: var(--spacing);
+}
+
+#options label {
+    border-radius: var(--radius);
+    padding: var(--half-padding) var(--padding);
+    font-size: var(--size-small);
+    color: white;
 }

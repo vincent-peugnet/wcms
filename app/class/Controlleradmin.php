@@ -107,18 +107,27 @@ class Controlleradmin extends Controller
             exit;
         }
 
+        $filters = [
+            'warn' => $_GET['warn'] ?? true,
+            'error' => $_GET['error'] ?? true,
+            'info' => $_GET['info'] ?? true,
+        ];
+
         $loglines = file(Model::ERROR_LOG);
 
         $logs = [];
         foreach ($loglines as $line) {
             if (!str_starts_with($line, '#')) {
                 try {
-                    $logs[] = new Logline($line);
+                    $log = new Logline($line);
+                    if ($filters[$log->level]) {
+                        $logs[] = $log;
+                    }
                 } catch (RuntimeException $e) {
                     // Skip the line if parsing failed
                 }
             }
         }
-        $this->showtemplate('adminlog', ['logs' => $logs]);
+        $this->showtemplate('adminlog', array_merge(['logs' => $logs], $filters));
     }
 }

@@ -10,7 +10,7 @@
         </button>
     </form>
     <div class="hbar-section">
-        <a href="<?= $this->url('adminlog') ?>">
+        <a href="<?= $this->url('adminlog') ?>#bottom">
             <i class="fa fa-align-left"></i>
             logs
         </a>
@@ -339,9 +339,9 @@
         <h3>Markdown Parser</h3>
 
         <p class="field">
+            <label for="markdownhardwrap" title="When activated, single line break will be rendered as &lt;br&gt;" >Render soft-linebreaks as &lt;br&gt;</label>
             <input type="hidden" name="markdownhardwrap" value="0" form="admin">
             <input type="checkbox" name="markdownhardwrap" id="markdownhardwrap" value="1" <?= Wcms\Config::markdownhardwrap() ? 'checked' : '' ?> form="admin">
-            <label for="markdownhardwrap" title="When activated, single line break will be rendered as &lt;br&gt;" >Render soft-linebreaks as &lt;br&gt;</label>
         </p>
 
         <h3>Url linker</h3>
