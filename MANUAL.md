@@ -920,6 +920,10 @@ LDAP users cannot be created from the user management interface. User may be con
 But it's possible to automatically create new user as they connect for the first time using LDAP. To do this, __a default user class__ must be set in the admin panel.
 
 
+### Log file
+
+W generate a log file called `w_error.log` located at the root of W installation path. It's also possible to browse a simplified version in the Web interface from the admin interface.
+
 
 Profile
 -------

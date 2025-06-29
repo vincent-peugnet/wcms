@@ -27,6 +27,7 @@ abstract class Model
     public const FONTS_CSS_FILE = self::CSS_DIR . 'fonts.css';
     public const DATABASE_DIR = './database/';
     public const PAGES_DIR = self::DATABASE_DIR . 'pages/';
+    public const ERROR_LOG = 'w_error.log';
 
     public const FILE_PERMISSION    = 0660;
     public const FOLDER_PERMISSION  = 0770;

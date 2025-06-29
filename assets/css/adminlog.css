@@ -1,0 +1,25 @@
+.level div {
+    width: 70px;
+    text-align: center;
+    color: white;
+    line-height: 20px;
+    border-radius: var(--radius);
+}
+
+.level div.warn {
+    background-color: orange;
+}
+
+.level div.error {
+    background-color: red;
+
+}
+
+.level div.info {
+    background-color: green;
+
+}
+
+.date {
+    white-space: nowrap;
+}

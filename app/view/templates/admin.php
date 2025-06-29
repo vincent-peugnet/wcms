@@ -9,6 +9,12 @@
             <span>Save</span>
         </button>
     </form>
+    <div class="hbar-section">
+        <a href="<?= $this->url('adminlog') ?>">
+            <i class="fa fa-align-left"></i>
+            logs
+        </a>
+    </div>
 </nav>
 
 <main class="admin grid">

@@ -3,8 +3,10 @@
 require('./vendor/autoload.php');
 mb_internal_encoding('UTF-8');
 
+use Wcms\Model;
+
 try {
-    Wcms\Logger::init('w_error.log', 3);
+    Wcms\Logger::init(Model::ERROR_LOG, 3);
 } catch (RuntimeException $e) {
     die('Unable to init logs: ' . $e->getMessage());
 }

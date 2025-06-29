@@ -98,4 +98,27 @@ class Controlleradmin extends Controller
         }
         $this->routedirect('admin');
     }
+
+    public function log(): void
+    {
+        if (!$this->user->isadmin()) {
+            http_response_code(403);
+            $this->showtemplate('forbidden');
+            exit;
+        }
+
+        $loglines = file(Model::ERROR_LOG);
+
+        $logs = [];
+        foreach ($loglines as $line) {
+            if (!str_starts_with($line, '#')) {
+                try {
+                    $logs[] = new Logline($line);
+                } catch (RuntimeException $e) {
+                    // Skip the line if parsing failed
+                }
+            }
+        }
+        $this->showtemplate('adminlog', ['logs' => $logs]);
+    }
 }
