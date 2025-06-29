@@ -772,8 +772,11 @@ abstract class Page extends Item
         $this->refresh = $refresh;
     }
 
-    public function setpassword(string $password): void
+    public function setpassword(?string $password): void
     {
+        if ($password === null) { // in order to fix Pages that stored password as null
+            $password = '';
+        }
         if (strlen($password) < 64) {
             $this->password = $password;
         }
