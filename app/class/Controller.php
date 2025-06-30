@@ -97,7 +97,7 @@ class Controller
         }
     }
 
-    public function initplates(): void
+    protected function initplates(): void
     {
         $formatershort = new IntlDateFormatter(Config::lang(), IntlDateFormatter::SHORT, IntlDateFormatter::SHORT);
         $formatermedium = new IntlDateFormatter(Config::lang(), IntlDateFormatter::MEDIUM, IntlDateFormatter::MEDIUM);
@@ -130,18 +130,24 @@ class Controller
     }
 
     /**
+     * show a template and exit.
+     *
      * @param array<string, mixed> $params
+     *
+     * @throws void             Indicate to PHPStan that no exception is
+     *                          thrown despite the use of `never` return type
      */
-    public function showtemplate(string $template, array $params = []): void
+    protected function showtemplate(string $template, array $params = []): never
     {
         $params = array_merge($this->commonsparams(), $params);
         echo $this->plates->render($template, $params);
+        exit;
     }
 
     /**
      * @return array<string, mixed>
      */
-    public function commonsparams(): array
+    protected function commonsparams(): array
     {
         $commonsparams = [];
         $commonsparams['user'] = $this->user;

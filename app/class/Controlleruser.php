@@ -16,7 +16,6 @@ class Controlleruser extends Controller
         if ($this->user->isvisitor()) {
             http_response_code(401);
             $this->showtemplate('connect', ['route' => 'user']);
-            exit;
         }
     }
 
@@ -94,7 +93,6 @@ class Controlleruser extends Controller
         } else {
             http_response_code(403);
             $this->showtemplate('forbidden');
-            exit;
         }
     }
 

@@ -78,7 +78,6 @@ class Controllerpage extends Controller
         if ($this->user->isvisitor()) {
             http_response_code(401);
             $this->showtemplate('connect', ['route' => $route, 'id' => $this->page->id()]);
-            exit;
         }
     }
 
@@ -149,14 +148,12 @@ class Controllerpage extends Controller
                 'alertexistnot',
                 ['page' => $this->page, 'subtitle' => Config::existnot()]
             );
-            exit;
         }
 
         // Check page password
         if (!empty($this->page->password())) {
             if (empty($_POST['pagepassword']) || $_POST['pagepassword'] !== $this->page->password()) {
                 $this->showtemplate('pagepassword', ['pageid' => $this->page->id()]);
-                exit;
             }
         }
 
@@ -168,16 +165,13 @@ class Controllerpage extends Controller
                         'alertnotpublished',
                         ['page' => $this->page, 'subtitle' => Config::notpublished()]
                     );
-                    break;
 
                 case Page::PRIVATE:
                     $this->showtemplate(
                         'alertprivate',
                         ['page' => $this->page, 'subtitle' => Config::private()]
                     );
-                    break;
             }
-            exit;
         }
 
         try {
@@ -273,7 +267,6 @@ class Controllerpage extends Controller
             if (!$this->canedit($this->page)) {
                 http_response_code(403);
                 $this->showtemplate('forbidden', ['route' => 'pageedit', 'id' => $this->page->id()]);
-                exit;
             }
 
             $servicetags = new Servicetags();
@@ -345,14 +338,12 @@ class Controllerpage extends Controller
         if (!$this->user->iseditor()) {
             http_response_code(403);
             $this->showtemplate('forbidden', ['route' => 'pageedit', 'id' => $this->page->id()]);
-            exit;
         }
 
         if ($this->importpage()) {
             http_response_code(403);
             $message = 'page already exist with this ID';
             $this->showtemplate('forbidden', ['route' => 'pageedit', 'id' => $this->page->id(), 'message' => $message]);
-            exit;
         }
 
         $this->page->reset();
@@ -390,7 +381,6 @@ class Controllerpage extends Controller
         if (!$this->canedit($this->page)) {
             http_response_code(403);
             $this->showtemplate('forbidden', ['id' => $this->page->id(), 'route' => 'pagedownload']);
-            exit;
         }
 
         $file = Model::PAGES_DIR . Config::pagetable() . DIRECTORY_SEPARATOR . $page . '.json';
@@ -497,7 +487,6 @@ class Controllerpage extends Controller
         if (!$this->importpage() || !$this->candelete($this->page)) {
             http_response_code(403);
             $this->showtemplate('forbidden', ['route' => 'pageread', 'id' => $this->page->id()]);
-            exit;
         }
 
         try {

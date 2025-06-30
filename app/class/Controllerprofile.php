@@ -16,7 +16,6 @@ class Controllerprofile extends Controller
         if ($this->user->isvisitor()) {
             http_response_code(401);
             $this->showtemplate('connect', ['route' => 'profile']);
-            exit;
         }
     }
 
@@ -57,7 +56,6 @@ class Controllerprofile extends Controller
         if ($this->user->isldap()) {
             http_response_code(403);
             $this->showtemplate('forbidden', ['route' => 'profile']);
-            exit;
         }
 
         if (

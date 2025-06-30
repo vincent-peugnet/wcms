@@ -14,7 +14,6 @@ class Controllerinfo extends Controller
         if ($this->user->isvisitor()) {
             http_response_code(401);
             $this->showtemplate('connect', ['route' => 'info']);
-            exit;
         }
     }
 

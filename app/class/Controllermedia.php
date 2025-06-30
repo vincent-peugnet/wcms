@@ -22,7 +22,6 @@ class Controllermedia extends Controller
         if ($this->user->isvisitor()) {
             http_response_code(401);
             $this->showtemplate('connect', ['route' => 'media']);
-            exit;
         }
         $this->mediamanager = new Modelmedia();
         $this->mediaopt = new Mediaopt($_GET);
@@ -35,7 +34,6 @@ class Controllermedia extends Controller
         if (!$this->user->iseditor()) {
             http_response_code(403);
             $this->showtemplate('forbidden');
-            exit;
         }
         try {
             Fs::dircheck(Model::FONT_DIR, true, 0775);

@@ -23,12 +23,10 @@ class Controlleradmin extends Controller
         if ($this->user->isvisitor()) {
             http_response_code(401);
             $this->showtemplate('connect', ['route' => 'admin']);
-            exit;
         }
         if (!$this->user->isadmin()) {
             http_response_code(403);
             $this->showtemplate('forbidden');
-            exit;
         }
     }
 
@@ -105,7 +103,6 @@ class Controlleradmin extends Controller
         if (!$this->user->isadmin()) {
             http_response_code(403);
             $this->showtemplate('forbidden');
-            exit;
         }
 
         $filters = [

@@ -9,7 +9,6 @@ class Controllerworkspace extends Controller
         if (!$this->user->isinvite()) {
             http_response_code(403);
             $this->showtemplate('forbidden');
-            exit;
         }
         $this->workspace->hydrate($_POST);
         $this->servicesession->setworkspace($this->workspace);

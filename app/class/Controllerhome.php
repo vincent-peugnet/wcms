@@ -240,7 +240,6 @@ class Controllerhome extends Controller
         if (!$this->user->issupereditor()) {
             http_response_code(304);
             $this->showtemplate('forbidden');
-            exit;
         }
         try {
             $this->pagemanager->flushrendercache();
@@ -257,7 +256,6 @@ class Controllerhome extends Controller
         if (!$this->user->issupereditor()) {
             http_response_code(304);
             $this->showtemplate('forbidden');
-            exit;
         }
         try {
             Fs::deletefile(Model::URLS_FILE);
@@ -280,7 +278,6 @@ class Controllerhome extends Controller
         if (!$this->user->issupereditor()) {
             http_response_code(304);
             $this->showtemplate('forbidden');
-            exit;
         }
         try {
             $urlchecker = new Serviceurlchecker(0);
