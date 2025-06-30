@@ -470,7 +470,7 @@ class Controllerpage extends Controller
 
     public function delete(string $page): never
     {
-        $this->setpage($page, 'pagecdelete');
+        $this->setpage($page, 'pagedelete');
         if ($this->importpage() && $this->candelete($this->page)) {
             $linksto = new Opt();
             $linksto->setlinkto($this->page->id());

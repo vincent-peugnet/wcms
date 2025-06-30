@@ -2,7 +2,7 @@
 
     <div class="hbar-section">
         <form action="<?= $this->url('search') ?>" method="post"  id="search">
-            <input type="text" list="searchdatalist" name="id" id="search" placeholder="page id" required <?= $tab !== 'edit' && !$user->isvisitor() ? 'autofocus' : '' ?>>
+            <input type="text" list="searchdatalist" name="id" id="search" placeholder="page id" required <?= $tab !== 'edit' && $tab !== null ? 'autofocus' : '' ?>>
             <input type="submit" name="action" value="read">
             <?= $user->iseditor() ? '<input type="submit" name="action" value="edit">' : '' ?>
             <?php if($user->iseditor()) : ?>

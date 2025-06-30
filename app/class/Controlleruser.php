@@ -27,7 +27,7 @@ class Controlleruser extends Controller
             $this->showtemplate('user', $datas);
         } else {
             http_response_code(403);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', ['route' => 'home']);
         }
     }
 
