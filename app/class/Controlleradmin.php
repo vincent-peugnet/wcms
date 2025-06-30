@@ -112,38 +112,42 @@ class Controlleradmin extends Controller
             'warn' => $_GET['warn'] ?? true,
             'error' => $_GET['error'] ?? true,
             'info' => $_GET['info'] ?? true,
+            'limit' => $_GET['limit'] ?? 100,
         ];
 
         $loglines = file(Model::ERROR_LOG);
+        $filelines = count($loglines);
 
         $stats = stat(Model::ERROR_LOG);
         if ($stats === false) {
             throw new LogicException();
         }
 
-
         $logs = [];
-        $i = 1;
         $t = 0;
-        foreach ($loglines as $line) {
+        $max = max(0, $filelines - $filters['limit']);
+        for ($l = $filelines - 1; $l >= 0; $l--) {
+            if ($t >= $filters['limit']) {
+                break;
+            }
+            $line = $loglines[$l];
             if (!str_starts_with($line, '#')) {
                 try {
                     $log = new Logline($line);
-                    $t++;
                     if ($filters[$log->level]) {
-                        $logs[$i] = $log;
+                        $logs[$l + 1] = $log;
+                        $t++;
                     }
                 } catch (RuntimeException $e) {
                     // Skip the line if parsing failed
                 }
             }
-            $i++;
         }
         $this->showtemplate('adminlog', array_merge([
-            'logs' => $logs,
+            'logs' => array_reverse($logs, true),
             'total' => $t,
             'filesize' => $stats['size'] / 8,
-            'filelines' => count($loglines),
+            'filelines' => $filelines,
         ], $filters));
     }
 }

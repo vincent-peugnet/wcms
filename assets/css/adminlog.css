@@ -6,16 +6,16 @@
     border-radius: var(--radius);
 }
 
-.level .warn {
+.level .warn, .level.warn {
     background-color: rgb(221, 144, 0);
 }
 
-.level .error {
+.level .error, .level.error {
     background-color: red;
 
 }
 
-.level .info {
+.level .info, .level.info {
     background-color: green;
 
 }
@@ -45,5 +45,12 @@ tbody {
     border-radius: var(--radius);
     padding: var(--half-padding) var(--padding);
     font-size: var(--size-small);
+}
+
+#options #limit {
+    width: 80px;
+}
+
+label.level {
     color: white;
 }

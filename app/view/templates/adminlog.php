@@ -12,18 +12,21 @@
             </span>
         </h2>
         <div id="options">
-            <form class="level" action="<?= $this->url('adminlog') ?>#bottom" method="get">
+            <form action="<?= $this->url('adminlog') ?>#bottom" method="get">
                 <input type="hidden" name="warn" value="0">
                 <input type="checkbox" name="warn" id="warn" value="1" <?= $warn ? 'checked' : '' ?>>
-                <label for="warn" class="warn">warn</label>
+                <label for="warn" class="level warn">warn</label>
 
                 <input type="hidden" name="error" value="0">
                 <input type="checkbox" name="error" id="error" value="1" <?= $error ? 'checked' : '' ?>>
-                <label for="error" class="error">error</label>
+                <label for="error" class="level error">error</label>
 
                 <input type="hidden" name="info" value="0">
                 <input type="checkbox" name="info" id="info" value="1" <?= $info ? 'checked' : '' ?>>
-                <label for="info" class="info">info</label>
+                <label for="info" class="level info">info</label>
+
+                <input type="number" name="limit" id="limit" value="<?= $limit ?>" min="0">
+                <label for="limit">last lines</label>
 
                 <input type="submit" value="filter">
             </form>
@@ -73,7 +76,7 @@
     </section>
 </main>
 <footer>
-    w_error.log | displayed lines: <?= $total ?> | file lines: <?= $filelines ?> | file size: <?= $this->readablesize($filesize) ?>o
+    w_error.log | parsed lines: <?= $total ?> | file lines: <?= $filelines ?> | file size: <?= $this->readablesize($filesize) ?>o
 </footer>
 
 <?php $this->stop('page') ?>
