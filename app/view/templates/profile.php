@@ -1,6 +1,6 @@
 <?php
     use Wcms\Model;
-    $this->layout('layout', ['title' => 'profile', 'stylesheets' => [$css . 'back.css', $css . 'profile.css']]) 
+    $this->layout('backlayout', ['title' => 'profile', 'stylesheets' => [$css . 'back.css', $css . 'profile.css']]) 
 ?>
 
 <?php $this->start('page') ?>

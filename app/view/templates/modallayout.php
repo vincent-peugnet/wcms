@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => $title, 'description' => $description, 'stylesheets' => [$css . 'modal.css']]) ?>
+<?php $this->layout('backlayout', ['title' => $title, 'description' => $description, 'stylesheets' => [$css . 'modal.css']]) ?>
 
 <?php $this->start('page') ?>
 

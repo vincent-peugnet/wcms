@@ -2,7 +2,7 @@
 
 use Wcms\Config;
 
- $this->layout('layout', ['title' => 'home', 'stylesheets' => [$css . 'back.css', $css . 'home.css', Wcms\Model::jspath() . 'map.bundle.css', $css . 'tagcolors.css'], 'favicon' => '']) ?>
+ $this->layout('backlayout', ['title' => 'home', 'stylesheets' => [$css . 'back.css', $css . 'home.css', Wcms\Model::jspath() . 'map.bundle.css', $css . 'tagcolors.css'], 'favicon' => '']) ?>
 
 
 
