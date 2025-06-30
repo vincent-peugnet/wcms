@@ -23,7 +23,8 @@ class Modelmedia extends Model
         'extension' => 'extension'
     ];
 
-    public const ID_REGEX                   = "%[^a-z0-9-_.]%";
+    /** Characters that are authorized for cleaned media filename */
+    public const ID_AUTHORIZED_CHARS                   = 'a-z0-9-_.';
 
     public const OPTIMIZE_IMG_MAX_WIDTH     = 1920;
     public const OPTIMIZE_IMG_MAX_HEIGHT    = 1920;

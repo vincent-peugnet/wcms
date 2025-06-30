@@ -18,7 +18,8 @@ class Routes
         if (!empty(Config::basepath())) {
             $router->setBasePath('/' . Config::basepath());
         }
-        $router->addMatchTypes(array('cid' => '[^/]+'));
+        $router->addMatchTypes(array('noslash' => '[^/]+'));
+        $router->addMatchTypes(array('cid' => Model::ID_REGEX));
         $router->addRoutes([
             ['GET', '/api/v0/page/[cid:page]', 'Controllerapipage#get', 'apipageget'],
             ['GET', '/api/v0/pages/list', 'Controllerapipage#list', 'apipagelist'],
@@ -69,13 +70,13 @@ class Routes
             ['POST', '/!profile', 'Controllerprofile#update', 'profileupdate'],
             ['POST', '/!profile/password', 'Controllerprofile#password', 'profilepassword'],
             ['GET', '/!info', 'Controllerinfo#desktop', 'info'],
-            ['GET', '/[cid:page]/', 'Controllerpage#pagepermanentredirect', 'pageread/'],
+            ['GET', '/[noslash:page]/', 'Controllerpage#pagepermanentredirect', 'pageread/'],
             ['HEAD', '/[cid:page]/', 'Controllerpage#pagepermanentredirect', 'pageread/head'],
             ['POST', '/[cid:page]', 'Controllerpage#read', 'pagereadpost'], /** Used for password protected pages */
-            ['GET', '/[cid:page]', 'Controllerpage#read', 'pageread'],
+            ['GET', '/[noslash:page]', 'Controllerpage#read', 'pageread'],
             ['HEAD', '/[cid:page]', 'Controllerpage#readhead', 'pagereadhead'],
-            ['GET', '/[cid:page]/add', 'Controllerpage#add', 'pageadd'],
-            ['GET', '/[cid:page]/add:[cid:copy]', 'Controllerpage#addascopy', 'pageaddascopy'],
+            ['GET', '/[noslash:page]/add', 'Controllerpage#add', 'pageadd'],
+            ['GET', '/[noslash:page]/add:[cid:copy]', 'Controllerpage#addascopy', 'pageaddascopy'],
             ['GET', '/[cid:page]/edit', 'Controllerpage#edit', 'pageedit'],
             ['GET', '/[cid:page]/render', 'Controllerpage#render', 'pagerender'],
             ['GET', '/[cid:page]/log', 'Controllerpage#log', 'pagelog'],
@@ -86,7 +87,7 @@ class Routes
             ['POST', '/workspace/update', 'Controllerworkspace#update', 'workspaceupdate'],
             ['GET', '/[cid:page]/delete', 'Controllerpage#delete', 'pagedelete'],
             ['POST', '/[cid:page]/delete', 'Controllerpage#confirmdelete', 'pageconfirmdelete'],
-            ['GET', '/[cid:page]/duplicate:[cid:duplicate]', 'Controllerpage#duplicate', 'pageduplicate'],
+            ['GET', '/[cid:page]/duplicate:[noslash:duplicate]', 'Controllerpage#duplicate', 'pageduplicate'],
             ['GET', '/[cid:page]/[*:command]', 'Controllerpage#commandnotfound', 'pageread/etoile'],
         ]);
 

@@ -53,12 +53,22 @@ abstract class Model
         'version' => 'version',
     ];
 
-    public const ID_REGEX                   = "%[^a-z0-9-_]%";
-    public const MAX_ID_LENGTH              = 64;
-    public const PASSWORD_MIN_LENGTH        = 4;
-    public const PASSWORD_MAX_LENGTH        = 128;
-    public const MAX_COOKIE_CONSERVATION    = 365;
-    public const MAX_QUERY_LENGH            = 512;
+    /** Characters that are authorized in item ID */
+    public const ID_AUTHORIZED_CHARS         = 'a-z0-9-_';
+
+    /** Maximum database item ID length */
+    public const MAX_ID_LENGTH               = 64;
+
+    /** Regex for unauthorized characters in item IDs */
+    public const ID_UNAUTHORIZED_CHARS_REGEX = '[^' . self::ID_AUTHORIZED_CHARS . ']';
+
+    /** Regex for database items IDs*/
+    public const ID_REGEX                    = '[' . self::ID_AUTHORIZED_CHARS . ']{1,' . self::MAX_ID_LENGTH . '}';
+
+    public const PASSWORD_MIN_LENGTH         = 4;
+    public const PASSWORD_MAX_LENGTH         = 128;
+    public const MAX_COOKIE_CONSERVATION     = 365;
+    public const MAX_QUERY_LENGH             = 512;
 
 
     public static function dirtopath(string $dir): string
@@ -139,7 +149,8 @@ abstract class Model
             $replace = ['e', 'a', 'e', 'c', 'u', 'u', 'i', 'i', '-'];
             $input = str_replace($search, $replace, $input);
 
-            $input = preg_replace(static::ID_REGEX, '', strtolower(trim($input)));
+            $regex = '%' . self::ID_UNAUTHORIZED_CHARS_REGEX . '%';
+            $input = preg_replace($regex, '', strtolower(trim($input)));
             $input = mb_substr($input, 0, $max);
         }
         return $input;
@@ -153,7 +164,7 @@ abstract class Model
     public static function idcheck(string $id, int $max = self::MAX_ID_LENGTH): bool
     {
         return (
-            !((bool) preg_match(static::ID_REGEX, $id))
+            !((bool) preg_match('%' . self::ID_UNAUTHORIZED_CHARS_REGEX . '%', $id))
             && strlen($id) <= $max
             && strlen($id) > 0
         );
