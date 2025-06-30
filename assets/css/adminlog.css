@@ -24,6 +24,11 @@
     white-space: nowrap;
 }
 
+.line {
+    font-family: monospace;
+    text-align: right;
+}
+
 tbody {
     user-select: text;
 }

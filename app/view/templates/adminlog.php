@@ -5,7 +5,7 @@
 <main>
     <section>
         <h2>
-            Logs
+            Logs (<?= count($logs) ?>)
             <span>
                 <a href="#bottom" title="jump to top"><i class="fa fa-arrow-circle-down"></i></a>
                 <a href="#top" title="jump to bottom"><i class="fa fa-arrow-circle-up"></i></a>
@@ -34,6 +34,9 @@
                 <thead>
                     <tr>
                         <th>
+                            line
+                        </th>
+                        <th>
                             date
                         </th>
                         <th>
@@ -45,8 +48,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($logs as $log) : ?>
+                    <?php foreach($logs as $line => $log) : ?>
                     <tr>
+                        <td class="line">
+                            <?= $line ?>
+                        </td>
                         <td class="date">
                             <?= $this->datemedium($log->date) ?>
                         </td>
@@ -66,5 +72,8 @@
         </div>
     </section>
 </main>
+<footer>
+    w_error.log | displayed lines: <?= $total ?> | file lines: <?= $filelines ?> | file size: <?= $this->readablesize($filesize) ?>o
+</footer>
 
 <?php $this->stop('page') ?>

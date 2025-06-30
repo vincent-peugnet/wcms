@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use AltoRouter;
+use LogicException;
 use RuntimeException;
 use Wcms\Exception\Filesystemexception;
 
@@ -115,19 +116,34 @@ class Controlleradmin extends Controller
 
         $loglines = file(Model::ERROR_LOG);
 
+        $stats = stat(Model::ERROR_LOG);
+        if ($stats === false) {
+            throw new LogicException();
+        }
+
+
         $logs = [];
+        $i = 1;
+        $t = 0;
         foreach ($loglines as $line) {
             if (!str_starts_with($line, '#')) {
                 try {
                     $log = new Logline($line);
+                    $t++;
                     if ($filters[$log->level]) {
-                        $logs[] = $log;
+                        $logs[$i] = $log;
                     }
                 } catch (RuntimeException $e) {
                     // Skip the line if parsing failed
                 }
             }
+            $i++;
         }
-        $this->showtemplate('adminlog', array_merge(['logs' => $logs], $filters));
+        $this->showtemplate('adminlog', array_merge([
+            'logs' => $logs,
+            'total' => $t,
+            'filesize' => $stats['size'] / 8,
+            'filelines' => count($loglines),
+        ], $filters));
     }
 }

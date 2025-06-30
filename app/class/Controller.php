@@ -123,6 +123,9 @@ class Controller
         $this->plates->registerFunction('datemedium', function (DateTimeInterface $date) use ($formatermedium) {
             return $formatermedium->format($date);
         });
+        $this->plates->registerFunction('readablesize', function (float $size): string {
+            return readablesize($size);
+        });
         $this->plates->addData(['flashmessages' => $this->getflashmessages()]);
     }
 

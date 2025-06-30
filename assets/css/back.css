@@ -98,6 +98,11 @@ footer {
     opacity: 0.4;
 }
 
+@media (max-height: 500px) {
+    footer {
+        display: none;
+    }
+}
 
 /* --------------------------------------------------------- grid layout */
 
