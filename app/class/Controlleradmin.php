@@ -30,7 +30,7 @@ class Controlleradmin extends Controller
         }
     }
 
-    public function desktop(): void
+    public function desktop(): never
     {
         $datas['pagelist'] = $this->pagemanager->list();
         $this->mediamanager = new Modelmedia();
@@ -56,7 +56,7 @@ class Controlleradmin extends Controller
         $this->showtemplate('admin', $datas);
     }
 
-    public function update(): void
+    public function update(): never
     {
         try {
             Fs::accessfile(Model::GLOBAL_CSS_FILE, true);
@@ -70,7 +70,7 @@ class Controlleradmin extends Controller
         $this->routedirect('admin');
     }
 
-    public function database(): void
+    public function database(): never
     {
         if (!empty($_POST['action'])) {
             switch ($_POST['action']) {
@@ -98,7 +98,7 @@ class Controlleradmin extends Controller
         $this->routedirect('admin');
     }
 
-    public function log(): void
+    public function log(): never
     {
         if (!$this->user->isadmin()) {
             http_response_code(403);

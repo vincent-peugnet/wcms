@@ -81,7 +81,7 @@ class Controllerpage extends Controller
         }
     }
 
-    public function render(string $page): void
+    public function render(string $page): never
     {
         $this->setpage($page, 'pageupdate');
 
@@ -121,7 +121,7 @@ class Controllerpage extends Controller
      * Return either 200, 308 or 404 response codes.
      * Password protected, private and not_published Pages are considered as 200 OK
      */
-    public function readhead(string $page): void
+    public function readhead(string $page): never
     {
         $this->setpage($page, 'pageread');
         if ($this->importpage()) {
@@ -129,6 +129,7 @@ class Controllerpage extends Controller
         } else {
             http_response_code(404);
         }
+        exit;
     }
 
     /**
@@ -138,7 +139,7 @@ class Controllerpage extends Controller
      *
      * @param string $page page ID
      */
-    public function read(string $page): void
+    public function read(string $page): never
     {
         $this->setpage($page, 'pageread');
 
@@ -255,70 +256,71 @@ class Controllerpage extends Controller
         // If the page cannot be cached, or the client don't have an old version of the page, we send the HTML
         http_response_code(200);
         echo $html;
+        exit;
     }
 
-    public function edit(string $page): void
+    public function edit(string $page): never
     {
         $this->setpage($page, 'pageedit');
-
         $this->pageconnect('pageedit');
 
-        if ($this->importpage()) {
-            if (!$this->canedit($this->page)) {
-                http_response_code(403);
-                $this->showtemplate('forbidden', ['route' => 'pageedit', 'id' => $this->page->id()]);
-            }
-
-            $servicetags = new Servicetags();
-
-            try {
-                $datas['taglist'] = $servicetags->taglist();
-            } catch (Filesystemexception $e) {
-                Logger::errorex($e);
-            }
-
-            $datas['faviconlist'] = $this->mediamanager->listfavicon();
-            $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();
-            $datas['pagelist'] = $this->pagemanager->list();
-            $datas['target'] = hash('crc32', $this->page->id() . rand(0, 2048));
-            $datas['editorlist'] = $this->usermanager->getlisterbylevel(2, '>=', true);
-            $datas['page'] = $this->page;
-
-            $backlinkopt = new Opt(['linkto' => $this->page->id()]);
-            $datas['homebacklink'] = $backlinkopt->getaddress();
-
-            $datas['urls'] = [];
-            if (count($this->page->externallinks()) > 0) {
-                $urlchecker = new Serviceurlchecker();
-                foreach ($this->page->externallinks() as $url => $status) {
-                    try {
-                        $datas['urls'][$url] = $urlchecker->info($url);
-                    } catch (RuntimeException $e) {
-                        // No cached infos about this URL
-                    }
-                }
-            }
-
-            $this->showtemplate('edit', $datas);
-        } else {
+        if (!$this->importpage()) {
             $this->routedirect('pageread', ['page' => $this->page->id()]);
         }
+
+        if (!$this->canedit($this->page)) {
+            http_response_code(403);
+            $this->showtemplate('forbidden', ['route' => 'pageedit', 'id' => $this->page->id()]);
+        }
+
+        $servicetags = new Servicetags();
+
+        try {
+            $datas['taglist'] = $servicetags->taglist();
+        } catch (Filesystemexception $e) {
+            Logger::errorex($e);
+        }
+
+        $datas['faviconlist'] = $this->mediamanager->listfavicon();
+        $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();
+        $datas['pagelist'] = $this->pagemanager->list();
+        $datas['target'] = hash('crc32', $this->page->id() . rand(0, 2048));
+        $datas['editorlist'] = $this->usermanager->getlisterbylevel(2, '>=', true);
+        $datas['page'] = $this->page;
+
+        $backlinkopt = new Opt(['linkto' => $this->page->id()]);
+        $datas['homebacklink'] = $backlinkopt->getaddress();
+
+        $datas['urls'] = [];
+        if (count($this->page->externallinks()) > 0) {
+            $urlchecker = new Serviceurlchecker();
+            foreach ($this->page->externallinks() as $url => $status) {
+                try {
+                    $datas['urls'][$url] = $urlchecker->info($url);
+                } catch (RuntimeException $e) {
+                    // No cached infos about this URL
+                }
+            }
+        }
+
+        $this->showtemplate('edit', $datas);
     }
 
     /**
      * Print page's datas. Used for debug. Kind of obscure nowdays.
      */
-    public function log(string $page): void
+    public function log(string $page): never
     {
-        if ($this->user->issupereditor()) {
-            $this->setpage($page, 'pagelog');
-            $this->importpage();
-            echo '<pre>';
-            var_dump($this->page);
-            echo '</pre>';
-        } else {
-            $this->routedirect('pageread', ['page' => $page]);
+        $this->setpage($page, 'pagelog');
+        if (!$this->user->issupereditor()) {
+            http_response_code(403);
+            $this->showtemplate('forbidden', ['route' => 'pageread', 'id' => $this->page->id()]);
         }
+        $this->importpage();
+        echo '<pre>';
+        var_dump($this->page);
+        echo '</pre>';
+        exit;
     }
 
     /**
@@ -329,7 +331,7 @@ class Controllerpage extends Controller
      *
      * @todo This should not throw RuntimeException but manage the exception itself and log friendly error
      */
-    public function add(string $page): void
+    public function add(string $page): never
     {
         $this->setpage($page, 'pageadd');
 
@@ -358,7 +360,7 @@ class Controllerpage extends Controller
         $this->routedirect('pageedit', ['page' => $this->page->id()]);
     }
 
-    public function addascopy(string $page, string $copy): void
+    public function addascopy(string $page, string $copy): never
     {
         $page = Model::idclean($page);
         if ($this->copy($copy, $page)) {
@@ -368,7 +370,10 @@ class Controllerpage extends Controller
         }
     }
 
-    public function download(string $page): void
+    /**
+     * @todo move the file part to Modelpage
+     */
+    public function download(string $page): never
     {
         $this->setpage($page, 'pagedownload');
 
@@ -394,14 +399,16 @@ class Controllerpage extends Controller
             header('Pragma: public');
             header('Content-Length: ' . filesize($file));
             readfile($file);
-            exit;
+        } else {
+            Logger::error("Error while trying to read file: $file");
         }
+        exit;
     }
 
     /**
      * Import page and save it into the database
      */
-    public function upload(): void
+    public function upload(): never
     {
         $page = $this->pagemanager->getfromfile();
 
@@ -435,12 +442,14 @@ class Controllerpage extends Controller
                 );
             }
         } else {
-            $this->sendflashmessage('Error while importing page JSON', self::FLASH_ERROR);
+            $msg = 'Error while importing page from File';
+            Logger::error($msg);
+            $this->sendflashmessage($msg, self::FLASH_ERROR);
         }
         $this->routedirect('home');
     }
 
-    public function logout(string $page): void
+    public function logout(string $page): never
     {
         if (!$this->user->isvisitor()) {
             $this->disconnect();
@@ -450,7 +459,7 @@ class Controllerpage extends Controller
         }
     }
 
-    public function login(string $page): void
+    public function login(string $page): never
     {
         if ($this->user->isvisitor()) {
             $this->showtemplate('connect', ['id' => $page, 'route' => 'pageread']);
@@ -459,7 +468,7 @@ class Controllerpage extends Controller
         }
     }
 
-    public function delete(string $page): void
+    public function delete(string $page): never
     {
         $this->setpage($page, 'pagecdelete');
         if ($this->importpage() && $this->candelete($this->page)) {
@@ -481,7 +490,7 @@ class Controllerpage extends Controller
     /**
      * @todo maybe show an error view if deletion failed
      */
-    public function confirmdelete(string $page): void
+    public function confirmdelete(string $page): never
     {
         $this->setpage($page, 'pageconfirmdelete');
         if (!$this->importpage() || !$this->candelete($this->page)) {
@@ -501,7 +510,7 @@ class Controllerpage extends Controller
         $this->routedirect('pageread', ['page' => $this->page->id()]);
     }
 
-    public function duplicate(string $page, string $duplicate): void
+    public function duplicate(string $page, string $duplicate): never
     {
         $duplicate = Model::idclean($duplicate);
         if ($this->copy($page, $duplicate)) {
@@ -538,7 +547,7 @@ class Controllerpage extends Controller
         return false;
     }
 
-    public function update(string $page): void
+    public function update(string $page): never
     {
         $this->setpage($page, 'pageupdate');
 
@@ -580,16 +589,17 @@ class Controllerpage extends Controller
      *
      * Used only with Route `pageread/` redirecting to `pageread`
      */
-    public function pagepermanentredirect(string $page): void
+    public function pagepermanentredirect(string $page): never
     {
         $path = $this->generate('pageread', ['page' => Model::idclean($page)]);
         header("Location: $path", true, 301);
+        exit;
     }
 
     /**
      * Send a `404` HTTP code and display 'Command not found'
      */
-    public function commandnotfound(string $page, string $command): void
+    public function commandnotfound(string $page, string $command): never
     {
         http_response_code(404);
         $this->showtemplate('alertcommandnotfound', ['command' => $command, 'id' => strip_tags($page)]);

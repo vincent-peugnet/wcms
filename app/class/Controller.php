@@ -14,7 +14,7 @@ use RuntimeException;
 use Wcms\Exception\Database\Notfoundexception;
 use Wcms\Exception\Databaseexception;
 
-class Controller
+abstract class Controller
 {
     protected Servicesession $servicesession;
 
@@ -169,7 +169,7 @@ class Controller
      * @return string The URL of the route with named parameters in place.
      * @throws InvalidArgumentException If the route does not exist.
      */
-    public function generate(string $route, array $params = [], string $get = ''): string
+    protected function generate(string $route, array $params = [], string $get = ''): string
     {
         try {
             return $this->router->generate($route, $params) . $get;
@@ -185,25 +185,27 @@ class Controller
      * @throws void             Indicate to PHPStan that no exception is
      *                          thrown despite the use of `never` return type
      */
-    public function redirect(string $url): never
+    protected function redirect(string $url): never
     {
         header('Location: ' . $url);
         exit;
     }
 
     /**
+     * Redirect to given route and exit. Send a 302 HTTP response code
+     *
      * @param array<string, mixed> $vars
      * @param array<string, mixed> $gets
      *
      * @throws InvalidArgumentException
      */
-    public function routedirect(string $route, array $vars = [], array $gets = []): never
+    protected function routedirect(string $route, array $vars = [], array $gets = []): never
     {
         $get = empty($gets) ? "" : "?" . http_build_query($gets);
         $this->redirect($this->generate($route, $vars, $get));
     }
 
-    public function error(int $code): never
+    protected function error(int $code): never
     {
         http_response_code($code);
         exit;
@@ -212,7 +214,7 @@ class Controller
     /**
      * Used to display a count / total stat
      */
-    public function sendstatflashmessage(int $count, int $total, string $message): void
+    protected function sendstatflashmessage(int $count, int $total, string $message): void
     {
         if ($count === $total) {
             $this->sendflashmessage($count . ' / ' . $total . ' ' . $message, self::FLASH_SUCCESS);
@@ -296,7 +298,7 @@ class Controller
      *
      * @return array<array{'content': string, 'type': string}>
      */
-    public static function getflashmessages(): array
+    protected static function getflashmessages(): array
     {
         if (!empty($_SESSION['flashmessages'])) {
             $flashmessage = $_SESSION['flashmessages'];

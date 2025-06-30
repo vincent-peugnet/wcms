@@ -40,7 +40,7 @@
                 <ul>
                     <?php foreach ($flashmessages as $flashmessage ) : ?>
                         <li class="alert alert-<?= $flashmessage['type'] ?>">
-                            <?= $flashmessage['content'] ?>
+                            <?= $this->e($flashmessage['content']) ?>
                         </li>
                     <?php endforeach ?>
                 </ul>

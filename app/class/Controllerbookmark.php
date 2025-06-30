@@ -16,7 +16,7 @@ class Controllerbookmark extends Controller
         $this->bookmarkmanager = new Modelbookmark();
     }
 
-    public function add(): void
+    public function add(): never
     {
         if ($this->user->iseditor() && isset($_POST['id'])) {
             try {
@@ -38,7 +38,7 @@ class Controllerbookmark extends Controller
         $this->routedirect($_POST['route'] ?? 'home');
     }
 
-    public function delete(): void
+    public function delete(): never
     {
         if ($this->user->iseditor() && isset($_POST['id'])) {
             if (!$_POST['confirmdelete']) {
@@ -61,7 +61,7 @@ class Controllerbookmark extends Controller
         $this->routedirect($_POST['route'] ?? 'home');
     }
 
-    public function update(): void
+    public function update(): never
     {
         if ($this->user->iseditor() && isset($_POST['id'])) {
             try {
@@ -83,7 +83,7 @@ class Controllerbookmark extends Controller
      *
      * @param string $bookmark              Id of the bookmark
      */
-    public function publish(string $bookmark): void
+    public function publish(string $bookmark): never
     {
         if ($this->user->issupereditor()) {
             try {
@@ -104,7 +104,7 @@ class Controllerbookmark extends Controller
         $this->routedirect('home');
     }
 
-    public function unpublish(string $bookmark): void
+    public function unpublish(string $bookmark): never
     {
         if ($this->user->issupereditor()) {
             try {

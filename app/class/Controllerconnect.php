@@ -28,7 +28,7 @@ class Controllerconnect extends Controller
     }
 
 
-    public function connect(): void
+    public function connect(): never
     {
         if (isset($_SESSION['pageupdate'])) {
             $pageupdate['route'] = 'pageedit';

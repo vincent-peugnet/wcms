@@ -19,7 +19,7 @@ class Controllerprofile extends Controller
         }
     }
 
-    public function desktop(): void
+    public function desktop(): never
     {
         try {
             $datas['user'] = $this->usermanager->get($this->user);
@@ -30,7 +30,7 @@ class Controllerprofile extends Controller
         }
     }
 
-    public function update(): void
+    public function update(): never
     {
         try {
             $user = $this->usermanager->get($this->user);
@@ -51,7 +51,7 @@ class Controllerprofile extends Controller
     /**
      * Update the user's password.
      */
-    public function password(): void
+    public function password(): never
     {
         if ($this->user->isldap()) {
             http_response_code(403);

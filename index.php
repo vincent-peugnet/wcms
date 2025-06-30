@@ -55,7 +55,7 @@ try {
         $whoops->handleException($e);
     }
     echo '<h1>⚠ Whoops ! There is a little problem : </h1>';
-    echo `<p>` . $e->getMessage() . '</p>';
+    echo `<p>` . htmlspecialchars($e->getMessage()) . '</p>';
     echo '<p>Please contact yout Wiki admin to solve this.</p>';
 }
 Wcms\Logger::close();

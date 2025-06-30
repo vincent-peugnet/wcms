@@ -29,7 +29,7 @@ class Controllermedia extends Controller
 
 
 
-    public function desktop(): void
+    public function desktop(): never
     {
         if (!$this->user->iseditor()) {
             http_response_code(403);
@@ -42,6 +42,7 @@ class Controllermedia extends Controller
             Fs::dircheck(Model::CSS_DIR, true, 0775);
         } catch (RuntimeException $e) {
             $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);
+            Logger::errorex($e);
         }
         if (isset($_POST['query'])) {
             $datas = array_merge($_GET, $_POST);
@@ -89,7 +90,7 @@ class Controllermedia extends Controller
         }
     }
 
-    public function upload(): void
+    public function upload(): never
     {
         if ($this->user->iseditor()) {
             $target = $_POST['dir'] ?? Model::MEDIA_DIR;
@@ -118,65 +119,73 @@ class Controllermedia extends Controller
         }
     }
 
-    public function urlupload(): void
+    public function urlupload(): never
     {
-        if ($this->user->iseditor()) {
-            $target = $_POST['dir'] ?? Model::MEDIA_DIR;
-            if (!empty($_POST['url'])) {
-                try {
-                    $this->mediamanager->urlupload($_POST['url'], $target);
-                } catch (RuntimeException $e) {
-                    $this->sendflashmessage('Error while uploading : ' . $e->getMessage(), self::FLASH_ERROR);
-                }
-            }
-            $this->redirect($this->generate('media') . $_POST['route']);
-        } else {
+        if (!$this->user->iseditor()) {
             http_response_code(403);
             $this->showtemplate('forbidden');
         }
-    }
 
-    public function folderadd(): void
-    {
-        if ($this->user->iseditor()) {
-            $dir = $_POST['dir'] ?? Model::MEDIA_DIR;
-            $name = Model::idclean($_POST['foldername']);
-            if ($name == "") {
-                $name = 'new-folder';
+        $target = $_POST['dir'] ?? Model::MEDIA_DIR;
+        if (!empty($_POST['url'])) {
+            try {
+                $this->mediamanager->urlupload($_POST['url'], $target);
+            } catch (RuntimeException $e) {
+                $this->sendflashmessage('Error while uploading : ' . $e->getMessage(), self::FLASH_ERROR);
             }
-            $this->mediamanager->adddir($dir, $name);
-            parse_str(ltrim($_POST['route'], '?'), $route);
-            $route['path'] = $dir . $name;
-            $this->routedirect('media', [], $route);
         }
-        http_response_code(403);
-        $this->showtemplate('forbidden');
+        $this->redirect($this->generate('media') . $_POST['route']);
     }
 
-    public function folderdelete(): void
+    public function folderadd(): never
     {
-        if ($this->user->issupereditor()) {
-            if (isset($_POST['deletefolder']) && intval($_POST['deletefolder']) && isset($_POST['dir'])) {
-                try {
-                    if ($this->mediamanager->deletedir($_POST['dir'])) {
-                        $this->sendflashmessage('Deletion successfull', self::FLASH_SUCCESS);
-                    } else {
-                        $this->sendflashmessage('Deletion failed', self::FLASH_ERROR);
-                    }
-                } catch (Forbiddenexception $e) {
-                    $this->sendflashmessage('Deletion failed: ' . $e->getMessage(), self::FLASH_ERROR);
-                }
-            }
-            $this->redirect($this->generate('media') . $_POST['route']);
-        } else {
+        if (!$this->user->iseditor()) {
             http_response_code(403);
             $this->showtemplate('forbidden');
         }
+
+        $dir = $_POST['dir'] ?? Model::MEDIA_DIR;
+        $name = Model::idclean($_POST['foldername']);
+        if ($name == "") {
+            $name = 'new-folder';
+        }
+        $this->mediamanager->adddir($dir, $name);
+        parse_str(ltrim($_POST['route'], '?'), $route);
+        $route['path'] = $dir . $name;
+        $this->routedirect('media', [], $route);
     }
 
-    public function edit(): void
+    public function folderdelete(): never
     {
-        if ($this->user->issupereditor() && isset($_POST['action'])) {
+        if (!$this->user->issupereditor()) {
+            http_response_code(403);
+            $this->showtemplate('forbidden');
+        }
+
+        if (isset($_POST['deletefolder']) && intval($_POST['deletefolder']) && isset($_POST['dir'])) {
+            try {
+                if ($this->mediamanager->deletedir($_POST['dir'])) {
+                    $this->sendflashmessage('Deletion successfull', self::FLASH_SUCCESS);
+                } else {
+                    $this->sendflashmessage('Deletion failed', self::FLASH_ERROR);
+                }
+            } catch (Forbiddenexception $e) {
+                $this->sendflashmessage('Deletion failed: ' . $e->getMessage(), self::FLASH_ERROR);
+            }
+        }
+        $this->redirect($this->generate('media') . $_POST['route']);
+    }
+
+    /**
+     * @todo use a swith case instead of many if
+     */
+    public function edit(): never
+    {
+        if (!$this->user->issupereditor()) {
+            http_response_code(403);
+            $this->showtemplate('forbidden');
+        }
+        if (isset($_POST['action'])) {
             if (!isset($_POST['id']) || empty($_POST['id'])) {
                 $this->sendflashmessage('no media selected', self::FLASH_ERROR);
                 $this->redirect($this->generate('media') . $_POST['route']);
@@ -211,18 +220,19 @@ class Controllermedia extends Controller
                     $this->sendflashmessage('Error while updating fonts CSS : ' . $e->getMessage());
                 }
             }
-            $this->redirect($this->generate('media') . $_POST['route']);
-        } else {
+        }
+        $this->redirect($this->generate('media') . $_POST['route']);
+    }
+
+    public function rename(): never
+    {
+        if (!$this->user->issupereditor()) {
             http_response_code(403);
             $this->showtemplate('forbidden');
         }
-    }
 
-    public function rename(): void
-    {
         if (
-            $this->user->issupereditor()
-            && isset($_POST['oldfilename'])
+            isset($_POST['oldfilename'])
             && isset($_POST['newfilename'])
             && isset($_POST['dir'])
         ) {
@@ -238,33 +248,30 @@ class Controllermedia extends Controller
             } catch (RuntimeException $e) {
                 $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);
             }
-            $this->redirect($this->generate('media') . $_POST['route']);
-        } else {
-            http_response_code(403);
-            $this->showtemplate('forbidden');
         }
+        $this->redirect($this->generate('media') . $_POST['route']);
     }
 
     /**
      * Generate the CSS file with the @fontface
      */
-    public function fontface(): void
+    public function fontface(): never
     {
-        if ($this->user->iseditor()) {
-            try {
-                $fontfacer = new Servicefont($this->mediamanager);
-                $fontfacer->writecss();
-                $this->sendflashmessage("Font face CSS file  successfully generated", self::FLASH_SUCCESS);
-            } catch (RuntimeException $e) {
-                $this->sendflashmessage(
-                    "Error while trying to save generated fonts file : " . $e->getMessage(),
-                    self::FLASH_ERROR
-                );
-            }
-            $this->redirect($this->generate("media", [], $this->mediaopt->getpathaddress()));
-        } else {
+        if (!$this->user->iseditor()) {
             http_response_code(403);
             $this->showtemplate('forbidden');
         }
+
+        try {
+            $fontfacer = new Servicefont($this->mediamanager);
+            $fontfacer->writecss();
+            $this->sendflashmessage("Font CSS file successfully generated", self::FLASH_SUCCESS);
+            Logger::info("Font CSS file successfully generated by User " . $this->user->id());
+        } catch (RuntimeException $e) {
+            $msg = "Error while trying to save generated font CSS file : " . $e->getMessage();
+            Logger::error($msg);
+            $this->sendflashmessage($msg, self::FLASH_ERROR);
+        }
+        $this->redirect($this->generate("media", [], $this->mediaopt->getpathaddress()));
     }
 }

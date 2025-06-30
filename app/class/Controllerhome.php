@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use AltoRouter;
+use LogicException;
 use RuntimeException;
 use Wcms\Exception\Databaseexception;
 use Wcms\Exception\Filesystemexception;
@@ -32,7 +33,7 @@ class Controllerhome extends Controller
 
 
 
-    public function desktop(): void
+    public function desktop(): never
     {
         if ($this->user->isvisitor()) {
             if (Config::homepage() === 'redirect' && !empty(Config::homeredirect())) {
@@ -40,114 +41,111 @@ class Controllerhome extends Controller
             } else {
                 $this->showtemplate('connect', ['route' => 'home']);
             }
-        } else {
-            $display = $_GET['display'] ?? 'list';
-
-            $pagelist = $this->pagemanager->pagelist();
-
-
-            $this->opt = new Opt();
-            $this->opt->settaglist($pagelist);
-            $this->opt->setauthorlist($pagelist);
-            $this->opt->setpageidlist($pagelist);
-            $this->opt->submit();
-
-            try {
-                $servicetags = new Servicetags();
-                $vars['colors'] = $servicetags->synctags($this->opt->taglist());
-            } catch (RuntimeException $e) {
-                $this->sendflashmessage("Error while generating display colors", self::FLASH_ERROR);
-                Logger::errorex($e);
-            }
-
-            $publicbookmarks = $this->bookmarkmanager->getlisterpublic();
-            $personalbookmarks = $this->bookmarkmanager->getlisterbyuser($this->user);
-            $queryaddress = $this->opt->getaddress();
-            $bookmarks = array_merge($publicbookmarks, $personalbookmarks);
-
-            $vars['editablebookmarks'] = $personalbookmarks;
-            $vars['matchedbookmarks'] = $this->modelhome->matchedbookmarks($personalbookmarks, $queryaddress);
-            if ($this->user->isadmin()) {
-                $vars['editablebookmarks'] += $publicbookmarks;
-                $vars['matchedbookmarks'] += $this->modelhome->matchedbookmarks($publicbookmarks, $queryaddress);
-            }
-            $vars['publicbookmarks'] = $publicbookmarks;
-            $vars['personalbookmarks'] = $personalbookmarks;
-            $vars['queryaddress'] = $queryaddress;
-
-            $deepsearch = $this->deepsearch();
-
-            $pagelistopt = $this->pagemanager->pagetable(
-                $pagelist,
-                $this->opt,
-                $deepsearch['regex'],
-                $deepsearch['searchopt']
-            );
-
-
-            $vars['columns'] = $this->user->checkedcolumns();
-
-
-            $vars['faviconlist'] = $this->mediamanager->listfavicon();
-            $vars['thumbnaillist'] = $this->mediamanager->listthumbnail();
-            $vars['editorlist'] = $this->usermanager->getlisterbylevel(2, '>=');
-            $vars['user'] = $this->user;
-            $vars['opt'] = $this->opt;
-            $vars['deepsearch'] = $deepsearch['regex'];
-            $vars['searchopt'] = $deepsearch['searchopt'];
-            $vars['display'] = $display;
-            $vars['urlchecker'] = Config::urlchecker();
-            $vars['hiddencolumncount'] = count(User::HOME_COLUMNS) - count($this->user->columns());
-
-            if ($display === 'graph') {
-                $graph = $this->servicesession->getgraph();
-                $graph->hydrate($_GET);
-                $this->servicesession->setgraph($graph);
-                $datas = $this->modelhome->cytodata($pagelistopt, $graph);
-                $vars['json'] = json_encode($datas);
-                $vars['graph'] = $graph;
-            }
-
-            if ($display === 'map') {
-                if (!$this->opt->geo()) {
-                    $geopt = new Opt(['geo' => true]);
-                    $geopages = $this->pagemanager->pagetable($pagelistopt, $geopt);
-                } else {
-                    $geopages = $pagelistopt;
-                }
-                $vars['mapcounter'] = count($geopages);
-                $geopages = array_map(function (Page $page) {
-                    $data = $page->drylist(['id', 'title', 'latitude', 'longitude']);
-                    $data['read'] = $this->generate('pageread', ['page' => $page->id()]);
-                    $data['edit'] = $this->generate('pageedit', ['page' => $page->id()]);
-                    return $data;
-                }, $geopages);
-                $geopages = array_values($geopages);
-                $vars['json'] = json_encode($geopages);
-            }
-
-            $vars['pagelistopt'] = $pagelistopt;
-            $vars['footer'] = [
-                'version' => getversion(),
-                'total' => count($pagelist),
-                'database' => Config::pagetable(),
-                'pageversion' => Config::pageversion()
-            ];
-
-            $this->listquery();
-
-            $optrandom = new Optrandom();
-            $optrandom->submit();
-            $vars['optrandom'] = $optrandom;
-
-            $optmap = new Optmap();
-            $optmap->submit();
-            $vars['optmap'] = $optmap;
-
-            $vars['optlist'] = $this->optlist;
-
-            $this->showtemplate('home', $vars);
         }
+        $display = $_GET['display'] ?? 'list';
+
+        $pagelist = $this->pagemanager->pagelist();
+
+
+        $this->opt = new Opt();
+        $this->opt->settaglist($pagelist);
+        $this->opt->setauthorlist($pagelist);
+        $this->opt->setpageidlist($pagelist);
+        $this->opt->submit();
+
+        try {
+            $servicetags = new Servicetags();
+            $vars['colors'] = $servicetags->synctags($this->opt->taglist());
+        } catch (RuntimeException $e) {
+            $this->sendflashmessage("Error while generating display colors", self::FLASH_ERROR);
+            Logger::errorex($e);
+        }
+
+        $publicbookmarks = $this->bookmarkmanager->getlisterpublic();
+        $personalbookmarks = $this->bookmarkmanager->getlisterbyuser($this->user);
+        $queryaddress = $this->opt->getaddress();
+        $bookmarks = array_merge($publicbookmarks, $personalbookmarks);
+
+        $vars['editablebookmarks'] = $personalbookmarks;
+        $vars['matchedbookmarks'] = $this->modelhome->matchedbookmarks($personalbookmarks, $queryaddress);
+        if ($this->user->isadmin()) {
+            $vars['editablebookmarks'] += $publicbookmarks;
+            $vars['matchedbookmarks'] += $this->modelhome->matchedbookmarks($publicbookmarks, $queryaddress);
+        }
+        $vars['publicbookmarks'] = $publicbookmarks;
+        $vars['personalbookmarks'] = $personalbookmarks;
+        $vars['queryaddress'] = $queryaddress;
+
+        $deepsearch = $this->deepsearch();
+
+        $pagelistopt = $this->pagemanager->pagetable(
+            $pagelist,
+            $this->opt,
+            $deepsearch['regex'],
+            $deepsearch['searchopt']
+        );
+
+
+        $vars['columns'] = $this->user->checkedcolumns();
+        $vars['faviconlist'] = $this->mediamanager->listfavicon();
+        $vars['thumbnaillist'] = $this->mediamanager->listthumbnail();
+        $vars['editorlist'] = $this->usermanager->getlisterbylevel(2, '>=');
+        $vars['user'] = $this->user;
+        $vars['opt'] = $this->opt;
+        $vars['deepsearch'] = $deepsearch['regex'];
+        $vars['searchopt'] = $deepsearch['searchopt'];
+        $vars['display'] = $display;
+        $vars['urlchecker'] = Config::urlchecker();
+        $vars['hiddencolumncount'] = count(User::HOME_COLUMNS) - count($this->user->columns());
+
+        if ($display === 'graph') {
+            $graph = $this->servicesession->getgraph();
+            $graph->hydrate($_GET);
+            $this->servicesession->setgraph($graph);
+            $datas = $this->modelhome->cytodata($pagelistopt, $graph);
+            $vars['json'] = json_encode($datas);
+            $vars['graph'] = $graph;
+        }
+
+        if ($display === 'map') {
+            if (!$this->opt->geo()) {
+                $geopt = new Opt(['geo' => true]);
+                $geopages = $this->pagemanager->pagetable($pagelistopt, $geopt);
+            } else {
+                $geopages = $pagelistopt;
+            }
+            $vars['mapcounter'] = count($geopages);
+            $geopages = array_map(function (Page $page) {
+                $data = $page->drylist(['id', 'title', 'latitude', 'longitude']);
+                $data['read'] = $this->generate('pageread', ['page' => $page->id()]);
+                $data['edit'] = $this->generate('pageedit', ['page' => $page->id()]);
+                return $data;
+            }, $geopages);
+            $geopages = array_values($geopages);
+            $vars['json'] = json_encode($geopages);
+        }
+
+        $vars['pagelistopt'] = $pagelistopt;
+        $vars['footer'] = [
+            'version' => getversion(),
+            'total' => count($pagelist),
+            'database' => Config::pagetable(),
+            'pageversion' => Config::pageversion()
+        ];
+
+        $this->listquery();
+
+        $optrandom = new Optrandom();
+        $optrandom->submit();
+        $vars['optrandom'] = $optrandom;
+
+        $optmap = new Optmap();
+        $optmap->submit();
+        $vars['optmap'] = $optmap;
+
+        $vars['optlist'] = $this->optlist;
+
+        $this->showtemplate('home', $vars);
     }
 
     /**
@@ -189,7 +187,7 @@ class Controllerhome extends Controller
         }
     }
 
-    public function columns(): void
+    public function columns(): never
     {
         if (isset($_POST['columns']) && $this->user->iseditor()) {
             try {
@@ -204,7 +202,7 @@ class Controllerhome extends Controller
         $this->routedirect('home');
     }
 
-    public function colors(): void
+    public function colors(): never
     {
         if ($this->user->issupereditor()) {
             try {
@@ -218,7 +216,7 @@ class Controllerhome extends Controller
         $this->routedirect('home');
     }
 
-    public function search(): void
+    public function search(): never
     {
         if (isset($_POST['id']) && !empty($_POST['id'])) {
             if (isset($_POST['action'])) {
@@ -228,14 +226,17 @@ class Controllerhome extends Controller
 
                     case 'edit':
                         $this->routedirect('pageedit', ['page' => $_POST['id']]);
+
+                    default:
+                        $action = $_POST['action'];
+                        throw new LogicException("Invalid value of action send through POST: $action");
                 }
             }
-        } else {
-            $this->routedirect('home');
         }
+        $this->routedirect('home');
     }
 
-    public function flushrendercache(): void
+    public function flushrendercache(): never
     {
         if (!$this->user->issupereditor()) {
             http_response_code(304);
@@ -244,14 +245,17 @@ class Controllerhome extends Controller
         try {
             $this->pagemanager->flushrendercache();
             $this->sendflashmessage('Render cache successfully deleted', self::FLASH_SUCCESS);
+            $user = $this->user->id();
+            Logger::info("Render cache successfully deleted by user '$user'");
         } catch (RuntimeException $e) {
-            $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);
-            Logger::errorex($e);
+            $msg = 'Error while trying to delete render cache: ' . $e->getMessage();
+            $this->sendflashmessage($msg, self::FLASH_ERROR);
+            Logger::error($msg);
         }
         $this->routedirect('home');
     }
 
-    public function flushurlcache(): void
+    public function flushurlcache(): never
     {
         if (!$this->user->issupereditor()) {
             http_response_code(304);
@@ -260,12 +264,14 @@ class Controllerhome extends Controller
         try {
             Fs::deletefile(Model::URLS_FILE);
             $this->sendflashmessage('URL cache successfully deleted', self::FLASH_SUCCESS);
+            $user = $this->user->id();
+            Logger::info("URL cache successfully deleted by user '$user'");
         } catch (Notfoundexception $e) {
             $this->sendflashmessage('URL cache is already deleted ' . $e->getMessage(), self::FLASH_WARNING);
         } catch (RuntimeException $e) {
-            $fserror = $e->getMessage();
-            $this->sendflashmessage("Error while trying to flush page render cache: $fserror", self::FLASH_ERROR);
-            Logger::errorex($e);
+            $msg = 'Error while trying to flush page render cache:' . $e->getMessage();
+            $this->sendflashmessage($msg, self::FLASH_ERROR);
+            Logger::error($msg);
         }
         $this->routedirect('home');
     }
@@ -273,7 +279,7 @@ class Controllerhome extends Controller
     /**
      * Remove unused URLs from cache
      */
-    public function cleanurlcache(): void
+    public function cleanurlcache(): never
     {
         if (!$this->user->issupereditor()) {
             http_response_code(304);
@@ -291,9 +297,20 @@ class Controllerhome extends Controller
         $this->routedirect('home');
     }
 
-    public function multi(): void
+    public function multi(): never
     {
-        if (isset($_POST['action']) && $this->user->issupereditor() && !empty($_POST['pagesid'])) {
+        if (!$this->user->issupereditor()) {
+            http_response_code(304);
+            $this->showtemplate('forbidden');
+        }
+
+        if (empty($_POST['pagesid'])) {
+            $action = $_POST['action'] ?? 'edit';
+            $this->sendflashmessage('Please select some pages to ' . $action, self::FLASH_WARNING);
+            $this->routedirect('home');
+        }
+
+        if (isset($_POST['action'])) {
             switch ($_POST['action']) {
                 case 'edit':
                     $this->multiedit();
@@ -306,15 +323,18 @@ class Controllerhome extends Controller
                 case 'delete':
                     $this->multidelete();
                     break;
+
+                default:
+                    $action = $_POST['action'];
+                    throw new LogicException(
+                        "Invalid action value provided through POST data: $action, should be edit|render|delete"
+                    );
             }
-        } else {
-            $action = $_POST['action'] ?? 'edit';
-            $this->sendflashmessage('Please select some pages to ' . $action, self::FLASH_WARNING);
         }
         $this->routedirect('home');
     }
 
-    public function multiedit(): void
+    protected function multiedit(): void
     {
         $pagelist = $_POST['pagesid'] ?? [];
         $datas = $_POST['datas'] ?? [];
@@ -345,7 +365,7 @@ class Controllerhome extends Controller
         $this->sendstatflashmessage($count, $total, 'pages have been edited');
     }
 
-    public function multirender(): void
+    protected function multirender(): void
     {
         $pagelist = $_POST['pagesid'] ?? [];
         $total = count($pagelist);
@@ -368,7 +388,7 @@ class Controllerhome extends Controller
         $this->sendstatflashmessage($count, $total, 'pages have been rendered');
     }
 
-    public function multidelete(): void
+    protected function multidelete(): void
     {
         if (isset($_POST['confirmdelete']) && $_POST['confirmdelete']) {
             $pagelist = $_POST['pagesid'] ?? [];

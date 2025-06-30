@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use AltoRouter;
+use LogicException;
 use RuntimeException;
 use Wcms\Exception\Databaseexception;
 use Wcms\Exception\Database\Notfoundexception;
@@ -19,7 +20,7 @@ class Controlleruser extends Controller
         }
     }
 
-    public function desktop(): void
+    public function desktop(): never
     {
         if ($this->user->isadmin()) {
             $datas['userlist'] = $this->usermanager->getlister();
@@ -30,9 +31,13 @@ class Controlleruser extends Controller
         }
     }
 
-    public function add(): void
+    public function add(): never
     {
-        if ($this->user->isadmin() && isset($_POST['id'])) {
+        if (!$this->user->isadmin()) {
+            http_response_code(403);
+            $this->showtemplate('forbidden');
+        }
+        if (isset($_POST['id'])) {
             $user = new User($_POST);
             if (empty($user->id()) || $this->usermanager->exist($user)) {
                 $this->sendflashmessage('Error: problem with ID', self::FLASH_ERROR);
@@ -62,18 +67,22 @@ class Controlleruser extends Controller
                 );
                 Logger::errorex($e);
             }
-            $this->routedirect('user');
         }
+        $this->routedirect('user');
     }
 
-    public function edit(): void
+    public function edit(): never
     {
-        if ($this->user->isadmin() && isset($_POST['action'])) {
+        if (!$this->user->isadmin()) {
+            http_response_code(403);
+            $this->showtemplate('forbidden');
+        }
+
+        if (isset($_POST['action'])) {
             try {
                 switch ($_POST['action']) {
                     case 'delete':
                         $this->delete($_POST);
-                        break;
 
                     case 'confirmdelete':
                         $user = new User($_POST);
@@ -85,15 +94,19 @@ class Controlleruser extends Controller
                         $this->update($_POST);
                         $this->sendflashmessage('User successfully updated', self::FLASH_SUCCESS);
                         $this->routedirect('user');
+
+                    default:
+                        $action = $_POST['action'];
+                        throw new LogicException(
+                            "Invalid action value provided by POST data: $action, should be delete|confirmdelete|update"
+                        );
                 }
             } catch (RuntimeException $e) {
+                Logger::errorex($e);
                 $this->sendflashmessage('Error : ' . $e->getMessage(), self::FLASH_ERROR);
-                $this->routedirect('user');
             }
-        } else {
-            http_response_code(403);
-            $this->showtemplate('forbidden');
         }
+        $this->routedirect('user');
     }
 
     // ________________________________ F U N _________________________________________
@@ -103,7 +116,7 @@ class Controlleruser extends Controller
      *
      * @throws Notfoundexception            If user is not found in the database
      */
-    protected function delete(array $datas): void
+    protected function delete(array $datas): never
     {
         $user = new User($datas);
         $user = $this->usermanager->get($user);
