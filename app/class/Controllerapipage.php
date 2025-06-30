@@ -103,6 +103,8 @@ class Controllerapipage extends Controllerapi
 
     /**
      * @throws RuntimeException when saving page fails
+     *
+     * @todo This should not throw RuntimeException but manage the exception itself and log friendly error
      */
     public function add(string $page): void
     {
@@ -119,10 +121,14 @@ class Controllerapipage extends Controllerapi
         $this->page = $this->pagemanager->newpage(array_merge($this->recievejson(), ['id' => $page]));
         $this->page->addauthor($this->user->id());
         $this->pagemanager->add($this->page);
+        $user = $this->user->id();
+        Logger::info("User '$user' successfully added Page '$page'");
     }
 
     /**
      * @throws RuntimeException when saving page fails
+     *
+     * @todo This should not throw RuntimeException but manage the exception itself and log friendly error
      */
     public function put(string $page): void
     {

@@ -333,6 +333,8 @@ class Controllerpage extends Controller
      * Match domain.com/PAGE_ID/add
      *
      * @throws RuntimeException if page creation failed
+     *
+     * @todo This should not throw RuntimeException but manage the exception itself and log friendly error
      */
     public function add(string $page): void
     {
@@ -360,6 +362,8 @@ class Controllerpage extends Controller
         }
         $this->page->addauthor($this->user->id());
         $this->pagemanager->add($this->page);
+        $user = $this->user->id();
+        Logger::info("User '$user' successfully added Page '$page'");
         $this->routedirect('pageedit', ['page' => $this->page->id()]);
     }
 

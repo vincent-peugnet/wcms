@@ -76,7 +76,7 @@
     </section>
 </main>
 <footer>
-    w_error.log | parsed lines: <?= $total ?> | file lines: <?= $filelines ?> | file size: <?= $this->readablesize($filesize) ?>o
+    w_error.log | file lines: <?= $filelines ?> | file size: <?= $this->readablesize($filesize) ?>o
 </footer>
 
 <?php $this->stop('page') ?>

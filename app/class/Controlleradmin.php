@@ -112,7 +112,7 @@ class Controlleradmin extends Controller
             'warn' => $_GET['warn'] ?? true,
             'error' => $_GET['error'] ?? true,
             'info' => $_GET['info'] ?? true,
-            'limit' => $_GET['limit'] ?? 100,
+            'limit' => $_GET['limit'] ?? 500,
         ];
 
         $loglines = file(Model::ERROR_LOG);
@@ -146,7 +146,7 @@ class Controlleradmin extends Controller
         $this->showtemplate('adminlog', array_merge([
             'logs' => array_reverse($logs, true),
             'total' => $t,
-            'filesize' => $stats['size'] / 8,
+            'filesize' => $stats['size'],
             'filelines' => $filelines,
         ], $filters));
     }
