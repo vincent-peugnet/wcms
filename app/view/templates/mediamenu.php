@@ -88,9 +88,9 @@
         </details>
 
 
-        <details class="dropdown">
-            <summary>Edit</summary>
-            <?php if($user->issupereditor()) : ?>                
+        <?php if($user->issupereditor()) : ?>
+            <details class="dropdown">
+                <summary>Edit</summary>
                 <form action="<?= $this->url('mediaedit') ?>" method="post" id="mediaedit" class="dropdown-content">
                     <div class="dropdown-section">
                         <h3>Move</h3>
@@ -123,8 +123,8 @@
                         </p>
                     </div>
                 </form>
-            <?php endif ?>
-        </details>
+            </details>
+        <?php endif ?>
 
 
         <details <?= $filtercode ? "open" : " " ?> class="dropdown">
