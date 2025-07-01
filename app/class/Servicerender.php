@@ -709,7 +709,7 @@ abstract class Servicerender
 
                 $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optlist);
                 $content = $optlist->listhtml($pagetable, $this->page);
-                $text = str_replace($match['fullmatch'], $content, $text);
+                $text = str_replace($match->fullmatch(), $content, $text);
             } catch (RuntimeException $e) {
                 Logger::errorex($e);
             }
