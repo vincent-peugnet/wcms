@@ -737,7 +737,7 @@ abstract class Servicerender
 
                 $optlist->hydrate($options);
 
-                if ($optlist->checkbox()) {
+                if ($optlist->tagcheck()) {
                     $this->checkboxjs = true;
                 }
 

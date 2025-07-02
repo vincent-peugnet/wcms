@@ -1,13 +1,14 @@
-console.log('yoo');
+const formFilters = document.querySelectorAll('form');
 
-const formFilter = document.querySelector('form');
-
-function w_filterpagelist() {
+function filterpagelist(id) {
+    let idSelector = '#' + id;
     let tagCheckboxesChecked = document.querySelectorAll(
-        'input[type="checkbox"]:checked'
+        'form' + idSelector + ' input[type="checkbox"]:checked'
     );
 
-    let pages = document.querySelectorAll('.pagelist li');
+    let pages = document.querySelectorAll(
+        'form' + idSelector + ' + .pagelist li'
+    );
     let tagCount = tagCheckboxesChecked.length;
 
     for (var li of pages) {
@@ -31,4 +32,8 @@ function w_filterpagelist() {
     }
 }
 
-formFilter.addEventListener('click', w_filterpagelist);
+for (let formFilter of formFilters) {
+    formFilter.addEventListener('click', () => {
+        filterpagelist(formFilter.id);
+    });
+}

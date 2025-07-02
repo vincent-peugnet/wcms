@@ -19,7 +19,7 @@ class Optlist extends Optcode
     protected bool $timemodif = false;
     protected bool $author = false;
     protected bool $hidecurrent = false;
-    protected bool $checkbox = false;
+    protected bool $tagcheck = false;
     protected string $style = self::LIST;
 
     public const LIST = 'list';
@@ -29,6 +29,7 @@ class Optlist extends Optcode
         self::CARD => self::CARD,
     ];
 
+    /** @var array<string, int> $usefulltags */
     protected array $usefulltags = [];
 
     /**
@@ -159,7 +160,7 @@ class Optlist extends Optcode
                     $thumbnail->setAttribute('alt', htmlspecialchars($page->title()));
                     $parent->appendChild($thumbnail);
                 }
-                if ($this->checkbox) {
+                if ($this->tagcheck) {
                     $tags = $page->tag();
                     $this->addusefulltags($tags);
                     foreach ($tags as $tag) {
@@ -169,15 +170,19 @@ class Optlist extends Optcode
             }
             $dom->appendChild($ul);
 
-            if ($this->checkbox) {
+            if ($this->tagcheck) {
+                $hash = crc32(serialize($this));
                 $domform = new DOMDocument('1.0', 'UTF-8');
                 $form = $domform->createElement('form');
+                $form->setAttribute('class', 'tagcheck');
+                $form->setAttribute('id', "tagcheck-$hash");
                 foreach ($this->usefulltags as $tag => $count) {
                     if ($count === $pagecount) {
                         continue; // skip this tag as it's used by all pages
                     }
                     $span = $domform->createElement('span');
-                    $id = "checkbox-tag_$tag";
+                    $span->setAttribute('class', "tag_$tag");
+                    $id = "tagcheck-$hash-tag_$tag";
                     $input = $domform->createElement('input');
                     $input->setAttribute('id', $id);
                     $input->setAttribute('value', $tag);
@@ -203,7 +208,9 @@ class Optlist extends Optcode
 
     /**
      * merge list of tags within the list of usefull tags.
-     * Tag names are stored as key and value count the time it's used.
+     * Tag name is key and value count the time it's used.
+     *
+     * @param string[] $tags
      */
     private function addusefulltags(array $tags): void
     {
@@ -267,9 +274,9 @@ class Optlist extends Optcode
         return $this->hidecurrent;
     }
 
-    public function checkbox(): bool
+    public function tagcheck(): bool
     {
-        return $this->checkbox;
+        return $this->tagcheck;
     }
 
     public function style(): string
@@ -325,12 +332,12 @@ class Optlist extends Optcode
         $this->hidecurrent = $hidecurrent;
     }
 
-    public function setcheckbox($checkbox)
+    public function settagcheck(bool $tagcheck): void
     {
-        $this->checkbox = boolval($checkbox);
+        $this->tagcheck = $tagcheck;
     }
 
-    public function setstyle(string $style)
+    public function setstyle(string $style): void
     {
         if (key_exists($style, self::STYLES)) {
             $this->style = $style;
