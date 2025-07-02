@@ -200,7 +200,7 @@ class Modelpage extends Modeldb
         try {
             $template = $this->get($page->templatecss());
             $templates[$template->id()] = $template;
-            $templates = $this->getpagecsstemplates($template, $templates);
+            $templates = array_merge($templates, $this->getpagecsstemplates($template, $templates));
         } catch (Databaseexception | RangeException $e) {
             // This mean page do not exist or is invalid
             Logger::errorex($e);
