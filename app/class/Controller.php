@@ -155,6 +155,7 @@ abstract class Controller
         $commonsparams['css'] = Model::assetscsspath();
         $commonsparams['now'] = new DateTimeImmutable();
         $commonsparams['workspace'] = $this->workspace;
+        $commonsparams['theme'] = empty($this->user->theme()) ? Config::theme() : $this->user->theme();
         return $commonsparams;
     }
 

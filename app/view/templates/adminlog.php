@@ -1,4 +1,4 @@
-<?php $this->layout('backlayout', ['title' => 'logs', 'stylesheets' => [$css . 'back.css', $css . 'adminlog.css']]) ?>
+<?php $this->layout('backlayout', ['title' => 'logs', 'stylesheets' => [$css . 'back.css', $css . 'adminlog.css'], 'theme' => $theme]) ?>
 <?php $this->start('page') ?>
 <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'admin', 'pagelist' => $pagelist]) ?>
 

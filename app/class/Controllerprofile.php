@@ -23,6 +23,8 @@ class Controllerprofile extends Controller
     {
         try {
             $datas['user'] = $this->usermanager->get($this->user);
+            $mediamanager = new Modelmedia();
+            $datas['themes'] = $mediamanager->listthemes();
             $this->showtemplate('profile', $datas);
         } catch (Notfoundexception $e) {
             $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);

@@ -19,9 +19,7 @@
         <link rel="stylesheet" href="<?= $stylsheet ?>">
     <?php endforeach ?>
     
-    <?php if (!empty(Wcms\Config::theme())) : ?>
-        <link rel="stylesheet" href="<?= Wcms\Model::themepath() . Wcms\Config::theme() ?>">
-    <?php endif ?>
+    <link rel="stylesheet" href="<?= Wcms\Model::themepath() . $theme ?>">
 
     <?php if (isreportingerrors()) : ?>
         <script>

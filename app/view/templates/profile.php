@@ -1,6 +1,6 @@
 <?php
     use Wcms\Model;
-    $this->layout('backlayout', ['title' => 'profile', 'stylesheets' => [$css . 'back.css', $css . 'profile.css']]) 
+    $this->layout('backlayout', ['title' => 'profile', 'stylesheets' => [$css . 'back.css', $css . 'profile.css'], 'theme' => $theme]) 
 ?>
 
 <?php $this->start('page') ?>
@@ -53,6 +53,20 @@
             <p class="field">
                 <label for="cookie">Cookie conservation time <i>(In days)</i></label>
                 <input type="number" name="cookie" value="<?= $user->cookie() ?>" id="cookie" min="0" max="<?= Model::MAX_COOKIE_CONSERVATION ?>" >
+            </p>
+
+            <p class="info">
+                Don't like the interface theme set by administrator&nbsp;? Overide it with your preference.
+            </p>
+
+            <p class="field">
+                <label for="theme">Personnal interface theme</label>
+                <select name="theme" id="theme">
+                    <option value="">--no personnal theme--</option>
+                    <?php foreach ($themes as $theme) : ?>
+                        <option value="<?= $theme ?>" <?= $theme === $user->theme() ? 'selected' : '' ?>><?= $theme ?></option>
+                    <?php endforeach ?>
+                </select>
             </p>
             
             <p class="field submit-field">

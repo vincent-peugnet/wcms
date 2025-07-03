@@ -35,6 +35,8 @@ class User extends Item
     /** @var string[] sessions */
     protected array $sessions = [];
 
+    protected string $theme = '';
+
     public const HOME_COLUMNS = [
         'favicon',
         'download',
@@ -169,6 +171,11 @@ class User extends Item
         return $this->sessions;
     }
 
+    public function theme(): string
+    {
+        return $this->theme;
+    }
+
 
     // _______________________ S E T _______________________
 
@@ -282,6 +289,11 @@ class User extends Item
     public function setsessions(array $sessions): void
     {
         $this->sessions = $sessions;
+    }
+
+    public function settheme(string $theme): void
+    {
+        $this->theme = $theme;
     }
 
 
