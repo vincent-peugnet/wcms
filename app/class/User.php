@@ -32,7 +32,7 @@ class User extends Item
     /** @var DateTimeImmutable|false $expiredate */
     protected $expiredate = false;
 
-    /** @var string[] sessions */
+    /** @var array<string, string> sessions as hash => name */
     protected array $sessions = [];
 
     protected string $theme = '';

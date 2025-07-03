@@ -93,4 +93,17 @@ class Controllerprofile extends Controller
         }
         $this->routedirect('profile');
     }
+
+    public function deletesessions(): never
+    {
+        try {
+            $this->user->setsessions([]);
+            $this->usermanager->update($this->user);
+            $this->sendflashmessage('Sessions successfully deleted', self::FLASH_SUCCESS);
+        } catch (Databaseexception $e) {
+            $this->sendflashmessage('Error while trying to delete sessions :' . $e->getMessage());
+            Logger::errorex($e);
+        }
+        $this->routedirect('profile');
+    }
 }

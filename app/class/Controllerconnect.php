@@ -2,6 +2,7 @@
 
 namespace Wcms;
 
+use donatj\UserAgent\UserAgentParser;
 use RuntimeException;
 
 class Controllerconnect extends Controller
@@ -115,7 +116,12 @@ class Controllerconnect extends Controller
             if (!empty($_POST['rememberme'])) {
                 try {
                     if ($this->user->cookie() > 0) {
-                        $wsessionid = $this->user->newsession();
+                        $uaparser = new UserAgentParser();
+                        $ua = $uaparser->parse();
+                        $browser = $ua->browser() ?? 'unknwown-browser';
+                        $platform = $ua->platform() ?? 'unknwown-platform';
+                        $msg = date('Y-m-d') . "/$platform/$browser/" . $this->user->cookie() . "d";
+                        $wsessionid = $this->user->newsession($msg);
                         $this->modelconnect->createauthcookie(
                             $this->user->id(),
                             $wsessionid,

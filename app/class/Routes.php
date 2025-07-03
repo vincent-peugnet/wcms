@@ -69,6 +69,7 @@ class Routes
             ['GET', '/!profile', 'Controllerprofile#desktop', 'profile'],
             ['POST', '/!profile', 'Controllerprofile#update', 'profileupdate'],
             ['POST', '/!profile/password', 'Controllerprofile#password', 'profilepassword'],
+            ['GET', '/!profile/deletesessions', 'Controllerprofile#deletesessions', 'profiledeletesessions'],
             ['GET', '/!info', 'Controllerinfo#desktop', 'info'],
             ['GET', '/[noslash:page]/', 'Controllerpage#pagepermanentredirect', 'pageread/'],
             ['HEAD', '/[cid:page]/', 'Controllerpage#pagepermanentredirect', 'pageread/head'],

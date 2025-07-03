@@ -1,1 +1,7 @@
 /* PROFILE */
+
+#sessions li h4 {
+    margin-top: var(--spacing);
+    font-size: var(--size-small);
+    margin-bottom: var(--half-spacing);
+}

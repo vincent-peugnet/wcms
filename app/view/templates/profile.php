@@ -108,6 +108,36 @@
         </div>
     <?php endif ?>
 
+    <div class="grid-item" id="sessions">
+        <h2>Sessions</h2>
+
+        <p class="info">
+            Sessions are created when you tick the "remember me" checkbox during login.
+        </p>
+
+        <ul>
+            <?php foreach ($user->sessions() as $hash => $name) : ?>
+                <li>
+                    <h4>
+                        <?= $name ?>
+                    </h4>
+                    <code class="select-all"><?= $hash ?></code>
+                </li>
+            <?php endforeach ?>
+        </ul>
+
+        <p class="info">
+            Deleting all sessions will disconnect you from every places you've checked "remember me".
+        </p>
+
+        <p class="field submit-field">
+            <a href="<?= $this->url('profiledeletesessions') ?>" class="button">
+                <i class="fa fa-trash"></i>
+                delete all sessions
+            </a>
+        </p>
+    </div>
+
 </main>
 
 <?php $this->stop('page') ?>

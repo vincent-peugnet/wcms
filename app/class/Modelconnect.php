@@ -40,7 +40,9 @@ class Modelconnect extends Model
 
     /**
      * Get decoded cookie using JWT
-     * @return string[]                     Associative array containing JWT token's datas
+     *
+     * @return array{'userid': string, 'wsession': string}
+     *
      * @throws RuntimeException             If JWT token decode failed or auth cookie is unset
      */
     public function checkcookie(): array
