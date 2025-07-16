@@ -218,6 +218,16 @@ possible error codes:
 - `406` if user is not found
 
 
+Public API
+----------
+
+### health
+
+Return `200` if W instal is healthy.
+
+    GET     /api/v0/health
+
+
 
 Usages example
 --------------

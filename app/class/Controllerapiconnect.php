@@ -35,4 +35,9 @@ class Controllerapiconnect extends Controllerapi
             $this->shortresponse(400, $e->getMessage());
         }
     }
+
+    public function health(): never
+    {
+        $this->shortresponse(200, "W is healthy");
+    }
 }
