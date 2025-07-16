@@ -536,7 +536,7 @@ abstract class Page extends Item
             $this->date = $date;
         } elseif (is_string($date)) {
             $this->date = DateTimeImmutable::createFromFormat(
-                DateTime::ISO8601,
+                DateTime::RFC3339,
                 $date,
                 new DateTimeZone('Europe/Paris')
             );
@@ -574,7 +574,7 @@ abstract class Page extends Item
             $this->datecreation = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
         } elseif (is_string($datecreation)) {
             $this->datecreation = DateTimeImmutable::createFromFormat(
-                DateTime::ISO8601,
+                DateTime::RFC3339,
                 $datecreation,
                 new DateTimeZone('Europe/Paris')
             );
@@ -590,7 +590,7 @@ abstract class Page extends Item
             $this->datemodif = $datemodif;
         } elseif (is_string($datemodif)) {
             $this->datemodif = DateTimeImmutable::createFromFormat(
-                DateTime::ISO8601,
+                DateTime::RFC3339,
                 $datemodif,
                 new DateTimeZone('Europe/Paris')
             );
@@ -606,7 +606,7 @@ abstract class Page extends Item
             $this->daterender = $daterender;
         } elseif (is_string($daterender)) {
             $this->daterender = DateTimeImmutable::createFromFormat(
-                DateTime::ISO8601,
+                DateTime::RFC3339,
                 $daterender,
                 new DateTimeZone('Europe/Paris')
             );

@@ -165,7 +165,7 @@ abstract class Item
         }
 
         if ($option == 'string') {
-            return $property->format(DateTime::ISO8601);
+            return $property->format(DateTime::RFC3339);
         } elseif ($option == 'date' || $option == 'sort') {
             return $property;
         } elseif ($option == 'hrdi') {
