@@ -6,6 +6,9 @@ class Controllerapiworkspace extends Controllerapi
 {
     public function update(): void
     {
+        if ($this->user->isvisitor()) {
+            $this->shortresponse(401);
+        }
         if (!empty($_POST)) {
             $this->workspace->hydrate($_POST);
             $this->servicesession->setworkspace($this->workspace);

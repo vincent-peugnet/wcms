@@ -40,17 +40,19 @@ class Controllerapipage extends Controllerapi
     /**
      * - Send `401` if user can't edit page
      */
-    public function get(string $page): void
+    public function get(string $page): never
     {
         if ($this->importpage($page)) {
             if ($this->canedit($this->page)) {
                 http_response_code(200);
                 header('Content-type: application/json; charset=utf-8');
                 echo json_encode($this->page->dry(), JSON_PRETTY_PRINT);
+                exit;
             } else {
-                http_response_code(401);
+                $this->shortresponse(401);
             }
         }
+        exit;
     }
 
     /**
@@ -95,7 +97,6 @@ class Controllerapipage extends Controllerapi
                     $this->shortresponse(409, "Conflict : A more recent version of the page is stored in the database");
                 }
             } else {
-                http_response_code(401);
                 $this->shortresponse(401, "You are not alowed to edit this page");
             }
         }
@@ -167,7 +168,7 @@ class Controllerapipage extends Controllerapi
                     $this->shortresponse(500, $e->getMessage());
                 }
             } else {
-                http_response_code(401);
+                $this->shortresponse(401);
             }
         }
     }
@@ -175,7 +176,7 @@ class Controllerapipage extends Controllerapi
     public function list(): void
     {
         if (!$this->user->iseditor()) {
-            http_response_code(401);
+            $this->shortresponse(401);
         }
         http_response_code(200);
         header('Content-type: application/json; charset=utf-8');
@@ -185,7 +186,7 @@ class Controllerapipage extends Controllerapi
     public function query(): void
     {
         if (!$this->user->iseditor()) {
-            http_response_code(401);
+            $this->shortresponse(401);
         }
         $jsondatas = $this->recievejson();
         if (empty($jsondatas) && empty($_POST)) {

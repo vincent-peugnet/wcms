@@ -42,7 +42,7 @@ class Modelpage extends Modeldb
      * If a scan has already been perform, it will just
      * read `pagelist` Propriety
      *
-     * @return Page[]                       of Pages objects as `id => Page`
+     * @return array<string, Page>          of Pages objects as `id => Page`
      */
     public function pagelist(): array
     {
