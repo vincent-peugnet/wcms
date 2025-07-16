@@ -20,10 +20,10 @@ Page related api
     "tag": [
         "place", "green"
     ],
-    "date": "2022-03-20T20:47:00+0100",
-    "datecreation": "2022-03-20T20:47:18+0100",
-    "datemodif": "2022-05-29T14:59:58+0200",
-    "daterender": "2022-05-14T16:42:49+0200",
+    "date": "2022-03-20T20:47:00+01:00",
+    "datecreation": "2022-03-20T20:47:18+01:00",
+    "datemodif": "2022-05-29T14:59:58+02:00",
+    "daterender": "2022-05-14T16:42:49+02:00",
     "css": "",
     "javascript": "",
     "body": "%HEADER%\r\n\r\n%NAV%\r\n\r\n%ASIDE%\r\n\r\n%MAIN%\r\n\r\n%FOOTER%",
