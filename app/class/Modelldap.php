@@ -42,7 +42,7 @@ class Modelldap extends Model
     }
 
     /**
-     * Try to authenticate user against CLUB1 local LDAP server
+     * Try to authenticate user against local LDAP server
      *
      * @param string $username
      * @param string $password
