@@ -7,9 +7,43 @@ use donatj\UserAgent\UserAgentParser;
 use Firebase\JWT\JWT;
 use RuntimeException;
 use Wcms\Exception\Database\Notfoundexception;
+use Wcms\Exception\Databaseexception;
 
 class Modelconnect extends Model
 {
+    /**
+     * Check presence of a Bearer Auth JWT
+     *
+     * @throws RuntimeException if bearer auth did'nt worked
+     */
+    public function bearerauth(Modeluser $usermanager): User
+    {
+        $headers = getallheaders();
+        if (!isset($headers['Authorization'])) {
+            throw new RuntimeException('missing Authorization HTTP header');
+        }
+        $header = $headers['Authorization'];
+        $words = explode(' ', $header, 2);
+        if ($words[0] !== 'Bearer' || !isset($words[1])) {
+            throw new RuntimeException('malformed Bearer Authorization header');
+        }
+        $jwt = $words[1];
+        try {
+            $data = $this->readjwt($jwt);
+            $userid = $data['userid'];
+            $user = $usermanager->get($userid);
+            if ($user->checksession($data['wsession'])) {
+                return $user;
+            } else {
+                throw new RuntimeException('wrong credentials');
+            }
+        } catch (Databaseexception $e) {
+            throw new RuntimeException('could not get user in database: ' . $e->getMessage());
+        } catch (RuntimeException $e) {
+            throw new RuntimeException('malformed JWT: ' . $e->getMessage());
+        }
+    }
+
     /**
      * @param string $userid
      * @param string $wsession
@@ -18,14 +52,7 @@ class Modelconnect extends Model
      */
     public function createauthcookie(string $userid, string $wsession, int $conservation): void
     {
-        $datas = [
-            "userid" => $userid,
-            "wsession" => $wsession
-        ];
-        if (empty(Config::secretkey())) {
-            throw new RuntimeException("Secret Key not set");
-        }
-        $jwt = JWT::encode($datas, Config::secretkey());
+        $jwt = $this->createjwt($userid, $wsession);
         $options = [
             'expires' => time() + $conservation * 24 * 3600,
             'path' => '/' . Config::basepath(),
@@ -34,10 +61,25 @@ class Modelconnect extends Model
             'httponly' => true,
             'samesite' => 'Strict'
         ];
-        $cookie = setcookie('rememberme', $jwt, $options);
-        if (!$cookie) {
+        $success = setcookie('rememberme', $jwt, $options);
+        if (!$success) {
             throw new RuntimeException("Remember me cookie cannot be created");
         }
+    }
+
+    /**
+     * @throws RuntimeException if secret key is not set
+     */
+    public function createjwt(string $userid, string $wsession): string
+    {
+        $datas = [
+            "userid" => $userid,
+            "wsession" => $wsession
+        ];
+        if (empty(Config::secretkey())) {
+            throw new RuntimeException("Secret Key not set");
+        }
+        return JWT::encode($datas, Config::secretkey());
     }
 
     /**
@@ -49,12 +91,21 @@ class Modelconnect extends Model
      */
     public function checkcookie(): array
     {
-        if (!empty($_COOKIE['rememberme'])) {
-            $datas = JWT::decode($_COOKIE['rememberme'], Config::secretkey(), ['HS256']);
-            return get_object_vars($datas);
-        } else {
+        if (empty($_COOKIE['rememberme'])) {
             throw new RuntimeException('Auth cookie is unset');
         }
+        return $this->readjwt($_COOKIE['rememberme']);
+    }
+
+    /**
+     * @return array{'userid': string, 'wsession': string}
+     *
+     * @throws RuntimeException If JWT token decode failed
+     */
+    public function readjwt(string $jwt): array
+    {
+        $obj = JWT::decode($jwt, Config::secretkey(), ['HS256']);
+        return get_object_vars($obj);
     }
 
     /**

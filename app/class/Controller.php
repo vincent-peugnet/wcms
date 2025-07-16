@@ -32,6 +32,9 @@ abstract class Controller
     /** @var Modelpage */
     protected $pagemanager;
 
+    /** @var Modelconnect */
+    protected $connectmanager;
+
     protected Engine $plates;
 
     /** @var DateTimeImmutable */
@@ -56,6 +59,7 @@ abstract class Controller
         $this->servicesession = new Servicesession();
         $this->workspace = $this->servicesession->getworkspace();
         $this->usermanager = new Modeluser();
+        $this->connectmanager = new Modelconnect();
 
         $this->user = new User();
         $this->setuser();
@@ -65,36 +69,38 @@ abstract class Controller
         $this->now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
     }
 
-    protected function setuser(): void
+    protected function setuser(): bool
     {
         // check session, then cookies
         if (!is_null($this->servicesession->getuser())) {
             $sessionuser = $this->servicesession->getuser();
             try {
                 $this->user = $this->usermanager->get($sessionuser);
+                return true;
             } catch (Notfoundexception $e) {
                 Logger::warning("Deleted session using non existing user : '$sessionuser'");
                 $this->servicesession->empty(); // empty the session as a non existing user was set
             }
         } elseif (!empty($_COOKIE['rememberme'])) {
             try {
-                $modelconnect = new Modelconnect();
-                $datas = $modelconnect->checkcookie();
+                $datas = $this->connectmanager->checkcookie();
                 $user = $this->usermanager->get($datas['userid']);
                 if ($user->checksession($datas['wsession'])) {
-                    $this->user = $user;
                     $this->servicesession->setwsessionid($datas['wsession']);
                     $this->servicesession->setuser($user->id());
+                    $this->user = $user;
+                    return true;
                 } else {
-                    $modelconnect->deleteauthcookie(); // As not listed in the user
+                    $this->connectmanager->deleteauthcookie(); // As not listed in the user
                 }
             } catch (Notfoundexception $e) {
                 Logger::warning('Deleted auth cookie using non existing user');
-                $modelconnect->deleteauthcookie(); // Delete auth cookie as a non existing user was set
+                $this->connectmanager->deleteauthcookie(); // Delete auth cookie as a non existing user was set
             } catch (RuntimeException $e) {
                 $this->sendflashmessage("Invalid Autentification cookie exist : $e", self::FLASH_WARNING);
             }
         }
+        return false;
     }
 
     protected function initplates(): void
@@ -233,8 +239,7 @@ abstract class Controller
     {
         try {
             $this->user->destroysession($this->servicesession->getwsessionid());
-            $cookiemanager = new Modelconnect();
-            $cookiemanager->deleteauthcookie();
+            $this->connectmanager->deleteauthcookie();
             $this->servicesession->empty();
             $this->usermanager->update($this->user);
         } catch (Databaseexception $e) {

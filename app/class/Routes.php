@@ -29,6 +29,7 @@ class Routes
             ['DELETE', '/api/v0/page/[cid:page]', 'Controllerapipage#delete', 'apipagedelete'],
             ['PUT', '/api/v0/page/[cid:page]', 'Controllerapipage#put', 'apipageput'],
             ['GET', '/api/v0/user/[cid:user]', 'Controllerapiuser#get', 'apiuserget'],
+            ['POST', '/api/v0/auth', 'Controllerapiconnect#auth', 'apiconnectauth'],
             ['POST', '/api/v0/media/upload/[*:path]', 'Controllerapimedia#upload', 'apimediaupload'],
             ['DELETE', '/api/v0/media/[*:path]', 'Controllerapimedia#delete', 'apimediadelete'],
             ['POST', '/api/v0/workspace', 'Controllerapiworkspace#update', 'apiworkspaceupdate'],

@@ -47,10 +47,9 @@ class Controllerconnect extends Controller
 
         $username = strval($_POST['user']);
         $password = strval($_POST['pass']);
-        $connector = new Modelconnect();
 
         try {
-            $user = $connector->login($username, $password);
+            $user = $this->connectmanager->login($username, $password);
             $this->servicesession->setuser($user->id());
             $this->sendflashmessage("Successfully logged in as " . $user->id(), self::FLASH_SUCCESS);
             Logger::info("successful login for user " . $user->id());
@@ -62,7 +61,7 @@ class Controllerconnect extends Controller
 
         if (isset($_POST['rememberme']) && $_POST['rememberme'] == 1) {
             try {
-                $wsessionid = $connector->remember($user);
+                $wsessionid = $this->connectmanager->remember($user);
                 $this->servicesession->setwsessionid($wsessionid); // Used to destroy session from User
             } catch (RuntimeException $e) {
                 $this->sendflashmessage($e->getMessage(), self::FLASH_WARNING);

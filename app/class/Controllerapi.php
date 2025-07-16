@@ -4,9 +4,38 @@ namespace Wcms;
 
 use Error;
 use JsonException;
+use RuntimeException;
 
 class Controllerapi extends Controller
 {
+    /**
+     * Add a Bearer connection check to the Session and rememberme Cookie auth methods
+     */
+    protected function setuser(): bool
+    {
+        if (parent::setuser()) {
+            return true;
+        }
+        try {
+            $this->user = $this->connectmanager->bearerauth($this->usermanager);
+            return true;
+        } catch (RuntimeException $e) {
+            Logger::error('Bearer API auth failed: ' . $e->getMessage());
+            http_response_code(401);
+            header('Content-type: application/json; charset=utf-8');
+            echo json_encode(["message" => $e->getMessage()], JSON_PRETTY_PRINT);
+        }
+        return false;
+    }
+
+    /**
+     * We don't need Plate for the API
+     */
+    protected function initplates(): void
+    {
+        return;
+    }
+
     /**
      * @throws Error in case of stream_get_contents failure
      *
