@@ -121,7 +121,7 @@ abstract class Item
      * @throws InvalidArgumentException if a listed property does not exist or is an object or array
      * @return array<string, mixed>     Associative array `var => value`
      */
-    public function drylist(array $vars, string $dateformat = "string"): array
+    public function drylist(array $vars, bool $strict = true, string $dateformat = "string"): array
     {
         $array = [];
         foreach ($vars as $var) {
@@ -135,7 +135,7 @@ abstract class Item
                         "$var property of " . get_class($this) . " should not be used with " . __FUNCTION__ . "()"
                     );
                 }
-            } else {
+            } elseif ($strict) {
                 throw new InvalidArgumentException(
                     "$var property does not exist in Object of class " . get_class($this)
                 );

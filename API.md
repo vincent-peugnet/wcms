@@ -1,62 +1,22 @@
 Wcms API documentation
 =================
 
+Authentication
+--------------
+
+### Using a token
+
+W support [Bearer Authentication](https://swagger.io/docs/specification/v3_0/authentication/bearer-authentication/).
+
+To authenticate a request, present a token in the `Authorization` HTTP Header, after the `Bearer` keyword :
+
+    Authorization: Bearer <token>
+
+To get, a token, you have to use the [auth route](#auth).
+
 
 Page related api
 ----------------
-
-
-
-
-<details>
-    <summary>JSON page object sample</summary>
-    <pre>
-        <code>
-{
-    "id": "garden",
-    "title": "A nice Garden !!",
-    "description": "With a lot of snails",
-    "lang": "en",
-    "tag": [
-        "place", "green"
-    ],
-    "date": "2022-03-20T20:47:00+01:00",
-    "datecreation": "2022-03-20T20:47:18+01:00",
-    "datemodif": "2022-05-29T14:59:58+02:00",
-    "daterender": "2022-05-14T16:42:49+02:00",
-    "css": "",
-    "javascript": "",
-    "body": "%HEADER%\r\n\r\n%NAV%\r\n\r\n%ASIDE%\r\n\r\n%MAIN%\r\n\r\n%FOOTER%",
-    "header": "",
-    "main": "# Welcome to my Garden !!",
-    "nav": "",
-    "aside": "",
-    "footer": "",
-    "externalcss": [],
-    "customhead": "",
-    "secure": 1,
-    "interface": "main",
-    "linkto": [],
-    "templatebody": "",
-    "templatecss": "",
-    "templatejavascript": "",
-    "favicon": "",
-    "thumbnail": "",
-    "authors": [
-        "cindy",
-        "vincent"
-    ],
-    "displaycount": 1,
-    "visitcount": 0,
-    "editcount": 3,
-    "sleep": 0,
-    "redirection": "",
-    "refresh": 0,
-    "password": null
-}
-        </code>
-    </pre>
-</details>
 
 
 ### access
@@ -141,7 +101,8 @@ possibles error codes:
 
 ### list
 
-List all pages IDs
+List all pages IDs.
+This method is way more efficient than the [query](#query) version.
 
     GET     /api/v0/pages/list
 
@@ -150,31 +111,30 @@ possibles error codes:
 - `401` if user does'nt have the rights to view list of page
 
 
-### query
-
-List pages as objects using given filters and sorting options.
-
-    POST    /api/v0/pages/query
-
-You need to provide a JSON storing search options.
+#### example response
 
 ```json
 {
-    sortby: "datemodif",
-    order: 1,
-    tagfilter: ["cc", "dille"],
-    tagcompare: "AND",
-    tagnot: false,
-    authorfilter: ["vincent", "audrey"],
-    authorcompare: "OR",
-    secure: 0,
-    linkto: "the-pagest-page",
-    invert: false,
-    limit: 40,
-    since: 2022-12-09T23:27,
-    until: 2025-01-01T10:10
+    "pages": [
+        "kitchen", "about-love", "22", "morbier", "birthday-2034"
+    ]
 }
 ```
+
+### query
+
+List pages ID using filters and sorting options.
+
+    POST    /api/v0/pages/query
+
+You need to provide a JSON representing search options.
+Those are the same as the Web interface options.
+
+An extra key `fields` define which field will be outputed.
+If not present, all fields will be returned.
+Provide an empty array if you want no field.
+
+All the keys are optionnal.
 
 possible error codes:
 
@@ -182,6 +142,44 @@ possible error codes:
 - `401` if user does'nt have the rights to view list of page
 
 
+
+#### example request
+
+```json
+{
+    "fields": ["datemodif", "version"],
+    "sortby": "datemodif",
+    "order": 1,
+    "tagfilter": ["cc", "dille"],
+    "tagcompare": "AND",
+    "tagnot": false,
+    "authorfilter": ["vincent", "audrey"],
+    "authorcompare": "OR",
+    "secure": 0,
+    "linkto": "the-pagest-page",
+    "invert": false,
+    "limit": 2,
+    "since": "2022-12-09T23:27",
+    "until": "2025-01-01T10:10"
+}
+```
+
+#### example response
+
+```json
+{
+    "pages": {
+        "about-love": {
+            "datemodif": "2022-12-09T23:27",
+            "version": 2
+        },
+        "morbier": {
+            "datemodif": "2021-06-09T13:33",
+            "version": 2
+        }
+    }
+}
+```
 
 
 User related API
@@ -227,6 +225,79 @@ Return `200` if W instal is healthy.
 
     GET     /api/v0/health
 
+
+### auth
+
+Return `200` in case of auth success.
+
+    POST    /api/v0/auth
+
+possible error codes:
+
+- `400` If auth failed
+
+#### example request
+
+```json
+{
+    "username": "michel",
+    "password": "ilovecrepes"
+}
+```
+
+#### example response
+
+```json
+{
+    "token": "ddo3jsdjqsj:fgfpgoeaalkakn5eooddf:dpapajj235redao"
+}
+```
+
+Schemas
+-------
+
+### Page
+
+```json
+{
+  "id": "bar",
+  "title": "Bar (le duc)",
+  "description": "ba bidou bap bap oh yeahhhhh",
+  "lang": "",
+  "tag": ["room", "enfer", "kroute"],
+  "latitude": null,
+  "longitude": null,
+  "date": "2024-01-02T20:29:00+01:00",
+  "datecreation": "2024-01-19T20:29:32+01:00",
+  "datemodif": "2025-07-17T02:14:22+02:00",
+  "daterender": "2025-07-16T19:35:10+02:00",
+  "css": "",
+  "javascript": "",
+  "body": "<main>%CONTENT%</main>",
+  "externalcss": [],
+  "customhead": "",
+  "secure": 0,
+  "interface": "content",
+  "linkto": [],
+  "templatebody": "",
+  "templatecss": "",
+  "templatejavascript": "",
+  "favicon": "",
+  "thumbnail": "",
+  "authors": ["vincent", "audrey"],
+  "displaycount": 31,
+  "visitcount": 3,
+  "editcount": 63,
+  "sleep": 0,
+  "redirection": "",
+  "refresh": 0,
+  "password": "",
+  "postprocessaction": false,
+  "externallinks": [],
+  "version": 2,
+  "content": "Un bar! Binjour"
+}
+```
 
 
 Usages example

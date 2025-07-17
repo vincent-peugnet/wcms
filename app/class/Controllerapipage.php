@@ -180,7 +180,7 @@ class Controllerapipage extends Controllerapi
         }
         http_response_code(200);
         header('Content-type: application/json; charset=utf-8');
-        echo json_encode($this->pagemanager->list());
+        echo json_encode(['pages' => $this->pagemanager->list()]);
     }
 
     public function query(): void
@@ -194,13 +194,20 @@ class Controllerapipage extends Controllerapi
         }
         $datas = empty($jsondatas) ? $_POST : $jsondatas;
         $opt = new Opt($datas);
+
+        $fields = $datas['fields'] ?? null;
+
         $pages = $this->pagemanager->pagelist();
         $pages = $this->pagemanager->pagetable($pages, $opt);
-        $pages = array_map(function (Page $page) {
-            return $page->dry();
+        $pages = array_map(function (Page $page) use ($fields) {
+            if ($fields === null) {
+                return $page->dry();
+            } else {
+                return $page->drylist($fields, false);
+            }
         }, $pages);
         http_response_code(200);
         header('Content-type: application/json; charset=utf-8');
-        echo json_encode(array_values($pages));
+        echo json_encode(['pages' => $pages], JSON_FORCE_OBJECT);
     }
 }

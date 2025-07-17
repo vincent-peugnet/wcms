@@ -225,7 +225,7 @@ class Opt extends Item
      */
     public function sortbyorder(string $sortby = ''): string
     {
-        $object = $this->drylist(self::DATALIST, self::HTML_DATETIME_LOCAL);
+        $object = $this->drylist(self::DATALIST, true, self::HTML_DATETIME_LOCAL);
         if (!empty($sortby)) {
             $object['sortby'] = $sortby;
         }
@@ -291,7 +291,7 @@ class Opt extends Item
      */
     public function getfilteraddress(array $vars = []): string
     {
-        $object = $this->drylist(self::DATALIST, self::HTML_DATETIME_LOCAL);
+        $object = $this->drylist(self::DATALIST, true, self::HTML_DATETIME_LOCAL);
         $object = array_merge($object, $vars);
         $object['submit'] = 'filter';
         return urldecode(http_build_query($object));
