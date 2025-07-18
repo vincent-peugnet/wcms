@@ -66,6 +66,7 @@ class Controllerapipage extends Controllerapi
      */
     public function update(string $page): void
     {
+        $force = isset($_GET['force']) ? boolval($_GET['force']) : false;
         if ($this->importpage($page)) {
             if ($this->canedit($this->page)) {
                 if (!empty($_POST)) {
@@ -82,7 +83,7 @@ class Controllerapipage extends Controllerapi
                 }
                 $this->page->hydrate($datas);
 
-                if ($this->page->datemodif() == $oldpage->datemodif()) {
+                if ($force || $this->page->datemodif() == $oldpage->datemodif()) {
                     try {
                         $this->page->updateedited();
                         $this->pagemanager->update($this->page);

@@ -33,10 +33,15 @@ possible error codes:
 
 ### update
 
-To update a page, you'll have to provide it with POST datas.
-In case of success, you will get a `200` HTTP CODE and recieve the full JSON page object.
+To update a page, you'll have to provide some fields of [Page data](#page).
+Only the given fields will be updated.
+The `datemodified` field is important as it's used for conflict detection. It has to be the same as stored Page, otherwise, a `409` response is thrown.
+An optional `force=1` [search parameter](https://developer.mozilla.org/en-US/docs/Web/API/URL/search) can be added to bypass conflict detection.
 
-    POST    /api/v0/page/<page_id>/update
+In case of success, you will get a `200` HTTP CODE and recieve the full JSON page object.
+The `datemodif` and `editcount` field will be updated.
+
+    POST    /api/v0/page/<page_id>/update[?force=1]
 
 possible error codes:
 
