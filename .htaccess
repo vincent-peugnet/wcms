@@ -10,3 +10,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 # is redirect to index
 RewriteRule . index.php [L]
 
+# fix bug with PHP-FPM + Apache not recieving Authorization Header
+# see <https://stackoverflow.com/a/69021772>
+CGIPassAuth On
+
