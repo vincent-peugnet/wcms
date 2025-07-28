@@ -99,6 +99,9 @@
                                 >
                             </p>
                         <?php endforeach ?>
+                        <?php if(!$user->issupereditor()) : ?>
+                            <input type="hidden" name="authors[]" value="<?= $user->id() ?>" form="update">
+                        <?php endif ?>
                     </fieldset>
                 </details>
             <?php endif ?>
