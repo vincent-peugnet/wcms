@@ -121,7 +121,6 @@
                     <h4>
                         <?= $name ?>
                     </h4>
-                    <code class="select-all"><?= $hash ?></code>
                 </li>
             <?php endforeach ?>
         </ul>
