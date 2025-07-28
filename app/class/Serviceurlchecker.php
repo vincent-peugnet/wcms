@@ -31,6 +31,7 @@ class Serviceurlchecker
     /** @var null[] URL response code considered as not dead */
     public const ACCEPTED_RESPONSE_CODES = [
         200 => null,
+        204 => null,
         401 => null,
         403 => null,
         405 => null,
