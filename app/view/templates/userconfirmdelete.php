@@ -1,5 +1,5 @@
 <?php $id = $userdelete->id() ?>
-<?php $this->layout('modallayout', ['title' => "Delete user $id", 'description' => 'delete', 'css' => $css, 'user' => $user, 'pagelist' => $pagelist]) ?>
+<?php $this->layout('modallayout', ['theme' => $theme, 'title' => "Delete user $id", 'description' => 'delete', 'css' => $css, 'user' => $user, 'pagelist' => $pagelist]) ?>
 
 <?php $this->start('modal') ?>
 
