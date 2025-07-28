@@ -487,13 +487,12 @@ abstract class Page extends Item
     public function settag($tag): void
     {
         if (is_string($tag) && strlen($tag) < self::LENGTH_SHORT_TEXT) {
-            $tag = $this->tagtoarray($tag);
+            $this->tag = $this->tagtoarray($tag);
         } elseif (is_array($tag)) {
             $tag = array_map(function ($id) {
                 return Model::idclean($id);
             }, $tag);
-            $tag = array_filter($tag);
-            $this->tag = $tag;
+            $this->tag = array_filter($tag);
         }
     }
 
