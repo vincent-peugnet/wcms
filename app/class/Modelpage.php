@@ -234,7 +234,7 @@ class Modelpage extends Modeldb
         try {
             $template = $this->get($templatejs);
             $templates[$template->id()] = $template;
-            $templates = $this->getpagejavascripttemplates($template, $templates);
+            $templates = array_merge($templates, $this->getpagejavascripttemplates($template, $templates));
         } catch (Databaseexception | RangeException $e) {
             // This mean page do not exist or is invalid
             Logger::errorex($e);
