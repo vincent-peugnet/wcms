@@ -2,6 +2,7 @@
 
 namespace Wcms;
 
+use DomainException;
 use Wcms\Exception\Filesystemexception;
 
 abstract class Config
@@ -24,6 +25,9 @@ abstract class Config
     protected static string $defaultv2body = "%CONTENT%";
     protected static string $defaultfavicon = '';
     protected static string $defaultthumbnail = '';
+    protected static int $defaultprivacy = 0;
+    /** @var string[] $defaulttag */
+    protected static array $defaulttag = [];
     protected static string $suffix = "";
     protected static bool $externallinkblank = true;
     protected static bool $internallinkblank = false;
@@ -31,7 +35,6 @@ abstract class Config
     protected static bool $urlchecker = true;
     protected static bool $deletelinktocache = true;
     protected static bool $titlefromalt = false;
-    protected static int $defaultprivacy = 0;
     protected static string $homepage = 'default';
     protected static ?string $homeredirect = null;
     protected static string $theme = 'default.css';
@@ -128,7 +131,7 @@ abstract class Config
         foreach ($arr as $key => $value) {
             $arr[$key] = self::$$key;
         }
-        $json = json_encode($arr, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT | JSON_UNESCAPED_LINE_TERMINATORS);
+        $json = json_encode($arr, JSON_PRETTY_PRINT | JSON_UNESCAPED_LINE_TERMINATORS);
         return $json;
     }
 
@@ -265,6 +268,21 @@ abstract class Config
     public static function defaultv2body(): string
     {
         return self::$defaultv2body;
+    }
+
+    /**
+     * @return string[]|string
+     *
+     * @throws DomainException if given option is invalid
+     */
+    public static function defaulttag(string $option = 'array')
+    {
+        if ($option == 'string') {
+            return implode(", ", self::$defaulttag);
+        } elseif ($option == 'array') {
+            return self::$defaulttag;
+        }
+        throw new DomainException('invalid option given');
     }
 
     public static function defaultfavicon(): string
@@ -491,6 +509,24 @@ abstract class Config
     {
         self::$defaultv2body = crlf2lf($defaultbody);
     }
+
+    /**
+     * @param string[]|string $tag
+     */
+    public static function setdefaulttag($tag): void
+    {
+        if (is_string($tag) && strlen($tag) < Page::LENGTH_SHORT_TEXT) {
+            $tag = Page::tagtoarray($tag);
+        }
+        if (is_array($tag)) {
+            $tag = array_map(function ($id) {
+                return Model::idclean($id);
+            }, $tag);
+            self::$defaulttag = array_unique(array_filter($tag));
+            natsort(self::$defaulttag);
+        }
+    }
+
 
     public static function setdefaultfavicon(string $defaultfavicon): void
     {

@@ -175,6 +175,13 @@
             <textarea name="<?= $defaultbody ?>" id="defaultbody" cols="30" rows="10" form="admin"><?= $this->e(Wcms\Config::defaultbody()) ?></textarea>
         </p>
 
+        <h3>Default tags</h3>
+
+        <p class="field">
+            <label for="defaulttag">Tag(s)</label>
+            <input type="text" name="defaulttag" class="field" id="defaulttag" value="<?= Wcms\Config::defaulttag('string'); ?>" form="admin">
+        </p>
+
     </div>
 
     <div class="grid-item"  id="alert-pages">

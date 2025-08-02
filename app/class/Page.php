@@ -105,7 +105,7 @@ abstract class Page extends Item
         }
         $this->setdescription('');
         $this->setlang('');
-        $this->settag([]);
+        $this->settag(Config::defaulttag());
         $this->latitude = null;
         $this->longitude = null;
         $this->setdate($now);
@@ -487,12 +487,14 @@ abstract class Page extends Item
     public function settag($tag): void
     {
         if (is_string($tag) && strlen($tag) < self::LENGTH_SHORT_TEXT) {
-            $this->tag = $this->tagtoarray($tag);
-        } elseif (is_array($tag)) {
+            $tag = self::tagtoarray($tag);
+        }
+        if (is_array($tag)) {
             $tag = array_map(function ($id) {
                 return Model::idclean($id);
             }, $tag);
-            $this->tag = array_filter($tag);
+            $this->tag = array_unique(array_filter($tag));
+            natsort($this->tag);
         }
     }
 
@@ -839,7 +841,7 @@ abstract class Page extends Item
     public function addtag($tag): void
     {
         if (is_string($tag)) {
-                $tag = $this->tagtoarray($tag);
+                $tag = self::tagtoarray($tag);
         }
         if (is_array($tag)) {
             $tag = array_map(function ($id) {
@@ -899,7 +901,7 @@ abstract class Page extends Item
      * @return string[] Tags stored as an array
      */
 
-    private function tagtoarray(string $tagstring): array
+    public static function tagtoarray(string $tagstring): array
     {
         $tag = strip_tags(trim(strtolower($tagstring)));
         $tag = str_replace(' ', '', $tag);
