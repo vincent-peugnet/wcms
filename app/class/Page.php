@@ -120,9 +120,9 @@ abstract class Page extends Item
         $this->setcustomhead('');
         $this->setsecure(Config::defaultprivacy());
         $this->setlinkto([]);
-        $this->settemplatebody('');
-        $this->settemplatecss('');
-        $this->settemplatejavascript('');
+        $this->settemplatebody(Config::defaulttemplatebody());
+        $this->settemplatecss(Config::defaulttemplatecss());
+        $this->settemplatejavascript(Config::defaulttemplatejs());
         $this->setfavicon('');
         $this->setthumbnail('');
         $this->setauthors([]);

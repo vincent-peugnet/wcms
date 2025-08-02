@@ -182,6 +182,38 @@
             <input type="text" name="defaulttag" class="field" id="defaulttag" value="<?= Wcms\Config::defaulttag('string'); ?>" form="admin">
         </p>
 
+        <h3>Default templates</h3>
+
+        <p class="field">
+            <label for="defaulttemplatebody">BODY template</label>
+            <select name="defaulttemplatebody" id="defaulttemplatebody" form="admin">
+                <option value="" <?= Wcms\Config::defaulttemplatebody() === "" ? 'selected' : '' ?>>--no default body template--</option>
+                <?php foreach ($pagelist as $page) : ?>
+                    <option value="<?= $page ?>" <?= Wcms\Config::defaulttemplatebody() === $page ? 'selected' : '' ?>><?= $page ?></option>
+                <?php endforeach ?>
+            </select>
+        </p>
+
+        <p class="field">
+            <label for="defaulttemplatecss">CSS template</label>
+            <select name="defaulttemplatecss" id="defaulttemplatecss" form="admin">
+                <option value="" <?= Wcms\Config::defaulttemplatecss() === "" ? 'selected' : '' ?>>--no default css template--</option>
+                <?php foreach ($pagelist as $page) : ?>
+                    <option value="<?= $page ?>" <?= Wcms\Config::defaulttemplatecss() === $page ? 'selected' : '' ?>><?= $page ?></option>
+                <?php endforeach ?>
+            </select>
+        </p>
+
+        <p class="field">
+            <label for="defaulttemplatejs">JS template</label>
+            <select name="defaulttemplatejs" id="defaulttemplatejs" form="admin">
+                <option value="" <?= Wcms\Config::defaulttemplatejs() === "" ? 'selected' : '' ?>>--no default js template--</option>
+                <?php foreach ($pagelist as $page) : ?>
+                    <option value="<?= $page ?>" <?= Wcms\Config::defaulttemplatejs() === $page ? 'selected' : '' ?>><?= $page ?></option>
+                <?php endforeach ?>
+            </select>
+        </p>
+
     </div>
 
     <div class="grid-item"  id="alert-pages">

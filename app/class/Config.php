@@ -28,6 +28,9 @@ abstract class Config
     protected static int $defaultprivacy = 0;
     /** @var string[] $defaulttag */
     protected static array $defaulttag = [];
+    protected static string $defaulttemplatebody = '';
+    protected static string $defaulttemplatecss = '';
+    protected static string $defaulttemplatejs = '';
     protected static string $suffix = "";
     protected static bool $externallinkblank = true;
     protected static bool $internallinkblank = false;
@@ -285,6 +288,21 @@ abstract class Config
         throw new DomainException('invalid option given');
     }
 
+    public static function defaulttemplatebody(): string
+    {
+        return self::$defaulttemplatebody;
+    }
+
+    public static function defaulttemplatecss(): string
+    {
+        return self::$defaulttemplatecss;
+    }
+
+    public static function defaulttemplatejs(): string
+    {
+        return self::$defaulttemplatejs;
+    }
+
     public static function defaultfavicon(): string
     {
         return self::$defaultfavicon;
@@ -525,6 +543,21 @@ abstract class Config
             self::$defaulttag = array_unique(array_filter($tag));
             natsort(self::$defaulttag);
         }
+    }
+
+    public static function setdefaulttemplatebody(string $templatebody): void
+    {
+        self::$defaulttemplatebody = Model::idclean($templatebody);
+    }
+
+    public static function setdefaulttemplatecss(string $templatecss): void
+    {
+        self::$defaulttemplatecss = Model::idclean($templatecss);
+    }
+
+    public static function setdefaulttemplatejs(string $templatejs): void
+    {
+        self::$defaulttemplatejs = Model::idclean($templatejs);
     }
 
 
