@@ -150,7 +150,8 @@
                             <?php endif ?>
                         </label>
                         <select name="templatecss" id="templatecss" form="update">
-                            <option value="" <?= empty($page->templatecss()) ? 'selected' : '' ?>>--no template--</option>
+                            <option value="%" <?= $page->templatecss() === null ? 'selected' : '' ?>>--same as body template--</option>
+                            <option value="" <?= $page->templatecss() === '' ? 'selected' : '' ?>>--no template--</option>
                             <?php foreach ($pagelist as $template) : ?>
                                 <option value="<?= $template ?>" <?= $page->templatecss() === $template ? 'selected' : '' ?>><?= $template ?></option>
                             <?php endforeach ?>
@@ -166,7 +167,8 @@
                             <?php endif ?>
                         </label>                    
                         <select name="templatejavascript" id="templatejavascript" form="update">
-                            <option value="" <?= empty($page->templatejavascript()) ? 'selected' : '' ?>>--no template--</option>
+                            <option value="%" <?= $page->templatejavascript() === null ? 'selected' : '' ?>>--same as body template--</option>
+                            <option value="" <?= $page->templatejavascript() === '' ? 'selected' : '' ?>>--no template--</option>
                             <?php foreach ($pagelist as $template) : ?>
                                 <option value="<?= $template ?>" <?= $page->templatejavascript() === $template ? 'selected' : '' ?>><?= $template ?></option>
                             <?php endforeach ?>

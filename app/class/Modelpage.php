@@ -190,15 +190,16 @@ class Modelpage extends Modeldb
      */
     public function getpagecsstemplates(Page $page, array $templates = []): array
     {
-        if (empty($page->templatecss())) {
+        $templatecss = $page->templatecss() ?? $page->templatebody();
+        if (empty($templatecss)) {
             return [];
         }
-        if ($page->templatecss() === $page->id() || key_exists($page->templatecss(), $templates)) {
+        if ($templatecss === $page->id() || key_exists($templatecss, $templates)) {
             throw new RuntimeException('there is a loop in CSS templates');
         }
 
         try {
-            $template = $this->get($page->templatecss());
+            $template = $this->get($templatecss);
             $templates[$template->id()] = $template;
             $templates = array_merge($templates, $this->getpagecsstemplates($template, $templates));
         } catch (Databaseexception | RangeException $e) {
@@ -222,15 +223,16 @@ class Modelpage extends Modeldb
      */
     public function getpagejavascripttemplates(Page $page, array $templates = []): array
     {
-        if (empty($page->templatejavascript())) {
+        $templatejs = $page->templatejavascript() ?? $page->templatebody();
+        if (empty($templatejs)) {
             return [];
         }
-        if ($page->templatejavascript() === $page->id() || key_exists($page->templatejavascript(), $templates)) {
+        if ($templatejs === $page->id() || key_exists($templatejs, $templates)) {
             throw new RuntimeException('there is a loop in Javascript templates');
         }
 
         try {
-            $template = $this->get($page->templatejavascript());
+            $template = $this->get($templatejs);
             $templates[$template->id()] = $template;
             $templates = $this->getpagejavascripttemplates($template, $templates);
         } catch (Databaseexception | RangeException $e) {

@@ -33,8 +33,8 @@ abstract class Page extends Item
     /** @var string[] $linkto */
     protected array $linkto = [];
     protected string $templatebody = '';
-    protected string $templatecss = '';
-    protected string $templatejavascript = '';
+    protected ?string $templatecss = null;
+    protected ?string $templatejavascript = '';
     protected string $favicon = '';
     protected string $thumbnail = '';
     /** @var string[] $authors */
@@ -122,7 +122,7 @@ abstract class Page extends Item
         $this->setlinkto([]);
         $this->settemplatebody(Config::defaulttemplatebody());
         $this->settemplatecss(Config::defaulttemplatecss());
-        $this->settemplatejavascript(Config::defaulttemplatejs());
+        $this->settemplatejavascript(Config::defaulttemplatejavascript());
         $this->setfavicon('');
         $this->setthumbnail('');
         $this->setauthors([]);
@@ -357,14 +357,14 @@ abstract class Page extends Item
         return $this->templatebody;
     }
 
-    public function templatecss(string $type = 'string'): string
+    public function templatecss(string $option = 'string'): ?string
     {
         return $this->templatecss;
     }
 
-    public function templatejavascript(string $type = 'string'): string
+    public function templatejavascript(string $option = 'string'): ?string
     {
-        return $this->templatejavascript;
+            return $this->templatejavascript;
     }
 
     public function favicon(string $type = 'string'): string
@@ -689,14 +689,22 @@ abstract class Page extends Item
         $this->templatebody = $templatebody;
     }
 
-    public function settemplatecss(string $templatecss): void
+    public function settemplatecss(?string $templatecss): void
     {
-        $this->templatecss = $templatecss;
+        if ($templatecss === '%') { // This mean "same as BODY template"
+            $this->templatecss = null;
+        } else {
+            $this->templatecss = $templatecss;
+        }
     }
 
-    public function settemplatejavascript(string $templatejavascript): void
+    public function settemplatejavascript(?string $templatejavascript): void
     {
-        $this->templatejavascript = $templatejavascript;
+        if ($templatejavascript === '%') {
+            $this->templatejavascript = null;
+        } else {
+            $this->templatejavascript = $templatejavascript;
+        }
     }
 
     public function setfavicon(string $favicon): void
