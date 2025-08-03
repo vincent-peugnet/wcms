@@ -50,7 +50,11 @@
         </a>
 
         <form action="<?= $this->url('log') ?>" method="post" id="connect">
-            <input type="submit" name="log" value="logout" >
+            <!-- <input type="submit" name="log" value="logout" > -->
+            <button type="submit" name="log" value="logout">
+                <i class="fa fa-sign-out"></i>
+                <span class="text">logout</span>
+            </button>
             <?php if($tab === 'edit') : ?>
                 <input type="hidden" name="route" value="pageread">
                 <input type="hidden" name="id" value="<?= $pageid ?>">

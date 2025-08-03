@@ -141,7 +141,14 @@ div#geomap {
 	resize: none;
 	padding: var(--spacing);
     border-radius: 0;
+	font-family: monospace;
+	line-height: 1.2em;
+	text-wrap: nowrap;
 }
+
+textarea#editcontent {
+    text-wrap: wrap;
+  } 
 
 /* --------------------------------------------------------- tabs */
 
@@ -304,8 +311,8 @@ span.cm-wkeyword {
     border-radius: var(--radius);
     animation: none;
     margin: 0;
-    padding: var(--half-spacing) var(--spacing);
-    gap: var(--half-spacing);
+    padding: var(--half-padding) var(--padding);
+    gap: var(--spacing);
     background: #eee;
 }
 
@@ -315,8 +322,8 @@ span.cm-wkeyword {
 }
 
 .tagify__dropdown span.tag {
-    /* border-radius: 10px;
-	padding: 1px 4px; */
+    border-radius: var(--radius);
+    padding: var(--half-padding) var(--padding);
 }
 
 .tagify--focus {
@@ -353,6 +360,12 @@ span.cm-wkeyword {
     .pageid, 
     /* hide editor font-size input + label */
     .fontsize {
+        display: none;
+    }
+}
+
+@media (max-height: 450px) and (max-width: 700px) {
+    .toggle-panel-container {
         display: none;
     }
 }

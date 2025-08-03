@@ -20,7 +20,10 @@
                 <input type="checkbox" name="rememberme" id="rememberme" value="1">
                 <label for="rememberme">Remember me</label>
             </span>
-            <input name="log" type="submit" value="login">
+            <button type="submit" name="log" value="login">
+                <i class="fa fa-sign-in"></i>
+                <span>login</span>
+            </button>
         </form>
 
     <?php else : ?>    
