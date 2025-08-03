@@ -39,7 +39,7 @@ class Controllerhome extends Controller
             if (Config::homepage() === 'redirect' && !empty(Config::homeredirect())) {
                 $this->routedirect('pageread', ['page' => Config::homeredirect()]);
             } else {
-                $this->showtemplate('connect', ['route' => 'home']);
+                $this->showconnect('home');
             }
         }
         $display = $_GET['display'] ?? 'list';

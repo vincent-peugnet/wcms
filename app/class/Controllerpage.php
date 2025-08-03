@@ -77,8 +77,7 @@ class Controllerpage extends Controller
     protected function pageconnect(string $route): void
     {
         if ($this->user->isvisitor()) {
-            http_response_code(401);
-            $this->showtemplate('connect', ['route' => $route, 'id' => $this->page->id()]);
+            $this->showconnect($route, $this->page->id());
         }
     }
 
@@ -463,7 +462,7 @@ class Controllerpage extends Controller
     public function login(string $page): never
     {
         if ($this->user->isvisitor()) {
-            $this->showtemplate('connect', ['id' => $page, 'route' => 'pageread']);
+            $this->showconnect('pageread', $page);
         } else {
             $this->routedirect('pageread', ['page' => $page]);
         }

@@ -14,8 +14,7 @@ class Controllerprofile extends Controller
         parent::__construct($router);
 
         if ($this->user->isvisitor()) {
-            http_response_code(401);
-            $this->showtemplate('connect', ['route' => 'profile']);
+            $this->showconnect('profile');
         }
     }
 

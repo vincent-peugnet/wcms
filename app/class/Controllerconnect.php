@@ -31,12 +31,10 @@ class Controllerconnect extends Controller
     public function connect(): never
     {
         if (isset($_SESSION['pageupdate'])) {
-            $pageupdate['route'] = 'pageedit';
-            $pageupdate['id'] = $_SESSION['pageupdate']['id'];
+            $this->showconnect('pageedit', $_SESSION['pageupdate']['id']);
         } else {
-            $pageupdate = ['route' => 'home'];
+            $this->showconnect('home');
         }
-        $this->showtemplate('connect', $pageupdate);
     }
 
     protected function login(): void

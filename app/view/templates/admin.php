@@ -20,8 +20,12 @@
 <main class="admin grid">
 
     <div class="grid-item"  id="home-page">
-        <h2>Landing page</h2>
-        <p class="info">By default, W has no landing page for visitors without an account.
+        <h2>Visitor interface</h2>
+
+        <h3>Landing page</h3>
+
+        <p class="info">
+            By default, W has no landing page for visitors without an account.
             But if you wish, you can define a page to which visitors who are not logged in will be redirected.
         </p>
 
@@ -43,6 +47,30 @@
                 <?php endforeach ?>
             </select>
         </p>
+
+        <h3>help button</h3>
+
+        <p class="info">
+            Add a "help" button on login pages that point to a page or an URL.
+            Leave empty if you don't need one.
+        </p>
+
+            
+        <p class="field">
+            <label for="helpbutton">destination</label>
+            <input
+                type="text"
+                name="helpbutton"
+                form="admin"
+                id="helpbutton"
+                value="<?= $this->e(Wcms\Config::helpbutton()) ?>"
+                list="searchdatalist"
+                placeholder="URL or page ID"
+                maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>"
+            >
+        </p>
+
+
     </div>
 
     <div class="grid-item"  id="databases">

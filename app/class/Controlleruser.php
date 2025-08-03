@@ -15,8 +15,7 @@ class Controlleruser extends Controller
         parent::__construct($router);
 
         if ($this->user->isvisitor()) {
-            http_response_code(401);
-            $this->showtemplate('connect', ['route' => 'user']);
+            $this->showconnect('user');
         }
     }
 

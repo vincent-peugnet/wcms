@@ -35,7 +35,19 @@
     <?php endif ?>
 
     <?php if(in_array($route, ['pageedit', 'pageread', 'pageadd'])) : ?>
-        <p><a class="button" href="<?= $this->upage('pageread', $id) ?>">back to page read view</a></p>
+        <p>
+            <a class="button" href="<?= $this->upage('pageread', $id) ?>">
+            <i class="fa fa-eye"></i>
+            display page
+        </a>
+    </p>
+    <?php endif ?>
+
+    <?php if (!empty($helpbutton)) : ?>
+        <a href="<?= $helpbutton ?>" class="button">
+            <i class="fa fa-info-circle"></i>
+            help
+        </a>
     <?php endif ?>
 </div>
 

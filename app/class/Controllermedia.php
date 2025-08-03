@@ -20,8 +20,7 @@ class Controllermedia extends Controller
     {
         parent::__construct($router);
         if ($this->user->isvisitor()) {
-            http_response_code(401);
-            $this->showtemplate('connect', ['route' => 'media']);
+            $this->showconnect('media');
         }
         $this->mediamanager = new Modelmedia();
         $this->mediaopt = new Mediaopt($_GET);

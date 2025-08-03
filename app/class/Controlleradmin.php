@@ -21,8 +21,7 @@ class Controlleradmin extends Controller
         $this->adminmanager = new Modeladmin();
 
         if ($this->user->isvisitor()) {
-            http_response_code(401);
-            $this->showtemplate('connect', ['route' => 'admin']);
+            $this->showconnect('admin');
         }
         if (!$this->user->isadmin()) {
             http_response_code(403);

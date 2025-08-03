@@ -12,8 +12,7 @@ class Controllerinfo extends Controller
         parent::__construct($router);
 
         if ($this->user->isvisitor()) {
-            http_response_code(401);
-            $this->showtemplate('connect', ['route' => 'info']);
+            $this->showconnect('info');
         }
     }
 

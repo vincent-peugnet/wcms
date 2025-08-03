@@ -59,6 +59,9 @@ abstract class Config
 
     /** @var bool $disablejavascript */
     protected static bool $disablejavascript = false;
+
+    protected static string $helpbutton = '';
+
     /** @var string $lang Default string for pages */
     protected static $lang = "en";
 
@@ -412,6 +415,11 @@ abstract class Config
         return self::$disablejavascript;
     }
 
+    public static function helpbutton(): string
+    {
+        return self::$helpbutton;
+    }
+
     public static function pageversion(): int
     {
         return self::$pageversion;
@@ -702,6 +710,13 @@ abstract class Config
     public static function setdisablejavascript(bool $disablejavascript): void
     {
         self::$disablejavascript = $disablejavascript;
+    }
+
+    public static function sethelpbutton(string $url): void
+    {
+        if (strlen($url) < Item::LENGTH_SHORT_TEXT) {
+            self::$helpbutton = strip_tags(trim($url));
+        }
     }
 
     public static function setpageversion(int $pageversion): void

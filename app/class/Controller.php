@@ -103,6 +103,42 @@ abstract class Controller
         return false;
     }
 
+    /**
+     * Show `connect` template and send `401` response code.
+     * This wrapper also setup the help button if necessary.
+     *
+     * @param string $route                 route that will be used for redirection after successfull login
+     *
+     * @param ?string $pageid               If route is a page route, a page ID is mandatory
+     */
+    protected function showconnect(string $route, ?string $pageid = null): never
+    {
+        if (str_starts_with($route, 'page') && $pageid === null) {
+            throw new DomainException("missing page ID argument for 'page...' route");
+        }
+
+        $helpbutton = '';
+        if (Model::idcheck(Config::helpbutton())) {
+            $helpbutton = $this->generate('pageread', ['page' => Config::helpbutton()]);
+        } else {
+            try {
+                $helpbutton = getfirsturl(Config::helpbutton());
+            } catch (RuntimeException $e) {
+                Logger::warning('connect page: help button URL contain invalid value: "%s"', Config::helpbutton());
+            }
+        }
+
+        http_response_code(401);
+        $this->showtemplate(
+            'connect',
+            [
+                'route' => $route,
+                'id' => $pageid,
+                'helpbutton' => $helpbutton,
+            ]
+        );
+    }
+
     protected function initplates(): void
     {
         $formatershort = new IntlDateFormatter(Config::lang(), IntlDateFormatter::SHORT, IntlDateFormatter::SHORT);
