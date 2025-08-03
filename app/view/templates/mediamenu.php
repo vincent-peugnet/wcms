@@ -1,7 +1,7 @@
 <nav id="navbar" class="hbar">
 
     <div class="hbar-section">
-        <details class="dropdown">
+        <details name="menu" class="dropdown">
             <summary>File</summary>
             <div class="dropdown-content">
                 <form id=addmedia action="<?= $this->url('mediaupload') ?>" method="post" enctype="multipart/form-data" class="dropdown-section">
@@ -89,7 +89,7 @@
 
 
         <?php if($user->issupereditor()) : ?>
-            <details class="dropdown">
+            <details name="menu" class="dropdown">
                 <summary>Edit</summary>
                 <form action="<?= $this->url('mediaedit') ?>" method="post" id="mediaedit" class="dropdown-content">
                     <div class="dropdown-section">
@@ -127,7 +127,7 @@
         <?php endif ?>
 
 
-        <details <?= $filtercode ? "open" : " " ?> class="dropdown">
+        <details name="menu" <?= $filtercode ? "open" : " " ?> class="dropdown">
             <summary>Filter</summary>
             <div class="dropdown-content">
                 <form action="" method="post" class="dropdown-section">

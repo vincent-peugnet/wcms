@@ -19,9 +19,9 @@
     --radius: 0;
 }
 
-input, button, select, textarea, .dropdown, .dropdown-content {
+input, button, select, textarea, .dropdown, .dropdown-content, .tagify {
     border-radius: 0px;
-    border: solid 1px;
+    border: solid 1px var(--input-color);
 }
 .dropdown-content  {
     border: solid 1px;

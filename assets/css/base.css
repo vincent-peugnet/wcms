@@ -116,6 +116,10 @@ a {
     color: currentColor;
 }
 
+summary {
+    cursor: pointer;
+}
+
 /* --------------------------------------------------------- icons */
 .fa {
     line-height: 0 !important;
@@ -541,6 +545,13 @@ input.toggle-panel-toggle {
     .dropdown-content {
         /* dropdown at left:0 when navbar is scrollable */
         left: 0;
+    }
+}
+
+@media (max-height: 550px) {
+    main section thead {
+        position: relative;
+        box-shadow: none;
     }
 }
 

@@ -4,7 +4,7 @@
 
         <?php if($user->issupereditor()) : ?>
 
-            <details id="json" class="dropdown">
+            <details name="menu" id="json" class="dropdown">
                 <summary>File</summary>
                 <div class="dropdown-content">
                     <form action="<?= $this->url('pageupload') ?>" method="post" enctype="multipart/form-data" class="dropdown-section">              
@@ -60,7 +60,7 @@
 
             </details>
 
-            <details id="edit" class="dropdown">
+            <details name="menu" id="edit" class="dropdown">
                 <summary>Edit</summary>
                 <form action="<?= $this->url('multi') ?>" method="post" id="multi" class="dropdown-content">
                     <i>Edit selected pages</i>        
@@ -251,7 +251,7 @@
 
         <?php endif ?>
 
-        <details id="selection" <?= !empty($optlist) ? 'open' : '' ?> class="dropdown">
+        <details name="menu" id="selection" <?= !empty($optlist) ? 'open' : '' ?> class="dropdown">
             <summary>Filter</summary>
             <div class="dropdown-content">
                 <form action="<?= $this->url('homequery') ?>" method="post" class="dropdown-section">
@@ -350,7 +350,7 @@
 
 
 
-        <details id="bookmark" class="dropdown">
+        <details name="menu" id="bookmark" class="dropdown">
             <summary>Bookmark</summary>
             <div class="dropdown-content">
                 <?php if(empty($matchedbookmarks)) : ?>
@@ -497,7 +497,7 @@
 
 
 
-        <details id="display" class="dropdown">
+        <details name="menu" id="display" class="dropdown">
             <summary>Display</summary>
             <div class="dropdown-content">
                 <form action="<?= $this->url('homecolumns') ?>" method="post" class="dropdown-section">
