@@ -320,7 +320,7 @@ class Opt extends Item
     {
         /** @var array<string, mixed> */
         $class = get_class_vars(get_class($this));
-        $object = $this->dry();
+        $object = $this->dry(self::HTML_DATETIME_LOCAL);
         $class['pageidlist'] = $object['pageidlist'];
         $class['pagevarlist'] = $object['pagevarlist'];
         $class['taglist'] = $object['taglist'];
