@@ -11,6 +11,9 @@
                     <span id="editstatus"></span>
                 </span>
             </button>
+
+            <input type="hidden" name="datemodif" value="<?= $page->datemodif('string') ?>">
+            <input type="hidden" name="version" value="<?= $page->version() ?>">
         </form>
 
         <a href="<?= $this->upage('pageread', $page->id()) ?>" target="<?= $target ?>" id="display">

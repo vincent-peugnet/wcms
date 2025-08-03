@@ -901,6 +901,8 @@ class Modelpage extends Modeldb
                     return new Pagev2($datas);
             }
             throw new RangeException('Version is specified but out of range');
+        } elseif (isset($datas['content'])) {
+            return new Pagev2($datas);
         } else {
             return new Pagev1($datas);
         }

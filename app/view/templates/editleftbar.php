@@ -6,8 +6,6 @@
         <h1>Meta</h1>
         <div class="toggle-panel-content">
 
-            <input type="hidden" name="datemodif" value="<?= $page->datemodif('string') ?>" form="update">
-
             <details id="editinfo" open>
                 <summary>Informations</summary>
                 <fieldset >                        

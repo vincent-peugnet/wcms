@@ -53,10 +53,11 @@ class Controllerpage extends Controller
     protected function importpage(): bool
     {
         try {
-            if (isset($_SESSION['pageupdate']['id']) && $_SESSION['pageupdate']['id'] == $this->page->id()) {
+            if (isset($_SESSION['pageupdate']['id']) && $_SESSION['pageupdate']['id'] === $this->page->id()) {
                 $this->page = $this->pagemanager->parsepage($_SESSION['pageupdate']);
+                $this->pagemanager->update($this->page);
                 unset($_SESSION['pageupdate']);
-                return true;
+                $this->routedirect('pageedit', ['page' => $this->page->id()]);
             } else {
                 $this->page = $this->pagemanager->get($this->page);
                 return true;
