@@ -203,7 +203,7 @@
         <p class="field">
             <label for="defaulttemplatecss">CSS template</label>
             <select name="defaulttemplatecss" id="defaulttemplatecss" form="admin">
-                <option value="%" <?= Wcms\Config::defaulttemplatecss() === null ? 'selected' : '' ?>>--same as default BODY template--</option>
+                <option value="%" <?= Wcms\Config::defaulttemplatecss() === null ? 'selected' : '' ?>>--same as default body template--</option>
                 <option value="" <?= Wcms\Config::defaulttemplatecss() === '' ? 'selected' : '' ?>>--no default css template--</option>
                 <?php foreach ($pagelist as $page) : ?>
                     <option value="<?= $page ?>" <?= Wcms\Config::defaulttemplatecss() === $page ? 'selected' : '' ?>><?= $page ?></option>
@@ -214,7 +214,7 @@
         <p class="field">
             <label for="defaulttemplatejavascript">JS template</label>
             <select name="defaulttemplatejavascript" id="defaulttemplatejavascript" form="admin">
-                <option value="%" <?= Wcms\Config::defaulttemplatejavascript() === null ? 'selected' : '' ?>>--same as default BODY template--</option>
+                <option value="%" <?= Wcms\Config::defaulttemplatejavascript() === null ? 'selected' : '' ?>>--same as default body template--</option>
                 <option value="" <?= Wcms\Config::defaulttemplatejavascript() === '' ? 'selected' : '' ?>>--no default js template--</option>
                 <?php foreach ($pagelist as $page) : ?>
                     <option value="<?= $page ?>" <?= Wcms\Config::defaulttemplatejavascript() === $page ? 'selected' : '' ?>><?= $page ?></option>

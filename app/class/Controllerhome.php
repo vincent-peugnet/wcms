@@ -339,11 +339,11 @@ class Controllerhome extends Controller
         $pagelist = $_POST['pagesid'] ?? [];
         $datas = $_POST['datas'] ?? [];
         $datas = array_filter($datas, function ($var) {
-            return $var !== "";
+            return $var !== '';
         });
         $datas = array_map(function ($value) {
-            if ($value === "!") {
-                return "";
+            if ($value === '!') {
+                return '';
             } else {
                 return $value;
             }

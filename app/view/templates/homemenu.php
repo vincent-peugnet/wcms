@@ -164,6 +164,7 @@
                             <select name="datas[templatecss]" id="templatecss">
                                 <option value="" selected>--keep css template--</option>
                                 <option value="!" >--unset css template--</option>
+                                <option value="%" >--same as body template--</option>
                                 <?php foreach ($pagelist as $page) : ?>
                                     <option value ="<?= $page ?>"><?= $page ?></option>
                                 <?php endforeach ?>            
@@ -174,6 +175,7 @@
                             <select name="datas[templatejavascript]" id="templatejavascript">
                                 <option value="" selected>--keep javascript template--</option>
                                 <option value="!" >--unset javascript template--</option>
+                                <option value="%" >--same as body template--</option>
                                 <?php foreach ($pagelist as $page) :?>
                                     <option value ="<?= $page ?>"><?= $page ?></option>
                                 <?php endforeach ?>
