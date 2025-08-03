@@ -141,20 +141,6 @@
 
         <h2>Page creation</h2>
 
-        <p class="info">What really happend when you create a new page.
-        </p>
-        
-        <h3>Privacy of new pages</h3>
-
-        <p class="field">
-            <label for="defaultprivacy">Default privacy</label>
-            <select name="defaultprivacy" id="defaultprivacy" form="admin">
-                <option value="0" <?= Wcms\Config::defaultprivacy() == 0 ? 'selected' : '' ?>>public</option>
-                <option value="1" <?= Wcms\Config::defaultprivacy() == 1 ? 'selected' : '' ?>>private</option>
-                <option value="2" <?= Wcms\Config::defaultprivacy() == 2 ? 'selected' : '' ?>>not published</option>
-            </select>
-        </p>
-
         <h3>Page version</h3>
 
         <p class="info">Choose W page version you want to use when a new page is created.
@@ -167,12 +153,32 @@
             </select>
         </p>
 
+        
+        <?php if (Wcms\Config::pageversion() > 1) : ?>
+            <h3>Default content</h3>
+            <p class="field">
+                <label for="defaultcontent">Edit default page content</label>
+                <textarea name="defaultcontent" id="defaultcontent" rows="6" spellcheck="false" form="admin"><?= $this->e(Wcms\Config::defaultcontent()) ?></textarea>
+            </p>
+        <?php endif ?>
+
         <h3>Default BODY</h3>
 
         <?php $defaultbody = 'defaultv' . Wcms\Config::pageversion() . 'body' ?>
         <p class="field">
             <label for="defaultbody">Edit default page V<?= Wcms\Config::pageversion() ?> BODY content</label>
-            <textarea name="<?= $defaultbody ?>" id="defaultbody" cols="30" rows="10" form="admin"><?= $this->e(Wcms\Config::defaultbody()) ?></textarea>
+            <textarea name="<?= $defaultbody ?>" id="defaultbody" rows="6" spellcheck="false" form="admin"><?= $this->e(Wcms\Config::defaultbody()) ?></textarea>
+        </p>
+        
+        <h3>Privacy of new pages</h3>
+
+        <p class="field">
+            <label for="defaultprivacy">Default privacy</label>
+            <select name="defaultprivacy" id="defaultprivacy" form="admin">
+                <option value="0" <?= Wcms\Config::defaultprivacy() == 0 ? 'selected' : '' ?>>public</option>
+                <option value="1" <?= Wcms\Config::defaultprivacy() == 1 ? 'selected' : '' ?>>private</option>
+                <option value="2" <?= Wcms\Config::defaultprivacy() == 2 ? 'selected' : '' ?>>not published</option>
+            </select>
         </p>
 
         <h3>Default tags</h3>
@@ -416,7 +422,7 @@
 
         <p class="field">
             <label for="globalcss">Global CSS will be loaded with every page</label>
-            <textarea name="globalcss" id="globalcss" cols="30" rows="30" form="admin"><?= $this->e($globalcss) ?></textarea>
+            <textarea name="globalcss" id="globalcss" rows="30" spellcheck="false" form="admin"><?= $this->e($globalcss) ?></textarea>
         </p>
 
         <h3>Favicon</h3>

@@ -25,6 +25,7 @@ abstract class Config
     protected static string $defaultv2body = "%CONTENT%";
     protected static string $defaultfavicon = '';
     protected static string $defaultthumbnail = '';
+    protected static string $defaultcontent = '';
     protected static int $defaultprivacy = 0;
     /** @var string[] $defaulttag */
     protected static array $defaulttag = [];
@@ -313,6 +314,11 @@ abstract class Config
         return self::$defaultthumbnail;
     }
 
+    public static function defaultcontent(): string
+    {
+        return self::$defaultcontent;
+    }
+
     public static function suffix(): string
     {
         return self::$suffix;
@@ -577,6 +583,13 @@ abstract class Config
     public static function setdefaultthumbnail(string $defaultthumbnail): void
     {
         self::$defaultthumbnail = $defaultthumbnail;
+    }
+
+    public static function setdefaultcontent(string $content): void
+    {
+        if (strlen($content) < Page::LENGTH_LONG_TEXT) {
+            self::$defaultcontent = $content;
+        }
     }
 
     public static function setsuffix(string $suffix): void

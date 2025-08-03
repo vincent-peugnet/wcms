@@ -128,6 +128,8 @@ footer {
 }
 .grid-item textarea {
     width: 100%;
+    resize: vertical;
+    font-family: monospace;
 }
 .grid-item h2 {
     margin: calc(-1 * var(--double-spacing)) calc(-1 * var(--double-spacing))  0 calc(-1 * var(--double-spacing));

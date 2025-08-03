@@ -14,7 +14,7 @@ class Pagev2 extends Page
     {
         parent::reset();
 
-        $this->setcontent('');
+        $this->setcontent(Config::defaultcontent());
 
         $this->setinterface('content');
     }
