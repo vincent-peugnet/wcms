@@ -2,7 +2,14 @@
 
 use Wcms\Config;
 
- $this->layout('backlayout', ['title' => 'home', 'stylesheets' => [$css . 'back.css', $css . 'home.css', Wcms\Model::jspath() . 'map.bundle.css', $css . 'tagcolors.css'], 'favicon' => '', 'theme' => $theme]) ?>
+ $this->layout('backlayout', ['title' => 'home', 'favicon' => '', 'theme' => $theme, 'stylesheets' => [
+    Wcms\Model::jspath() . 'home.bundle.css',
+    $css . 'back.css',
+    $css . 'tagify.css',
+    $css . 'home.css',
+    Wcms\Model::jspath() . 'map.bundle.css',
+    $css . 'tagcolors.css',
+]]) ?>
 
 
 
@@ -409,7 +416,11 @@ use Wcms\Config;
 
 <?php if(!Wcms\Config::disablejavascript()) : ?>
 
-<script type="module" src="<?= Wcms\Model::jspath() ?>home.bundle.js"></script>
+    <script>
+        const taglist = <?= json_encode($taglist) ?>;
+    </script>
+
+    <script type="module" src="<?= Wcms\Model::jspath() ?>home.bundle.js"></script>
 
 <?php endif ?>
 

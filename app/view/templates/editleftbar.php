@@ -19,7 +19,7 @@
                     </p>
                     <p class="field">
                         <label for="tag">Tag(s)</label>
-                        <input type="text" name="tag" class="field" id="tag" value="<?= $page->tag('string'); ?>" form="update">
+                        <input type="text" name="tag" id="tag" value="<?= $page->tag('string'); ?>" form="update">
                     </p>
                     <p class="field">
                         <label for="secure">Privacy level</label>

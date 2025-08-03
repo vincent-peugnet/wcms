@@ -1,6 +1,7 @@
 <?php
     $this->layout('backlayout', ['title' => '✏ ' . $this->e($page->title()), 'theme' => $theme, 'stylesheets' => [
         Wcms\Model::jspath() . 'edit.bundle.css',
+        $css . 'tagify.css',
         $css . 'edit.css',
         $css . 'tagcolors.css'
     ], 'favicon' => $page->favicon()]) 

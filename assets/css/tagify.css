@@ -1,0 +1,50 @@
+
+/* --------------------------------------------------------- Tagify field */
+
+.tagify {
+    --tag-pad: 0 0;
+    --tag-text-color: inherit;
+    --tag-border-radius: 10px;
+    --tag-inset-shadow-size: 0;
+    --loader-size: 0;
+    --tags-focus-border-color: transparent;
+    background: var(--input-background-color);
+    border:none;
+    border-radius: var(--radius);
+    width: 100%;
+    font-size: var(--size-small);
+    display: flex;
+    flex-direction: row;
+    padding: var(--half-padding);
+    gap: var(--half-padding);
+    flex-wrap: wrap;
+}
+
+:root {
+	--tagify-dd-color-primary: var(--outline-background-color);
+	--tagify-dd-item-pad: 5px;
+	--tagify-dd-bg-color:  var(--input-background-color);
+}
+
+.tagify__tag {
+    border-radius: var(--radius);
+    animation: none;
+    margin: 0;
+    padding: var(--half-padding) var(--padding);
+    gap: var(--spacing);
+    background: #eee;
+}
+
+.tagify__tag__removeBtn {
+    color: inherit;
+    margin: 0;
+}
+
+.tagify__dropdown span.tag {
+    border-radius: var(--radius);
+    padding: var(--half-padding) var(--padding);
+}
+
+.tagify--focus {
+    outline: ridge 2px var(--outline-background-color)
+}

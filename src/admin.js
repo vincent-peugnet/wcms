@@ -1,22 +1,10 @@
-import {
-    activateCheckall,
-    activateCloseSubmenus,
-    initWorkspaceForm,
-} from './fn/fn';
-
 import Tagify from '@yaireo/tagify';
 import '@yaireo/tagify/dist/tagify.css';
-
-window.addEventListener('load', () => {
-    activateCheckall('pagesid[]', 'checkall');
-    activateCloseSubmenus();
-    initWorkspaceForm();
-});
 
 /* ________________ TAGIFY  ________________ */
 
 /** @var {HTMLInputElement} */
-let inputTag = document.querySelector('input[name=addtag]');
+let inputTag = document.querySelector('input[name=defaulttag]');
 
 let tagify = new Tagify(inputTag, {
     originalInputValueFormat: valuesArr =>

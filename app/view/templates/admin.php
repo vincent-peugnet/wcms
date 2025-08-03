@@ -1,4 +1,10 @@
-<?php $this->layout('backlayout', ['title' => 'admin', 'stylesheets' => [$css . 'back.css', $css . 'admin.css'], 'theme' => $theme]) ?>
+<?php $this->layout('backlayout', ['title' => 'admin', 'theme' => $theme, 'stylesheets' => [
+    Wcms\Model::jspath() . 'admin.bundle.css',
+    $css . 'back.css',
+    $css . 'tagify.css',
+    $css . 'admin.css',
+    $css . 'tagcolors.css',
+]]) ?>
 <?php $this->start('page') ?>
 <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'admin', 'pagelist' => $pagelist]) ?>
 
@@ -213,7 +219,7 @@
 
         <p class="field">
             <label for="defaulttag">Tag(s)</label>
-            <input type="text" name="defaulttag" class="field" id="defaulttag" value="<?= Wcms\Config::defaulttag('string'); ?>" form="admin">
+            <input type="text" name="defaulttag" id="defaulttag" value="<?= Wcms\Config::defaulttag('string'); ?>" form="admin">
         </p>
 
         <h3>Default templates</h3>
@@ -544,5 +550,18 @@
     </div>
 
 </main>
+
+
+
+<?php if(!Wcms\Config::disablejavascript()) : ?>
+
+<script>
+    const taglist = <?= json_encode($taglist) ?>;
+</script>
+
+<script type="module" src="<?= Wcms\Model::jspath() ?>admin.bundle.js"></script>
+
+<?php endif ?>
+
 
 <?php $this->stop('page') ?>
