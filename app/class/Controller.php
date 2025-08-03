@@ -6,6 +6,7 @@ use AltoRouter;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DomainException;
+use donatj\UserAgent\UserAgentParser;
 use Exception;
 use IntlDateFormatter;
 use InvalidArgumentException;
@@ -57,7 +58,7 @@ abstract class Controller
     public function __construct(AltoRouter $router)
     {
         $this->servicesession = new Servicesession();
-        $this->workspace = $this->servicesession->getworkspace();
+        $this->workspace = $this->loadworkspace();
         $this->usermanager = new Modeluser();
         $this->connectmanager = new Modelconnect();
 
@@ -67,6 +68,24 @@ abstract class Controller
         $this->pagemanager = new Modelpage(Config::pagetable());
         $this->initplates();
         $this->now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
+    }
+
+    /**
+     * Load workspace from session.
+     * Try to detect if user is on mobile to set adequate default settings.
+     */
+    private function loadworkspace(): Workspace
+    {
+        try {
+            return $this->servicesession->getworkspace();
+        } catch (RuntimeException $e) {
+            $ua = new UserAgentParser();
+            $workspace = new Workspace();
+            if (is_mobile($ua->parse())) {
+                $workspace->resettomobiledefault();
+            }
+            return $workspace;
+        }
     }
 
     protected function setuser(): bool

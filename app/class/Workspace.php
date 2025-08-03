@@ -35,6 +35,17 @@ class Workspace extends Item
         $this->hydrate($datas);
     }
 
+    public function resettomobiledefault(): void
+    {
+        $this->showeditorleftpanel = false;
+        $this->showeditorrightpanel = false;
+        $this->showhomeoptionspanel = false;
+        $this->showhomebookmarkspanel = false;
+        $this->showmediaoptionspanel = false;
+        $this->showmediatreepanel = true;
+        $this->highlighttheme = self::THEME_NONE;
+    }
+
     public function showeditorleftpanel(): bool
     {
         return $this->showeditorleftpanel;

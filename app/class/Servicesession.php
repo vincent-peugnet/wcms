@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use RuntimeException;
+
 class Servicesession
 {
     public function setvisitor(bool $visitor): void
@@ -55,12 +57,15 @@ class Servicesession
         $_SESSION['workspace'] = $workspace;
     }
 
+    /**
+     * @throws RuntimeException if Workspace is not present in session cookie.
+     */
     public function getworkspace(): Workspace
     {
         if (isset($_SESSION['workspace']) && $_SESSION['workspace'] instanceof Workspace) {
             return $_SESSION['workspace'];
         } else {
-            return new Workspace();
+            throw new RuntimeException('no available workspace in session');
         }
     }
 

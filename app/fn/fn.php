@@ -1,5 +1,7 @@
 <?php
 
+use donatj\UserAgent\Platforms;
+use donatj\UserAgent\UserAgent;
 use Wcms\Exception\Filesystemexception\Folderexception;
 use Wcms\Exception\Missingextensionexception;
 
@@ -407,4 +409,19 @@ function filecount($path): int
         }
     }
     return $count;
+}
+
+/**
+ * Determine if visitor use a mobile based on User Agent.
+ */
+function is_mobile(UserAgent $ua): bool
+{
+    $mobileplatforms = [
+        Platforms::ANDROID,
+        Platforms::BLACKBERRY,
+        Platforms::IPHONE,
+        Platforms::IPOD,
+    ];
+
+    return in_array($ua->platform(), $mobileplatforms);
 }
