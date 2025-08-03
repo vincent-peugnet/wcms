@@ -6,7 +6,7 @@
         <h1>Meta</h1>
         <div class="toggle-panel-content">
 
-            <details id="editinfo" open>
+            <details id="editinfo" <?= $workspace->collapsemenu() ? '' : 'open' ?>>
                 <summary>Informations</summary>
                 <fieldset >                        
                     <p class="field">
@@ -104,7 +104,7 @@
                 </details>
             <?php endif ?>
 
-            <details <?= $page->isgeo() ? 'open' : '' ?> id="geomap-details">
+            <details <?= $page->isgeo() && !$workspace->collapsemenu() ? 'open' : '' ?> id="geomap-details">
                 <summary>Geolocalisation</summary>
                 <div id="geomap"></div>
                 <fieldset class="flexrow">
@@ -119,7 +119,7 @@
                 </fieldset>
             </details>
 
-            <details class="template" <?= !empty($page->templatebody()) || !empty($page->templatecss()) || !empty($page->templatejavascript()) ? 'open' : '' ?>>
+            <details class="template" <?= !$workspace->collapsemenu() && ( !empty($page->templatebody()) || !empty($page->templatecss()) || !empty($page->templatejavascript()) ) ? 'open' : '' ?>>
                 <summary>Template</summary>
                 <fieldset >
                     <p class="field">
@@ -176,7 +176,7 @@
                 </fieldset>
             </details>
 
-            <details id="advanced" <?= !empty($page->externalcss()) || !empty($page->customhead()) || !empty($page->sleep()) || !empty($page->redirection()) ? 'open' : '' ?>>
+            <details id="advanced" <?= !$workspace->collapsemenu() && ( !empty($page->externalcss()) || !empty($page->customhead()) || !empty($page->sleep()) || !empty($page->redirection()) ) ? 'open' : '' ?>>
                 <summary>Advanced</summary>
                         
                 <fieldset>

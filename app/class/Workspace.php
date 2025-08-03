@@ -11,6 +11,13 @@ class Workspace extends Item
     protected bool $showmediaoptionspanel = false;
     protected bool $showmediatreepanel = true;
 
+    /**
+     * Instead of adaptative menu expansion, collapse them all at page load.
+     * Usefull for mobile browsing.
+     * @var bool $collapsemenu
+     **/
+    protected bool $collapsemenu = false;
+
     protected int $fontsize = 15;
     protected string $mediadisplay = self::LIST;
     protected string $highlighttheme = self::THEME_DEFAULT;
@@ -43,6 +50,7 @@ class Workspace extends Item
         $this->showhomebookmarkspanel = false;
         $this->showmediaoptionspanel = false;
         $this->showmediatreepanel = true;
+        $this->collapsemenu = true;
         $this->highlighttheme = self::THEME_NONE;
     }
 
@@ -74,6 +82,11 @@ class Workspace extends Item
     public function showmediatreepanel(): bool
     {
         return $this->showmediatreepanel;
+    }
+
+    public function collapsemenu(): bool
+    {
+        return $this->collapsemenu;
     }
 
     public function fontsize(): int
@@ -119,6 +132,11 @@ class Workspace extends Item
     public function setshowmediatreepanel(bool $show): void
     {
         $this->showmediatreepanel = $show;
+    }
+
+    public function setcollapsemenu(bool $collapse): void
+    {
+        $this->collapsemenu = $collapse;
     }
 
     public function setfontsize(int $fontsize): void
