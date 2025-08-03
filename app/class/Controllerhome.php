@@ -56,7 +56,6 @@ class Controllerhome extends Controller
         try {
             $servicetags = new Servicetags();
             $vars['colors'] = $servicetags->synctags($this->opt->taglist());
-            $vars['taglist'] = $servicetags->taglist();
         } catch (RuntimeException $e) {
             $this->sendflashmessage("Error while generating display colors", self::FLASH_ERROR);
             Logger::errorex($e);

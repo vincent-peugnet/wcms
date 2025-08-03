@@ -46,14 +46,6 @@ class Controlleradmin extends Controller
         }
 
         try {
-            $servicetags = new Servicetags();
-            $datas['taglist'] = $servicetags->taglist();
-        } catch (Filesystemexception $e) {
-            $datas['taglist'] = [];
-            Logger::errorex($e);
-        }
-
-        try {
             $datas['pagetables'] = $this->adminmanager->pagetables();
         } catch (RuntimeException $e) {
             Logger::errorex($e);

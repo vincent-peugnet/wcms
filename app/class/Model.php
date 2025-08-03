@@ -14,6 +14,7 @@ abstract class Model
     public const URLS_FILE = self::DATABASE_DIR . 'urls.json';
     public const THEME_DIR = self::ASSETS_CSS_DIR . 'theme/';
     public const JS_DIR = 'assets/js/';
+    public const JS_TAGLIST_FILE = self::JS_DIR . 'taglist.js';
     public const ICONS_DIR = 'assets/icons/';
     public const MEDIA_DIR = 'media/';
     public const FAVICON_DIR = self::MEDIA_DIR . 'favicon/';

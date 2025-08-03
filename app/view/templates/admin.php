@@ -555,11 +555,8 @@
 
 <?php if(!Wcms\Config::disablejavascript()) : ?>
 
-<script>
-    const taglist = <?= json_encode($taglist) ?>;
-</script>
-
-<script type="module" src="<?= Wcms\Model::jspath() ?>admin.bundle.js"></script>
+    <script src="<?= Wcms\Model::jspath() ?>taglist.js"></script>
+    <script type="module" src="<?= Wcms\Model::jspath() ?>admin.bundle.js"></script>
 
 <?php endif ?>
 

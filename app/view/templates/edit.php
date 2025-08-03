@@ -29,8 +29,8 @@
         const pageid = '<?= $this->e($page->id()) ?>';
         let pagetitle = '<?= $this->e($page->title()) ?>';
         let theme = '<?= $this->e($workspace->highlighttheme()) ?>';
-        const taglist = <?= json_encode($taglist) ?>;
     </script>
+    <script src="<?= Wcms\Model::jspath() ?>taglist.js"></script>
     <script type="module" src="<?= Wcms\Model::jspath() ?>edit.bundle.js" async></script>
 
 <?php endif ?>

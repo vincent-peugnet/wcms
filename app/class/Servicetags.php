@@ -27,7 +27,7 @@ class Servicetags
 
     /**
      * Update the tag JSON cache file with the last tag list.
-     * This also re-generate the CSS file.
+     * This also re-generate the CSS file and JS file.
      *
      * @param array<string, int> $tags      Array of tags as keys
      *
@@ -61,6 +61,7 @@ class Servicetags
         }
         Fs::writefile(Model::TAGS_FILE, json_encode($tagdata, JSON_PRETTY_PRINT));
         $this->generatecssfile($tagdata);
+        $this->generatejsfile(array_keys($tags));
         return $tagdata;
     }
 
@@ -105,5 +106,18 @@ class Servicetags
             $css .= "\n.tag_$tag { background-color: $bgcolor; color: $color; }";
         }
         Fs::writefile(Model::COLORS_FILE, $css, 0664);
+    }
+
+    /**
+     * Generate JS file used by Tagify for dynamic tag inputs
+     *
+     * @param string[] $tags
+     *
+     * @throws Filesystemexception          If an error while saving CSS file
+     */
+    protected function generatejsfile(array $tags): void
+    {
+        $content = 'const taglist = ' .  json_encode($tags) . ';';
+        Fs::writefile(Model::JS_TAGLIST_FILE, $content, 0664);
     }
 }

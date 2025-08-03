@@ -273,15 +273,6 @@ class Controllerpage extends Controller
             $this->showtemplate('forbidden', ['route' => 'pageedit', 'id' => $this->page->id()]);
         }
 
-
-        try {
-            $servicetags = new Servicetags();
-            $datas['taglist'] = $servicetags->taglist();
-        } catch (Filesystemexception $e) {
-            $datas['taglist'] = [];
-            Logger::errorex($e);
-        }
-
         $datas['faviconlist'] = $this->mediamanager->listfavicon();
         $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();
         $datas['pagelist'] = $this->pagemanager->list();
