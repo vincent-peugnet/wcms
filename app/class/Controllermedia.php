@@ -99,8 +99,8 @@ class Controllermedia extends Controller
                     $this->mediamanager->multiupload(
                         'file',
                         $target,
-                        boolval($_POST['idclean']),
-                        boolval($_POST['convertimages'])
+                        boolval($_POST['idclean'] ?? false),
+                        boolval($_POST['convertimages'] ?? false)
                     );
                     $this->sendflashmessage("$count file(s) has been uploaded successfully", self::FLASH_SUCCESS);
                     if ($target === Model::FONT_DIR) {
