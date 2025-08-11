@@ -194,6 +194,7 @@ class Serviceurlchecker
             curl_setopt($curlhandles[$url], CURLOPT_TIMEOUT, $this->timeout);
             curl_setopt($curlhandles[$url], CURLOPT_FOLLOWLOCATION, true);
             curl_setopt($curlhandles[$url], CURLOPT_MAXREDIRS, self::MAX_BOUNCE);
+            curl_setopt($curlhandles[$url], CURLOPT_USERAGENT, 'wcms-URLchecker/' . getversion());
 
             curl_multi_add_handle($multihandle, $curlhandles[$url]);
 
