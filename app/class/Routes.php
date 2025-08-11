@@ -35,6 +35,7 @@ class Routes
             ['DELETE', '/api/v0/media/[*:path]', 'Controllerapimedia#delete', 'apimediadelete'],
             ['POST', '/api/v0/workspace', 'Controllerapiworkspace#update', 'apiworkspaceupdate'],
             ['GET', '/', 'Controllerhome#desktop', 'home'],
+            ['HEAD', '/', 'Controllerhome#desktop', 'homehead'],
             ['POST', '/', 'Controllerhome#desktop', 'homequery'],
             ['POST', '/columns', 'Controllerhome#columns', 'homecolumns'],
             ['POST', '/colors', 'Controllerhome#colors', 'homecolors'],
