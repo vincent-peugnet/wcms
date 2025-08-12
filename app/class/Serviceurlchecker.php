@@ -2,7 +2,6 @@
 
 namespace Wcms;
 
-use DateTime;
 use DateTimeImmutable;
 use RuntimeException;
 use Wcms\Exception\Filesystemexception;
@@ -13,7 +12,10 @@ use Wcms\Exception\Missingextensionexception;
  */
 class Serviceurlchecker
 {
-    /** @var array<string, array{'response': int, 'timestamp': int, 'expire': int}> $urls cached URLs */
+    /**
+     * @var array<string, array{'response': int, 'timestamp': int, 'expire': int, 'message': ?string}> $urls
+     * cached URLs
+     **/
     protected array $urls = [];
 
     /** @var string[] $queue ULRs that need to be checked */
@@ -82,28 +84,31 @@ class Serviceurlchecker
     /**
      * Read infos about a cached URL
      *
-     * @return array{'response': int, 'timestamp': DateTimeImmutable, 'expire': DateTimeImmutable}
+     * @return array{'response': int, 'timestamp': DateTimeImmutable, 'expire': DateTimeImmutable, 'message': string}
      * Assoc array with same structure as `urls.json` file.
      *
      * @throws RuntimeException             If the URL is not part of the cache
      */
     public function info(string $url): array
     {
-        if (key_exists($url, $this->urls)) {
-            $infos['response'] = $this->urls[$url]['response'];
-            // $infos['timestamp'] = new DateTimeImmutable('@' . $this->urls[$url]['timestamp']);
-            $infos['timestamp'] = DateTimeImmutable::createFromFormat(
-                'U',
-                strval($this->urls[$url]['expire']),
-            );
-            $infos['expire'] = DateTimeImmutable::createFromFormat(
-                'U',
-                strval($this->urls[$url]['expire']),
-            );
-            return $infos;
-        } else {
+        if (!key_exists($url, $this->urls)) {
             throw new RuntimeException('URL is not stored in cache');
         }
+        if (!isset($this->urls[$url]['response'])) {
+            throw new RuntimeException('missing response info');
+        }
+
+        $infos['response'] = $this->urls[$url]['response'];
+        $infos['timestamp'] = DateTimeImmutable::createFromFormat(
+            'U',
+            strval($this->urls[$url]['expire']),
+        );
+        $infos['expire'] = DateTimeImmutable::createFromFormat(
+            'U',
+            strval($this->urls[$url]['expire']),
+        );
+        $infos['message'] = $this->urls[$url]['message'] ?? '';
+        return $infos;
     }
 
     /**
@@ -235,8 +240,10 @@ class Serviceurlchecker
 
             if ($curlerror !== CURLE_OK) {
                 $response = $curlerror;
+                $message = curl_error($curlhandle);
             } else {
                 $response = curl_getinfo($curlhandle, CURLINFO_HTTP_CODE);
+                $message = HTTP_STATUS[$response] ?? '';
             }
 
             if ($this->responseisaccepted($response) || $response === 404) {
@@ -256,6 +263,7 @@ class Serviceurlchecker
                 'response' => $response,
                 'timestamp' => time(),
                 'expire' => $expire,
+                'message' => $message,
             ];
         }
 

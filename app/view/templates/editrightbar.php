@@ -44,8 +44,8 @@
             <h3>back links</h3>
 
             <a href="<?= $this->url('home', [], $homebacklink) ?>" class="button">
-                <i class="fa fa-search"></i>
-                search pages that link here
+                <i class="fa fa-list-ul"></i>
+                list pages that link here
             </a>
 
             <h3>external links: <?= count($page->externallinks()) ?></h3>
@@ -53,7 +53,7 @@
             <ul class="externallinks">
                 <?php foreach ($page->externallinks() as $url => $status) : ?>
                     <?php if(Wcms\Config::urlchecker() && key_exists($url, $urls)) : ?>
-                        <li title="<?= $url ?>&#013;&#013;response: <?= $urls[$url]['response'] ?>&#013;checked <?= hrdi($urls[$url]['timestamp']->diff($now)) ?> ago">
+                        <li title="<?= $url ?>&#013;<?= $urls[$url]['response'] < 100 ? '❌' : '💡 ' . $urls[$url]['response']  ?> <?= $urls[$url]['message'] ?>&#013;⏱️ checked <?= hrdi($urls[$url]['timestamp']->diff($now)) ?> ago">
                     <?php else : ?>
                         <li title="<?= $url ?>">
                     <?php endif ?>
