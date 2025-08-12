@@ -224,12 +224,17 @@ possible error codes:
 Public API
 ----------
 
-### health
+### version
 
 Return `200` if W instal is healthy.
 
-    GET     /api/v0/health
+    GET     /api/v0/version
 
+```json
+{
+    "version": "v2.3.0"
+}
+```
 
 ### auth
 

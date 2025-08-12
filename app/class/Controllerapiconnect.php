@@ -36,8 +36,11 @@ class Controllerapiconnect extends Controllerapi
         }
     }
 
-    public function health(): never
+    public function version(): never
     {
-        $this->shortresponse(200, "W is healthy");
+        http_response_code(200);
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode(['version' => getversion()], JSON_PRETTY_PRINT);
+        exit;
     }
 }
