@@ -5,6 +5,15 @@ import Tagify from '@yaireo/tagify';
  * @param {HTMLInputElement} inputTag
  */
 export function initTagify(inputTag) {
+    // taglist come from assets/js/taglist.js
+    // if not successfully loaded: use empty array instead
+    if (typeof taglist === 'undefined' || taglist === null) {
+        var tags = [];
+        console.log('use empty taglist');
+    } else {
+        var tags = taglist;
+    }
+
     let tagify = new Tagify(inputTag, {
         originalInputValueFormat: valuesArr =>
             valuesArr.map(item => item.value).join(', '),
