@@ -358,13 +358,22 @@ class Modelpage extends Modeldb
 
     /**
      * Update a page in the database
+     * Check if page version match the one stored in database
      *
      * @param Page $page                    The page that is going to be updated
      *
      * @throws Databaseexception            in case of error
+     * @throws RangeException               If original page version is invalid
      */
     public function update(Page $page): void
     {
+        $oldpage = $this->get($page);
+        if ($page->version() !== $oldpage->version()) {
+            $vnew = $page->version();
+            $vold = $oldpage->version();
+            throw new Databaseexception("page version ($vnew) does not match original page in database ($vold)");
+        }
+
         $pagedata = new Document($page->dry());
         $pagedata->setId($page->id());
         $this->updatedoc($pagedata);
