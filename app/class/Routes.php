@@ -74,6 +74,7 @@ class Routes
             ['POST', '/!profile/password', 'Controllerprofile#password', 'profilepassword'],
             ['GET', '/!profile/deletesessions', 'Controllerprofile#deletesessions', 'profiledeletesessions'],
             ['GET', '/!info', 'Controllerinfo#desktop', 'info'],
+            ['GET', '/!info/api', 'Controllerinfo#api', 'infoapi'],
             ['GET', '/[noslash:page]/', 'Controllerpage#pagepermanentredirect', 'pageread/'],
             ['HEAD', '/[cid:page]/', 'Controllerpage#pagepermanentredirect', 'pageread/head'],
             ['POST', '/[cid:page]', 'Controllerpage#read', 'pagereadpost'], /** Used for password protected pages */

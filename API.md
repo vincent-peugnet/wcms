@@ -313,7 +313,7 @@ Schemas
 Usages example
 --------------
 
-### Get a page and then update the MAIN element.
+### Update a page element.
 
 ```js
 obj = await fetch('http://localhost:8080/api/v0/page/jardin')
@@ -334,7 +334,7 @@ obj = await fetch('http://localhost:8080/api/v0/pages/list')
     .then(res => res.json());
 ```
 
-### Get the list of pages filted and sorted.
+### Get the list of pages
 
 ```js
 const options = {sortby:"datemodif", limit: 40, tagfilter: ["galaxy", "sublime"]};
@@ -346,7 +346,7 @@ fetch('http://localhost:8080/api/v0/pages/query', {
     .then(console.log);
 ```
 
-### Create a page with a random number as ID.
+### Create a page with generated ID
 
 #### HTML
 

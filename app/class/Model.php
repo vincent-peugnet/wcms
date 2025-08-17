@@ -6,7 +6,9 @@ abstract class Model
 {
     public const CONFIG_FILE = 'config.json';
     public const MAN_FILE = 'MANUAL.md';
+    public const MAN_API_FILE = 'API.md';
     public const MAN_RENDER_DIR = 'assets/manual/';
+    public const MAN_API_RENDER_DIR = 'assets/manual/api/';
     public const ASSETS_CSS_DIR = 'assets/css/';
     public const ASSETS_ATOM_DIR = 'assets/atom/';
     public const COLORS_FILE = self::ASSETS_CSS_DIR . 'tagcolors.css';

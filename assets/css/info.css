@@ -210,3 +210,24 @@
 .summary > li > ul {
     padding-left: 15px;
 }
+
+#toc .scroll .selector {
+    display: flex;
+    padding: 0;
+    width: 100%;
+}
+
+#toc .selector a {
+    padding: var(--padding);
+    width: 50%;
+    text-align: center;
+}
+
+#toc .selector a.currentpage {
+    background: var(--secondary-background-color);
+}
+
+#toc .selector a:hover {
+    background: var(--outline-background-color);
+    color: var(--outline-color);
+}

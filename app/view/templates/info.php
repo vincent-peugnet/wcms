@@ -11,15 +11,34 @@
         <h2>Version <?= $version ?></h2>
         <div class="scroll">
 
+            <p class="selector">
+                <a
+                    href="<?= $this->url('info') ?>"
+                    <?= $view === 'manual' ? 'class="currentpage"' : '' ?>
+                >
+                    <!-- <i class="fa fa-book"></i> -->
+                    user manual
+                </a>
+
+                <a
+                    href="<?= $this->url('infoapi') ?>"
+                    <?= $view === 'api' ? 'class="currentpage"' : '' ?>
+                >
+                    <!-- <i class="fa fa-book"></i> -->
+                    API doc
+                </a>
+            </p>
+
+            <h2>Summary</h2>
+
+            <?= $summary ?>
+
+            <h2>External links</h2>
+
             <ul class="summary">
                 <li><a href="https://github.com/vincent-peugnet/wcms" target="_blank">🐱‍👤 Github</a></li>
                 <li><a href="https://w.club1.fr" target="_blank">🌵 Website</a></li>
-                <li><a href="https://github.com/vincent-peugnet/wcms/blob/master/API.md" target="_blank">📕 API doc</a></li>
             </ul>
-
-            <h2>Manual Summary</h2>
-
-            <?= $summary ?>
         </div>
     </nav>
 
