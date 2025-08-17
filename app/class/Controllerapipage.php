@@ -61,45 +61,58 @@ class Controllerapipage extends Controllerapi
      *
      * - Send `400` if no datas are send
      * - Send `401` if user can't edit page
+     * - Send `404` if page is not found
      * - Send `409` in case of conflict
      * - Send `500`
      */
     public function update(string $page): void
     {
-        $force = isset($_GET['force']) ? boolval($_GET['force']) : false;
-        if ($this->importpage($page)) {
-            if ($this->canedit($this->page)) {
-                if (!empty($_POST)) {
-                    $datas = $_POST;
-                } else {
-                    $datas = $this->recievejson();
-                    if (empty($datas)) {
-                        $this->shortresponse(400, "No POST or JSON datas recieved");
-                    }
-                }
-                $oldpage = clone $this->page;
-                if (isset($datas['id']) && $datas['id'] !== $this->page->id()) {
-                    $this->shortresponse(400, "Page ID and datas ID doesn't match");
-                }
-                $this->page->hydrate($datas);
+        if (!$this->importpage($page)) {
+            $this->shortresponse(404, 'Page not found');
+        }
 
-                if ($force || $this->page->datemodif() == $oldpage->datemodif()) {
-                    try {
-                        $this->page->updateedited();
-                        $this->pagemanager->update($this->page);
-                        http_response_code(200);
-                        header('Content-type: application/json; charset=utf-8');
-                        echo json_encode($this->page->dry(), JSON_PRETTY_PRINT);
-                    } catch (RuntimeException $e) {
-                        Logger::error("Error while trying to update Page '$page' through API: " . $e->getMessage());
-                        $this->shortresponse(500, $e->getMessage());
-                    }
-                } else {
-                    $this->shortresponse(409, "Conflict : A more recent version of the page is stored in the database");
-                }
-            } else {
-                $this->shortresponse(401, "You are not alowed to edit this page");
+        if (!$this->canedit($this->page)) {
+            $this->shortresponse(401, "You are not alowed to edit this page");
+        }
+
+        if (!empty($_POST)) {
+            $datas = $_POST;
+        } else {
+            $datas = $this->recievejson();
+            if (empty($datas)) {
+                $this->shortresponse(400, "No POST or JSON datas recieved");
             }
+        }
+
+        $oldpage = clone $this->page;
+
+        // Verify that route page ID and data page ID do match (if present)
+        if (isset($datas['id']) && $datas['id'] !== $this->page->id()) {
+            $this->shortresponse(400, "Page ID and datas ID doesn't match");
+        }
+
+        $this->page->hydrate($datas);
+
+        // protect page version change
+        if ($oldpage->version() !== $this->page->version()) {
+            $this->shortresponse(400, "Page version does not match");
+        }
+
+        // Conflict detection if `force` option is not activated
+        $force = isset($_GET['force']) ? boolval($_GET['force']) : false;
+        if (!$force && $this->page->datemodif() != $oldpage->datemodif()) {
+            $this->shortresponse(409, "Conflict: A more recent version of the page is stored in the database");
+        }
+
+        try {
+            $this->page->updateedited();
+            $this->pagemanager->update($this->page);
+            http_response_code(200);
+            header('Content-type: application/json; charset=utf-8');
+            echo json_encode($this->page->dry(), JSON_PRETTY_PRINT);
+        } catch (RuntimeException $e) {
+            Logger::error("Error while trying to update Page '$page' through API: " . $e->getMessage());
+            $this->shortresponse(500, $e->getMessage());
         }
     }
 

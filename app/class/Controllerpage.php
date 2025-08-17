@@ -542,34 +542,44 @@ class Controllerpage extends Controller
     {
         $this->setpage($page, 'pageupdate');
 
+        if (!$this->importpage()) {
+            $this->routedirect('pageedit', ['page' => $this->page->id()]);
+        }
 
-        if ($this->importpage()) {
-            if ($this->canedit($this->page)) {
-                // Check if someone esle edited the page during the editing.
-                $oldpage = clone $this->page;
-                $this->page->hydrate($_POST);
+        if (!$this->canedit($this->page)) {
+            // If the editor session finished during the editing, let's try to reconnect to save the editing
+            $_SESSION['pageupdate'] = $_POST;
+            $_SESSION['pageupdate']['id'] = $this->page->id();
+            $this->routedirect('connect');
+        }
 
-                if ($oldpage->datemodif() != $this->page->datemodif()) {
-                    $this->sendflashmessage("Page has been modified by someone else", self::FLASH_WARNING);
-                    $_SESSION['pageupdate'] = $_POST;
-                    $_SESSION['pageupdate']['id'] = $this->page->id();
-                    $this->routedirect('pageedit', ['page' => $this->page->id()]);
-                } else {
-                    try {
-                        $this->page->updateedited();
-                        $this->pagemanager->update($this->page);
-                        $this->sendflashmessage('Page succesfully updated', self::FLASH_SUCCESS);
-                    } catch (RuntimeException $e) {
-                        $this->sendflashmessage('Error while trying to update', self::FLASH_ERROR);
-                        Logger::error("Error while trying to update Page '$page': " . $e->getMessage());
-                    }
-                }
-            } else {
-                // If the editor session finished during the editing, let's try to reconnect to save the editing
-                $_SESSION['pageupdate'] = $_POST;
-                $_SESSION['pageupdate']['id'] = $this->page->id();
-                $this->routedirect('connect');
-            }
+        $oldpage = clone $this->page;
+        $this->page->hydrate($_POST);
+
+        // Check if someone else edited the page during the editing.
+        if ($oldpage->datemodif() != $this->page->datemodif()) {
+            $this->sendflashmessage(
+                'Page has been modified somewhere else, copy your work and redresh the page.',
+                self::FLASH_WARNING
+            );
+            $_SESSION['pageupdate'] = $_POST;
+            $_SESSION['pageupdate']['id'] = $this->page->id();
+            $this->routedirect('pageedit', ['page' => $this->page->id()]);
+        }
+
+        // protect page version change
+        if ($oldpage->version() !== $this->page->version()) {
+            $this->sendflashmessage("Page version does not match", self::FLASH_ERROR);
+            $this->routedirect('pageedit', ['page' => $this->page->id()]);
+        }
+
+        try {
+            $this->page->updateedited();
+            $this->pagemanager->update($this->page);
+            $this->sendflashmessage('Page succesfully updated', self::FLASH_SUCCESS);
+        } catch (RuntimeException $e) {
+            $this->sendflashmessage('Error while trying to update', self::FLASH_ERROR);
+            Logger::error("Error while trying to update Page '$page': " . $e->getMessage());
         }
         $this->routedirect('pageedit', ['page' => $this->page->id()]);
     }
