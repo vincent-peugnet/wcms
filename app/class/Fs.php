@@ -200,6 +200,7 @@ abstract class Fs
 
     /**
      * Delete all files in a given folder
+     * This is not reccursive: it wont delete sub-folders
      *
      * @throws Notfoundexception                If folder does not exist
      * @throws Fileexception                    If a file cannot be deleted
@@ -214,7 +215,9 @@ abstract class Fs
         }
         try {
             foreach ($files as $file) {
-                self::deletefile($file);
+                if (is_file($file)) {
+                    self::deletefile($file);
+                }
             }
         } catch (Notfoundexception $e) {
             throw new LogicException(
