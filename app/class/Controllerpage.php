@@ -55,9 +55,8 @@ class Controllerpage extends Controller
         try {
             if (isset($_SESSION['pageupdate']['id']) && $_SESSION['pageupdate']['id'] === $this->page->id()) {
                 $this->page = $this->pagemanager->parsepage($_SESSION['pageupdate']);
-                $this->pagemanager->update($this->page);
                 unset($_SESSION['pageupdate']);
-                $this->routedirect('pageedit', ['page' => $this->page->id()]);
+                return true;
             } else {
                 $this->page = $this->pagemanager->get($this->page);
                 return true;
