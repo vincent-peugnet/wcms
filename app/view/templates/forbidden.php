@@ -9,6 +9,12 @@
     </p>
 <?php endif ?>
 
+<?php if(isset($message)) : ?>
+    <p class="message">
+        <?= $this->e($message) ?>
+    </p>
+<?php endif ?>
+
 <?php if(isset($route)) : ?>
     <?php if(in_array($route, ['pageedit', 'pageread', 'pageadd', 'pagedownload'])) :?>
         <p><a href="<?= $this->upage('pageread', $id) ?>" class="button" autofocus>back to page read view</a></p>
