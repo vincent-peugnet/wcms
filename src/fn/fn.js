@@ -9,7 +9,9 @@ export function initTagify(inputTag) {
     // if not successfully loaded: use empty array instead
     if (typeof taglist === 'undefined' || taglist === null) {
         var tags = [];
-        console.log('use empty taglist');
+        console.log(
+            'use empty taglist as taglist.js has not been generated yet'
+        );
     } else {
         var tags = taglist;
     }
@@ -19,7 +21,7 @@ export function initTagify(inputTag) {
             valuesArr.map(item => item.value).join(', '),
         pattern: /^[a-z0-9_-]{1,64}$/,
         editTags: false,
-        whitelist: taglist,
+        whitelist: tags,
         dropdown: {
             enabled: 0,
             maxItems: 30,
