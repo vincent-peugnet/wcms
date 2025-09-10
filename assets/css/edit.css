@@ -153,11 +153,13 @@ textarea#editcontent {
 /* --------------------------------------------------------- tabs */
 
 #advanced label {
-    width: 150px;
-    display: inline-block;
+    width: 100%;
+    display: flex;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    justify-content: space-between;
+    align-items: baseline;
 }
 
 /* --------------------------------------------------------- right bar links */

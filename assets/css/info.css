@@ -10,6 +10,7 @@
     user-select: text;
     margin: auto;
     padding: var(--double-spacing);
+    margin-bottom: 500px;
 }
 #manual a {
     text-decoration: underline;
@@ -28,13 +29,10 @@
 
 #manual a[href^="https://"]::after {
     content: " ◥";
-    color: var(--main-color);
 }
 
-#manual a[href^="#"]::after {
-    content: " ✻";
-    color: var(--main-color);
-    white-space: nowrap;
+#manual a[href^="#"] {
+    text-decoration: underline dashed 1px;
 }
 
 #manual i {
@@ -77,11 +75,10 @@
 }
 
 #manual h5 {
-    text-transform: uppercase;
     margin-top: 50px;
     margin-bottom: 0;
     margin-left: 0;
-    font-size: medium;
+    font-size: large;
     border: solid 1px;
     width: fit-content;
     padding: 0 3px;

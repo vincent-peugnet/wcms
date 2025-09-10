@@ -48,6 +48,13 @@ abstract class Page extends Item
     protected string $password = '';
     protected bool $postprocessaction = false;
 
+    /**
+     * render cache duration, can be used to override global setting
+     * null: use global setting
+     * -1: disable cache expiration
+     **/
+    protected ?int $cachettl = null;
+
     /** @var array<string, ?bool> $externallinks */
     protected array $externallinks = [];
 
@@ -434,6 +441,11 @@ abstract class Page extends Item
         return $this->postprocessaction;
     }
 
+    public function cachettl(): ?int
+    {
+        return $this->cachettl;
+    }
+
     /**
      * @return array<string, ?bool>|int
      */
@@ -794,6 +806,18 @@ abstract class Page extends Item
     public function setpostprocessaction(bool $postprocessaction): void
     {
         $this->postprocessaction = $postprocessaction;
+    }
+
+    /**
+     * @param null|int|string $cachettl
+     */
+    public function setcachettl($cachettl): void
+    {
+        if ($cachettl === null || is_string($cachettl) && empty($cachettl)) {
+            $this->cachettl = null;
+        } elseif ($cachettl >= -1 && $cachettl <= Model::MAX_CACHE_TTL) {
+            $this->cachettl = $cachettl;
+        }
     }
 
     /**

@@ -176,7 +176,7 @@
                 </fieldset>
             </details>
 
-            <details id="advanced" <?= !$workspace->collapsemenu() && ( !empty($page->externalcss()) || !empty($page->customhead()) || !empty($page->sleep()) || !empty($page->redirection()) ) ? 'open' : '' ?>>
+            <details id="advanced" <?= !$workspace->collapsemenu() && ( !empty($page->externalcss()) || !empty($page->customhead()) || !empty($page->lang()) || !empty($page->sleep()) || !empty($page->redirection() || !empty($page->cachettl())) ) ? 'open' : '' ?>>
                 <summary>Advanced</summary>
                         
                 <fieldset>
@@ -195,8 +195,8 @@
                         <textarea name="customhead" wrap="off" spellcheck="false" rows="<?= $page->customhead('int') ?>" form="update"><?= $this->e($page->customhead()) ?></textarea>
                     </p>
                     <p class="field">
-                        <label for="lang">Language</label>
-                        <i>(default: <?= Wcms\Config::lang() ?> )</i>
+                        <label for="lang">Language
+                        <small>(default: <?= Wcms\Config::lang() ?> )</small></label>
                         <input type="text" name="lang" id="lang" value="<?= $page->lang() ?>" minlength="<?= Wcms\Config::LANG_MIN ?>" maxlength="<?= Wcms\Config::LANG_MAX ?>" form="update">
                     </p>
                     <p class="field">
@@ -214,6 +214,34 @@
                     <p class="field">
                         <label for="password" title="specific page password protection">Password</label>
                         <input type="text" name="password" value="<?= $this->e($page->password()) ?>" id="password" min="0" max="64" form="update">
+                    </p>
+                    <p class="field">
+                        <label for="cachettl">
+                            <span>
+                                Cache life time
+                                <small>(default: <?= Wcms\Config::cachettl() ?>)</small>
+                            </span>
+                            <a href="<?= $this->url('info', [], '#rendering-cache') ?>" class="help">?</a>
+                        </label>
+                        <input
+                            type="number"
+                            name="cachettl"
+                            id="cachettl"
+                            value="<?= $page->cachettl() ?>"
+                            min="-1"
+                            max="<?= Wcms\Model::MAX_CACHE_TTL ?>"
+                            form="update"
+                            list="defaultcachettl"
+                        >
+                        
+                        <datalist id="defaultcachettl">
+                            <option value="60"       label="one minute" ></option>
+                            <option value="3600"     label="one hour"   ></option>
+                            <option value="86400"    label="one day"    ></option>
+                            <option value="604800"   label="one week"   ></option>
+                            <option value="2678400"  label="one month"  ></option>
+                            <option value="31536000" label="one year"  ></option>
+                        </datalist>
                     </p>
                 </fieldset>
             </details>

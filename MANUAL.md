@@ -102,6 +102,39 @@ This is where you can edit page [metadatas](#metadatas).
 - Press <kbd>CTRL</kbd> + <kbd>D</kbd> or "display" button to view your page. This will open a new tab.
 
 
+
+
+### Rendering cache
+
+To avoid re-rendering a page each time somebody want to read the page, W store the last rendered version of a page *in cache*. This cache is invalidated each time some edit is done to the page. And also, if a page use a [BODY template](#body-template) that have been edited meanwhile.
+
+To by-pass the rendering cache anytime, connected users can use the [`/render` command](#render).
+
+
+#### cache expiration
+
+But cache is not forced to live forever ! It's maximum life time can be globally defined in [admin panel](#administration). It have to be set in seconds. To disable cache expiration, this value can be set to `-1`.
+If cache life time is set to 0 seconds, W will never use caching. This is not recommanded in production as this will most of the time waste ressources.
+
+> 💡 [counters inclusions](#counters-inclusion) are not affected by the render cache as they are included at reading time, after the rest of the page has beed rendered.
+
+Caching is very efficient for simple pages, as they mainly depend on their own content update. On the over hand, it can be quite problematic for pages that use more dynamic content. For example: a page that use a [generated list](#page-list) of "the last 5 edited pages", will have its cache outdated way more often !
+
+That's why if you want some pages to have a specific cache expiration duration, this can be set under the advanced section in the left panel of the page edition inferface. This setting use the same logic as the global one described above.
+
+
+#### edit propagation
+
+Another option is to activate a strange option called "invalidate rendering of linked pages when updating" in the [admin panel](#administration).
+
+This option assumes that related pages have more change to be affected by each others edit. So when a page is edited, all the page that are related have their render cache unvalidated.
+
+This technique is quite hazardous and won't do magic, but it may help to reduce inconsistency.
+
+
+
+
+
 ### Syntax
 
 W take advantage of the *Markdown* syntax, flavored with a few specific syntax.
@@ -1177,6 +1210,8 @@ Command used to delete a page from the database. This will ask you for a confirm
 ##### /render
 
 Force the rendering of a page.
+
+As a side effect, if [URL checker](#url-checker) is enabled, the maximum time to wait for responses is set to 6 seconds.
 
 ##### /download
 
