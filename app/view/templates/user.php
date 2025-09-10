@@ -40,6 +40,10 @@ $this->layout('backlayout', ['title' => 'user', 'stylesheets' => [$css . 'back.c
                 </select>
             </p>
             <p class="field">
+                <label for="url">Associated url</label>
+                <input type="text" name="url" id="url" value="<?= $this->e($user->url()) ?>" list="searchdatalist" placeholder="URL or page ID" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>" >
+            </p>
+            <p class="field">
                 <label for="expiredate">Expiration date</label>
                 <input type="date" name="expiredate" id="expiredate" min="<?= $now->format('Y-m-d'); ?>">
             </p>
@@ -57,7 +61,15 @@ $this->layout('backlayout', ['title' => 'user', 'stylesheets' => [$css . 'back.c
         <table>
             <thead>
                 <tr>
-                    <th>id</th><th>password</th><th>hash</th><th>level</th><th>set expiration date</th><th>action</th><th>expire</th><th>connect</th>
+                    <th>id</th>
+                    <th>password</th>
+                    <th>hash</th>
+                    <th>level</th>
+                    <th>page</th>
+                    <th>set expiration date</th>
+                    <th>action</th>
+                    <th>expire</th>
+                    <th>connect</th>
                 </tr>
             </thead>
             <tbody>
@@ -92,6 +104,10 @@ $this->layout('backlayout', ['title' => 'user', 'stylesheets' => [$css . 'back.c
                                     <option value="4" <?= $user->level() === 4 ? 'selected' : '' ?>>super editor</option>
                                     <option value="10" <?= $user->level() === 10 ? 'selected' : '' ?>>admin</option>
                                 </select>
+                            </td>
+
+                            <td>
+                                <input type="text" name="url" id="url" value="<?= $this->e($user->url()) ?>" list="searchdatalist" placeholder="URL or page ID" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>" >
                             </td>
 
                             <td class="nowrap">
