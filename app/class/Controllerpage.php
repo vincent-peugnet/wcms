@@ -102,13 +102,13 @@ class Controllerpage extends Controller
     /**
      * Delete render cache of all related pages
      *
-     * @param string[] $relatedpages        List of page ids
+     * @param string[]|Page[] $relatedpages        List of page ids
      */
-    protected function deletelinktocache(array $relatedpages): void
+    protected function removecaches(array $relatedpages): void
     {
-        foreach ($relatedpages as $pageid) {
+        foreach ($relatedpages as $page) {
             try {
-                $this->pagemanager->unlink($pageid);
+                $this->pagemanager->removecache($page);
             } catch (RuntimeException $e) {
                 Logger::errorex($e, true);
             }
@@ -183,7 +183,7 @@ class Controllerpage extends Controller
                 $this->page = $this->pagemanager->renderpage($this->page, $this->router, $urlchecker);
                 if (isset($oldlinkto)) {
                     $relatedpages = array_unique(array_merge($oldlinkto, $this->page->linkto()));
-                    $this->deletelinktocache($relatedpages);
+                    $this->removecaches($relatedpages);
                 }
             }
 
@@ -493,6 +493,12 @@ class Controllerpage extends Controller
             $this->pagemanager->delete($this->page);
             $user = $this->user->id();
             Logger::info("User '$user' uccessfully deleted Page '$page'");
+
+            /** Delete backlinks render cache */
+            $linksto = new Opt();
+            $linksto->setlinkto($this->page->id());
+            $backlinks = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $linksto);
+            $this->removecaches($backlinks);
         } catch (Filesystemexception $e) {
             Logger::warning("Error while deleting Page '$page'" . $e->getMessage());
         } catch (Databaseexception $e) {

@@ -313,28 +313,35 @@ class Modelpage extends Modeldb
         if (!$this->repo->delete($page->id())) {
             throw new Databaseexception('Impossible to delete document from database');
         }
-        $this->unlink($page->id());
+        $this->removecache($page->id());
     }
 
     /**
      * Delete rendered CSS, JS and HTML files associated with given Page
      *
-     * @param string $pageid
+     * @param string|Page $id
      *
      * @throws Filesystemexception          If a file deletion failure occurs
      */
-    public function unlink(string $pageid): void
+    public function removecache($id): void
     {
+        if ($id instanceof Page) {
+            $id = $id->id();
+        }
+        if (!is_string($id)) {
+            throw new InvalidArgumentException("argument should be a ID string or Page");
+        }
+
         $files = ['.css', '.quick.css', '.js'];
         foreach ($files as $file) {
             try {
-                Fs::deletefile(Model::ASSETS_RENDER_DIR . $pageid . $file);
+                Fs::deletefile(Model::ASSETS_RENDER_DIR . $id . $file);
             } catch (Notfoundexception $e) {
                 // do nothing, this means file is already deleted
             }
         }
         try {
-            Fs::deletefile(Model::HTML_RENDER_DIR . $pageid . '.html');
+            Fs::deletefile(Model::HTML_RENDER_DIR . $id . '.html');
         } catch (Notfoundexception $e) {
             // do nothing, this means file is already deleted
         }
