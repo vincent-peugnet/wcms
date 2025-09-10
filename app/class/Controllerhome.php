@@ -44,6 +44,11 @@ class Controllerhome extends Controller
         }
         $display = $_GET['display'] ?? 'list';
 
+        if (Config::disablejavascript() && ($display === 'graph' || $display === 'map')) {
+            http_response_code(403);
+            $this->showtemplate('forbidden', ['message' => 'only list mode is available as javscript is disabled']);
+        }
+
         $pagelist = $this->pagemanager->pagelist();
 
 
