@@ -440,9 +440,9 @@
 
         <p class="info">
             Number of seconds before a page render expires.
-            Set it to zero if you want no cache expiration.
+            Set it to -1 if you want no cache expiration.
             <br>
-            (604800 seconds is one week, 86400 is a day, 3600 is one hour)
+            (604800 seconds is one week)
         </p>
 
         <p class="field">
@@ -452,11 +452,21 @@
                 name="cachettl"
                 id="cachettl"
                 value="<?= Wcms\Config::cachettl() ?>"
-                min="0"
+                min="-1"
                 max="<?= Wcms\Model::MAX_CACHE_TTL ?>"
                 form="admin"
+                list="defaultcachettl"
             >
         </p>
+
+        <datalist id="defaultcachettl">
+            <option value="60"       label="one minute" ></option>
+            <option value="3600"     label="one hour"   ></option>
+            <option value="86400"    label="one day"    ></option>
+            <option value="604800"   label="one week"   ></option>
+            <option value="2678400"  label="one month"  ></option>
+            <option value="31536000" label="one year"  ></option>
+        </datalist>
 
         <p class="info">When a page is modified, this may affect the rendering of other pages linked to it.
             The pages to which it points have a strong possibility of needing to be updated too.

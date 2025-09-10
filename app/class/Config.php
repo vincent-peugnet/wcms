@@ -741,7 +741,7 @@ abstract class Config
 
     public static function setcachettl(int $cachettl): void
     {
-        if ($cachettl >= 0 && $cachettl <= Model::MAX_CACHE_TTL) {
+        if ($cachettl >= -1 && $cachettl <= Model::MAX_CACHE_TTL) {
             self::$cachettl = $cachettl;
         }
     }

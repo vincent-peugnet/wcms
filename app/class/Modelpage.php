@@ -475,7 +475,7 @@ class Modelpage extends Modeldb
             }
         }
 
-        if ($level >= 4 && Config::cachettl() !== 0) {
+        if ($level >= 4 && Config::cachettl() !== -1) {
             $maxttl = $page->daterender()->getTimestamp() + Config::cachettl();
             if (time() > $maxttl) {
                 return true;
