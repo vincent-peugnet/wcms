@@ -341,7 +341,7 @@ table a {
     max-width: 350px;
     max-height: 85%;
     overflow-y: auto;
-    z-index: 30;
+    z-index: 2000;
     box-shadow: 0px 14px 14px #24242430;
     border-radius: 0 var(--radius) var(--radius) var(--radius);
 }
@@ -595,7 +595,7 @@ input.toggle-panel-toggle {
     width: 100%;
     position: absolute;
     top: 0;
-    z-index: 40;
+    z-index: 3000;
 }
 
 div#flashmessage:target {
