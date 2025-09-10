@@ -19,17 +19,17 @@
 /* --------------------------------------------------------- side bar collapsible panels */
 
 /* overwrites global behavior */
-#leftbar :checked ~ .toggle-panel {
+#leftbar :checked ~ .toggle-panel, #rightbar :checked ~ .toggle-panel {
     width: 280px;
     max-width: none;
 }
 /* overwrites global behavior */
-#leftbar .toggle-panel-content {
+#leftbar .toggle-panel-content, #rightbar .toggle-panel-content {
     padding: 0;
     background-color: var(--tertiary-background-color);
 }
 /* overwrites global behavior */
-#leftbar .toggle-panel-content summary {
+.toggle-panel-content summary {
     list-style: none;
     background-color: var(--secondary-background-color);
     font-size: 1em;
@@ -162,33 +162,40 @@ textarea#editcontent {
 
 /* --------------------------------------------------------- right bar links */
 
-ul.internallinks li {
-    margin-bottom: 10px;
+#rightbar table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
 }
 
-ul.internallinks a.read {
+#rightbar table td {
+    padding: var(--padding);
+}
+
+#rightbar table td.id {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#internal-links td.read, #internal-links td.edit {
+    width: 13%;
+}
+
+#external-links ul a {
+    width: calc(100% - 25px);
     display: inline-block;
+    text-overflow: ellipsis;
     overflow: hidden;
     text-wrap: nowrap;
-    width: 215px;
-    text-overflow: ellipsis;
 }
 
-ul.externallinks a {
-    width: 90%;
-    display: inline-block;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    text-wrap: nowrap;
-}
-
-ul.externallinks li {
-    width: 250px;
+#external-links li {
     font-size: smaller;
-    padding: 1px;
+    padding: var(--half-padding);
 }
 
-ul.externallinks li:hover {
+#external-links li:hover, #internal-links tr:hover, #stats tr:hover {
     background-color: var(--outline-background-color);
     color: var(--outline-color);
 }
@@ -289,7 +296,7 @@ span.cm-wkeyword {
     }
 
     #leftbar :checked ~ .toggle-panel,
-    :checked ~ .toggle-panel {
+    #rightbar :checked ~ .toggle-panel {
         /* full width panels */
         width: 100%;
         max-width: none;
