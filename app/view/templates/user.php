@@ -41,7 +41,7 @@ $this->layout('backlayout', ['title' => 'user', 'stylesheets' => [$css . 'back.c
             </p>
             <p class="field">
                 <label for="url">Associated url</label>
-                <input type="text" name="url" id="url" value="<?= $this->e($user->url()) ?>" list="searchdatalist" placeholder="URL or page ID" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>" >
+                <input type="text" name="url" id="url" value="" list="searchdatalist" placeholder="URL or page ID" maxlength="<?= Wcms\Item::LENGTH_SHORT_TEXT ?>" >
             </p>
             <p class="field">
                 <label for="expiredate">Expiration date</label>
