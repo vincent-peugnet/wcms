@@ -4,7 +4,9 @@
 
 <?= Wcms\Config::alertcss() ? '<link href="' . Wcms\Model::csspath() . 'global.css" rel="stylesheet" />' : '' ?>
 <meta name="viewport" content="width=device-width">
-
+<?php if (!empty(Wcms\Config::defaultfavicon())) : ?>
+    <link rel="shortcut icon" href="<?= Wcms\Model::faviconpath() . Wcms\Config::defaultfavicon() ?>" type="image/x-icon">
+<?php endif ?>
 
 
 <?php $this->stop() ?>
