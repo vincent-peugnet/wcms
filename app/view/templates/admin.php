@@ -345,19 +345,6 @@
         <p class="info">To be applied, these modifications need the re-rendering of all pages.
         </p>
 
-        <h3>Rendering details</h3>
-        <p class="info">When a page is modified, this may affect the rendering of other pages linked to it.
-            The pages to which it points have a strong possibility of needing to be updated too.
-            This option will invalidate their rendering each time the page pointing to them is updated.
-            They will therefore be re-rendered the next time they are viewed.
-        </p>
-
-        <p class="field">
-            <input type="hidden" name="deletelinktocache" value="0" form="admin">
-            <label for="deletelinktocache">invalidates the rendering of linked pages when updating</label>
-            <input type="checkbox" name="deletelinktocache" id="deletelinktocache" value="1" <?= Wcms\Config::deletelinktocache() ? 'checked' : '' ?> form="admin">
-        </p>
-
         <h3>Base page language</h3>
 
         <p class="info">If the page language is not specified in metadatas, then this default will be used.
@@ -445,6 +432,42 @@
             <input type="hidden" name="htmltag" value="0" form="admin">
             <label for="htmltag">Print HTML tags around V1 page's contents</label>
             <input type="checkbox" name="htmltag" id="htmltag" value="1" <?= Wcms\Config::htmltag() ? 'checked' : '' ?> form="admin">                        
+        </p>
+    </div>
+
+    <div class="grid-item" id="cache">
+        <h2>Cache</h2>
+
+        <p class="info">
+            Number of seconds before a page render expires.
+            Set it to zero if you want no cache expiration.
+            <br>
+            (604800 seconds is one week, 86400 is a day, 3600 is one hour)
+        </p>
+
+        <p class="field">
+            <label for="cachettl">cache life time (in seconds)</label>
+            <input
+                type="number"
+                name="cachettl"
+                id="cachettl"
+                value="<?= Wcms\Config::cachettl() ?>"
+                min="0"
+                max="<?= Wcms\Model::MAX_CACHE_TTL ?>"
+                form="admin"
+            >
+        </p>
+
+        <p class="info">When a page is modified, this may affect the rendering of other pages linked to it.
+            The pages to which it points have a strong possibility of needing to be updated too.
+            This option will invalidate their rendering each time the page pointing to them is updated.
+            They will therefore be re-rendered the next time they are viewed.
+        </p>
+
+        <p class="field">
+            <input type="hidden" name="deletelinktocache" value="0" form="admin">
+            <label for="deletelinktocache">invalidates the rendering of linked pages when updating</label>
+            <input type="checkbox" name="deletelinktocache" id="deletelinktocache" value="1" <?= Wcms\Config::deletelinktocache() ? 'checked' : '' ?> form="admin">
         </p>
     </div>
 

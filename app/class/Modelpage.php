@@ -439,6 +439,7 @@ class Modelpage extends Modeldb
      * 1. render file(s) are missing
      * 2. edit date is more recent than render date
      * 3. if the templatebody is set, exist and has been updated
+     * 4. cache time to live is reached
      *
      * @param Page $page                    Page to be checked
      *
@@ -446,7 +447,7 @@ class Modelpage extends Modeldb
      *
      * @return bool                         true if the page need to be rendered otherwise false
      */
-    public function needtoberendered(Page $page, int $level = 3): bool
+    public function needtoberendered(Page $page, int $level = 4): bool
     {
         if ($level < 1) {
             throw new DomainException('minimum level is 1');
@@ -462,14 +463,25 @@ class Modelpage extends Modeldb
         if ($level >= 2 && $page->daterender() <= $page->datemodif()) {
             return true;
         }
+
         if ($level >= 3 && !empty($page->templatebody())) {
             try {
                 $bodytemplate = $this->get($page->templatebody());
-                return $page->daterender() <= $bodytemplate->datemodif();
+                if ($page->daterender() <= $bodytemplate->datemodif()) {
+                    return true;
+                }
             } catch (RuntimeException $e) {
                 Logger::errorex($e);
             }
         }
+
+        if ($level >= 4 && Config::cachettl() !== 0) {
+            $maxttl = $page->daterender()->getTimestamp() + Config::cachettl();
+            if (time() > $maxttl) {
+                return true;
+            }
+        }
+
         return false;
     }
 

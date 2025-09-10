@@ -71,6 +71,9 @@ abstract class Config
     /** Indicate if img should have loading="lazy" attribute */
     protected static bool $lazyloadimg = true;
 
+    /** Global cache duration in seconds. Default is one week */
+    protected static int $cachettl = 604800;
+
     /** LDAP auth */
     protected static string $ldapserver = '';
     protected static string $ldaptree = '';
@@ -430,6 +433,11 @@ abstract class Config
         return self::$lazyloadimg;
     }
 
+    public static function cachettl(): int
+    {
+        return self::$cachettl;
+    }
+
     public static function ldapserver(): string
     {
         return self::$ldapserver;
@@ -729,6 +737,13 @@ abstract class Config
     public static function setlazyloadimg(bool $lazyloadimg): bool
     {
         return self::$lazyloadimg = $lazyloadimg;
+    }
+
+    public static function setcachettl(int $cachettl): void
+    {
+        if ($cachettl >= 0 && $cachettl <= Model::MAX_CACHE_TTL) {
+            self::$cachettl = $cachettl;
+        }
     }
 
     public static function setldapserver(string $ldapserver): void
