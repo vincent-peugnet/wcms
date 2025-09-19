@@ -39,7 +39,7 @@ abstract class Config
     protected static bool $urlchecker = true;
     protected static bool $deletelinktocache = true;
     protected static bool $titlefromalt = false;
-    protected static string $homepage = 'default';
+    protected static string $homepage = self::HOMEPAGE_DEFAULT;
     protected static ?string $homeredirect = null;
     protected static string $theme = 'default.css';
     protected static ?string $secretkey = null;
@@ -85,7 +85,13 @@ abstract class Config
 
     public const SUFFIX_MAX = 128;
 
-    public const HOMEPAGE = ['default', 'redirect'];
+    public const HOMEPAGE_DEFAULT = 'default';
+    public const HOMEPAGE_REDIRECT = 'redirect';
+
+    public const HOMEPAGE = [
+        self::HOMEPAGE_DEFAULT,
+        self::HOMEPAGE_REDIRECT,
+    ];
 
     public const SECRET_KEY_MIN = 16;
     public const SECRET_KEY_MAX = 128;

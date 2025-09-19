@@ -36,7 +36,7 @@ class Controllerhome extends Controller
     public function desktop(): never
     {
         if ($this->user->isvisitor()) {
-            if (Config::homepage() === 'redirect' && !empty(Config::homeredirect())) {
+            if (Config::homepage() === Config::HOMEPAGE_REDIRECT && !empty(Config::homeredirect())) {
                 $this->routedirect('pageread', ['page' => Config::homeredirect()]);
             } else {
                 $this->showconnect('home');

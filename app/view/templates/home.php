@@ -284,6 +284,9 @@ use Wcms\Config;
                                     <label title="<?= $this->e($item->title()) ?>" for="id_<?= $item->id() ?>">
                                         <?= $item->id() ?>
                                     </label>
+                                    <?php if (Config::homepage() === Config::HOMEPAGE_REDIRECT && $item->id() === Config::homeredirect()) : ?>
+                                        <i class="fa fa-home" title="this page is set as homepage"></i>
+                                    <?php endif ?>
                                     <?php if (!empty($item->redirection())) : ?>
                                         <a
                                             href="<?= \Wcms\Model::idcheck($item->redirection()) ? $this->upage('pageread', $item->redirection()) : getfirsturl($item->redirection()) ?>"
