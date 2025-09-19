@@ -67,7 +67,19 @@ When you update or add pages in the bookmark's scope, you need to manually refre
 
 
 
+### confidentiality
 
+To manage which page are accessible to who, editors can set the [privacy level of their pages](#privacy).
+
+#### search engine indexing
+
+When something is public on the Web, and at least one hyperlink point to it, it will sooner or later became indexed by some robots. The most traditionnal ones are the **search engines Web crawlers** (sometimes even called spiders). When a page or a media is indexed by one of those robots, the associated search engine may display the ressource on their results lists.
+
+Hopefully, we can tell those robot not to index our content by using a tag called `noindex`.
+
+Inside W, this can be set per page under "advanced setting" in edit interface.
+
+Note that this is only usefull for `public` pages as the others are not published on the Web. But it won't cause any harm either.
 
 
 

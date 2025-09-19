@@ -58,6 +58,8 @@ abstract class Page extends Item
     /** @var array<string, ?bool> $externallinks */
     protected array $externallinks = [];
 
+    protected bool $noindex = false;
+
     protected int $version;
 
     public const LATITUDE_MIN = -90;
@@ -141,6 +143,7 @@ abstract class Page extends Item
         $this->setrefresh(0);
         $this->setpassword('');
         $this->externallinks = [];
+        $this->noindex = false;
         $this->postprocessaction = false;
     }
 
@@ -455,6 +458,11 @@ abstract class Page extends Item
             return count($this->externallinks);
         }
         return $this->externallinks;
+    }
+
+    public function noindex(): bool
+    {
+        return $this->noindex;
     }
 
     public function version(string $type = 'int'): int
@@ -826,6 +834,11 @@ abstract class Page extends Item
     public function setexternallinks(array $externallinks): void
     {
         $this->externallinks = $externallinks;
+    }
+
+    public function setnoindex(bool $noindex): void
+    {
+        $this->noindex = $noindex;
     }
 
 
