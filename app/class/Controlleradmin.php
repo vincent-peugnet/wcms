@@ -99,11 +99,6 @@ class Controlleradmin extends Controller
 
     public function log(): never
     {
-        if (!$this->user->isadmin()) {
-            http_response_code(403);
-            $this->showtemplate('forbidden');
-        }
-
         $filters = [
             'warn' => $_GET['warn'] ?? true,
             'error' => $_GET['error'] ?? true,
@@ -145,5 +140,21 @@ class Controlleradmin extends Controller
             'filesize' => $stats['size'],
             'filelines' => $filelines,
         ], $filters));
+    }
+
+    public function logdownload(): never
+    {
+        $file = Model::ERROR_LOG;
+
+        if (file_exists($file)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: text/plain');
+            header('Content-Disposition: attachment; filename="w_error.log"');
+            header('Content-Length: ' . filesize($file));
+            readfile($file);
+        } else {
+            Logger::error('error while downloading log file: file does not exist');
+        }
+        exit;
     }
 }

@@ -30,6 +30,9 @@
 
                 <input type="submit" value="filter">
             </form>
+            <a href="<?= $this->url('adminlogdownload') ?>" class="button" title="download original log file">
+                <i class="fa fa-download"></i> <span class="text">download</span>
+            </a>
         </div>
         <div class="scroll">
             <span id="top"></span>
