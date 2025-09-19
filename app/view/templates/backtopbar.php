@@ -23,7 +23,7 @@
             </a>
         <?php endif ?>
 
-        <?php if (Wcms\Config::homepage() === 'redirect' && !empty(Wcms\Config::homeredirect())) : ?>
+        <?php if (Wcms\Config::homepage() === Wcms\Config::HOMEPAGE_REDIRECT && !empty(Wcms\Config::homeredirect())) : ?>
             <a href="<?= $this->url('pageread', ['page' => Wcms\Config::homeredirect()]) ?>" title="open landing page">
                 <i class="fa fa-external-link-square"></i>
                 <span><?= Wcms\Config::homeredirect() ?></span>

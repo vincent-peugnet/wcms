@@ -37,12 +37,12 @@
 
         <p class="field">
             <label for="default">default</label>    
-            <input type="radio" name="homepage" value="default" id="default" <?= Wcms\Config::homepage() === 'default' ? 'checked' : '' ?> form="admin">                        
+            <input type="radio" name="homepage" value="default" id="default" <?= Wcms\Config::homepage() === Wcms\Config::HOMEPAGE_DEFAULT ? 'checked' : '' ?> form="admin">                        
         </p>
 
         <p class="field">
             <label for="redirect">redirect to page</label>
-            <input type="radio" name="homepage" value="redirect" id="redirect" <?= Wcms\Config::homepage() === 'redirect' ? 'checked' : '' ?> form="admin">
+            <input type="radio" name="homepage" value="redirect" id="redirect" <?= Wcms\Config::homepage() === Wcms\Config::HOMEPAGE_REDIRECT ? 'checked' : '' ?> form="admin">
         </p>
 
         <p class="field">
