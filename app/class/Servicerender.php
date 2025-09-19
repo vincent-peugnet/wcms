@@ -230,6 +230,10 @@ abstract class Servicerender
 
         $head .= "<meta property=\"og:url\" content=\"$url$id\">\n";
 
+        if ($this->page->noindex()) {
+            $head .= '<meta name="robots" content="noindex">';
+        }
+
         foreach ($this->rsslist as $bookmark) {
             $atompath = Servicerss::atompath($bookmark->id());
             $title = htmlspecialchars($bookmark->name());
