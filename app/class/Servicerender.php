@@ -193,6 +193,7 @@ abstract class Servicerender
         $title = htmlspecialchars($this->page->title());
         $suffix = htmlspecialchars(Config::suffix());
         $url = Config::url();
+        $generator = 'W ' . getversion();
 
         $head = '';
 
@@ -218,7 +219,7 @@ abstract class Servicerender
 
         $head .= "<meta name=\"description\" content=\"$description\" />\n";
         $head .= "<meta name=\"viewport\" content=\"width=device-width\" />\n";
-        $head .= "<meta name=\"generator\" content=\"W-cms\" />\n";
+        $head .= "<meta name=\"generator\" content=\"$generator\" />\n";
 
         $head .= "<meta property=\"og:type\" content=\"website\" />";
         $head .= "<meta property=\"og:title\" content=\"$title$suffix\">\n";
