@@ -382,6 +382,7 @@ use Wcms\Config;
                                     <td class="secure">
                                         <?= $opt->securelink($item->secure('int') , $item->secure('string')) ?>
                                         <?= !empty($item->password()) ? '<i class="fa fa-lock" title="This page is password protected"></i>' : '' ?>
+                                        <?= $item->noindex() ? '<i class="fa fa-search-minus" title="this page cannot be indexed by search engines">' : '' ?>
                                     </td>
                                 <?php endif ?>
                                 <?php if ($columns['authors']) : ?>

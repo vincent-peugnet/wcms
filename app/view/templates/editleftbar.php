@@ -181,6 +181,14 @@
                         
                 <fieldset>
                     <p class="field">
+                        <label for="noindex">
+                            <span>no index</span>
+                            <a href="<?= $this->url('info', [], '#search-engine-indexing') ?>" class="help">?</a>
+                        </label>
+                        <input type="hidden" name="noindex" value="0">
+                        <input type="checkbox" name="noindex" value="1" id="noindex" form="update" <?= $page->noindex() ? 'checked' : '' ?>>
+                    </p>
+                    <p class="field">
                         <label for="externalcss">External CSS</label>
                         <input type="text" name="externalcss[]" id="externalcss" placeholder="add external address" form="update">
                     </p>
