@@ -590,6 +590,30 @@ class Controllerpage extends Controller
         $this->routedirect('pageedit', ['page' => $this->page->id()]);
     }
 
+    public function comment(string $page): never
+    {
+        if (!isset($_POST['origin']) || !$this->pagemanager->exist($_POST['origin'])) {
+            $this->showtemplate('fordbidden');
+            exit;
+        }
+
+        if (!$this->user->isvisitor()) {
+            // store message in INBOX
+            $this->routedirect('pageread', ['page' => $_POST['origin']]);
+        } else {
+            if (isset($_POST['name'])) {
+                
+            }
+
+
+
+            $this->showtemplate('alertcomment', [
+                'post' => $_POST,
+            ]);
+        }
+        exit;
+    }
+
     /**
      * Permanent redirection to a page.
      * Send a `301` HTTP code.

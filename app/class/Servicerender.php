@@ -5,6 +5,7 @@ namespace Wcms;
 use AltoRouter;
 use DOMDocument;
 use DOMElement;
+use DOMNode;
 use DOMNodeList;
 use DOMXPath;
 use Exception;
@@ -495,6 +496,33 @@ abstract class Servicerender
                 ) {
                     $image->setAttribute('title', $image->getAttribute('alt'));
                 }
+            }
+        }
+
+
+        $forms = $dom->getElementsByTagName('form');
+        foreach ($forms as $form) {
+            assert($form instanceof DOMElement);
+            $action = $form->getAttribute('action');
+            if (str_ends_with($action, '/comment')) {
+                $this->postprocessaction = true;
+
+                $inputs = $form->getElementsByTagName('input');
+
+                foreach ($inputs as $input) {
+                    if ($input->hasAttribute('name')) {
+                        $input->setAttribute('value', Servicepostprocess::USER_NAME);
+                    }
+                }
+
+
+
+                // Add origin hidden input
+                $origin = $dom->createElement('input');
+                $origin->setAttribute('type', 'hidden');
+                $origin->setAttribute('name', 'origin');
+                $origin->setAttribute('value', $this->page->id());
+                $form->appendChild($origin);
             }
         }
 

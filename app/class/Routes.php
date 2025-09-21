@@ -87,6 +87,7 @@ class Routes
             ['GET', '/[cid:page]/render', 'Controllerpage#render', 'pagerender'],
             ['GET', '/[cid:page]/log', 'Controllerpage#log', 'pagelog'],
             ['GET', '/[cid:page]/download', 'Controllerpage#download', 'pagedownload'],
+            ['POST', '/[cid:page]/comment', 'Controllerpage#comment', 'pagecomment'],
             ['GET', '/[cid:page]/logout', 'Controllerpage#logout', 'pagelogout'],
             ['GET', '/[cid:page]/login', 'Controllerpage#login', 'pagelogin'],
             ['POST', '/[cid:page]/edit', 'Controllerpage#update', 'pageupdate'],
