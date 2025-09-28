@@ -77,9 +77,11 @@ When something is public on the Web, and at least one hyperlink point to it, it 
 
 Hopefully, we can tell those robot not to index our content by using a tag called `noindex`.
 
-Inside W, this can be set per page under "advanced setting" in edit interface.
+Inside W, this can be set per page under "advanced setting" in edit interface, or using multi-edit feature in home view.
 
-Note that this is only usefull for `public` pages as the others are not published on the Web. But it won't cause any harm either.
+In home view, page that are set as `noindex` are signified with a search symbol <i class="fa fa-search-minus"></i> in the **privacy** column.
+
+> Note that this is only usefull for `public` pages as the others are not published on the Web. But it won't cause any harm either.
 
 
 
