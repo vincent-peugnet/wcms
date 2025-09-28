@@ -185,7 +185,7 @@
                             <span>no index</span>
                             <a href="<?= $this->url('info', [], '#search-engine-indexing') ?>" class="help">?</a>
                         </label>
-                        <input type="hidden" name="noindex" value="0">
+                        <input type="hidden" name="noindex" value="0" form="update">
                         <input type="checkbox" name="noindex" value="1" id="noindex" form="update" <?= $page->noindex() ? 'checked' : '' ?>>
                     </p>
                     <p class="field">
