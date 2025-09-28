@@ -183,6 +183,18 @@
                         </p>
 
                         <h4>Advanced</h4>
+                        <p class="field">
+                            <label for="keepindex">keep index setting</label>
+                            <input type="radio" name="datas[noindex]" id="keepindex" value="" checked>
+                        </p>
+                        <p class="field" title="prevent public pages being indexed by search engines">
+                            <label for="noindex">no index</label>
+                            <input type="radio" name="datas[noindex]" id="noindex" value="1">
+                        </p>
+                        <p class="field">
+                            <label for="index">allow index</label>
+                            <input type="radio" name="datas[noindex]" id="index" value="0">
+                        </p>
                         <div class="flexrow">
                             <p class="field">
                                 <label for="sleep">Sleep (s.)</label>
