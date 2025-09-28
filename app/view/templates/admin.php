@@ -215,6 +215,12 @@
             </select>
         </p>
 
+        <p class="field">
+            <label for="defaultnoindex">no index</label>
+            <input type="hidden" name="defaultnoindex" value="0" form="admin">
+            <input type="checkbox" name="defaultnoindex" value="1" id="defaultnoindex" form="admin" <?= Wcms\Config::defaultnoindex() ? 'checked' : '' ?>>
+        </p>
+
         <h3>Default tags</h3>
 
         <p class="field">

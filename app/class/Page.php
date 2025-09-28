@@ -143,7 +143,7 @@ abstract class Page extends Item
         $this->setrefresh(0);
         $this->setpassword('');
         $this->externallinks = [];
-        $this->noindex = false;
+        $this->noindex = Config::defaultnoindex();
         $this->postprocessaction = false;
     }
 

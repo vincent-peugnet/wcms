@@ -32,6 +32,8 @@ abstract class Config
     protected static string $defaulttemplatebody = '';
     protected static ?string $defaulttemplatecss = null;
     protected static ?string $defaulttemplatejavascript = null;
+    protected static bool $defaultnoindex = false;
+
     protected static string $suffix = "";
     protected static bool $externallinkblank = true;
     protected static bool $internallinkblank = false;
@@ -316,6 +318,11 @@ abstract class Config
         return self::$defaulttemplatejavascript;
     }
 
+    public static function defaultnoindex(): bool
+    {
+        return self::$defaultnoindex;
+    }
+
     public static function defaultfavicon(): string
     {
         return self::$defaultfavicon;
@@ -596,6 +603,10 @@ abstract class Config
         }
     }
 
+    public static function setdefaultnoindex(bool $defaultnoindex): void
+    {
+        self::$defaultnoindex = $defaultnoindex;
+    }
 
     public static function setdefaultfavicon(string $defaultfavicon): void
     {
