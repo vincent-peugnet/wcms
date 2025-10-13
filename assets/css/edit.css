@@ -68,6 +68,15 @@ div#geomap {
     height: 250px;
 }
 
+
+/* --------------------------------------------------------- left bar authors */
+
+#authors .level {
+    opacity: 0.5;
+    font-size: smaller;
+}
+
+
 /* --------------------------------------------------------- tabs */
 
 .tabs {

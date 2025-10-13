@@ -37,6 +37,14 @@ class User extends Item
 
     protected string $theme = '';
 
+    public const LEVELS = [
+        1  => 'reader',
+        2  => 'invite editor',
+        3  => 'editor',
+        4  => 'super editor',
+        10 => 'admin',
+    ];
+
     public const HOME_COLUMNS = [
         'favicon',
         'download',

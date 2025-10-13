@@ -78,12 +78,17 @@
             </details>
 
             <?php if ($user->iseditor()) : ?>
-                <details id="editinfo">
+                <details id="authors">
                     <summary>Authors</summary>
                     <fieldset>  
                         <?php foreach ($editorlist as $editor) : ?>
                             <p class="field">
-                                <label for="<?= $editor->id() ?>" ><?= $editor->id() ?> <?= $editor->level() ?></label>    
+                                <label for="<?= $editor->id() ?>" >
+                                    <?= $editor->id() ?>
+                                    <span class="level">
+                                        <?= Wcms\User::LEVELS[$editor->level()] ?>
+                                    </span>
+                                </label>    
                                 <input
                                     type="checkbox"
                                     name="authors[]"
