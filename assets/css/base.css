@@ -45,7 +45,6 @@ flash messages
     --double-padding: calc(var(--padding) * 2);
 
     /* header has --spacing top and bottom + input font-size + input padding on top and bottom */
-    /* unused ! */
     --header-height: calc( var(--spacing) * 2 + var(--size-small) + var(--half-spacing) * 2);
 }
 
@@ -245,6 +244,7 @@ input[type=submit]:focus, button:focus, .button:focus {
     justify-content: space-between;
     padding: var(--spacing);
     gap: var(--double-spacing);
+    height: var(--header-height);
     -webkit-overflow-scrolling: touch;
     /* @check */
     /* should be neeeded for mobile views, but might cause unwanted height */
