@@ -451,6 +451,8 @@ Display options are :
 - thumbnail : display the [thumnail](#thumbnail) of the page.
 - date : display the [date](#date) of the page.
 - time : display the [time](#date) of the page.
+- modification date : display the [modification date](#datemodif) of the page.
+- modification time : display the [modification time](#datemodif) of the page.
 - author: display the [authors](#authors)
 - hide current: if checked, hide the currently browsed from the list.
 
