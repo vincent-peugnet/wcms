@@ -257,14 +257,7 @@ abstract class Servicerender
         $head .= $this->recursivecss($this->page);
         $head .= "<link href=\"$renderpath$id.css\" rel=\"stylesheet\" />\n";
 
-        try {
-            foreach ($this->pagemanager->getpagejavascripttemplates($this->page) as $template) {
-                $templateid = $template->id();
-                $head .= "<script src=\"$renderpath$templateid.js\" async></script>\n";
-            }
-        } catch (RuntimeException $e) {
-            Logger::warningex($e);
-        }
+        $head .= $this->recursivejs($this->page);
         if (!empty($this->page->javascript())) {
             $head .= "<script src=\"$renderpath$id.js\" async></script>\n";
         }
@@ -285,7 +278,7 @@ abstract class Servicerender
      */
     protected function recursivecss(Page $page): string
     {
-        $head = "";
+        $head = '';
         try {
             $templates = $this->pagemanager->getpagecsstemplates($page);
             $templates = array_reverse($templates); // put farthest templates first
@@ -297,7 +290,31 @@ abstract class Servicerender
                 $head .= "\n";
             }
         } catch (RuntimeException $e) {
-            Logger::errorex($e);
+            Logger::warningex($e);
+        }
+        return $head;
+    }
+
+
+    /**
+     * This create a HTML script tag for every javascript that are templated
+     *
+     * @param Page $page                    Page being rendered
+     * @return string                       HTML to insert into <head> of page
+     */
+    protected function recursivejs(Page $page): string
+    {
+        $head = '';
+        try {
+            $templates = $this->pagemanager->getpagejavascripttemplates($this->page);
+            $templates = array_reverse($templates); // put farthest templates first
+            $renderpath = Model::renderpath();
+            foreach ($templates as $template) {
+                $templateid = $template->id();
+                $head .= "<script src=\"$renderpath$templateid.js\" async></script>\n";
+            }
+        } catch (RuntimeException $e) {
+            Logger::warningex($e);
         }
         return $head;
     }
