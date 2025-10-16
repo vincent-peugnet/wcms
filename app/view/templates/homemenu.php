@@ -312,6 +312,16 @@
                         <label for="list_time">Show time</label>
                         <input type="checkbox" name="time" id="list_time" value="1" <?= !empty($optlist) && $optlist->time() ? 'checked' : '' ?>>
                     </p>
+                    <p class="field">
+                        <input type="hidden" name="datemodif" value="0">
+                        <label for="list_datemodif">Show modification date</label>
+                        <input type="checkbox" name="datemodif" id="list_datemodif" value="1" <?= !empty($optlist) && $optlist->datemodif() ? 'checked' : '' ?>>
+                    </p>
+                    <p class="field">
+                        <input type="hidden" name="timemodif" value="0">
+                        <label for="list_timemodif">Show modification time</label>
+                        <input type="checkbox" name="timemodif" id="list_timemodif" value="1" <?= !empty($optlist) && $optlist->timemodif() ? 'checked' : '' ?>>
+                    </p>
                     <p class="field">                
                         <input type="hidden" name="author" value="0">
                         <label for="list_author">Show author(s)</label>

@@ -15,6 +15,8 @@ class Optlist extends Optcode
     protected bool $thumbnail = false;
     protected bool $date = false;
     protected bool $time = false;
+    protected bool $datemodif = false;
+    protected bool $timemodif = false;
     protected bool $author = false;
     protected bool $hidecurrent = false;
     protected bool $tags = false;
@@ -107,6 +109,21 @@ class Optlist extends Optcode
                     $datetime->setAttribute('datetime', $page->date()->format(DateTimeInterface::ATOM));
                     $parent->appendChild($datetime);
                 }
+                if ($this->datemodif || $this->timemodif) {
+                    $values = [];
+                    if ($this->datemodif) {
+                        $values[] = $dateformatter->format($page->datemodif());
+                    }
+                    if ($this->timemodif) {
+                        $values[] = $timeformatter->format($page->datemodif());
+                    }
+                    $datetime = $dom->createElement('time', implode(' ', $values));
+                    if ($this->datemodif) {
+                        $datetime->setAttribute('title', $datetitleformatter->format($page->datemodif()));
+                    }
+                    $datetime->setAttribute('datetime', $page->datemodif()->format(DateTimeInterface::ATOM));
+                    $parent->appendChild($datetime);
+                }
                 if ($this->author) {
                     $usermanager = new Modeluser();
                     $authors = $dom->createElement('span');
@@ -178,6 +195,16 @@ class Optlist extends Optcode
         return $this->time;
     }
 
+    public function datemodif(): bool
+    {
+        return $this->datemodif;
+    }
+
+    public function timemodif(): bool
+    {
+        return $this->timemodif;
+    }
+
     public function author(): bool
     {
         return $this->author;
@@ -219,6 +246,16 @@ class Optlist extends Optcode
     public function settime(bool $time): void
     {
         $this->time = $time;
+    }
+
+    public function setdatemodif(bool $date): void
+    {
+        $this->datemodif = $date;
+    }
+
+    public function settimemodif(bool $time): void
+    {
+        $this->timemodif = $time;
     }
 
     public function setauthor(bool $author): void
