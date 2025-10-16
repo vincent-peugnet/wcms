@@ -179,6 +179,7 @@ class Modelpage extends Modeldb
 
     /**
      * Get all the existing pages that are called in css templating
+     * (the last element is the farthest of the chain)
      *
      * @param Page $page                    page to retrieve css templates
      *
@@ -190,7 +191,7 @@ class Modelpage extends Modeldb
      */
     public function getpagecsstemplates(Page $page, array $templates = []): array
     {
-        $templatecss = $page->templatecss() ?? $page->templatebody();
+        $templatecss = $page->templatecss() ?? $page->templatebody(); // null CSS template: same as body template
         if (empty($templatecss)) {
             return [];
         }
