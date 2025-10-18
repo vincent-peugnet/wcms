@@ -1,5 +1,45 @@
 /* INFO — DOCUMENTATION */
 
+body{
+    overflow: auto;
+    position: relative;
+}
+
+/* special layout to allow back button when navigating anchors */
+.hbar { 
+    position: fixed; 
+    width: 100%;
+    z-index: 1;
+}
+#toc { 
+    position: sticky; 
+    top: calc(var(--header-height) ); 
+    align-self: self-start; 
+    height: calc( 100vh - var(--header-height));
+    border-top: 1px solid var(--tertiary-background-color);
+}
+main section,
+main section .scroll,
+main {
+    overflow: unset; 
+    height: auto;
+}
+main {
+    margin-top: calc(var(--header-height));
+    display: grid;
+    grid-template-columns: min(300px, 30vw) 1fr;
+}
+main section h1 {
+    position: sticky;
+    top: calc(var(--header-height) );
+    border-top: 1px solid var(--tertiary-background-color);
+}
+#manual h2,
+#manual h3,
+#manual h4 {
+    scroll-margin-top: calc(var(--header-height) * 2 + .75em);
+}
+
 
 /* --------------------------------------------------------- manual */
 
@@ -50,7 +90,6 @@
     background: none;
     color: var(--text3-color);
     padding: 0;
-    scroll-margin-top: 1em;
 }
 
 #manual h3 {
@@ -63,14 +102,12 @@
     border-radius: var(--radius);
     background: var(--secondary-background-color);
     display: inline-block;
-    scroll-margin-top: 1em;
 }
 
 #manual h4 {
     border-bottom: solid 2px var(--main-color);
     font-size: x-large;
     margin: 1em 0;
-    scroll-margin-top: 1em;
 }
 
 #manual h5 {
@@ -149,6 +186,27 @@
         font-size: 1em;
     }
 }
+
+
+@media (max-width: 600px) {
+    body:has(.main-info) #toc {
+        height: auto;
+        position: relative;
+        top: unset;
+        width: auto;
+        max-width: none;
+        align-self: unset;
+    }
+    body:has(.main-info) main {
+        display: flex;
+        flex-direction: column;
+    }
+    main {
+      display: block;
+      overflow: scroll;
+    }
+}
+
 
 
 @media (max-width: 550px) {
