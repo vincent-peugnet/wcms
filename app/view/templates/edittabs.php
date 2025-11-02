@@ -1,23 +1,25 @@
 <div class="tabs">
 
-    <?php foreach ($tablist as $key => $value) : ?>
+    <?php foreach ($page->tabs() as $key => $value) : ?>
     <div class="tab">
 
-        <input form="update" name="interface" type="radio" value="<?= $key ?>" id="tab<?= $key ?>" class="checkboxtab" <?= $key == $opentab ? 'checked' : '' ?> >
+        <input form="update" name="interface" type="radio" value="<?= $key ?>" id="tab<?= $key ?>" class="checkboxtab" <?= $key == $page->interface() ? 'checked' : '' ?> >
 
         <label for="tab<?= $key ?>" <?= empty($templates[$key]) ? '' : 'title="template : '.$templates[$key].'" ' ?> class="<?= empty($templates[$key]) ? '' : 'template' ?> <?= empty($value) ? '' : 'edited' ?>"><?= $key ?> </label>
 
         <div class="content">
 
-            <textarea name="<?= $key ?>"
-                    class="editorarea"
-                    id="edit<?= $key ?>"
-                    autocomplete="off"
-                    autocorrect="off"
-                    autocapitalize="off"
-                    spellcheck="false"
-                    form="update"
-                    <?= $key == $opentab ? 'autofocus' : '' ?>
+            <textarea
+                name="<?= $key ?>"
+                class="editorarea"
+                id="edit<?= $key ?>"
+                autocapitalize="off"
+                form="update"
+                <?php if (!in_array($key, \Wcms\Page::TABS)) { ?>
+                    spellcheck="true"
+                    lang="<?= empty($page->lang()) ? Wcms\Config::lang() : $page->lang() ?>"
+                <?php } ?>
+                <?= $key == $page->interface() ? 'autofocus' : '' ?>
             ><?= $this->e($value) ?></textarea>
         </div>
     </div>

@@ -273,6 +273,8 @@ function initEditors(theme) {
                     styleSelectedText: true,
                     theme,
                     extraKeys: { 'Alt-F': 'findPersistent' },
+                    inputStyle: 'contenteditable',
+                    spellcheck: true,
                 }),
                 CodeMirror.fromTextArea(document.getElementById('editcss'), {
                     mode: 'css',
@@ -287,6 +289,8 @@ function initEditors(theme) {
                     styleSelectedText: true,
                     theme,
                     extraKeys: { 'Alt-F': 'findPersistent' },
+                    inputStyle: 'contenteditable',
+                    spellcheck: true,
                 }),
                 CodeMirror.fromTextArea(document.getElementById('editnav'), {
                     mode: 'wcms-markdown',
@@ -295,6 +299,8 @@ function initEditors(theme) {
                     styleSelectedText: true,
                     theme,
                     extraKeys: { 'Alt-F': 'findPersistent' },
+                    inputStyle: 'contenteditable',
+                    spellcheck: true,
                 }),
                 CodeMirror.fromTextArea(document.getElementById('editaside'), {
                     mode: 'wcms-markdown',
@@ -303,6 +309,8 @@ function initEditors(theme) {
                     styleSelectedText: true,
                     theme,
                     extraKeys: { 'Alt-F': 'findPersistent' },
+                    inputStyle: 'contenteditable',
+                    spellcheck: true,
                 }),
                 CodeMirror.fromTextArea(document.getElementById('editfooter'), {
                     mode: 'wcms-markdown',
@@ -311,6 +319,8 @@ function initEditors(theme) {
                     styleSelectedText: true,
                     theme,
                     extraKeys: { 'Alt-F': 'findPersistent' },
+                    inputStyle: 'contenteditable',
+                    spellcheck: true,
                 }),
                 CodeMirror.fromTextArea(document.getElementById('editbody'), {
                     mode: 'wcms-html',
@@ -342,6 +352,8 @@ function initEditors(theme) {
                         styleSelectedText: true,
                         theme,
                         extraKeys: { 'Alt-F': 'findPersistent' },
+                        inputStyle: 'contenteditable',
+                        spellcheck: true,
                     }
                 ),
                 CodeMirror.fromTextArea(document.getElementById('editcss'), {
