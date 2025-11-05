@@ -40,15 +40,25 @@
             </label>
             <input type="number" name="fontsize" value="<?= $workspace->fontsize() ?>" id="editfontsize" min="<?= Wcms\Workspace::FONTSIZE_MIN ?>" max="<?= Wcms\Workspace::FONTSIZE_MAX ?>" form="workspace-form">
         </span>
-                
-        <span class="highlighttheme">
-            <label for="edithighlighttheme">
-                <i class="fa fa-adjust"></i>
-            </label>
-            <select name="highlighttheme" form="workspace-form" id="edithighlighttheme">
-                <?= options(Wcms\Workspace::THEMES, $workspace->highlighttheme(), true) ?>
-            </select>
-        </span>
+
+        <?php if (! Wcms\Config::disablejavascript()) : ?>
+            <span>
+                <label for="markdownheading">
+                    <i class="fa fa-heading"></i>
+                </label>
+                <input type="hidden" name="markdownheading" value="0" form="workspace-form">
+                <input type="checkbox" name="markdownheading" value="1" id="markdownheading" <?= $workspace->markdownheading() ? 'checked' : '' ?> form="workspace-form">
+            </span>
+        
+            <span class="highlighttheme">
+                <label for="edithighlighttheme">
+                    <i class="fa fa-adjust"></i>
+                </label>
+                <select name="highlighttheme" form="workspace-form" id="edithighlighttheme">
+                    <?= options(Wcms\Workspace::THEMES, $workspace->highlighttheme(), true) ?>
+                </select>
+            </span>
+        <?php endif ?>
 
         <div id="save-workspace">
             <form action="<?= $this->url('workspaceupdate') ?>" method="post" id="workspace-form" data-api="<?= $this->url('apiworkspaceupdate') ?>" >

@@ -1,4 +1,4 @@
-<div class="tabs">
+<div class="tabs" data-markdownheading="<?= $workspace->markdownheading() ?>">
 
     <?php foreach ($page->tabs() as $key => $value) : ?>
     <div class="tab">

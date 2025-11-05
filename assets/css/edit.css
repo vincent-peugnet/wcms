@@ -283,12 +283,12 @@ span.cm-wkeyword {
     font-weight: bold;
 }
 
-/* To make markdown heading bigger
-.cm-header-1 { font-size: 150%; }
-.cm-header-2 { font-size: 130%; }
-.cm-header-3 { font-size: 120%; }
-.cm-header-4 { font-size: 110%; }
-*/
+/* To make markdown heading bigger */
+.tabs[data-markdownheading="1"] .cm-header-1 { font-size: 200%; }
+.tabs[data-markdownheading="1"] .cm-header-2 { font-size: 160%; }
+.tabs[data-markdownheading="1"] .cm-header-3 { font-size: 130%; }
+.tabs[data-markdownheading="1"] .cm-header-4 { font-size: 115%; }
+
 
 .CodeMirror-selected  {
 	background-color: var(--main-color) !important;

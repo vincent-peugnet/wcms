@@ -395,6 +395,12 @@ function initEditFeatures() {
     const themeSelect = document.getElementById('edithighlighttheme');
     themeSelect.addEventListener('change', themeChangeHandler);
 
+    const markdownHeaderToggle = document.getElementById('markdownheading');
+    markdownHeaderToggle.addEventListener(
+        'change',
+        markdownHeadingChangeHandler
+    );
+
     document.getElementById('title').addEventListener('input', e => {
         pagetitle = e.target.value;
     });
@@ -491,6 +497,11 @@ function themeChangeHandler(e) {
         }
     }
     theme = e.target.value;
+}
+
+function markdownHeadingChangeHandler(e) {
+    const tabs = document.querySelector('.tabs');
+    tabs.setAttribute('data-markdownheading', +e.target.checked);
 }
 
 /**

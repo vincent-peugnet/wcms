@@ -22,6 +22,9 @@ class Workspace extends Item
     protected string $mediadisplay = self::LIST;
     protected string $highlighttheme = self::THEME_DEFAULT;
 
+    /** Proportionnal Markdown headings */
+    protected bool $markdownheading = true;
+
     public const FONTSIZE_MIN = 5;
     public const FONTSIZE_MAX = 99;
 
@@ -52,6 +55,7 @@ class Workspace extends Item
         $this->showmediatreepanel = true;
         $this->collapsemenu = true;
         $this->highlighttheme = self::THEME_NONE;
+        $this->markdownheading = true;
     }
 
     public function showeditorleftpanel(): bool
@@ -102,6 +106,11 @@ class Workspace extends Item
     public function highlighttheme(): string
     {
         return $this->highlighttheme;
+    }
+
+    public function markdownheading(): bool
+    {
+        return $this->markdownheading;
     }
 
     public function setshoweditorleftpanel(bool $show): void
@@ -158,5 +167,10 @@ class Workspace extends Item
         if (in_array($theme, self::THEMES)) {
             $this->highlighttheme = $theme;
         }
+    }
+
+    public function setmarkdownheading(bool $markdownheading): void
+    {
+        $this->markdownheading = $markdownheading;
     }
 }
