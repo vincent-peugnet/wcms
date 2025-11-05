@@ -15,10 +15,10 @@
                 id="edit<?= $key ?>"
                 autocapitalize="off"
                 form="update"
-                <?php if (!in_array($key, \Wcms\Page::TABS)) { ?>
+                <?php if (!in_array($key, \Wcms\Page::TABS)) : ?>
                     spellcheck="true"
                     lang="<?= empty($page->lang()) ? Wcms\Config::lang() : $page->lang() ?>"
-                <?php } ?>
+                <?php endif ?>
                 <?= $key == $page->interface() ? 'autofocus' : '' ?>
             ><?= $this->e($value) ?></textarea>
         </div>
