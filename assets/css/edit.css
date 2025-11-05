@@ -38,9 +38,8 @@
 }
 
 /* open / closed metadata informations */
-aside details summary::before { content: "+ " }
+aside details summary::before { content: "+ "; font-family: mono;}
 aside details[open] summary::before { content: "- " }
-
 
 
 /* --------------------------------------------------------- left bar fieldsets */
