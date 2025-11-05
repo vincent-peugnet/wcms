@@ -198,3 +198,37 @@ main div#graph {
         padding: 0 10px;
     }
 }
+
+
+/* TEMPORARY ZONE */
+
+/* Quick and Dirty implementation, should be refactored with Edit view left bar */
+#filter summary {
+    list-style: none;
+    background-color: var(--secondary-background-color);
+    font-size: 1em;
+    padding: var(--spacing);
+    color: var(--text-color);
+}
+
+/* open / closed metadata informations */
+aside details summary::before { content: "+ "; font-family: mono;}
+aside details[open] summary::before { content: "- " }
+
+#filter fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+    padding: var(--spacing);
+    border: none;
+    margin: 0;
+}
+
+
+#filter details {
+    min-width: 200px;
+  }
+
+#filter summary:has(+ fieldset[data-default="0"])::after {
+    content: " ▼";
+}
