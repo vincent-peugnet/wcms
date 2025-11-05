@@ -1,6 +1,6 @@
 <aside id="filter" class="toggle-panel-container">
     
-    <input id="showhomeoptionspanel" name="showhomeoptionspanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" <?= $workspace->showhomeoptionspanel() === true ? 'checked' : '' ?>>
+    <input id="showhomeoptionspanel" name="showhomeoptionspanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" <?= !$workspace->collapsemenu() && $workspace->showhomeoptionspanel() === true ? 'checked' : '' ?>>
     <label for="showhomeoptionspanel" class="toggle-panel-label"><span><i class="fa fa-filter"></i></span></label>
     
     <div class="toggle-panel" id="optionspanel">
