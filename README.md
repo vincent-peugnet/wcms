@@ -95,13 +95,15 @@ How to install
 
 __Server requirements__
 
-- apache server
+- apache server (but Ngnix *seems fine* too)
 - PHP >=7.4.0 and the following extensions: `curl mbstring xml intl`
 - optionally: `gd` or `imagick` PHP extensions for [image optimizer feature](MANUAL.md#optimize-images).
 
 __W__ don't need any database manager as it use a "flat file" system.
 
 You can put W at the root of your domain, or in subfolders. Then access the address in your browser and follow the differents steps.
+
+**💡 Advanced installs:** W can also run with **Nginx**, checkout [NGNIX sample configuration](#ngnix)
 
 Install using latest release zip
 --------------------------------
@@ -130,6 +132,62 @@ If you have a SSH access to your server and you are familiar with Git, you can i
 3. build what's necessary
 
         make build
+
+
+Other configurations
+--------------------
+
+Some documentation for non Apache based installs:
+
+### Ngnix
+
+Here is a sample Ngnix configuration suggested by **ppom**:
+
+```nginx
+# Max upload size
+# This must be set as well in PHP-FPM's conf
+# /etc/php/8.2/fpm/php.ini
+# upload_max_filesize = 50M
+# post_max_size = 50M
+client_max_body_size 50m;
+
+# no directory listing
+autoindex off;
+
+# All files in assets and media folders are served directly by NGINX
+location ~ ^/(assets|media)/ {
+        # root is put here as extra security:
+        # we don't want NGINX to serve anything else in this folder
+        root /var/www/html;
+        # First attempt to serve request as file, then
+        # as directory, then fall back to displaying a 404.
+        try_files $uri $uri/ =404;
+}
+
+# Everything else is handled by index.php
+location / {
+        rewrite ^ /index.php last;
+}
+
+# index.php redirects to PHP-FPM
+location = /index.php {
+        # root is put here as extra security:
+        # we don't want NGINX to serve anything else in this folder
+        root /var/www/html;
+
+        include snippets/fastcgi-php.conf;
+
+        # With php-fpm (or other unix sockets):
+        fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+
+        # With php-cgi (or other tcp sockets):
+        #fastcgi_pass 127.0.0.1:9000;
+}
+```
+
+See [issue #541 on Github](https://github.com/vincent-peugnet/wcms/issues/541) for more infos.
+
+
 
 Development informations
 ========================
