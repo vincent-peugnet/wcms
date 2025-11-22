@@ -95,7 +95,7 @@ How to install
 
 __Server requirements__
 
-- apache server (but Ngnix *seems fine* too)
+- apache server (but nginx *seems fine* too)
 - PHP >=7.4.0 and the following extensions: `curl mbstring xml intl`
 - optionally: `gd` or `imagick` PHP extensions for [image optimizer feature](MANUAL.md#optimize-images).
 
@@ -103,7 +103,7 @@ __W__ don't need any database manager as it use a "flat file" system.
 
 You can put W at the root of your domain, or in subfolders. Then access the address in your browser and follow the differents steps.
 
-**💡 Advanced installs:** W can also run with **Nginx**, checkout [NGNIX sample configuration](#ngnix)
+**💡 Advanced installs:** W can also run with **Nginx**, checkout [Nginx sample configuration](#nginx)
 
 Install using latest release zip
 --------------------------------
@@ -139,9 +139,9 @@ Other configurations
 
 Some documentation for non Apache based installs:
 
-### Ngnix
+### Nginx
 
-Here is a sample Ngnix configuration suggested by **ppom**:
+Here is a sample nginx configuration suggested by **ppom**:
 
 ```nginx
 # Max upload size
