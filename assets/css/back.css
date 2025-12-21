@@ -68,24 +68,6 @@ main section {
     margin: 0;
 }
 
-#filter fieldset[data-default="0"] legend::before {
-    content: "~ ";
-    display: inline;
-    position: absolute;
-    width: 1em;
-    left: var(--spacing);
-    text-indent: 0;
-}
-
-#filter fieldset[data-default="0"] legend {
-    text-indent: 1em;
-    position: relative;
-}
-
-#filter legend .help {
-    text-indent: 0;
-}
-
 #filter input[type="submit"] {
     width: 100%;
 }
