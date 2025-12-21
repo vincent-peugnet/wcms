@@ -14,8 +14,13 @@
                 <input type="submit" name="submit" value="filter" class="filter">
             </p>
 
-            <details <?= !$workspace->collapsemenu() && $opt->isdefault('limit') ? 'open' : '' ?>>
-                <summary>Sort</summary>
+            <details <?= $workspace->collapsemenu() || $opt->isdefault('limit') ? '' : 'open' ?>>
+                <summary>
+                    Sort
+                    <span>
+                        <?= $opt->isdefault('limit') ? '' : '<i class="fa fa-filter"></i>' ?>
+                    </span>
+                </summary>
                 <fieldset class="flexcol" data-default="<?= $opt->isdefault('limit') ? '1' : '0' ?>">
                     <p class="field">
                         <label for="sortby">Sort by</label>
@@ -42,8 +47,13 @@
                 </fieldset>
             </details>
 
-            <details <?= !$workspace->collapsemenu() && $opt->isdefault('secure') ? 'open' : '' ?>>
-                <summary>Privacy</summary>
+            <details <?= $workspace->collapsemenu() || $opt->isdefault('secure') ? '' : 'open' ?>>
+                <summary>
+                    Privacy
+                    <span>
+                        <?= $opt->isdefault('secure') ? '' : '<i class="fa fa-filter"></i>' ?>
+                    </span>
+                </summary>
                 <fieldset class="flexcol" data-default="<?= $opt->isdefault('secure') ? '1' : '0' ?>">                
                     <p class="field">
                         <label for="4">all</label>
@@ -64,8 +74,13 @@
                 </fieldset>
             </details>
 
-            <details <?= !$workspace->collapsemenu() && $opt->isdefault('tagfilter') && $opt->tagcompare() != 'EMPTY' ? 'open' : '' ?>>
-                <summary>Tags</summary>
+            <details <?= $workspace->collapsemenu() || $opt->isdefault('tagfilter') && $opt->tagcompare() != 'EMPTY' ? '' : 'open' ?>>
+                <summary>
+                    Tags
+                    <span>
+                        <?= $opt->isdefault('tagfilter') && $opt->tagcompare() != 'EMPTY' ? '' : '<i class="fa fa-filter"></i>' ?>
+                    </span>
+                </summary>
                 <fieldset class="flexcol tag" data-default="<?= $opt->isdefault('tagfilter') && $opt->tagcompare() != 'EMPTY' ? '1' : '0' ?>">
                     <input type="hidden" name="tagnot" value="0" <?= !$opt->tagnot() ? "checked" : '' ?>>
                     
@@ -105,8 +120,13 @@
                 </fieldset>
             </details>
 
-            <details <?= !$workspace->collapsemenu() && $opt->isdefault('authorfilter') && $opt->authorcompare() !== 'EMPTY' ? 'open' : '' ?>>
-                <summary>Author(s)</summary>
+            <details <?= $workspace->collapsemenu() || $opt->isdefault('authorfilter') && $opt->authorcompare() !== 'EMPTY' ? '' : 'open' ?>>
+                <summary>
+                    Author(s)
+                    <span>
+                        <?= $opt->isdefault('authorfilter') && $opt->authorcompare() !== 'EMPTY' ? '' : '<i class="fa fa-filter"></i>' ?>
+                    </span>
+                </summary>
                 <fieldset class="flexcol authors" data-default="<?= $opt->isdefault('authorfilter') && $opt->authorcompare() !== 'EMPTY' ? '1' : '0' ?>">                    
                     <div class="flexrow">
                         <p class="field">
@@ -140,8 +160,13 @@
                 </fieldset>
             </details>
 
-            <details <?= !$workspace->collapsemenu() && $opt->isdefault('since') && $opt->isdefault('until') ? 'open' : '' ?>>
-                <summary>Date & time</summary>
+            <details <?= $workspace->collapsemenu() || $opt->isdefault('since') && $opt->isdefault('until') ? '' : 'open' ?>>
+                <summary>
+                    Date & time
+                    <span>
+                        <?= $opt->isdefault('since') && $opt->isdefault('until') ? '' : '<i class="fa fa-filter"></i>' ?>
+                    </span>
+                </summary>
                 <fieldset class="flexcol" data-default="<?= $opt->isdefault('since') && $opt->isdefault('until') ? '1' : '0' ?>">
                     <p class="field">
                         <label for="since">since</label>
@@ -154,8 +179,13 @@
                 </fieldset>
             </details>
 
-            <details <?= !$workspace->collapsemenu() && $opt->isdefault('geo') ? 'open' : '' ?>>
-                <summary>Geolocalisation</summary>
+            <details <?= $workspace->collapsemenu() || $opt->isdefault('geo') ? '' : 'open' ?>>
+                <summary>
+                    Geolocalisation
+                    <span>
+                        <?= $opt->isdefault('geo') ? '' : '<i class="fa fa-filter"></i>' ?>
+                    </span>
+                </summary>
                 <fieldset class="flexcol" data-default="<?= $opt->isdefault('geo') ? '1' : '0' ?>">
                     <p class="field">
                         <input type="hidden" name="geo" value="0">
@@ -165,8 +195,13 @@
                 </fieldset>
             </details>
 
-            <details <?= !$workspace->collapsemenu() && $opt->isdefault('linkto') ? 'open' : '' ?>>
-                <summary>Internal links</summary>
+            <details <?= $workspace->collapsemenu() || $opt->isdefault('linkto') ? '' : 'open' ?>>
+                <summary>
+                    Internal links
+                    <span>
+                        <?= $opt->isdefault('linkto') ? '' : '<i class="fa fa-filter"></i>' ?>
+                    </span>
+                </summary>
                 <fieldset class="flexcol" data-default="<?= $opt->isdefault('linkto') ? '1' : '0' ?>">
                     <p class="field">
                         <label for="linkto" title="filter pages that have links pointing to the following selected page">page have a link to...</label>
@@ -183,8 +218,13 @@
                 </fieldset>
             </details>
 
-            <details <?= !$workspace->collapsemenu() && $opt->isdefault('version') ? 'open' : '' ?>>
-                <summary>Version</summary>
+            <details <?= $workspace->collapsemenu() || $opt->isdefault('version') ? '' : 'open' ?>>
+                <summary>
+                    Version
+                    <span>
+                        <?= $opt->isdefault('version') ? '' : '<i class="fa fa-filter"></i>' ?>
+                    </span>
+                </summary>
                 <fieldset class="flexcol" data-default="<?= $opt->isdefault('version') ? '1' : '0' ?>">
                     <div class="flexrow">
                         <p class="field">
@@ -203,8 +243,13 @@
                 </fieldset>
             </details>
 
-            <details <?= !$workspace->collapsemenu() && $opt->isdefault('invert') ? 'open' : '' ?>>
-                <summary>Other</summary>
+            <details <?= $workspace->collapsemenu() || $opt->isdefault('invert') ? '' : 'open' ?>>
+                <summary>
+                    Other
+                    <span>
+                        <?= $opt->isdefault('invert') ? '' : '<i class="fa fa-filter"></i>' ?>
+                    </span>
+                </summary>
                 <fieldset class="flexcol" data-default="<?= $opt->isdefault('invert') ? '1' : '0' ?>">       
                     <p class="field">
                         <input type="hidden" name="invert" value="0" <?= !$opt->invert() ? 'checked' : '' ?>>

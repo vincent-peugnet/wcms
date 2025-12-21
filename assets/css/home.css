@@ -229,6 +229,7 @@ aside details[open] summary::before { content: "- " }
     min-width: 200px;
   }
 
-#filter summary:has(+ fieldset[data-default="0"])::after {
-    content: " ▼";
+/* active filter icon */
+#filter summary span {
+    float: right;
 }
