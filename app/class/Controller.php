@@ -136,12 +136,13 @@ abstract class Controller
             throw new DomainException("missing page ID argument for 'page...' route");
         }
 
-        $helpbutton = '';
-        if (Model::idcheck(Config::helpbutton())) {
-            $helpbutton = $this->generate('pageread', ['page' => Config::helpbutton()]);
-        } else {
+        $helpbutton = Config::helpbutton();
+        $helpurl = '';
+        if (Model::idcheck($helpbutton)) {
+            $helpurl = $this->generate('pageread', ['page' => Config::helpbutton()]);
+        } elseif (!empty($helpbutton)) {
             try {
-                $helpbutton = getfirsturl(Config::helpbutton());
+                $helpurl = getfirsturl($helpbutton);
             } catch (RuntimeException $e) {
                 Logger::warning('connect page: help button URL contain invalid value: "%s"', Config::helpbutton());
             }
@@ -153,7 +154,7 @@ abstract class Controller
             [
                 'route' => $route,
                 'id' => $pageid,
-                'helpbutton' => $helpbutton,
+                'helpbutton' => $helpurl,
             ]
         );
     }
