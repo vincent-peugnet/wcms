@@ -524,6 +524,7 @@ class Modelmedia extends Model
      * @throws Missingextensionexception    If nor imagick or is installed
      * @throws ImagickException             If an error occured during IM process
      * @throws Filesystemexception          If deleting the original media failed, or if file creation failed.
+     * @throws RuntimeException             In case of other failures
      */
     private function optimizeimage(Media $media, bool $deleteoriginal = true): Media
     {
@@ -551,6 +552,9 @@ class Modelmedia extends Model
 
         if (extension_loaded('imagick')) {
             $image = new Imagick($media->getlocalpath());
+
+            image_fix_orientation_imagick($image);
+
             $image->adaptiveResizeImage(
                 min($image->getImageWidth(), $this::OPTIMIZE_IMG_MAX_WIDTH),
                 min($image->getImageHeight(), $this::OPTIMIZE_IMG_MAX_HEIGHT),
@@ -561,9 +565,16 @@ class Modelmedia extends Model
 
             $convertmediapath = $media->dir() . '/' . $media->getbasefilename() . '.webp';
             $conversionsuccess = $image->writeImage($convertmediapath);
+            Logger::info("optimized image using IMagick");
         } elseif (extension_loaded('gd')) {
             $gdfunction = $this::OPTIMIZE_IMG_ALLOWED_EXT[$media->extension()];
             $image = $gdfunction($media->getlocalpath());
+
+            if ($image === false) {
+                throw new RuntimeException("could not decode image using GD");
+            }
+
+            image_fix_orientation_gd($image, $media->getabsolutepath());
 
             $heightdiff = $media->height() - $this::OPTIMIZE_IMG_MAX_HEIGHT;
             $widthdiff = $media->width() - $this::OPTIMIZE_IMG_MAX_WIDTH;
@@ -580,6 +591,7 @@ class Modelmedia extends Model
                 $image = imagescale($image, $width, $height);
             }
             $conversionsuccess = imagewebp($image, $convertmediapath, $this::OPTIMIZE_IMG_QUALITY);
+            Logger::info("optimized image using GD");
         } else {
             throw new Missingextensionexception('Nor imagick or gd PHP extension is installed');
         }

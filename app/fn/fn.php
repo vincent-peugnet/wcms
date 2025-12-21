@@ -488,3 +488,68 @@ function is_mobile(UserAgent $ua): bool
 
     return in_array($ua->platform(), $mobileplatforms);
 }
+
+/**
+ * @param mixed $image
+ *
+ * @see https://stackoverflow.com/a/13963783
+ *
+ * @todo update $image var type when dropping PHP7.4 support *
+ */
+function image_fix_orientation_gd(&$image, string $filename): void
+{
+    $exif = exif_read_data($filename);
+
+    if (!empty($exif['Orientation'])) {
+        switch ($exif['Orientation']) {
+            case 3:
+                $image = imagerotate($image, 180, 0);
+                break;
+
+            case 6:
+                $image = imagerotate($image, -90, 0);
+                break;
+
+            case 8:
+                $image = imagerotate($image, 90, 0);
+                break;
+        }
+    }
+}
+
+/**
+ * @throws ImagickException                 in case of Imagick errors
+ *
+ * @see https://stackoverflow.com/a/13963783
+ */
+function image_fix_orientation_imagick(Imagick $image): void
+{
+    if (method_exists($image, 'getImageProperty')) {
+        $orientation = $image->getImageProperty('exif:Orientation');
+    } else {
+        $filename = $image->getImageFilename();
+
+        if (empty($filename)) {
+            $filename = 'data://image/jpeg;base64,' . base64_encode($image->getImageBlob());
+        }
+
+        $exif = exif_read_data($filename);
+        $orientation = isset($exif['Orientation']) ? $exif['Orientation'] : null;
+    }
+
+    if (!empty($orientation)) {
+        switch ($orientation) {
+            case 3:
+                $image->rotateImage('#000000', 180);
+                break;
+
+            case 6:
+                $image->rotateImage('#000000', 90);
+                break;
+
+            case 8:
+                $image->rotateImage('#000000', -90);
+                break;
+        }
+    }
+}
