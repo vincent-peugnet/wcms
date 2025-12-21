@@ -381,7 +381,7 @@ class Controllerhome extends Controller
                 $page = $this->pagemanager->renderpage(
                     $page,
                     $this->router,
-                    Config::urlchecker() ? new Serviceurlchecker(0) : 0
+                    Config::urlchecker() ? new Serviceurlchecker(0) : null
                 );
                 $this->pagemanager->update($page);
                 $count++;
