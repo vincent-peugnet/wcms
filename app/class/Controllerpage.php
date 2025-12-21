@@ -62,7 +62,6 @@ class Controllerpage extends Controller
                 return true;
             }
         } catch (RuntimeException $e) {
-            Logger::warningex($e);
             return false;
         }
     }
