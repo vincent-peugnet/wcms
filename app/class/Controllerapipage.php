@@ -106,6 +106,7 @@ class Controllerapipage extends Controllerapi
 
         try {
             $this->page->updateedited();
+            $this->page->addauthor($this->user->id()); // prevent editor from removing itself from authors
             $this->pagemanager->update($this->page);
             http_response_code(200);
             header('Content-type: application/json; charset=utf-8');

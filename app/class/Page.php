@@ -742,7 +742,12 @@ abstract class Page extends Item
      */
     public function setauthors(array $authors): void
     {
-        $this->authors = array_unique(array_values(array_filter($authors)));
+        $this->authors = array_unique(array_filter($authors, function ($id) {
+            if (!is_string($id)) {
+                return false;
+            }
+            return Model::idcheck($id);
+        }));
     }
 
     /**
@@ -872,6 +877,9 @@ abstract class Page extends Item
 
     public function addauthor(string $id): void
     {
+        if (!Model::idcheck($id)) {
+            return;
+        }
         if (!in_array($id, $this->authors)) {
             $this->authors[] = $id;
         }

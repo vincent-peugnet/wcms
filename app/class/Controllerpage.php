@@ -580,6 +580,7 @@ class Controllerpage extends Controller
 
         try {
             $this->page->updateedited();
+            $this->page->addauthor($this->user->id()); // prevent editor from removing itself from authors
             $this->pagemanager->update($this->page);
             $this->sendflashmessage('Page succesfully updated', self::FLASH_SUCCESS);
         } catch (RuntimeException $e) {
