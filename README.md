@@ -229,6 +229,18 @@ You can easily run a dev server using the `serve` target:
 
 There is an error reporting debug mode using [Whoops](https://github.com/filp/whoops). It can be enabled by setting the value of `debug` in `config.json` to one of [editors supported by Whoops](https://github.com/filp/whoops/blob/master/docs/Open%20Files%20In%20An%20Editor.md).
 
+###  extensions
+
+W detect itself if `gd` or `imagick` extensions are installed and automatically choose which one to use (it prefers ImageMagick 😋). To test what append in differents configurations, one may want to quickly enable ore disable those extensions.
+
+For example, to toggle Imagick extension on Debian/Apache install with PHP 8.1, one can use the following commands:
+
+    sudo apt remove php8.1-imagick && sudo systemctl restart apache2.service
+
+and
+
+    $ sudo apt install php8.1-imagick && sudo systemctl restart apache2.service
+
 JS development
 --------------
 
