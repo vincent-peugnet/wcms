@@ -54,7 +54,7 @@ fieldset.tag input[type="radio"], fieldset.authors input[type="radio"] {
     margin-right: -2px;
 }
 
-td label, td time, td.tag, td.description, td.secure {
+td label, td time, td.tag, td.description, td.secure, td.authors {
     white-space: nowrap;
 }
 
