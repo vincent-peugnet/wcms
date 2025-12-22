@@ -8,12 +8,18 @@ class Controllerurl extends Controller
 {
     protected Serviceurlchecker $urlmanager;
 
+
     public function __construct($router)
     {
         parent::__construct($router);
-        // Managing URLS is reserved to supereditors and above
+
+        if ($this->user->isvisitor()) {
+            http_response_code(401);
+            $this->showtemplate('connect', ['route' => 'url']);
+            exit;
+        }
         if (!$this->user->issupereditor()) {
-            http_response_code(304);
+            http_response_code(403);
             $this->showtemplate('forbidden');
             exit;
         }
