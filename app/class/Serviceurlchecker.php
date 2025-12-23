@@ -13,7 +13,7 @@ use Wcms\Exception\Missingextensionexception;
 class Serviceurlchecker
 {
     /**
-     * @var array<string, array{'response': int, 'timestamp': int, 'expire': int, 'message': ?string}> $urls
+     * @var array<string, Url> $urls
      * cached URLs
      **/
     protected array $urls = [];
@@ -54,7 +54,10 @@ class Serviceurlchecker
         }
         try {
             $urlfile = Fs::readfile(Model::URLS_FILE);
-            $this->urls = json_decode($urlfile, true);
+            $urlsdata = json_decode($urlfile, true);
+            foreach ($urlsdata as $url => $data) {
+                $this->urls[$url] = new Url($url, $data);
+            }
         } catch (Filesystemexception $e) {
             // This surely beccause the url cache file does not exist
             Logger::warningex($e);
@@ -74,7 +77,7 @@ class Serviceurlchecker
     public function check(string $url): bool
     {
         if ($this->iscachedandvalid($url)) {
-            return $this->responseisaccepted($this->urls[$url]['response']);
+            return $this->responseisaccepted($this->urls[$url]->response);
         } elseif (!$this->cacheonly) {
             $this->queue[] = $url;
         }
@@ -84,31 +87,23 @@ class Serviceurlchecker
     /**
      * Read infos about a cached URL
      *
-     * @return array{'response': int, 'timestamp': DateTimeImmutable, 'expire': DateTimeImmutable, 'message': string}
-     * Assoc array with same structure as `urls.json` file.
-     *
      * @throws RuntimeException             If the URL is not part of the cache
      */
-    public function info(string $url): array
+    public function info(string $url): Url
     {
         if (!key_exists($url, $this->urls)) {
             throw new RuntimeException('URL is not stored in cache');
         }
-        if (!isset($this->urls[$url]['response'])) {
-            throw new RuntimeException('missing response info');
-        }
 
-        $infos['response'] = $this->urls[$url]['response'];
-        $infos['timestamp'] = DateTimeImmutable::createFromFormat(
-            'U',
-            strval($this->urls[$url]['expire']),
-        );
-        $infos['expire'] = DateTimeImmutable::createFromFormat(
-            'U',
-            strval($this->urls[$url]['expire']),
-        );
-        $infos['message'] = $this->urls[$url]['message'] ?? '';
-        return $infos;
+        return $this->urls[$url];
+    }
+
+    /**
+     * @return array<string, Url>
+     */
+    public function list(): array
+    {
+        return $this->urls;
     }
 
     /**
@@ -149,7 +144,7 @@ class Serviceurlchecker
         if (!key_exists($url, $this->urls)) {
             return false;
         }
-        if ($this->urls[$url]['expire'] < time()) {
+        if ($this->urls[$url]->expire < time()) {
             return false;
         }
         return true;
@@ -248,9 +243,9 @@ class Serviceurlchecker
 
             if ($this->responseisaccepted($response) || $response === 404) {
                 $expire = time() + 80 * 24 * 3600 + rand(0, 40 * 24 * 3600); // 100 +-20 days
-            } elseif (key_exists($url, $this->urls) && !$this->responseisaccepted($this->urls[$url]['response'])) {
+            } elseif (key_exists($url, $this->urls) && !$this->responseisaccepted($this->urls[$url]->response)) {
                 // If it was already an error before: expire in twice the time since previous timestamp
-                $expire = time() + (time() - $this->urls[$url]['timestamp']) * 2;
+                $expire = time() + (time() - $this->urls[$url]->timestamp) * 2;
             } elseif ($response === 429) { // Too many request: let's expire in one hour to avoid another one
                 $expire = time() + 3600;
             } elseif ($response > 200) { // default to ten minutes for other error codes
@@ -259,12 +254,13 @@ class Serviceurlchecker
                 $expire = time() + 60;
             }
 
-            $newurls[$url] = [
+            $data = [
                 'response' => $response,
                 'timestamp' => time(),
                 'expire' => $expire,
                 'message' => $message,
             ];
+            $newurls[$url] = new Url($url, $data);
         }
 
         curl_multi_close($multihandle);

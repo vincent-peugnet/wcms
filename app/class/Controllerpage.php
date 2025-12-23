@@ -282,7 +282,7 @@ class Controllerpage extends Controller
         $datas['homebacklink'] = $backlinkopt->getaddress();
 
         $datas['urls'] = [];
-        if (count($this->page->externallinks()) > 0) {
+        if (Config::urlchecker() && count($this->page->externallinks()) > 0) {
             $urlchecker = new Serviceurlchecker();
             foreach ($this->page->externallinks() as $url => $status) {
                 try {

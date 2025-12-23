@@ -69,7 +69,11 @@
                 <ul class="externallinks">
                     <?php foreach ($page->externallinks() as $url => $status) : ?>
                         <?php if(Wcms\Config::urlchecker() && key_exists($url, $urls)) : ?>
-                            <li title="<?= $url ?>&#013;<?= $urls[$url]['response'] < 100 ? '❌' : '💡 ' . $urls[$url]['response']  ?> <?= $urls[$url]['message'] ?>&#013;⏱️ checked <?= hrdi($urls[$url]['timestamp']->diff($now)) ?> ago">
+                            <li title="🔗 <?= $url ?>&#013;
+<?= $urls[$url]->response < 100 ? '❌' : '💡 ' . $urls[$url]->response  ?> <?= $urls[$url]->message ?>&#013;
+⏱️ checked <?= hrdi($urls[$url]->timestampdate()->diff($now)) ?> ago&#013;
+⏳️ expire in <?= hrdi($urls[$url]->expiredate()->diff($now)) ?>"
+                            >
                         <?php else : ?>
                             <li title="<?= $url ?>">
                         <?php endif ?>
@@ -77,7 +81,7 @@
                                 <?= ltrim(substr($url, 6), "\/") ?>
                             </a>
                             <span>
-                                <?= is_bool($status) ? ($status ? '✅' : '💀') : '' ?>
+                                <?= is_bool($status) ? ($status ? '✅' : '💀') : '⏳️' ?>
                             </span>
                         </li>
                     <?php endforeach ?>
