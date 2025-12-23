@@ -62,6 +62,7 @@ class Routes
             ['POST', '/!media/folderdelete', 'Controllermedia#folderdelete', 'mediafolderdelete'],
             ['POST', '/!media/edit', 'Controllermedia#edit', 'mediaedit'],
             ['POST', '/!media/rename', 'Controllermedia#rename', 'mediarename'],
+            ['GET', '/!url', 'Controllerurl#desktop', 'url'],
             ['GET', '/!admin', 'Controlleradmin#desktop', 'admin'],
             ['GET', '/!admin/log', 'Controlleradmin#log', 'adminlog'],
             ['GET', '/!admin/log/download', 'Controlleradmin#logdownload', 'adminlogdownload'],
