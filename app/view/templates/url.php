@@ -46,8 +46,8 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                         <td>
                             <input type="checkbox" name="" id="">
                         </td>
-                        <td class="url" <?=  strlen($id) > 30 ? "title=\"$id\"" : '' ?>>
-                            <a href="<?= $id ?>"><?= $id ?></a>
+                        <td class="url" <?=  strlen($url->id) > 30 ? "title=\"$url->id\"" : '' ?>>
+                            <a href="<?= $url->id ?>"><?= $url->id ?></a>
                         </td>
                         <td>
                             <span class="response" <?= $url->response > 100 ? "data-httpcode=\"$url->response\"" : '' ?>>

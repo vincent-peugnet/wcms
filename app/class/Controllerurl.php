@@ -26,7 +26,9 @@ class Controllerurl extends Controller
 
     public function desktop(): void
     {
-        $urls = $this->urlmanager->list();
+        $sortby = $_GET['sortby'] ?? 'id';
+        $order = $_GET['order'] ?? 1;
+        $urls = $this->urlmanager->list($sortby, $order);
         // ksort($urls);
         $urls = array_reverse($urls);
         $this->showtemplate('url', ['urls' => $urls]);

@@ -39,6 +39,14 @@ class Serviceurlchecker
         405 => null,
     ];
 
+    public const URL_SORTBY = [
+        'default' => 'default',
+        'id' => 'url',
+        'response' => 'response',
+        'timestamp' => 'last checked',
+        'expire' => 'expire',
+    ];
+
     /**
      * Tool that check for urls status, first in the cache, then on the Web
      * A timeout have to be set to limit Web checking time
@@ -101,8 +109,9 @@ class Serviceurlchecker
     /**
      * @return array<string, Url>
      */
-    public function list(): array
+    public function list(string $sortby = "id", int $order = 1): array
     {
+        $this->urllistsort($this->urls, $sortby, $order);
         return $this->urls;
     }
 
@@ -288,5 +297,33 @@ class Serviceurlchecker
     public function savecache(): void
     {
         Fs::writefile(Model::URLS_FILE, json_encode($this->urls, JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * Sort an array of Urls
+     *
+     * @param Url[] $urls
+     * @param string $sortby
+     * @param int $order                    Can be 1 or -1
+     */
+    protected function urllistsort(array &$urls, string $sortby = 'id', int $order = 1): void
+    {
+        $sortby = (key_exists($sortby, self::URL_SORTBY)) ? $sortby : 'id';
+        $order = ($order === 1 || $order === -1) ? $order : 1;
+        uasort($urls, $this->buildsorter($sortby, $order));
+    }
+
+    protected function buildsorter(string $sortby, int $order): callable
+    {
+        return function (Url $url1, Url $url2) use ($sortby, $order) {
+            $result = $this->urlcompare($url1, $url2, $sortby, $order);
+            return $result;
+        };
+    }
+
+    protected function urlcompare(Url $url1, Url $url2, string $property = 'id', int $order = 1): int
+    {
+        $result = ($url1->$property <=> $url2->$property);
+        return $result * $order;
     }
 }
