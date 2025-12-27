@@ -14,13 +14,21 @@
             <?php endif ?>
         </form>
 
-        <?php if($user->iseditor()) : ?>                
+        <?php if($user->iseditor()) : ?>
             <a href="<?= $this->url('home') ?>" <?= $tab == 'home' ? 'class="currentpage"' : '' ?>>
                 <i class="fa fa-home"></i> <span>home</span>
             </a>
             <a href="<?= $this->url('media') ?>" <?= $tab == 'media' ? 'class="currentpage"' : '' ?>>
-                <i class="fa fa-link"></i> <span>media</span>
+                <i class="fa fa-folder"></i> <span>media</span>
             </a>
+        <?php endif ?>
+
+
+        <?php if($user->issupereditor()) : ?>
+            <a href="<?= $this->url('url') ?>" <?= $tab == 'url' ? 'class="currentpage"' : '' ?>>
+                <i class="fa fa-link"></i> <span>link</span>
+            </a>
+
         <?php endif ?>
 
         <?php if (Wcms\Config::homepage() === Wcms\Config::HOMEPAGE_REDIRECT && !empty(Wcms\Config::homeredirect())) : ?>

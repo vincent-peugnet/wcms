@@ -5,7 +5,7 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
 
 <?php $this->start('page') ?>
 
-<?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'home', 'pagelist' => $pagelist]) ?>
+<?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'url', 'pagelist' => $pagelist]) ?>
 
 
 <main class="url">
