@@ -7,6 +7,7 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
 
 <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'url', 'pagelist' => $pagelist]) ?>
 
+<?php $this->insert('urlmenu', ['user' => $user]); ?>
 
 <main class="url">
     <section>

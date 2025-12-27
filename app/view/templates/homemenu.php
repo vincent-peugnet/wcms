@@ -45,16 +45,6 @@
                                 <i class="fa fa-trash"></i> Flush render cache
                             </a>
                         </p>
-                        <p class="field submit-field">
-                            <a href="<?= $this->url('flushurlcache') ?>" class="button">
-                                <i class="fa fa-trash"></i> Flush URL cache
-                            </a>
-                        </p>
-                        <p class="field submit-field">
-                            <a href="<?= $this->url('cleanurlcache') ?>" class="button">
-                                <i class="fa fa-recycle"></i> Clean URL cache
-                            </a>
-                        </p>
                     </div>
                 </div>
 
