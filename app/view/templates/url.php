@@ -15,11 +15,14 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
         <div class="scroll">
             <table>
                 <thead>
-                    <th>
+                    <th id="checkall">
                         x
                     </th>
                     <th>
                         URL
+                    </th>
+                    <th>
+                        link
                     </th>
                     <th>
                         response
@@ -33,22 +36,18 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                     <th>
                         expire
                     </th>
-                    <th>
-                        edit
-                    </th>
-                    <th>
-                        re-check
-                    </th>
                 </thead>
 
                 <?php foreach($urls as $id => $url) : ?>
                     <tr>
                         <td>
-                            <input type="checkbox" name="" id="">
+                            <input type="checkbox" name="id[]" id="url_<?= $url->id ?>" value="<?= $url->id ?>">
                         </td>
                         <td class="url" <?=  strlen($url->id) > 30 ? "title=\"$url->id\"" : '' ?>>
-                            <a href="<?= $url->id ?>"><?= $url->id ?></a>
+                            <label for="url_<?= $url->id ?>"><?= $url->id ?></label>
                         </td>
+                        <td>
+                            <a href="<?= $url->id ?>" class="button"><i class="fa fa-link"></i></a></td>
                         <td>
                             <span class="response" <?= $url->response > 100 ? "data-httpcode=\"$url->response\"" : '' ?>>
                                 <?= $url->response ?>
@@ -67,21 +66,15 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                                 <?= hrdi($url->expiredate()->diff($now)) ?> ago
                             <?php endif ?>
                         </td>
-                        <td>
-                            <a href="" class="button">
-                                <i class="fa fa-pencil"></i>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="" class="button">
-                                <i class="fa fa-refresh"></i>
-                            </a>
-                        </td>
                     </tr>    
                 <?php endforeach ?>
             </table>
         </div>
     </section>
 </main>
+
+<?php if(!Wcms\Config::disablejavascript()) : ?>
+    <script type="module" src="<?= Wcms\Model::jspath() ?>url.bundle.js"></script>
+<?php endif ?>
 
 <?php $this->stop('page') ?>

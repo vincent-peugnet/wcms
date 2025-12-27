@@ -1,9 +1,10 @@
 
-td.url a {
+td.url label {
     text-overflow: ellipsis;
     max-width: 500px;
     display: block;
     overflow: hidden;
+    font-family: monospace;
     white-space: nowrap;
 }
 
