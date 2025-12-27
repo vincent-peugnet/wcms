@@ -23,6 +23,20 @@
             </div>
         </details>
 
+
+        <details name="menu" id="edit" class="dropdown">
+            <summary>Edit</summary>
+            <form action="<?= $this->url('urledit') ?>" method="post" id="urledit" class="dropdown-content">
+                <i>Edit selected URLs</i>
+                
+                <button type="submit" name="action" value="check">
+                    <i class="fa fa-refresh"></i>
+                    <span>re-check</span>
+                </button>
+
+            </form>
+        </details>
+
     </div>
     
 </nav>

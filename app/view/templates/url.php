@@ -41,7 +41,7 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                 <?php foreach($urls as $id => $url) : ?>
                     <tr>
                         <td>
-                            <input type="checkbox" name="id[]" id="url_<?= $url->id ?>" value="<?= $url->id ?>">
+                            <input type="checkbox" name="id[]" id="url_<?= $url->id ?>" value="<?= $url->id ?>" form="urledit">
                         </td>
                         <td class="url" <?=  strlen($url->id) > 30 ? "title=\"$url->id\"" : '' ?>>
                             <label for="url_<?= $url->id ?>"><?= $url->id ?></label>

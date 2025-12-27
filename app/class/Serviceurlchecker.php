@@ -22,7 +22,7 @@ class Serviceurlchecker
     protected array $queue = [];
 
     /** @var int $timeout before stopping Web check (in seconds) */
-    protected int $timeout;
+    public int $timeout;
 
     /** @var bool $cacheonly Limit URL checking to cache */
     protected bool $cacheonly = false;
@@ -140,9 +140,21 @@ class Serviceurlchecker
         return $removed;
     }
 
+
+    /**
+     * Check if the status of URL is cached
+     *
+     * @param string $url                   The URL to verify
+     *
+     * @return bool                         Indicate if the URL status is cached
+     */
+    public function iscached(string $url): bool
+    {
+        return key_exists($url, $this->urls);
+    }
+
     /**
      * Check if the status of URL is cached and has not expired
-     * If cache is expired, the entry is deleted
      *
      * @param string $url                   The URL to verify
      *
@@ -157,6 +169,14 @@ class Serviceurlchecker
             return false;
         }
         return true;
+    }
+
+    /**
+     * Add URL to queue
+     */
+    public function addtoqueue(string $url): void
+    {
+        $this->queue[] = $url;
     }
 
     /**

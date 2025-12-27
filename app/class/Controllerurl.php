@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use AltoRouter;
+use RuntimeException;
 
 class Controllerurl extends Controller
 {
@@ -32,5 +33,33 @@ class Controllerurl extends Controller
         // ksort($urls);
         $urls = array_reverse($urls);
         $this->showtemplate('url', ['urls' => $urls]);
+    }
+
+    public function edit(): void
+    {
+        $this->urlmanager->timeout = 6;
+        $ids = $_POST['id'] ?? [];
+
+        if (empty($ids)) {
+            $this->sendflashmessage('no selected URL', self::FLASH_WARNING);
+            $this->routedirect('url');
+        }
+
+        foreach ($ids as $id) {
+            if (!$this->urlmanager->iscached($id)) {
+                continue;
+            }
+            $this->urlmanager->addtoqueue($id);
+        }
+        try {
+            $count = $this->urlmanager->processqueue();
+            $this->urlmanager->savecache();
+            $this->sendflashmessage("$count URL(s) were processed", self::FLASH_SUCCESS);
+        } catch (RuntimeException $e) {
+            Logger::errorex($e);
+            $this->sendflashmessage('an error occured: ' . $e->getMessage(), self::FLASH_ERROR);
+        }
+
+        $this->routedirect('url');
     }
 }
