@@ -1,6 +1,6 @@
 <?php
 
-$this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css . 'back.css'], 'theme' => $theme]) ?>
+$this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css . 'back.css', $css . 'url.css'], 'theme' => $theme]) ?>
 
 
 <?php $this->start('page') ?>
@@ -46,11 +46,13 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                         <td>
                             <input type="checkbox" name="" id="">
                         </td>
-                        <td>
+                        <td class="url" <?=  strlen($id) > 30 ? "title=\"$id\"" : '' ?>>
                             <a href="<?= $id ?>"><?= $id ?></a>
                         </td>
                         <td>
-                            <?= $url->response ?>
+                            <span class="response" <?= $url->response > 100 ? "data-httpcode=\"$url->response\"" : '' ?>>
+                                <?= $url->response ?>
+                            </span>
                         </td>
                         <td>
                             <?= $url->message ?>
@@ -59,7 +61,11 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                             <?= hrdi($url->timestampdate()->diff($now)) ?> ago
                         </td>
                         <td title="<?= $this->datemedium($url->expiredate()) ?>">
-                            in <?= hrdi($url->expiredate()->diff($now)) ?>
+                            <?php if ($url->expiredate() > $now) : ?>
+                                in <?= hrdi($url->expiredate()->diff($now)) ?>
+                            <?php else : ?>
+                                <?= hrdi($url->expiredate()->diff($now)) ?> ago
+                            <?php endif ?>
                         </td>
                         <td>
                             <a href="" class="button">

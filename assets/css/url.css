@@ -1,0 +1,19 @@
+
+td.url a {
+    text-overflow: ellipsis;
+    max-width: 500px;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.response {
+    background-color: red;
+    color: white;
+    padding: 5px;
+    border-radius: var(--radius);
+}
+
+.response[data-httpcode^="2"] {
+    background: green;
+}
