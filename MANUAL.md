@@ -455,6 +455,7 @@ Display options are :
 - modification time : display the [modification time](#datemodif) of the page.
 - author: display the [authors](#authors)
 - hide current: if checked, hide the currently browsed from the list.
+- __BETA__ show [tags](#tag) as checkboxes by adding `checkboxes=1`.
 
 Generate :
 
@@ -483,7 +484,20 @@ If you want to do this, you can use the wildcard character `*` as a value of `li
 It will be replaced by the [id](#page-id) of the currently displayed page.
 
 
+##### Tag as checkboxes (BETA)
 
+Add the `checkboxes=1` to your LIST, then you maybe able to use those classes to filter list elements:
+
+- OR filtering `w_filter-or-out`
+- AND filtering `w_filter-and-out`
+
+For example:
+
+```css
+.w_filter-or-out {
+    display: none;
+}
+```
 
 
 
