@@ -455,7 +455,7 @@ Display options are :
 - modification time : display the [modification time](#datemodif) of the page.
 - author: display the [authors](#authors)
 - hide current: if checked, hide the currently browsed from the list.
-- __BETA__ show [tags](#tag) as checkboxes by adding `checkboxes=1`.
+- __BETA__ show [tags](#tag) as checkboxes by adding `tagcheck=1`.
 
 Generate :
 
@@ -486,7 +486,7 @@ It will be replaced by the [id](#page-id) of the currently displayed page.
 
 ##### Tag as checkboxes (BETA)
 
-Add the `checkboxes=1` to your LIST, then you maybe able to use those classes to filter list elements:
+Add the `tagcheck=1` to your LIST, then you maybe able to use those classes to filter list elements:
 
 - OR filtering `w_filter-or-out`
 - AND filtering `w_filter-and-out`
