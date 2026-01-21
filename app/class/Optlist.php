@@ -19,7 +19,7 @@ class Optlist extends Optcode
     protected bool $timemodif = false;
     protected bool $author = false;
     protected bool $hidecurrent = false;
-    protected bool $tags = false;
+    protected bool $tagcheck = false;
     protected string $style = self::LIST;
 
     public const LIST = 'list';
@@ -28,6 +28,9 @@ class Optlist extends Optcode
         self::LIST => self::LIST,
         self::CARD => self::CARD,
     ];
+
+    /** @var array<string, int> $usefulltags */
+    protected array $usefulltags = [];
 
     /**
      * @param array<string, mixed> $datas
@@ -54,6 +57,9 @@ class Optlist extends Optcode
      */
     public function listhtml(array $pagelist, Page $currentpage): string
     {
+        $pagecount = count($pagelist);
+        $html = '';
+
         if ($this->hidecurrent && key_exists($currentpage->id(), $pagelist)) {
             unset($pagelist[$currentpage->id()]);
         }
@@ -154,13 +160,66 @@ class Optlist extends Optcode
                     $thumbnail->setAttribute('alt', htmlspecialchars($page->title()));
                     $parent->appendChild($thumbnail);
                 }
+                if ($this->tagcheck) {
+                    $tags = $page->tag();
+                    $this->addusefulltags($tags);
+                    foreach ($tags as $tag) {
+                        $parent->setAttribute("data-tag_$tag", '1');
+                    }
+                }
             }
-
             $dom->appendChild($ul);
 
-            return $dom->saveHTML($dom->documentElement);
+            if ($this->tagcheck) {
+                $hash = crc32(serialize($this));
+                $domform = new DOMDocument('1.0', 'UTF-8');
+                $form = $domform->createElement('form');
+                $form->setAttribute('class', 'tagcheck');
+                $form->setAttribute('id', "tagcheck-$hash");
+                foreach ($this->usefulltags as $tag => $count) {
+                    if ($count === $pagecount) {
+                        continue; // skip this tag as it's used by all pages
+                    }
+                    $span = $domform->createElement('span');
+                    $span->setAttribute('class', "tag_$tag");
+                    $id = "tagcheck-$hash-tag_$tag";
+                    $input = $domform->createElement('input');
+                    $input->setAttribute('id', $id);
+                    $input->setAttribute('value', $tag);
+                    $input->setAttribute('type', 'checkbox');
+                    $label = $domform->createElement('label', $tag);
+                    $label->setAttribute('for', $id);
+                    $span->appendChild($input);
+                    $span->appendChild($label);
+                    $form->appendChild($span);
+                }
+                $domform->appendChild($form);
+                $html .= $domform->saveHTML($domform->documentElement);
+                $html .= "\n";
+            }
+
+            $html .= $dom->saveHTML($dom->documentElement);
+
+            return $html;
         } catch (DOMException $e) {
             throw new LogicException('bad DOM node used', 0, $e);
+        }
+    }
+
+    /**
+     * merge list of tags within the list of usefull tags.
+     * Tag name is key and value count the time it's used.
+     *
+     * @param string[] $tags
+     */
+    private function addusefulltags(array $tags): void
+    {
+        foreach ($tags as $tag) {
+            if (key_exists($tag, $this->usefulltags)) {
+                $this->usefulltags[$tag] ++;
+            } else {
+                $this->usefulltags[$tag] = 1;
+            }
         }
     }
 
@@ -215,6 +274,11 @@ class Optlist extends Optcode
         return $this->hidecurrent;
     }
 
+    public function tagcheck(): bool
+    {
+        return $this->tagcheck;
+    }
+
     public function style(): string
     {
         return $this->style;
@@ -266,6 +330,11 @@ class Optlist extends Optcode
     public function sethidecurrent(bool $hidecurrent): void
     {
         $this->hidecurrent = $hidecurrent;
+    }
+
+    public function settagcheck(bool $tagcheck): void
+    {
+        $this->tagcheck = $tagcheck;
     }
 
     public function setstyle(string $style): void
