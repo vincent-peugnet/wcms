@@ -997,15 +997,24 @@ abstract class Servicerender
 
         $formatermedium = new IntlDateFormatter(Config::lang(), IntlDateFormatter::MEDIUM, IntlDateFormatter::MEDIUM);
 
+        $usermanager = new Modeluser();
+
         $com = '';
         foreach ($this->page->comments() as $key => $comment) {
+            try {
+                $user = $usermanager->get($comment->username());
+                $username = $this->user($user);
+            } catch (\Throwable $th) {
+                $username = $comment->username();
+            }
+
             $com .= sprintf(
                 '<li id="comment-%d"><a href="%s#comment-%d">%04d</a> - <strong>%s</strong> <em>%s</em><p>%s</p></li>',
                 $key,
                 $this->page->id(),
                 $key,
                 $key,
-                $comment->username(),
+                $username,
                 $formatermedium->format($comment->date()),
                 $comment->message(),
             );
