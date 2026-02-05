@@ -590,6 +590,33 @@ class Controllerpage extends Controller
         $this->routedirect('pageedit', ['page' => $this->page->id()]);
     }
 
+    public function comment(string $page): never
+    {
+        $this->setpage($page, 'pageupdate');
+
+        if (!$this->importpage()) {
+            $this->showtemplate('forbidden');
+        }
+
+        if ($this->user->isvisitor()) {
+            $this->showtemplate('forbidden');
+        }
+
+        $comment = new Comment($_POST);
+        $comment->setdate(new DateTimeImmutable());
+        $comment->setusername($this->user->id());
+
+        try {
+            $this->page->addcomment($comment);
+            $this->pagemanager->update($this->page);
+            Logger::info('new comment on page "%s"', $this->page->id());
+        } catch (Databaseexception $e) {
+            Logger::errorex($e);
+        }
+
+        $this->routedirect('pageread', ['page' => $this->page->id()]);
+    }
+
     /**
      * Permanent redirection to a page.
      * Send a `301` HTTP code.

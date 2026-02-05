@@ -92,11 +92,12 @@ class Routes
             ['GET', '/[cid:page]/logout', 'Controllerpage#logout', 'pagelogout'],
             ['GET', '/[cid:page]/login', 'Controllerpage#login', 'pagelogin'],
             ['POST', '/[cid:page]/edit', 'Controllerpage#update', 'pageupdate'],
-            ['POST', '/workspace/update', 'Controllerworkspace#update', 'workspaceupdate'],
+            ['POST', '/[cid:page]/comment', 'Controllerpage#comment', 'pagecomment'],
             ['GET', '/[cid:page]/delete', 'Controllerpage#delete', 'pagedelete'],
             ['POST', '/[cid:page]/delete', 'Controllerpage#confirmdelete', 'pageconfirmdelete'],
             ['GET', '/[cid:page]/duplicate:[noslash:duplicate]', 'Controllerpage#duplicate', 'pageduplicate'],
             ['GET', '/[cid:page]/[*:command]', 'Controllerpage#commandnotfound', 'pageread/etoile'],
+            ['POST', '/workspace/update', 'Controllerworkspace#update', 'workspaceupdate'],
         ]);
 
         $match = $router->match();
