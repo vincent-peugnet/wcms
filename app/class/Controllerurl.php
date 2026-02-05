@@ -28,12 +28,11 @@ class Controllerurl extends Controller
 
     public function desktop(): void
     {
-        $sortby = $_GET['sortby'] ?? 'id';
+        $sortby = $_GET['sortby'] ?? 'timestamp';
         $order = $_GET['order'] ?? 1;
         $urls = $this->urlmanager->list($sortby, $order);
-        // ksort($urls);
         $urls = array_reverse($urls);
-        $this->showtemplate('url', ['urls' => $urls]);
+        $this->showtemplate('url', ['urls' => $urls, 'sortby' => $sortby, 'reverseorder' => $order * -1]);
     }
 
     public function edit(): void

@@ -19,22 +19,34 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                         x
                     </th>
                     <th>
-                        URL
+                        <a href="<?= $this->url('url', [], "?sortby=id&order=$reverseorder") ?>">URL</a>
+                        <?php if($sortby === 'id') : ?>
+                            <i class="fa fa-sort-<?= $reverseorder > 0 ? 'asc' : 'desc' ?>"></i>
+                        <?php endif ?>
                     </th>
                     <th>
                         link
                     </th>
                     <th>
-                        response
+                        <a href="<?= $this->url('url', [], "?sortby=response&order=$reverseorder") ?>">response</a>
+                        <?php if($sortby === 'response') : ?>
+                            <i class="fa fa-sort-<?= $reverseorder > 0 ? 'asc' : 'desc' ?>"></i>
+                        <?php endif ?>
                     </th>
                     <th>
                         message
                     </th>
                     <th>
-                        last checked
+                        <a href="<?= $this->url('url', [], "?sortby=timestamp&order=$reverseorder") ?>">last checked</a>
+                        <?php if($sortby === 'timestamp') : ?>
+                            <i class="fa fa-sort-<?= $reverseorder > 0 ? 'asc' : 'desc' ?>"></i>
+                        <?php endif ?>
                     </th>
                     <th>
-                        expire
+                        <a href="<?= $this->url('url', [], "?sortby=expire&order=$reverseorder") ?>">expire</a>
+                        <?php if($sortby === 'expire') : ?>
+                            <i class="fa fa-sort-<?= $reverseorder > 0 ? 'asc' : 'desc' ?>"></i>
+                        <?php endif ?>
                     </th>
                 </thead>
 
