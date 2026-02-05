@@ -11,7 +11,7 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
 
 <main class="url">
     <section>
-        <h2>Urls</h2>
+        <h2>Urls (<?= $total ?>)</h2>
         <div class="scroll">
             <table>
                 <thead>
@@ -29,7 +29,7 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                     </th>
                     <th>
                         <a href="<?= $this->url('url', [], "?sortby=accepted&order=$reverseorder") ?>">
-                            <i class="fa fa-heart"></i>
+                            <i class="fa fa-heartbeat"></i>
                         </a>
                         <?php if($sortby === 'accepted') : ?>
                             <i class="fa fa-sort-<?= $reverseorder > 0 ? 'asc' : 'desc' ?>"></i>
@@ -85,7 +85,7 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                             <?php if ($url->expiredate() > $now) : ?>
                                 in <?= hrdi($url->expiredate()->diff($now)) ?>
                             <?php else : ?>
-                                <?= hrdi($url->expiredate()->diff($now)) ?> ago
+                                expired
                             <?php endif ?>
                         </td>
                     </tr>    

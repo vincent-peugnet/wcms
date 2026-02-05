@@ -32,7 +32,12 @@ class Controllerurl extends Controller
         $order = $_GET['order'] ?? 1;
         $urls = $this->urlmanager->list($sortby, $order);
         $urls = array_reverse($urls);
-        $this->showtemplate('url', ['urls' => $urls, 'sortby' => $sortby, 'reverseorder' => $order * -1]);
+        $this->showtemplate('url', [
+            'urls' => $urls,
+            'sortby' => $sortby,
+            'reverseorder' => $order * -1,
+            'total' => count($urls),
+        ]);
     }
 
     public function edit(): void
