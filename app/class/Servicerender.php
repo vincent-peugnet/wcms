@@ -8,6 +8,7 @@ use DOMElement;
 use DOMNodeList;
 use DOMXPath;
 use Exception;
+use IntlDateFormatter;
 use InvalidArgumentException;
 use LogicException;
 use Michelf\MarkdownExtra;
@@ -338,6 +339,7 @@ abstract class Servicerender
         $text = $this->randomopt($text);
         $text = $this->authors($text);
         $text = $this->authenticate($text);
+        $text = $this->comments($text);
         return $text;
     }
 
@@ -982,6 +984,35 @@ abstract class Servicerender
             return $form;
         }, $text);
         return $text;
+    }
+
+    protected function comments(string $text): string
+    {
+        preg_match_all('$%COMMENTS%$', $text, $matches);
+
+        if (empty($matches[0])) {
+            return $text;
+        }
+
+
+        $formatermedium = new IntlDateFormatter(Config::lang(), IntlDateFormatter::MEDIUM, IntlDateFormatter::MEDIUM);
+
+        $com = '';
+        foreach ($this->page->comments() as $key => $comment) {
+            $com .= sprintf(
+                '<li id="comment-%d"><a href="%s#comment-%d">%04d</a> - <strong>%s</strong> <em>%s</em><p>%s</p></li>',
+                $key,
+                $this->page->id(),
+                $key,
+                $key,
+                $comment->username(),
+                $formatermedium->format($comment->date()),
+                $comment->message(),
+            );
+        }
+        $com = "<ul>$com</ul>";
+
+        return str_replace('%COMMENTS%', $com, $text);
     }
 
     /**
