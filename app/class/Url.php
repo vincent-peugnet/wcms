@@ -11,6 +11,7 @@ class Url extends Item
     public int $timestamp = 0;
     public int $expire = 0;
     public string $message = '';
+    public bool $accepted;
 
     /**
      * @param array<string, mixed> $data
@@ -19,6 +20,7 @@ class Url extends Item
     {
         $this->id = $url;
         $this->hydrate($data);
+        $this->accepted = Serviceurlchecker::responseisaccepted($this->response);
     }
 
     public function timestampdate(): DateTimeImmutable

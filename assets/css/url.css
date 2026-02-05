@@ -8,13 +8,6 @@ td.url label {
     white-space: nowrap;
 }
 
-.response {
-    background-color: red;
-    color: white;
-    padding: 5px;
-    border-radius: var(--radius);
-}
-
-.response[data-httpcode^="2"] {
-    background: green;
+table td.timestamp, table td.expire {
+    white-space: nowrap;
 }

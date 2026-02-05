@@ -28,7 +28,15 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                         link
                     </th>
                     <th>
-                        <a href="<?= $this->url('url', [], "?sortby=response&order=$reverseorder") ?>">response</a>
+                        <a href="<?= $this->url('url', [], "?sortby=accepted&order=$reverseorder") ?>">
+                            <i class="fa fa-heart"></i>
+                        </a>
+                        <?php if($sortby === 'accepted') : ?>
+                            <i class="fa fa-sort-<?= $reverseorder > 0 ? 'asc' : 'desc' ?>"></i>
+                        <?php endif ?>
+                    </th>
+                    <th>
+                        <a href="<?= $this->url('url', [], "?sortby=response&order=$reverseorder") ?>">code</a>
                         <?php if($sortby === 'response') : ?>
                             <i class="fa fa-sort-<?= $reverseorder > 0 ? 'asc' : 'desc' ?>"></i>
                         <?php endif ?>
@@ -59,19 +67,21 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                             <label for="url_<?= $url->id ?>"><?= $url->id ?></label>
                         </td>
                         <td>
-                            <a href="<?= $url->id ?>" class="button"><i class="fa fa-link"></i></a></td>
-                        <td>
-                            <span class="response" <?= $url->response > 100 ? "data-httpcode=\"$url->response\"" : '' ?>>
-                                <?= $url->response ?>
-                            </span>
+                            <a href="<?= $url->id ?>" class="button"><i class="fa fa-link"></i></a>
                         </td>
                         <td>
+                            <?= $url->accepted ? '<span title="OK">✅</span>' : '<span title="dead">💀</span>' ?>
+                        </td>
+                        <td class="response">
+                            <?= $url->response ?>
+                        </td>
+                        <td class="message">
                             <?= $url->message ?>
                         </td>
-                        <td title="<?= $this->datemedium($url->timestampdate()) ?>">
+                        <td class="timestamp" title="<?= $this->datemedium($url->timestampdate()) ?>">
                             <?= hrdi($url->timestampdate()->diff($now)) ?> ago
                         </td>
-                        <td title="<?= $this->datemedium($url->expiredate()) ?>">
+                        <td class="expire" title="<?= $this->datemedium($url->expiredate()) ?>">
                             <?php if ($url->expiredate() > $now) : ?>
                                 in <?= hrdi($url->expiredate()->diff($now)) ?>
                             <?php else : ?>

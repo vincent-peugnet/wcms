@@ -30,10 +30,8 @@ class Serviceurlchecker
     /** @var int MAX_BOUNCE limit of redirections to follow */
     public const MAX_BOUNCE = 8;
 
-    /** @var null[] URL response code considered as not dead */
+    /** @var null[] additionnal URL response codes considered as not dead */
     public const ACCEPTED_RESPONSE_CODES = [
-        200 => null,
-        204 => null,
         401 => null,
         403 => null,
         405 => null,
@@ -45,6 +43,7 @@ class Serviceurlchecker
         'response' => 'response',
         'timestamp' => 'last checked',
         'expire' => 'expire',
+        'accepted' => 'status',
     ];
 
     /**
@@ -300,12 +299,19 @@ class Serviceurlchecker
     }
 
     /**
+     * Binary response concerning the status of an URL.
+     * HTTP response code is considered OK if between 200 and 299.
+     * But also include a few white-listed exceptions.
+     *
      * @param int $response                 HTTP response code
      *
-     * @return bool                         Indicate if code mean alive or not.
+     * @return bool                         Indicate if code means alive or not.
      */
     public static function responseisaccepted(int $response): bool
     {
+        if ($response >= 200 && $response < 300) {
+            return true;
+        }
         return key_exists($response, self::ACCEPTED_RESPONSE_CODES);
     }
 
