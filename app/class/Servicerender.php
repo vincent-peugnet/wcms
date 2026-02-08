@@ -988,40 +988,24 @@ abstract class Servicerender
 
     protected function comments(string $text): string
     {
-        preg_match_all('$%COMMENTS%$', $text, $matches);
+        $matches = $this->match($text, 'COMMENTS');
 
-        if (empty($matches[0])) {
+        if (empty($matches)) {
             return $text;
         }
 
+        $searches = [];
+        $replaces = [];
 
-        $formatermedium = new IntlDateFormatter(Config::lang(), IntlDateFormatter::MEDIUM, IntlDateFormatter::MEDIUM);
 
-        $usermanager = new Modeluser();
+        foreach ($matches as $match) {
+            $commentlist = new Comments($match->readoptions());
 
-        $com = '';
-        foreach ($this->page->comments() as $key => $comment) {
-            try {
-                $user = $usermanager->get($comment->username());
-                $username = $this->user($user);
-            } catch (\Throwable $th) {
-                $username = $comment->username();
-            }
-
-            $com .= sprintf(
-                '<li id="comment-%d"><a href="%s#comment-%d">%04d</a> - <strong>%s</strong> <em>%s</em><p>%s</p></li>',
-                $key,
-                $this->page->id(),
-                $key,
-                $key,
-                $username,
-                $formatermedium->format($comment->date()),
-                $comment->message(),
-            );
+            $searches[] = $match->fullmatch();
+            $replaces[] = $commentlist->listhtml($this->page);
         }
-        $com = "<ul>$com</ul>";
 
-        return str_replace('%COMMENTS%', $com, $text);
+        return str_replace($searches, $replaces, $text);
     }
 
     /**
