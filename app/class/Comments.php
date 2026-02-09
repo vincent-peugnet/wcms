@@ -12,6 +12,7 @@ use RuntimeException;
 class Comments extends Item
 {
     protected int $order = 1;
+    protected string $id = '';
 
     /**
      * @param array<string, mixed> $data
@@ -21,14 +22,30 @@ class Comments extends Item
         $this->hydrate($data);
     }
 
+    /**
+     * @throws RuntimeException if ID param failed (page do not exist or database error)
+     */
     public function listhtml(Page $page): string
     {
         $lang = $page->lang() == '' ? Config::lang() : $page->lang();
         $datedisplayformater = new IntlDateFormatter($lang, IntlDateFormatter::SHORT, IntlDateFormatter::MEDIUM);
         $datetitleformatter = new IntlDateFormatter($lang, IntlDateFormatter::FULL, IntlDateFormatter::NONE);
+
         $usermanager = new Modeluser();
 
-        $comments = $page->comments();
+
+        if (!empty($this->id)) {
+            $pagemanager = new Modelpage(Config::pagetable());
+            try {
+                $commentspage = $pagemanager->get($this->id);
+                $comments = $commentspage->comments();
+            } catch (RuntimeException $e) {
+                throw new RuntimeException("comments inclusion: ", 0, $e);
+            }
+        } else {
+            $comments = $page->comments();
+        }
+
 
         if ($this->order === -1) {
             $comments = array_reverse($comments, true);
@@ -89,6 +106,11 @@ class Comments extends Item
         return $this->order;
     }
 
+    public function id(): string
+    {
+        return $this->id;
+    }
+
     /**
      * @param mixed $order
      */
@@ -98,5 +120,10 @@ class Comments extends Item
         if ($order == 1 || $order == -1) {
             $this->order = $order;
         }
+    }
+
+    public function setid(string $id): void
+    {
+        $this->id = $id;
     }
 }
