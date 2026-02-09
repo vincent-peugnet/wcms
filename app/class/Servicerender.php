@@ -491,6 +491,10 @@ abstract class Servicerender
             $inputs = $form->getElementsByTagName('input');
             foreach ($inputs as $input) {
                 $input->setAttribute(Servicepostprocess::DISABLED_MARKER, '1');
+
+                if ($input->getAttribute('name') === 'message' && !$input->hasAttribute('maxlength')) {
+                    $input->setAttribute('maxlength', strval(Comment::MAX_COMMENT_LENGTH));
+                }
             }
             // TODO: also add marker to buttons/textarea and inputs/buttons that are outside but have `form=ID`
 

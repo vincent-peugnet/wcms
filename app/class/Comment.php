@@ -11,7 +11,9 @@ class Comment extends Item
 {
     protected DateTimeImmutable $date;
     protected string $username;
-    protected string $message;
+    protected string $message = '';
+
+    public const MAX_COMMENT_LENGTH = 2 ** 14;
 
     // public function __construct(string $username, string $message)
     // {
@@ -59,7 +61,9 @@ class Comment extends Item
 
     public function setmessage(string $message): void
     {
-        $this->message = $message;
+        if (strlen($message) <= self::MAX_COMMENT_LENGTH) {
+            $this->message = $message;
+        }
     }
 
     /**
