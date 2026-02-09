@@ -596,10 +596,20 @@ class Controllerpage extends Controller
 
         if ($this->user->isvisitor()) {
             http_response_code(401);
+            exit;
         }
 
         if (!$this->importpage()) {
             $this->showtemplate('forbidden');
+        }
+
+        if (empty($_POST['message']) || empty($_POST['wcms-hash-protection'])) {
+            $this->routedirect('pageread', ['page' => $this->page->id()]);
+        }
+
+        if ($_POST['wcms-hash-protection'] !== secrethash($this->page->id())) {
+            http_response_code(400);
+            exit;
         }
 
         $comment = new Comment($_POST);
