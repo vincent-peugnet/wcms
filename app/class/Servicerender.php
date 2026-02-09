@@ -9,7 +9,6 @@ use DOMException;
 use DOMNodeList;
 use DOMXPath;
 use Exception;
-use IntlDateFormatter;
 use InvalidArgumentException;
 use LogicException;
 use Michelf\MarkdownExtra;
@@ -493,7 +492,7 @@ abstract class Servicerender
             foreach ($inputs as $input) {
                 $input->setAttribute(Servicepostprocess::DISABLED_MARKER, '1');
             }
-            // TODO: also add marker to buttons and inputs/buttons that are outside but have `form=ID`
+            // TODO: also add marker to buttons/textarea and inputs/buttons that are outside but have `form=ID`
 
             try {
                 $hidden = $dom->createElement('input');
@@ -1036,8 +1035,12 @@ abstract class Servicerender
         foreach ($matches as $match) {
             $commentlist = new Comments($match->readoptions());
 
-            $searches[] = $match->fullmatch();
-            $replaces[] = $commentlist->listhtml($this->page);
+            try {
+                $replaces[] = $commentlist->listhtml($this->page);
+                $searches[] = $match->fullmatch();
+            } catch (RuntimeException $e) {
+                // store the error somewhere.
+            }
         }
 
         return str_replace($searches, $replaces, $text);
