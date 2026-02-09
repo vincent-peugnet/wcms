@@ -18,9 +18,10 @@ class Servicepostprocess
     /** @var bool Indicate if the page need some specific actions like replacements */
     protected bool $action;
 
-    public const VISIT_COUNT    = '%VISITCOUNT%';
-    public const EDIT_COUNT     = '%EDITCOUNT%';
-    public const AFF_COUNT      = '%DISPLAYCOUNT%';
+    public const VISIT_COUNT     = '%VISITCOUNT%';
+    public const EDIT_COUNT      = '%EDITCOUNT%';
+    public const AFF_COUNT       = '%DISPLAYCOUNT%';
+    public const DISABLED_MARKER = 'wcms-postprocess-disabled';
 
     public const COUNTERS = [
         self::VISIT_COUNT,
@@ -74,6 +75,7 @@ class Servicepostprocess
             self::VISIT_COUNT => "<span class=\"counter visitcount\">$visitcount</span>",
             self::EDIT_COUNT => "<span class=\"counter editcount\">$editcount</span>",
             self::AFF_COUNT => "<span class=\"counter displaycount\">$displaycount</span>",
+            self::DISABLED_MARKER . '="1"' => $this->user->isvisitor() ? 'disabled' : '',
         ];
         return strtr($text, $replacements);
     }
