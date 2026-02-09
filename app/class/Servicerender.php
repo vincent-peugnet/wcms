@@ -5,6 +5,7 @@ namespace Wcms;
 use AltoRouter;
 use DOMDocument;
 use DOMElement;
+use DOMException;
 use DOMNodeList;
 use DOMXPath;
 use Exception;
@@ -485,23 +486,26 @@ abstract class Servicerender
             $action = $form->getAttribute('action');
             $idregex = Model::ID_REGEX;
             $match = preg_match("%^($idregex)\/comment$%", $action, $matches);
-            if ($match === false || $match === 0) {
-                continue;
+            if ($match === false || $match === 0 || $matches[1] !== $this->page->id()) {
+                continue; // Comment form action must match it's page
             }
-            try {
-                $page = $this->pagemanager->get($matches[1]);
-                if ($page->id() !== $this->page->id()) {
-                    continue; // Comment form action must match it's page
-                }
-                $inputs = $form->getElementsByTagName('input');
-                foreach ($inputs as $input) {
-                    $input->setAttribute(Servicepostprocess::DISABLED_MARKER, '1');
-                }
+            $inputs = $form->getElementsByTagName('input');
+            foreach ($inputs as $input) {
+                $input->setAttribute(Servicepostprocess::DISABLED_MARKER, '1');
+            }
+            // TODO: also add marker to buttons and inputs/buttons that are outside but have `form=ID`
 
-                $this->postprocessaction = true;
-            } catch (RuntimeException $e) {
-                continue;
+            try {
+                $hidden = $dom->createElement('input');
+                $hidden->setAttribute('type', 'hidden');
+                $hidden->setAttribute('name', 'wcms-hash-protection'); // TODO: replace with a constant
+                $hidden->setAttribute('value', secrethash($this->page->id()));
+                $form->appendChild($hidden);
+            } catch (DOMException $e) {
+                throw new LogicException('bad DOM node used', 0, $e);
             }
+
+            $this->postprocessaction = true;
         }
 
 
