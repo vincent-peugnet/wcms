@@ -138,7 +138,7 @@ abstract class Servicerender
 
         $body = $this->bodyconstructor($this->readbody());
         $parsebody = $this->bodyparser($body);
-        $this->postprocessaction = $this->checkpostprocessaction($parsebody);
+        $this->checkpostprocessaction($parsebody);
         $head = $this->gethead();
 
         $lang = !empty($this->page->lang()) ? $this->page->lang() : Config::lang();
@@ -475,6 +475,35 @@ abstract class Servicerender
                 $link->setAttribute('class', implode(' ', array_unique($classes)));
             }
         }
+
+        // Check presence of comment forms
+        $forms = $dom->getElementsByTagName('form');
+        foreach ($forms as $form) {
+            if (!$form->hasAttribute('action')) {
+                continue;
+            }
+            $action = $form->getAttribute('action');
+            $idregex = Model::ID_REGEX;
+            $match = preg_match("%^($idregex)\/comment$%", $action, $matches);
+            if ($match === false || $match === 0) {
+                continue;
+            }
+            try {
+                $page = $this->pagemanager->get($matches[1]);
+                if ($page->id() !== $this->page->id()) {
+                    continue; // Comment form action must match it's page
+                }
+                $inputs = $form->getElementsByTagName('input');
+                foreach ($inputs as $input) {
+                    $input->setAttribute(Servicepostprocess::DISABLED_MARKER, '1');
+                }
+
+                $this->postprocessaction = true;
+            } catch (RuntimeException $e) {
+                continue;
+            }
+        }
+
 
         // check for URLs that where not cached
         try {
@@ -936,11 +965,13 @@ abstract class Servicerender
     /**
      * Check if the page need post processing by looking for patterns
      */
-    protected function checkpostprocessaction(string $text): bool
+    protected function checkpostprocessaction(string $text): void
     {
         $counterpaterns = Servicepostprocess::COUNTERS;
         $pattern = implode('|', $counterpaterns);
-        return boolval(preg_match("#($pattern)#", $text));
+        if (boolval(preg_match("#($pattern)#", $text))) {
+            $this->postprocessaction = true;
+        }
     }
 
     /**

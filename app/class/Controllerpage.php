@@ -594,11 +594,11 @@ class Controllerpage extends Controller
     {
         $this->setpage($page, 'pageupdate');
 
-        if (!$this->importpage()) {
-            $this->showtemplate('forbidden');
+        if ($this->user->isvisitor()) {
+            http_response_code(401);
         }
 
-        if ($this->user->isvisitor()) {
+        if (!$this->importpage()) {
             $this->showtemplate('forbidden');
         }
 
