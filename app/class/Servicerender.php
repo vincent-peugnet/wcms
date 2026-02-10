@@ -488,15 +488,48 @@ abstract class Servicerender
             if ($match === false || $match === 0 || $matches[1] !== $this->page->id()) {
                 continue; // Comment form action must match it's page
             }
-            $inputs = $form->getElementsByTagName('input');
-            foreach ($inputs as $input) {
-                $input->setAttribute(Servicepostprocess::DISABLED_MARKER, '1');
 
-                if ($input->getAttribute('name') === 'message' && !$input->hasAttribute('maxlength')) {
-                    $input->setAttribute('maxlength', strval(Comment::MAX_COMMENT_LENGTH));
+            // Add a replacable disabled marker on inputs (will be replaced as)
+            $disableds = [];
+
+            // select form descendants input/textarea/button/select elements
+            $disableds[] = $form->getElementsByTagName('input');
+            $disableds[] = $form->getElementsByTagName('textarea');
+            $disableds[] = $form->getElementsByTagName('button');
+            $disableds[] = $form->getElementsByTagName('select');
+
+            // select input/textarea/button/select associated elements that use `form=ID`
+            if ($form->hasAttribute('id')) {
+                $i = $form->getAttribute('id');
+                $selector = new DOMXPath($dom);
+                $q = "//input[@form='$i'] | //textarea[@form='$i'] | //button[@form='$i'] | //select[@form='$i']";
+                $disableds[] = $selector->query($q);
+            }
+
+            foreach ($disableds as $elements) {
+                foreach ($elements as $element) {
+                    if (!($element instanceof DOMElement)) {
+                        continue;
+                    }
+                    $element->setAttribute(Servicepostprocess::DISABLED_MARKER, '1');
+
+                    // Manage maxlength attribute
+                    if ($element->getAttribute('name') !== 'message') {
+                        continue;
+                    }
+
+                    if (!$element->hasAttribute('maxlength')) {
+                        $element->setAttribute('maxlength', strval(Comment::MAX_COMMENT_LENGTH));
+                        continue;
+                    }
+
+                    $maxlength = $element->getAttribute('maxlength');
+                    if (intval($maxlength) > Comment::MAX_COMMENT_LENGTH) {
+                        $element->setAttribute('maxlength', strval(Comment::MAX_COMMENT_LENGTH));
+                        continue;
+                    }
                 }
             }
-            // TODO: also add marker to buttons/textarea and inputs/buttons that are outside but have `form=ID`
 
             try {
                 $hidden = $dom->createElement('input');
