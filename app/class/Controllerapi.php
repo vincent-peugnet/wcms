@@ -67,17 +67,20 @@ class Controllerapi extends Controller
     }
 
     /**
-     * Send `400` HTTP Error if the JSON decoding failed
-     *
      * @return array<string, mixed>
+     *
+     * @throws RuntimeException if JSON decoding failed
      */
     protected function recievejson(): array
     {
         $json = $this->getrequestbody();
+        if (empty($json)) {
+            return []; // empty string cause a JSON decoding error
+        }
         try {
             $datas = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
-            $this->shortresponse(400, "Json decoding error: " . $e->getMessage());
+            throw new RuntimeException("Json decoding error: $e");
         }
         return $datas;
     }

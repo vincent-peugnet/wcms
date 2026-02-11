@@ -13,13 +13,13 @@ class Controllerapiconnect extends Controllerapi
 
     public function auth(): never
     {
-        $data = $this->recievejson();
-        if (!isset($data['username']) || !isset($data['password'])) {
-            $this->shortresponse(400, "JSON should have 'username' and 'password' keys");
-        }
-        $username = strval($data['username']);
-        $password = strval($data['password']);
         try {
+            $data = $this->recievejson();
+            if (!isset($data['username']) || !isset($data['password'])) {
+                $this->shortresponse(400, "JSON should have 'username' and 'password' keys");
+            }
+            $username = strval($data['username']);
+            $password = strval($data['password']);
             $user = $this->connectmanager->login($username, $password);
             $msg = date('Y-m-d') . '/' . $_SERVER['HTTP_USER_AGENT'];
             $wsessionid = $user->newsession($msg);
@@ -32,7 +32,7 @@ class Controllerapiconnect extends Controllerapi
             Logger::info("API auth token generated for user $username");
             exit;
         } catch (RuntimeException $e) {
-            $this->shortresponse(400, $e->getMessage());
+            $this->shortresponse(400, "authentication: $e");
         }
     }
 

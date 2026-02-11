@@ -59,7 +59,7 @@ class Controllerapipage extends Controllerapi
      * update a page
      * Check datas in request body first, then check POST datas
      *
-     * - Send `400` if no datas are send
+     * - Send `400` if no datas are send or JSON is invalid
      * - Send `401` if user can't edit page
      * - Send `404` if page is not found
      * - Send `409` in case of conflict
@@ -78,7 +78,11 @@ class Controllerapipage extends Controllerapi
         if (!empty($_POST)) {
             $datas = $_POST;
         } else {
-            $datas = $this->recievejson();
+            try {
+                $datas = $this->recievejson();
+            } catch (RuntimeException $e) {
+                $this->shortresponse(400, "page update: $e");
+            }
             if (empty($datas)) {
                 $this->shortresponse(400, "No POST or JSON datas recieved");
             }
@@ -117,11 +121,6 @@ class Controllerapipage extends Controllerapi
         }
     }
 
-    /**
-     * @throws RuntimeException when saving page fails
-     *
-     * @todo This should not throw RuntimeException but manage the exception itself and log friendly error
-     */
     public function add(string $page): void
     {
         if (!Model::idcheck($page)) {
@@ -134,18 +133,17 @@ class Controllerapipage extends Controllerapi
             $this->shortresponse(405, 'ID is already used');
         }
 
-        $this->page = $this->pagemanager->newpage(array_merge($this->recievejson(), ['id' => $page]));
-        $this->page->addauthor($this->user->id());
-        $this->pagemanager->add($this->page);
-        $user = $this->user->id();
-        Logger::info("User '$user' successfully added Page '$page'");
+        try {
+            $this->page = $this->pagemanager->newpage(array_merge($this->recievejson(), ['id' => $page]));
+            $this->page->addauthor($this->user->id());
+            $this->pagemanager->add($this->page);
+            $user = $this->user->id();
+            Logger::info("User '$user' successfully added Page '$page'");
+        } catch (RuntimeException $e) {
+            $this->shortresponse(400, "page add: $e");
+        }
     }
 
-    /**
-     * @throws RuntimeException when saving page fails
-     *
-     * @todo This should not throw RuntimeException but manage the exception itself and log friendly error
-     */
     public function put(string $page): void
     {
         if (!Model::idcheck($page)) {
@@ -158,12 +156,20 @@ class Controllerapipage extends Controllerapi
         if ($exist && !$this->canedit($this->page)) {
             $this->shortresponse(401, 'Page already exist but user cannot update it');
         }
-        $this->page = $this->pagemanager->newpage(array_merge($this->recievejson(), ['id' => $page]));
-        if (!$exist) { // If it's a page creation, add the user as an author
-            $this->page->addauthor($this->user->id());
+        try {
+            $this->page = $this->pagemanager->newpage(array_merge($this->recievejson(), ['id' => $page]));
+            if (!$exist) { // If it's a page creation, add the user as an author
+                $this->page->addauthor($this->user->id());
+            }
+            $this->pagemanager->add($this->page);
+            http_response_code($exist ? 200 : 201);
+            if ($exist) {
+                $user = $this->user->id();
+                Logger::info("User '$user' successfully added Page '$page'");
+            }
+        } catch (RuntimeException $e) {
+            $this->shortresponse(400, "page put: $e");
         }
-        $this->pagemanager->add($this->page);
-        http_response_code($exist ? 200 : 201);
     }
 
     public function delete(string $page): void
@@ -203,7 +209,11 @@ class Controllerapipage extends Controllerapi
         if (!$this->user->iseditor()) {
             $this->shortresponse(401);
         }
-        $jsondatas = $this->recievejson();
+        try {
+            $jsondatas = $this->recievejson();
+        } catch (RuntimeException $e) {
+            $this->shortresponse(400, "query: $e");
+        }
         if (empty($jsondatas) && empty($_POST)) {
             $this->shortresponse(400, "No POST or JSON datas recieved");
         }
