@@ -80,7 +80,7 @@ class Modelconnect extends Model
         if (empty(Config::secretkey())) {
             throw new RuntimeException("Secret Key not set");
         }
-        $jwt = new JWT(Config::secretkey());
+        $jwt = new JWT(Config::secretkey(), 'HS256', 3600 * 24 * 365); // expire in one year
         return $jwt->encode($datas);
     }
 
@@ -102,12 +102,16 @@ class Modelconnect extends Model
     /**
      * @return array{'userid': string, 'wsession': string}
      *
-     * @throws JWTException If JWT token decode failed
+     * @throws RuntimeException If JWT token decode failed or is expired
      */
     public function readjwt(string $token): array
     {
-        $jwt = new JWT(Config::secretkey());
-        return $jwt->decode($token);
+        try {
+            $jwt = new JWT(Config::secretkey());
+            return $jwt->decode($token);
+        } catch (JWTException $e) {
+            throw new RuntimeException($e->getMessage());
+        }
     }
 
     /**
