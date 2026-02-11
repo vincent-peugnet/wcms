@@ -30,6 +30,17 @@ class Comment extends Item
         $this->hydrate($data);
     }
 
+    public function validate(Commentconf $conf): bool
+    {
+        if (strlen($this->message) > $conf->maxlength) {
+            return false;
+        }
+        if (strlen($this->message) < $conf->minlength) {
+            return false;
+        }
+        return true;
+    }
+
 
     // GET
 

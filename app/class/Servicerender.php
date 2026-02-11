@@ -2,6 +2,7 @@
 
 namespace Wcms;
 
+use Ahc\Jwt\JWT;
 use AltoRouter;
 use DOMDocument;
 use DOMElement;
@@ -489,6 +490,11 @@ abstract class Servicerender
                 continue; // Comment form action must match it's page
             }
 
+            // form configuration
+            $formconf = [];
+            $formconf['id'] = $this->page->id();
+            $formconf['mode'] = 1; // not used yet
+
             // Add a replacable disabled marker on inputs (will be replaced as)
             $disableds = [];
 
@@ -520,25 +526,37 @@ abstract class Servicerender
 
                     if (!$element->hasAttribute('maxlength')) {
                         $element->setAttribute('maxlength', strval(Comment::MAX_COMMENT_LENGTH));
-                        continue;
+                    } else {
+                        $maxlength = intval($element->getAttribute('maxlength'));
+                        if ($maxlength > Comment::MAX_COMMENT_LENGTH) {
+                            $element->setAttribute('maxlength', strval(Comment::MAX_COMMENT_LENGTH));
+                            // TODO: store render warning: user defined maxlength is abobe backend maxlength
+                        } else {
+                            $formconf['maxlength'] = $maxlength;
+                        }
                     }
 
-                    $maxlength = $element->getAttribute('maxlength');
-                    if (intval($maxlength) > Comment::MAX_COMMENT_LENGTH) {
-                        $element->setAttribute('maxlength', strval(Comment::MAX_COMMENT_LENGTH));
-                        continue;
+                    if ($element->hasAttribute('minlength')) {
+                        $formconf['minlength'] = intval($element->getAttribute('minlength'));
                     }
                 }
             }
 
             try {
+                $exp = $this->page->cachettl() === null ? Config::cachettl() : $this->page->cachettl();
+                if ($exp === -1) {
+                    $exp = 3600 * 24 * 365 * 100; // expire in 100 years
+                } elseif ($exp < 3600 * 24) {
+                    $exp = 3600 * 24; // minimum expiration is 24h
+                }
+                $jwt = new JWT(Config::secretkey(), 'HS256', $exp);
                 $hidden = $dom->createElement('input');
                 $hidden->setAttribute('type', 'hidden');
-                $hidden->setAttribute('name', 'wcms-hash-protection'); // TODO: replace with a constant
-                $hidden->setAttribute('value', secrethash($this->page->id()));
+                $hidden->setAttribute('name', 'wcms-comment-form-configuration'); // TODO: replace with a constant
+                $hidden->setAttribute('value', $jwt->encode($formconf));
                 $form->appendChild($hidden);
             } catch (DOMException $e) {
-                throw new LogicException('bad DOM node used', 0, $e);
+                throw new LogicException('DOM: $e', 0, $e);
             }
 
             $this->postprocessaction = true;

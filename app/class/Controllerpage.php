@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use Ahc\Jwt\JWT;
+use Ahc\Jwt\JWTException;
 use AltoRouter;
 use DateTime;
 use DateTimeImmutable;
@@ -603,18 +605,36 @@ class Controllerpage extends Controller
             $this->showtemplate('forbidden');
         }
 
-        if (empty($_POST['message']) || empty($_POST['wcms-hash-protection'])) {
-            $this->routedirect('pageread', ['page' => $this->page->id()]);
+        if (!isset($_POST['wcms-comment-form-configuration'])) {
+            http_response_code(400);
+            exit;
         }
 
-        if ($_POST['wcms-hash-protection'] !== secrethash($this->page->id())) {
+        try {
+            $token = $_POST['wcms-comment-form-configuration'];
+            $jwt = new JWT(Config::secretkey());
+            $config = $jwt->decode($token);
+            $conf = new Commentconf($config);
+        } catch (JWTException | RuntimeException $e) {
             http_response_code(400);
+            exit;
+        }
+
+        if ($conf->id !== $this->page->id()) {
+            http_response_code(400); // page do not match
             exit;
         }
 
         $comment = new Comment($_POST);
         $comment->setdate(new DateTimeImmutable());
         $comment->setusername($this->user->id());
+
+        if (!$comment->validate($conf)) {
+            Logger::warning("'%s' sent a invalid comment on page '%s'", $this->user->id(), $this->page->id());
+            http_response_code(400);
+            exit;
+        }
+
 
         try {
             $this->page->addcomment($comment);
