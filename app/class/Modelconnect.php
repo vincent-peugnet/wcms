@@ -2,9 +2,10 @@
 
 namespace Wcms;
 
+use Ahc\Jwt\JWT;
+use Ahc\Jwt\JWTException;
 use DateTime;
 use donatj\UserAgent\UserAgentParser;
-use Firebase\JWT\JWT;
 use RuntimeException;
 use Wcms\Exception\Database\Notfoundexception;
 use Wcms\Exception\Databaseexception;
@@ -79,7 +80,8 @@ class Modelconnect extends Model
         if (empty(Config::secretkey())) {
             throw new RuntimeException("Secret Key not set");
         }
-        return JWT::encode($datas, Config::secretkey());
+        $jwt = new JWT(Config::secretkey());
+        return $jwt->encode($datas);
     }
 
     /**
@@ -100,12 +102,12 @@ class Modelconnect extends Model
     /**
      * @return array{'userid': string, 'wsession': string}
      *
-     * @throws RuntimeException If JWT token decode failed
+     * @throws JWTException If JWT token decode failed
      */
-    public function readjwt(string $jwt): array
+    public function readjwt(string $token): array
     {
-        $obj = JWT::decode($jwt, Config::secretkey(), ['HS256']);
-        return get_object_vars($obj);
+        $jwt = new JWT(Config::secretkey());
+        return $jwt->decode($token);
     }
 
     /**

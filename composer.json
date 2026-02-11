@@ -4,9 +4,9 @@
     "license": "AGPL-3.0-or-later",
     "require": {
         "php": ">=7.4.0",
+        "adhocore/jwt": "^1.1",
         "altorouter/altorouter": "^1.2",
         "donatj/phpuseragentparser": "^1.10",
-        "firebase/php-jwt": "^5.2",
         "jamesmoss/flywheel": "^0.5.2",
         "league/plates": "^3.3",
         "michelf/php-markdown": "^1.8",
