@@ -69,7 +69,7 @@ class Comments extends Item
 
                 try {
                     $user = $usermanager->get($comment->username());
-                    $userlink = $dom->createElement('a', $user->name());
+                    $userlink = $dom->createElement('a', empty($user->name()) ? $user->id() : $user->name());
                     if (!empty($user->url())) {
                         $userlink->setAttribute('href', $user->url());
                     }
