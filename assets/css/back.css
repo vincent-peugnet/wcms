@@ -36,12 +36,12 @@ media queries
 
 /* Display mode links */
 
-h2 a {
-    color: var(--outline-background-color);
+h2 .display a {
+    opacity: 0.4;
 }
 
-h2 a.selected, h2 a:hover {
-    color: var(--text2-color);
+h2 .display a.selected, h2 .display a:hover {
+    opacity: 1;
 }
 
 

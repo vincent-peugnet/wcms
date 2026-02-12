@@ -67,11 +67,11 @@ use Wcms\Config;
             <?php if(!empty($deepsearch)) : ?>
                 <i class="fa fa-search" title="There is active search"></i>
             <?php endif ?>
-            <span>
+            <span class="display">
                 <?php if(!Wcms\Config::disablejavascript()) : ?>
-                    <a href="?display=list" <?= $display === 'list' ? 'class="selected"' : '' ?> ><i class="fa fa-th-list"></i></a>
-                    <a href="?display=graph"  <?= $display === 'graph' ? 'class="selected"' : '' ?>  ><i class="fa fa-sitemap"></i></a>
-                    <a href="?display=map" <?= $display === 'map' ? 'class="selected"' : '' ?> ><i class="fa fa-globe"></i></a>
+                    <a href="?display=list" <?= $display === 'list' ? 'class="selected"' : '' ?> title="list"><i class="fa fa-th-list"></i></a>
+                    <a href="?display=graph"  <?= $display === 'graph' ? 'class="selected"' : '' ?> title="graph"><i class="fa fa-sitemap"></i></a>
+                    <a href="?display=map" <?= $display === 'map' ? 'class="selected"' : '' ?> title="map"><i class="fa fa-globe"></i></a>
                 <?php endif ?>
             </span>
         </h2>

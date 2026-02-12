@@ -88,11 +88,11 @@
 
         <h2>
             /<?= $mediaopt->dir() ?>
-            <span class="right">
-                <a href="<?= $mediaopt->getpathaddress() ?>&display=list" <?= $workspace->mediadisplay() === Wcms\Workspace::LIST ? 'class="selected"' : '' ?> >
+            <span class="display">
+                <a href="<?= $mediaopt->getpathaddress() ?>&display=list" <?= $workspace->mediadisplay() === Wcms\Workspace::LIST ? 'class="selected"' : '' ?> title="list">
                     <i class="fa fa-th-list"></i>
                 </a>
-                <a href="<?= $mediaopt->getpathaddress() ?>&display=gallery"  <?= $workspace->mediadisplay() === Wcms\Workspace::GALLERY ? 'class="selected"' : '' ?>  >
+                <a href="<?= $mediaopt->getpathaddress() ?>&display=gallery"  <?= $workspace->mediadisplay() === Wcms\Workspace::GALLERY ? 'class="selected"' : '' ?> title="gallery">
                     <i class="fa fa-th-large"></i>
                 </a>
             </span>
