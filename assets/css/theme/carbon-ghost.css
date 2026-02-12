@@ -1,0 +1,48 @@
+:root {
+    --text-color: black;
+    --text2-color: white;
+    --text3-color: #000000;
+    --main-color: blue;
+    --secondary-background-color: #ddd;
+    --code-background-color: black;
+    --code-color: white;
+    --primary-background-color: #fdfdfd;
+    --tertiary-background-color: #aaa;
+    --outline-background-color: blue;
+    --outline-color: #ffffff;
+    --button-background-color: #000000;
+    --button-color: #ffffff;
+    --input-color: black;
+    --input-background-color: #ffffff;
+    color-scheme: light;
+}
+
+:root {
+    --radius: 0;
+    --spacing: 7px;
+    --padding: 5px;
+    --font-family: 'IBM Plex Sans', sans;
+    --font-family: sans;
+}
+
+body {
+    font-size: 15px;
+}
+
+input, button, select, textarea, .tagify {
+    border: solid 1px;
+}
+
+main section table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+main section thead th {
+    border-bottom: solid 1px;
+}
+  
+
+#manual pre {
+    border: solid 1px;
+}
