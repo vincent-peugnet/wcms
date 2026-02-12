@@ -338,6 +338,7 @@ table a {
     gap: var(--spacing);
     overflow-x: hidden;
     position: absolute;
+    min-width: 200px;
     max-width: 350px;
     max-height: 85%;
     overflow-y: auto;
@@ -428,6 +429,10 @@ table a {
 
 #navbar {
     background-color: var(--secondary-background-color);
+}
+
+#navbar a {
+    color: var(--text-color); /* mostly used for log button in admin panel */
 }
 
 /* --------------------------------------------------------- toggle panels (collapsibles) */

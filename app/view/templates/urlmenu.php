@@ -26,15 +26,17 @@
 
         <details name="menu" id="edit" class="dropdown">
             <summary>Edit</summary>
-            <form action="<?= $this->url('urledit') ?>" method="post" id="urledit" class="dropdown-content">
-                <i>Edit selected URLs</i>
-                
-                <button type="submit" name="action" value="check">
-                    <i class="fa fa-refresh"></i>
-                    <span>re-check</span>
-                </button>
-
-            </form>
+            <div class="dropdown-content">
+                <div class="dropdown-section">
+                    <form action="<?= $this->url('urledit') ?>" method="post" id="urledit">
+                        <i>Edit selected URLs</i>
+                        <button type="submit" name="action" value="check">
+                            <i class="fa fa-refresh"></i>
+                            <span>re-check</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
         </details>
 
     </div>

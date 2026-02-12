@@ -53,9 +53,9 @@
             <details name="menu" id="edit" class="dropdown">
                 <summary>Edit</summary>
                 <form action="<?= $this->url('multi') ?>" method="post" id="multi" class="dropdown-content">
-                    <i>Edit selected pages</i>        
                     <div class="dropdown-section">
                         <h3>Edit Meta infos</h3>
+                        <i>Edit selected pages</i> 
                         <p class="field">
                             <label for="title">title</label>
                             <input type="text" name="datas[title]" id="title">

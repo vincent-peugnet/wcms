@@ -5,9 +5,14 @@ td.url label {
     display: block;
     overflow: hidden;
     font-family: monospace;
+    font-size: var(--size-small);
     white-space: nowrap;
 }
 
-table td.timestamp, table td.expire {
-    white-space: nowrap;
+span.ok {
+    color: green;
+}
+
+span.dead {
+    color: red;
 }

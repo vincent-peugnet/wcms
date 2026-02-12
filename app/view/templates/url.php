@@ -70,18 +70,18 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                             <a href="<?= $url->id ?>" class="button"><i class="fa fa-link"></i></a>
                         </td>
                         <td>
-                            <?= $url->accepted ? '<span title="OK">✅</span>' : '<span title="dead">💀</span>' ?>
+                            <?= $url->accepted ? '<span title="OK" class="ok"><i class="fa fa-check"></i></span>' : '<span title="dead" class="dead"><i class="fa fa-times"></i></span>' ?>
                         </td>
                         <td class="response">
                             <?= $url->response ?>
                         </td>
-                        <td class="message">
+                        <td class="message nowrap">
                             <?= $url->message ?>
                         </td>
-                        <td class="timestamp" title="<?= $this->datemedium($url->timestampdate()) ?>">
+                        <td class="timestamp nowrap" title="<?= $this->datemedium($url->timestampdate()) ?>">
                             <?= hrdi($url->timestampdate()->diff($now)) ?> ago
                         </td>
-                        <td class="expire" title="<?= $this->datemedium($url->expiredate()) ?>">
+                        <td class="expire nowrap" title="<?= $this->datemedium($url->expiredate()) ?>">
                             <?php if ($url->expiredate() > $now) : ?>
                                 in <?= hrdi($url->expiredate()->diff($now)) ?>
                             <?php else : ?>

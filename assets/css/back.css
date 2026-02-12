@@ -27,7 +27,6 @@ media queries
     background-color: var(--code-background-color);
     padding: 2px;
     font-family: monospace;
-    font-size: 15px;
     width: 100%;
     border: none;
     overflow: hidden;
