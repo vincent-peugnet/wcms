@@ -606,6 +606,7 @@ class Controllerpage extends Controller
         }
 
         if (!isset($_POST['wcms-comment-form-configuration'])) {
+            Logger::warning("comment on page '$page': missing config token");
             http_response_code(400);
             exit;
         }
@@ -616,11 +617,13 @@ class Controllerpage extends Controller
             $config = $jwt->decode($token);
             $conf = new Commentconf($config);
         } catch (JWTException | RuntimeException $e) {
+            Logger::warning("comment on page '$page': config error: $e");
             http_response_code(400);
             exit;
         }
 
         if ($conf->id !== $this->page->id()) {
+            Logger::warning("comment on page '$page': ID don't match");
             http_response_code(400); // page do not match
             exit;
         }
