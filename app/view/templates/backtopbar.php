@@ -23,14 +23,6 @@
             </a>
         <?php endif ?>
 
-
-        <?php if($user->issupereditor()) : ?>
-            <a href="<?= $this->url('url') ?>" <?= $tab == 'url' ? 'class="currentpage"' : '' ?>>
-                <i class="fa fa-link"></i> <span>link</span>
-            </a>
-
-        <?php endif ?>
-
         <?php if (Wcms\Config::homepage() === Wcms\Config::HOMEPAGE_REDIRECT && !empty(Wcms\Config::homeredirect())) : ?>
             <a href="<?= $this->url('pageread', ['page' => Wcms\Config::homeredirect()]) ?>" title="open landing page">
                 <i class="fa fa-external-link-square"></i>

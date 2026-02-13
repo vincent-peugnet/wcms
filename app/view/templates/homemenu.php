@@ -39,13 +39,22 @@
                     </form>
 
                     <div class="dropdown-section">
-                        <h3>Cache</h3>
+                        <h3>Pages cache</h3>
                         <p class="field submit-field">
                             <a href="<?= $this->url('flushrendercache') ?>" class="button">
                                 <i class="fa fa-trash"></i> Flush render cache
                             </a>
                         </p>
                     </div>
+
+                    <?php if (Wcms\Config::urlchecker()) : ?>
+                        <div class="dropdown-section">
+                            <h3>URL checker</h3>
+                            <a href="<?= $this->url('url') ?>" class="button">
+                                <i class="fa fa-table"></i> Manage cached URLs
+                            </a>
+                        </div>
+                    <?php endif ?>
                 </div>
 
             </details>
