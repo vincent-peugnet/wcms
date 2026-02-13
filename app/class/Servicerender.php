@@ -2,9 +2,11 @@
 
 namespace Wcms;
 
+use Ahc\Jwt\JWT;
 use AltoRouter;
 use DOMDocument;
 use DOMElement;
+use DOMException;
 use DOMNodeList;
 use DOMXPath;
 use Exception;
@@ -137,7 +139,7 @@ abstract class Servicerender
 
         $body = $this->bodyconstructor($this->readbody());
         $parsebody = $this->bodyparser($body);
-        $this->postprocessaction = $this->checkpostprocessaction($parsebody);
+        $this->checkpostprocessaction($parsebody);
         $head = $this->gethead();
 
         $lang = !empty($this->page->lang()) ? $this->page->lang() : Config::lang();
@@ -338,6 +340,7 @@ abstract class Servicerender
         $text = $this->randomopt($text);
         $text = $this->authors($text);
         $text = $this->authenticate($text);
+        $text = $this->comments($text);
         return $text;
     }
 
@@ -473,6 +476,92 @@ abstract class Servicerender
                 $link->setAttribute('class', implode(' ', array_unique($classes)));
             }
         }
+
+        // Check presence of comment forms
+        $forms = $dom->getElementsByTagName('form');
+        foreach ($forms as $form) {
+            if (!$form->hasAttribute('action')) {
+                continue;
+            }
+            $action = $form->getAttribute('action');
+            $idregex = Model::ID_REGEX;
+            $match = preg_match("%^($idregex)\/comment$%", $action, $matches);
+            if ($match === false || $match === 0 || $matches[1] !== $this->page->id()) {
+                continue; // Comment form action must match it's page
+            }
+
+            // form configuration
+            $formconf = [];
+            $formconf['id'] = $this->page->id();
+            $formconf['mode'] = 1; // not used yet
+
+            // Add a replacable disabled marker on inputs (will be replaced as)
+            $disableds = [];
+
+            // select form descendants input/textarea/button/select elements
+            $disableds[] = $form->getElementsByTagName('input');
+            $disableds[] = $form->getElementsByTagName('textarea');
+            $disableds[] = $form->getElementsByTagName('button');
+            $disableds[] = $form->getElementsByTagName('select');
+
+            // select input/textarea/button/select associated elements that use `form=ID`
+            if ($form->hasAttribute('id')) {
+                $i = $form->getAttribute('id');
+                $selector = new DOMXPath($dom);
+                $q = "//input[@form='$i'] | //textarea[@form='$i'] | //button[@form='$i'] | //select[@form='$i']";
+                $disableds[] = $selector->query($q);
+            }
+
+            foreach ($disableds as $elements) {
+                foreach ($elements as $element) {
+                    if (!($element instanceof DOMElement)) {
+                        continue;
+                    }
+                    $element->setAttribute(Servicepostprocess::DISABLED_MARKER, '1');
+
+                    // Manage maxlength attribute
+                    if ($element->getAttribute('name') !== 'message') {
+                        continue;
+                    }
+
+                    if (!$element->hasAttribute('maxlength')) {
+                        $element->setAttribute('maxlength', strval(Comment::MAX_COMMENT_LENGTH));
+                    } else {
+                        $maxlength = intval($element->getAttribute('maxlength'));
+                        if ($maxlength > Comment::MAX_COMMENT_LENGTH) {
+                            $element->setAttribute('maxlength', strval(Comment::MAX_COMMENT_LENGTH));
+                            // TODO: store render warning: user defined maxlength is abobe backend maxlength
+                        } else {
+                            $formconf['maxlength'] = $maxlength;
+                        }
+                    }
+
+                    if ($element->hasAttribute('minlength')) {
+                        $formconf['minlength'] = intval($element->getAttribute('minlength'));
+                    }
+                }
+            }
+
+            try {
+                $exp = $this->page->cachettl() === null ? Config::cachettl() : $this->page->cachettl();
+                if ($exp === -1) {
+                    $exp = 3600 * 24 * 365 * 100; // expire in 100 years
+                } elseif ($exp < 3600 * 24) {
+                    $exp = 3600 * 24; // minimum expiration is 24h
+                }
+                $jwt = new JWT(Config::secretkey(), 'HS256', $exp);
+                $hidden = $dom->createElement('input');
+                $hidden->setAttribute('type', 'hidden');
+                $hidden->setAttribute('name', 'wcms-comment-form-configuration'); // TODO: replace with a constant
+                $hidden->setAttribute('value', $jwt->encode($formconf));
+                $form->appendChild($hidden);
+            } catch (DOMException $e) {
+                throw new LogicException('DOM: $e', 0, $e);
+            }
+
+            $this->postprocessaction = true;
+        }
+
 
         // check for URLs that where not cached
         try {
@@ -934,11 +1023,13 @@ abstract class Servicerender
     /**
      * Check if the page need post processing by looking for patterns
      */
-    protected function checkpostprocessaction(string $text): bool
+    protected function checkpostprocessaction(string $text): void
     {
         $counterpaterns = Servicepostprocess::COUNTERS;
         $pattern = implode('|', $counterpaterns);
-        return boolval(preg_match("#($pattern)#", $text));
+        if (boolval(preg_match("#($pattern)#", $text))) {
+            $this->postprocessaction = true;
+        }
     }
 
     /**
@@ -982,6 +1073,32 @@ abstract class Servicerender
             return $form;
         }, $text);
         return $text;
+    }
+
+    protected function comments(string $text): string
+    {
+        $matches = $this->match($text, 'COMMENTS');
+
+        if (empty($matches)) {
+            return $text;
+        }
+
+        $searches = [];
+        $replaces = [];
+
+
+        foreach ($matches as $match) {
+            $commentlist = new Comments($match->readoptions());
+
+            try {
+                $replaces[] = $commentlist->listhtml($this->page);
+                $searches[] = $match->fullmatch();
+            } catch (RuntimeException $e) {
+                // store the error somewhere.
+            }
+        }
+
+        return str_replace($searches, $replaces, $text);
     }
 
     /**

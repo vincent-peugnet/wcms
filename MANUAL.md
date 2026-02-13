@@ -579,6 +579,44 @@ The most common usage is tu use it as a link `href`. For example, with a publish
     [RSS feed of my blog](%RSS?id=my-blog%)
 
 
+#### Comments
+
+Each page can store it's own comment database. Comments are limited to 16k characters in size.
+
+To allow comment on a page, it should have a valid [comment form](#comment-form) inside it.
+
+##### Comment form
+
+For more flexibility, comment form don't look like the traditionnal W inclusions. Instead it's based on a standard HTML form.
+
+Mandatory parts are:
+
+- form `action` should point to `PAGE_ID/comment`, using the current page ID (a good use case for [ID inclusion](#id-inclusion))
+- form `method` should be `post`
+- message must use an `input`, `textarea` or `select` element and have its `type` set to `message`
+
+The following example describe a basic comment form that can be copied in your pages.
+
+```html
+<form action="%ID%/comment" method="post">
+    <textarea name="message" placeholder="A very interesting comment..." required></textarea>
+    <input type="submit">
+</form>
+```
+
+This also work with templates.
+
+
+##### Comment list
+
+To print a list of comment on a page, use the following code.
+
+    %COMMENTS%
+
+- `id` page to use
+- `order` order of the sorting, can be `1` or `-1`
+
+It will generate an HTML list element.
 
 
 
