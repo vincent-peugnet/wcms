@@ -24,14 +24,12 @@ class Controllerapipage extends Controllerapi
     protected function importpage(string $id): bool
     {
         if (!Model::idcheck($id)) {
-            http_response_code(406);
-            return false;
+            $this->shortresponse(406, 'invalid id');
         } else {
             try {
                 $this->page = $this->pagemanager->get($id);
             } catch (RuntimeException $e) {
-                http_response_code(404);
-                return false;
+                $this->shortresponse(404, 'could not find a page with the given id');
             }
             return true;
         }
@@ -49,7 +47,7 @@ class Controllerapipage extends Controllerapi
                 echo json_encode($this->page->dry(), JSON_PRETTY_PRINT);
                 exit;
             } else {
-                $this->shortresponse(401);
+                $this->shortresponse(401, 'cannot access the page');
             }
         }
         exit;
