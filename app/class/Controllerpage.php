@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use Ahc\Jwt\JWT;
+use Ahc\Jwt\JWTException;
 use AltoRouter;
 use DateTime;
 use DateTimeImmutable;
@@ -588,6 +590,64 @@ class Controllerpage extends Controller
             Logger::error("Error while trying to update Page '$page': " . $e->getMessage());
         }
         $this->routedirect('pageedit', ['page' => $this->page->id()]);
+    }
+
+    public function comment(string $page): never
+    {
+        $this->setpage($page, 'pageupdate');
+
+        if ($this->user->isvisitor()) {
+            http_response_code(401);
+            exit;
+        }
+
+        if (!$this->importpage()) {
+            $this->showtemplate('forbidden');
+        }
+
+        if (!isset($_POST['wcms-comment-form-configuration'])) {
+            Logger::warning("comment on page '$page': missing config token");
+            http_response_code(400);
+            exit;
+        }
+
+        try {
+            $token = $_POST['wcms-comment-form-configuration'];
+            $jwt = new JWT(Config::secretkey());
+            $config = $jwt->decode($token);
+            $conf = new Commentconf($config);
+        } catch (JWTException | RuntimeException $e) {
+            Logger::warning("comment on page '$page': config error: $e");
+            http_response_code(400);
+            exit;
+        }
+
+        if ($conf->id !== $this->page->id()) {
+            Logger::warning("comment on page '$page': ID don't match");
+            http_response_code(400); // page do not match
+            exit;
+        }
+
+        $comment = new Comment($_POST);
+        $comment->setdate(new DateTimeImmutable());
+        $comment->setusername($this->user->id());
+
+        if (!$comment->validate($conf)) {
+            Logger::warning("'%s' sent a invalid comment on page '%s'", $this->user->id(), $this->page->id());
+            http_response_code(400);
+            exit;
+        }
+
+
+        try {
+            $this->page->addcomment($comment);
+            $this->pagemanager->update($this->page);
+            Logger::info('new comment on page "%s"', $this->page->id());
+        } catch (Databaseexception $e) {
+            Logger::errorex($e);
+        }
+
+        $this->routedirect('pageread', ['page' => $this->page->id()]);
     }
 
     /**

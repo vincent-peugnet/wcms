@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use DomainException;
+use RuntimeException;
 
 abstract class Page extends Item
 {
@@ -59,6 +60,9 @@ abstract class Page extends Item
     protected array $externallinks = [];
 
     protected bool $noindex = false;
+
+    /** @var array<int, Comment> */
+    protected array $comments = [];
 
     protected int $version;
 
@@ -465,6 +469,14 @@ abstract class Page extends Item
         return $this->noindex;
     }
 
+    /**
+     * @return array<int, Comment>
+     */
+    public function comments(): array
+    {
+        return $this->comments;
+    }
+
     public function version(string $type = 'int'): int
     {
         return $this->version;
@@ -841,6 +853,16 @@ abstract class Page extends Item
         $this->externallinks = $externallinks;
     }
 
+    /**
+     * @param array<int, array<string, string>> $comments
+     */
+    public function setcomments(array $comments): void
+    {
+        foreach ($comments as $id => $comment) {
+            $this->comments[$id] = new Comment($comment);
+        }
+    }
+
     public function setnoindex(bool $noindex): void
     {
         $this->noindex = $noindex;
@@ -863,6 +885,34 @@ abstract class Page extends Item
     public function addvisitcount(): void
     {
         $this->visitcount++;
+    }
+
+    public function addcomment(Comment $comment): void
+    {
+        $lastid = array_key_last($this->comments);
+        if ($lastid !== null) {
+            $id = intval($lastid) + 1;
+        } else {
+            $id = 1;
+        }
+        $this->comments[$id] = $comment;
+    }
+
+    /**
+     * @throws RuntimeException if there is no comments
+     */
+    public function lastcomment(): DateTimeImmutable
+    {
+        if (empty($this->comments)) {
+            throw new RuntimeException('No comments');
+        }
+
+        $lastid = array_key_last($this->comments);
+        $lastcomment = $this->comments[$lastid];
+
+        $date = $lastcomment->date();
+        assert($date instanceof DateTimeImmutable);
+        return $date;
     }
 
     /**

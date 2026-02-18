@@ -461,8 +461,20 @@ class Modelpage extends Modeldb
         ) {
             return true;
         }
-        if ($level >= 2 && $page->daterender() <= $page->datemodif()) {
-            return true;
+
+
+        if ($level >= 2) {
+            if ($page->daterender() <= $page->datemodif()) {
+                return true;
+            }
+
+            try {
+                if ($page->daterender() <= $page->lastcomment()) {
+                    return true;
+                }
+            } catch (RuntimeException $e) {
+                // this means Page have no comment.
+            }
         }
 
         if ($level >= 3 && !empty($page->templatebody())) {
