@@ -59,7 +59,7 @@ $this->layout('backlayout', ['title' => 'user', 'stylesheets' => [$css . 'back.c
         <h2>Users</h2>
 
         <table>
-            <thead>
+            <thead class="sticky">
                 <tr>
                     <th>id</th>
                     <th>password</th>

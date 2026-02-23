@@ -37,7 +37,7 @@
         <div class="scroll">
             <span id="top"></span>
             <table>
-                <thead>
+                <thead class="sticky">
                     <tr>
                         <th>
                             line

@@ -59,12 +59,12 @@ main section h1 {
 }
 
 #manual p {
-    line-height: 1.4em;
+    line-height: 1.6em;
     margin: 1em 0;
 }
 #manual li {
     margin: 5px 0;
-    line-height: 23px;
+    line-height: 1.6em;
 }
 
 #manual a[href^="https://"]::after {
@@ -117,7 +117,7 @@ main section h1 {
     font-size: large;
     border: solid 1px;
     width: fit-content;
-    padding: 0 3px;
+    padding: 4px 8px;
     border-left: 8px solid;
     border-color: var(--main-color);
 }

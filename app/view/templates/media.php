@@ -146,7 +146,7 @@
 
 
             <table id="medialist">
-                <thead>
+                <thead class="sticky">
                     <tr>
                         <th id="checkall">x</th>
                         <th>

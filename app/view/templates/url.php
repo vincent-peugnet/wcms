@@ -14,7 +14,7 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
         <h2>Urls (<?= $total ?>)</h2>
         <div class="scroll">
             <table>
-                <thead>
+                <thead class="sticky">
                     <th id="checkall">
                         x
                     </th>

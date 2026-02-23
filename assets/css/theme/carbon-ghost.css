@@ -22,7 +22,6 @@
     --spacing: 7px;
     --padding: 5px;
     --font-family: 'IBM Plex Sans', sans;
-    --font-family: sans;
 }
 
 body {
@@ -43,6 +42,6 @@ main section thead th {
 }
   
 
-#manual pre {
-    border: solid 1px;
+#manual pre, #manual p code {
+    border: solid 1px #999;
 }

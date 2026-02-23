@@ -159,7 +159,7 @@ use Wcms\Config;
 
             <div class="scroll">
                 <table id="home2table">
-                    <thead>
+                    <thead class="sticky">
                         <tr>
                             <?php if($user->issupereditor()) : ?><th id="checkall">x</th> <?php endif ?>
                             <?php if($columns['favicon']) : ?>
