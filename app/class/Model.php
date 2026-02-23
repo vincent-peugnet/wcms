@@ -32,9 +32,6 @@ abstract class Model
     public const PAGES_DIR = self::DATABASE_DIR . 'pages/';
     public const ERROR_LOG = 'w_error.log';
 
-    public const FILE_PERMISSION    = 0660;
-    public const FOLDER_PERMISSION  = 0770;
-
     public const METADATAS_NAMES = [
         'favicon' => 'favicon',
         'id' => 'id',

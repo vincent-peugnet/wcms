@@ -151,21 +151,22 @@ abstract class Fs
 
     /**
      * Copy folder folder files and subbfolders recursively
+     * Permission will be kept
      *
      * @param string $src source folder
      * @param string $dst destination folder
-     * @param int $perm OPTIONNAL permission in octal format.
      */
-    public static function recursecopy($src, $dst, $perm = Model::FOLDER_PERMISSION): void
+    public static function recursecopy($src, $dst): void
     {
         $dir = opendir($src);
-        mkdir($dst, $perm);
+        mkdir($dst, fileperms($src));
         while (false !== ( $file = readdir($dir))) {
             if (( $file != '.' ) && ( $file != '..' )) {
                 if (is_dir($src . '/' . $file)) {
-                    self::recursecopy($src . '/' . $file, $dst . '/' . $file, $perm);
+                    self::recursecopy($src . '/' . $file, $dst . '/' . $file);
                 } else {
                     copy($src . '/' . $file, $dst . '/' . $file);
+                    chmod($dst . '/' . $file, fileperms($src . '/' . $file));
                 }
             }
         }

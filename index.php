@@ -2,6 +2,7 @@
 
 require('./vendor/autoload.php');
 mb_internal_encoding('UTF-8');
+umask(0);
 
 use Wcms\Model;
 

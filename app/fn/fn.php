@@ -420,7 +420,7 @@ function mktmpdir(string $prefix): string
     $tmp = get_temp_dir();
     $randstr = dechex(mt_rand() % (2 << 16));
     $path = "$tmp/$prefix-$randstr";
-    if (!mkdir($path)) {
+    if (!mkdir($path, 0775)) {
         throw new Folderexception("cannot create tmp dir '$path'");
     }
     return $path;

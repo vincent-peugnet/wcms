@@ -23,6 +23,9 @@ class Modelmedia extends Model
         'extension' => 'extension'
     ];
 
+    public const MEDIA_PERMISSION        = 0664;
+    public const MEDIA_FOLDER_PERMISSION = 0775;
+
     /** Characters that are authorized for cleaned media filename */
     public const ID_AUTHORIZED_CHARS                   = 'a-z0-9-_.';
 
@@ -286,7 +289,7 @@ class Modelmedia extends Model
             throw new RuntimeException("server response is $firstheader");
         }
         $file = curl_download($url);
-        Fs::writefile($target . basename($url), $file, 0664);
+        Fs::writefile($target . basename($url), $file, self::MEDIA_PERMISSION);
     }
 
     /**
@@ -327,7 +330,10 @@ class Modelmedia extends Model
                     if ($convertimages && $media->type() === Media::IMAGE) {
                         $media = $this->optimizeimage($media);
                     }
-                    if (rename($media->getlocalpath(), $target . $media->filename())) {
+                    if (
+                        rename($media->getlocalpath(), $target . $media->filename()) &&
+                        chmod($target . $media->filename(), self::MEDIA_PERMISSION)
+                    ) {
                         $successcount++;
                     } else {
                         Logger::error('failed to move file from tmp dir to media folder');
@@ -370,7 +376,7 @@ class Modelmedia extends Model
     {
         $newdir = $dir . DIRECTORY_SEPARATOR . $name;
         if (!is_dir($newdir)) {
-            return mkdir($newdir);
+            return mkdir($newdir, self::MEDIA_FOLDER_PERMISSION);
         } else {
             return false;
         }
@@ -545,7 +551,7 @@ class Modelmedia extends Model
             }
         } catch (RuntimeException $e) {
             Logger::errorex($e);
-            return $media; // PHP could not get image dimensions. It may be beccause of supporting new formats.
+            return $media; // PHP could not get image dimensions. It may be beccause of unsupported format.
         }
 
         $convertmediapath = $media->dir() . '/' . $media->getbasefilename() . '.webp';
@@ -594,6 +600,9 @@ class Modelmedia extends Model
             Logger::info("optimized image using GD");
         } else {
             throw new Missingextensionexception('Nor imagick or gd PHP extension is installed');
+        }
+        if (!chmod($convertmediapath, self::MEDIA_PERMISSION)) {
+            throw new RuntimeException("edit file permission failed: '$convertmediapath'");
         }
 
         if ($conversionsuccess && $deleteoriginal && $convertmediapath !== $media->getlocalpath()) {
