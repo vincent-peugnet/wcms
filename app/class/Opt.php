@@ -90,6 +90,7 @@ class Opt extends Item
         'date',
         'secure',
         'authors',
+        'commentcount',
         'visitcount',
         'editcount',
         'displaycount',
