@@ -8,17 +8,24 @@
 <p>Title : <?= $this->e($page->title()) ?></p>
 <p>Number of edits : <?= $page->editcount() ?></p>
 <p>Number of displays : <?= $page->displaycount() ?></p>
+<p>Comments : <?= $page->commentcount() ?></p>
 <p>
     Page linking to this one : <?= $pageslinkingtocount ?>
 </p>
-    <?php if ($pageslinkingtocount > 0) : ?>
-        <p>
-            <a class="button" href="<?= $this->url('home', [], '?linkto=' . $page->id() . '&submit=filter') ?>" title="search for pages linking to this one in home view">
-                <i class="fa fa-search"></i>
-                explore backlinks
-            </a>
-        </p>
-    <?php endif ?>
+<?php if($page->commentcount() > 0) : ?>
+    <p>
+        <i class="fa fa-warning"></i>
+        Deleting the page will also delete all the comments.
+    </p>
+<?php endif ?>
+<?php if ($pageslinkingtocount > 0) : ?>
+    <p>
+        <a class="button" href="<?= $this->url('home', [], '?linkto=' . $page->id() . '&submit=filter') ?>" title="search for pages linking to this one in home view">
+            <i class="fa fa-search"></i>
+            explore backlinks
+        </a>
+    </p>
+<?php endif ?>
 
 <form action="<?= $this->upage('pagedelete', $page->id()) ?>" method="post">
 

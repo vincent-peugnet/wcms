@@ -96,4 +96,21 @@ class Modelcomment extends Modeldb
         }
         return get_object_vars($doc);
     }
+
+    /**
+     * delete page comments from database if it exists
+     *
+     * @throws Databaseexception            if deletion failed
+     */
+    public function delete(string $id): void
+    {
+        try {
+            $this->get($id);
+            if (!$this->repo->delete($id)) {
+                throw new Databaseexception("deleting comments for page '$id' failed");
+            }
+        } catch (Notfoundexception $e) {
+            // no need to delete it if it does not exist
+        }
+    }
 }

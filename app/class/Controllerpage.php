@@ -500,21 +500,31 @@ class Controllerpage extends Controller
             $this->showtemplate('forbidden', ['route' => 'pageread', 'id' => $this->page->id()]);
         }
 
+        /** Delete page JSON and render cache */
         try {
             $this->pagemanager->delete($this->page);
             $user = $this->user->id();
             Logger::info("User '$user' uccessfully deleted Page '$page'");
-
-            /** Delete backlinks render cache */
-            $linksto = new Opt();
-            $linksto->setlinkto($this->page->id());
-            $backlinks = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $linksto);
-            $this->removecaches($backlinks);
         } catch (Filesystemexception $e) {
             Logger::warning("Error while deleting Page '$page'" . $e->getMessage());
         } catch (Databaseexception $e) {
             Logger::error("Could not delete Page $page: " . $e->getMessage());
         }
+
+        /** Delete the associated comments if there is some */
+        try {
+            $commentmanager = new Modelcomment();
+            $commentmanager->delete($this->page->id());
+        } catch (Databaseexception $e) {
+            Logger::error("Could not delete Page $page comments: " . $e->getMessage());
+        }
+
+        /** Invalidate backlinks cache by deleting rendered files */
+        $linksto = new Opt();
+        $linksto->setlinkto($this->page->id());
+        $backlinks = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $linksto);
+        $this->removecaches($backlinks);
+
         $this->routedirect('pageread', ['page' => $this->page->id()]);
     }
 
