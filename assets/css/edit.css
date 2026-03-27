@@ -210,6 +210,38 @@ textarea#editcontent {
     color: var(--outline-color);
 }
 
+/* --------------------------------------------------------- right bar comments */
+
+.comment {
+    margin: var(--spacing);
+    margin-bottom: var(--double-spacing);
+    font-size: var(--size-small);
+}
+
+.comment .id {
+    float: right;
+}
+
+.comment .id:before {
+    content: "#";
+}
+
+.comment .message {
+    background: var(--primary-background-color);
+    color: var(--input-color);
+    padding: var(--padding);
+    margin: var(--half-spacing) 0;
+    border-radius: var(--radius);
+    white-space: break-spaces;
+    user-select: text;
+}
+
+.comment .date {
+    margin: var(--half-spacing);
+    font-size: var(--size-small);
+    text-align: right;
+}
+
 /* --------------------------------------------------------- help */
 
 #help kbd {

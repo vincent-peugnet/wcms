@@ -88,6 +88,22 @@
                 </ul>
             </details>
 
+            <details id="comments" <?= $workspace->collapsemenu() ? '' : 'open' ?>>
+                <summary>comments (<?= count($comments) ?>)</summary>
+
+                <ul>
+                    <?php foreach($comments as $id => $comment) : ?>
+                        <li class="comment">
+                            <strong class="username"><?=$comment->username() ?></strong>
+                            <span class="id"><?= $id ?></span>
+                            <div class="message"><?=$comment->message() ?></div>
+                            <div class="date"><?=$comment->date('hrdi') ?> ago</div>
+                        </li>
+                    <?php endforeach ?>
+                </ul>     
+
+            </details>
+
             <details id="help" <?= $workspace->collapsemenu() ? '' : 'open' ?>>
                 <summary>Help</summary>
                 <?php $this->insert('edithelp') ?>
