@@ -483,9 +483,17 @@ abstract class Servicerender
             if (!$form->hasAttribute('action')) {
                 continue;
             }
-            $action = $form->getAttribute('action');
-            if ($action !== '%COMMENT%') {
+            if ($form->getAttribute('action') !== '%COMMENT%') {
                 continue; // Comment form action must match it's page
+            }
+
+            try {
+                $form->setAttribute(
+                    'action',
+                    $this->router->generate('pagecomment', ['page' => $this->page->id()])
+                );
+            } catch (Exception $e) {
+                throw new LogicException($e->getMessage(), $e->getCode(), $e);
             }
 
             // form configuration
