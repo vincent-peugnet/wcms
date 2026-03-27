@@ -438,7 +438,7 @@ class Modelpage extends Modeldb
      * A page need to be rendered if:
      *
      * 1. render file(s) are missing
-     * 2. edit date is more recent than render date
+     * 2. edit or comment date is more recent than render date
      * 3. if the templatebody is set, exist and has been updated
      * 4. cache time to live is reached
      *
@@ -468,12 +468,8 @@ class Modelpage extends Modeldb
                 return true;
             }
 
-            try {
-                if ($page->daterender() <= $page->datecomment()) {
-                    return true;
-                }
-            } catch (RuntimeException $e) {
-                // this means Page have no comment.
+            if ($page->datecomment() !== null && $page->daterender() <= $page->datecomment()) {
+                return true;
             }
         }
 
