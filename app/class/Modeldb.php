@@ -49,6 +49,8 @@ class Modeldb extends Model
      * @param Document $document   Flywheel Document
      *
      * @throws Databaseexception if minimum disk space is reached or if an error occured
+     *
+     * @todo enhance exception message: refer to DB name and add document ID
      */
     protected function storedoc(DocumentInterface $document): void
     {

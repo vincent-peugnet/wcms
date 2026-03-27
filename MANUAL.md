@@ -618,6 +618,14 @@ To print a list of comment on a page, use the following code.
 
 It will generate an HTML list element.
 
+Most of the time, you may be interested to use the following line of CSS to respect line breaks.
+
+```css
+li.comment .message {
+    white-space: break-spaces;
+}
+```
+
 
 
 
