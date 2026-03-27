@@ -881,7 +881,9 @@ abstract class Page extends Item
 
     public function setcommentcount(int $commentcount): void
     {
-        $this->commentcount = $commentcount;
+        if ($commentcount >= 0) {   
+            $this->commentcount = $commentcount;
+        }
     }
 
     public function setnoindex(bool $noindex): void
