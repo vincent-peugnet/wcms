@@ -543,6 +543,8 @@ class Controllerpage extends Controller
      *
      * @param string $srcid Source page ID
      * @param string $targetid Target page ID
+     *
+     * @todo move this to Modelpage ? also the bool return seems odd
      */
     protected function copy(string $srcid, string $targetid): bool
     {
@@ -554,6 +556,8 @@ class Controllerpage extends Controller
                     $this->page->setdatecreation(true); // Reset date of creation
                     $this->page->setdatemodif(new DateTimeImmutable());
                     $this->page->setdaterender(new DateTimeImmutable());
+                    $this->page->setcommentcount(0);
+                    $this->page->setdatecomment(null);
                     $this->page->addauthor($this->user->id());
                     $this->pagemanager->add($this->page);
                     return true;
