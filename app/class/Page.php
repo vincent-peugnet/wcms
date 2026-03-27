@@ -61,8 +61,8 @@ abstract class Page extends Item
 
     protected bool $noindex = false;
 
-    /** @var array<int, Comment> */
-    protected array $comments = [];
+    protected int $commentcount = 0;
+    protected ?DateTimeImmutable $datecomment = null;
 
     protected int $version;
 
@@ -291,6 +291,17 @@ abstract class Page extends Item
         return $this->datetransform('daterender', $option);
     }
 
+    /**
+     * @return DateTimeInterface|string|null
+     */
+    public function datecomment(string $option = 'date')
+    {
+        if ($this->datecomment === null) {
+            return null;
+        }
+        return $this->datetransform('datecomment', $option);
+    }
+
     public function primary(string $type = ''): string
     {
         return '';
@@ -469,12 +480,9 @@ abstract class Page extends Item
         return $this->noindex;
     }
 
-    /**
-     * @return array<int, Comment>
-     */
-    public function comments(): array
+    public function commentcount(): int
     {
-        return $this->comments;
+        return $this->commentcount;
     }
 
     public function version(string $type = 'int'): int
@@ -643,6 +651,24 @@ abstract class Page extends Item
                 $daterender,
                 new DateTimeZone('Europe/Paris')
             );
+        }
+    }
+
+    /**
+     * @param DateTimeImmutable|string|null $datecomment
+     */
+    public function setdatecomment($datecomment): void
+    {
+        if ($datecomment instanceof DateTimeImmutable) {
+            $this->datecomment = $datecomment;
+        } elseif (is_string($datecomment)) {
+            $this->datecomment = DateTimeImmutable::createFromFormat(
+                DateTime::RFC3339,
+                $datecomment,
+                new DateTimeZone('Europe/Paris')
+            );
+        } elseif ($datecomment === null) {
+            $this->datecomment = null;
         }
     }
 
@@ -853,14 +879,9 @@ abstract class Page extends Item
         $this->externallinks = $externallinks;
     }
 
-    /**
-     * @param array<int, array<string, string>> $comments
-     */
-    public function setcomments(array $comments): void
+    public function setcommentcount(int $commentcount): void
     {
-        foreach ($comments as $id => $comment) {
-            $this->comments[$id] = new Comment($comment);
-        }
+        $this->commentcount = $commentcount;
     }
 
     public function setnoindex(bool $noindex): void
@@ -885,34 +906,6 @@ abstract class Page extends Item
     public function addvisitcount(): void
     {
         $this->visitcount++;
-    }
-
-    public function addcomment(Comment $comment): void
-    {
-        $lastid = array_key_last($this->comments);
-        if ($lastid !== null) {
-            $id = intval($lastid) + 1;
-        } else {
-            $id = 1;
-        }
-        $this->comments[$id] = $comment;
-    }
-
-    /**
-     * @throws RuntimeException if there is no comments
-     */
-    public function lastcomment(): DateTimeImmutable
-    {
-        if (empty($this->comments)) {
-            throw new RuntimeException('No comments');
-        }
-
-        $lastid = array_key_last($this->comments);
-        $lastcomment = $this->comments[$lastid];
-
-        $date = $lastcomment->date();
-        assert($date instanceof DateTimeImmutable);
-        return $date;
     }
 
     /**

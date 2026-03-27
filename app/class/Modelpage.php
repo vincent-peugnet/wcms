@@ -469,7 +469,7 @@ class Modelpage extends Modeldb
             }
 
             try {
-                if ($page->daterender() <= $page->lastcomment()) {
+                if ($page->daterender() <= $page->datecomment()) {
                     return true;
                 }
             } catch (RuntimeException $e) {

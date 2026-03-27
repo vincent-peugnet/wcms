@@ -12,7 +12,8 @@ use RuntimeException;
 class Comments extends Item
 {
     protected int $order = 1;
-    protected string $id = '';
+    protected ?string $id = null;
+    protected Modelcomment $commentmanager;
 
     /**
      * @param array<string, mixed> $data
@@ -20,6 +21,7 @@ class Comments extends Item
     public function __construct(array $data)
     {
         $this->hydrate($data);
+        $this->commentmanager = new Modelcomment();
     }
 
     /**
@@ -34,18 +36,22 @@ class Comments extends Item
         $usermanager = new Modeluser();
 
 
-        if (!empty($this->id)) {
-            $pagemanager = new Modelpage(Config::pagetable());
-            try {
-                $commentspage = $pagemanager->get($this->id);
-                $comments = $commentspage->comments();
-            } catch (RuntimeException $e) {
-                throw new RuntimeException("comments inclusion: ", 0, $e);
+        try {
+            if ($this->id !== null) {
+                $pagemanager = new Modelpage(Config::pagetable());
+                $commentpage = $pagemanager->get($this->id);
+            } else {
+                $commentpage = $page;
             }
-        } else {
-            $comments = $page->comments();
-        }
 
+            if ($commentpage->commentcount() === 0) {
+                $comments = [];
+            } else {
+                $comments = $this->commentmanager->getcomments($commentpage->id());
+            }
+        } catch (RuntimeException $e) {
+            throw new RuntimeException("comments inclusion: ", 0, $e);
+        }
 
         if ($this->order === -1) {
             $comments = array_reverse($comments, true);
