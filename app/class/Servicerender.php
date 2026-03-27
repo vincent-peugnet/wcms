@@ -484,9 +484,7 @@ abstract class Servicerender
                 continue;
             }
             $action = $form->getAttribute('action');
-            $idregex = Model::ID_REGEX;
-            $match = preg_match("%^($idregex)\/comment$%", $action, $matches);
-            if ($match === false || $match === 0 || $matches[1] !== $this->page->id()) {
+            if ($action !== '%COMMENT%') {
                 continue; // Comment form action must match it's page
             }
 

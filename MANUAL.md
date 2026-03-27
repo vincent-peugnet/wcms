@@ -591,14 +591,14 @@ For more flexibility, comment form don't look like the traditionnal W inclusions
 
 Mandatory parts are:
 
-- form `action` should point to `PAGE_ID/comment`, using the current page ID (a good use case for [ID inclusion](#id-inclusion))
+- form `action` should point to `%COMMENT%`
 - form `method` should be `post`
 - message must use an `input`, `textarea` or `select` element and have its `type` set to `message`
 
 The following example describe a basic comment form that can be copied in your pages.
 
 ```html
-<form action="%ID%/comment" method="post">
+<form action="%COMMENT%" method="post">
     <textarea name="message" placeholder="A very interesting comment..." required></textarea>
     <input type="submit">
 </form>
