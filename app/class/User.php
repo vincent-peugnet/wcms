@@ -59,6 +59,7 @@ class User extends Item
         'date',
         'secure',
         'authors',
+        'commentcount',
         'visitcount',
         'editcount',
         'displaycount',

@@ -47,6 +47,7 @@ abstract class Model
         'date' => 'date',
         'secure' => 'privacy',
         'authors' => 'authors',
+        'commentcount' => 'comments',
         'visitcount' => 'visit',
         'editcount' => 'edit',
         'displaycount' => 'display',

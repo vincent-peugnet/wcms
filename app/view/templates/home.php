@@ -238,6 +238,12 @@ use Wcms\Config;
                                     <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'authors']) ?>
                                 </th>
                             <?php endif ?>
+                            <?php if ($columns['commentcount']) : ?>
+                                <th class="commentcount">
+                                    <a href="<?= $opt->sortbyorder('commentcount') ?>">comments</a>
+                                    <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'commentcount']) ?>
+                                </th>
+                            <?php endif ?>
                             <?php if ($columns['visitcount']) : ?>
                                 <th class="visitcount">
                                     <a href="<?= $opt->sortbyorder('visitcount') ?>">visit</a>
@@ -390,6 +396,9 @@ use Wcms\Config;
                                 <?php endif ?>
                                 <?php if ($columns['authors']) : ?>
                                     <td class="authors"><?= $opt->authorlinks($item->authors('array')) ?></td>
+                                <?php endif ?>
+                                <?php if ($columns['commentcount']) : ?>
+                                    <td class="commentcount"><?= $item->commentcount() ?></td>
                                 <?php endif ?>
                                 <?php if ($columns['visitcount']) : ?>
                                     <td class="visitcount"><?= $item->visitcount() ?></td>
