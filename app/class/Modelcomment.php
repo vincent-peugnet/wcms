@@ -2,7 +2,6 @@
 
 namespace Wcms;
 
-use RuntimeException;
 use JamesMoss\Flywheel\Document;
 use Wcms\Exception\Database\Notfoundexception;
 use Wcms\Exception\Databaseexception;
