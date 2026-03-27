@@ -374,6 +374,8 @@ class Controllerpage extends Controller
 
     /**
      * @todo move the file part to Modelpage
+     * @todo reset comment count if needed -> generate the JSON instead of reading to the actual file
+     * @link https://github.com/vincent-peugnet/wcms/issues/590
      */
     public function download(string $page): never
     {
