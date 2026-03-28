@@ -483,10 +483,13 @@ abstract class Servicerender
             if (!$form->hasAttribute('action')) {
                 continue;
             }
-            if ($form->getAttribute('action') !== '%COMMENT%') {
-                continue; // Comment form action must match it's page
+
+            $matches = $this->match($form->getAttribute('action'), 'COMMENT', true);
+            if (empty($matches)) {
+                continue;
             }
 
+            // generate action route
             try {
                 $form->setAttribute(
                     'action',
@@ -496,10 +499,12 @@ abstract class Servicerender
                 throw new LogicException($e->getMessage(), $e->getCode(), $e);
             }
 
-            // form configuration
-            $formconf = [];
-            $formconf['id'] = $this->page->id();
-            $formconf['mode'] = 1; // not used yet
+            // comment form configuration
+            try {
+                $commentconf = new Commentconf($this->page->id(), $matches[0]->readoptions());
+            } catch (RuntimeException $e) {
+                continue;
+            }
 
             // Add a replacable disabled marker on inputs (will be replaced as)
             $disableds = [];
@@ -530,21 +535,15 @@ abstract class Servicerender
                         continue;
                     }
 
-                    if (!$element->hasAttribute('maxlength')) {
-                        $element->setAttribute('maxlength', strval(Comment::MAX_COMMENT_LENGTH));
-                    } else {
-                        $maxlength = intval($element->getAttribute('maxlength'));
-                        if ($maxlength > Comment::MAX_COMMENT_LENGTH) {
-                            $element->setAttribute('maxlength', strval(Comment::MAX_COMMENT_LENGTH));
-                            // TODO: store render warning: user defined maxlength is abobe backend maxlength
-                        } else {
-                            $formconf['maxlength'] = $maxlength;
-                        }
+                    if ($element->hasAttribute('maxlength')) {
+                        $commentconf->setmaxlength(intval($element->getAttribute('maxlength')));
                     }
+                    $element->setAttribute('maxlength', strval($commentconf->maxlength()));
 
                     if ($element->hasAttribute('minlength')) {
-                        $formconf['minlength'] = intval($element->getAttribute('minlength'));
+                        $commentconf->setminlength(intval($element->getAttribute('minlength')));
                     }
+                    $element->setAttribute('minlength', strval($commentconf->minlength()));
                 }
             }
 
@@ -559,7 +558,7 @@ abstract class Servicerender
                 $hidden = $dom->createElement('input');
                 $hidden->setAttribute('type', 'hidden');
                 $hidden->setAttribute('name', Modelcomment::CONFIG_POST_NAME);
-                $hidden->setAttribute('value', $jwt->encode($formconf));
+                $hidden->setAttribute('value', $jwt->encode($commentconf->dry()));
                 $form->appendChild($hidden);
             } catch (DOMException $e) {
                 throw new LogicException('DOM: $e', 0, $e);
@@ -746,12 +745,17 @@ abstract class Servicerender
      *
      * @param string $text                  Input text to scan
      * @param string $include               Word to match `%$include%`
+     * @param bool $wholetext               Only match if it's the whole text
      *
      * @return Inclusion[]
      */
-    protected function match(string $text, string $include): array
+    protected function match(string $text, string $include, bool $wholetext = false): array
     {
-        preg_match_all('~\%(' . $include . ')(\?([a-zA-Z0-9:\[\]\&=\-_\/\%\+\*\;]*))?\%~', $text, $out);
+        $regex = "\%($include)(\?([a-zA-Z0-9:\[\]\&=\-_\/\%\+\*\;]*))?\%";
+        if ($wholetext) {
+            $regex = "^$regex$";
+        }
+        preg_match_all("~$regex~", $text, $out);
 
         $matches = [];
 

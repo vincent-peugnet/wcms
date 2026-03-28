@@ -13,7 +13,7 @@ class Comment extends Item
     protected string $username;
     protected string $message = '';
 
-    public const MAX_COMMENT_LENGTH = 2 ** 14;
+    public const MAX_MESSAGE_LENGTH = 2 ** 14;
 
     // public function __construct(string $username, string $message)
     // {
@@ -32,10 +32,10 @@ class Comment extends Item
 
     public function validate(Commentconf $conf): bool
     {
-        if (strlen($this->message) > $conf->maxlength) {
+        if (strlen($this->message) > $conf->maxlength()) {
             return false;
         }
-        if (strlen($this->message) < $conf->minlength) {
+        if (strlen($this->message) < $conf->minlength()) {
             return false;
         }
         return true;
@@ -72,7 +72,7 @@ class Comment extends Item
 
     public function setmessage(string $message): void
     {
-        if (strlen($message) <= self::MAX_COMMENT_LENGTH) {
+        if (strlen($message) <= self::MAX_MESSAGE_LENGTH) {
             $this->message = $message;
         }
     }

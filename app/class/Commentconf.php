@@ -6,43 +6,59 @@ use RuntimeException;
 
 class Commentconf extends Item
 {
-    public string $id;
-    public int $maxlength = Comment::MAX_COMMENT_LENGTH;
-    public int $minlength = 0;
-    public int $mode; // Not used yet
+    protected string $id;
+    protected int $maxlength = Comment::MAX_MESSAGE_LENGTH;
+    protected int $minlength = 0;
+    protected int $mode = 1; // Not used yet
 
     /**
      * @param array<string, mixed> $data
      *
      * @throws RuntimeException
      */
-    public function __construct(array $data = [])
-    {
-        $this->hydrate($data);
-
-        if (!isset($this->id)) {
-            throw new RuntimeException('missing ID');
-        }
-        if (!isset($this->mode)) {
-            throw new RuntimeException('missing Mode');
-        }
-        if ($this->minlength > $this->maxlength) {
-            throw new RuntimeException('minlength is superior to maxlenght');
-        }
-    }
-
-    public function setid(string $id): void
+    public function __construct(string $id, array $data = [])
     {
         if (Model::idcheck($id)) {
             $this->id = $id;
         }
+        $this->hydrate($data);
+
+        if (!isset($this->id)) {
+            throw new RuntimeException('missing or invalid ID');
+        }
     }
 
-    public function setmaxlength(int $maxlength): void
+    public function id(): string
     {
-        if ($maxlength > 0) {
-            $this->maxlength = $maxlength;
+        return $this->id;
+    }
+
+    public function maxlength(): int
+    {
+        return $this->maxlength;
+    }
+
+    public function minlength(): int
+    {
+        return $this->minlength;
+    }
+
+    public function mode(): int
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @return bool                         indicting if setting was valid or not
+     */
+    public function setmaxlength(int $maxlength): bool
+    {
+        if ($maxlength < 0 || $maxlength > Comment::MAX_MESSAGE_LENGTH) {
+            return false;
         }
+
+        $this->maxlength = $maxlength;
+        return true;
     }
 
     public function setminlength(int $minlength): void
