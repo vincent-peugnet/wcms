@@ -12,6 +12,12 @@ class Commentconf extends Item
     protected string $mode = self::USER_MODE;
     protected ?int $limit = null;
 
+    /**
+     * @var bool $requirepseudonym define if pseudonym field is mandatory.
+     * This only have an effect in VISITOR_MODE
+     */
+    protected bool $requirepseudonym = false;
+
     public const VISITOR_MODE = 'visitors';
     public const USER_MODE = 'users';
     public const MODES = [self::VISITOR_MODE, self::USER_MODE];
@@ -58,6 +64,11 @@ class Commentconf extends Item
         return $this->limit;
     }
 
+    public function requirepseudonym(): bool
+    {
+        return $this->requirepseudonym;
+    }
+
     /**
      * @return bool                         indicting if setting was valid or not
      */
@@ -96,5 +107,10 @@ class Commentconf extends Item
         if ($limit >= 0) {
             $this->limit = $limit;
         }
+    }
+
+    public function setrequirepseudonym(bool $require): void
+    {
+        $this->requirepseudonym = $require;
     }
 }

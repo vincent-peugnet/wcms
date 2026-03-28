@@ -530,7 +530,11 @@ abstract class Servicerender
                 $i = $form->getAttribute('id');
                 $selector = new DOMXPath($dom);
                 $q = "//input[@form='$i'] | //textarea[@form='$i'] | //button[@form='$i'] | //select[@form='$i']";
-                $disablables[] = $selector->query($q);
+                $nodes = $selector->query($q);
+                if ($nodes === false) {
+                    throw new LogicException('malformed DOM XPath expression');
+                }
+                $disablables[] = $nodes;
             }
 
             foreach ($disablables as $elements) {
@@ -546,20 +550,24 @@ abstract class Servicerender
                         $this->postprocessaction = true; // this is called multiple times, not very optimized but ok
                     }
 
-                    // Manage maxlength attribute
-                    if ($element->getAttribute('name') !== 'message') {
-                        continue;
+                    if ($element->getAttribute('name') === 'message') {
+                        // Manage maxlength attribute
+                        if ($element->hasAttribute('maxlength')) {
+                            $commentconf->setmaxlength(intval($element->getAttribute('maxlength')));
+                        }
+                        $element->setAttribute('maxlength', strval($commentconf->maxlength()));
+
+                        if ($element->hasAttribute('minlength')) {
+                            $commentconf->setminlength(intval($element->getAttribute('minlength')));
+                        }
+                        $element->setAttribute('minlength', strval($commentconf->minlength()));
                     }
 
-                    if ($element->hasAttribute('maxlength')) {
-                        $commentconf->setmaxlength(intval($element->getAttribute('maxlength')));
+                    if ($element->getAttribute('name') === 'pseudonym') {
+                        if ($element->hasAttribute('required')) {
+                            $commentconf->setrequirepseudonym(true);
+                        }
                     }
-                    $element->setAttribute('maxlength', strval($commentconf->maxlength()));
-
-                    if ($element->hasAttribute('minlength')) {
-                        $commentconf->setminlength(intval($element->getAttribute('minlength')));
-                    }
-                    $element->setAttribute('minlength', strval($commentconf->minlength()));
                 }
             }
 
