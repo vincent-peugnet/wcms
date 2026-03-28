@@ -58,6 +58,11 @@ class Controllercomment extends Controller
             exit;
         }
 
+        // check if comment limit is reached
+        if ($conf->limit() !== null && $page->commentcount() >= $conf->limit()) {
+            http_response_code(400);
+            exit;
+        }
 
         $comment = new Comment($_POST);
         $comment->setdate(new DateTimeImmutable());
