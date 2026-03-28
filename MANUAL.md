@@ -604,8 +604,30 @@ The following example describe a basic comment form that can be copied in your p
 </form>
 ```
 
-This also work with templates.
+This also work great with templates.
 
+
+###### Comment modes
+
+Comments form have two different modes: `users` and `visitors`.
+It specify who can post new comment.
+The default mode is `users` mode which restrict posting to logged in users.
+
+To allow any visitor that browse the page to add a comment on it, add the `mode` parameter.
+
+    %COMMENT?mode=visitors%
+
+When using the visitor mode, a new form input can be added that use the name `pseudonym`.
+This will store a pseudonym associated to the comment that will be displayed in `%COMMENTS%` inlcusion.
+
+Example:
+
+```html
+<input type="text" name="pseudonym" placeholder="my pseudonym">
+```
+
+If this input is present in `users` mode, the value will be ignored
+and the username or display name of the logged in user who posted will be used instead.
 
 ##### Comment list
 

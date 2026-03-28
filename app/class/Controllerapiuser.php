@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use Wcms\Exception\Database\Notfoundexception;
+use Wcms\Exception\Databaseexception;
 
 class Controllerapiuser extends Controllerapi
 {
@@ -22,8 +23,8 @@ class Controllerapiuser extends Controllerapi
             http_response_code(200);
             header('Content-type: application/json; charset=utf-8');
             echo json_encode($user, JSON_PRETTY_PRINT);
-        } catch (Notfoundexception $e) {
-            $this->shortresponse(404, 'User not found');
+        } catch (Databaseexception $e) {
+            $this->shortresponse(404, "User not found: $e");
         }
     }
 }
