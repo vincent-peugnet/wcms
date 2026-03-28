@@ -108,6 +108,10 @@ class Controllerapipage extends Controllerapi
             $this->shortresponse(409, "Conflict: A more recent version of the page is stored in the database");
         }
 
+        // comment count and comment date should not be modified by user update
+        $this->page->setcommentcount($oldpage->commentcount());
+        $this->page->datecomment($oldpage->datecomment());
+
         try {
             $this->page->updateedited();
             $this->page->addauthor($this->user->id()); // prevent editor from removing itself from authors
@@ -157,11 +161,16 @@ class Controllerapipage extends Controllerapi
             $this->shortresponse(401, 'Page already exist but user cannot update it');
         }
         try {
-            $this->page = $this->pagemanager->newpage(array_merge($this->recievejson(), ['id' => $page]));
-            if (!$exist) { // If it's a page creation, add the user as an author
-                $this->page->addauthor($this->user->id());
+            $putpage = $this->pagemanager->newpage(array_merge($this->recievejson(), ['id' => $page]));
+            if (!$exist) { // If it's a page creation, add the user as an author and reset comments metadata
+                $putpage->addauthor($this->user->id());
+                $putpage->setcommentcount(0);
+                $putpage->setdatecomment(null);
+            } else { // otherwise we prevent comment metada edition
+                $putpage->setcommentcount($this->page->commentcount());
+                $putpage->setdatecomment($this->page->datecomment());
             }
-            $this->pagemanager->add($this->page);
+            $this->pagemanager->add($putpage);
             http_response_code($exist ? 200 : 201);
             if ($exist) {
                 $user = $this->user->id();
