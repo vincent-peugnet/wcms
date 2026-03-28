@@ -579,63 +579,10 @@ The most common usage is tu use it as a link `href`. For example, with a publish
     [RSS feed of my blog](%RSS?id=my-blog%)
 
 
-#### Comments
 
-Each page can store it's own comment database. Comments are limited to 16k characters in size.
+#### Comment list
 
-To allow comment on a page, it should have a valid [comment form](#comment-form) inside it.
-
-##### Comment form
-
-For more flexibility, comment form don't look like the traditionnal W inclusions. Instead it's based on a standard HTML form.
-
-Mandatory parts are:
-
-- form `action` should point to `%COMMENT%`
-- form `method` should be `post`
-- message must use an `input`, `textarea` or `select` element and have its `type` set to `message`
-
-The following example describe a basic comment form that can be copied in your pages.
-
-```html
-<form action="%COMMENT%" method="post">
-    <textarea name="message" placeholder="A very interesting comment..." required></textarea>
-    <input type="submit">
-</form>
-```
-
-This also work great with templates.
-
-
-###### Comment modes
-
-Comments form have two different modes: `users` and `visitors`.
-It specify who can post new comment.
-The default mode is `users` mode which restrict posting to logged in users.
-
-To allow any visitor that browse the page to add a comment on it, add the `mode` parameter.
-
-    %COMMENT?mode=visitors%
-
-When using the visitor mode, a new form input can be added that use the name `pseudonym`.
-This will store a pseudonym associated to the comment that will be displayed in `%COMMENTS%` inlcusion.
-
-Example:
-
-```html
-<input type="text" name="pseudonym" placeholder="my pseudonym">
-```
-
-To make this field mandatory, add the `required` HTML attribute:
-
-```html
-<input type="text" name="pseudonym" placeholder="my pseudonym" required>
-```
-
-If this input is present in `users` mode, the value will be ignored
-and the username or display name of the logged in user who posted will be used instead.
-
-##### Comment list
+> See [Comments](#comments) for more info about comment system
 
 To print a list of comment on a page, use the following code.
 
@@ -653,8 +600,6 @@ li.comment .message {
     white-space: break-spaces;
 }
 ```
-
-
 
 
 
@@ -1010,6 +955,72 @@ This folder is supposed to contain favicons. Once favicon files (that can be `.i
 #### Thumbnail folder
 
 This folder is supposed to contain thumbnails images. Once images files (that can be `.jpg`, `.png`, etc.) are uploaded here, they are listed in the thumbnail selection drop down list in every pages or in the admin panel.
+
+
+
+
+Comments
+--------
+
+Each page can store it's own comment database. Comments are limited to 16k characters in size.
+
+To allow comment on a page, it should have a valid [comment form](#comment-form) inside it.
+
+Comment can be printed in a page using [comment list inclusion](#comment-list).
+
+### Comment form
+
+For more flexibility, comment form don't look like the traditionnal W inclusions. Instead it's based on a standard HTML form.
+
+Mandatory parts are:
+
+- form `action` should point to `%COMMENT%`
+- form `method` should be `post`
+- message must use an `input`, `textarea` or `select` element and have its `type` set to `message`
+
+The following example describe a basic comment form that can be copied in your pages.
+
+```html
+<form action="%COMMENT%" method="post">
+    <textarea name="message" placeholder="A very interesting comment..." required></textarea>
+    <input type="submit">
+</form>
+```
+
+This also work great with templates.
+
+
+
+#### Comment modes
+
+Comments form have two different modes: `users` and `visitors`.
+It specify who can post new comment.
+The default mode is `users` mode which restrict posting to logged in users.
+
+To allow any visitor that browse the page to add a comment on it, add the `mode` parameter.
+
+    %COMMENT?mode=<mode>%
+
+When using the visitor mode, a new form input can be added that use the name `pseudonym`.
+This will store a pseudonym associated to the comment that will be displayed in `%COMMENTS%` inlcusion.
+
+__Example:__
+
+```html
+<input type="text" name="pseudonym" placeholder="my pseudonym">
+```
+
+To make this field mandatory, add the `required` HTML attribute:
+
+```html
+<input type="text" name="pseudonym" placeholder="my pseudonym" required>
+```
+
+If this input is present in `users` mode, the value will be ignored
+and the username or display name of the logged in user who posted will be used instead.
+
+
+
 
 
 
