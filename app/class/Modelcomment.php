@@ -10,6 +10,9 @@ class Modelcomment extends Modeldb
 {
     public const COMMENT_REPO_NAME = 'comment';
 
+    /** Name of POST index that store the comment config as a JWT */
+    public const CONFIG_POST_NAME = 'wcms-comment-form-configuration';
+
     public function __construct()
     {
         parent::__construct();

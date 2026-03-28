@@ -558,7 +558,7 @@ abstract class Servicerender
                 $jwt = new JWT(Config::secretkey(), 'HS256', $exp);
                 $hidden = $dom->createElement('input');
                 $hidden->setAttribute('type', 'hidden');
-                $hidden->setAttribute('name', 'wcms-comment-form-configuration'); // TODO: replace with a constant
+                $hidden->setAttribute('name', Modelcomment::CONFIG_POST_NAME);
                 $hidden->setAttribute('value', $jwt->encode($formconf));
                 $form->appendChild($hidden);
             } catch (DOMException $e) {
