@@ -10,6 +10,7 @@ class Commentconf extends Item
     protected int $maxlength = Comment::MAX_MESSAGE_LENGTH;
     protected int $minlength = 0;
     protected int $mode = 1; // Not used yet
+    protected ?int $limit = null;
 
     /**
      * @param array<string, mixed> $data
@@ -48,6 +49,11 @@ class Commentconf extends Item
         return $this->mode;
     }
 
+    public function limit(): ?int
+    {
+        return $this->limit;
+    }
+
     /**
      * @return bool                         indicting if setting was valid or not
      */
@@ -71,5 +77,18 @@ class Commentconf extends Item
     public function setmode(int $mode): void
     {
         $this->mode = $mode;
+    }
+
+    /**
+     * @param ?int<0, max> $limit           set to NULL to disable limit
+     */
+    public function setlimit(?int $limit): void
+    {
+        if ($limit === null) {
+            $this->limit = null;
+        }
+        if ($limit >= 0) {
+            $this->limit = $limit;
+        }
     }
 }

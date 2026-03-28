@@ -59,6 +59,9 @@ abstract class Servicerender
     /** @var bool Indicate presence of an included MAP, meant to call the script in page's Head */
     protected bool $map = false;
 
+    /** @var bool Indicate if current page have reached it's comment limit */
+    protected bool $commentlimitreached = false;
+
     /**
      * @param AltoRouter $router            Router used to generate urls
      * @param Modelpage $pagemanager        [optionnal] can be usefull if a pagemanager already store a page list
@@ -478,6 +481,8 @@ abstract class Servicerender
         }
 
         // Check presence of comment forms
+        // TODO: multiple comment form on the same rendered page is a problem as it allow multiple configs
+        // maybe this should be limited to only one form
         $forms = $dom->getElementsByTagName('form');
         foreach ($forms as $form) {
             if (!$form->hasAttribute('action')) {
@@ -506,29 +511,39 @@ abstract class Servicerender
                 continue;
             }
 
+            // check if limit is reached
+            $this->commentlimitreached = (
+                $commentconf->limit() !== null && $this->page->commentcount() >= $commentconf->limit()
+            );
+
             // Add a replacable disabled marker on inputs (will be replaced as)
-            $disableds = [];
+            $disablables = [];
 
             // select form descendants input/textarea/button/select elements
-            $disableds[] = $form->getElementsByTagName('input');
-            $disableds[] = $form->getElementsByTagName('textarea');
-            $disableds[] = $form->getElementsByTagName('button');
-            $disableds[] = $form->getElementsByTagName('select');
+            $disablables[] = $form->getElementsByTagName('input');
+            $disablables[] = $form->getElementsByTagName('textarea');
+            $disablables[] = $form->getElementsByTagName('button');
+            $disablables[] = $form->getElementsByTagName('select');
 
             // select input/textarea/button/select associated elements that use `form=ID`
             if ($form->hasAttribute('id')) {
                 $i = $form->getAttribute('id');
                 $selector = new DOMXPath($dom);
                 $q = "//input[@form='$i'] | //textarea[@form='$i'] | //button[@form='$i'] | //select[@form='$i']";
-                $disableds[] = $selector->query($q);
+                $disablables[] = $selector->query($q);
             }
 
-            foreach ($disableds as $elements) {
+            foreach ($disablables as $elements) {
                 foreach ($elements as $element) {
                     if (!($element instanceof DOMElement)) {
                         continue;
                     }
-                    $element->setAttribute(Servicepostprocess::DISABLED_MARKER, '1');
+
+                    if ($this->commentlimitreached) {
+                        $element->setAttribute('disabled', '1');
+                    } else {
+                        $element->setAttribute(Servicepostprocess::DISABLED_MARKER, '1');
+                    }
 
                     // Manage maxlength attribute
                     if ($element->getAttribute('name') !== 'message') {
@@ -547,6 +562,10 @@ abstract class Servicerender
                 }
             }
 
+            if ($this->commentlimitreached) {
+                continue; // no need to add hidden JWT config input as comment limit is reached
+            }
+
             try {
                 $exp = $this->page->cachettl() === null ? Config::cachettl() : $this->page->cachettl();
                 if ($exp === -1) {
@@ -558,7 +577,8 @@ abstract class Servicerender
                 $hidden = $dom->createElement('input');
                 $hidden->setAttribute('type', 'hidden');
                 $hidden->setAttribute('name', Modelcomment::CONFIG_POST_NAME);
-                $hidden->setAttribute('value', $jwt->encode($commentconf->dry()));
+                $payload = $commentconf->dry();
+                $hidden->setAttribute('value', $jwt->encode($payload));
                 $form->appendChild($hidden);
             } catch (DOMException $e) {
                 throw new LogicException('DOM: $e', 0, $e);
