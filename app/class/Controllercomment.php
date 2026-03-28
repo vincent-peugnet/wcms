@@ -43,19 +43,21 @@ class Controllercomment extends Controller
         try {
             $token = $_POST[Modelcomment::CONFIG_POST_NAME];
             $jwt = new JWT(Config::secretkey());
-            $config = $jwt->decode($token);
-            $conf = new Commentconf($config);
+            $confdata = $jwt->decode($token);
+
+            if (!isset($confdata['id']) || $confdata['id'] !== $page->id()) {
+                Logger::warning("comment on page '%s': ID don't match", $page->id());
+                http_response_code(400); // page do not match
+                exit;
+            }
+
+            $conf = new Commentconf($confdata['id'], $confdata);
         } catch (JWTException | RuntimeException $e) {
             Logger::warning("comment on page '%s': config error: %s", $page->id(), $e);
             http_response_code(400);
             exit;
         }
 
-        if ($conf->id !== $page->id()) {
-            Logger::warning("comment on page '%s': ID don't match", $page->id());
-            http_response_code(400); // page do not match
-            exit;
-        }
 
         $comment = new Comment($_POST);
         $comment->setdate(new DateTimeImmutable());
