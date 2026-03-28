@@ -25,7 +25,7 @@ class Controllerprofile extends Controller
             $mediamanager = new Modelmedia();
             $datas['themes'] = $mediamanager->listthemes();
             $this->showtemplate('profile', $datas);
-        } catch (Notfoundexception $e) {
+        } catch (Databaseexception $e) {
             $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);
             $this->routedirect('home');
         }

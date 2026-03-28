@@ -541,8 +541,9 @@ abstract class Servicerender
 
                     if ($this->commentlimitreached) {
                         $element->setAttribute('disabled', '1');
-                    } else {
-                        $element->setAttribute(Servicepostprocess::DISABLED_MARKER, '1');
+                    } elseif ($commentconf->mode() === Commentconf::USER_MODE) {
+                        $element->setAttribute(Servicepostprocess::DISABLED_IF_VISITOR_MARKER, '1');
+                        $this->postprocessaction = true; // this is called multiple times, not very optimized but ok
                     }
 
                     // Manage maxlength attribute
@@ -583,8 +584,6 @@ abstract class Servicerender
             } catch (DOMException $e) {
                 throw new LogicException('DOM: $e', 0, $e);
             }
-
-            $this->postprocessaction = true;
         }
 
 
@@ -1118,13 +1117,13 @@ abstract class Servicerender
 
 
         foreach ($matches as $match) {
-            $commentlist = new Comments($match->readoptions());
+            $commentlist = new Comments($this->page, $match->readoptions());
 
             try {
-                $replaces[] = $commentlist->listhtml($this->page);
+                $replaces[] = $commentlist->listhtml();
                 $searches[] = $match->fullmatch();
             } catch (RuntimeException $e) {
-                // store the error somewhere.
+                Logger::warning('render error: %s', $e->getMessage());
             }
         }
 

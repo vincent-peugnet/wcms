@@ -5,6 +5,7 @@ namespace Wcms;
 use DateTimeInterface;
 use DOMDocument;
 use DOMException;
+use DOMNode;
 use IntlDateFormatter;
 use LogicException;
 use RuntimeException;
@@ -13,35 +14,44 @@ class Comments extends Item
 {
     protected int $order = 1;
     protected ?string $id = null;
+
+    /** @var Page $page the rendered page */
+    protected Page $page;
+
     protected Modelcomment $commentmanager;
+    protected Modeluser $usermanager;
+
+    protected IntlDateFormatter $datedisplayformater;
+    protected IntlDateFormatter $datetitleformatter;
 
     /**
+     * @param Page $page                    Page where the comment list is rendered
      * @param array<string, mixed> $data
      */
-    public function __construct(array $data)
+    public function __construct(Page $page, array $data = [])
     {
+        $this->page = $page;
         $this->hydrate($data);
+
+        $lang = $this->page->lang() == '' ? Config::lang() : $this->page->lang();
+        $this->datedisplayformater = new IntlDateFormatter($lang, IntlDateFormatter::SHORT, IntlDateFormatter::MEDIUM);
+        $this->datetitleformatter = new IntlDateFormatter($lang, IntlDateFormatter::FULL, IntlDateFormatter::NONE);
+
         $this->commentmanager = new Modelcomment();
+        $this->usermanager = new Modeluser();
     }
 
     /**
      * @throws RuntimeException if ID param failed (page do not exist or database error)
      */
-    public function listhtml(Page $page): string
+    public function listhtml(): string
     {
-        $lang = $page->lang() == '' ? Config::lang() : $page->lang();
-        $datedisplayformater = new IntlDateFormatter($lang, IntlDateFormatter::SHORT, IntlDateFormatter::MEDIUM);
-        $datetitleformatter = new IntlDateFormatter($lang, IntlDateFormatter::FULL, IntlDateFormatter::NONE);
-
-        $usermanager = new Modeluser();
-
-
         try {
             if ($this->id !== null) {
                 $pagemanager = new Modelpage(Config::pagetable());
                 $commentpage = $pagemanager->get($this->id);
             } else {
-                $commentpage = $page;
+                $commentpage = $this->page;
             }
 
             if ($commentpage->commentcount() === 0) {
@@ -64,39 +74,7 @@ class Comments extends Item
             $ul->setAttribute('class', 'comments');
 
             foreach ($comments as $id => $comment) {
-                $li = $dom->createElement('li');
-                $fragment = "comment-$id";
-                $li->setAttribute('id', $fragment);
-                $li->setAttribute('class', 'comment');
-                $fragmentlink = $dom->createElement('a', "#$id");
-                $fragmentlink->setAttribute('href', "#$fragment");
-                $fragmentlink->setAttribute('class', 'comment-id'); // TODO: find a good class name
-
-
-                try {
-                    $user = $usermanager->get($comment->username());
-                    $userlink = $dom->createElement('a', empty($user->name()) ? $user->id() : $user->name());
-                    if (!empty($user->url())) {
-                        $userlink->setAttribute('href', $user->url());
-                    }
-                } catch (RuntimeException $e) {
-                    $userlink = $dom->createElement('a', $comment->username());
-                }
-
-                $userlink->setAttribute('class', 'user');
-
-                $time = $dom->createElement('time', $datedisplayformater->format($comment->date()));
-                $time->setAttribute('datetime', $comment->date()->format(DateTimeInterface::ATOM));
-                $time->setAttribute('title', $datetitleformatter->format($comment->date()));
-
-                $message = $dom->createElement('p', $comment->message());
-                $message->setAttribute('class', 'message');
-
-                $li->appendChild($fragmentlink);
-                $li->appendChild($userlink);
-                $li->appendChild($time);
-                $li->appendChild($message);
-
+                $li = $this->commentline($id, $comment, $dom);
                 $ul->appendChild($li);
             }
 
@@ -105,6 +83,53 @@ class Comments extends Item
         } catch (DOMException $e) {
             throw new LogicException('bad DOM node used', 0, $e);
         }
+    }
+
+    /**
+     * Render a comment line as a `li` HTML DOM node
+     *
+     * @throws DOMException                 in case of DOM error
+     */
+    protected function commentline(int $id, Comment $comment, DOMDocument $dom): DOMNode
+    {
+        $li = $dom->createElement('li');
+        $fragment = "comment-$id";
+        $li->setAttribute('id', $fragment);
+        $li->setAttribute('class', 'comment');
+        $fragmentlink = $dom->createElement('a', "#$id");
+        $fragmentlink->setAttribute('href', "#$fragment");
+        $fragmentlink->setAttribute('class', 'comment-id'); // TODO: find a good class name
+        $li->appendChild($fragmentlink);
+
+        if (!empty($comment->username())) {
+            try {
+                $user = $this->usermanager->get($comment->username());
+                $userlink = $dom->createElement('a', empty($user->name()) ? $user->id() : $user->name());
+                if (!empty($user->url())) {
+                    $userlink->setAttribute('href', $user->url());
+                }
+            } catch (RuntimeException $e) {
+                $userlink = $dom->createElement('a', $comment->username());
+            }
+            $userlink->setAttribute('class', 'user');
+            $li->appendChild($userlink);
+        } elseif (!empty($comment->pseudonym())) {
+            $userlink = $dom->createElement('a', $comment->pseudonym());
+            $userlink->setAttribute('class', 'visitor');
+            $li->appendChild($userlink);
+        }
+
+
+        $time = $dom->createElement('time', $this->datedisplayformater->format($comment->date()));
+        $time->setAttribute('datetime', $comment->date()->format(DateTimeInterface::ATOM));
+        $time->setAttribute('title', $this->datetitleformatter->format($comment->date()));
+        $li->appendChild($time);
+
+        $message = $dom->createElement('p', $comment->message());
+        $message->setAttribute('class', 'message');
+        $li->appendChild($message);
+
+        return $li;
     }
 
     public function order(): int

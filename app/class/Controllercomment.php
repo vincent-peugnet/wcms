@@ -21,10 +21,6 @@ class Controllercomment extends Controller
 
     public function comment(string $page): never
     {
-        if ($this->user->isvisitor()) {
-            http_response_code(403);
-            exit;
-        }
 
         try {
             $page = $this->pagemanager->get($page);
@@ -58,6 +54,12 @@ class Controllercomment extends Controller
             exit;
         }
 
+        // check if visitors are allowed to comment
+        if ($conf->mode() !== Commentconf::VISITOR_MODE && $this->user->isvisitor()) {
+            http_response_code(403);
+            exit;
+        }
+
         // check if comment limit is reached
         if ($conf->limit() !== null && $page->commentcount() >= $conf->limit()) {
             http_response_code(400);
@@ -66,7 +68,10 @@ class Controllercomment extends Controller
 
         $comment = new Comment($_POST);
         $comment->setdate(new DateTimeImmutable());
-        $comment->setusername($this->user->id());
+
+        if ($conf->mode() !== Commentconf::VISITOR_MODE) {
+            $comment->setusername($this->user->id());
+        }
 
         if (!$comment->validate($conf)) {
             Logger::warning("'%s' sent a invalid comment on page '%s'", $this->user->id(), $page->id());

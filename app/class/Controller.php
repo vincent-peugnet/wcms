@@ -96,7 +96,7 @@ abstract class Controller
             try {
                 $this->user = $this->usermanager->get($sessionuser);
                 return true;
-            } catch (Notfoundexception $e) {
+            } catch (Databaseexception $e) {
                 Logger::warning("Deleted session using non existing user : '$sessionuser'");
                 $this->servicesession->empty(); // empty the session as a non existing user was set
             }

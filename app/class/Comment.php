@@ -10,10 +10,13 @@ use DateTimeInterface;
 class Comment extends Item
 {
     protected DateTimeImmutable $date;
-    protected string $username;
+    protected string $username = '';
+    protected string $pseudonym = '';
     protected string $message = '';
 
     public const MAX_MESSAGE_LENGTH = 2 ** 14;
+
+    public const MAX_PSEUDONYM_LENGTH = 128;
 
     // public function __construct(string $username, string $message)
     // {
@@ -38,6 +41,23 @@ class Comment extends Item
         if (strlen($this->message) < $conf->minlength()) {
             return false;
         }
+
+        // depending on the comment mode, only the pseudonym or username property could be filled
+        switch ($conf->mode()) {
+            case Commentconf::VISITOR_MODE:
+                // pseudonym is not mandatory in visitor mode
+                if (!empty($this->username)) {
+                    return false;
+                }
+                break;
+
+            case Commentconf::USER_MODE:
+                if (empty($this->username) || !empty($this->pseudonym)) {
+                    return false;
+                }
+                break;
+        }
+
         return true;
     }
 
@@ -47,6 +67,11 @@ class Comment extends Item
     public function username(): string
     {
         return $this->username;
+    }
+
+    public function pseudonym(): string
+    {
+        return $this->pseudonym;
     }
 
     public function message(): string
@@ -68,6 +93,11 @@ class Comment extends Item
     public function setusername(string $username): void
     {
         $this->username = $username;
+    }
+
+    public function setpseudonym(string $pseudonym): void
+    {
+        $this->pseudonym = trim(strip_tags($pseudonym));
     }
 
     public function setmessage(string $message): void

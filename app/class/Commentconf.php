@@ -9,8 +9,12 @@ class Commentconf extends Item
     protected string $id;
     protected int $maxlength = Comment::MAX_MESSAGE_LENGTH;
     protected int $minlength = 0;
-    protected int $mode = 1; // Not used yet
+    protected string $mode = self::USER_MODE;
     protected ?int $limit = null;
+
+    public const VISITOR_MODE = 'visitors';
+    public const USER_MODE = 'users';
+    public const MODES = [self::VISITOR_MODE, self::USER_MODE];
 
     /**
      * @param array<string, mixed> $data
@@ -44,7 +48,7 @@ class Commentconf extends Item
         return $this->minlength;
     }
 
-    public function mode(): int
+    public function mode(): string
     {
         return $this->mode;
     }
@@ -74,9 +78,11 @@ class Commentconf extends Item
         }
     }
 
-    public function setmode(int $mode): void
+    public function setmode(string $mode): void
     {
-        $this->mode = $mode;
+        if (in_array($mode, self::MODES)) {
+            $this->mode = $mode;
+        }
     }
 
     /**
