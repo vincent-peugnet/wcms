@@ -34,14 +34,14 @@ class Controllercomment extends Controller
         }
 
 
-        if (!isset($_POST['wcms-comment-form-configuration'])) {
+        if (!isset($_POST[Modelcomment::CONFIG_POST_NAME])) {
             Logger::warning("comment on page '%s': missing config token", $page->id());
             http_response_code(400);
             exit;
         }
 
         try {
-            $token = $_POST['wcms-comment-form-configuration'];
+            $token = $_POST[Modelcomment::CONFIG_POST_NAME];
             $jwt = new JWT(Config::secretkey());
             $config = $jwt->decode($token);
             $conf = new Commentconf($config);
