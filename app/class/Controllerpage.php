@@ -608,7 +608,7 @@ class Controllerpage extends Controller
 
         // comment count and comment date should not be modified by user update
         $this->page->setcommentcount($oldpage->commentcount());
-        $this->page->datecomment($oldpage->datecomment());
+        $this->page->setdatecomment($oldpage->datecomment());
 
         try {
             $this->page->updateedited();
