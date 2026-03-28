@@ -626,6 +626,12 @@ Example:
 <input type="text" name="pseudonym" placeholder="my pseudonym">
 ```
 
+To make this field mandatory, add the `required` HTML attribute:
+
+```html
+<input type="text" name="pseudonym" placeholder="my pseudonym" required>
+```
+
 If this input is present in `users` mode, the value will be ignored
 and the username or display name of the logged in user who posted will be used instead.
 

@@ -45,8 +45,10 @@ class Comment extends Item
         // depending on the comment mode, only the pseudonym or username property could be filled
         switch ($conf->mode()) {
             case Commentconf::VISITOR_MODE:
-                // pseudonym is not mandatory in visitor mode
                 if (!empty($this->username)) {
+                    return false;
+                }
+                if ($conf->requirepseudonym() && empty($this->pseudonym)) {
                     return false;
                 }
                 break;
