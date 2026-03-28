@@ -480,6 +480,9 @@ abstract class Page extends Item
         return $this->noindex;
     }
 
+    /**
+     * @return int<0, max> $commentcount
+     */
     public function commentcount(): int
     {
         return $this->commentcount;
@@ -879,6 +882,9 @@ abstract class Page extends Item
         $this->externallinks = $externallinks;
     }
 
+    /**
+     * @param int<0, max> $commentcount
+     */
     public function setcommentcount(int $commentcount): void
     {
         if ($commentcount >= 0) {

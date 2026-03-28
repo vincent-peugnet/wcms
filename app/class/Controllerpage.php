@@ -606,6 +606,10 @@ class Controllerpage extends Controller
             $this->routedirect('pageedit', ['page' => $this->page->id()]);
         }
 
+        // comment count and comment date should not be modified by user update
+        $this->page->setcommentcount($oldpage->commentcount());
+        $this->page->datecomment($oldpage->datecomment());
+
         try {
             $this->page->updateedited();
             $this->page->addauthor($this->user->id()); // prevent editor from removing itself from authors
