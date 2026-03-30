@@ -18,6 +18,12 @@ class Commentconf extends Item
      */
     protected bool $requirepseudonym = false;
 
+    /**
+     * @var bool $requirewebsite define if website field is mandatory.
+     * This only have an effect in VISITOR_MODE
+     */
+    protected bool $requirewebsite = false;
+
     public const VISITOR_MODE = 'visitors';
     public const USER_MODE = 'users';
     public const MODES = [self::VISITOR_MODE, self::USER_MODE];
@@ -69,6 +75,11 @@ class Commentconf extends Item
         return $this->requirepseudonym;
     }
 
+    public function requirewebsite(): bool
+    {
+        return $this->requirewebsite;
+    }
+
     /**
      * @return bool                         indicting if setting was valid or not
      */
@@ -112,5 +123,10 @@ class Commentconf extends Item
     public function setrequirepseudonym(bool $require): void
     {
         $this->requirepseudonym = $require;
+    }
+
+    public function setrequirewebsite(bool $require): void
+    {
+        $this->requirewebsite = $require;
     }
 }

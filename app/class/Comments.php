@@ -116,6 +116,9 @@ class Comments extends Item
         } elseif (!empty($comment->pseudonym())) {
             $userlink = $dom->createElement('a', htmlspecialchars($comment->pseudonym()));
             $userlink->setAttribute('class', 'visitor');
+            if (!empty($comment->website())) {
+                $userlink->setAttribute('href', $comment->website());
+            }
             $li->appendChild($userlink);
         }
 

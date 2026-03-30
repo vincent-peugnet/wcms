@@ -569,6 +569,12 @@ abstract class Servicerender
                         }
                         $element->setAttribute('maxlength', strval(Comment::MAX_PSEUDONYM_LENGTH));
                     }
+
+                    if ($element->getAttribute('name') === 'website') {
+                        if ($element->hasAttribute('required')) {
+                            $commentconf->setrequirewebsite(true);
+                        }
+                    }
                 }
             }
 
