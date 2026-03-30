@@ -6,12 +6,14 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use DateTimeInterface;
+use VStelmakh\UrlHighlight\UrlHighlight;
 
 class Comment extends Item
 {
     protected DateTimeImmutable $date;
     protected string $username = '';
     protected string $pseudonym = '';
+    protected string $website = '';
     protected string $message = '';
 
     public const MAX_MESSAGE_LENGTH = 2 ** 14;
@@ -51,10 +53,19 @@ class Comment extends Item
                 if ($conf->requirepseudonym() && empty($this->pseudonym)) {
                     return false;
                 }
+                if ($conf->requirewebsite() && empty($this->website)) {
+                    return false;
+                }
+                if (!empty($this->website)) {
+                    $urlHighlight = new UrlHighlight();
+                    if (!$urlHighlight->isUrl($this->website)) {
+                        return false;
+                    }
+                }
                 break;
 
             case Commentconf::USER_MODE:
-                if (empty($this->username) || !empty($this->pseudonym)) {
+                if (empty($this->username) || !empty($this->pseudonym) || !empty($this->website)) {
                     return false;
                 }
                 break;
@@ -74,6 +85,11 @@ class Comment extends Item
     public function pseudonym(): string
     {
         return $this->pseudonym;
+    }
+
+    public function website(): string
+    {
+        return $this->website;
     }
 
     public function message(): string
@@ -100,7 +116,7 @@ class Comment extends Item
     public function setpseudonym(string $pseudonym): void
     {
         $pseudonym = trim(strip_tags($pseudonym));
-        if (strlen($this->pseudonym) <= self::MAX_PSEUDONYM_LENGTH) {
+        if (strlen($pseudonym) <= self::MAX_PSEUDONYM_LENGTH) {
             $this->pseudonym = $pseudonym;
         }
     }
@@ -110,6 +126,11 @@ class Comment extends Item
         if (strlen($message) <= self::MAX_MESSAGE_LENGTH) {
             $this->message = $message;
         }
+    }
+
+    public function setwebsite(string $website): void
+    {
+        $this->website = $website;
     }
 
     /**
