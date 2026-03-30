@@ -114,7 +114,7 @@ class Comments extends Item
             $userlink->setAttribute('class', 'user');
             $li->appendChild($userlink);
         } elseif (!empty($comment->pseudonym())) {
-            $userlink = $dom->createElement('a', $comment->pseudonym());
+            $userlink = $dom->createElement('a', htmlspecialchars($comment->pseudonym()));
             $userlink->setAttribute('class', 'visitor');
             $li->appendChild($userlink);
         }
@@ -125,7 +125,7 @@ class Comments extends Item
         $time->setAttribute('title', $this->datetitleformatter->format($comment->date()));
         $li->appendChild($time);
 
-        $message = $dom->createElement('p', $comment->message());
+        $message = $dom->createElement('p', htmlspecialchars($comment->message()));
         $message->setAttribute('class', 'message');
         $li->appendChild($message);
 
