@@ -19,6 +19,12 @@ class Commentconf extends Item
     protected bool $requirepseudonym = false;
 
     /**
+     * @var bool $allowwebsite define if website field can be set.
+     * This only have an effect in VISITOR_MODE
+     */
+    protected bool $allowwebsite = false;
+
+    /**
      * @var bool $requirewebsite define if website field is mandatory.
      * This only have an effect in VISITOR_MODE
      */
@@ -80,6 +86,11 @@ class Commentconf extends Item
         return $this->requirewebsite;
     }
 
+    public function allowwebsite(): bool
+    {
+        return $this->allowwebsite;
+    }
+
     /**
      * @return bool                         indicting if setting was valid or not
      */
@@ -128,5 +139,10 @@ class Commentconf extends Item
     public function setrequirewebsite(bool $require): void
     {
         $this->requirewebsite = $require;
+    }
+
+    public function setallowwebsite(bool $allow): void
+    {
+        $this->allowwebsite = $allow;
     }
 }

@@ -53,6 +53,9 @@ class Comment extends Item
                 if ($conf->requirepseudonym() && empty($this->pseudonym)) {
                     return false;
                 }
+                if (!$conf->allowwebsite() && !empty($this->website)) {
+                    return false;
+                }
                 if ($conf->requirewebsite() && empty($this->website)) {
                     return false;
                 }
