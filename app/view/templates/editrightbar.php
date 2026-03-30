@@ -96,8 +96,8 @@
                         <li class="comment">
                             <strong class="username"><?=$comment->username() ?></strong>
                             <span class="id"><?= $id ?></span>
-                            <div class="message"><?=$comment->message() ?></div>
-                            <div class="date"><?=$comment->date('hrdi') ?> ago</div>
+                            <div class="message"><?= $this->e($comment->message()) ?></div>
+                            <div class="date"><?= $comment->date('hrdi') ?> ago</div>
                         </li>
                     <?php endforeach ?>
                 </ul>     
