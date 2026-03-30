@@ -571,6 +571,7 @@ abstract class Servicerender
                     }
 
                     if ($element->getAttribute('name') === 'website') {
+                        $commentconf->setallowwebsite(true);
                         if ($element->hasAttribute('required')) {
                             $commentconf->setrequirewebsite(true);
                         }
