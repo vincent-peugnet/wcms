@@ -99,7 +99,10 @@ class Comment extends Item
 
     public function setpseudonym(string $pseudonym): void
     {
-        $this->pseudonym = trim(strip_tags($pseudonym));
+        $pseudonym = trim(strip_tags($pseudonym));
+        if (strlen($this->pseudonym) <= self::MAX_PSEUDONYM_LENGTH) {
+            $this->pseudonym = $pseudonym;
+        }
     }
 
     public function setmessage(string $message): void

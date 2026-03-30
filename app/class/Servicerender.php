@@ -567,6 +567,7 @@ abstract class Servicerender
                         if ($element->hasAttribute('required')) {
                             $commentconf->setrequirepseudonym(true);
                         }
+                        $element->setAttribute('maxlength', Comment::MAX_PSEUDONYM_LENGTH);
                     }
                 }
             }
