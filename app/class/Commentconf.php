@@ -30,8 +30,8 @@ class Commentconf extends Item
      */
     protected bool $requirewebsite = false;
 
-    public const VISITOR_MODE = 'visitors';
-    public const USER_MODE = 'users';
+    public const VISITOR_MODE = 'visitor';
+    public const USER_MODE = 'user';
     public const MODES = [self::VISITOR_MODE, self::USER_MODE];
 
     /**
