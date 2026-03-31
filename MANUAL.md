@@ -993,13 +993,15 @@ This also work great with templates.
 
 #### Comment modes
 
-Comments form have two different modes: `users` and `visitors`.
+Comments form have two different modes: `user` and `visitor`.
 It specify who can post new comment.
-The default mode is `users` mode which restrict posting to logged in users.
+The default mode is `user` mode which restrict posting to logged in users.
 
 To allow any visitor that browse the page to add a comment on it, add the `mode` parameter.
 
     %COMMENT?mode=<mode>%
+
+##### Visitor
 
 When using the visitor mode, a new form input can be added that use the name `pseudonym`.
 This will store a pseudonym associated to the comment that will be displayed in `%COMMENTS%` inlcusion.
@@ -1016,12 +1018,13 @@ To make this field mandatory, add the `required` HTML attribute:
 <input type="text" name="pseudonym" placeholder="my pseudonym" required>
 ```
 
-If this input is present in `users` mode, the value will be ignored
-and the username or display name of the logged in user who posted will be used instead.
 
 
+##### User
 
-
+In `user` mode, the username and if set, the display name of the user is used and displayed in comment list.
+And if a link is defined in user's profile, it will be used.
+the username or display name of the logged in user who posted will be used instead.
 
 
 
