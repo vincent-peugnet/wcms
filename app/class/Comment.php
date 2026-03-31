@@ -16,6 +16,12 @@ class Comment extends Item
     protected string $website = '';
     protected string $message = '';
 
+    /**
+     * @var bool $validated indicate if the comment has been validated
+     * @todo find a better name, as it's too close to validate() func
+     */
+    protected bool $validated = false;
+
     public const MAX_MESSAGE_LENGTH = 2 ** 14;
 
     public const MAX_PSEUDONYM_LENGTH = 128;
@@ -108,6 +114,11 @@ class Comment extends Item
         return $this->datetransform('date', $option);
     }
 
+    public function validated(): bool
+    {
+        return $this->validated;
+    }
+
 
     // SET
 
@@ -150,5 +161,10 @@ class Comment extends Item
                 new DateTimeZone('Europe/Paris')
             );
         }
+    }
+
+    public function setvalidated(bool $validated): void
+    {
+        $this->validated = $validated;
     }
 }
