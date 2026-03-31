@@ -287,7 +287,7 @@ class Controllerpage extends Controller
         if ($this->page->commentcount() > 0) {
             try {
                 $commentmanager = new Modelcomment();
-                $datas['comments'] = $commentmanager->getcomments($page);
+                $datas['comments'] = array_reverse($commentmanager->getcomments($page), true);
             } catch (RuntimeException $e) {
                 Logger::errorex($e);
             }

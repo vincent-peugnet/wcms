@@ -116,4 +116,34 @@ class Modelcomment extends Modeldb
             // no need to delete it if it does not exist
         }
     }
+
+    /**
+     * @param array<int, Comment> $comments
+     *
+     * @throws Databaseexception if update failed
+     */
+    protected function update(string $id, array $comments): void
+    {
+        array_walk($comments, function (Comment &$comment) {
+            $comment = $comment->dry();
+        });
+        $doc = new Document($comments);
+        $doc->setId($id);
+        $this->updatedoc($doc);
+    }
+
+    /**
+     * @param string[] $validids                 comment IDs
+     *
+     * @throws Databaseexception if no comment are found for given page ID or update failed
+     */
+    public function validateids(string $pageid, array $validids): void
+    {
+        $comments = $this->getcomments($pageid);
+
+        array_walk($comments, function (Comment &$comment, int $id, array $validids) {
+            $comment->setvalidated(in_array($id, $validids));
+        }, $validids);
+        $this->update($pageid, $comments);
+    }
 }

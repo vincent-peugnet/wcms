@@ -90,18 +90,22 @@
 
             <details id="comments" <?= $workspace->collapsemenu() ? '' : 'open' ?>>
                 <summary>comments (<?= count($comments) ?>)</summary>
+                <form action="<?= $this->url('pagecommentmoderation', ['page' => $page->id()]) ?>" method="post">
+                    <input type="submit" value="update moderation">
+                    <ul>
+                        <?php foreach($comments as $id => $comment) : ?>
+                            <li class="comment">
+                                <strong class="username"><?=$comment->username() ?></strong>
+                                <span class="id"><?= $id ?></span>
+                                <div class="message"><?= $this->e($comment->message()) ?></div>
+                                <div class="date"><?= $comment->date('hrdi') ?> ago</div>
 
-                <ul>
-                    <?php foreach($comments as $id => $comment) : ?>
-                        <li class="comment">
-                            <strong class="username"><?=$comment->username() ?></strong>
-                            <span class="id"><?= $id ?></span>
-                            <div class="message"><?= $this->e($comment->message()) ?></div>
-                            <div class="date"><?= $comment->date('hrdi') ?> ago</div>
-                        </li>
-                    <?php endforeach ?>
-                </ul>     
-
+                                <input type="checkbox" name="validatedcomment[]" value="<?= $id ?>" id="comment-<?= $id ?>" <?= $comment->validated() ? 'checked' : '' ?>>
+                                <label for="comment-<?= $id ?>">validated</label>
+                            </li>
+                        <?php endforeach ?>
+                    </ul>     
+                </form>
             </details>
 
             <details id="help" <?= $workspace->collapsemenu() ? '' : 'open' ?>>

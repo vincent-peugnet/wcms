@@ -71,6 +71,7 @@ class Controllercomment extends Controller
 
         if ($conf->mode() !== Commentconf::VISITOR_MODE) {
             $comment->setusername($this->user->id());
+            $comment->setvalidated(true); // logged in user comments are validated by default
         }
 
         if (!$comment->validate($conf)) {
@@ -91,5 +92,35 @@ class Controllercomment extends Controller
         }
 
         $this->routedirect('pageread', ['page' => $page->id()]);
+    }
+
+    public function moderation(string $page): never
+    {
+        $pageid = $page;
+        try {
+            $page = $this->pagemanager->get($pageid);
+        } catch (RuntimeException $e) {
+            http_response_code(404);
+            $this->showtemplate('forbidden');
+        }
+
+        if (!$this->canedit($page)) {
+            http_response_code(401);
+            $this->showtemplate('forbidden');
+        }
+
+        $validcommentids = $_POST['validatedcomment'] ?? [];
+
+        try {
+            $this->commentmanager->validateids($pageid, $validcommentids);
+
+            $page->setdatecomment($this->now);
+            $this->pagemanager->update($page);
+        } catch (Databaseexception $e) {
+            http_response_code(500);
+            exit;
+        }
+
+        $this->routedirect('pageedit', ['page' => $pageid]);
     }
 }

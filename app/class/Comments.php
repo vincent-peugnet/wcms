@@ -74,6 +74,9 @@ class Comments extends Item
             $ul->setAttribute('class', 'comments');
 
             foreach ($comments as $id => $comment) {
+                if (!$comment->validated()) {
+                    continue;
+                }
                 $li = $this->commentline($id, $comment, $dom);
                 $ul->appendChild($li);
             }
@@ -95,7 +98,13 @@ class Comments extends Item
         $li = $dom->createElement('li');
         $fragment = "comment-$id";
         $li->setAttribute('id', $fragment);
-        $li->setAttribute('class', 'comment');
+
+        $classes = ['comment'];
+        if ($comment->validated()) {
+            $classes[] = 'validated';
+        }
+        $li->setAttribute('class', implode(' ', $classes));
+        $li->setAttribute('data-validated', strval(intval($comment->validated())));
         $fragmentlink = $dom->createElement('a', "#$id");
         $fragmentlink->setAttribute('href', "#$fragment");
         $fragmentlink->setAttribute('class', 'comment-id'); // TODO: find a good class name
