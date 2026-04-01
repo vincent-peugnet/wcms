@@ -14,6 +14,7 @@ class Comments extends Item
 {
     protected int $order = 1;
     protected ?string $id = null;
+    protected ?int $limit = null;
 
     /** @var Page $page the rendered page */
     protected Page $page;
@@ -73,12 +74,14 @@ class Comments extends Item
             $ul = $dom->createElement('ul');
             $ul->setAttribute('class', 'comments');
 
+            $i = 0;
             foreach ($comments as $id => $comment) {
-                if (!$comment->validated()) {
+                if (!$comment->validated() || $i === $this->limit) {
                     continue;
                 }
                 $li = $this->commentline($id, $comment, $dom);
                 $ul->appendChild($li);
+                $i++;
             }
 
             $dom->appendChild($ul);
@@ -154,6 +157,11 @@ class Comments extends Item
         return $this->id;
     }
 
+    public function limit(): ?int
+    {
+        return $this->limit;
+    }
+
     /**
      * @param mixed $order
      */
@@ -168,5 +176,16 @@ class Comments extends Item
     public function setid(string $id): void
     {
         $this->id = $id;
+    }
+
+    public function setlimit(?int $limit): void
+    {
+        if ($limit === null) {
+            $this->limit = null;
+            return;
+        }
+        if ($limit >= 0) {
+            $this->limit = $limit;
+        }
     }
 }
