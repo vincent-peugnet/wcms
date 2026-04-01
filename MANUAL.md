@@ -597,7 +597,7 @@ It will generate an HTML list element where each `<li>` is a comment. The ID is 
 
 ##### Styling
 
-A data-attribute `data-validated` indicate if comment has been validated using [moderation](#moderation).
+A data-attribute `data-approved` indicate if comment has been approved using [moderation](#moderation).
 
 Most of the time, you may be interested to use the following line of CSS to respect line breaks.
 
@@ -1080,11 +1080,11 @@ This should not be confused with [comment list inclusion](#comment-list) limit.
 
 Moderation can be done in [page edit view](#edition-interface) right panel.
 
-Each comment have a *validated* status, that can be checked or unchecked.
+Each comment have a *approved* status, that can be checked or unchecked.
 
-Comments from logged-in users are *validated* by default whereas visitor users are not.
+Comments from logged-in users are *approved* by default whereas visitor users are not.
 
-By default, [comment list inclusion](#comment-list) do not display unvalidated comments. This prevent any visitor comment being displayed without editor's approval.
+By default, [comment list inclusion](#comment-list) do not display unapproved comments. This prevent any visitor comment being displayed without editor's approval.
 
 
 

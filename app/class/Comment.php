@@ -17,10 +17,9 @@ class Comment extends Item
     protected string $message = '';
 
     /**
-     * @var bool $validated indicate if the comment has been validated
-     * @todo find a better name, as it's too close to validate() func
+     * @var bool $approved indicate if the comment has been approved
      */
-    protected bool $validated = false;
+    protected bool $approved = false;
 
     public const MAX_MESSAGE_LENGTH = 2 ** 14;
 
@@ -114,9 +113,9 @@ class Comment extends Item
         return $this->datetransform('date', $option);
     }
 
-    public function validated(): bool
+    public function approved(): bool
     {
-        return $this->validated;
+        return $this->approved;
     }
 
 
@@ -163,8 +162,8 @@ class Comment extends Item
         }
     }
 
-    public function setvalidated(bool $validated): void
+    public function setapproved(bool $approved): void
     {
-        $this->validated = $validated;
+        $this->approved = $approved;
     }
 }

@@ -76,7 +76,7 @@ class Comments extends Item
 
             $i = 0;
             foreach ($comments as $id => $comment) {
-                if (!$comment->validated() || $i === $this->limit) {
+                if (!$comment->approved() || $i === $this->limit) {
                     continue;
                 }
                 $li = $this->commentline($id, $comment, $dom);
@@ -103,11 +103,11 @@ class Comments extends Item
         $li->setAttribute('id', $fragment);
 
         $classes = ['comment'];
-        if ($comment->validated()) {
-            $classes[] = 'validated';
+        if ($comment->approved()) {
+            $classes[] = 'approved';
         }
         $li->setAttribute('class', implode(' ', $classes));
-        $li->setAttribute('data-validated', strval(intval($comment->validated())));
+        $li->setAttribute('data-approved', strval(intval($comment->approved())));
         $fragmentlink = $dom->createElement('a', "#$id");
         $fragmentlink->setAttribute('href', "#$fragment");
         $fragmentlink->setAttribute('class', 'comment-id'); // TODO: find a good class name
