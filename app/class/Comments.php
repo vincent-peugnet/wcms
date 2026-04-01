@@ -9,6 +9,7 @@ use DOMNode;
 use IntlDateFormatter;
 use LogicException;
 use RuntimeException;
+use VStelmakh\UrlHighlight\UrlHighlight;
 
 class Comments extends Item
 {
@@ -28,6 +29,8 @@ class Comments extends Item
     protected IntlDateFormatter $datedisplayformater;
     protected IntlDateFormatter $datetitleformatter;
 
+    protected UrlHighlight $urlhighlighter;
+
     /**
      * @param Page $page                    Page where the comment list is rendered
      * @param array<string, mixed> $data
@@ -43,6 +46,7 @@ class Comments extends Item
 
         $this->commentmanager = new Modelcomment();
         $this->usermanager = new Modeluser();
+        $this->urlhighlighter = new UrlHighlight();
     }
 
     /**
@@ -142,9 +146,15 @@ class Comments extends Item
         $time->setAttribute('title', $this->datetitleformatter->format($comment->date()));
         $li->appendChild($time);
 
-        $message = $dom->createElement('p', htmlspecialchars($comment->message()));
-        $message->setAttribute('class', 'message');
-        $li->appendChild($message);
+        $message = $dom->createDocumentFragment();
+        $message->appendXML(
+            $this->urlhighlighter->highlightUrls(nl2br(htmlspecialchars($comment->message())))
+        );
+
+        $paragraph = $dom->createElement('p');
+        $paragraph->appendChild($message);
+        $paragraph->setAttribute('class', 'message');
+        $li->appendChild($paragraph);
 
         return $li;
     }
