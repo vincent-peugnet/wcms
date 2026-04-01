@@ -21,12 +21,16 @@ class Controllercomment extends Controller
 
     public function comment(string $page): never
     {
+        if (!Config::comments()) {
+            http_response_code(400);
+            $this->showtemplate('forbidden', ['message' => 'Comments are disabled globally']);
+        }
 
         try {
             $page = $this->pagemanager->get($page);
         } catch (RuntimeException $e) {
             http_response_code(404);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', ['message' => $e->getMessage()]);
         }
 
 

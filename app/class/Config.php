@@ -76,6 +76,9 @@ abstract class Config
     /** Global cache duration in seconds. Default is one week */
     protected static int $cachettl = 604800;
 
+    /** Enable comment system */
+    protected static bool $comments = false;
+
     /** LDAP auth */
     protected static string $ldapserver = '';
     protected static string $ldaptree = '';
@@ -451,6 +454,11 @@ abstract class Config
         return self::$cachettl;
     }
 
+    public static function comments(): bool
+    {
+        return self::$comments;
+    }
+
     public static function ldapserver(): string
     {
         return self::$ldapserver;
@@ -761,6 +769,11 @@ abstract class Config
         if ($cachettl >= -1 && $cachettl <= Model::MAX_CACHE_TTL) {
             self::$cachettl = $cachettl;
         }
+    }
+
+    public static function setcomments(bool $enable): void
+    {
+        self::$comments = $enable;
     }
 
     public static function setldapserver(string $ldapserver): void

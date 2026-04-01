@@ -659,9 +659,12 @@ abstract class Servicerender
                 continue;
             }
 
-            if ($this->commentlimitreached) {
-                $element->setAttribute('disabled', '1');
-            } elseif ($commentconf->mode() === Commentconf::USER_MODE) {
+            if (!Config::comments() || $this->commentlimitreached) {
+                $element->setAttribute('disabled', '');
+                continue;
+            }
+
+            if ($commentconf->mode() === Commentconf::USER_MODE) {
                 $element->setAttribute(Servicepostprocess::DISABLED_IF_VISITOR_MARKER, '1');
                 $this->postprocessaction = true; // this is called multiple times, not very optimized but ok
             }
