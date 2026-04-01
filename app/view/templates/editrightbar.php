@@ -90,22 +90,26 @@
 
             <details id="comments" <?= $workspace->collapsemenu() ? '' : 'open' ?>>
                 <summary>comments (<?= count($comments) ?>)</summary>
-                <form action="<?= $this->url('pagecommentmoderation', ['page' => $page->id()]) ?>" method="post">
-                    <input type="submit" value="update moderation">
-                    <ul>
-                        <?php foreach($comments as $id => $comment) : ?>
-                            <li class="comment">
-                                <strong class="username"><?=$comment->username() ?></strong>
-                                <span class="id"><?= $id ?></span>
-                                <div class="message"><?= $this->e($comment->message()) ?></div>
-                                <div class="date"><?= $comment->date('hrdi') ?> ago</div>
+                <?php if(count($comments) > 0) : ?>
+                    <form action="<?= $this->url('pagecommentmoderation', ['page' => $page->id()]) ?>" method="post">
+                        <input type="submit" value="update moderation">
+                        <ul>
+                            <?php foreach($comments as $id => $comment) : ?>
+                                <li class="comment">
+                                    <?= !empty($comment->username()) ? '<i class="fa fa-user"></i>' : '' ?>
+                                    <strong class="username"><?= empty($comment->username()) ? $comment->pseudonym() : $comment->username() ?></strong>
+                                    <a target="_blank" href="<?= $comment->website() ?>"><?= ltrim(substr($comment->website(), 6), "\/") ?></a>
+                                    <span class="id"><?= $id ?></span>
+                                    <div class="message"><?= $this->e($comment->message()) ?></div>
+                                    <div class="date"><?= $comment->date('hrdi') ?> ago</div>
 
-                                <input type="checkbox" name="validatedcomment[]" value="<?= $id ?>" id="comment-<?= $id ?>" <?= $comment->validated() ? 'checked' : '' ?>>
-                                <label for="comment-<?= $id ?>">validated</label>
-                            </li>
-                        <?php endforeach ?>
-                    </ul>     
-                </form>
+                                    <input type="checkbox" name="validatedcomment[]" value="<?= $id ?>" id="comment-<?= $id ?>" <?= $comment->validated() ? 'checked' : '' ?>>
+                                    <label for="comment-<?= $id ?>">valid</label>
+                                </li>
+                            <?php endforeach ?>
+                        </ul>     
+                    </form>
+                <?php endif ?>
             </details>
 
             <details id="help" <?= $workspace->collapsemenu() ? '' : 'open' ?>>
