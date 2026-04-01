@@ -113,10 +113,8 @@ class Controllercomment extends Controller
             $this->showtemplate('forbidden');
         }
 
-        $approvedcommentids = $_POST['approvedcomment'] ?? [];
-
         try {
-            $this->commentmanager->approveids($pageid, $approvedcommentids);
+            $this->commentmanager->applymoderation($pageid, $_POST);
 
             // invalidate cache of the page that store the comments
             // we assume here that there's a lot of chance the page display it's own comments

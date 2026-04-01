@@ -133,17 +133,25 @@ class Modelcomment extends Modeldb
     }
 
     /**
-     * @param string[] $approvedids         comment IDs
+     * @param array<int, string> $statuses     key is comment ID, value is `-1`, `0` or `1`
      *
      * @throws Databaseexception if no comment are found for given page ID or update failed
      */
-    public function approveids(string $pageid, array $approvedids): void
+    public function applymoderation(string $pageid, array $statuses): void
     {
         $comments = $this->getcomments($pageid);
 
-        array_walk($comments, function (Comment &$comment, int $id, array $approvedids) {
-            $comment->setapproved(in_array($id, $approvedids));
-        }, $approvedids);
+        foreach ($comments as $id => $comment) {
+            if (!isset($statuses[$id])) {
+                continue; // this is strange
+            }
+            $status = intval($statuses[$id]);
+            if ($status === -1) {
+                unset($comments[$id]);
+            } else {
+                $comments[$id]->setapproved(boolval($status));
+            }
+        }
         $this->update($pageid, $comments);
     }
 }

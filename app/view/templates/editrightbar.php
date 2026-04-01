@@ -94,7 +94,7 @@
                     <form action="<?= $this->url('pagecommentmoderation', ['page' => $page->id()]) ?>" method="post">
                         <button type="submit">
                             <i class="fa fa-gavel"></i>
-                            update comment moderation
+                            apply comment moderation
                         </button>
                         <ul>
                             <?php foreach($comments as $id => $comment) : ?>
@@ -106,10 +106,17 @@
                                     <div class="message"><?= $this->e($comment->message()) ?></div>
                                     <div class="date"><?= $comment->date('hrdi') ?> ago</div>
 
-                                    <input type="checkbox" name="approvedcomment[]" value="<?= $id ?>" id="comment-<?= $id ?>" <?= $comment->approved() ? 'checked' : '' ?>>
-                                    <label for="comment-<?= $id ?>" title="approve comment">
-                                        <i class="fa fa-thumbs-o-up"></i>
-                                    </label>
+                                    <div class="moderation">
+                                        <label for="comment-delete-<?= $id ?>" title="delete comment" class="delete">
+                                            <i class="fa fa-trash-o"></i>
+                                        </label>
+                                        <input type="radio" name="<?= $id ?>" value="-1" id="comment-delete-<?= $id ?>" class="delete">
+                                        <input type="radio" name="<?= $id ?>" value="0" <?= $comment->approved() ? '' : 'checked' ?> class="neutral">
+                                        <input type="radio" name="<?= $id ?>" value="1" <?= $comment->approved() ? 'checked' : '' ?> id="comment-approve-<?= $id ?>" class="approve">
+                                        <label for="comment-approve-<?= $id ?>" title="approve comment" class="approve">
+                                            <i class="fa fa-thumbs-o-up"></i>
+                                        </label>
+                                    </div>
                                 </li>
                             <?php endforeach ?>
                         </ul>     
