@@ -703,6 +703,12 @@ abstract class Servicerender
                         }
                     }
                     break;
+
+                case 'success':
+                    if ($element->hasAttribute('value')) {
+                        $commentconf->setsuccess($element->getAttribute('value'));
+                    }
+                    break;
             }
         }
     }

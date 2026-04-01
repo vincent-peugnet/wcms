@@ -215,9 +215,12 @@ class Controllerpage extends Controller
             }
         }
 
+        // check for a potential alert stored in session
+        $alert = $this->servicesession->consumealert($this->page->id());
+
         // read rendered HTML and apply post process render if necessary
         $html = file_get_contents(Model::HTML_RENDER_DIR . $page . '.html');
-        $postprocessor = new Servicepostprocess($this->page, $this->user);
+        $postprocessor = new Servicepostprocess($this->page, $this->user, $alert);
         $html = $postprocessor->process($html);
 
         // Do some sleep if the page need to

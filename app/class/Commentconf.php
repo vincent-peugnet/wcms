@@ -30,6 +30,11 @@ class Commentconf extends Item
      */
     protected bool $requirewebsite = false;
 
+    /**
+     * @var string $success message that should be displayed to page viewer in case of success
+     */
+    protected string $success = '';
+
     public const VISITOR_MODE = 'visitor';
     public const USER_MODE = 'user';
     public const MODES = [self::VISITOR_MODE, self::USER_MODE];
@@ -91,6 +96,11 @@ class Commentconf extends Item
         return $this->allowwebsite;
     }
 
+    public function success(): string
+    {
+        return $this->success;
+    }
+
     /**
      * @return bool                         indicting if setting was valid or not
      */
@@ -144,5 +154,10 @@ class Commentconf extends Item
     public function setallowwebsite(bool $allow): void
     {
         $this->allowwebsite = $allow;
+    }
+
+    public function setsuccess(string $success): void
+    {
+        $this->success = $success;
     }
 }

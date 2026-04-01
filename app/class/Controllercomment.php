@@ -91,6 +91,10 @@ class Controllercomment extends Controller
             $page->setdatecomment($comment->date());
             $this->pagemanager->update($page);
             Logger::info('new comment on page "%s"', $page->id());
+
+            if (!empty($conf->success())) {
+                $this->servicesession->addalert($page->id(), $conf->success());
+            }
         } catch (Databaseexception $e) {
             Logger::errorex($e);
         }

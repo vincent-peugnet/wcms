@@ -18,6 +18,9 @@ class Servicepostprocess
     /** @var bool Indicate if the page need some specific actions like replacements */
     protected bool $action;
 
+    /** @var string May store an alert that should be displayed */
+    protected ?string $alert;
+
     public const VISIT_COUNT     = '%VISITCOUNT%';
     public const EDIT_COUNT      = '%EDITCOUNT%';
     public const AFF_COUNT       = '%DISPLAYCOUNT%';
@@ -29,11 +32,12 @@ class Servicepostprocess
         self::AFF_COUNT,
     ];
 
-    public function __construct(Page $page, User $user)
+    public function __construct(Page $page, User $user, ?string $alert = null)
     {
         $this->page = $page;
         $this->user = $user;
         $this->action = $page->postprocessaction();
+        $this->alert = $alert;
     }
 
     /**
@@ -41,7 +45,7 @@ class Servicepostprocess
      */
     public function process(string $html): string
     {
-        $html = $this->jsvars($html);
+        $html = $this->js($html);
         if ($this->action) {
             $html = $this->replace($html);
         }
@@ -49,16 +53,21 @@ class Servicepostprocess
     }
 
     /**
-     * Inject Javscript vars inside HTML head of the page
+     * Inject Javascript vars, and an alert message if needed, inside HTML head of the page
      */
-    private function jsvars(string $html): string
+    private function js(string $html): string
     {
         try {
             $wobj = $this->wobj($this->page, $this->user);
         } catch (JsonException $e) {
             $wobj = '{}';
         }
-        $script = "\n<script>const w = $wobj</script>";
+        $s = "const w = $wobj;";
+        if ($this->alert !== null) {
+            $alert = addslashes($this->alert);
+            $s .= "alert('$alert');";
+        }
+        $script = "\n<script>$s</script>";
         return insert_after($html, '<head>', $script);
     }
 
