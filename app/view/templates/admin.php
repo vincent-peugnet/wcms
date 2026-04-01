@@ -137,6 +137,20 @@
             </p>
         </form>
 
+        <h3>Comment system</h3>
+
+        <p class="info">
+            Allow new comments to be posted on pages.<br>
+            See <a href="<?= $this->url('info', [], '#comments') ?>">📖 manual section</a> for more infos.
+        </p>
+
+        <p class="field">
+            <label for="comments">enable comments</label>
+            <input type="hidden" name="comments" value="0" form="admin">
+            <input type="checkbox" name="comments" id="comments" value="1" <?= Wcms\Config::comments() ? 'checked' : '' ?> form="admin">
+
+        </p>
+
     </div>
 
     <div class="grid-item"  id="interface">
