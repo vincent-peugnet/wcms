@@ -237,9 +237,9 @@ textarea#editcontent {
 }
 
 .comment .date {
-    margin: var(--half-spacing);
     font-size: var(--size-small);
     text-align: right;
+    float: right;
 }
 
 /* --------------------------------------------------------- help */
