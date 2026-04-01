@@ -55,6 +55,7 @@ class User extends Item
         'externallinks',
         'geolocalisation',
         'datemodif',
+        'datecomment',
         'datecreation',
         'date',
         'secure',

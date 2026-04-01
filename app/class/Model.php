@@ -46,6 +46,7 @@ abstract class Model
         'externallinks' => 'external links',
         'geolocalisation' => 'geolocalisation',
         'datemodif' => 'modification date',
+        'datecomment' => 'last comment',
         'datecreation' => 'creation date',
         'date' => 'date',
         'secure' => 'privacy',

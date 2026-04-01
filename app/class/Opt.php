@@ -86,6 +86,7 @@ class Opt extends Item
         'linkto',
         'externallinks',
         'datemodif',
+        'datecomment',
         'datecreation',
         'date',
         'secure',
