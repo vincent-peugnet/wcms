@@ -16,6 +16,9 @@ class Comments extends Item
     protected ?string $id = null;
     protected ?int $limit = null;
 
+    /** Show unapproved comments */
+    protected bool $unapproved = false;
+
     /** @var Page $page the rendered page */
     protected Page $page;
 
@@ -76,7 +79,7 @@ class Comments extends Item
 
             $i = 0;
             foreach ($comments as $id => $comment) {
-                if (!$comment->approved() || $i === $this->limit) {
+                if ((!$this->unapproved && !$comment->approved()) || $i === $this->limit) {
                     continue;
                 }
                 $li = $this->commentline($id, $comment, $dom);
@@ -103,10 +106,9 @@ class Comments extends Item
         $li->setAttribute('id', $fragment);
 
         $classes = ['comment'];
-        if ($comment->approved()) {
-            $classes[] = 'approved';
-        }
+        $classes[] = $comment->approved() ? 'approved' : 'unapproved';
         $li->setAttribute('class', implode(' ', $classes));
+
         $li->setAttribute('data-approved', strval(intval($comment->approved())));
         $fragmentlink = $dom->createElement('a', "#$id");
         $fragmentlink->setAttribute('href', "#$fragment");
@@ -162,6 +164,11 @@ class Comments extends Item
         return $this->limit;
     }
 
+    public function unapproved(): bool
+    {
+        return $this->unapproved;
+    }
+
     /**
      * @param mixed $order
      */
@@ -187,5 +194,10 @@ class Comments extends Item
         if ($limit >= 0) {
             $this->limit = $limit;
         }
+    }
+
+    public function setunapproved(bool $unapproved): void
+    {
+        $this->unapproved = $unapproved;
     }
 }

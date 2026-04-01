@@ -591,6 +591,7 @@ To print a list of comment on a page, use the following code.
 - `id` page to use
 - `order` order of the sorting, can be `1` or `-1`
 - `limit` limit the quantity of comment.
+- `unapproved` show the unapproved comments, can be `0` or `1`
 
 It will generate an HTML list element where each `<li>` is a comment. The ID is the comment number prefixed by `comment-`.
 
