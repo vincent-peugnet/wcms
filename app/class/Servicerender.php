@@ -538,45 +538,7 @@ abstract class Servicerender
             }
 
             foreach ($disablables as $elements) {
-                foreach ($elements as $element) {
-                    if (!($element instanceof DOMElement)) {
-                        continue;
-                    }
-
-                    if ($this->commentlimitreached) {
-                        $element->setAttribute('disabled', '1');
-                    } elseif ($commentconf->mode() === Commentconf::USER_MODE) {
-                        $element->setAttribute(Servicepostprocess::DISABLED_IF_VISITOR_MARKER, '1');
-                        $this->postprocessaction = true; // this is called multiple times, not very optimized but ok
-                    }
-
-                    if ($element->getAttribute('name') === 'message') {
-                        // Manage maxlength attribute
-                        if ($element->hasAttribute('maxlength')) {
-                            $commentconf->setmaxlength(intval($element->getAttribute('maxlength')));
-                        }
-                        $element->setAttribute('maxlength', strval($commentconf->maxlength()));
-
-                        if ($element->hasAttribute('minlength')) {
-                            $commentconf->setminlength(intval($element->getAttribute('minlength')));
-                        }
-                        $element->setAttribute('minlength', strval($commentconf->minlength()));
-                    }
-
-                    if ($element->getAttribute('name') === 'pseudonym') {
-                        if ($element->hasAttribute('required')) {
-                            $commentconf->setrequirepseudonym(true);
-                        }
-                        $element->setAttribute('maxlength', strval(Comment::MAX_PSEUDONYM_LENGTH));
-                    }
-
-                    if ($element->getAttribute('name') === 'website') {
-                        $commentconf->setallowwebsite(true);
-                        if ($element->hasAttribute('required')) {
-                            $commentconf->setrequirewebsite(true);
-                        }
-                    }
-                }
+                $this->formNodes($elements, $commentconf);
             }
 
             if ($this->commentlimitreached) {
@@ -681,6 +643,63 @@ abstract class Servicerender
             }
             if ($sourcable->tagName === 'img' && Config::lazyloadimg()) {
                 $sourcable->setAttribute('loading', 'lazy');
+            }
+        }
+    }
+
+    /**
+     * For each DOM node, apply rules regarding Comment configuration
+     *
+     * @param DOMNodeList<DOMElement> $elements
+     */
+    protected function formNodes(DOMNodeList $elements, Commentconf $commentconf): void
+    {
+        foreach ($elements as $element) {
+            if (!($element instanceof DOMElement)) {
+                continue;
+            }
+
+            if ($this->commentlimitreached) {
+                $element->setAttribute('disabled', '1');
+            } elseif ($commentconf->mode() === Commentconf::USER_MODE) {
+                $element->setAttribute(Servicepostprocess::DISABLED_IF_VISITOR_MARKER, '1');
+                $this->postprocessaction = true; // this is called multiple times, not very optimized but ok
+            }
+
+            switch ($element->getAttribute('name')) {
+                case 'message':
+                    if ($element->hasAttribute('maxlength')) {
+                        $commentconf->setmaxlength(intval($element->getAttribute('maxlength')));
+                    }
+                    $element->setAttribute('maxlength', strval($commentconf->maxlength()));
+
+                    if ($element->hasAttribute('minlength')) {
+                        $commentconf->setminlength(intval($element->getAttribute('minlength')));
+                    }
+                    $element->setAttribute('minlength', strval($commentconf->minlength()));
+                    break;
+
+                case 'pseudonym':
+                    if ($commentconf->mode() === Commentconf::USER_MODE) {
+                        $element->setAttribute('disabled', '');
+                    } else {
+                        if ($element->hasAttribute('required')) {
+                            $commentconf->setrequirepseudonym(true);
+                        }
+                        $element->setAttribute('maxlength', strval(Comment::MAX_PSEUDONYM_LENGTH));
+                    }
+                    break;
+
+                case 'website':
+                    if ($commentconf->mode() === Commentconf::USER_MODE) {
+                        $element->setAttribute('disabled', '');
+                    } else {
+                        $commentconf->setallowwebsite(true);
+                        if ($element->hasAttribute('required')) {
+                            $commentconf->setrequirewebsite(true);
+                        }
+                    }
+                    break;
             }
         }
     }
