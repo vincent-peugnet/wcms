@@ -214,6 +214,12 @@ use Wcms\Config;
                                     <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'datemodif']) ?>
                                 </th>
                             <?php endif ?>
+                            <?php if ($columns['datecomment']) : ?>
+                                <th class="datecomment">
+                                    <a href="<?= $opt->sortbyorder('datecomment') ?>">last comment</a>
+                                    <?= $this->insert('macro_tablesort', ['opt' => $opt, 'th' => 'datecomment']) ?>
+                                </th>
+                            <?php endif ?>
                             <?php if ($columns['datecreation']) : ?>
                                 <th class="datecreation">
                                     <a href="<?= $opt->sortbyorder('datecreation') ?>">date of creation</a>
@@ -375,6 +381,13 @@ use Wcms\Config;
                                 <?php if ($columns['datemodif']) : ?>
                                     <td class="datemodif" title="<?= $this->datemedium($item->datemodif()) ?>">
                                         <?= $item->datemodif('hrdi') ?>
+                                    </td>
+                                <?php endif ?>
+                                <?php if ($columns['datecomment']) : ?>
+                                    <td
+                                        class="datecomment"
+                                        <?= $item->datecomment() !== null ? 'title="' . $this->datemedium($item->datecomment()) . '"' : '' ?>">
+                                        <?= $item->datecomment('hrdi') ?>
                                     </td>
                                 <?php endif ?>
                                 <?php if ($columns['datecreation']) : ?>
