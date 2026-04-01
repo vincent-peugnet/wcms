@@ -118,9 +118,14 @@ class Controllercomment extends Controller
         try {
             $this->commentmanager->validateids($pageid, $validcommentids);
 
-            $page->setdatecomment($this->now);
+            // invalidate cache of the page that store the comments
+            // we assume here that there's a lot of chance the page display it's own comments
+            // but nothing is done for other pages that would print the comments
+            // by not updating page->datecomment here, it can still be used as last comment date
+            $this->pagemanager->removecache($pageid);
+
             $this->pagemanager->update($page);
-        } catch (Databaseexception $e) {
+        } catch (RuntimeException $e) {
             http_response_code(500);
             exit;
         }

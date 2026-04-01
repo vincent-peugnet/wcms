@@ -318,7 +318,7 @@ class Modelpage extends Modeldb
     }
 
     /**
-     * Delete rendered CSS, JS and HTML files associated with given Page
+     * Invalidate cache of a Page by deleting rendered CSS, JS and HTML files
      *
      * @param string|Page $id
      *
