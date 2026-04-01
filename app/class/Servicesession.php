@@ -84,6 +84,26 @@ class Servicesession
     }
 
     /**
+     * Add an alert to a dedicated page.
+     * The content will be shown as a JS alert the next time the page is loaded by this reader
+     */
+    public function addalert(string $pageid, string $content): void
+    {
+        $_SESSION['alerts'][$pageid] = $content;
+    }
+
+    /**
+     * Read a potential alert for a dedicated page.
+     * The storage is cleared after reading.
+     */
+    public function consumealert(string $pageid): ?string
+    {
+        $content = $_SESSION['alerts'][$pageid] ?? null;
+        unset($_SESSION['alerts'][$pageid]);
+        return $content;
+    }
+
+    /**
      * Empty current user session
      */
     public function empty(): void

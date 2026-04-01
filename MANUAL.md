@@ -1068,13 +1068,29 @@ Some options can be set for both modes.
 
 ##### comment limit
 
-The comment limit that the page should accept. To use a custom limit, add the limit `parameter`.
+The maximum number of comments that the page should accept. To use a custom limit, add the limit `parameter`.
 
 The following example add a limit of 100 comments to the page:
 
     %COMMENT?limit=100%
 
 This should not be confused with [comment list inclusion](#comment-list) limit.
+
+##### Success message
+
+It may be interesting to send a feedback that indicate that the comment as been weel recieved. It's possible to do it by adding an hidden field inside the form.
+
+This input type should be `hidden` and have it's name set to `success`. The content of the message is stored in the `value` attribute.
+
+Here is an example message that confirm the reception of the comment:
+
+```html
+<input type="hidden" name="success" value="Thanks for your comment ! 😀">
+```
+
+> 💡 This may be particuliary usefull if comments are not displayed on the page, or if some moderation is done before publication.
+
+
 
 
 ### Moderation
