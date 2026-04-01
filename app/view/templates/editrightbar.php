@@ -92,7 +92,10 @@
                 <summary>comments (<?= count($comments) ?>)</summary>
                 <?php if(count($comments) > 0) : ?>
                     <form action="<?= $this->url('pagecommentmoderation', ['page' => $page->id()]) ?>" method="post">
-                        <input type="submit" value="update moderation">
+                        <button type="submit">
+                            <i class="fa fa-gavel"></i>
+                            update comment moderation
+                        </button>
                         <ul>
                             <?php foreach($comments as $id => $comment) : ?>
                                 <li class="comment">
@@ -103,8 +106,10 @@
                                     <div class="message"><?= $this->e($comment->message()) ?></div>
                                     <div class="date"><?= $comment->date('hrdi') ?> ago</div>
 
-                                    <input type="checkbox" name="validatedcomment[]" value="<?= $id ?>" id="comment-<?= $id ?>" <?= $comment->validated() ? 'checked' : '' ?>>
-                                    <label for="comment-<?= $id ?>">valid</label>
+                                    <input type="checkbox" name="approvedcomment[]" value="<?= $id ?>" id="comment-<?= $id ?>" <?= $comment->approved() ? 'checked' : '' ?>>
+                                    <label for="comment-<?= $id ?>" title="approve comment">
+                                        <i class="fa fa-thumbs-o-up"></i>
+                                    </label>
                                 </li>
                             <?php endforeach ?>
                         </ul>     

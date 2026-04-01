@@ -133,17 +133,17 @@ class Modelcomment extends Modeldb
     }
 
     /**
-     * @param string[] $validids                 comment IDs
+     * @param string[] $approvedids         comment IDs
      *
      * @throws Databaseexception if no comment are found for given page ID or update failed
      */
-    public function validateids(string $pageid, array $validids): void
+    public function approveids(string $pageid, array $approvedids): void
     {
         $comments = $this->getcomments($pageid);
 
-        array_walk($comments, function (Comment &$comment, int $id, array $validids) {
-            $comment->setvalidated(in_array($id, $validids));
-        }, $validids);
+        array_walk($comments, function (Comment &$comment, int $id, array $approvedids) {
+            $comment->setapproved(in_array($id, $approvedids));
+        }, $approvedids);
         $this->update($pageid, $comments);
     }
 }

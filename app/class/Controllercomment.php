@@ -75,7 +75,7 @@ class Controllercomment extends Controller
 
         if ($conf->mode() !== Commentconf::VISITOR_MODE) {
             $comment->setusername($this->user->id());
-            $comment->setvalidated(true); // logged in user comments are validated by default
+            $comment->setapproved(true); // logged in user comments are approved by default
         }
 
         if (!$comment->validate($conf)) {
@@ -113,10 +113,10 @@ class Controllercomment extends Controller
             $this->showtemplate('forbidden');
         }
 
-        $validcommentids = $_POST['validatedcomment'] ?? [];
+        $approvedcommentids = $_POST['approvedcomment'] ?? [];
 
         try {
-            $this->commentmanager->validateids($pageid, $validcommentids);
+            $this->commentmanager->approveids($pageid, $approvedcommentids);
 
             // invalidate cache of the page that store the comments
             // we assume here that there's a lot of chance the page display it's own comments
