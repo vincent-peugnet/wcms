@@ -220,6 +220,7 @@ textarea#editcontent {
 
 .comment .id {
     float: right;
+    padding: var(--double-padding);
 }
 
 .comment .id:before {
@@ -228,8 +229,7 @@ textarea#editcontent {
 
 .comment .message {
     background: var(--primary-background-color);
-    color: var(--input-color);
-    padding: var(--padding);
+    padding: var(--double-padding);
     margin: var(--half-spacing) 0;
     border-radius: var(--radius);
     white-space: break-spaces;
@@ -242,6 +242,27 @@ textarea#editcontent {
     float: right;
 }
 
+.comment .delete {
+    accent-color: red;
+}
+
+.comment .approve {
+    accent-color: green;
+}
+
+.comment .neutral {
+    accent-color: #e87f00;
+}
+
+.moderation, .comment .date, .comment .id {
+    opacity: 0.5;
+}
+  
+.comment:hover .moderation, .comment:hover .date, .comment:hover .id {
+    opacity: 1;
+}
+  
+  
 /* --------------------------------------------------------- help */
 
 #help kbd {
