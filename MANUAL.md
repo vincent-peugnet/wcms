@@ -590,8 +590,14 @@ To print a list of comment on a page, use the following code.
 
 - `id` page to use
 - `order` order of the sorting, can be `1` or `-1`
+- `limit` limit the quantity of comment.
 
-It will generate an HTML list element.
+It will generate an HTML list element where each `<li>` is a comment. The ID is the comment number prefixed by `comment-`.
+
+
+##### Styling
+
+A data-attribute `data-validated` indicate if comment has been validated using [moderation](#moderation).
 
 Most of the time, you may be interested to use the following line of CSS to respect line breaks.
 
@@ -962,7 +968,7 @@ This folder is supposed to contain thumbnails images. Once images files (that ca
 Comments
 --------
 
-Each page can store it's own comment database. Comments are limited to 16k characters in size.
+Each page can store it's own comment database. Comments message are limited to 16k characters in size.
 
 To allow comment on a page, it should have a valid [comment form](#comment-form) inside it.
 
@@ -971,12 +977,14 @@ Comment can be printed in a page using [comment list inclusion](#comment-list).
 ### Comment form
 
 For more flexibility, comment form don't look like the traditionnal W inclusions. Instead it's based on a standard HTML form.
+They can be used in [content](#content), but seems more suited for [BODY](#body) as it's mostly pure HTML.
+Using a comment form in BODY allow it to be used in template.
 
 Mandatory parts are:
 
 - form `action` should point to `%COMMENT%`
 - form `method` should be `post`
-- message must use an `input`, `textarea` or `select` element and have its `type` set to `message`
+- message must use an `input`, `textarea`, `select` or `submit` HTML element and have its `type` set to `message`
 
 The following example describe a basic comment form that can be copied in your pages.
 
@@ -987,24 +995,39 @@ The following example describe a basic comment form that can be copied in your p
 </form>
 ```
 
-This also work great with templates.
+
+__Min and max length__ can be specified on the element with the name set to `message` using the official HTML attributes `minlength` and `maxlength`.
+
+> ⚠️ Using multiple form input that share the same value for `name` attribute will mess up the form and problems may orccur.
 
 
+__Comment modes:__
 
-#### Comment modes
+Comments form have two different modes: [user](#user-mode) and [visitor](#visitor-mode) that specify who can post new comment.
 
-Comments form have two different modes: `user` and `visitor`.
-It specify who can post new comment.
-The default mode is `user` mode which restrict posting to logged in users.
 
-To allow any visitor that browse the page to add a comment on it, add the `mode` parameter.
+#### User mode
 
-    %COMMENT?mode=<mode>%
+    %COMMENT?mode=user%
 
-##### Visitor
 
-When using the visitor mode, a new form input can be added that use the name `pseudonym`.
-This will store a pseudonym associated to the comment that will be displayed in `%COMMENTS%` inlcusion.
+The default mode which __restrict posting to logged in users__.
+
+In `user` mode, the username and if set, the display name of the user is used and displayed in comment list.
+And if a link is defined in user's profile, it will be used.
+the username or display name of the logged in user who posted will be used instead.
+
+
+#### Visitor mode
+
+    %COMMENT?mode=visitor%
+
+This mode __restrict posting to visitors__. Comment made by connected users will ignore their username and will be treated as visitor comments.
+
+
+##### Pseudonym
+
+When using the visitor mode, a new form input can be added that use the name `pseudonym`. This will store a pseudonym associated to the comment that will be displayed in [comment list inlcusion](#comment-list).
 
 __Example:__
 
@@ -1018,13 +1041,51 @@ To make this field mandatory, add the `required` HTML attribute:
 <input type="text" name="pseudonym" placeholder="my pseudonym" required>
 ```
 
+To provide a default value, for example `anonym`, or `mysterious person`, set the HTML value attribute.
+
+##### Website
+
+When using the visitor mode, a new form input can be added that use the name `website`. This will store an URL associated to the comment that will be displayed in [comment list inlcusion](#comment-list).
+
+This is recommended to use a HTML `type="url"` input tag, as this check that URL is valid before sending the form.
+
+__Example:__
+
+```html
+<input type="url" name="website" placeholder="your website">
+```
+
+To make this field mandatory, add the `required` HTML attribute:
+
+```html
+<input type="url" name="website" placeholder="your website" required>
+```
+
+#### Common options
+
+Some options can be set for both modes.
+
+##### comment limit
+
+The comment limit that the page should accept. To use a custom limit, add the limit `parameter`.
+
+The following example add a limit of 100 comments to the page:
+
+    %COMMENT?limit=100%
+
+This should not be confused with [comment list inclusion](#comment-list) limit.
 
 
-##### User
+### Moderation
 
-In `user` mode, the username and if set, the display name of the user is used and displayed in comment list.
-And if a link is defined in user's profile, it will be used.
-the username or display name of the logged in user who posted will be used instead.
+Moderation can be done in [page edit view](#edition-interface) right panel.
+
+Each comment have a *validated* status, that can be checked or unchecked.
+
+Comments from logged-in users are *validated* by default whereas visitor users are not.
+
+By default, [comment list inclusion](#comment-list) do not display unvalidated comments. This prevent any visitor comment being displayed without editor's approval.
+
 
 
 
