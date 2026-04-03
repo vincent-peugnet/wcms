@@ -6,14 +6,10 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use DateTimeInterface;
-use VStelmakh\UrlHighlight\UrlHighlight;
 
-class Comment extends Item
+abstract class Comment extends Item
 {
     protected DateTimeImmutable $date;
-    protected string $username = '';
-    protected string $pseudonym = '';
-    protected string $website = '';
     protected string $message = '';
 
     /**
@@ -24,13 +20,6 @@ class Comment extends Item
     public const MAX_MESSAGE_LENGTH = 2 ** 14;
 
     public const MAX_PSEUDONYM_LENGTH = 128;
-
-    // public function __construct(string $username, string $message)
-    // {
-    //     $this->date = new DateTimeImmutable();
-    //     $this->username = $username;
-    //     $this->message = $message;
-    // }
 
     /**
      * @param array<mixed> $data
@@ -48,57 +37,35 @@ class Comment extends Item
         if (strlen($this->message) < $conf->minlength()) {
             return false;
         }
-
-        // depending on the comment mode, only the pseudonym or username property could be filled
-        switch ($conf->mode()) {
-            case Commentconf::VISITOR_MODE:
-                if (!empty($this->username)) {
-                    return false;
-                }
-                if ($conf->requirepseudonym() && empty($this->pseudonym)) {
-                    return false;
-                }
-                if (!$conf->allowwebsite() && !empty($this->website)) {
-                    return false;
-                }
-                if ($conf->requirewebsite() && empty($this->website)) {
-                    return false;
-                }
-                if (!empty($this->website)) {
-                    $urlHighlight = new UrlHighlight();
-                    if (!$urlHighlight->isUrl($this->website)) {
-                        return false;
-                    }
-                }
-                break;
-
-            case Commentconf::USER_MODE:
-                if (empty($this->username) || !empty($this->pseudonym) || !empty($this->website)) {
-                    return false;
-                }
-                break;
-        }
-
         return true;
+    }
+
+    /**
+     * The name that shoule be displayed in internal interface
+     * It may be the pseudonym of visitor comment or the username of logged in user comment
+     */
+    public function visiblename(): string
+    {
+        return '';
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return Commentuser|Commentvisitor
+     */
+    public static function new(array $data): Comment
+    {
+        if (isset($data['username']) && !empty($data['username'])) {
+            return new Commentuser($data);
+        } else {
+            return new Commentvisitor($data);
+        }
     }
 
 
     // GET
 
-    public function username(): string
-    {
-        return $this->username;
-    }
-
-    public function pseudonym(): string
-    {
-        return $this->pseudonym;
-    }
-
-    public function website(): string
-    {
-        return $this->website;
-    }
 
     public function message(): string
     {
@@ -121,18 +88,7 @@ class Comment extends Item
 
     // SET
 
-    public function setusername(string $username): void
-    {
-        $this->username = $username;
-    }
 
-    public function setpseudonym(string $pseudonym): void
-    {
-        $pseudonym = trim(strip_tags($pseudonym));
-        if (strlen($pseudonym) <= self::MAX_PSEUDONYM_LENGTH) {
-            $this->pseudonym = $pseudonym;
-        }
-    }
 
     public function setmessage(string $message): void
     {
@@ -141,10 +97,6 @@ class Comment extends Item
         }
     }
 
-    public function setwebsite(string $website): void
-    {
-        $this->website = $website;
-    }
 
     /**
      * @param DateTimeImmutable|string $date

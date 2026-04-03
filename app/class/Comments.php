@@ -119,7 +119,7 @@ class Comments extends Item
         $fragmentlink->setAttribute('class', 'comment-id'); // TODO: find a good class name
         $li->appendChild($fragmentlink);
 
-        if (!empty($comment->username())) {
+        if ($comment instanceof Commentuser) {
             try {
                 $user = $this->usermanager->get($comment->username());
                 $userlink = $dom->createElement('a', empty($user->name()) ? $user->id() : $user->name());
@@ -131,7 +131,7 @@ class Comments extends Item
             }
             $userlink->setAttribute('class', 'user');
             $li->appendChild($userlink);
-        } elseif (!empty($comment->pseudonym())) {
+        } elseif ($comment instanceof Commentvisitor && !empty($comment->pseudonym())) {
             $userlink = $dom->createElement('a', htmlspecialchars($comment->pseudonym()));
             $userlink->setAttribute('class', 'visitor');
             if (!empty($comment->website())) {

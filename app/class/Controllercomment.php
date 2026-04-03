@@ -5,7 +5,7 @@ namespace Wcms;
 use Ahc\Jwt\JWT;
 use Ahc\Jwt\JWTException;
 use AltoRouter;
-use DateTimeImmutable;
+use DomainException;
 use RuntimeException;
 use Wcms\Exception\Databaseexception;
 
@@ -70,13 +70,22 @@ class Controllercomment extends Controller
             exit;
         }
 
-        $comment = new Comment($_POST);
-        $comment->setdate(new DateTimeImmutable());
+        switch ($conf->mode()) {
+            case Commentconf::VISITOR_MODE:
+                $comment = new Commentvisitor($_POST);
+                break;
 
-        if ($conf->mode() !== Commentconf::VISITOR_MODE) {
-            $comment->setusername($this->user->id());
-            $comment->setapproved(true); // logged in user comments are approved by default
+            case Commentconf::USER_MODE:
+                $comment = new Commentuser($_POST);
+                $comment->setusername($this->user->id());
+                $comment->setapproved(true); // logged in user comments are approved by default
+                break;
+
+            default:
+                throw new DomainException('Commentconf object mode is set to unauthorized value');
         }
+
+        $comment->setdate($this->now);
 
         if (!$comment->validate($conf)) {
             Logger::warning("'%s' sent a invalid comment on page '%s'", $this->user->id(), $page->id());
