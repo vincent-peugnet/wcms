@@ -99,9 +99,11 @@
                         <ul>
                             <?php foreach($comments as $id => $comment) : ?>
                                 <li class="comment">
-                                    <?= !empty($comment->username()) ? '<i class="fa fa-user"></i>' : '' ?>
-                                    <strong class="username"><?= empty($comment->username()) ? $comment->pseudonym() : $comment->username() ?></strong>
-                                    <a target="_blank" href="<?= $comment->website() ?>"><?= ltrim(substr($comment->website(), 6), "\/") ?></a>
+                                    <?= $comment instanceof Wcms\Commentuser ? '<i class="fa fa-user"></i>' : '' ?>
+                                    <strong class="username"><?= $this->e($comment->visiblename()) ?></strong>
+                                    <?php if ($comment instanceof Wcms\Commentvisitor) : ?>
+                                        <a target="_blank" href="<?= $comment->website() ?>"><?= ltrim(substr($comment->website(), 6), "\/") ?></a>
+                                    <?php endif ?>
                                     <span class="id"><?= $id ?></span>
                                     <div class="message"><?= $this->e($comment->message()) ?></div>
                                     <div class="date"><?= $comment->date('hrdi') ?> ago</div>

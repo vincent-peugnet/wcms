@@ -62,7 +62,7 @@ class Modelcomment extends Modeldb
         $data = $this->get($id);
         $comments = [];
         foreach ($data as $id => $data) {
-            $comments[intval($id)] = new Comment($data);
+            $comments[intval($id)] = Comment::new($data);
         }
         return $comments;
     }
