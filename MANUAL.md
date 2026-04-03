@@ -966,6 +966,10 @@ This folder is supposed to contain thumbnails images. Once images files (that ca
 
 
 
+
+
+
+
 Comments
 --------
 
@@ -1016,7 +1020,6 @@ The default mode which __restrict posting to logged in users__.
 
 In `user` mode, the username and if set, the display name of the user is used and displayed in comment list.
 And if a link is defined in user's profile, it will be used.
-the username or display name of the logged in user who posted will be used instead.
 
 
 #### Visitor mode
@@ -1068,13 +1071,17 @@ Some options can be set for both modes.
 
 ##### comment limit
 
-The maximum number of comments that the page should accept. To use a custom limit, add the limit `parameter`.
+The maximum number of comments that the page should accept.
 
-The following example add a limit of 100 comments to the page:
+The **default comment limit is 100 comments**. This default is set to low as a basic safe guard against comment overflow. It's meant to be increased if the risk is accepted.
 
-    %COMMENT?limit=100%
+To use a custom limit, add the `limit` parameter.
 
-This should not be confused with [comment list inclusion](#comment-list) limit.
+The following example set the limit to 44 comments:
+
+    %COMMENT?limit=44%
+
+This should not be confused with [comment list inclusion](#comment-list) limit, which only limits the displayed comments.
 
 ##### Success message
 
@@ -1095,13 +1102,26 @@ Here is an example message that confirm the reception of the comment:
 
 ### Moderation
 
-Moderation can be done in [page edit view](#edition-interface) right panel.
+Moderation of comments can be done in [page edit view](#edition-interface) right panel. This means that it's reserved to page's [authors](#authors) or [super editors](#super-editor) and above.
+
+Each comment have a status determined by one of the 3 colors: 🔴🟠🟢
+
+#### Approval
 
 Each comment have a *approved* status, that can be checked or unchecked.
 
 Comments from logged-in users are *approved* by default whereas visitor users are not.
 
-By default, [comment list inclusion](#comment-list) do not display unapproved comments. This prevent any visitor comment being displayed without editor's approval.
+By default, [comment list inclusion](#comment-list) do not display unapproved comments. This prevent any visitor comment from being displayed without editor's approval.
+
+In the editor interface, un-approved comments have an orange color status 🟠 (it correspond the central checkbox). To approve a comment, check the right 🟢 (green) checkbox.
+
+
+#### Comment deletion
+
+Comments can be deleted from the database by checking the red option 🔴 (the closest button to the trash icon). Once a comment is deleted, it's not possible to restore it.
+
+
 
 
 

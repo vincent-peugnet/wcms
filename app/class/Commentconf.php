@@ -10,7 +10,7 @@ class Commentconf extends Item
     protected int $maxlength = Comment::MAX_MESSAGE_LENGTH;
     protected int $minlength = 0;
     protected string $mode = self::USER_MODE;
-    protected ?int $limit = null;
+    protected ?int $limit = self::DEFAULT_LIMIT;
 
     /**
      * @var bool $requirepseudonym define if pseudonym field is mandatory.
@@ -38,6 +38,7 @@ class Commentconf extends Item
     public const VISITOR_MODE = 'visitor';
     public const USER_MODE = 'user';
     public const MODES = [self::VISITOR_MODE, self::USER_MODE];
+    public const DEFAULT_LIMIT = 100;
 
     /**
      * @param array<string, mixed> $data
