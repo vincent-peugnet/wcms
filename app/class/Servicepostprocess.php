@@ -62,13 +62,15 @@ class Servicepostprocess
         } catch (JsonException $e) {
             $wobj = '{}';
         }
-        $s = "const w = $wobj;";
+        $o = "\n<script>const w = $wobj</script>";
         if ($this->alert !== null) {
             $alert = addslashes($this->alert);
-            $s .= "alert('$alert');";
+            // this force the browser to render the page before sending the alert message
+            $a = "\n<script>window.onload = function(){setTimeout(function(){alert('$alert');},0)}</script>";
+        } else {
+            $a = '';
         }
-        $script = "\n<script>$s</script>";
-        return insert_after($html, '<head>', $script);
+        return insert_after($html, '<head>', $o . $a);
     }
 
     /**
