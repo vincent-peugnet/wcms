@@ -9,6 +9,7 @@ use DOMNode;
 use IntlDateFormatter;
 use LogicException;
 use RuntimeException;
+use VStelmakh\UrlHighlight\Highlighter\HtmlHighlighter;
 use VStelmakh\UrlHighlight\UrlHighlight;
 
 class Comments extends Item
@@ -29,7 +30,6 @@ class Comments extends Item
     protected IntlDateFormatter $datedisplayformater;
     protected IntlDateFormatter $datetitleformatter;
 
-    protected UrlHighlight $urlhighlighter;
 
     /**
      * @param Page $page                    Page where the comment list is rendered
@@ -46,7 +46,6 @@ class Comments extends Item
 
         $this->commentmanager = new Modelcomment();
         $this->usermanager = new Modeluser();
-        $this->urlhighlighter = new UrlHighlight();
     }
 
     /**
@@ -105,6 +104,19 @@ class Comments extends Item
      */
     protected function commentline(int $id, Comment $comment, DOMDocument $dom): DOMNode
     {
+        $rels = []; // List of rel attributes that should be added to links in message or website link
+        if ($comment instanceof Commentvisitor) {
+            $rels[] = 'ugc'; // User Generated Content
+        }
+        if (!$comment->approved()) {
+            $rels[] = 'nofollow'; // unsafe link
+        }
+        // User comments are considered to have safe content
+
+        // initalizr URL highlighter
+        $highlighter = new HtmlHighlighter('http', ['rel' => implode(' ', $rels)]);
+        $urlhighlight = new UrlHighlight(null, $highlighter);
+
         $li = $dom->createElement('li');
         $fragment = "comment-$id";
         $li->setAttribute('id', $fragment);
@@ -136,10 +148,10 @@ class Comments extends Item
             $userlink->setAttribute('class', 'visitor');
             if (!empty($comment->website())) {
                 $userlink->setAttribute('href', $comment->website());
+                $userlink->setAttribute('rel', implode(' ', $rels));
             }
             $li->appendChild($userlink);
         }
-
 
         $time = $dom->createElement('time', $this->datedisplayformater->format($comment->date()));
         $time->setAttribute('datetime', $comment->date()->format(DateTimeInterface::ATOM));
@@ -148,7 +160,7 @@ class Comments extends Item
 
         $message = $dom->createDocumentFragment();
         $message->appendXML(
-            $this->urlhighlighter->highlightUrls(nl2br(htmlspecialchars($comment->message())))
+            $urlhighlight->highlightUrls(nl2br(htmlspecialchars($comment->message())))
         );
 
         $paragraph = $dom->createElement('p');
