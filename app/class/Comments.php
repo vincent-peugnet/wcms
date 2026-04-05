@@ -113,7 +113,7 @@ class Comments extends Item
         }
         // User comments are considered to have safe content
 
-        // initalizr URL highlighter
+        // initalize URL highlighter
         $highlighter = new HtmlHighlighter('http', ['rel' => implode(' ', $rels)]);
         $urlhighlight = new UrlHighlight(null, $highlighter);
 
@@ -128,7 +128,7 @@ class Comments extends Item
         $li->setAttribute('data-approved', strval(intval($comment->approved())));
         $fragmentlink = $dom->createElement('a', "#$id");
         $fragmentlink->setAttribute('href', "#$fragment");
-        $fragmentlink->setAttribute('class', 'comment-id'); // TODO: find a good class name
+        $fragmentlink->setAttribute('class', 'id');
         $li->appendChild($fragmentlink);
 
         if ($comment instanceof Commentuser) {
@@ -143,9 +143,14 @@ class Comments extends Item
             }
             $userlink->setAttribute('class', 'user');
             $li->appendChild($userlink);
-        } elseif ($comment instanceof Commentvisitor && !empty($comment->pseudonym())) {
-            $userlink = $dom->createElement('a', htmlspecialchars($comment->pseudonym()));
-            $userlink->setAttribute('class', 'visitor');
+        } elseif (
+            $comment instanceof Commentvisitor &&
+            (!empty($comment->website()) || !empty($comment->pseudonym()))
+        ) {
+            $userlink = $dom->createElement(
+                'a',
+                htmlspecialchars(empty($comment->pseudonym()) ? $comment->website() : $comment->pseudonym())
+            );
             if (!empty($comment->website())) {
                 $userlink->setAttribute('href', $comment->website());
                 $userlink->setAttribute('rel', implode(' ', $rels));
