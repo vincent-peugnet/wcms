@@ -133,13 +133,13 @@ class Comments extends Item
 
         if ($comment instanceof Commentuser) {
             try {
-                $user = $this->usermanager->get($comment->username());
+                $user = $this->usermanager->get($comment->user());
                 $userlink = $dom->createElement('a', empty($user->name()) ? $user->id() : $user->name());
                 if (!empty($user->url())) {
                     $userlink->setAttribute('href', $user->url());
                 }
             } catch (RuntimeException $e) {
-                $userlink = $dom->createElement('a', $comment->username());
+                $userlink = $dom->createElement('a', $comment->user());
             }
             $userlink->setAttribute('class', 'user');
             $li->appendChild($userlink);
