@@ -595,10 +595,33 @@ To print a list of comment on a page, use the following code.
 
 It will generate an HTML list element where each `<li>` is a comment. The ID is the comment number prefixed by `comment-`.
 
+The main list tag (`<ul>`) have it's class attribute set to `comments`.
+
+Each list elements (`<li>`) have the class `comment`.
+
+It also have an `approved` or `unapproved` class that indicate if the comment has been approved or not.
+Additionnaly, a data-attribute `data-approved` is set to `0` or `1`.
+
+URLs in the message bloc will be transformed to links.
+
+> 💡 more details about comment approval in [comment moderation](#moderation) section.
+
+__HTML structure of a comment:__
+
+```html
+<li id="comment-ID" class="comment approved|unapproved" data-approved="0|1">
+    <a class="id">ID</a>
+    [<a class="name [user]" [href="WEBSITE"]>NAME|WEBSITE</a>]
+    <time>TIMESTAMP</time>
+    <p class="message">MESSAGE</p>
+</li>
+```
+
+In case of a comment coming from a local user, diplay name and URL will be used if available. The `<a>` element containing the name will also get the class `user`.
+
+In visitor mode, if no pseudonym or website is set, then the name `<a>` will not be printed.
 
 ##### Styling
-
-A data-attribute `data-approved` indicate if comment has been approved using [moderation](#moderation).
 
 Most of the time, you may be interested to use the following line of CSS to respect line breaks.
 
@@ -1165,7 +1188,10 @@ Profile
 
 The profile panel allow each users to edit some preferences. To access it, click on your username preceded by <i class="fa fa-user"></i> on the right side of the main menu.
 
-__Display name__ ande __url__ are used in case of an [authors inclusion](#authors-inclusion) or a [page list](#page-list) inclusion with `authors=1`.
+
+### settings
+
+__Display name__ ande __url__ are used in case of an [authors inclusion](#authors-inclusion), [comments inclusion](#comment-list) (if comment form mode is set to `user`) or a [page list](#page-list) inclusion with `authors=1`.
 
 
 
