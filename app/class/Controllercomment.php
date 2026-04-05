@@ -77,7 +77,7 @@ class Controllercomment extends Controller
 
             case Commentconf::USER_MODE:
                 $comment = new Commentuser($_POST);
-                $comment->setusername($this->user->id());
+                $comment->setuser($this->user->id());
                 $comment->setapproved(true); // logged in user comments are approved by default
                 break;
 

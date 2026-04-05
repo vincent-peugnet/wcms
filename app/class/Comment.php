@@ -56,7 +56,7 @@ abstract class Comment extends Item
      */
     public static function new(array $data): Comment
     {
-        if (isset($data['username']) && !empty($data['username'])) {
+        if (isset($data['user']) && !empty($data['user'])) {
             return new Commentuser($data);
         } else {
             return new Commentvisitor($data);

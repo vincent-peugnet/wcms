@@ -7,14 +7,14 @@ namespace Wcms;
  */
 class Commentuser extends Comment
 {
-    protected string $username = '';
+    protected string $user = '';
 
     public function validate(Commentconf $conf): bool
     {
         if (parent::validate($conf) === false) {
             return false;
         }
-        if (empty($this->username)) {
+        if (empty($this->user)) {
             return false;
         }
         return true;
@@ -22,16 +22,16 @@ class Commentuser extends Comment
 
     public function visiblename(): string
     {
-        return $this->username;
+        return $this->user;
     }
 
-    public function username(): string
+    public function user(): string
     {
-        return $this->username;
+        return $this->user;
     }
 
-    public function setusername(string $username): void
+    public function setuser(string $user): void
     {
-        $this->username = $username;
+        $this->user = $user;
     }
 }
