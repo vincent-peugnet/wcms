@@ -21,8 +21,6 @@ abstract class Comment extends Item
 
     public const MAX_MESSAGE_LENGTH = 2 ** 14;
 
-    public const MAX_PSEUDONYM_LENGTH = 128;
-
     /**
      * @param array<mixed> $data
      */
