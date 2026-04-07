@@ -13,6 +13,11 @@ class Commentconf extends Item
     protected ?int $limit = self::DEFAULT_LIMIT;
 
     /**
+     * @var bool $requirepseudonym define if message field is mandatory.
+     */
+    protected bool $requiremessage = false;
+
+    /**
      * @var bool $allowpseudonym define if pseudonym field can be set.
      * This only have an effect in VISITOR_MODE
      */
@@ -97,6 +102,11 @@ class Commentconf extends Item
         return $this->limit;
     }
 
+    public function requiremessage(): bool
+    {
+        return $this->requiremessage;
+    }
+
     public function allowpseudonym(): bool
     {
         return $this->allowpseudonym;
@@ -160,6 +170,11 @@ class Commentconf extends Item
         if ($limit >= 0) {
             $this->limit = $limit;
         }
+    }
+
+    public function setrequiremessage(bool $require): void
+    {
+        $this->requiremessage = $require;
     }
 
     public function setallowpseudonym(bool $allow): void

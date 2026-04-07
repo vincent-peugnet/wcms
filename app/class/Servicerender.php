@@ -680,6 +680,9 @@ abstract class Servicerender
                         $commentconf->setminlength(intval($element->getAttribute('minlength')));
                     }
                     $element->setAttribute('minlength', strval($commentconf->minlength()));
+                    if ($element->hasAttribute('required')) {
+                        $commentconf->setrequiremessage(true);
+                    }
                     break;
 
                 case 'pseudonym':

@@ -33,11 +33,21 @@ abstract class Comment extends Item
 
     public function validate(Commentconf $conf): bool
     {
-        if (strlen($this->message) > $conf->maxlength()) {
+        if ($conf->requiremessage() && empty($this->message)) {
             return false;
         }
-        if (strlen($this->message) < $conf->minlength()) {
-            return false;
+
+        if (!empty($this->message)) {
+            // unify linebreaks to avoid character count error
+            // @see <https://stackoverflow.com/a/7642371>
+            $message = str_replace('\r\n', '\n', $this->message);
+
+            if (mb_strlen($message) > $conf->maxlength()) {
+                return false;
+            }
+            if (mb_strlen($message) < $conf->minlength()) {
+                return false;
+            }
         }
         return true;
     }
