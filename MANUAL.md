@@ -609,7 +609,7 @@ URLs in the message bloc will be transformed to links.
 __HTML structure of a comment:__
 
 ```html
-<li id="comment-ID" class="comment approved|unapproved" data-approved="0|1">
+<li id="comment-ID" class="comment approved|unapproved visitor|user" data-approved="0|1">
     <a class="id">ID</a>
     [<a class="name [user]" [href="WEBSITE"]>NAME|WEBSITE</a>]
     <time>TIMESTAMP</time>
@@ -1025,13 +1025,14 @@ The following example describe a basic comment form that can be copied in your p
 
 
 __Min and max length__ can be specified on the element with the name set to `message` using the official HTML attributes `minlength` and `maxlength`.
+Max length cannot go beyond the hard limit of 16384 characters.
 
 > ⚠️ Using multiple form input that share the same value for `name` attribute will mess up the form and problems may orccur.
 
 
 __Comment modes:__
 
-Comments form have two different modes: [user](#user-mode) and [visitor](#visitor-mode) that specify who can post new comment.
+Comments form have tree different modes: [user](#user-mode), [visitor](#visitor-mode) and [all](#all-mode) that specifies who can post new comment.
 
 
 #### User mode
@@ -1039,10 +1040,10 @@ Comments form have two different modes: [user](#user-mode) and [visitor](#visito
     %COMMENT?mode=user%
 
 
-The default mode which __restrict posting to logged in users__.
+This is the default mode which __restrict posting to logged in users__.
 
-In `user` mode, the username and if set, the display name of the user is used and displayed in comment list.
-And if a link is defined in user's profile, it will be used.
+In `user` mode, the username, and if set, the display name of the user is used and displayed in comment list.
+And if a link is defined in user's profile, it will be used as well.
 
 
 #### Visitor mode
@@ -1058,15 +1059,20 @@ This mode __restrict posting to visitors__. Comment made by connected users is s
 
 Allow comment posted from __logged in users and from visitors__.
 
-If visitor fields like [pseudonym](#pseudonym) or [website](#website) are used in the form, they will be set to `disabled` state when a logged in user see the page.
+If visitor fields like [pseudonym](#pseudonym) or [website](#website) are used in the form, they will be set to `disabled` state when logged in users see the page.
 
 
 #### Visitor fields
 
+If the comment mode allow visitor to post, a few fields can be added to the form.
 
 ##### Pseudonym
 
-When using the visitor mode, a new form input can be added that use the name `pseudonym`. This will store a pseudonym associated to the comment that will be displayed in [comment list inlcusion](#comment-list).
+It uses the `pseudonym` name attribute and is supposed to store the name of the person who posted the comment. It will be displayed in [comment list inlcusion](#comment-list) inside a `<a>` tag with the classes `name` and `visitor`.
+
+Pseudonym field has a hard-limit of 64 characters. Tt will be automatically added to HTML during page rendering.
+
+Most of the time, one would use the HTML `text` type attribute for this field.
 
 __Example:__
 
@@ -1084,7 +1090,9 @@ To provide a default value, for example `anonym`, or `mysterious person`, set th
 
 ##### Website
 
-When using the visitor mode, a new form input can be added that use the name `website`. This will store an URL associated to the comment that will be displayed in [comment list inlcusion](#comment-list).
+It uses the `website` name attribute and is supposed to store the visitor's personnal website. It will be used in [comment list inlcusion](#comment-list) as the target of the name link. If no [pseudonym](#pseudonym) is defined for a comment, the URL of the website will be used instead.
+
+Website field has a hard-limit of 128 characters. Tt will be automatically added to HTML during page rendering.
 
 This is recommended to use a HTML `type="url"` input tag, as this check that URL is valid before sending the form.
 

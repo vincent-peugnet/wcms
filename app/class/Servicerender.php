@@ -691,7 +691,7 @@ abstract class Servicerender
                         if ($element->hasAttribute('required')) {
                             $commentconf->setrequirepseudonym(true);
                         }
-                        $element->setAttribute('maxlength', strval(Comment::MAX_PSEUDONYM_LENGTH));
+                        $element->setAttribute('maxlength', strval(Commentvisitor::MAX_PSEUDONYM_LENGTH));
                         if ($commentconf->mode() === Commentconf::ALL_MODE) {
                             $element->setAttribute(Servicepostprocess::DISABLED_IF_USER_MARKER, '1');
                             $this->postprocessaction = true;
@@ -707,6 +707,7 @@ abstract class Servicerender
                         if ($element->hasAttribute('required')) {
                             $commentconf->setrequirewebsite(true);
                         }
+                        $element->setAttribute('maxlength', strval(Commentvisitor::MAX_WEBSITE_LENGTH));
                         if ($commentconf->mode() === Commentconf::ALL_MODE) {
                             $element->setAttribute(Servicepostprocess::DISABLED_IF_USER_MARKER, '1');
                             $this->postprocessaction = true;

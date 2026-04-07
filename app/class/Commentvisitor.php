@@ -14,6 +14,9 @@ class Commentvisitor extends Comment
 
     public const TYPE = 'visitor';
 
+    public const MAX_PSEUDONYM_LENGTH = 64;
+    public const MAX_WEBSITE_LENGTH   = 128;
+
     public function validate(Commentconf $conf): bool
     {
         if (parent::validate($conf) === false) {
@@ -38,6 +41,12 @@ class Commentvisitor extends Comment
             if (!$urlHighlight->isUrl($this->website)) {
                 return false;
             }
+        }
+        if (mb_strlen($this->website) > self::MAX_WEBSITE_LENGTH) {
+            return false;
+        }
+        if (mb_strlen($this->pseudonym) > self::MAX_PSEUDONYM_LENGTH) {
+            return false;
         }
         return true;
     }
