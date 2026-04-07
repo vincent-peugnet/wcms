@@ -23,21 +23,22 @@ class Controllercomment extends Controller
     {
         if (!Config::comments()) {
             http_response_code(400);
-            $this->showtemplate('forbidden', ['message' => 'Comments are disabled globally']);
+            $this->showtemplate('alertcomment', ['message' => 'Comments are disabled globally']);
         }
 
         try {
             $page = $this->pagemanager->get($page);
         } catch (RuntimeException $e) {
             http_response_code(404);
-            $this->showtemplate('forbidden', ['message' => $e->getMessage()]);
+            $this->showtemplate('alertcomment', ['message' => $e->getMessage()]);
         }
 
 
         if (!isset($_POST[Modelcomment::CONFIG_POST_NAME])) {
-            Logger::warning("comment on page '%s': missing config token", $page->id());
+            $msg = sprintf("comment on page '%s': missing config token", $page->id());
+            Logger::warning($msg);
             http_response_code(400);
-            exit;
+            $this->showtemplate('alertcomment', ['message' => $msg]);
         }
 
         try {
@@ -53,21 +54,24 @@ class Controllercomment extends Controller
 
             $conf = new Commentconf($confdata['id'], $confdata);
         } catch (JWTException | RuntimeException $e) {
-            Logger::warning("comment on page '%s': config error: %s", $page->id(), $e);
+            $msg = sprintf("comment on page '%s': comment config decoding error", $page->id());
+            Logger::warning($msg);
             http_response_code(400);
-            exit;
+            $this->showtemplate('alertcomment', ['message' => $msg]);
         }
 
         // check if visitors are allowed to comment
         if ($conf->mode() !== Commentconf::VISITOR_MODE && $this->user->isvisitor()) {
             http_response_code(403);
-            exit;
+            $this->showtemplate('alertcomment', ['message' => 'comment not allowed from visitors']);
         }
 
         // check if comment limit is reached
         if ($conf->limit() !== null && $page->commentcount() >= $conf->limit()) {
+            $msg = sprintf("comment limit is reached on page '%s'", $page->id());
+            Logger::warning($msg);
             http_response_code(400);
-            exit;
+            $this->showtemplate('alertcomment', ['message' => $msg]);
         }
 
         switch ($conf->mode()) {
@@ -90,7 +94,7 @@ class Controllercomment extends Controller
         if (!$comment->validate($conf)) {
             Logger::warning("'%s' sent a invalid comment on page '%s'", $this->user->id(), $page->id());
             http_response_code(400);
-            exit;
+            $this->showtemplate('alertcomment', ['message' => 'invalid comment']);
         }
 
 
@@ -99,13 +103,15 @@ class Controllercomment extends Controller
             $page->setcommentcount($commentcount);
             $page->setdatecomment($comment->date());
             $this->pagemanager->update($page);
-            Logger::info('new comment on page "%s"', $page->id());
+            Logger::info('new comment on page \'%s\'', $page->id());
 
             if (!empty($conf->success())) {
                 $this->servicesession->addalert($page->id(), $conf->success());
             }
         } catch (Databaseexception $e) {
             Logger::errorex($e);
+            http_response_code(500);
+            $this->showtemplate('alertcomment', ['message' => 'database error']);
         }
 
         $this->routedirect('pageread', ['page' => $page->id()]);
@@ -118,7 +124,10 @@ class Controllercomment extends Controller
             $page = $this->pagemanager->get($pageid);
         } catch (RuntimeException $e) {
             http_response_code(404);
-            $this->showtemplate('forbidden');
+            $this->showtemplate(
+                'alertexistnot',
+                ['page' => new Pagev2(['id' => $pageid]), 'subtitle' => Config::existnot()]
+            );
         }
 
         if (!$this->canedit($page)) {
@@ -138,6 +147,7 @@ class Controllercomment extends Controller
             $this->pagemanager->update($page);
         } catch (RuntimeException $e) {
             http_response_code(500);
+            Logger::error('comment moderation: %s', $e->getMessage());
             exit;
         }
 
