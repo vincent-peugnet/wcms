@@ -113,10 +113,6 @@ class Comments extends Item
         }
         // User comments are considered to have safe content
 
-        // initalize URL highlighter
-        $highlighter = new HtmlHighlighter('http', ['rel' => implode(' ', $rels)]);
-        $urlhighlight = new UrlHighlight(null, $highlighter);
-
         $li = $dom->createElement('li');
         $fragment = "comment-$id";
         $li->setAttribute('id', $fragment);
@@ -163,14 +159,22 @@ class Comments extends Item
         $time->setAttribute('title', $this->datetitleformatter->format($comment->date()));
         $li->appendChild($time);
 
-        $message = $dom->createDocumentFragment();
-        $message->appendXML(
-            $urlhighlight->highlightUrls(nl2br(htmlspecialchars($comment->message())))
-        );
-
         $paragraph = $dom->createElement('p');
-        $paragraph->appendChild($message);
         $paragraph->setAttribute('class', 'message');
+
+        // appendChild() is not happy if docummentFragment is empty, so we check before adding it
+        if (!empty($comment->message())) {
+            // initalize URL highlighter
+            $highlighter = new HtmlHighlighter('http', ['rel' => implode(' ', $rels)]);
+            $urlhighlight = new UrlHighlight(null, $highlighter);
+
+            $message = $dom->createDocumentFragment();
+            $message->appendXML(
+                $urlhighlight->highlightUrls(nl2br(htmlspecialchars($comment->message())))
+            );
+            $paragraph->appendChild($message);
+        }
+
         $li->appendChild($paragraph);
 
         return $li;
