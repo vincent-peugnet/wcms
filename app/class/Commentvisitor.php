@@ -20,6 +20,10 @@ class Commentvisitor extends Comment
             return false;
         }
 
+        if (!$conf->allowpseudonym() && !empty($this->pseudonym)) {
+            return false;
+        }
+
         if ($conf->requirepseudonym() && empty($this->pseudonym)) {
             return false;
         }
