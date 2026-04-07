@@ -25,6 +25,7 @@ class Servicepostprocess
     public const EDIT_COUNT      = '%EDITCOUNT%';
     public const AFF_COUNT       = '%DISPLAYCOUNT%';
     public const DISABLED_IF_VISITOR_MARKER = 'wcms-postprocess-disabled_if_visitor';
+    public const DISABLED_IF_USER_MARKER = 'wcms-postprocess-disabled_if_user';
 
     public const COUNTERS = [
         self::VISIT_COUNT,
@@ -87,6 +88,7 @@ class Servicepostprocess
             self::EDIT_COUNT => "<span class=\"counter editcount\">$editcount</span>",
             self::AFF_COUNT => "<span class=\"counter displaycount\">$displaycount</span>",
             self::DISABLED_IF_VISITOR_MARKER . '="1"' => $this->user->isvisitor() ? 'disabled' : '',
+            self::DISABLED_IF_USER_MARKER . '="1"' => !$this->user->isvisitor() ? 'disabled' : '',
         ];
         return strtr($text, $replacements);
     }

@@ -9,6 +9,8 @@ class Commentuser extends Comment
 {
     protected string $user = '';
 
+    public const TYPE = 'user';
+
     public function validate(Commentconf $conf): bool
     {
         if (parent::validate($conf) === false) {

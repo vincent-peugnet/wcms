@@ -623,11 +623,11 @@ In visitor mode, if no pseudonym or website is set, then the name `<a>` will not
 
 ##### Styling
 
-Most of the time, you may be interested to use the following line of CSS to respect line breaks.
+The following CSS code will preserve spaces in message comment
 
 ```css
 li.comment .message {
-    white-space: break-spaces;
+    white-space: preserve-spaces;
 }
 ```
 
@@ -1049,7 +1049,19 @@ And if a link is defined in user's profile, it will be used.
 
     %COMMENT?mode=visitor%
 
-This mode __restrict posting to visitors__. Comment made by connected users will ignore their username and will be treated as visitor comments.
+This mode __restrict posting to visitors__. Comment made by connected users is still possible, but their will be treated as visitor comments. Username / display name or URL associated with user will not be used when rendering the comment.
+
+
+#### All mode
+
+    %COMMENT?mode=all%
+
+Allow comment posted from __logged in users and from visitors__.
+
+If visitor fields like [pseudonym](#pseudonym) or [website](#website) are used in the form, they will be set to `disabled` state when a logged in user see the page.
+
+
+#### Visitor fields
 
 
 ##### Pseudonym
