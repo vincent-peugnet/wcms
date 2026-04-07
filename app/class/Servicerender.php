@@ -684,6 +684,7 @@ abstract class Servicerender
 
                 case 'pseudonym':
                     if ($commentconf->allowvisitor()) {
+                        $commentconf->setallowpseudonym(true);
                         if ($element->hasAttribute('required')) {
                             $commentconf->setrequirepseudonym(true);
                         }
