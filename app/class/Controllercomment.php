@@ -61,7 +61,7 @@ class Controllercomment extends Controller
         }
 
         // check if visitors are allowed to comment
-        if ($conf->mode() !== Commentconf::VISITOR_MODE && $this->user->isvisitor()) {
+        if (!$conf->allowvisitor() && $this->user->isvisitor()) {
             http_response_code(403);
             $this->showtemplate('alertcomment', ['message' => 'comment not allowed from visitors']);
         }
@@ -83,6 +83,16 @@ class Controllercomment extends Controller
                 $comment = new Commentuser($_POST);
                 $comment->setuser($this->user->id());
                 $comment->setapproved(true); // logged in user comments are approved by default
+                break;
+
+            case Commentconf::ALL_MODE:
+                if ($this->user->isvisitor()) {
+                    $comment = new Commentvisitor($_POST);
+                } else {
+                    $comment = new Commentuser($_POST);
+                    $comment->setuser($this->user->id());
+                    $comment->setapproved(true); // logged in user comments are approved by default
+                }
                 break;
 
             default:

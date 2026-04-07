@@ -37,7 +37,8 @@ class Commentconf extends Item
 
     public const VISITOR_MODE = 'visitor';
     public const USER_MODE = 'user';
-    public const MODES = [self::VISITOR_MODE, self::USER_MODE];
+    public const ALL_MODE = 'all';
+    public const MODES = [self::VISITOR_MODE, self::USER_MODE, self::ALL_MODE];
     public const DEFAULT_LIMIT = 100;
 
     /**
@@ -55,6 +56,14 @@ class Commentconf extends Item
         if (!isset($this->id)) {
             throw new RuntimeException('missing or invalid ID');
         }
+    }
+
+    /**
+     * Indicate if visitor are allowed to post comment
+     */
+    public function allowvisitor(): bool
+    {
+        return $this->mode !== self::USER_MODE;
     }
 
     public function id(): string

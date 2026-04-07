@@ -12,6 +12,7 @@ class Commentvisitor extends Comment
     protected string $pseudonym = '';
     protected string $website = '';
 
+    public const TYPE = 'visitor';
 
     public function validate(Commentconf $conf): bool
     {

@@ -119,6 +119,7 @@ class Comments extends Item
 
         $classes = ['comment'];
         $classes[] = $comment->approved() ? 'approved' : 'unapproved';
+        $classes[] = $comment->type();
         $li->setAttribute('class', implode(' ', $classes));
 
         $li->setAttribute('data-approved', strval(intval($comment->approved())));
@@ -127,6 +128,7 @@ class Comments extends Item
         $fragmentlink->setAttribute('class', 'id');
         $li->appendChild($fragmentlink);
 
+        $userclasses = ['name'];
         if ($comment instanceof Commentuser) {
             try {
                 $user = $this->usermanager->get($comment->user());
@@ -137,7 +139,8 @@ class Comments extends Item
             } catch (RuntimeException $e) {
                 $userlink = $dom->createElement('a', $comment->user());
             }
-            $userlink->setAttribute('class', 'user');
+            $userclasses[] = 'user';
+            $userlink->setAttribute('class', implode(' ', $userclasses));
             $li->appendChild($userlink);
         } elseif (
             $comment instanceof Commentvisitor &&
@@ -151,8 +154,10 @@ class Comments extends Item
                 $userlink->setAttribute('href', $comment->website());
                 $userlink->setAttribute('rel', implode(' ', $rels));
             }
+            $userlink->setAttribute('class', implode(' ', $userclasses));
             $li->appendChild($userlink);
         }
+
 
         $time = $dom->createElement('time', $this->datedisplayformater->format($comment->date()));
         $time->setAttribute('datetime', $comment->date()->format(DateTimeInterface::ATOM));

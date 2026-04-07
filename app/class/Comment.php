@@ -12,6 +12,8 @@ abstract class Comment extends Item
     protected DateTimeImmutable $date;
     protected string $message = '';
 
+    public const TYPE = '';
+
     /**
      * @var bool $approved indicate if the comment has been approved
      */
@@ -47,6 +49,14 @@ abstract class Comment extends Item
     public function visiblename(): string
     {
         return '';
+    }
+
+    /**
+     * @return string that indicate the type of comment
+     */
+    public function type(): string
+    {
+        return static::TYPE;
     }
 
     /**

@@ -683,24 +683,32 @@ abstract class Servicerender
                     break;
 
                 case 'pseudonym':
-                    if ($commentconf->mode() === Commentconf::USER_MODE) {
-                        $element->setAttribute('disabled', '');
-                    } else {
+                    if ($commentconf->allowvisitor()) {
                         if ($element->hasAttribute('required')) {
                             $commentconf->setrequirepseudonym(true);
                         }
                         $element->setAttribute('maxlength', strval(Comment::MAX_PSEUDONYM_LENGTH));
+                        if ($commentconf->mode() === Commentconf::ALL_MODE) {
+                            $element->setAttribute(Servicepostprocess::DISABLED_IF_USER_MARKER, '1');
+                            $this->postprocessaction = true;
+                        }
+                    } else {
+                        $element->setAttribute('disabled', '');
                     }
                     break;
 
                 case 'website':
-                    if ($commentconf->mode() === Commentconf::USER_MODE) {
-                        $element->setAttribute('disabled', '');
-                    } else {
+                    if ($commentconf->allowvisitor()) {
                         $commentconf->setallowwebsite(true);
                         if ($element->hasAttribute('required')) {
                             $commentconf->setrequirewebsite(true);
                         }
+                        if ($commentconf->mode() === Commentconf::ALL_MODE) {
+                            $element->setAttribute(Servicepostprocess::DISABLED_IF_USER_MARKER, '1');
+                            $this->postprocessaction = true;
+                        }
+                    } else {
+                        $element->setAttribute('disabled', '');
                     }
                     break;
 
