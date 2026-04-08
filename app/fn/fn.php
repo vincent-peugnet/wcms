@@ -26,6 +26,7 @@ const HTTP_STATUS = array(
     305 => 'Use Proxy',
     306 => 'Switch Proxy',
     307 => 'Temporary Redirect',
+    308 => 'Permanent Redirect',
     400 => 'Bad Request',
     401 => 'Unauthorized',
     402 => 'Payment Required',
