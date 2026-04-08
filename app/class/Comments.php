@@ -138,6 +138,7 @@ class Comments extends Item
                 if (!empty($user->url())) {
                     $name->setAttribute('href', $user->url());
                 }
+                $name->setAttribute('data-user', $comment->user());
             } catch (RuntimeException $e) {
                 $name = $dom->createElement('a', $comment->user());
             }
