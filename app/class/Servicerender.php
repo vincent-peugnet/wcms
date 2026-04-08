@@ -500,75 +500,7 @@ abstract class Servicerender
                 break; // TODO: store a render error: multiple comment forms on the same page.
             }
             $this->commentform = true;
-
-            // generate action route
-            try {
-                $form->setAttribute(
-                    'action',
-                    $this->router->generate('pagecomment', ['page' => $this->page->id()])
-                );
-            } catch (Exception $e) {
-                throw new LogicException($e->getMessage(), $e->getCode(), $e);
-            }
-
-            // comment form configuration
-            try {
-                $commentconf = new Commentconf($this->page->id(), $matches[0]->readoptions());
-            } catch (RuntimeException $e) {
-                continue;
-            }
-
-            // check if limit is reached
-            $this->commentlimitreached = (
-                $commentconf->limit() !== null && $this->page->commentcount() >= $commentconf->limit()
-            );
-
-            // Add a replacable disabled marker on inputs (will be replaced as)
-            $disablables = [];
-
-            // select form descendants input/textarea/button/select elements
-            $disablables[] = $form->getElementsByTagName('input');
-            $disablables[] = $form->getElementsByTagName('textarea');
-            $disablables[] = $form->getElementsByTagName('button');
-            $disablables[] = $form->getElementsByTagName('select');
-
-            // select input/textarea/button/select associated elements that use `form=ID`
-            if ($form->hasAttribute('id')) {
-                $i = $form->getAttribute('id');
-                $selector = new DOMXPath($dom);
-                $q = "//input[@form='$i'] | //textarea[@form='$i'] | //button[@form='$i'] | //select[@form='$i']";
-                $nodes = $selector->query($q);
-                if ($nodes === false) {
-                    throw new LogicException('malformed DOM XPath expression');
-                }
-                $disablables[] = $nodes;
-            }
-
-            foreach ($disablables as $elements) {
-                $this->formNodes($elements, $commentconf);
-            }
-
-            if ($this->commentlimitreached) {
-                continue; // no need to add hidden JWT config input as comment limit is reached
-            }
-
-            try {
-                $exp = $this->page->cachettl() === null ? Config::cachettl() : $this->page->cachettl();
-                if ($exp === -1) {
-                    $exp = 3600 * 24 * 365 * 100; // expire in 100 years
-                } elseif ($exp < 3600 * 24) {
-                    $exp = 3600 * 24; // minimum expiration is 24h
-                }
-                $jwt = new JWT(Config::secretkey(), 'HS256', $exp);
-                $hidden = $dom->createElement('input');
-                $hidden->setAttribute('type', 'hidden');
-                $hidden->setAttribute('name', Modelcomment::CONFIG_POST_NAME);
-                $payload = $commentconf->dry();
-                $hidden->setAttribute('value', $jwt->encode($payload));
-                $form->appendChild($hidden);
-            } catch (DOMException $e) {
-                throw new LogicException('DOM: $e', 0, $e);
-            }
+            $this->commentform($dom, $form, $matches[0]);
         }
 
 
@@ -655,81 +587,159 @@ abstract class Servicerender
     }
 
     /**
+     * Read HTML comment form, manage attributes, insert JWT if necessary
+     *
+     * @param DOMDocument $dom              the main DOMDocument
+     * @param DOMElement $form              the form HTML element
+     * @param Inclusion $inclusion          W inclusion, that contain parsed %COMMENT% params
+     */
+    protected function commentform(DOMDocument $dom, DOMElement $form, Inclusion $inclusion): void
+    {
+        // generate action route
+        try {
+            $form->setAttribute(
+                'action',
+                $this->router->generate('pagecomment', ['page' => $this->page->id()])
+            );
+        } catch (Exception $e) {
+            throw new LogicException($e->getMessage(), $e->getCode(), $e);
+        }
+
+        // comment form configuration
+        try {
+            $commentconf = new Commentconf($this->page->id(), $inclusion->readoptions());
+        } catch (RuntimeException $e) {
+            return;
+        }
+
+        // check if limit is reached
+        $this->commentlimitreached = (
+            $commentconf->limit() !== null && $this->page->commentcount() >= $commentconf->limit()
+        );
+
+        // Add a replacable disabled marker on inputs (will be replaced as)
+        $disablables = [];
+
+        // select form descendants input/textarea/button/select elements
+        $disablables[] = $form->getElementsByTagName('input');
+        $disablables[] = $form->getElementsByTagName('textarea');
+        $disablables[] = $form->getElementsByTagName('button');
+        $disablables[] = $form->getElementsByTagName('select');
+
+        // select input/textarea/button/select associated elements that use `form=ID`
+        if ($form->hasAttribute('id')) {
+            $i = $form->getAttribute('id');
+            $selector = new DOMXPath($dom);
+            $q = "//input[@form='$i'] | //textarea[@form='$i'] | //button[@form='$i'] | //select[@form='$i']";
+            $nodes = $selector->query($q);
+            if ($nodes === false) {
+                throw new LogicException('malformed DOM XPath expression');
+            }
+            $disablables[] = $nodes;
+        }
+
+        foreach ($disablables as $elements) {
+            foreach ($elements as $element) {
+                if (!($element instanceof DOMElement)) {
+                    continue;
+                }
+                $this->formNodes($element, $commentconf);
+            }
+        }
+
+        if ($this->commentlimitreached) {
+            return; // no need to add hidden JWT config input as comment limit is reached
+        }
+
+        try {
+            $exp = $this->page->cachettl() === null ? Config::cachettl() : $this->page->cachettl();
+            if ($exp === -1) {
+                $exp = 3600 * 24 * 365 * 100; // expire in 100 years
+            } elseif ($exp < 3600 * 24) {
+                $exp = 3600 * 24; // minimum expiration is 24h
+            }
+            $jwt = new JWT(Config::secretkey(), 'HS256', $exp);
+            $hidden = $dom->createElement('input');
+            $hidden->setAttribute('type', 'hidden');
+            $hidden->setAttribute('name', Modelcomment::CONFIG_POST_NAME);
+            $payload = $commentconf->dry();
+            $hidden->setAttribute('value', $jwt->encode($payload));
+            $form->appendChild($hidden);
+        } catch (DOMException $e) {
+            throw new LogicException('DOM: $e', 0, $e);
+        }
+    }
+
+    /**
      * For each DOM node, apply rules regarding Comment configuration
      *
-     * @param DOMNodeList<DOMElement> $elements
+     * @param DOMElement $element
      */
-    protected function formNodes(DOMNodeList $elements, Commentconf $commentconf): void
+    protected function formNodes(DOMElement $element, Commentconf $commentconf): void
     {
-        foreach ($elements as $element) {
-            if (!($element instanceof DOMElement)) {
-                continue;
-            }
+        if (!Config::comments() || $this->commentlimitreached) {
+            $element->setAttribute('disabled', '');
+            return;
+        }
 
-            if (!Config::comments() || $this->commentlimitreached) {
-                $element->setAttribute('disabled', '');
-                continue;
-            }
+        if ($commentconf->mode() === Commentconf::USER_MODE) {
+            $element->setAttribute(Servicepostprocess::DISABLED_IF_VISITOR_MARKER, '1');
+            $this->postprocessaction = true; // this is called multiple times, not very optimized but ok
+        }
 
-            if ($commentconf->mode() === Commentconf::USER_MODE) {
-                $element->setAttribute(Servicepostprocess::DISABLED_IF_VISITOR_MARKER, '1');
-                $this->postprocessaction = true; // this is called multiple times, not very optimized but ok
-            }
+        switch ($element->getAttribute('name')) {
+            case 'message':
+                if ($element->hasAttribute('maxlength')) {
+                    $commentconf->setmaxlength(intval($element->getAttribute('maxlength')));
+                }
+                $element->setAttribute('maxlength', strval($commentconf->maxlength()));
 
-            switch ($element->getAttribute('name')) {
-                case 'message':
-                    if ($element->hasAttribute('maxlength')) {
-                        $commentconf->setmaxlength(intval($element->getAttribute('maxlength')));
-                    }
-                    $element->setAttribute('maxlength', strval($commentconf->maxlength()));
+                if ($element->hasAttribute('minlength')) {
+                    $commentconf->setminlength(intval($element->getAttribute('minlength')));
+                }
+                $element->setAttribute('minlength', strval($commentconf->minlength()));
+                if ($element->hasAttribute('required')) {
+                    $commentconf->setrequiremessage(true);
+                }
+                break;
 
-                    if ($element->hasAttribute('minlength')) {
-                        $commentconf->setminlength(intval($element->getAttribute('minlength')));
-                    }
-                    $element->setAttribute('minlength', strval($commentconf->minlength()));
+            case 'pseudonym':
+                if ($commentconf->allowvisitor()) {
+                    $commentconf->setallowpseudonym(true);
                     if ($element->hasAttribute('required')) {
-                        $commentconf->setrequiremessage(true);
+                        $commentconf->setrequirepseudonym(true);
                     }
-                    break;
+                    $element->setAttribute('maxlength', strval(Commentvisitor::MAX_PSEUDONYM_LENGTH));
+                    if ($commentconf->mode() === Commentconf::ALL_MODE) {
+                        $element->setAttribute(Servicepostprocess::DISABLED_IF_USER_MARKER, '1');
+                        $this->postprocessaction = true;
+                    }
+                } else {
+                    $element->setAttribute('disabled', '');
+                }
+                break;
 
-                case 'pseudonym':
-                    if ($commentconf->allowvisitor()) {
-                        $commentconf->setallowpseudonym(true);
-                        if ($element->hasAttribute('required')) {
-                            $commentconf->setrequirepseudonym(true);
-                        }
-                        $element->setAttribute('maxlength', strval(Commentvisitor::MAX_PSEUDONYM_LENGTH));
-                        if ($commentconf->mode() === Commentconf::ALL_MODE) {
-                            $element->setAttribute(Servicepostprocess::DISABLED_IF_USER_MARKER, '1');
-                            $this->postprocessaction = true;
-                        }
-                    } else {
-                        $element->setAttribute('disabled', '');
+            case 'website':
+                if ($commentconf->allowvisitor()) {
+                    $commentconf->setallowwebsite(true);
+                    if ($element->hasAttribute('required')) {
+                        $commentconf->setrequirewebsite(true);
                     }
-                    break;
+                    $element->setAttribute('maxlength', strval(Commentvisitor::MAX_WEBSITE_LENGTH));
+                    if ($commentconf->mode() === Commentconf::ALL_MODE) {
+                        $element->setAttribute(Servicepostprocess::DISABLED_IF_USER_MARKER, '1');
+                        $this->postprocessaction = true;
+                    }
+                } else {
+                    $element->setAttribute('disabled', '');
+                }
+                break;
 
-                case 'website':
-                    if ($commentconf->allowvisitor()) {
-                        $commentconf->setallowwebsite(true);
-                        if ($element->hasAttribute('required')) {
-                            $commentconf->setrequirewebsite(true);
-                        }
-                        $element->setAttribute('maxlength', strval(Commentvisitor::MAX_WEBSITE_LENGTH));
-                        if ($commentconf->mode() === Commentconf::ALL_MODE) {
-                            $element->setAttribute(Servicepostprocess::DISABLED_IF_USER_MARKER, '1');
-                            $this->postprocessaction = true;
-                        }
-                    } else {
-                        $element->setAttribute('disabled', '');
-                    }
-                    break;
-
-                case 'success':
-                    if ($element->hasAttribute('value')) {
-                        $commentconf->setsuccess($element->getAttribute('value'));
-                    }
-                    break;
-            }
+            case 'success':
+                if ($element->hasAttribute('value')) {
+                    $commentconf->setsuccess($element->getAttribute('value'));
+                }
+                break;
         }
     }
 
