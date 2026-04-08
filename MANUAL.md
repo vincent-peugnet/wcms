@@ -611,15 +611,15 @@ __HTML structure of a comment:__
 ```html
 <li id="comment-ID" class="comment approved|unapproved visitor|user" data-approved="0|1">
     <a class="id">ID</a>
-    [<a class="name [user]" [href="WEBSITE"]>NAME|WEBSITE</a>]
+    <a class="name [user]" [href="WEBSITE"]>NAME|WEBSITE</a>
     <time>TIMESTAMP</time>
     <p class="message">MESSAGE</p>
 </li>
 ```
 
-In case of a comment coming from a local user, diplay name and URL will be used if available. The `<a>` element containing the name will also get the class `user`.
+In case of a comment coming from a local user, diplay name and URL will be used if available. The `<a>` element containing the name will also get the class `user` and a data-* attribute called `data-user` will contain the user identifier.
 
-In visitor mode, if no pseudonym or website is set, then the name `<a>` will not be printed.
+
 
 ##### Styling
 
@@ -631,6 +631,12 @@ li.comment .message {
 }
 ```
 
+
+In case of visitor comments, if no pseudonym or website is set, then the name `<a>` still be printed, but will be empty. If you want to get rid of it, you can do it in CSS using the pseudo selector `:empty`.
+
+```css
+li.comment .name:empty { display: none; }
+```
 
 
 

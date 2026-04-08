@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use DateTimeInterface;
+use DomainException;
 use DOMDocument;
 use DOMException;
 use DOMNode;
@@ -128,36 +129,34 @@ class Comments extends Item
         $fragmentlink->setAttribute('class', 'id');
         $li->appendChild($fragmentlink);
 
-        $userclasses = ['name'];
+        $nameclasses = [];
         if ($comment instanceof Commentuser) {
             try {
                 $user = $this->usermanager->get($comment->user());
-                $userlink = $dom->createElement('a', empty($user->name()) ? $user->id() : $user->name());
+                $name = $dom->createElement('a', empty($user->name()) ? $user->id() : $user->name());
+                $nameclasses[] = 'user';
                 if (!empty($user->url())) {
-                    $userlink->setAttribute('href', $user->url());
+                    $name->setAttribute('href', $user->url());
                 }
             } catch (RuntimeException $e) {
-                $userlink = $dom->createElement('a', $comment->user());
+                $name = $dom->createElement('a', $comment->user());
             }
-            $userclasses[] = 'user';
-            $userlink->setAttribute('class', implode(' ', $userclasses));
-            $li->appendChild($userlink);
-        } elseif (
-            $comment instanceof Commentvisitor &&
-            (!empty($comment->website()) || !empty($comment->pseudonym()))
-        ) {
-            $userlink = $dom->createElement(
+        } elseif ($comment instanceof Commentvisitor) {
+            $name = $dom->createElement(
                 'a',
                 htmlspecialchars(empty($comment->pseudonym()) ? $comment->website() : $comment->pseudonym())
             );
             if (!empty($comment->website())) {
-                $userlink->setAttribute('href', $comment->website());
-                $userlink->setAttribute('rel', implode(' ', $rels));
+                $name->setAttribute('href', $comment->website());
+                $name->setAttribute('rel', implode(' ', $rels));
             }
-            $userlink->setAttribute('class', implode(' ', $userclasses));
-            $li->appendChild($userlink);
+        } else {
+            throw new DomainException('Invalid Comment child class');
         }
 
+        $nameclasses[] = 'name';
+        $name->setAttribute('class', implode(' ', $nameclasses));
+        $li->appendChild($name);
 
         $time = $dom->createElement('time', $this->datedisplayformater->format($comment->date()));
         $time->setAttribute('datetime', $comment->date()->format(DateTimeInterface::ATOM));
