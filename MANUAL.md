@@ -611,7 +611,7 @@ __HTML structure of a comment:__
 ```html
 <li id="comment-ID" class="comment approved|unapproved visitor|user" data-approved="0|1">
     <a class="id">ID</a>
-    <a class="name [user]" [href="WEBSITE"]>NAME|WEBSITE</a>
+    <a class="name [user]" [href="WEBSITE"] [data-user="USERID"]>NAME|WEBSITE</a>
     <time>TIMESTAMP</time>
     <p class="message">MESSAGE</p>
 </li>
