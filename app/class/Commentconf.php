@@ -55,7 +55,7 @@ class Commentconf extends Item
     /**
      * @param array<string, mixed> $data
      *
-     * @throws RuntimeException
+     * @throws RuntimeException if ID is empty or invalid
      */
     public function __construct(string $id, array $data = [])
     {
