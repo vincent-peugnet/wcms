@@ -304,6 +304,16 @@ abstract class Controller
     }
 
     /**
+     * Tell if the current user can read the given Page
+     *
+     * @param Page $page
+     */
+    protected function canread(Page $page): bool
+    {
+        return $this->user->level() < $page->secure();
+    }
+
+    /**
      * Tell if the current user can edit the given Page
      *
      * User need to be SUPEREDITOR, otherwise, it need to be author of a page.
