@@ -62,6 +62,9 @@ abstract class Servicerender
     /** @var bool Indicate if current page have reached it's comment limit */
     protected bool $commentlimitreached = false;
 
+    /** @var bool Indicate if a comment form is found in the page */
+    protected bool $commentform = false;
+
     /**
      * @param AltoRouter $router            Router used to generate urls
      * @param Modelpage $pagemanager        [optionnal] can be usefull if a pagemanager already store a page list
@@ -481,8 +484,6 @@ abstract class Servicerender
         }
 
         // Check presence of comment forms
-        // TODO: multiple comment form on the same rendered page is a problem as it allow multiple configs
-        // maybe this should be limited to only one form
         $forms = $dom->getElementsByTagName('form');
         foreach ($forms as $form) {
             if (!$form->hasAttribute('action')) {
@@ -493,6 +494,12 @@ abstract class Servicerender
             if (empty($matches)) {
                 continue;
             }
+
+            // Comment forms are limited to one per page
+            if ($this->commentform) {
+                break; // TODO: store a render error: multiple comment forms on the same page.
+            }
+            $this->commentform = true;
 
             // generate action route
             try {

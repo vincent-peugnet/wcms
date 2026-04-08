@@ -1014,6 +1014,9 @@ For more flexibility, comment form don't look like the traditionnal W inclusions
 They can be used in [content](#content), but seems more suited for [BODY](#body) as it's mostly pure HTML.
 Using a comment form in BODY allow it to be used in template.
 
+> ⚠️ Each page is limited to **one comment form per page**.
+> If multiple forms are detected, only the first one will be used.
+
 Mandatory parts are:
 
 - form `action` should point to `%COMMENT%`
@@ -1033,7 +1036,7 @@ The following example describe a basic comment form that can be copied in your p
 __Min and max length__ can be specified on the element with the name set to `message` using the official HTML attributes `minlength` and `maxlength`.
 Max length cannot go beyond the hard limit of 16384 characters.
 
-> ⚠️ Using multiple form input that share the same value for `name` attribute will mess up the form and problems may orccur.
+
 
 
 __Comment modes:__
