@@ -33,6 +33,12 @@ class Controllercomment extends Controller
             $this->showtemplate('alertcomment', ['message' => $e->getMessage()]);
         }
 
+        // users who cannot read the page cannot post comments
+        if (!$this->canread($page)) {
+            http_response_code(401);
+            $this->showtemplate('alertcomment', ['message' => 'unauthorized']);
+        }
+
 
         if (!isset($_POST[Modelcomment::CONFIG_POST_NAME])) {
             $msg = sprintf("comment on page '%s': missing config token", $page->id());
@@ -62,7 +68,7 @@ class Controllercomment extends Controller
 
         // check if visitors are allowed to comment
         if (!$conf->allowvisitor() && $this->user->isvisitor()) {
-            http_response_code(403);
+            http_response_code(401);
             $this->showtemplate('alertcomment', ['message' => 'comment not allowed from visitors']);
         }
 

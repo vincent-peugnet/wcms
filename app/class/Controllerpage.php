@@ -158,7 +158,7 @@ class Controllerpage extends Controller
             }
         }
 
-        if ($this->user->level() < $this->page->secure()) {
+        if ($this->canread($this->page)) {
             http_response_code(403);
             switch ($this->page->secure()) {
                 case Page::NOT_PUBLISHED:
