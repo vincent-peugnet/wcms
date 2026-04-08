@@ -116,7 +116,7 @@ CodeMirror.defineSimpleMode('wcms', {
     // detect a Wcms markup then pass to 'wcms' mode
     start: [
         {
-            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|CONTENT|SUMMARY|LIST|MAP|RANDOM|MEDIA|TITLE|DESCRIPTION|DATE|TIME|DATEMODIF|TIMEMODIF|THUMBNAIL|RSS|AUTHORS|ID|PATH|URL|VISITCOUNT|EDITCOUNT|DISPLAYCOUNT)(\?[^\s]*)?%)/,
+            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|CONTENT|SUMMARY|LIST|COMMENTS|COMMENT|MAP|RANDOM|MEDIA|TITLE|DESCRIPTION|DATE|TIME|DATEMODIF|TIMEMODIF|THUMBNAIL|RSS|AUTHORS|ID|PATH|URL|VISITCOUNT|EDITCOUNT|DISPLAYCOUNT)(\?[^\s]*)?%)/,
             token: 'wcms',
             next: 'wcms',
         },
@@ -125,7 +125,7 @@ CodeMirror.defineSimpleMode('wcms', {
             token: 'wikilink',
             next: 'start',
         },
-        { regex: /<!--/, token: 'comment', next: 'comment' },
+        { regex: /<!--/, token: 'htmlcomment', next: 'htmlcomment' },
     ],
     // 'wcms' mode, for each macro, if there is parameters, pass to its associated mode
     wcms: [
@@ -136,6 +136,8 @@ CodeMirror.defineSimpleMode('wcms', {
         },
         { regex: /SUMMARY\?/, token: 'wcms', next: 'summary' },
         { regex: /LIST\?/, token: 'wcms', next: 'list' },
+        { regex: /COMMENTS\?/, token: 'wcms', next: 'comments' },
+        { regex: /COMMENT\?/, token: 'wcms', next: 'comment' },
         { regex: /MAP\?/, token: 'wcms', next: 'map' },
         { regex: /RANDOM\?/, token: 'wcms', next: 'random' },
         { regex: /MEDIA\?/, token: 'wcms', next: 'media' },
@@ -166,6 +168,24 @@ CodeMirror.defineSimpleMode('wcms', {
     list: [
         {
             regex: /sortby|order|secure|tagcompare|authorcompare|tagfilter|authorfilter|linkto|geo|invert|limit|description|thumbnail|date|time|since|until|author|hidecurrent|style|bookmark|invert/,
+            token: 'wkeyword',
+            push: 'wcms',
+        },
+        { regex: null, push: 'wcms' },
+    ],
+    // 'comments' mode, parameters' keywords of the 'comments' macro
+    comments: [
+        {
+            regex: /id|order|limit|unapproved/,
+            token: 'wkeyword',
+            push: 'wcms',
+        },
+        { regex: null, push: 'wcms' },
+    ],
+    // 'comment' mode, parameters' keywords of the 'comment' macro
+    comment: [
+        {
+            regex: /mode|limit/,
             token: 'wkeyword',
             push: 'wcms',
         },
@@ -204,9 +224,9 @@ CodeMirror.defineSimpleMode('wcms', {
         { regex: /format|lang/, token: 'wkeyword', push: 'wcms' },
         { regex: null, push: 'wcms' },
     ],
-    comment: [
-        { regex: /.*?-->/, token: 'comment', next: 'start' },
-        { regex: /.*/, token: 'comment' },
+    htmlcomment: [
+        { regex: /.*?-->/, token: 'htmlcomment', next: 'start' },
+        { regex: /.*/, token: 'htmlcomment' },
     ],
 });
 
