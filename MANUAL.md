@@ -330,7 +330,7 @@ This will print a HTML list of every [authors](#authors) of the page. If they ha
 
 ```html
 <ul class="userlist">
-    <li><span class="user user-ID"><a href="URL">NAME</a></span>
+    <li><a class="user" data-user="ID" [href="URL"]>NAME|ID</a></li>
 </ul>
 ```
 

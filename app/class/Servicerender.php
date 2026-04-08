@@ -1205,24 +1205,19 @@ abstract class Servicerender
     }
 
     /**
-     * Render an user as a <span> HTML element
-     * A HTML link is added inside if user have a specified URL property
+     * Render an user as a <a> HTML element
+     * A href attribute is added if user have a specified URL property
      *
      * @param User $user        User to render
-     * @return string           HTML rendered <span> element
+     * @return string           HTML rendered <a> element
      */
     public function user(User $user): string
     {
         $name   = !empty($user->name()) ? htmlspecialchars($user->name()) : $user->id();
         $id     = $user->id();
-        if (!empty($user->url())) {
-            $url = $user->url();
-            $html = "<a href=\"$url\">$name</a>";
-        } else {
-            $html = $name;
-        }
-        $html = "<span class=\"user user-$id\" data-user-id=\"$id\">$html</span>";
-        return $html;
+        $href   = empty($user->url()) ? '' : sprintf('href="%s"', $user->url());
+
+        return "<a class=\"user\" data-user=\"$id\"$href>$name</a>";
     }
 
     /**
