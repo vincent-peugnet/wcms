@@ -2,6 +2,9 @@
 
 namespace Wcms;
 
+use DateTime;
+use DateTimeImmutable;
+use DateTimeZone;
 use RuntimeException;
 
 class Commentconf extends Item
@@ -45,6 +48,11 @@ class Commentconf extends Item
      * @var string $success message that should be displayed to page viewer in case of success
      */
     protected string $success = '';
+
+    /**
+     * @var DateTimeImmutable $datemodif the page last edit date at render time
+     */
+    protected DateTimeImmutable $datemodif;
 
     public const VISITOR_MODE = 'visitor';
     public const USER_MODE = 'user';
@@ -133,6 +141,14 @@ class Commentconf extends Item
     }
 
     /**
+     * @return DateTimeImmutable|string
+     */
+    public function datemodif(string $option = 'date')
+    {
+        return $this->datetransform('datemodif', $option);
+    }
+
+    /**
      * @return bool                         indicting if setting was valid or not
      */
     public function setmaxlength(int $maxlength): bool
@@ -200,5 +216,21 @@ class Commentconf extends Item
     public function setsuccess(string $success): void
     {
         $this->success = $success;
+    }
+
+    /**
+     * @param DateTimeImmutable|string $datemodif
+     */
+    public function setdatemodif($datemodif): void
+    {
+        if ($datemodif instanceof DateTimeImmutable) {
+            $this->datemodif = $datemodif;
+        } elseif (is_string($datemodif)) {
+            $this->datemodif = DateTimeImmutable::createFromFormat(
+                DateTime::RFC3339,
+                $datemodif,
+                new DateTimeZone('Europe/Paris')
+            );
+        }
     }
 }

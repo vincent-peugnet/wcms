@@ -5,6 +5,7 @@ namespace Wcms;
 use Ahc\Jwt\JWT;
 use Ahc\Jwt\JWTException;
 use AltoRouter;
+use DateInterval;
 use DomainException;
 use RuntimeException;
 use Wcms\Exception\Databaseexception;
@@ -64,6 +65,15 @@ class Controllercomment extends Controller
             Logger::warning($msg);
             http_response_code(400);
             $this->showtemplate('alertcomment', ['message' => $msg]);
+        }
+
+        // check if is JWT is not outdated
+        if ($conf->datemodif() != $page->datemodif()) {
+            $yesterday = $this->now->sub(new DateInterval('PT24H'));
+            if ($page->datemodif() < $yesterday) { // page has been edited since more than 24h
+                http_response_code(400);
+                $this->showtemplate('alertcomment', ['message' => 'outdated comment configuration']);
+            }
         }
 
         // check if visitors are allowed to comment

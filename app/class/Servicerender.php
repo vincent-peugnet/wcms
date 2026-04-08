@@ -651,6 +651,9 @@ abstract class Servicerender
             return; // no need to add hidden JWT config input as comment limit is reached
         }
 
+        // store datemodif in config
+        $commentconf->setdatemodif($this->page->datemodif());
+
         try {
             $exp = $this->page->cachettl() === null ? Config::cachettl() : $this->page->cachettl();
             if ($exp === -1) {
