@@ -37,12 +37,19 @@ class User extends Item
 
     protected string $theme = '';
 
+    public const ADMIN       = 10;
+    public const SUPEREDITOR = 4;
+    public const EDITOR      = 3;
+    public const INVITE      = 2;
+    public const READER      = 1;
+    public const VISITOR     = 0;
+
     public const LEVELS = [
-        1  => 'reader',
-        2  => 'invite editor',
-        3  => 'editor',
-        4  => 'super editor',
-        10 => 'admin',
+        self::READER      => 'reader',
+        self::INVITE      => 'invite editor',
+        self::EDITOR      => 'editor',
+        self::SUPEREDITOR => 'super editor',
+        self::ADMIN       => 'admin',
     ];
 
     public const HOME_COLUMNS = [
@@ -396,7 +403,15 @@ class User extends Item
      */
     public function isvisitor(): bool
     {
-        return $this->level === Modeluser::FREE;
+        return $this->level === self::VISITOR;
+    }
+
+    /**
+     * User is at least reader
+     */
+    public function isreader(): bool
+    {
+        return $this->level >= self::READER;
     }
 
     /**
@@ -404,7 +419,7 @@ class User extends Item
      */
     public function isinvite(): bool
     {
-        return $this->level >= Modeluser::INVITE;
+        return $this->level >= self::INVITE;
     }
 
     /**
@@ -412,7 +427,7 @@ class User extends Item
      */
     public function iseditor(): bool
     {
-        return $this->level >= Modeluser::EDITOR;
+        return $this->level >= self::EDITOR;
     }
 
     /**
@@ -420,7 +435,7 @@ class User extends Item
      */
     public function issupereditor(): bool
     {
-        return $this->level >= Modeluser::SUPEREDITOR;
+        return $this->level >= self::SUPEREDITOR;
     }
 
     /**
@@ -428,7 +443,7 @@ class User extends Item
      */
     public function isadmin(): bool
     {
-        return $this->level === Modeluser::ADMIN;
+        return $this->level === self::ADMIN;
     }
 
 

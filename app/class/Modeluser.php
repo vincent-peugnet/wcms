@@ -9,13 +9,6 @@ use Wcms\Exception\Database\Notfoundexception;
 
 class Modeluser extends Modeldb
 {
-    public const ADMIN = 10;
-    public const SUPEREDITOR = 4;
-    public const EDITOR = 3;
-    public const INVITE = 2;
-    public const READ = 1;
-    public const FREE = 0;
-
     public const USER_REPO_NAME = 'user';
 
     public function __construct()
@@ -27,7 +20,7 @@ class Modeluser extends Modeldb
 
     public function logout(): User
     {
-        $user = new User(['level' => self::FREE]);
+        $user = new User(['level' => User::VISITOR]);
         return $user;
     }
 

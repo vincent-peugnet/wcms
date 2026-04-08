@@ -1393,6 +1393,25 @@ Each page have a dedicated stylesheet, that can be called by other pages using [
 
 Not all users are equal. Users have rights according to their level (from 0 to 10).
 
+|user levels                        |0  |1  |2  |3  |4  |10 |
+|-----------------------------------|---|---|---|---|---|---|
+|read pubic page                    |✔️  |✔️  |✔️  |✔️  |✔️  |✔️  |
+|read private page                  |   |✔️  |✔️  |✔️  |✔️  |✔️  |
+|read not_published page if author  |   |   |✔️  |✔️  |✔️  |✔️  |
+|edit page if author                |   |   |✔️  |✔️  |✔️  |✔️  |
+|read not_published page            |   |   |   |✔️  |✔️  |✔️  |
+|delete page if only author         |   |   |   |✔️  |✔️  |✔️  |
+|manage page's authors              |   |   |   |✔️  |✔️  |✔️  |
+|create page                        |   |   |   |✔️  |✔️  |✔️  |
+|upload media                       |   |   |   |✔️  |✔️  |✔️  |
+|edit any page                      |   |   |   |   |✔️  |✔️  |
+|delete media                       |   |   |   |   |✔️  |✔️  |
+|edit multiple page at once         |   |   |   |   |✔️  |✔️  |
+|delete any page                    |   |   |   |   |✔️  |✔️  |
+|create user                        |   |   |   |   |   |✔️  |
+|delete user                        |   |   |   |   |   |✔️  |
+|admin                              |   |   |   |   |   |✔️  |
+
 #### Visitor
 
 > 👤 level : 0

@@ -306,11 +306,28 @@ abstract class Controller
     /**
      * Tell if the current user can read the given Page
      *
+     * - PUBLIC pages can be read by anyone
+     * - EDITORS can read all page
+     * - PRIVATE pages need READERS or above
+     * - NOT_PUBLISHED pages need INVITE users listed as author of page
+     *
      * @param Page $page
      */
     protected function canread(Page $page): bool
     {
-        return $this->user->level() < $page->secure();
+        if ($page->ispublic()) {
+            return true;
+        }
+        if ($this->user->iseditor()) {
+            return true;
+        }
+        if ($page->isprivate() && $this->user->isreader()) {
+            return true;
+        }
+        if ($page->isnotpublished() && $this->user->isinvite() && in_array($this->user->id(), $page->authors())) {
+            return true;
+        }
+        return false;
     }
 
     /**
