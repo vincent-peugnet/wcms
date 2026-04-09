@@ -118,7 +118,6 @@ class Modelbookmark extends Modeldb
     /**
      * @param Bookmark $bookmark
      * @throws Databaseexception            When ID is invalid, already exist or creation failed
-     * @throws Notfoundexception            If personnal bookmark User does not exist
      */
     public function add(Bookmark $bookmark): void
     {
@@ -128,10 +127,6 @@ class Modelbookmark extends Modeldb
         }
         if ($this->exist($bookmark)) {
             throw new Databaseexception("ID already exist");
-        }
-        if (!$bookmark->ispublic()) {
-            $usermanager = new Modeluser();
-            $usermanager->get($bookmark->user());
         }
         $bookmarkdata = new Document($bookmark->dry());
         $bookmarkdata->setId($bookmark->id());
@@ -179,7 +174,7 @@ class Modelbookmark extends Modeldb
     /**
      * Create a bookmark that filter pages where the given user is an author.
      *
-     * @param User $user                    The concerned user (need to be already added in database)
+     * @param User $user                    The concerned user
      *
      * @throws RuntimeException             If the process failed
      */
