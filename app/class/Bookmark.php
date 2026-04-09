@@ -32,12 +32,10 @@ class Bookmark extends Item
 
     /**
      * @param object|array<string, mixed> $datas
-     *
-     * @throws RuntimeException
      */
     public function __construct($datas = [])
     {
-        $this->hydrateexception($datas);
+        $this->hydrate($datas);
     }
 
     public function init(

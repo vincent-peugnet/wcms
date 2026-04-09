@@ -32,11 +32,7 @@ class Modelbookmark extends Modeldb
         $bookmarks = [];
         $list = $this->repo->findAll();
         foreach ($list as $bookmarkdata) {
-            try {
-                $bookmarks[$bookmarkdata->id] = new Bookmark($bookmarkdata);
-            } catch (RuntimeException $e) {
-                Logger::error("Error while reading bookmark \"$bookmarkdata->id\" from database : " . $e->getMessage());
-            }
+            $bookmarks[$bookmarkdata->id] = new Bookmark($bookmarkdata);
         }
         return $bookmarks;
     }
@@ -56,11 +52,7 @@ class Modelbookmark extends Modeldb
 
         $bookmarks = [];
         foreach ($bookmarkdatas as $bookmarkdata) {
-            try {
-                $bookmarks[$bookmarkdata->id] = new Bookmark($bookmarkdata);
-            } catch (RuntimeException $e) {
-                Logger::error("Error while reading bookmark \"$bookmarkdata->id\" from database : " . $e->getMessage());
-            }
+            $bookmarks[$bookmarkdata->id] = new Bookmark($bookmarkdata);
         }
         return $bookmarks;
     }
