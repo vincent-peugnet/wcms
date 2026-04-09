@@ -23,7 +23,7 @@ class Modelldap extends Model
      *                                      Like `ou=people,dc=server,dc=tld`
      * @param string $u                     Username storing name, something like `uid`.
      *
-     * @throws RuntimeException if LDAP server syntax did pass the sanity test
+     * @throws RuntimeException if LDAP server syntax did not pass the sanity test
      * @throws Missingextensionexception if LDAP extension is not installed
      */
     public function __construct(string $ldapserver, string $tree, string $u)

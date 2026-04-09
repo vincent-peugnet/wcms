@@ -446,7 +446,9 @@ class User extends Item
         return $this->level === self::ADMIN;
     }
 
-
+    /**
+     * Increment connection counter
+     */
     public function connectcounter(): void
     {
         $this->connectcount ++;

@@ -137,8 +137,9 @@ class Modeluser extends Modeldb
      * @return User                         User object
      *
      * @throws Notfoundexception            If User cant be founded
-     * @throws InvalidArgumentException     If $id param is not a string or an User
      * @throws Databaseexception            If ID is invalid
+     *
+     * @throws InvalidArgumentException     If $id param is not a string or an User
      *
      * @todo remplace by a dedicated InvalidIDexception for the case of invalid ID
      */

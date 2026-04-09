@@ -6,6 +6,7 @@ use Ahc\Jwt\JWT;
 use Ahc\Jwt\JWTException;
 use DateTime;
 use donatj\UserAgent\UserAgentParser;
+use LogicException;
 use RuntimeException;
 use Wcms\Exception\Database\Notfoundexception;
 use Wcms\Exception\Databaseexception;
@@ -123,9 +124,10 @@ class Modelconnect extends Model
     }
 
     /**
-     * Will try to login an user against local password or LDAP
+     * Try to login an user against local password or LDAP
+     * If LDAP config is valid and user not in database, try to create a new user if auth succeeded
      *
-     * @throws RuntimeException if login failed or database connections occured
+     * @throws RuntimeException if login failed or database connections error occured
      */
     public function login(string $username, string $password): User
     {
@@ -133,53 +135,102 @@ class Modelconnect extends Model
 
         try {
             $user = $usermanager->get($username);
-
-            if (
-                $user->expiredate() !== false &&
-                $user->expiredate() < new DateTime() &&
-                $user->level() < 10
-            ) {
-                throw new RuntimeException('Account expired');
-            }
-
-            if ($user->isldap()) {
-                $success = $this->authldap($username, $password);
-            } else {
-                $success = $usermanager->passwordcheck($user, $password);
-            }
-
-            if (!$success) {
-                throw new RuntimeException('Wrong credentials');
-            }
         } catch (Notfoundexception $e) {
-            if (Config::isldap() && $this->authldap($username, $password)) {
-                // create a new User and add a personnal bookmark
-                $user = new User(['password' => null, 'level' => Config::ldapuserlevel(), 'id' => $username]);
-                $bookmarkmanager = new Modelbookmark();
-                $bookmarkmanager->addauthorbookmark($user);
-            } else {
-                throw new RuntimeException('Wrong credentials');
+            if (!Config::isldap()) {
+                throw new RuntimeException('get: ' . $e->getMessage());
             }
+
+            // LDAP config is defined: try to create a new user
+            try {
+                $user = $this->newldapuser($username, $password);
+                $usermanager->add($user);
+                Logger::info("new LDAP user '%s' created", $user->id());
+                return $user;
+            } catch (RuntimeException $e) {
+                throw new RuntimeException('create LDAP user: ' . $e->getMessage());
+            }
+        } catch (Databaseexception $e) {
+            throw new RuntimeException('get: ' . $e->getMessage());
+        }
+
+        // check if account is expired
+        if (
+            $user->expiredate() !== false &&
+            $user->expiredate() < new DateTime() &&
+            $user->level() < 10
+        ) {
+            throw new RuntimeException('account expired');
+        }
+
+        // check password
+        if ($user->isldap()) {
+            if (!Config::isldap()) {
+                throw new RuntimeException('user require LDAP credentials: missing or invalid LDAP config');
+            }
+            try {
+                $success = $this->authldap($user->id(), $password);
+            } catch (RuntimeException $e) {
+                throw new RuntimeException('LDAP auth: ' . $e->getMessage());
+            }
+        } else {
+            $success = $usermanager->passwordcheck($user, $password);
+        }
+
+        // wrong password
+        if (!$success) {
+            throw new RuntimeException('wrong password');
         }
 
         $user->connectcounter();
-        $usermanager->add($user);
+        $usermanager->update($user);
 
         return $user;
     }
 
     /**
-     * @throws RuntimeException if LDAP is not activated in Config or LDAP is not functionnal
+     * Try to authenticate an user against LDAP connection
+     * Config LDAP should be checked before
+     *
+     * @throws RuntimeException if LDAP connection failed
      */
     protected function authldap(string $username, string $password): bool
     {
         if (!Config::isldap()) {
-            throw new RuntimeException('Error with LDAP connection');
+            throw new LogicException('LDAP config not complete');
         }
         $ldap = new Modelldap(Config::ldapserver(), Config::ldaptree(), Config::ldapu());
         $success = $ldap->auth($username, $password);
         $ldap->disconnect();
         return $success;
+    }
+
+    /**
+     * Try to create a new user if LDAP auth succeeded
+     * Create the default personnal bookmark
+     *
+     * @throws RuntimeException
+     */
+    protected function newldapuser(string $username, string $password): User
+    {
+        // authenticate over LDAP
+        if (!$this->authldap($username, $password)) {
+            throw new RuntimeException('LDAP auth failed');
+        }
+
+        // create a new User
+        $user = new User(['password' => null, 'level' => Config::ldapuserlevel(), 'id' => $username]);
+        $user->connectcounter();
+
+        // create personnal bookmark
+        try {
+            $bookmarkmanager = new Modelbookmark();
+            $bookmarkmanager->addauthorbookmark($user);
+        } catch (RuntimeException $e) {
+            // bookmark creation failure should not stop the process
+            Logger::error("personnal bookmark creation for user '%s': %s", $user->id(), $e);
+        }
+
+        return $user;
     }
 
     /**
