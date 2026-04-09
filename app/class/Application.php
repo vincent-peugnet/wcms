@@ -17,6 +17,9 @@ class Application
         $this->usermanager = new Modeluser();
     }
 
+    /**
+     * @throws RuntimeException if default bookmark creation failed
+     */
     public function wakeup(): void
     {
         if (isset($_POST['configinit'])) {
@@ -206,48 +209,47 @@ class Application
 
     /**
      * Create default bookmarks set during install
+     *
+     * @throws Databaseexception
      */
     protected function defaultbookmarks(): void
     {
         $bookmarkmanager = new Modelbookmark();
         if (empty($bookmarkmanager->list())) {
-            try {
-                $lastedited = new Opt(['sortby' => 'datemodif', 'limit' => 5, 'order' => -1]);
-                $lasteditedbookmark = new Bookmark();
-                $lasteditedbookmark->init(
-                    'last5edited',
-                    $lastedited->getaddress(),
-                    '🕒',
-                    'Last 5 edited',
-                    'Get the 5 last edited pages of the database'
-                );
-                $lastcreated = new Opt(['sortby' => 'datecreation', 'limit' => 10, 'order' => -1]);
-                $lastcreatedbookmark = new Bookmark();
-                $lastcreatedbookmark->init(
-                    'last10created',
-                    $lastcreated->getaddress(),
-                    '🖍️',
-                    'Last 10 created',
-                    'Get the 10 last created pages of the database'
-                );
-                $emptytag = new Opt(['tagcompare' => 'EMPTY']);
-                $emptytagbookmark = new Bookmark();
-                $emptytagbookmark->init(
-                    'notags',
-                    $emptytag->getaddress(),
-                    '🏷️',
-                    'No tags',
-                    'Pages that does\'nt have any tag'
-                );
-                $all = new Opt();
-                $allbookmark = new Bookmark();
-                $allbookmark->init('all', $all->getaddress(), '⚓', 'All', 'Show all pages');
-                    $bookmarkmanager->add($lasteditedbookmark);
-                    $bookmarkmanager->add($lastcreatedbookmark);
-                    $bookmarkmanager->add($emptytagbookmark);
-                    $bookmarkmanager->add($allbookmark);
-            } catch (RuntimeException $e) {
-            }
+            $lastedited = new Opt(['sortby' => 'datemodif', 'limit' => 5, 'order' => -1]);
+            $lasteditedbookmark = new Bookmark();
+            $lasteditedbookmark->init(
+                'last5edited',
+                $lastedited->getaddress(),
+                '🕒',
+                'Last 5 edited',
+                'Get the 5 last edited pages of the database'
+            );
+            $lastcreated = new Opt(['sortby' => 'datecreation', 'limit' => 10, 'order' => -1]);
+            $lastcreatedbookmark = new Bookmark();
+            $lastcreatedbookmark->init(
+                'last10created',
+                $lastcreated->getaddress(),
+                '🖍️',
+                'Last 10 created',
+                'Get the 10 last created pages of the database'
+            );
+            $emptytag = new Opt(['tagcompare' => 'EMPTY']);
+            $emptytagbookmark = new Bookmark();
+            $emptytagbookmark->init(
+                'notags',
+                $emptytag->getaddress(),
+                '🏷️',
+                'No tags',
+                'Pages that does\'nt have any tag'
+            );
+            $all = new Opt();
+            $allbookmark = new Bookmark();
+            $allbookmark->init('all', $all->getaddress(), '⚓', 'All', 'Show all pages');
+            $bookmarkmanager->add($lasteditedbookmark);
+            $bookmarkmanager->add($lastcreatedbookmark);
+            $bookmarkmanager->add($emptytagbookmark);
+            $bookmarkmanager->add($allbookmark);
         }
     }
 }
