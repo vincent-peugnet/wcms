@@ -3,7 +3,7 @@
 
 <?php $this->start('modal') ?>
 
-<?php if($user->isinvite()) : ?>
+<?php if($user->isreader()) : ?>
     <p>
         Sorry <?= $this->e(empty($user->name()) ? $user->id() : $user->name()) ?>, you are not allowed to do this.
     </p>
