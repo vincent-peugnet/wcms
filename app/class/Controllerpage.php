@@ -179,7 +179,9 @@ class Controllerpage extends Controller
                 if (Config::deletelinktocache()) {
                     $oldlinkto = $this->page->linkto();
                 }
-                $urlchecker = Config::urlchecker() ? new Serviceurlchecker(3) : null;
+                // only check URLs online if user is an editor
+                $timeout = $this->user->isinvite() ? 3 : 0;
+                $urlchecker = Config::urlchecker() ? new Serviceurlchecker($timeout) : null;
                 $this->page = $this->pagemanager->renderpage($this->page, $this->router, $urlchecker);
                 if (isset($oldlinkto)) {
                     $relatedpages = array_unique(array_merge($oldlinkto, $this->page->linkto()));
