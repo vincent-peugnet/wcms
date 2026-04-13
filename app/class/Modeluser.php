@@ -139,8 +139,6 @@ class Modeluser extends Modeldb
      * @throws Notfoundexception            If User cant be founded
      * @throws Databaseexception            If ID is invalid
      *
-     * @throws InvalidArgumentException     If $id param is not a string or an User
-     *
      * @todo remplace by a dedicated InvalidIDexception for the case of invalid ID
      */
     public function get($id): User
@@ -148,19 +146,18 @@ class Modeluser extends Modeldb
         if ($id instanceof User) {
             $id = $id->id();
         }
-        if (is_string($id)) {
-            if (!Model::idcheck($id)) {
-                throw new Databaseexception("invalid ID: '$id'");
-            }
-            $userdata = $this->repo->findById($id);
-            if ($userdata !== false) {
-                return new User($userdata);
-            } else {
-                throw new Notfoundexception("User with ID $id not found in the database.");
-            }
-        } else {
+        if (!is_string($id)) {
             throw new InvalidArgumentException('input should be an User object or a string ID');
         }
+        if (!$this::idcheck($id)) {
+            throw new Databaseexception("invalid ID: '$id'");
+        }
+
+        $userdata = $this->repo->findById($id);
+        if ($userdata === false) {
+            throw new Notfoundexception("User with ID '$id'not found in the database.");
+        }
+        return new User($userdata);
     }
 
     /**

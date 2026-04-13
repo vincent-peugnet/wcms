@@ -111,6 +111,7 @@ class Modelpage extends Modeldb
      *
      * @return Page                         The Page object
      *
+     * @throws Databaseexception            If ID is not valid
      * @throws DatabaseNotfoundexception    If page is'nt found
      * @throws RangeException               If page version is specified but invalid
      */
@@ -121,6 +122,9 @@ class Modelpage extends Modeldb
         }
         if (!is_string($id)) {
             throw new InvalidArgumentException("argument of Modelpage->get() should be a ID string or Page");
+        }
+        if (!$this->idcheck($id)) {
+            throw new Databaseexception("invalid ID: '$id'");
         }
 
         $pagedata = $this->repo->findById($id);

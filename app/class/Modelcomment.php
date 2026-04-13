@@ -55,6 +55,7 @@ class Modelcomment extends Modeldb
      *
      * @return array<int, Comment>
      *
+     * @throws Databaseexception            If ID is not valid
      * @throws Notfoundexception            If comments cannot be found for the given page ID
      */
     public function getcomments(string $id): array
@@ -89,10 +90,14 @@ class Modelcomment extends Modeldb
      *
      * @return array<string, mixed>
      *
+     * @throws Databaseexception            If ID is not valid
      * @throws Notfoundexception            If comments cannot be found
      */
     protected function get(string $id): array
     {
+        if (!$this->idcheck($id)) {
+            throw new Databaseexception("invalid ID: '$id'");
+        }
         $doc = $this->repo->findById($id);
         if ($doc === false) {
             throw new Notfoundexception("Could not find page comments entry with the following ID: '$id'");

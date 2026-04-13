@@ -89,18 +89,21 @@ class Modelbookmark extends Modeldb
      *
      * @return Bookmark                     Bookmark object or false in case of error
      *
+     * @throws Databaseexception            If ID is not valid
      * @throws Notfoundexception            If Bookmark cant be found
-     * @throws InvalidArgumentException     If $id param is not a string or a Bookmark
      * @throws RuntimeException             If Bookmark cannot be build beccause of invalid datas
      */
     public function get($id): Bookmark
     {
-        $bookmarkdata = $this->repo->findById($this->id($id));
-        if ($bookmarkdata !== false) {
-            return new Bookmark($bookmarkdata);
-        } else {
-            throw new Notfoundexception("Could not find Bookmark with the following ID: \"$id\"");
+        $id = $this->id($id);
+        if (!$this->idcheck($id)) {
+            throw new Databaseexception("invalid ID: '$id'");
         }
+        $bookmarkdata = $this->repo->findById($id);
+        if ($bookmarkdata === false) {
+            throw new Notfoundexception("Could not find Bookmark with the following ID: '$id'");
+        }
+        return new Bookmark($bookmarkdata);
     }
 
 
