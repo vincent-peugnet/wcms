@@ -332,9 +332,7 @@ class Controllerpage extends Controller
      * When a client want to add a page.
      * Match domain.com/PAGE_ID/add
      *
-     * @throws RuntimeException if page creation failed
-     *
-     * @todo This should not throw RuntimeException but manage the exception itself and log friendly error
+     * @throws RuntimeException if page creation failed (this should be managed by wiki admin)
      */
     public function add(string $page): never
     {
@@ -358,11 +356,17 @@ class Controllerpage extends Controller
             $this->page->settitle($_SESSION['dirtyid'][$page]);
             unset($_SESSION['dirtyid']);
         }
-        $this->page->addauthor($this->user->id());
-        $this->pagemanager->add($this->page);
-        $user = $this->user->id();
-        Logger::info("User '$user' successfully added Page '$page'");
-        $this->routedirect('pageedit', ['page' => $this->page->id()]);
+        try {
+            $this->page->addauthor($this->user->id());
+            $this->pagemanager->add($this->page);
+            $user = $this->user->id();
+            Logger::info("User '$user' successfully added Page '$page'");
+            $this->routedirect('pageedit', ['page' => $this->page->id()]);
+        } catch (RuntimeException $e) {
+            $msg = "add page '$page': " . $e->getMessage();
+            Logger::error($msg);
+            throw new RuntimeException($msg);
+        }
     }
 
     public function addascopy(string $page, string $copy): never
