@@ -159,12 +159,16 @@
         <h3>Time zone</h3>
 
         <p class="field">
-            <label for="timezone">Time zone</label>
+            <label for="timezone">Interface and database Time zone</label>
             <select name="timezone" id="timezone" form="admin">
                 <?php foreach($timezones as $timezone) : ?>
                     <option value="<?= $timezone ?>" <?= $timezone === Wcms\Config::timezone() ? 'selected' : '' ?>><?= $timezone ?></option>
                 <?php endforeach ?>
             </select>
+        </p>
+
+        <p class="info">
+            This also influence rendering of date and time in pages.
         </p>
 
         <h3>Theme</h3>
