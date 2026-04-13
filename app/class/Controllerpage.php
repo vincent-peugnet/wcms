@@ -382,9 +382,7 @@ class Controllerpage extends Controller
     }
 
     /**
-     * @todo move the file part to Modelpage
-     * @todo reset comment count if needed -> generate the JSON instead of reading to the actual file
-     * @link https://github.com/vincent-peugnet/wcms/issues/590
+     * serve a JSON
      */
     public function download(string $page): never
     {
@@ -400,20 +398,20 @@ class Controllerpage extends Controller
             $this->showtemplate('forbidden', ['id' => $this->page->id(), 'route' => 'pagedownload'], 403);
         }
 
-        $file = Model::PAGES_DIR . Config::pagetable() . DIRECTORY_SEPARATOR . $page . '.json';
+        $this->page->setcommentcount(0);
+        $this->page->setdatecomment(null);
 
-        if (file_exists($file)) {
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/json; charset=utf-8');
-            header('Content-Disposition: attachment; filename="' . basename($file) . '"');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($file));
-            readfile($file);
-        } else {
-            Logger::error("Error while trying to read file: $file");
-        }
+        $json = json_encode($this->page->dry(), JSON_PRETTY_PRINT);
+        $filename = $this->page->id() . '.json';
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/json; charset=utf-8');
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        echo $json;
+
         exit;
     }
 
