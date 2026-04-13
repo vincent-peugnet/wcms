@@ -369,7 +369,34 @@ abstract class Servicerender
      */
     protected function title(string $text): string
     {
-        return str_replace('%TITLE%', $this->page->title(), $text);
+        $matches = $this->match($text, 'TITLE');
+
+        if (empty($matches)) {
+            return $text;
+        }
+
+        $searches = [];
+        $replaces = [];
+
+        foreach ($matches as $match) {
+            $options = $match->readoptions();
+
+            if (isset($options['id'])) {
+                try {
+                    $page = $this->pagemanager->get($options['id']);
+                    $title = $page->title();
+                } catch (RuntimeException $e) {
+                    continue;
+                    // store render error: page doesn't exist
+                }
+            } else {
+                $title = $this->page->title();
+            }
+            $replaces[] = $title;
+            $searches[] = $match->fullmatch();
+        }
+
+        return str_replace($searches, $replaces, $text);
     }
 
 

@@ -141,6 +141,7 @@ CodeMirror.defineSimpleMode('wcms', {
         { regex: /MAP\?/, token: 'wcms', next: 'map' },
         { regex: /RANDOM\?/, token: 'wcms', next: 'random' },
         { regex: /MEDIA\?/, token: 'wcms', next: 'media' },
+        { regex: /TITLE\?/, token: 'wcms', next: 'title' },
         { regex: /RSS\?/, token: 'wcms', next: 'rss' },
         {
             regex: /(DATE|TIME|DATEMODIF|TIMEMODIF)\?/,
@@ -212,6 +213,11 @@ CodeMirror.defineSimpleMode('wcms', {
     // 'media' mode, parameters' keywords of the 'media' macro
     media: [
         { regex: /path|sortby|order|type/, token: 'wkeyword', push: 'wcms' },
+        { regex: null, push: 'wcms' },
+    ],
+    // 'media' mode, parameters' keywords of the 'media' macro
+    title: [
+        { regex: /id/, token: 'wkeyword', push: 'wcms' },
         { regex: null, push: 'wcms' },
     ],
     // 'rss' mode, parameters' keywords of the 'rss' macro
