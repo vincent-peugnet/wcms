@@ -67,7 +67,7 @@ abstract class Controller
         $this->router = $router;
         $this->pagemanager = new Modelpage(Config::pagetable());
         $this->initplates();
-        $this->now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
+        $this->now = new DateTimeImmutable("now");
     }
 
     /**

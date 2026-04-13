@@ -15,6 +15,8 @@ try {
 $app = new Wcms\Application();
 $app->wakeup();
 
+date_default_timezone_set(Wcms\Config::timezone());
+
 session_set_cookie_params([
     'path' => '/' . Wcms\Config::basepath(),
     'samesite' => 'Strict',

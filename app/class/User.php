@@ -3,7 +3,6 @@
 namespace Wcms;
 
 use DateTimeImmutable;
-use DateTimeZone;
 use DomainException;
 
 class User extends Item
@@ -169,7 +168,7 @@ class User extends Item
             if (empty($this->expiredate)) {
                 return 'never';
             } else {
-                $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
+                $now = new DateTimeImmutable();
                 if ($this->expiredate < $now) {
                     return 'expired';
                 } else {
@@ -294,8 +293,7 @@ class User extends Item
         } else {
             $this->expiredate = DateTimeImmutable::createFromFormat(
                 'Y-m-d',
-                $expiredate,
-                new DateTimeZone('Europe/Paris')
+                $expiredate
             );
         }
     }

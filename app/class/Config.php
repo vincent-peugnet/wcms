@@ -2,7 +2,9 @@
 
 namespace Wcms;
 
+use DateTimeZone;
 use DomainException;
+use Throwable;
 use Wcms\Exception\Filesystemexception;
 
 abstract class Config
@@ -79,6 +81,9 @@ abstract class Config
     /** Enable comment system */
     protected static bool $comments = false;
 
+    /** TimeZone used for database and display of dates */
+    protected static string $timezone = self::DEFAULT_TIME_ZONE;
+
     /** LDAP auth */
     protected static string $ldapserver = '';
     protected static string $ldaptree = '';
@@ -100,6 +105,8 @@ abstract class Config
 
     public const SECRET_KEY_MIN = 16;
     public const SECRET_KEY_MAX = 128;
+
+    public const DEFAULT_TIME_ZONE = 'UTC';
 
 
     // _______________________________________ F U N _______________________________________
@@ -459,6 +466,11 @@ abstract class Config
         return self::$comments;
     }
 
+    public static function timezone(): string
+    {
+        return self::$timezone;
+    }
+
     public static function ldapserver(): string
     {
         return self::$ldapserver;
@@ -774,6 +786,16 @@ abstract class Config
     public static function setcomments(bool $enable): void
     {
         self::$comments = $enable;
+    }
+
+    public static function settimezone(string $timezone): void
+    {
+        try {
+            $tz = new DateTimeZone($timezone);
+            self::$timezone = $timezone;
+        } catch (Throwable $th) {
+            // keep default time zone
+        }
     }
 
     public static function setldapserver(string $ldapserver): void

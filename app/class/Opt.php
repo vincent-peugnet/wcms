@@ -3,7 +3,6 @@
 namespace Wcms;
 
 use DateTimeImmutable;
-use DateTimeZone;
 use InvalidArgumentException;
 
 class Opt extends Item
@@ -592,8 +591,7 @@ class Opt extends Item
             } else {
                 $this->since = DateTimeImmutable::createFromFormat(
                     self::HTML_DATETIME_LOCAL,
-                    $since,
-                    new DateTimeZone('Europe/Paris')
+                    $since
                 );
             }
         } else {
@@ -614,8 +612,7 @@ class Opt extends Item
             } else {
                 $this->until = DateTimeImmutable::createFromFormat(
                     self::HTML_DATETIME_LOCAL,
-                    $until,
-                    new DateTimeZone('Europe/Paris')
+                    $until
                 );
             }
         } else {

@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use AltoRouter;
+use DateTimeZone;
 use LogicException;
 use RuntimeException;
 use Wcms\Exception\Filesystemexception;
@@ -35,6 +36,7 @@ class Controlleradmin extends Controller
         $datas['faviconlist'] = $this->mediamanager->listfavicon();
         $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();
         $datas['themes'] = $this->mediamanager->listthemes();
+        $datas['timezones'] = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 
         $globalcssfile = Model::GLOBAL_CSS_FILE;
 
