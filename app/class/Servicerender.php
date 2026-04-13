@@ -355,7 +355,6 @@ abstract class Servicerender
         $html = $this->summary($html);
 
         $html = $this->rss($html);
-        $html = $this->wikiurl($html);
 
         $html = "<body>\n$html\n</body>";
         $html = $this->htmlparser($html);

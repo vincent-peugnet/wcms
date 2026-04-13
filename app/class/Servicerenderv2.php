@@ -67,6 +67,7 @@ class Servicerenderv2 extends Servicerender
     {
         $content = $element->content();
         $content = $this->winclusions($content);
+        $content = $this->wikiurl($content);
         if ($element->everylink() > 0) {
             $content = $this->everylink($content, $element->everylink());
         }

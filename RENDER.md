@@ -12,11 +12,10 @@ flowchart TD
 
     2A[[Body]] -->
     2B(W inclusion)  ------->
-    2C((Element inclusion)) --> 2D
+    2C((Elements inclusion)) --> 2D
     subgraph "post inclusion parser"
         2D(Summary) -->
         2rss(RSS detection) -->
-        2H(Wiki links) -->
         2I(Link and media analysis) -->
         2pp(check for post render actions)
     end
@@ -32,14 +31,15 @@ flowchart TD
 
     1A[[Element]] -->
     1B(W inclusion) -->
-    1C(every link*) -->
-    1D(Markdown) --> 1E
+    1C(wiki links) -->
+    1D(every link*) -->
+    1E(Markdown) --> 1F
     subgraph "post MD parser"
-        1E(header ID) -->
-        1F(URL linker) -->
-        1G(HTML tag*)
+        1F(header ID) -->
+        1G(URL linker) -->
+        1H(HTML tag*)
     end
-    1G --> 2C
+    1H --> 2C
 
     1E -. "send TOC structure" .-> 2D
     2rss -. "send rss links" .-> 0rss
