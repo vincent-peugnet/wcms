@@ -188,6 +188,25 @@ abstract class Servicerender
         return $body;
     }
 
+    protected function bodyparser(string $html): string
+    {
+        $html = $this->summary($html);
+
+        $html = $this->rss($html);
+
+        $html = "<body>\n$html\n</body>";
+        $html = $this->htmlparser($html);
+
+
+        return $html;
+    }
+
+
+
+
+
+    // _________________________ Head generation _______________________________
+
     /**
      * Return HEAD html element of a page
      */
@@ -328,6 +347,138 @@ abstract class Servicerender
     }
 
 
+    // _________________________ Element parser _______________________________
+
+    /**
+     * Add Id to html header elements and store the titles in the `$this->sum` var
+     *
+     * @param string $text Input html document to scan
+     * @param int $min Maximum header deepness to look for. Min = 1 Max = 6 Default = 1
+     * @param int $max Maximum header deepness to look for. Min = 1 Max = 6 Default = 6
+     * @param string $element Name of element being analysed. Leave empty if using Markdown field
+     * @param int $anchormode Mode of anchor link display. see Element HEADERANCHORMODES
+     *
+     * @return string text with id in header
+     */
+
+    protected function headerid(string $text, int $min, int $max, int $anchormode, string $element = ''): string
+    {
+        if (empty($element)) {
+            $element = md5($text);
+        }
+        if ($min > 6 || $min < 1) {
+            $min = 6;
+        }
+        if ($max > 6 || $max < 1) {
+            $max = 6;
+        }
+
+        $text = preg_replace_callback(
+            "/<h([$min-$max])((.*)id=\"([^\"]*)\"(.*)|.*)?>(.+)<\/h[$min-$max]>/mU",
+            function ($matches) use ($element, $anchormode) {
+                $level = $matches[1];
+                $beforeid = $matches[3];
+                $id = $matches[4];
+                $afterid = $matches[5];
+                $content = $matches[6];
+                // if no custom id is defined, use idclean of the content as id
+                if (empty($id)) {
+                    $id = Model::idclean($content);
+                }
+                $this->sum[$element][] = new Header($id, intval($level), $content);
+                switch ($anchormode) {
+                    case Element::HEADER_ANCHOR_LINK:
+                        $content = "<a href=\"#$id\">$content</a>";
+                        break;
+
+                    case Element::HEADER_ANCHOR_HASH:
+                        $content .= "<span class=\"nbsp\">&nbsp;</span><a class=\"headerlink\" href=\"#$id\">#</a>";
+                        break;
+                }
+                return "<h$level $beforeid id=\"$id\" $afterid>$content</h$level>";
+            },
+            $text
+        );
+        return $text;
+    }
+
+    protected function markdown(string $text): string
+    {
+        $fortin = new MarkdownExtra();
+        // id in headers
+        // $fortin->header_id_func = function ($header) {
+        //  return preg_replace('/[^\w]/', '', strtolower($header));
+        // };
+        $fortin->hard_wrap = Config::markdownhardwrap();
+        $text = $fortin->transform($text);
+        return $text;
+    }
+
+    /**
+     * Replace wiki links [[page_id]] with HTML link
+     */
+    protected function wikiurl(string $text): string
+    {
+        $rend = $this;
+        $text = preg_replace_callback(
+            '%\[\[([a-z0-9_-]+)\/?(#[\w-]+)?\]\]%',
+            function ($matches) use ($rend) {
+                try {
+                    $matchpage = $rend->pagemanager->get($matches[1]);
+                    $fragment = $matches[2] ?? '';
+                    $href = $matches[1] . $fragment;
+                    $a = htmlspecialchars($matchpage->title());
+                } catch (RuntimeException $e) {
+                    $href = $matches[1];
+                    $a = $matches[1];
+                }
+                return '<a href="' . $href . '">' . $a . '</a>';
+            },
+            $text
+        );
+        return $text;
+    }
+
+    /**
+     * Replace plain URL with HTML link pointing to their address.
+     *
+     * This will also include `target=_blank` and `class=external` attributes.
+     */
+    protected function autourl(string $text): string
+    {
+        $options = ["class" => "external"];
+        if ($this->externallinkblank) {
+            $options['target'] = '_blank';
+        }
+        $validator = new Validator(false);
+        $highlighter = new HtmlHighlighter("http", $options);
+        $urlHighlight = new UrlHighlight($validator, $highlighter);
+        $text = $urlHighlight->highlightUrls($text);
+        return $text;
+    }
+
+    /**
+     * Autolink Function : transform every word of more than $limit characters in internal link
+     *
+     * @param string $text The input text to be converted
+     *
+     * @return string Conversion output
+     */
+    protected function everylink(string $text, int $limit): string
+    {
+        $regex = '~([\w\-_éêèùïüîçà]{' . $limit . ',})(?![^<]*>|[^<>]*<\/)~';
+        $text = preg_replace_callback($regex, function ($matches) {
+            return '<a href="' . Model::idclean($matches[1]) . '">' . $matches[1] . '</a>';
+        }, $text);
+        return $text;
+    }
+
+
+
+
+
+    // _________________________ W Inclusions _______________________________
+
     /**
      * Perfom W syntax inclusions
      */
@@ -350,17 +501,29 @@ abstract class Servicerender
         return $text;
     }
 
-    protected function bodyparser(string $html): string
+    /**
+     * Match `%INCLUDE?params=values&...%`
+     *
+     * @param string $text                  Input text to scan
+     * @param string $include               Word to match `%$include%`
+     * @param bool $wholetext               Only match if it's the whole text
+     *
+     * @return Inclusion[]
+     */
+    protected function match(string $text, string $include, bool $wholetext = false): array
     {
-        $html = $this->summary($html);
+        $regex = "\%($include)(\?([a-zA-Z0-9:\[\]\&=\-_\/\%\+\*\;]*))?\%";
+        if ($wholetext) {
+            $regex = "^$regex$";
+        }
+        preg_match_all("~$regex~", $text, $out);
 
-        $html = $this->rss($html);
+        $matches = [];
 
-        $html = "<body>\n$html\n</body>";
-        $html = $this->htmlparser($html);
-
-
-        return $html;
+        foreach ($out[0] as $key => $match) {
+            $matches[$key] = new Inclusion($match, $out[1][$key], $out[3][$key], $this->page);
+        }
+        return $matches;
     }
 
     /**
@@ -408,22 +571,357 @@ abstract class Servicerender
     }
 
     /**
-     * Replace plain URL with HTML link pointing to their address.
+     * Check for media list call in the text and insert media list
+     * @param string $text Text to scan and replace
      *
-     * This will also include `target=_blank` and `class=external` attributes.
+     * @return string Output text
      */
-    protected function autourl(string $text): string
+    protected function automedialist(string $text): string
     {
-        $options = ["class" => "external"];
-        if ($this->externallinkblank) {
-            $options['target'] = '_blank';
+        $matches = $this->match($text, 'MEDIA');
+
+        if (!empty($matches)) {
+            foreach ($matches as $match) {
+                $medialist = new Mediaoptlist($match->readoptions());
+                try {
+                    $text = str_replace($match->fullmatch(), $medialist->generatecontent(), $text);
+                } catch (RuntimeException $e) {
+                    Logger::errorex($e);
+                }
+            }
         }
-        $validator = new Validator(false);
-        $highlighter = new HtmlHighlighter("http", $options);
-        $urlHighlight = new UrlHighlight($validator, $highlighter);
-        $text = $urlHighlight->highlightUrls($text);
         return $text;
     }
+
+    /**
+     * Check for Summary calls in the text and insert html summary
+     * @param string $text Text to scan and replace
+     *
+     * @return string Output text
+     */
+    protected function summary(string $text): string
+    {
+        $matches = $this->match($text, 'SUMMARY');
+
+
+        if (!empty($matches)) {
+            foreach ($matches as $match) {
+                $data = array_merge($match->readoptions(), ['sum' => $this->sum]);
+                $summary = new Summary($data);
+                $text = str_replace($match->fullmatch(), $summary->sumparser(), $text);
+            }
+        }
+        return $text;
+    }
+
+
+    /**
+     * Render pages list
+     */
+    protected function pageoptlist(string $text): string
+    {
+        $matches = $this->match($text, 'LIST');
+        foreach ($matches as $match) {
+            try {
+                $optlist = new Optlist();
+                $options = $match->readoptions();
+
+                if (isset($options['bookmark']) && !empty($options['bookmark'])) {
+                    $bookmarkmanager = new Modelbookmark();
+                    $bookmark = $bookmarkmanager->get($options['bookmark']);
+                    $optlist->hydrate($bookmark->querydata()); // may be erased by the Inclusion options
+                }
+
+                $optlist->hydrate($options);
+
+                $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optlist);
+                $content = $optlist->listhtml($pagetable, $this->page);
+                $text = str_replace($match->fullmatch(), $content, $text);
+            } catch (RuntimeException $e) {
+                Logger::errorex($e);
+            }
+        }
+
+        return $text;
+    }
+
+    /**
+     * Render page maps
+     */
+    protected function pageoptmap(string $text): string
+    {
+        $matches = $this->match($text, 'MAP');
+        foreach ($matches as $match) {
+            try {
+                $options = $match->readoptions();
+                $optmap = new Optmap();
+
+                if (isset($options['bookmark']) && !empty($options['bookmark'])) {
+                    $bookmarkmanager = new Modelbookmark();
+                    $bookmark = $bookmarkmanager->get($options['bookmark']);
+                    $optmap->hydrate($bookmark->querydata()); // may be erased by the Inclusion options
+                }
+
+                $optmap->hydrate($options);
+
+                $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optmap);
+                $geopt = new Opt(['geo' => true]);
+                $pagetable = $this->pagemanager->pagetable($pagetable, $geopt);
+                $this->linkto = array_merge($this->linkto, array_keys($pagetable));
+                $content = $optmap->maphtml($pagetable, $this->router);
+                $text = str_replace($match->fullmatch(), $content, $text);
+                $this->map = true;
+            } catch (RuntimeException $e) {
+                Logger::errorex($e);
+            }
+        }
+        return $text;
+    }
+
+    /**
+     * Render Random links
+     */
+    protected function randomopt(string $text): string
+    {
+        $matches = $this->match($text, 'RANDOM');
+        foreach ($matches as $match) {
+            try {
+                $options = $match->readoptions();
+                $optrandom = new Optrandom();
+
+                if (isset($options['bookmark']) && !empty($options['bookmark'])) {
+                    $bookmarkmanager = new Modelbookmark();
+                    $bookmark = $bookmarkmanager->get($options['bookmark']);
+                    $optrandom->hydrate($bookmark->querydata());
+                }
+
+                $optrandom->hydrate($options);
+
+                $randompages = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optrandom);
+                $this->linkto = array_merge($this->linkto, array_keys($randompages));
+                $optrandom->setorigin($this->page->id());
+                $content = $this->generate('randomdirect', [], $optrandom->getquery());
+                $text = str_replace($match->fullmatch(), $content, $text);
+            } catch (RuntimeException $e) {
+                Logger::errorex($e); // bookmark does not exist
+            }
+        }
+        return $text;
+    }
+
+    /**
+     * Replace RSS inclusions with atom paths and store Bookmarks in `rsslist` property
+     *
+     * @param string $text                  Input text to analyse
+     *
+     * @return string                       Text with replaced valid %RSS% inclusions
+     */
+    protected function rss(string $text): string
+    {
+        $this->rsslist = $this->rssmatch($text);
+        foreach ($this->rsslist as $fullmatch => $bookmark) {
+            $atompath = Servicerss::atompath($bookmark->id());
+            return str_replace($fullmatch, $atompath, $text);
+        }
+        return $text;
+    }
+
+    /**
+     * Identify all RSS inclusion in text, that have a valid and bublished bookmark associated
+     *
+     * @param string $text                  Text to analyse
+     *
+     * @return Bookmark[]                   Associative array of bookmarks, using fullmatch as key
+     */
+    protected function rssmatch(string $text): array
+    {
+        $rsslist = [];
+        $matches = $this->match($text, "RSS");
+        foreach ($matches as $match) {
+            $options = $match->readoptions();
+            if (isset($options['bookmark'])) {
+                $bookmarkmanager = new Modelbookmark();
+                try {
+                    $bookmark = $bookmarkmanager->get($options['bookmark']);
+                    if ($bookmark->ispublished()) {
+                        $rsslist[$match->fullmatch()] = $bookmark;
+                    }
+                } catch (RuntimeException $e) {
+                    // log a render error
+                }
+            }
+        }
+        return $rsslist;
+    }
+
+
+
+    protected function date(string $text): string
+    {
+        $dateregex = implode('|', array_keys(Clock::TYPES));
+        $matches = $this->match($text, $dateregex);
+        $searches = [];
+        $replaces = [];
+        foreach ($matches as $match) {
+            $clock = new Clock(
+                $match->type(),
+                $this->page,
+                $this->page->lang(),
+            );
+            $clock->hydrate($match->readoptions());
+            $searches[] = $match->fullmatch();
+            $replaces[] = $clock->render();
+        }
+        return str_replace($searches, $replaces, $text);
+    }
+
+    /**
+     * Render thumbnail of the page
+     *
+     * @param string $text Text to analyse
+     *
+     * @return string The rendered output
+     */
+    protected function thumbnail(string $text): string
+    {
+        $src = Model::thumbnailpath() . $this->pagemanager->getpagethumbnail($this->page);
+        $img = '<img class="thumbnail" src="' . $src . '">';
+        $img = "\n$img\n";
+        $text = str_replace('%THUMBNAIL%', $img, $text);
+
+        return $text;
+    }
+
+    /**
+     * Replace each occurence of `%PAGEID%` or `%ID%` with page ID
+     * @param string $text input text
+     * @return string output text with replaced elements
+     */
+    protected function pageid(string $text): string
+    {
+        return str_replace(['%PAGEID%', '%ID%'], $this->page->id(), $text);
+    }
+
+    /**
+     * Replace each occurence of `%URL%` with page ID
+     * @param string $text input text
+     * @return string output text with replaced elements
+     */
+    protected function url(string $text): string
+    {
+        return str_replace('%URL%', Config::domain() . $this->upage($this->page->id()), $text);
+    }
+
+    /**
+     * Replace each occurence of `%PATH%` with page path
+     * @param string $text input text
+     * @return string output text with replaced elements
+     */
+    protected function path(string $text): string
+    {
+        return str_replace('%PATH%', $this->upage($this->page->id()), $text);
+    }
+
+    /**
+     * Replace `%AUTHORS%` with a rendered list of authors
+     */
+    protected function authors(string $text): string
+    {
+        $page = $this->page;
+        return preg_replace_callback("~\%AUTHORS\%~", function () use ($page) {
+            $usermanager = new Modeluser();
+            $users = $usermanager->userlistbyid($page->authors());
+            return $this->userlist($users);
+        }, $text);
+    }
+
+    /**
+     * @param string $text content to analyse and replace
+     *
+     * @return string text ouput
+     */
+    protected function authenticate(string $text): string
+    {
+        $id = $this->page->id();
+        $regex = '~\%CONNECT(\?dir=([a-zA-Z0-9-_]+))?\%~';
+        $text = preg_replace_callback($regex, function ($matches) use ($id) {
+            if (isset($matches[2])) {
+                $id = $matches[2];
+            }
+            $form = '<form action="' . Model::dirtopath('!co') . '" method="post">
+            <input type="text" name="user" id="loginuser" autofocus placeholder="user" required>
+			<input type="password" name="pass" id="loginpass" placeholder="password" required>
+			<input type="hidden" name="route" value="pageread">
+			<input type="hidden" name="id" value="' . $id . '">
+			<input type="submit" name="log" value="login" id="button">
+			</form>';
+            return $form;
+        }, $text);
+        return $text;
+    }
+
+    protected function comments(string $text): string
+    {
+        $matches = $this->match($text, 'COMMENTS');
+
+        if (empty($matches)) {
+            return $text;
+        }
+
+        $searches = [];
+        $replaces = [];
+
+
+        foreach ($matches as $match) {
+            $commentlist = new Comments($this->page, $match->readoptions());
+
+            try {
+                $replaces[] = $commentlist->listhtml();
+                $searches[] = $match->fullmatch();
+            } catch (RuntimeException $e) {
+                Logger::warning('render error: %s', $e->getMessage());
+            }
+        }
+
+        return str_replace($searches, $replaces, $text);
+    }
+
+    /**
+     * Render an user as a <a> HTML element
+     * A href attribute is added if user have a specified URL property
+     *
+     * @param User $user        User to render
+     * @return string           HTML rendered <a> element
+     */
+    public function user(User $user): string
+    {
+        $name   = !empty($user->name()) ? htmlspecialchars($user->name()) : $user->id();
+        $id     = $user->id();
+        $href   = empty($user->url()) ? '' : sprintf('href="%s"', $user->url());
+
+        return "<a class=\"user\" data-user=\"$id\"$href>$name</a>";
+    }
+
+    /**
+     * Render a list of Users as a HTML <ul> that may contain links to their profile pages
+     *
+     * @param User[] $users     List of User
+     * @return string           List of user in HTML
+     */
+    protected function userlist(array $users): string
+    {
+        $html = "";
+        foreach ($users as $user) {
+            $html .= "<li>\n" . $this->user($user) . "\n</li>";
+        }
+        return "<ul class=\"userlist\">\n$html\n</ul>";
+    }
+
+
+
+
+
+    // _________________________ DOM parser _______________________________
 
     /**
      * Add `external` or `internal` class attribute in `<a>` anchor HTML link tags.
@@ -772,385 +1270,10 @@ abstract class Servicerender
         }
     }
 
-    /**
-     * Replace wiki links [[page_id]] with HTML link
-     */
-    protected function wikiurl(string $text): string
-    {
-        $rend = $this;
-        $text = preg_replace_callback(
-            '%\[\[([a-z0-9_-]+)\/?(#[\w-]+)?\]\]%',
-            function ($matches) use ($rend) {
-                try {
-                    $matchpage = $rend->pagemanager->get($matches[1]);
-                    $fragment = $matches[2] ?? '';
-                    $href = $matches[1] . $fragment;
-                    $a = htmlspecialchars($matchpage->title());
-                } catch (RuntimeException $e) {
-                    $href = $matches[1];
-                    $a = $matches[1];
-                }
-                return '<a href="' . $href . '">' . $a . '</a>';
-            },
-            $text
-        );
-        return $text;
-    }
-
-    /**
-     * Add Id to html header elements and store the titles in the `$this->sum` var
-     *
-     * @param string $text Input html document to scan
-     * @param int $min Maximum header deepness to look for. Min = 1 Max = 6 Default = 1
-     * @param int $max Maximum header deepness to look for. Min = 1 Max = 6 Default = 6
-     * @param string $element Name of element being analysed. Leave empty if using Markdown field
-     * @param int $anchormode Mode of anchor link display. see Element HEADERANCHORMODES
-     *
-     * @return string text with id in header
-     */
-
-    protected function headerid(string $text, int $min, int $max, int $anchormode, string $element = ''): string
-    {
-        if (empty($element)) {
-            $element = md5($text);
-        }
-        if ($min > 6 || $min < 1) {
-            $min = 6;
-        }
-        if ($max > 6 || $max < 1) {
-            $max = 6;
-        }
-
-        $text = preg_replace_callback(
-            "/<h([$min-$max])((.*)id=\"([^\"]*)\"(.*)|.*)?>(.+)<\/h[$min-$max]>/mU",
-            function ($matches) use ($element, $anchormode) {
-                $level = $matches[1];
-                $beforeid = $matches[3];
-                $id = $matches[4];
-                $afterid = $matches[5];
-                $content = $matches[6];
-                // if no custom id is defined, use idclean of the content as id
-                if (empty($id)) {
-                    $id = Model::idclean($content);
-                }
-                $this->sum[$element][] = new Header($id, intval($level), $content);
-                switch ($anchormode) {
-                    case Element::HEADER_ANCHOR_LINK:
-                        $content = "<a href=\"#$id\">$content</a>";
-                        break;
-
-                    case Element::HEADER_ANCHOR_HASH:
-                        $content .= "<span class=\"nbsp\">&nbsp;</span><a class=\"headerlink\" href=\"#$id\">#</a>";
-                        break;
-                }
-                return "<h$level $beforeid id=\"$id\" $afterid>$content</h$level>";
-            },
-            $text
-        );
-        return $text;
-    }
-
-    protected function markdown(string $text): string
-    {
-        $fortin = new MarkdownExtra();
-        // id in headers
-        // $fortin->header_id_func = function ($header) {
-        //  return preg_replace('/[^\w]/', '', strtolower($header));
-        // };
-        $fortin->hard_wrap = Config::markdownhardwrap();
-        $text = $fortin->transform($text);
-        return $text;
-    }
-
-    /**
-     * Match `%INCLUDE?params=values&...%`
-     *
-     * @param string $text                  Input text to scan
-     * @param string $include               Word to match `%$include%`
-     * @param bool $wholetext               Only match if it's the whole text
-     *
-     * @return Inclusion[]
-     */
-    protected function match(string $text, string $include, bool $wholetext = false): array
-    {
-        $regex = "\%($include)(\?([a-zA-Z0-9:\[\]\&=\-_\/\%\+\*\;]*))?\%";
-        if ($wholetext) {
-            $regex = "^$regex$";
-        }
-        preg_match_all("~$regex~", $text, $out);
-
-        $matches = [];
-
-        foreach ($out[0] as $key => $match) {
-            $matches[$key] = new Inclusion($match, $out[1][$key], $out[3][$key], $this->page);
-        }
-        return $matches;
-    }
-
-    /**
-     * Check for media list call in the text and insert media list
-     * @param string $text Text to scan and replace
-     *
-     * @return string Output text
-     */
-    protected function automedialist(string $text): string
-    {
-        $matches = $this->match($text, 'MEDIA');
-
-        if (!empty($matches)) {
-            foreach ($matches as $match) {
-                $medialist = new Mediaoptlist($match->readoptions());
-                try {
-                    $text = str_replace($match->fullmatch(), $medialist->generatecontent(), $text);
-                } catch (RuntimeException $e) {
-                    Logger::errorex($e);
-                }
-            }
-        }
-        return $text;
-    }
-
-    /**
-     * Check for Summary calls in the text and insert html summary
-     * @param string $text Text to scan and replace
-     *
-     * @return string Output text
-     */
-    protected function summary(string $text): string
-    {
-        $matches = $this->match($text, 'SUMMARY');
-
-
-        if (!empty($matches)) {
-            foreach ($matches as $match) {
-                $data = array_merge($match->readoptions(), ['sum' => $this->sum]);
-                $summary = new Summary($data);
-                $text = str_replace($match->fullmatch(), $summary->sumparser(), $text);
-            }
-        }
-        return $text;
-    }
-
-
-    /**
-     * Render pages list
-     */
-    protected function pageoptlist(string $text): string
-    {
-        $matches = $this->match($text, 'LIST');
-        foreach ($matches as $match) {
-            try {
-                $optlist = new Optlist();
-                $options = $match->readoptions();
-
-                if (isset($options['bookmark']) && !empty($options['bookmark'])) {
-                    $bookmarkmanager = new Modelbookmark();
-                    $bookmark = $bookmarkmanager->get($options['bookmark']);
-                    $optlist->hydrate($bookmark->querydata()); // may be erased by the Inclusion options
-                }
-
-                $optlist->hydrate($options);
-
-                $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optlist);
-                $content = $optlist->listhtml($pagetable, $this->page);
-                $text = str_replace($match->fullmatch(), $content, $text);
-            } catch (RuntimeException $e) {
-                Logger::errorex($e);
-            }
-        }
-
-        return $text;
-    }
-
-    /**
-     * Render page maps
-     */
-    protected function pageoptmap(string $text): string
-    {
-        $matches = $this->match($text, 'MAP');
-        foreach ($matches as $match) {
-            try {
-                $options = $match->readoptions();
-                $optmap = new Optmap();
-
-                if (isset($options['bookmark']) && !empty($options['bookmark'])) {
-                    $bookmarkmanager = new Modelbookmark();
-                    $bookmark = $bookmarkmanager->get($options['bookmark']);
-                    $optmap->hydrate($bookmark->querydata()); // may be erased by the Inclusion options
-                }
-
-                $optmap->hydrate($options);
-
-                $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optmap);
-                $geopt = new Opt(['geo' => true]);
-                $pagetable = $this->pagemanager->pagetable($pagetable, $geopt);
-                $this->linkto = array_merge($this->linkto, array_keys($pagetable));
-                $content = $optmap->maphtml($pagetable, $this->router);
-                $text = str_replace($match->fullmatch(), $content, $text);
-                $this->map = true;
-            } catch (RuntimeException $e) {
-                Logger::errorex($e);
-            }
-        }
-        return $text;
-    }
-
-    /**
-     * Render Random links
-     */
-    protected function randomopt(string $text): string
-    {
-        $matches = $this->match($text, 'RANDOM');
-        foreach ($matches as $match) {
-            try {
-                $options = $match->readoptions();
-                $optrandom = new Optrandom();
-
-                if (isset($options['bookmark']) && !empty($options['bookmark'])) {
-                    $bookmarkmanager = new Modelbookmark();
-                    $bookmark = $bookmarkmanager->get($options['bookmark']);
-                    $optrandom->hydrate($bookmark->querydata());
-                }
-
-                $optrandom->hydrate($options);
-
-                $randompages = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optrandom);
-                $this->linkto = array_merge($this->linkto, array_keys($randompages));
-                $optrandom->setorigin($this->page->id());
-                $content = $this->generate('randomdirect', [], $optrandom->getquery());
-                $text = str_replace($match->fullmatch(), $content, $text);
-            } catch (RuntimeException $e) {
-                Logger::errorex($e); // bookmark does not exist
-            }
-        }
-        return $text;
-    }
-
-    /**
-     * Replace RSS inclusions with atom paths and store Bookmarks in `rsslist` property
-     *
-     * @param string $text                  Input text to analyse
-     *
-     * @return string                       Text with replaced valid %RSS% inclusions
-     */
-    protected function rss(string $text): string
-    {
-        $this->rsslist = $this->rssmatch($text);
-        foreach ($this->rsslist as $fullmatch => $bookmark) {
-            $atompath = Servicerss::atompath($bookmark->id());
-            return str_replace($fullmatch, $atompath, $text);
-        }
-        return $text;
-    }
-
-    /**
-     * Identify all RSS inclusion in text, that have a valid and bublished bookmark associated
-     *
-     * @param string $text                  Text to analyse
-     *
-     * @return Bookmark[]                   Associative array of bookmarks, using fullmatch as key
-     */
-    protected function rssmatch(string $text): array
-    {
-        $rsslist = [];
-        $matches = $this->match($text, "RSS");
-        foreach ($matches as $match) {
-            $options = $match->readoptions();
-            if (isset($options['bookmark'])) {
-                $bookmarkmanager = new Modelbookmark();
-                try {
-                    $bookmark = $bookmarkmanager->get($options['bookmark']);
-                    if ($bookmark->ispublished()) {
-                        $rsslist[$match->fullmatch()] = $bookmark;
-                    }
-                } catch (RuntimeException $e) {
-                    // log a render error
-                }
-            }
-        }
-        return $rsslist;
-    }
 
 
 
-    protected function date(string $text): string
-    {
-        $dateregex = implode('|', array_keys(Clock::TYPES));
-        $matches = $this->match($text, $dateregex);
-        $searches = [];
-        $replaces = [];
-        foreach ($matches as $match) {
-            $clock = new Clock(
-                $match->type(),
-                $this->page,
-                $this->page->lang(),
-            );
-            $clock->hydrate($match->readoptions());
-            $searches[] = $match->fullmatch();
-            $replaces[] = $clock->render();
-        }
-        return str_replace($searches, $replaces, $text);
-    }
-
-    /**
-     * Render thumbnail of the page
-     *
-     * @param string $text Text to analyse
-     *
-     * @return string The rendered output
-     */
-    protected function thumbnail(string $text): string
-    {
-        $src = Model::thumbnailpath() . $this->pagemanager->getpagethumbnail($this->page);
-        $img = '<img class="thumbnail" src="' . $src . '">';
-        $img = "\n$img\n";
-        $text = str_replace('%THUMBNAIL%', $img, $text);
-
-        return $text;
-    }
-
-    /**
-     * Replace each occurence of `%PAGEID%` or `%ID%` with page ID
-     * @param string $text input text
-     * @return string output text with replaced elements
-     */
-    protected function pageid(string $text): string
-    {
-        return str_replace(['%PAGEID%', '%ID%'], $this->page->id(), $text);
-    }
-
-    /**
-     * Replace each occurence of `%URL%` with page ID
-     * @param string $text input text
-     * @return string output text with replaced elements
-     */
-    protected function url(string $text): string
-    {
-        return str_replace('%URL%', Config::domain() . $this->upage($this->page->id()), $text);
-    }
-
-    /**
-     * Replace each occurence of `%PATH%` with page path
-     * @param string $text input text
-     * @return string output text with replaced elements
-     */
-    protected function path(string $text): string
-    {
-        return str_replace('%PATH%', $this->upage($this->page->id()), $text);
-    }
-
-    /**
-     * Replace `%AUTHORS%` with a rendered list of authors
-     */
-    protected function authors(string $text): string
-    {
-        $page = $this->page;
-        return preg_replace_callback("~\%AUTHORS\%~", function () use ($page) {
-            $usermanager = new Modeluser();
-            $users = $usermanager->userlistbyid($page->authors());
-            return $this->userlist($users);
-        }, $text);
-    }
+    // _________________________ Final check _______________________________
 
     /**
      * Check if the page need post processing by looking for patterns
@@ -1164,105 +1287,7 @@ abstract class Servicerender
         }
     }
 
-    /**
-     * Autolink Function : transform every word of more than $limit characters in internal link
-     *
-     * @param string $text The input text to be converted
-     *
-     * @return string Conversion output
-     */
-    protected function everylink(string $text, int $limit): string
-    {
-        $regex = '~([\w\-_éêèùïüîçà]{' . $limit . ',})(?![^<]*>|[^<>]*<\/)~';
-        $text = preg_replace_callback($regex, function ($matches) {
-            return '<a href="' . Model::idclean($matches[1]) . '">' . $matches[1] . '</a>';
-        }, $text);
-        return $text;
-    }
 
-
-
-    /**
-     * @param string $text content to analyse and replace
-     *
-     * @return string text ouput
-     */
-    protected function authenticate(string $text): string
-    {
-        $id = $this->page->id();
-        $regex = '~\%CONNECT(\?dir=([a-zA-Z0-9-_]+))?\%~';
-        $text = preg_replace_callback($regex, function ($matches) use ($id) {
-            if (isset($matches[2])) {
-                $id = $matches[2];
-            }
-            $form = '<form action="' . Model::dirtopath('!co') . '" method="post">
-            <input type="text" name="user" id="loginuser" autofocus placeholder="user" required>
-			<input type="password" name="pass" id="loginpass" placeholder="password" required>
-			<input type="hidden" name="route" value="pageread">
-			<input type="hidden" name="id" value="' . $id . '">
-			<input type="submit" name="log" value="login" id="button">
-			</form>';
-            return $form;
-        }, $text);
-        return $text;
-    }
-
-    protected function comments(string $text): string
-    {
-        $matches = $this->match($text, 'COMMENTS');
-
-        if (empty($matches)) {
-            return $text;
-        }
-
-        $searches = [];
-        $replaces = [];
-
-
-        foreach ($matches as $match) {
-            $commentlist = new Comments($this->page, $match->readoptions());
-
-            try {
-                $replaces[] = $commentlist->listhtml();
-                $searches[] = $match->fullmatch();
-            } catch (RuntimeException $e) {
-                Logger::warning('render error: %s', $e->getMessage());
-            }
-        }
-
-        return str_replace($searches, $replaces, $text);
-    }
-
-    /**
-     * Render an user as a <a> HTML element
-     * A href attribute is added if user have a specified URL property
-     *
-     * @param User $user        User to render
-     * @return string           HTML rendered <a> element
-     */
-    public function user(User $user): string
-    {
-        $name   = !empty($user->name()) ? htmlspecialchars($user->name()) : $user->id();
-        $id     = $user->id();
-        $href   = empty($user->url()) ? '' : sprintf('href="%s"', $user->url());
-
-        return "<a class=\"user\" data-user=\"$id\"$href>$name</a>";
-    }
-
-    /**
-     * Render a list of Users as a HTML <ul> that may contain links to their profile pages
-     *
-     * @param User[] $users     List of User
-     * @return string           List of user in HTML
-     */
-    protected function userlist(array $users): string
-    {
-        $html = "";
-        foreach ($users as $user) {
-            $html .= "<li>\n" . $this->user($user) . "\n</li>";
-        }
-        return "<ul class=\"userlist\">\n$html\n</ul>";
-    }
 
 
 
