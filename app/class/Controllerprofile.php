@@ -55,8 +55,7 @@ class Controllerprofile extends Controller
     public function password(): never
     {
         if ($this->user->isldap()) {
-            http_response_code(403);
-            $this->showtemplate('forbidden', ['route' => 'profile']);
+            $this->showtemplate('forbidden', ['route' => 'profile'], 403);
         }
 
         if (

@@ -25,16 +25,14 @@ class Controlleruser extends Controller
             $datas['userlist'] = $this->usermanager->getlister();
             $this->showtemplate('user', $datas);
         } else {
-            http_response_code(403);
-            $this->showtemplate('forbidden', ['route' => 'home']);
+            $this->showtemplate('forbidden', ['route' => 'home'], 403);
         }
     }
 
     public function add(): never
     {
         if (!$this->user->isadmin()) {
-            http_response_code(403);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
         if (isset($_POST['id'])) {
             $user = new User($_POST);
@@ -73,8 +71,7 @@ class Controlleruser extends Controller
     public function edit(): never
     {
         if (!$this->user->isadmin()) {
-            http_response_code(403);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
 
         if (isset($_POST['action'])) {
@@ -119,11 +116,10 @@ class Controlleruser extends Controller
     {
         $user = new User($datas);
         $user = $this->usermanager->get($user);
-        if ($user->id() === $this->user->id()) {
-            $this->showtemplate('userconfirmdelete', ['userdelete' => $user, 'candelete' => false]);
-        } else {
-            $this->showtemplate('userconfirmdelete', ['userdelete' => $user, 'candelete' => true]);
-        }
+        $this->showtemplate(
+            'userconfirmdelete',
+            ['userdelete' => $user, 'candelete' => $user->id() !== $this->user->id()]
+        );
     }
 
     /**

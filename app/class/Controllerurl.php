@@ -16,12 +16,10 @@ class Controllerurl extends Controller
         parent::__construct($router);
 
         if ($this->user->isvisitor()) {
-            http_response_code(401);
             $this->showtemplate('connect', ['route' => 'url']);
         }
         if (!$this->user->issupereditor()) {
-            http_response_code(403);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
         $this->urlmanager = new Serviceurlchecker();
     }
@@ -71,8 +69,7 @@ class Controllerurl extends Controller
     public function flushurlcache(): never
     {
         if (!$this->user->isadmin()) {
-            http_response_code(304);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
         try {
             Fs::deletefile(Model::URLS_FILE);
@@ -95,8 +92,7 @@ class Controllerurl extends Controller
     public function cleanurlcache(): never
     {
         if (!$this->user->issupereditor()) {
-            http_response_code(304);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
         try {
             $urlchecker = new Serviceurlchecker(0);

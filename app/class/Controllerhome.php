@@ -45,8 +45,8 @@ class Controllerhome extends Controller
         $display = $_GET['display'] ?? 'list';
 
         if (Config::disablejavascript() && ($display === 'graph' || $display === 'map')) {
-            http_response_code(403);
-            $this->showtemplate('forbidden', ['message' => 'only list mode is available as javscript is disabled']);
+            $msg = 'only list mode is available as javscript is disabled';
+            $this->showtemplate('forbidden', ['message' => $msg], 403);
         }
 
         $pagelist = $this->pagemanager->pagelist();
@@ -244,8 +244,7 @@ class Controllerhome extends Controller
     public function flushrendercache(): never
     {
         if (!$this->user->issupereditor()) {
-            http_response_code(304);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
         try {
             $this->pagemanager->flushrendercache();
@@ -263,8 +262,7 @@ class Controllerhome extends Controller
     public function flushurlcache(): never
     {
         if (!$this->user->issupereditor()) {
-            http_response_code(304);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
         try {
             Fs::deletefile(Model::URLS_FILE);
@@ -287,8 +285,7 @@ class Controllerhome extends Controller
     public function cleanurlcache(): never
     {
         if (!$this->user->issupereditor()) {
-            http_response_code(304);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
         try {
             $urlchecker = new Serviceurlchecker(0);
@@ -305,8 +302,7 @@ class Controllerhome extends Controller
     public function multi(): never
     {
         if (!$this->user->issupereditor()) {
-            http_response_code(304);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
 
         if (empty($_POST['pagesid'])) {

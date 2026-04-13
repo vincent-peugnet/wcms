@@ -143,10 +143,10 @@ class Controllerpage extends Controller
         $this->setpage($page, 'pageread');
 
         if (!$this->importpage()) {
-            http_response_code(404);
             $this->showtemplate(
                 'alertexistnot',
-                ['page' => $this->page, 'subtitle' => Config::existnot()]
+                ['page' => $this->page, 'subtitle' => Config::existnot()],
+                404
             );
         }
 
@@ -158,18 +158,19 @@ class Controllerpage extends Controller
         }
 
         if (!$this->canread($this->page)) {
-            http_response_code(403);
             switch ($this->page->secure()) {
                 case Page::NOT_PUBLISHED:
                     $this->showtemplate(
                         'alertnotpublished',
-                        ['page' => $this->page, 'subtitle' => Config::notpublished()]
+                        ['page' => $this->page, 'subtitle' => Config::notpublished()],
+                        403
                     );
 
                 case Page::PRIVATE:
                     $this->showtemplate(
                         'alertprivate',
-                        ['page' => $this->page, 'subtitle' => Config::private()]
+                        ['page' => $this->page, 'subtitle' => Config::private()],
+                        403
                     );
             }
         }
@@ -273,8 +274,7 @@ class Controllerpage extends Controller
         }
 
         if (!$this->canedit($this->page)) {
-            http_response_code(403);
-            $this->showtemplate('forbidden', ['route' => 'pageedit', 'id' => $this->page->id()]);
+            $this->showtemplate('forbidden', ['route' => 'pageedit', 'id' => $this->page->id()], 403);
         }
 
         $datas['faviconlist'] = $this->mediamanager->listfavicon();
@@ -319,8 +319,7 @@ class Controllerpage extends Controller
     {
         $this->setpage($page, 'pagelog');
         if (!$this->user->issupereditor()) {
-            http_response_code(403);
-            $this->showtemplate('forbidden', ['route' => 'pageread', 'id' => $this->page->id()]);
+            $this->showtemplate('forbidden', ['route' => 'pageread', 'id' => $this->page->id()], 403);
         }
         $this->importpage();
         echo '<pre>';
@@ -342,14 +341,16 @@ class Controllerpage extends Controller
         $this->pageconnect('pageadd');
 
         if (!$this->user->iseditor()) {
-            http_response_code(403);
-            $this->showtemplate('forbidden', ['route' => 'pageedit', 'id' => $this->page->id()]);
+            $this->showtemplate('forbidden', ['route' => 'pageedit', 'id' => $this->page->id()], 403);
         }
 
         if ($this->importpage()) {
-            http_response_code(403);
             $message = 'page already exist with this ID';
-            $this->showtemplate('forbidden', ['route' => 'pageedit', 'id' => $this->page->id(), 'message' => $message]);
+            $this->showtemplate(
+                'forbidden',
+                ['route' => 'pageedit', 'id' => $this->page->id(), 'message' => $message],
+                403
+            );
         }
 
         $this->page->reset();
@@ -396,8 +397,7 @@ class Controllerpage extends Controller
         $this->pageconnect('pagedownload');
 
         if (!$this->canedit($this->page)) {
-            http_response_code(403);
-            $this->showtemplate('forbidden', ['id' => $this->page->id(), 'route' => 'pagedownload']);
+            $this->showtemplate('forbidden', ['id' => $this->page->id(), 'route' => 'pagedownload'], 403);
         }
 
         $file = Model::PAGES_DIR . Config::pagetable() . DIRECTORY_SEPARATOR . $page . '.json';
@@ -506,8 +506,7 @@ class Controllerpage extends Controller
     {
         $this->setpage($page, 'pageconfirmdelete');
         if (!$this->importpage() || !$this->candelete($this->page)) {
-            http_response_code(403);
-            $this->showtemplate('forbidden', ['route' => 'pageread', 'id' => $this->page->id()]);
+            $this->showtemplate('forbidden', ['route' => 'pageread', 'id' => $this->page->id()], 403);
         }
 
         /** Delete page JSON and render cache */
@@ -548,18 +547,17 @@ class Controllerpage extends Controller
         $this->pageconnect('pageduplicate');
 
         if (!$this->importpage()) {
-            http_response_code(404);
             $this->showtemplate(
                 'alertexistnot',
-                ['page' => $this->page, 'subtitle' => Config::existnot()]
+                ['page' => $this->page, 'subtitle' => Config::existnot()],
+                404
             );
         }
 
         if (!$this->canedit($this->page)) {
             $msg = sprintf("page duplicate '%s': user '%s' not allowed", $this->page->id(), $this->user->id());
             Logger::warning($msg);
-            http_response_code(403);
-            $this->showtemplate('forbidden', ['route' => 'pageread', 'id' => $this->page->id()]);
+            $this->showtemplate('forbidden', ['route' => 'pageread', 'id' => $this->page->id()], 403);
         }
 
         try {
@@ -643,7 +641,6 @@ class Controllerpage extends Controller
      */
     public function commandnotfound(string $page, string $command): never
     {
-        http_response_code(404);
-        $this->showtemplate('alertcommandnotfound', ['command' => $command, 'id' => strip_tags($page)]);
+        $this->showtemplate('alertcommandnotfound', ['command' => $command, 'id' => strip_tags($page)], 404);
     }
 }

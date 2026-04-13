@@ -31,8 +31,7 @@ class Controllermedia extends Controller
     public function desktop(): never
     {
         if (!$this->user->iseditor()) {
-            http_response_code(403);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
         try {
             Fs::dircheck(Model::FONT_DIR, true, 0775);
@@ -113,16 +112,14 @@ class Controllermedia extends Controller
             }
             $this->redirect($this->generate('media') . $_POST['route']);
         } else {
-            http_response_code(403);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
     }
 
     public function urlupload(): never
     {
         if (!$this->user->iseditor()) {
-            http_response_code(403);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
 
         $target = $_POST['dir'] ?? Model::MEDIA_DIR;
@@ -139,8 +136,7 @@ class Controllermedia extends Controller
     public function folderadd(): never
     {
         if (!$this->user->iseditor()) {
-            http_response_code(403);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
 
         $dir = $_POST['dir'] ?? Model::MEDIA_DIR;
@@ -157,8 +153,7 @@ class Controllermedia extends Controller
     public function folderdelete(): never
     {
         if (!$this->user->issupereditor()) {
-            http_response_code(403);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
 
         if (isset($_POST['deletefolder']) && intval($_POST['deletefolder']) && isset($_POST['dir'])) {
@@ -181,8 +176,7 @@ class Controllermedia extends Controller
     public function edit(): never
     {
         if (!$this->user->issupereditor()) {
-            http_response_code(403);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
         if (isset($_POST['action'])) {
             if (!isset($_POST['id']) || empty($_POST['id'])) {
@@ -226,8 +220,7 @@ class Controllermedia extends Controller
     public function rename(): never
     {
         if (!$this->user->issupereditor()) {
-            http_response_code(403);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
 
         if (
@@ -258,7 +251,7 @@ class Controllermedia extends Controller
     {
         if (!$this->user->iseditor()) {
             http_response_code(403);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
 
         try {

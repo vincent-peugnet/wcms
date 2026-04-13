@@ -23,29 +23,25 @@ class Controllercomment extends Controller
     public function comment(string $page): never
     {
         if (!Config::comments()) {
-            http_response_code(400);
-            $this->showtemplate('alertcomment', ['message' => 'Comments are disabled globally']);
+            $this->showtemplate('alertcomment', ['message' => 'Comments are disabled globally'], 400);
         }
 
         try {
             $page = $this->pagemanager->get($page);
         } catch (RuntimeException $e) {
-            http_response_code(404);
-            $this->showtemplate('alertcomment', ['message' => $e->getMessage()]);
+            $this->showtemplate('alertcomment', ['message' => $e->getMessage()], 404);
         }
 
         // users who cannot read the page cannot post comments
         if (!$this->canread($page)) {
-            http_response_code(401);
-            $this->showtemplate('alertcomment', ['message' => 'unauthorized']);
+            $this->showtemplate('alertcomment', ['message' => 'unauthorized'], 401);
         }
 
 
         if (!isset($_POST[Modelcomment::CONFIG_POST_NAME])) {
             $msg = sprintf("comment on page '%s': missing config token", $page->id());
             Logger::warning($msg);
-            http_response_code(400);
-            $this->showtemplate('alertcomment', ['message' => $msg]);
+            $this->showtemplate('alertcomment', ['message' => $msg], 400);
         }
 
         try {
@@ -63,16 +59,14 @@ class Controllercomment extends Controller
         } catch (JWTException | RuntimeException $e) {
             $msg = sprintf("comment on page '%s': comment config decoding error", $page->id());
             Logger::warning($msg);
-            http_response_code(400);
-            $this->showtemplate('alertcomment', ['message' => $msg]);
+            $this->showtemplate('alertcomment', ['message' => $msg], 400);
         }
 
         // check if is JWT is not outdated
         if ($conf->datemodif() != $page->datemodif()) {
             $yesterday = $this->now->sub(new DateInterval('PT24H'));
             if ($page->datemodif() < $yesterday) { // page has been edited since more than 24h
-                http_response_code(400);
-                $this->showtemplate('alertcomment', ['message' => 'outdated comment configuration']);
+                $this->showtemplate('alertcomment', ['message' => 'outdated comment configuration'], 400);
             }
         }
 
@@ -86,8 +80,7 @@ class Controllercomment extends Controller
         if ($conf->limit() !== null && $page->commentcount() >= $conf->limit()) {
             $msg = sprintf("comment limit is reached on page '%s'", $page->id());
             Logger::warning($msg);
-            http_response_code(400);
-            $this->showtemplate('alertcomment', ['message' => $msg]);
+            $this->showtemplate('alertcomment', ['message' => $msg], 400);
         }
 
         switch ($conf->mode()) {
@@ -119,8 +112,7 @@ class Controllercomment extends Controller
 
         if (!$comment->validate($conf)) {
             Logger::warning("'%s' sent a invalid comment on page '%s'", $this->user->id(), $page->id());
-            http_response_code(400);
-            $this->showtemplate('alertcomment', ['message' => 'invalid comment']);
+            $this->showtemplate('alertcomment', ['message' => 'invalid comment'], 400);
         }
 
 
@@ -136,8 +128,7 @@ class Controllercomment extends Controller
             }
         } catch (Databaseexception $e) {
             Logger::errorex($e);
-            http_response_code(500);
-            $this->showtemplate('alertcomment', ['message' => 'database error']);
+            $this->showtemplate('alertcomment', ['message' => 'database error'], 500);
         }
 
         $this->routedirect('pageread', ['page' => $page->id()]);
@@ -149,16 +140,15 @@ class Controllercomment extends Controller
         try {
             $page = $this->pagemanager->get($pageid);
         } catch (RuntimeException $e) {
-            http_response_code(404);
             $this->showtemplate(
                 'alertexistnot',
-                ['page' => new Pagev2(['id' => $pageid]), 'subtitle' => Config::existnot()]
+                ['page' => new Pagev2(['id' => $pageid]), 'subtitle' => Config::existnot()],
+                404
             );
         }
 
         if (!$this->canedit($page)) {
-            http_response_code(401);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 401);
         }
 
         try {

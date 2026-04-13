@@ -9,8 +9,7 @@ class Controllerworkspace extends Controller
     public function update(): never
     {
         if (!$this->user->isinvite()) {
-            http_response_code(403);
-            $this->showtemplate('forbidden');
+            $this->showtemplate('forbidden', [], 403);
         }
         $this->workspace->hydrate($_POST);
         $this->servicesession->setworkspace($this->workspace);

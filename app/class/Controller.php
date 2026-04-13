@@ -148,14 +148,14 @@ abstract class Controller
             }
         }
 
-        http_response_code(401);
         $this->showtemplate(
             'connect',
             [
                 'route' => $route,
                 'id' => $pageid,
                 'helpbutton' => $helpurl,
-            ]
+            ],
+            401
         );
     }
 
@@ -196,11 +196,14 @@ abstract class Controller
      *
      * @param array<string, mixed> $params
      *
+     * @param int $code                     HTTP response code
+     *
      * @throws void             Indicate to PHPStan that no exception is
      *                          thrown despite the use of `never` return type
      */
-    protected function showtemplate(string $template, array $params = []): never
+    protected function showtemplate(string $template, array $params = [], int $code = 200): never
     {
+        http_response_code($code);
         $params = array_merge($this->commonsparams(), $params);
         echo $this->plates->render($template, $params);
         exit;
