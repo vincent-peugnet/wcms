@@ -156,6 +156,17 @@
     <div class="grid-item"  id="interface">
         <h2 id="interface">Interface</h2>
 
+        <h3>Time zone</h3>
+
+        <p class="field">
+            <label for="timezone">Time zone</label>
+            <select name="timezone" id="timezone" form="admin">
+                <?php foreach($timezones as $timezone) : ?>
+                    <option value="<?= $timezone ?>" <?= $timezone === Wcms\Config::timezone() ? 'selected' : '' ?>><?= $timezone ?></option>
+                <?php endforeach ?>
+            </select>
+        </p>
+
         <h3>Theme</h3>
 
         <p class="info">See <a href="<?= $this->url('info', [], '#themes') ?>">📖 manual section</a> for more infos.

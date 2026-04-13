@@ -4,7 +4,6 @@ namespace Wcms;
 
 use DateTime;
 use DateTimeImmutable;
-use DateTimeZone;
 use DateTimeInterface;
 
 abstract class Comment extends Item
@@ -126,8 +125,7 @@ abstract class Comment extends Item
         } elseif (is_string($date)) {
             $this->date = DateTimeImmutable::createFromFormat(
                 DateTime::RFC3339,
-                $date,
-                new DateTimeZone('Europe/Paris')
+                $date
             );
         }
     }

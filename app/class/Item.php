@@ -169,7 +169,7 @@ abstract class Item
         } elseif ($option == 'date' || $option == 'sort') {
             return $property;
         } elseif ($option == 'hrdi') {
-            $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
+            $now = new DateTimeImmutable("now");
             return hrdi($property->diff($now));
         } elseif ($option == 'pdate') {
             return $property->format('Y-m-d');

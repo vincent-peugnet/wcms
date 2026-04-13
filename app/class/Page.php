@@ -5,7 +5,6 @@ namespace Wcms;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
-use DateTimeZone;
 use DomainException;
 use RuntimeException;
 
@@ -111,7 +110,7 @@ abstract class Page extends Item
 
     public function reset(): void
     {
-        $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
+        $now = new DateTimeImmutable();
 
         if ($this->id !== null) {
             $this->settitle($this->id);
@@ -581,8 +580,7 @@ abstract class Page extends Item
         } elseif (is_string($date)) {
             $this->date = DateTimeImmutable::createFromFormat(
                 DateTime::RFC3339,
-                $date,
-                new DateTimeZone('Europe/Paris')
+                $date
             );
         }
     }
@@ -615,12 +613,11 @@ abstract class Page extends Item
         if ($datecreation instanceof DateTimeImmutable) {
             $this->datecreation = $datecreation;
         } elseif ($datecreation === true) {
-            $this->datecreation = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
+            $this->datecreation = new DateTimeImmutable();
         } elseif (is_string($datecreation)) {
             $this->datecreation = DateTimeImmutable::createFromFormat(
                 DateTime::RFC3339,
-                $datecreation,
-                new DateTimeZone('Europe/Paris')
+                $datecreation
             );
         }
     }
@@ -635,8 +632,7 @@ abstract class Page extends Item
         } elseif (is_string($datemodif)) {
             $this->datemodif = DateTimeImmutable::createFromFormat(
                 DateTime::RFC3339,
-                $datemodif,
-                new DateTimeZone('Europe/Paris')
+                $datemodif
             );
         }
     }
@@ -651,8 +647,7 @@ abstract class Page extends Item
         } elseif (is_string($daterender)) {
             $this->daterender = DateTimeImmutable::createFromFormat(
                 DateTime::RFC3339,
-                $daterender,
-                new DateTimeZone('Europe/Paris')
+                $daterender
             );
         }
     }
@@ -667,8 +662,7 @@ abstract class Page extends Item
         } elseif (is_string($datecomment)) {
             $this->datecomment = DateTimeImmutable::createFromFormat(
                 DateTime::RFC3339,
-                $datecomment,
-                new DateTimeZone('Europe/Paris')
+                $datecomment
             );
         } elseif ($datecomment === null) {
             $this->datecomment = null;
@@ -921,7 +915,7 @@ abstract class Page extends Item
      */
     public function updateedited(): void
     {
-        $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
+        $now = new DateTimeImmutable();
         $this->setdatemodif($now);
         $this->addeditcount();
     }

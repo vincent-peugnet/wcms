@@ -430,7 +430,7 @@ class Modelpage extends Modeldb
      */
     protected function reset(Page $page, array $reset): Page
     {
-        $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
+        $now = new DateTimeImmutable();
         if (boolval($reset['tag'])) {
             $page->settag([]);
         }
@@ -532,7 +532,7 @@ class Modelpage extends Modeldb
      */
     public function renderpage(Page $page, AltoRouter $router, ?Serviceurlchecker $urlchecker = null): Page
     {
-        $now = new DateTimeImmutable("now", timezone_open("Europe/Paris"));
+        $now = new DateTimeImmutable();
 
         $params = [
             $router,
