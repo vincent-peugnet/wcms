@@ -11,22 +11,25 @@ flowchart TD
     0rss(RSS feed declaration) --> 3B
 
     2A[[Body]] -->
-    2B(W inclusion)  ------->
-    2C((Elements inclusion)) --> 2D
-    subgraph "post inclusion parser"
-        2D(Summary) -->
-        2rss(RSS detection) -->
+    2B(W inclusion)  -------->
+    2C((Elements inclusion)) -->
+    2D(Summary) -->
+    2rss(RSS detection) --> 2I
+    subgraph "DOM parser"
         2I(Link and media analysis) -->
-        2pp(check for post render actions)
+        url(URL checker) -->
+        2K(comment form parser)
     end
-    2pp -->
+    2K --> 2pp
+    2pp(check for post render actions) -->
     3B((Head and Body gathering)) -->
     3C[[Rendered HTML]] --> 4c
     subgraph "post render actions"
         4c(counters) -->
-        4j(js vars)
+        4e(disable comment inputs) -->
+        4j(include js vars)
     end
-    4j --> 5[\served web page/]
+    4j --> 5{served web page}
 
 
     1A[[Element]] -->
@@ -44,6 +47,13 @@ flowchart TD
     1E -. "send TOC structure" .-> 2D
     2rss -. "send rss links" .-> 0rss
     2pp -. trigger post render action .-> 4c
+    2K -. trigger post render action .-> 4e
+
+    urlcache@{ shape: lin-cyl, label: "URL cache" }
+    cloud@{ shape: cloud, label: "the Web"}
+    urlcache <-.-> url
+    cloud <-.-> urlcache
+
 ```
 
 - *every link: rendering option that transform every word as a link
@@ -69,5 +79,6 @@ List of W inclusions
 1. replace `%RANDOM%` code
 1. replace `%AUTHORS%` code
 1. replace `%CONNECT%` code
+1. replace `%COMMENTS%` code
 
 The point of doing those inclusions early is to be before __Header ID__ parser. That way, when they are used inside HTML headings, they will generate nicer IDs.
