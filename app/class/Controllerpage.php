@@ -2,13 +2,12 @@
 
 namespace Wcms;
 
-use Ahc\Jwt\JWT;
-use Ahc\Jwt\JWTException;
 use AltoRouter;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use RuntimeException;
+use Wcms\Exception\Database\Notfoundexception;
 use Wcms\Exception\Databaseexception;
 use Wcms\Exception\Filesystemexception;
 
@@ -369,14 +368,14 @@ class Controllerpage extends Controller
         }
     }
 
+    /**
+     * Same as duplicate, but params are inverted
+     *
+     * @throws RuntimeException in case of database errors (this should be managed by wiki admin)
+     */
     public function addascopy(string $page, string $copy): never
     {
-        $page = Model::idclean($page);
-        if ($this->copy($copy, $page)) {
-            $this->routedirect('pageedit', ['page' => $this->page->id()]);
-        } else {
-            $this->routedirect('pageread', ['page' => $page]);
-        }
+        $this->duplicate($copy, $page);
     }
 
     /**
@@ -537,45 +536,39 @@ class Controllerpage extends Controller
         $this->routedirect('pageread', ['page' => $this->page->id()]);
     }
 
+    /**
+     * @throws RuntimeException in case of database errors (this should be managed by wiki admin)
+     */
     public function duplicate(string $page, string $duplicate): never
     {
-        $duplicate = Model::idclean($duplicate);
-        if ($this->copy($page, $duplicate)) {
-            $this->routedirect('pageread', ['page' => $duplicate]);
-        } else {
-            $this->routedirect('pageread', ['page' => Model::idclean($page)]);
-        }
-    }
+        $this->setpage($page, 'pageduplicate');
 
-    /**
-     * Copy a page to a new ID
-     *
-     * @param string $srcid Source page ID
-     * @param string $targetid Target page ID
-     *
-     * @todo move this to Modelpage ? also the bool return seems odd
-     */
-    protected function copy(string $srcid, string $targetid): bool
-    {
-        if ($this->user->iseditor()) {
-            try {
-                $this->page = $this->pagemanager->get($srcid);
-                if ($this->canedit($this->page) && !$this->pagemanager->exist($targetid)) {
-                    $this->page->setid($targetid);
-                    $this->page->setdatecreation(true); // Reset date of creation
-                    $this->page->setdatemodif(new DateTimeImmutable());
-                    $this->page->setdaterender(new DateTimeImmutable());
-                    $this->page->setcommentcount(0);
-                    $this->page->setdatecomment(null);
-                    $this->page->addauthor($this->user->id());
-                    $this->pagemanager->add($this->page);
-                    return true;
-                }
-            } catch (RuntimeException $e) {
-                Logger::errorex($e, true);
-            }
+        $this->pageconnect('pageduplicate');
+
+        if (!$this->importpage()) {
+            http_response_code(404);
+            $this->showtemplate(
+                'alertexistnot',
+                ['page' => $this->page, 'subtitle' => Config::existnot()]
+            );
         }
-        return false;
+
+        if (!$this->canedit($this->page)) {
+            $msg = sprintf("page duplicate '%s': user '%s' not allowed", $this->page->id(), $this->user->id());
+            Logger::warning($msg);
+            http_response_code(403);
+            $this->showtemplate('forbidden', ['route' => 'pageread', 'id' => $this->page->id()]);
+        }
+
+        try {
+            $duplicate = Model::idclean($duplicate);
+            $this->pagemanager->copy($this->page, $duplicate);
+            $this->routedirect('pageread', ['page' => $duplicate]);
+        } catch (RuntimeException $e) {
+            $msg = sprintf("page duplicate '%s': %s", $this->page->id(), $e->getMessage());
+            Logger::error($msg);
+            throw new RuntimeException($msg);
+        }
     }
 
     public function update(string $page): never

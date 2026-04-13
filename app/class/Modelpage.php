@@ -148,6 +148,27 @@ class Modelpage extends Modeldb
     }
 
     /**
+     * Copy a page to a new ID
+     * Reset some values and store the page to the database
+     *
+     * @param Page $page                    Source page
+     * @param string $targetid              Target page ID
+     *
+     * @throws RuntimeException if target ID is illegal
+     * @throws Databaseexception if adding the page to database failed
+     */
+    public function copy(Page $page, string $targetid): void
+    {
+        $page->setid($targetid);
+        $page->setdatecreation(true); // Reset date of creation
+        $page->setdatemodif(new DateTimeImmutable());
+        $page->setdaterender(new DateTimeImmutable());
+        $page->setcommentcount(0);
+        $page->setdatecomment(null);
+        $this->add($page);
+    }
+
+    /**
      * Transform File to Page Oject
      *
      * @return false|Page
