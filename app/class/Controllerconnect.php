@@ -53,7 +53,7 @@ class Controllerconnect extends Controller
             Logger::info("successful login for user " . $user->id());
         } catch (RuntimeException $e) {
             $this->sendflashmessage('login failed', self::FLASH_WARNING);
-            Logger::warning("failed to login user '%s': %s", $username, $e);
+            Logger::warning("failed to login user '%s': %s", $username, $e->getMessage());
             return;
         }
 
