@@ -65,6 +65,9 @@ abstract class Servicerender
     /** @var bool Indicate if a comment form is found in the page */
     protected bool $commentform = false;
 
+    /** @var string[] Store render error */
+    protected array $errors;
+
     // W INCLUSIONS KEYWORDS
 
     public const LIST        = 'LIST';
@@ -206,7 +209,7 @@ abstract class Servicerender
             try {
                 $body = $this->pagemanager->get($templateid)->body();
             } catch (RuntimeException $e) {
-                Logger::errorex($e);
+                $this->adderror('template body: %s', $e->getMessage());
                 $body = $this->page->body();
                 $this->page->settemplatebody('');
             }
@@ -309,7 +312,7 @@ abstract class Servicerender
                         $rsslist[$match->fullmatch()] = $bookmark;
                     }
                 } catch (RuntimeException $e) {
-                    // log a render error
+                    $this->adderror('rss inclusion: %s', $e->getMessage());
                 }
             }
         }
@@ -349,7 +352,7 @@ abstract class Servicerender
                 }
                 $head .= "\n<meta http-equiv=\"refresh\" content=\"{$this->page->refresh()}; URL=$url\" />";
             } catch (\Exception $e) {
-                // TODO : send render error
+                $this->adderror('page redirection is not a valid URL or a valid ID');
             }
         }
 
@@ -432,7 +435,7 @@ abstract class Servicerender
                 $head .= "\n";
             }
         } catch (RuntimeException $e) {
-            Logger::warningex($e);
+            $this->adderror('CSS template: %s', $e->getMessage());
         }
         return $head;
     }
@@ -456,7 +459,7 @@ abstract class Servicerender
                 $head .= "<script src=\"$renderpath$templateid.js\" async></script>\n";
             }
         } catch (RuntimeException $e) {
-            Logger::warningex($e);
+            $this->adderror('JS template: %s', $e->getMessage());
         }
         return $head;
     }
@@ -715,7 +718,7 @@ abstract class Servicerender
             $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optlist);
             return $optlist->listhtml($pagetable, $this->page);
         } catch (RuntimeException $e) {
-            Logger::errorex($e);
+            $this->adderror("page list inclusion: '%s': %s", $match->fullmatch(), $e->getMessage());
         }
 
         return $match->fullmatch();
@@ -727,7 +730,7 @@ abstract class Servicerender
         try {
             return $medialist->generatecontent();
         } catch (RuntimeException $e) {
-            Logger::errorex($e);
+            $this->adderror("media list inclusion: '%s': %s", $match->fullmatch(), $e->getMessage());
         }
         return $match->fullmatch();
     }
@@ -756,7 +759,7 @@ abstract class Servicerender
             $this->map = true;
             return $optmap->maphtml($pagetable, $this->router);
         } catch (RuntimeException $e) {
-            Logger::errorex($e);
+            $this->adderror("map inclusion: '%s': %s", $match->fullmatch(), $e->getMessage());
         }
         return $match->fullmatch();
     }
@@ -783,7 +786,7 @@ abstract class Servicerender
             $optrandom->setorigin($this->page->id());
             return $this->generate('randomdirect', [], $optrandom->getquery());
         } catch (RuntimeException $e) {
-            Logger::errorex($e); // bookmark does not exist
+            $this->adderror("random link inclusion: '%s': %s", $match->fullmatch(), $e->getMessage());
         }
         return $match->fullmatch();
     }
@@ -800,6 +803,8 @@ abstract class Servicerender
 
     /**
      * @return string text ouput
+     *
+     * @deprecated this is already not documented, should be replaced by a better one using post render process
      */
     protected function authenticate(): string
     {
@@ -819,7 +824,7 @@ abstract class Servicerender
             $commentlist = new Comments($this->page, $match->readoptions());
             return $commentlist->listhtml();
         } catch (RuntimeException $e) {
-            Logger::warning('render error: %s', $e->getMessage());
+            $this->adderror("comments inclusion: '%s': %s", $match->fullmatch(), $e->getMessage());
         }
         return $match->fullmatch();
     }
@@ -847,7 +852,7 @@ abstract class Servicerender
                 $page = $this->pagemanager->get($options['id']);
                 return $page->title();
             } catch (RuntimeException $e) {
-                // store render error: page doesn't exist
+                $this->adderror("title inclusion: '%s': %s", $match->fullmatch(), $e->getMessage());
             }
         } else {
             return $this->page->title();
@@ -1006,7 +1011,8 @@ abstract class Servicerender
 
             // Comment forms are limited to one per page
             if ($this->commentform) {
-                break; // TODO: store a render error: multiple comment forms on the same page.
+                $this->adderror('comment form: multiple forms detected');
+                break;
             }
             $this->commentform = true;
             $this->commentform($dom, $form, $matches[0]);
@@ -1034,7 +1040,7 @@ abstract class Servicerender
                 }
             }
         } catch (RuntimeException $e) {
-            Logger::errorex($e);
+            $this->adderror('URL checker curl: %s', $e->getMessage());
         }
 
         $images = $dom->getElementsByTagName('img');
@@ -1316,6 +1322,19 @@ abstract class Servicerender
     }
 
 
+    // _________________________ Internal ___________________________________
+
+    /**
+     * Log a new render error message using printf format.
+     *
+     * @param mixed $args
+     */
+    protected function adderror(string $error, ...$args): void
+    {
+        $this->errors[] = sprintf($error, ...$args);
+    }
+
+
     // _________________________ G E T ___________________________________
 
     /**
@@ -1352,5 +1371,13 @@ abstract class Servicerender
     public function postprocessaction(): bool
     {
         return $this->postprocessaction;
+    }
+
+    /**
+     * @return string[] render errors messages
+     */
+    public function errors(): array
+    {
+        return $this->errors;
     }
 }

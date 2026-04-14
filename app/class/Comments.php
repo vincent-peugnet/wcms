@@ -68,7 +68,7 @@ class Comments extends Item
                 $comments = $this->commentmanager->getcomments($commentpage->id());
             }
         } catch (RuntimeException $e) {
-            throw new RuntimeException("comments inclusion: ", 0, $e);
+            throw new RuntimeException('comments inclusion: ' . $e->getMessage());
         }
 
         if ($this->order === -1) {

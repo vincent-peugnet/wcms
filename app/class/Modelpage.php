@@ -571,6 +571,10 @@ class Modelpage extends Modeldb
         $page->setexternallinks($renderengine->urls());
         $page->setpostprocessaction($renderengine->postprocessaction());
 
+        if (!empty($renderengine->errors())) {
+            Logger::warning("page '%s' render errors: %s", $page->id(), implode(', ', $renderengine->errors()));
+        }
+
         return $page;
     }
 
