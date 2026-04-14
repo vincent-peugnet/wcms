@@ -16,16 +16,11 @@ class Clock extends Item
 
     protected string $lang;
 
-    public const DATE = 'DATE';
-    public const TIME = 'TIME';
-    public const DATEMODIF = 'DATEMODIF';
-    public const TIMEMODIF = 'TIMEMODIF';
-
     public const TYPES = [
-        self::DATE => 'date',
-        self::TIME => 'date',
-        self::DATEMODIF => 'datemodif',
-        self::TIMEMODIF => 'datemodif',
+        Servicerender::DATE => 'date',
+        Servicerender::TIME => 'date',
+        Servicerender::DATEMODIF => 'datemodif',
+        Servicerender::TIMEMODIF => 'datemodif',
     ];
 
     public const NONE   = 'none';

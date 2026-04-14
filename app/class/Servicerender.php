@@ -65,6 +65,48 @@ abstract class Servicerender
     /** @var bool Indicate if a comment form is found in the page */
     protected bool $commentform = false;
 
+    // W INCLUSIONS KEYWORDS
+
+    public const LIST        = 'LIST';
+    public const MEDIA       = 'MEDIA';
+    public const MAP         = 'MAP';
+    public const RANDOM      = 'RANDOM';
+    public const AUTHORS     = 'AUTHORS';
+    public const CONNECT     = 'CONNECT';
+    public const COMMENTS    = 'COMMENTS';
+    public const DATE        = 'DATE';
+    public const TIME        = 'TIME';
+    public const DATEMODIF   = 'DATEMODIF';
+    public const TIMEMODIF   = 'TIMEMODIF';
+    public const TITLE       = 'TITLE';
+    public const DESCRIPTION = 'DESCRIPTION';
+    public const PATH        = 'PATH';
+    public const URL         = 'URL';
+    public const PAGEID      = 'PAGEID';
+    public const ID          = 'ID';
+    public const THUMBNAIL   = 'THUMBNAIL';
+
+    public const KEYWORDS = [
+        self::LIST,
+        self::MEDIA,
+        self::MAP,
+        self::RANDOM,
+        self::AUTHORS,
+        self::CONNECT,
+        self::COMMENTS,
+        self::DATE,
+        self::TIME,
+        self::DATEMODIF,
+        self::TIMEMODIF,
+        self::TITLE,
+        self::DESCRIPTION,
+        self::PATH,
+        self::URL,
+        self::PAGEID,
+        self::ID,
+        self::THUMBNAIL,
+    ];
+
     /**
      * @param AltoRouter $router            Router used to generate urls
      * @param Modelpage $pagemanager        [optionnal] can be usefull if a pagemanager already store a page list
@@ -199,6 +241,79 @@ abstract class Servicerender
 
 
         return $html;
+    }
+
+
+
+
+
+    // _________________________ BODY parser _______________________________
+
+    /**
+     * Check for Summary calls in the text and insert html summary
+     * @param string $text Text to scan and replace
+     *
+     * @return string Output text
+     */
+    protected function summary(string $text): string
+    {
+        $matches = $this->match($text, 'SUMMARY');
+
+
+        if (!empty($matches)) {
+            foreach ($matches as $match) {
+                $data = array_merge($match->readoptions(), ['sum' => $this->sum]);
+                $summary = new Summary($data);
+                $text = str_replace($match->fullmatch(), $summary->sumparser(), $text);
+            }
+        }
+        return $text;
+    }
+
+
+    /**
+     * Replace RSS inclusions with atom paths and store Bookmarks in `rsslist` property
+     *
+     * @param string $text                  Input text to analyse
+     *
+     * @return string                       Text with replaced valid %RSS% inclusions
+     */
+    protected function rss(string $text): string
+    {
+        $this->rsslist = $this->rssmatch($text);
+        foreach ($this->rsslist as $fullmatch => $bookmark) {
+            $atompath = Servicerss::atompath($bookmark->id());
+            return str_replace($fullmatch, $atompath, $text);
+        }
+        return $text;
+    }
+
+    /**
+     * Identify all RSS inclusion in text, that have a valid and bublished bookmark associated
+     *
+     * @param string $text                  Text to analyse
+     *
+     * @return Bookmark[]                   Associative array of bookmarks, using fullmatch as key
+     */
+    protected function rssmatch(string $text): array
+    {
+        $rsslist = [];
+        $matches = $this->match($text, "RSS");
+        foreach ($matches as $match) {
+            $options = $match->readoptions();
+            if (isset($options['bookmark'])) {
+                $bookmarkmanager = new Modelbookmark();
+                try {
+                    $bookmark = $bookmarkmanager->get($options['bookmark']);
+                    if ($bookmark->ispublished()) {
+                        $rsslist[$match->fullmatch()] = $bookmark;
+                    }
+                } catch (RuntimeException $e) {
+                    // log a render error
+                }
+            }
+        }
+        return $rsslist;
     }
 
 
@@ -484,21 +599,74 @@ abstract class Servicerender
      */
     protected function winclusions(string $text): string
     {
-        $text = $this->date($text);
-        $text = $this->thumbnail($text);
-        $text = $this->pageid($text);
-        $text = $this->url($text);
-        $text = $this->path($text);
-        $text = $this->title($text);
-        $text = $this->description($text);
-        $text = $this->pageoptlist($text);
-        $text = $this->automedialist($text);
-        $text = $this->pageoptmap($text);
-        $text = $this->randomopt($text);
-        $text = $this->authors($text);
-        $text = $this->authenticate($text);
-        $text = $this->comments($text);
-        return $text;
+        $inclusions = $this->match($text, implode("|", self::KEYWORDS));
+
+        $replacements = $this->inclusionprocessor($inclusions);
+
+        return strtr($text, $replacements);
+    }
+
+    /**
+     * @param Inclusion[] $inclusions
+     * @return array<string, string> `fullmatch => replacement`
+     */
+    protected function inclusionprocessor(array $inclusions): array
+    {
+        $replacements = [];
+        foreach ($inclusions as $inclusion) {
+            switch ($inclusion->type()) {
+                case self::LIST:
+                    $replacement = $this->pageoptlist($inclusion);
+                    break;
+                case self::MEDIA:
+                    $replacement = $this->automedialist($inclusion);
+                    break;
+                case self::MAP:
+                    $replacement = $this->pageoptmap($inclusion);
+                    break;
+                case self::RANDOM:
+                    $replacement = $this->randomopt($inclusion);
+                    break;
+                case self::AUTHORS:
+                    $replacement = $this->authors();
+                    break;
+                case self::CONNECT:
+                    $replacement = $this->authenticate();
+                    break;
+                case self::COMMENTS:
+                    $replacement = $this->comments($inclusion);
+                    break;
+                case self::DATE:
+                case self::TIME:
+                case self::DATEMODIF:
+                case self::TIMEMODIF:
+                    $replacement = $this->date($inclusion);
+                    break;
+                case self::TITLE:
+                    $replacement = $this->title($inclusion);
+                    break;
+                case self::DESCRIPTION:
+                    $replacement = $this->page->description();
+                    break;
+                case self::PATH:
+                    $replacement = $this->upage($this->page->id());
+                    break;
+                case self::URL:
+                    $replacement = Config::domain() . $this->upage($this->page->id());
+                    break;
+                case self::ID:
+                case self::PAGEID:
+                    $replacement = $this->page->id();
+                    break;
+                case self::THUMBNAIL:
+                    $replacement = $this->thumbnail();
+                    break;
+                default:
+                    throw new LogicException('error during W inclusion processing');
+            }
+            $replacements[$inclusion->fullmatch()] = $replacement;
+        }
+        return $replacements;
     }
 
     /**
@@ -526,365 +694,182 @@ abstract class Servicerender
         return $matches;
     }
 
-    /**
-     * Replace `%TITLE%` code with page's title
-     */
-    protected function title(string $text): string
-    {
-        $matches = $this->match($text, 'TITLE');
-
-        if (empty($matches)) {
-            return $text;
-        }
-
-        $searches = [];
-        $replaces = [];
-
-        foreach ($matches as $match) {
-            $options = $match->readoptions();
-
-            if (isset($options['id'])) {
-                try {
-                    $page = $this->pagemanager->get($options['id']);
-                    $title = $page->title();
-                } catch (RuntimeException $e) {
-                    continue;
-                    // store render error: page doesn't exist
-                }
-            } else {
-                $title = $this->page->title();
-            }
-            $replaces[] = $title;
-            $searches[] = $match->fullmatch();
-        }
-
-        return str_replace($searches, $replaces, $text);
-    }
-
-
-    /**
-     * Replace `%DESCRIPTION%` code with page's description
-     */
-    protected function description(string $text): string
-    {
-        return str_replace('%DESCRIPTION%', $this->page->description(), $text);
-    }
-
-    /**
-     * Check for media list call in the text and insert media list
-     * @param string $text Text to scan and replace
-     *
-     * @return string Output text
-     */
-    protected function automedialist(string $text): string
-    {
-        $matches = $this->match($text, 'MEDIA');
-
-        if (!empty($matches)) {
-            foreach ($matches as $match) {
-                $medialist = new Mediaoptlist($match->readoptions());
-                try {
-                    $text = str_replace($match->fullmatch(), $medialist->generatecontent(), $text);
-                } catch (RuntimeException $e) {
-                    Logger::errorex($e);
-                }
-            }
-        }
-        return $text;
-    }
-
-    /**
-     * Check for Summary calls in the text and insert html summary
-     * @param string $text Text to scan and replace
-     *
-     * @return string Output text
-     */
-    protected function summary(string $text): string
-    {
-        $matches = $this->match($text, 'SUMMARY');
-
-
-        if (!empty($matches)) {
-            foreach ($matches as $match) {
-                $data = array_merge($match->readoptions(), ['sum' => $this->sum]);
-                $summary = new Summary($data);
-                $text = str_replace($match->fullmatch(), $summary->sumparser(), $text);
-            }
-        }
-        return $text;
-    }
-
 
     /**
      * Render pages list
      */
-    protected function pageoptlist(string $text): string
+    protected function pageoptlist(Inclusion $match): string
     {
-        $matches = $this->match($text, 'LIST');
-        foreach ($matches as $match) {
-            try {
-                $optlist = new Optlist();
-                $options = $match->readoptions();
+        try {
+            $optlist = new Optlist();
+            $options = $match->readoptions();
 
-                if (isset($options['bookmark']) && !empty($options['bookmark'])) {
-                    $bookmarkmanager = new Modelbookmark();
-                    $bookmark = $bookmarkmanager->get($options['bookmark']);
-                    $optlist->hydrate($bookmark->querydata()); // may be erased by the Inclusion options
-                }
-
-                $optlist->hydrate($options);
-
-                $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optlist);
-                $content = $optlist->listhtml($pagetable, $this->page);
-                $text = str_replace($match->fullmatch(), $content, $text);
-            } catch (RuntimeException $e) {
-                Logger::errorex($e);
+            if (isset($options['bookmark']) && !empty($options['bookmark'])) {
+                $bookmarkmanager = new Modelbookmark();
+                $bookmark = $bookmarkmanager->get($options['bookmark']);
+                $optlist->hydrate($bookmark->querydata()); // may be erased by the Inclusion options
             }
+
+            $optlist->hydrate($options);
+
+            $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optlist);
+            return $optlist->listhtml($pagetable, $this->page);
+        } catch (RuntimeException $e) {
+            Logger::errorex($e);
         }
 
-        return $text;
+        return $match->fullmatch();
+    }
+
+    protected function automedialist(Inclusion $match): string
+    {
+        $medialist = new Mediaoptlist($match->readoptions());
+        try {
+            return $medialist->generatecontent();
+        } catch (RuntimeException $e) {
+            Logger::errorex($e);
+        }
+        return $match->fullmatch();
     }
 
     /**
      * Render page maps
      */
-    protected function pageoptmap(string $text): string
+    protected function pageoptmap(Inclusion $match): string
     {
-        $matches = $this->match($text, 'MAP');
-        foreach ($matches as $match) {
-            try {
-                $options = $match->readoptions();
-                $optmap = new Optmap();
+        try {
+            $options = $match->readoptions();
+            $optmap = new Optmap();
 
-                if (isset($options['bookmark']) && !empty($options['bookmark'])) {
-                    $bookmarkmanager = new Modelbookmark();
-                    $bookmark = $bookmarkmanager->get($options['bookmark']);
-                    $optmap->hydrate($bookmark->querydata()); // may be erased by the Inclusion options
-                }
-
-                $optmap->hydrate($options);
-
-                $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optmap);
-                $geopt = new Opt(['geo' => true]);
-                $pagetable = $this->pagemanager->pagetable($pagetable, $geopt);
-                $this->linkto = array_merge($this->linkto, array_keys($pagetable));
-                $content = $optmap->maphtml($pagetable, $this->router);
-                $text = str_replace($match->fullmatch(), $content, $text);
-                $this->map = true;
-            } catch (RuntimeException $e) {
-                Logger::errorex($e);
+            if (isset($options['bookmark']) && !empty($options['bookmark'])) {
+                $bookmarkmanager = new Modelbookmark();
+                $bookmark = $bookmarkmanager->get($options['bookmark']);
+                $optmap->hydrate($bookmark->querydata()); // may be erased by the Inclusion options
             }
+
+            $optmap->hydrate($options);
+
+            $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optmap);
+            $geopt = new Opt(['geo' => true]);
+            $pagetable = $this->pagemanager->pagetable($pagetable, $geopt);
+            $this->linkto = array_merge($this->linkto, array_keys($pagetable));
+            $this->map = true;
+            return $optmap->maphtml($pagetable, $this->router);
+        } catch (RuntimeException $e) {
+            Logger::errorex($e);
         }
-        return $text;
+        return $match->fullmatch();
     }
 
     /**
      * Render Random links
      */
-    protected function randomopt(string $text): string
+    protected function randomopt(Inclusion $match): string
     {
-        $matches = $this->match($text, 'RANDOM');
-        foreach ($matches as $match) {
-            try {
-                $options = $match->readoptions();
-                $optrandom = new Optrandom();
-
-                if (isset($options['bookmark']) && !empty($options['bookmark'])) {
-                    $bookmarkmanager = new Modelbookmark();
-                    $bookmark = $bookmarkmanager->get($options['bookmark']);
-                    $optrandom->hydrate($bookmark->querydata());
-                }
-
-                $optrandom->hydrate($options);
-
-                $randompages = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optrandom);
-                $this->linkto = array_merge($this->linkto, array_keys($randompages));
-                $optrandom->setorigin($this->page->id());
-                $content = $this->generate('randomdirect', [], $optrandom->getquery());
-                $text = str_replace($match->fullmatch(), $content, $text);
-            } catch (RuntimeException $e) {
-                Logger::errorex($e); // bookmark does not exist
-            }
-        }
-        return $text;
-    }
-
-    /**
-     * Replace RSS inclusions with atom paths and store Bookmarks in `rsslist` property
-     *
-     * @param string $text                  Input text to analyse
-     *
-     * @return string                       Text with replaced valid %RSS% inclusions
-     */
-    protected function rss(string $text): string
-    {
-        $this->rsslist = $this->rssmatch($text);
-        foreach ($this->rsslist as $fullmatch => $bookmark) {
-            $atompath = Servicerss::atompath($bookmark->id());
-            return str_replace($fullmatch, $atompath, $text);
-        }
-        return $text;
-    }
-
-    /**
-     * Identify all RSS inclusion in text, that have a valid and bublished bookmark associated
-     *
-     * @param string $text                  Text to analyse
-     *
-     * @return Bookmark[]                   Associative array of bookmarks, using fullmatch as key
-     */
-    protected function rssmatch(string $text): array
-    {
-        $rsslist = [];
-        $matches = $this->match($text, "RSS");
-        foreach ($matches as $match) {
+        try {
             $options = $match->readoptions();
-            if (isset($options['bookmark'])) {
+            $optrandom = new Optrandom();
+
+            if (isset($options['bookmark']) && !empty($options['bookmark'])) {
                 $bookmarkmanager = new Modelbookmark();
-                try {
-                    $bookmark = $bookmarkmanager->get($options['bookmark']);
-                    if ($bookmark->ispublished()) {
-                        $rsslist[$match->fullmatch()] = $bookmark;
-                    }
-                } catch (RuntimeException $e) {
-                    // log a render error
-                }
+                $bookmark = $bookmarkmanager->get($options['bookmark']);
+                $optrandom->hydrate($bookmark->querydata());
             }
+
+            $optrandom->hydrate($options);
+
+            $randompages = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optrandom);
+            $this->linkto = array_merge($this->linkto, array_keys($randompages));
+            $optrandom->setorigin($this->page->id());
+            return $this->generate('randomdirect', [], $optrandom->getquery());
+        } catch (RuntimeException $e) {
+            Logger::errorex($e); // bookmark does not exist
         }
-        return $rsslist;
-    }
-
-
-
-    protected function date(string $text): string
-    {
-        $dateregex = implode('|', array_keys(Clock::TYPES));
-        $matches = $this->match($text, $dateregex);
-        $searches = [];
-        $replaces = [];
-        foreach ($matches as $match) {
-            $clock = new Clock(
-                $match->type(),
-                $this->page,
-                $this->page->lang(),
-            );
-            $clock->hydrate($match->readoptions());
-            $searches[] = $match->fullmatch();
-            $replaces[] = $clock->render();
-        }
-        return str_replace($searches, $replaces, $text);
-    }
-
-    /**
-     * Render thumbnail of the page
-     *
-     * @param string $text Text to analyse
-     *
-     * @return string The rendered output
-     */
-    protected function thumbnail(string $text): string
-    {
-        $src = Model::thumbnailpath() . $this->pagemanager->getpagethumbnail($this->page);
-        $img = '<img class="thumbnail" src="' . $src . '">';
-        $img = "\n$img\n";
-        $text = str_replace('%THUMBNAIL%', $img, $text);
-
-        return $text;
-    }
-
-    /**
-     * Replace each occurence of `%PAGEID%` or `%ID%` with page ID
-     * @param string $text input text
-     * @return string output text with replaced elements
-     */
-    protected function pageid(string $text): string
-    {
-        return str_replace(['%PAGEID%', '%ID%'], $this->page->id(), $text);
-    }
-
-    /**
-     * Replace each occurence of `%URL%` with page ID
-     * @param string $text input text
-     * @return string output text with replaced elements
-     */
-    protected function url(string $text): string
-    {
-        return str_replace('%URL%', Config::domain() . $this->upage($this->page->id()), $text);
-    }
-
-    /**
-     * Replace each occurence of `%PATH%` with page path
-     * @param string $text input text
-     * @return string output text with replaced elements
-     */
-    protected function path(string $text): string
-    {
-        return str_replace('%PATH%', $this->upage($this->page->id()), $text);
+        return $match->fullmatch();
     }
 
     /**
      * Replace `%AUTHORS%` with a rendered list of authors
      */
-    protected function authors(string $text): string
+    protected function authors(): string
     {
-        $page = $this->page;
-        return preg_replace_callback("~\%AUTHORS\%~", function () use ($page) {
-            $usermanager = new Modeluser();
-            $users = $usermanager->userlistbyid($page->authors());
-            return $this->userlist($users);
-        }, $text);
+        $usermanager = new Modeluser();
+        $users = $usermanager->userlistbyid($this->page->authors());
+        return $this->userlist($users);
     }
 
     /**
-     * @param string $text content to analyse and replace
-     *
      * @return string text ouput
      */
-    protected function authenticate(string $text): string
+    protected function authenticate(): string
     {
         $id = $this->page->id();
-        $regex = '~\%CONNECT(\?dir=([a-zA-Z0-9-_]+))?\%~';
-        $text = preg_replace_callback($regex, function ($matches) use ($id) {
-            if (isset($matches[2])) {
-                $id = $matches[2];
-            }
-            $form = '<form action="' . Model::dirtopath('!co') . '" method="post">
-            <input type="text" name="user" id="loginuser" autofocus placeholder="user" required>
-			<input type="password" name="pass" id="loginpass" placeholder="password" required>
-			<input type="hidden" name="route" value="pageread">
-			<input type="hidden" name="id" value="' . $id . '">
-			<input type="submit" name="log" value="login" id="button">
-			</form>';
-            return $form;
-        }, $text);
-        return $text;
+        return '<form action="' . Model::dirtopath('!co') . '" method="post">
+        <input type="text" name="user" id="loginuser" autofocus placeholder="user" required>
+        <input type="password" name="pass" id="loginpass" placeholder="password" required>
+        <input type="hidden" name="route" value="pageread">
+        <input type="hidden" name="id" value="' . $id . '">
+        <input type="submit" name="log" value="login" id="button">
+        </form>';
     }
 
-    protected function comments(string $text): string
+    protected function comments(Inclusion $match): string
     {
-        $matches = $this->match($text, 'COMMENTS');
-
-        if (empty($matches)) {
-            return $text;
-        }
-
-        $searches = [];
-        $replaces = [];
-
-
-        foreach ($matches as $match) {
+        try {
             $commentlist = new Comments($this->page, $match->readoptions());
-
-            try {
-                $replaces[] = $commentlist->listhtml();
-                $searches[] = $match->fullmatch();
-            } catch (RuntimeException $e) {
-                Logger::warning('render error: %s', $e->getMessage());
-            }
+            return $commentlist->listhtml();
+        } catch (RuntimeException $e) {
+            Logger::warning('render error: %s', $e->getMessage());
         }
-
-        return str_replace($searches, $replaces, $text);
+        return $match->fullmatch();
     }
+
+    protected function date(Inclusion $match): string
+    {
+        $clock = new Clock(
+            $match->type(),
+            $this->page,
+            $this->page->lang(),
+        );
+        $clock->hydrate($match->readoptions());
+        return $clock->render();
+    }
+
+    /**
+     * Replace `%TITLE%` code with page's title
+     */
+    protected function title(Inclusion $match): string
+    {
+        $options = $match->readoptions();
+
+        if (isset($options['id'])) {
+            try {
+                $page = $this->pagemanager->get($options['id']);
+                return $page->title();
+            } catch (RuntimeException $e) {
+                // store render error: page doesn't exist
+            }
+        } else {
+            return $this->page->title();
+        }
+        return $match->fullmatch();
+    }
+
+    /**
+     * Render thumbnail of the page
+     *
+     * @return string The rendered output
+     */
+    protected function thumbnail(): string
+    {
+        $src = Model::thumbnailpath() . $this->pagemanager->getpagethumbnail($this->page);
+        $img = '<img class="thumbnail" src="' . $src . '">';
+        return "\n$img\n";
+    }
+
+
+
+    // inclusions helpers
 
     /**
      * Render an user as a <a> HTML element
