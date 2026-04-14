@@ -11,6 +11,7 @@ use DOMNodeList;
 use DOMXPath;
 use Exception;
 use InvalidArgumentException;
+use JoliTypo\Fixer;
 use LogicException;
 use Michelf\MarkdownExtra;
 use RuntimeException;
@@ -532,6 +533,24 @@ abstract class Servicerender
         $fortin->hard_wrap = Config::markdownhardwrap();
         $text = $fortin->transform($text);
         return $text;
+    }
+
+    /**
+     * Ajust typography elements like quotes and space before ponctuation.
+     *
+     * @todo When upgrading JoliTypo, use the new `SpaceBeforePunctuation` option instead of detecting french lang
+     */
+    protected function typography(string $text): string
+    {
+        $options = ['SmartQuotes'];
+        $lang = !empty($this->page->lang()) ? $this->page->lang() : Config::lang();
+        if (str_starts_with($lang, 'fr')) {
+            $options[] = 'FrenchNoBreakSpace';
+        }
+        $fixer = new Fixer($options);
+        $fixer->setLocale($lang);
+        $fixer->setProtectedTags(['pre', 'code', 'script', 'style', 'link']);
+        return $fixer->fix($text);
     }
 
     /**

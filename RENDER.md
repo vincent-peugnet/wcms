@@ -40,6 +40,7 @@ flowchart TD
     subgraph "post MD parser"
         1F(header ID) -->
         1G(URL linker) -->
+        typo(Typography fixer) -->
         1H(HTML tag*)
     end
     1H --> 2C
