@@ -86,6 +86,7 @@ class Servicerenderv1 extends Servicerender
         if ($element->urllinker()) {
             $content = $this->autourl($content);
         }
+        $content = $this->typography($content);
         if ($element->tag()) {
             $type = $element->type();
             $content = "\n<{$type}>\n{$content}\n</{$type}>\n";
