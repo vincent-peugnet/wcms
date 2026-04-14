@@ -80,5 +80,6 @@ List of W inclusions
 1. replace `%AUTHORS%` code
 1. replace `%CONNECT%` code
 1. replace `%COMMENTS%` code
+1. replace `%COMMENTCOUNT%` code
 
 The point of doing those inclusions early is to be before __Header ID__ parser. That way, when they are used inside HTML headings, they will generate nicer IDs.

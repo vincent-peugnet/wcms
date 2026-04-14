@@ -66,28 +66,29 @@ abstract class Servicerender
     protected bool $commentform = false;
 
     /** @var string[] Store render error */
-    protected array $errors;
+    protected array $errors = [];
 
     // W INCLUSIONS KEYWORDS
 
-    public const LIST        = 'LIST';
-    public const MEDIA       = 'MEDIA';
-    public const MAP         = 'MAP';
-    public const RANDOM      = 'RANDOM';
-    public const AUTHORS     = 'AUTHORS';
-    public const CONNECT     = 'CONNECT';
-    public const COMMENTS    = 'COMMENTS';
-    public const DATE        = 'DATE';
-    public const TIME        = 'TIME';
-    public const DATEMODIF   = 'DATEMODIF';
-    public const TIMEMODIF   = 'TIMEMODIF';
-    public const TITLE       = 'TITLE';
-    public const DESCRIPTION = 'DESCRIPTION';
-    public const PATH        = 'PATH';
-    public const URL         = 'URL';
-    public const PAGEID      = 'PAGEID';
-    public const ID          = 'ID';
-    public const THUMBNAIL   = 'THUMBNAIL';
+    public const LIST         = 'LIST';
+    public const MEDIA        = 'MEDIA';
+    public const MAP          = 'MAP';
+    public const RANDOM       = 'RANDOM';
+    public const AUTHORS      = 'AUTHORS';
+    public const CONNECT      = 'CONNECT';
+    public const COMMENTS     = 'COMMENTS';
+    public const DATE         = 'DATE';
+    public const TIME         = 'TIME';
+    public const DATEMODIF    = 'DATEMODIF';
+    public const TIMEMODIF    = 'TIMEMODIF';
+    public const TITLE        = 'TITLE';
+    public const DESCRIPTION  = 'DESCRIPTION';
+    public const PATH         = 'PATH';
+    public const URL          = 'URL';
+    public const PAGEID       = 'PAGEID';
+    public const ID           = 'ID';
+    public const THUMBNAIL    = 'THUMBNAIL';
+    public const COMMENTCOUNT = 'COMMENTCOUNT';
 
     public const KEYWORDS = [
         self::LIST,
@@ -108,6 +109,7 @@ abstract class Servicerender
         self::PAGEID,
         self::ID,
         self::THUMBNAIL,
+        self::COMMENTCOUNT,
     ];
 
     /**
@@ -664,6 +666,9 @@ abstract class Servicerender
                 case self::THUMBNAIL:
                     $replacement = $this->thumbnail();
                     break;
+                case self::COMMENTCOUNT:
+                    $replacement = $this->commentcount();
+                    break;
                 default:
                     throw new LogicException('error during W inclusion processing');
             }
@@ -870,6 +875,12 @@ abstract class Servicerender
         $src = Model::thumbnailpath() . $this->pagemanager->getpagethumbnail($this->page);
         $img = '<img class="thumbnail" src="' . $src . '">';
         return "\n$img\n";
+    }
+
+    protected function commentcount(): string
+    {
+        $commentcount = $this->page->commentcount();
+        return "<span class=\"counter commentcount\">$commentcount</span>";
     }
 
 

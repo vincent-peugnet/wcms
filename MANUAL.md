@@ -389,6 +389,16 @@ Will display the number of [display](#displaycount) of the page.
 
     <span class="counter displaycount">X</span>
 
+----
+
+    %COMMENTCOUNT%
+
+Will display the number of [comments](#comments) that the page recieved.
+
+    <span class="counter commentcount">X</span>
+
+> ⚠️ [unapproved comments](#approval) are part of the count
+
 
 
 ##### Login inclusion
