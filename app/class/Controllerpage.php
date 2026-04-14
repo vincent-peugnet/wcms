@@ -6,6 +6,7 @@ use AltoRouter;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
+use ResourceBundle;
 use RuntimeException;
 use Wcms\Exception\Database\Notfoundexception;
 use Wcms\Exception\Databaseexception;
@@ -283,6 +284,7 @@ class Controllerpage extends Controller
         $datas['target'] = hash('crc32', $this->page->id() . rand(0, 2048));
         $datas['editorlist'] = $this->usermanager->getlisterbylevel(2, '>=', true);
         $datas['page'] = $this->page;
+        $datas['locales'] = ResourceBundle::getLocales('');
 
         $backlinkopt = new Opt(['linkto' => $this->page->id()]);
         $datas['homebacklink'] = $backlinkopt->getaddress();

@@ -67,7 +67,7 @@ abstract class Config
     protected static string $helpbutton = '';
 
     /** @var string $lang Default string for pages */
-    protected static $lang = "en";
+    protected static $lang = self::DEFAULT_LANG;
 
     /** Page version during creation */
     protected static int $pageversion = Page::V1;
@@ -106,6 +106,7 @@ abstract class Config
     public const SECRET_KEY_MIN = 16;
     public const SECRET_KEY_MAX = 128;
 
+    public const DEFAULT_LANG      = 'en';
     public const DEFAULT_TIME_ZONE = 'UTC';
 
 

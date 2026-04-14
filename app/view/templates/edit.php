@@ -16,7 +16,7 @@
 
 <main class="editor">
 
-    <?php $this->insert('editleftbar', ['page' => $page, 'pagelist' => $pagelist, 'faviconlist' => $faviconlist, 'thumbnaillist' => $thumbnaillist, 'pagelist' => $pagelist, 'editorlist' => $editorlist, 'user' => $user, 'workspace' => $workspace]) ?>
+    <?php $this->insert('editleftbar', ['page' => $page, 'pagelist' => $pagelist, 'faviconlist' => $faviconlist, 'thumbnaillist' => $thumbnaillist, 'pagelist' => $pagelist, 'editorlist' => $editorlist, 'user' => $user, 'workspace' => $workspace, 'locales' => $locales]) ?>
     <?php $this->insert('edittabs', ['page' => $page, 'workspace' => $workspace]) ?>
     <?php $this->insert('editrightbar', ['page' => $page, 'workspace' => $workspace, 'homebacklink' => $homebacklink, 'comments' => $comments, 'urls' => $urls, 'now' => $now]) ?>
 

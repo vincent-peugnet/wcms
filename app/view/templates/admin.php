@@ -387,7 +387,11 @@
 
         <p class="field">
             <label for="lang">Default language</label>
-            <input type="text" name="lang" id="lang" value="<?= $this->e(Wcms\Config::lang()) ?>" form="admin" minlength="<?= Wcms\Config::LANG_MIN ?>" maxlength="<?= Wcms\Config::LANG_MAX ?>" required>
+            <select name="lang" id="lang" form="admin">
+                <?php foreach($locales as $locale) : ?>
+                    <option value="<?= $locale ?>" <?= $locale === Wcms\Config::lang() ? 'selected' : '' ?>><?= $locale ?></option>    
+                <?php endforeach ?>
+            </select>
         </p>
 
         <h3>Title</h3>

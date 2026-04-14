@@ -208,9 +208,13 @@
                         <textarea name="customhead" wrap="off" spellcheck="false" rows="<?= $page->customhead('int') ?>" form="update"><?= $this->e($page->customhead()) ?></textarea>
                     </p>
                     <p class="field">
-                        <label for="lang">Language
-                        <small>(default: <?= Wcms\Config::lang() ?> )</small></label>
-                        <input type="text" name="lang" id="lang" value="<?= $page->lang() ?>" minlength="<?= Wcms\Config::LANG_MIN ?>" maxlength="<?= Wcms\Config::LANG_MAX ?>" form="update">
+                        <label for="lang">Language</label>
+                        <select name="lang" id="lang" form="update">
+                            <option value="" <?= empty($page->lang()) ? 'selected' : '' ?> >--default language (<?= Wcms\Config::lang() ?>)--</option>
+                            <?php foreach($locales as $locale) : ?>
+                                <option value="<?= $locale ?>" <?= $locale === $page->lang() ? 'selected' : '' ?> ><?= $locale ?></option>    
+                            <?php endforeach ?>
+                        </select>
                     </p>
                     <p class="field">
                         <label for="sleep">Sleep time (s)</label>
