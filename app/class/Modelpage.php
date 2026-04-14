@@ -682,7 +682,11 @@ class Modelpage extends Modeldb
      */
     protected function sort(array $pagelist, Opt $opt): array
     {
-        $this->pagelistsort($pagelist, $opt->sortby(), $opt->order());
+        if ($opt->sortby() === Opt::RANDOM) {
+            shuffle($pagelist);
+        } else {
+            $this->pagelistsort($pagelist, $opt->sortby(), $opt->order());
+        }
 
         if ($opt->limit() !== 0) {
             $pagelist = array_slice($pagelist, 0, $opt->limit(), true);

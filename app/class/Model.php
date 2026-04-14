@@ -53,6 +53,7 @@ abstract class Model
         'editcount' => 'edit',
         'displaycount' => 'display',
         'version' => 'version',
+        Opt::RANDOM => 'random',
     ];
 
     /** Characters that are authorized in item ID */

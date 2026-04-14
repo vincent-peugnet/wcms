@@ -49,10 +49,12 @@ class Opt extends Item
     /** @var string[] $pagevarlist List fo every properties of an Page object */
     protected array $pagevarlist = [];
 
-    public const OR             = 'OR';
-    public const AND            = 'AND';
-    public const EMPTY          = 'EMPTY';
-    public const COMPARE    = [self::OR, self::AND, self::EMPTY];
+    public const OR       = 'OR';
+    public const AND      = 'AND';
+    public const EMPTY    = 'EMPTY';
+    public const COMPARE  = [self::OR, self::AND, self::EMPTY];
+
+    public const RANDOM   = 'random';
 
     protected const SORTLIST = [
         'sortby',
@@ -95,6 +97,7 @@ class Opt extends Item
         'editcount',
         'displaycount',
         'version',
+        self::RANDOM,
     ];
 
     /**
@@ -465,7 +468,7 @@ class Opt extends Item
 
     public function setsortby(string $sortby): void
     {
-        if (in_array($sortby, $this->pagevarlist) && in_array($sortby, self::SORTBYLIST)) {
+        if (in_array($sortby, self::SORTBYLIST)) {
             $this->sortby = strtolower(strip_tags($sortby));
         }
     }
