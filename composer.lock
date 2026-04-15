@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "635f5a0eadb16c7f1ffaf4459db10c91",
+    "content-hash": "e844209b0d1d2dafed5527b8f14b1c23",
     "packages": [
         {
             "name": "adhocore/jwt",
@@ -253,6 +253,68 @@
             "time": "2019-11-29T09:55:48+00:00"
         },
         {
+            "name": "jolicode/jolitypo",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jolicode/JoliTypo.git",
+                "reference": "d85b1076486b6886f1a16943d032d11b9c06c78d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jolicode/JoliTypo/zipball/d85b1076486b6886f1a16943d032d11b9c06c78d",
+                "reference": "d85b1076486b6886f1a16943d032d11b9c06c78d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "lib-libxml": "*",
+                "org_heigl/hyphenator": "^2.6 || ^3.0",
+                "php": ">=7.4"
+            },
+            "conflict": {
+                "ext-apc": "3.1.11"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.3.2",
+                "symfony/framework-bundle": "^4.4 || ^5.0 || ^6.0",
+                "symfony/phpunit-bridge": "^5.4.8 || ^6.0",
+                "symfony/twig-bundle": "^4.4 || ^5.0 || ^6.0",
+                "symfony/yaml": "^4.4 || ^5.0 || ^6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "JoliTypo\\": "src/JoliTypo"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Damien Alexandre",
+                    "email": "dalexandre@jolicode.com",
+                    "homepage": "https://damienalexandre.fr/"
+                }
+            ],
+            "description": "Microtypography fixer for the web.",
+            "homepage": "https://github.com/jolicode/JoliTypo",
+            "keywords": [
+                "ellipsis",
+                "fixer",
+                "quote",
+                "smartquote",
+                "typography"
+            ],
+            "support": {
+                "issues": "https://github.com/jolicode/JoliTypo/issues",
+                "source": "https://github.com/jolicode/JoliTypo/tree/v1.4.0"
+            },
+            "time": "2022-12-22T08:29:45+00:00"
+        },
+        {
             "name": "league/plates",
             "version": "v3.4.0",
             "source": {
@@ -360,6 +422,58 @@
                 "markdown"
             ],
             "time": "2021-11-24T02:52:38+00:00"
+        },
+        {
+            "name": "org_heigl/hyphenator",
+            "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/heiglandreas/Org_Heigl_Hyphenator.git",
+                "reference": "a9b8d2524cbed19d507ef8bc780b8122689c02bc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/heiglandreas/Org_Heigl_Hyphenator/zipball/a9b8d2524cbed19d507ef8bc780b8122689c02bc",
+                "reference": "a9b8d2524cbed19d507ef8bc780b8122689c02bc",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": "^7.2||^8.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.2",
+                "phpunit/phpunit": "^8.0||^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Org\\Heigl\\Hyphenator\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andreas Heigl",
+                    "email": "andreas@heigl.org",
+                    "homepage": "http://andreas.heigl.org",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Word-Hyphenation for PHP based on the TeX-Hyphenation algorithm",
+            "homepage": "http://github.com/heiglandreas/Org_Heigl_Hyphenator",
+            "keywords": [
+                "hyphenate",
+                "hyphenation"
+            ],
+            "support": {
+                "issues": "https://github.com/heiglandreas/Org_Heigl_Hyphenator/issues",
+                "source": "https://github.com/heiglandreas/Org_Heigl_Hyphenator/tree/v3.1.0"
+            },
+            "time": "2024-02-12T14:32:13+00:00"
         },
         {
             "name": "symfony/polyfill-php72",
@@ -4396,13 +4510,13 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.4.0"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "platform-overrides": {
         "php": "7.4"
     },

@@ -216,17 +216,17 @@ by one or more blank lines. (A blank line is any line that looks like a<br>
 blank line -- a line containing nothing but spaces or tabs is considered<br>
 blank.) Normal paragraphs should not be indented with spaces or tabs.</p>
 
-<p>The implication of the "one or more consecutive lines of text" rule is<br>
-that Markdown supports "hard-wrapped" text paragraphs. This differs<br>
+<p>The implication of the “one or more consecutive lines of text” rule is<br>
+that Markdown supports “hard-wrapped” text paragraphs. This differs<br>
 significantly from most other text-to-HTML formatters (including Movable<br>
-Type's "Convert Line Breaks" option) which translate every line break<br>
+Type's “Convert Line Breaks” option) which translate every line break<br>
 character in a paragraph into a <code>&lt;br /&gt;</code> tag.</p>
 
 <p>When you <em>do</em> want to insert a <code>&lt;br /&gt;</code> break tag using Markdown, you<br>
 end a line with two or more spaces, then type return.</p>
 
 <p>Yes, this takes a tad more effort to create a <code>&lt;br /&gt;</code>, but a simplistic<br>
-"every line break is a <code>&lt;br /&gt;</code>" rule wouldn't work for Markdown.<br>
+“every line break is a <code>&lt;br /&gt;</code>” rule wouldn't work for Markdown.<br>
 Markdown's email-style <a href="#blockquote">blockquoting</a> and multi-paragraph <a href="#list">list items</a><br>
 work best -- and look better -- when you format them with hard breaks.</p>
 
@@ -234,7 +234,7 @@ work best -- and look better -- when you format them with hard breaks.</p>
 
 <p>Markdown supports two styles of headers, <a href="http://docutils.sourceforge.net/mirror/setext.html" target="_blank" class="external">Setext</a> and <a href="http://www.aaronsw.com/2002/atx/" target="_blank" class="external">atx</a>.</p>
 
-<p>Setext-style headers are "underlined" using equal signs (for first-level<br>
+<p>Setext-style headers are “underlined” using equal signs (for first-level<br>
 headers) and dashes (for second-level headers). For example:</p>
 
 <pre><code>This is an H1
@@ -256,7 +256,7 @@ corresponding to header levels 1-6. For example:</p>
 ###### This is an H6
 </code></pre>
 
-<p>Optionally, you may "close" atx-style headers. This is purely<br>
+<p>Optionally, you may “close” atx-style headers. This is purely<br>
 cosmetic -- you can use this if you think it looks better. The<br>
 closing hashes don't even need to match the number of hashes<br>
 used to open the header. (The number of opening hashes<br>
@@ -687,7 +687,7 @@ links:</p>
 <p>The <em>implicit link name</em> shortcut allows you to omit the name of the<br>
 link, in which case the link text itself is used as the name.<br>
 Just use an empty set of square brackets -- e.g., to link the word<br>
-"Google" to the google.com web site, you could simply write:</p>
+“Google” to the google.com web site, you could simply write:</p>
 
 <pre><code>[Google][]
 </code></pre>
@@ -874,7 +874,7 @@ equivalent of &lt;code&gt;&amp;amp;mdash;&lt;/code&gt;.&lt;/p&gt;
 
 <h3 id="img">Images</h3>
 
-<p>Admittedly, it's fairly difficult to devise a "natural" syntax for<br>
+<p>Admittedly, it's fairly difficult to devise a “natural” syntax for<br>
 placing images into a plain text document format.</p>
 
 <p>Markdown uses an image syntax that is intended to resemble the syntax<br>
@@ -903,7 +903,7 @@ or single quotes.</li>
 <pre><code>![Alt text][id]
 </code></pre>
 
-<p>Where "id" is the name of a defined image reference. Image references<br>
+<p>Where “id” is the name of a defined image reference. Image references<br>
 are defined using syntax identical to link references:</p>
 
 <pre><code>[id]: url/to/image  "Optional title attribute"
@@ -919,7 +919,7 @@ use regular HTML <code>&lt;img&gt;</code> tags.</p>
 
 <h3 id="autolink">Automatic Links</h3>
 
-<p>Markdown supports a shortcut style for creating "automatic" links for URLs and email addresses: simply surround the URL or email address with angle brackets. What this means is that if you want to show the actual text of a URL or email address, and also have it be a clickable link, you can do this:</p>
+<p>Markdown supports a shortcut style for creating “automatic” links for URLs and email addresses: simply surround the URL or email address with angle brackets. What this means is that if you want to show the actual text of a URL or email address, and also have it be a clickable link, you can do this:</p>
 
 <pre><code>&lt;<a href="http://example.com/&amp;gt" class="external" target="_blank">http://example.com/&amp;gt</a>;
 </code></pre>
@@ -945,7 +945,7 @@ spambots. For example, Markdown will turn this:</p>
 &amp;#109;&amp;#x70;&amp;#x6C;e&amp;#x2E;&amp;#99;&amp;#111;&amp;#109;&lt;/a&gt;
 </code></pre>
 
-<p>which will render in a browser as a clickable link to "address@example.com".</p>
+<p>which will render in a browser as a clickable link to “address@example.com”.</p>
 
 <p>(This sort of entity-encoding trick will indeed fool many, if not<br>
 most, address-harvesting bots, but it definitely won't fool all of<br>
@@ -978,7 +978,6 @@ _   underscore
 .   dot
 !   exclamation mark
 </code></pre>
-
 </main>
 
 
