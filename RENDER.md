@@ -11,7 +11,7 @@ flowchart TD
     0rss(RSS feed declaration) --> 3B
 
     2A[[Body]] -->
-    2B(W inclusion)  -------->
+    2B(W inclusion)  --------->
     2C((Elements inclusion)) -->
     2D(Summary) -->
     2rss(RSS detection) --> 2I
@@ -34,7 +34,8 @@ flowchart TD
 
     1A[[Element]] -->
     1B(W inclusion) -->
-    1C(wiki links) -->
+    wikilinks(wiki links) -->
+    usertag(user tag @user) -->
     1D(every link*) -->
     1E(Markdown) --> 1F
     subgraph "post MD parser"

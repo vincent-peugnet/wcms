@@ -560,6 +560,30 @@ abstract class Servicerender
     }
 
     /**
+     * match `@hazel` user IDs tags
+     */
+    protected function usertag(string $text): string
+    {
+        $rend = $this;
+        $id = Model::ID_REGEX;
+        $regex = "#(?<=^|\s)@($id)#";
+        return preg_replace_callback(
+            $regex,
+            function ($matches) use ($rend) {
+                try {
+                    $usermanager = new Modeluser();
+                    $user = $usermanager->get($matches[1]);
+                    return $rend->user($user);
+                } catch (RuntimeException $e) {
+                    $rend->adderror('@user tag inclusion: %s', $e->getMessage());
+                    return $matches[0];
+                }
+            },
+            $text
+        );
+    }
+
+    /**
      * Replace plain URL with HTML link pointing to their address.
      *
      * This will also include `target=_blank` and `class=external` attributes.
@@ -894,7 +918,7 @@ abstract class Servicerender
      * @param User $user        User to render
      * @return string           HTML rendered <a> element
      */
-    public function user(User $user): string
+    protected function user(User $user): string
     {
         $name   = !empty($user->name()) ? htmlspecialchars($user->name()) : $user->id();
         $id     = $user->id();
