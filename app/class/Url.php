@@ -14,6 +14,11 @@ class Url extends Item
     public bool $accepted;
 
     /**
+     * @var array<string, null> list of pages that include this url `id => null`
+     */
+    public array $pages = [];
+
+    /**
      * @param array<string, mixed> $data
      */
     public function __construct(string $url, array $data)
@@ -31,6 +36,16 @@ class Url extends Item
     public function expiredate(): DateTimeImmutable
     {
         return DateTimeImmutable::createFromFormat('U', strval($this->expire));
+    }
+
+    public function addpage(string $page): void
+    {
+        $this->pages[$page] = null;
+    }
+
+    public function removepage(string $page): void
+    {
+        unset($this->pages[$page]);
     }
 
     public function setresponse(int $response): void
@@ -51,5 +66,13 @@ class Url extends Item
     public function setmessage(string $message): void
     {
         $this->message = $message;
+    }
+
+    /**
+     * @param array<string, null> $pages
+     */
+    public function setpages(array $pages): void
+    {
+        $this->pages = $pages;
     }
 }

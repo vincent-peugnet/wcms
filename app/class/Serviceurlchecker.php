@@ -44,6 +44,7 @@ class Serviceurlchecker
         'timestamp' => 'last checked',
         'expire' => 'expire',
         'accepted' => 'status',
+        'pages' => 'pages',
     ];
 
     /**
@@ -103,6 +104,39 @@ class Serviceurlchecker
         }
 
         return $this->urls[$url];
+    }
+
+    /**
+     * Add a page to a list of URLs
+     *
+     * @param array<string, mixed> $urls
+     */
+    public function addpage(string $id, array $urls): void
+    {
+        foreach ($urls as $url => $status) {
+            if (isset($this->urls[$url])) {
+                $this->urls[$url]->addpage($id);
+            }
+        }
+    }
+
+    /**
+     * Remove a page from a list of URLs
+     * If the URL don't have a page anymore, then it's deleted
+     *
+     * @param array<string, mixed> $urls
+     */
+    public function removepage(string $id, array $urls): void
+    {
+        foreach ($urls as $url => $status) {
+            if (isset($this->urls[$url])) {
+                $this->urls[$url]->removepage($id);
+            }
+            // remove URL that are not used anymore
+            if (empty($this->urls[$url]->pages)) {
+                unset($this->urls[$url]);
+            }
+        }
     }
 
     /**

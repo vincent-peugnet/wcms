@@ -566,6 +566,15 @@ class Modelpage extends Modeldb
         Fs::writefile(Model::ASSETS_RENDER_DIR . $page->id() . '.css', $page->css(), 0664);
         Fs::writefile(Model::ASSETS_RENDER_DIR . $page->id() . '.js', $page->javascript(), 0664);
 
+        if (!is_null($urlchecker)) {
+            try {
+                $this->externallinkupdate($page, $renderengine->urls(), $urlchecker);
+                $urlchecker->savecache();
+            } catch (RuntimeException $e) {
+                Logger::errorex($e);
+            }
+        }
+
         $page->setdaterender($now);
         $page->setlinkto($renderengine->linkto());
         $page->setexternallinks($renderengine->urls());
@@ -576,6 +585,19 @@ class Modelpage extends Modeldb
         }
 
         return $page;
+    }
+
+    /**
+     * Update the pages info to URL cache (pages where the URL is used)
+     *
+     * @param array<string, mixed> $urls list of external links found in page during rendering
+     */
+    protected function externallinkupdate(Page $page, array $urls, Serviceurlchecker $urlchecker): void
+    {
+        $urlchecker->addpage($page->id(), $urls);
+
+        $removeds = array_diff_key($page->externallinks(), $urls);
+        $urlchecker->removepage($page->id(), $removeds);
     }
 
     /**

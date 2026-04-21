@@ -45,6 +45,12 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                         message
                     </th>
                     <th>
+                        <a href="<?= $this->url('url', [], "?sortby=pages&order=$reverseorder") ?>">pages</a>
+                        <?php if($sortby === 'pages') : ?>
+                            <i class="fa fa-sort-<?= $reverseorder > 0 ? 'asc' : 'desc' ?>"></i>
+                        <?php endif ?>
+                    </th>
+                    <th>
                         <a href="<?= $this->url('url', [], "?sortby=timestamp&order=$reverseorder") ?>">last checked</a>
                         <?php if($sortby === 'timestamp') : ?>
                             <i class="fa fa-sort-<?= $reverseorder > 0 ? 'asc' : 'desc' ?>"></i>
@@ -77,6 +83,15 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                         </td>
                         <td class="message nowrap">
                             <?= $url->message ?>
+                        </td>
+                        <td class="pages">
+                            <?php foreach ($url->pages as $page => $value) : ?>
+                                <span>
+                                    <?= $page ?>
+                                    <a class="button" href="<?= $this->upage('pageread', $page) ?>"><i class="fa fa-eye"></i></a>
+                                    <a class="button" href="<?= $this->upage('pageedit', $page) ?>"><i class="fa fa-pencil"></i></a>
+                                </span>
+                            <?php endforeach ?>
                         </td>
                         <td class="timestamp nowrap" title="<?= $this->datemedium($url->timestampdate()) ?>">
                             <?= hrdi($url->timestampdate()->diff($now)) ?> ago
