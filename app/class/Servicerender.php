@@ -925,15 +925,9 @@ abstract class Servicerender
     // _________________________ DOM parser _______________________________
 
     /**
-     * Add `external` or `internal` class attribute in `<a>` anchor HTML link tags.
-     * In case of internal link, add `media` or `page` class depending of the kind of ressource it is pointing to.     *
-     * For internal link to pages, indicate if page exist or not.
-     * If the link point to the current page, add `current_page` class.
-     * If it exist, add description in title and privacy as class.
+     * final HTML parser used on BODY after all contents are inserted
      *
      * Add `external` or `internal` class attribute in `<img>`, `audio`, `video` or `source` HTML tags.
-     *
-     * Keep existing class and remove duplicates or useless spaces in class attribute
      */
     protected function htmlparser(string $html): string
     {
@@ -944,68 +938,7 @@ abstract class Servicerender
         $dom->removeChild($dom->firstChild);
         $links = $dom->getElementsByTagName('a');
         foreach ($links as $link) {
-            assert($link instanceof DOMElement);
-            $class = $link->getAttribute('class');
-            $classes = explode(' ', $class);
-            $classes = array_filter($classes, function (string $var) {
-                return !empty($var);
-            });
-            $href = $link->getAttribute('href');
-            if (preg_match('~^https?:\/\/~', $href)) {
-                $classes[] = 'external';
-                if (!$link->hasAttribute('target') && $this->externallinkblank) {
-                    $link->setAttribute('target', '_blank');
-                }
-                $this->urls[$href] = null;
-                if ($this->urlchecker !== null) {
-                    try {
-                        $status = $this->urlchecker->check($href);
-                        $classes[] = $status ? 'ok' : 'dead';
-                        $link->setAttribute('data-urlcheck', '1');
-                        $this->urls[$href] = $status;
-                    } catch (RuntimeException $e) {
-                        $link->setAttribute('data-urlcheck', '0');
-                    }
-                }
-            } elseif (preg_match('~^([a-z0-9-_]+)((\/?#[a-z0-9-_]+)|(\/([\w\-\%\[\]\=\?\&]*)))?$~', $href, $out)) {
-                $classes[] = 'internal';
-                $classes[] = 'page';
-                $fragment = $out[2] ?? '';
-                $link->setAttribute('href', $this->upage($out[1]) . $fragment);
-                if (isset($out[5]) && in_array($out[5], ['add', 'edit', 'update', 'render', 'download', 'delete'])) {
-                    $classes[] = $out[5];
-                }
-                try {
-                    $page = $this->pagemanager->get($out[1]);
-                    if (!$link->hasAttribute('title')) {
-                        $link->setAttribute('title', $page->description());
-                    }
-                    $classes[] = 'exist';
-                    if ($this->page->id() === $page->id()) {
-                        $classes[] = 'current_page';
-                    }
-                    $classes[] = $page->secure('string');
-                    $this->linkto[] = $page->id();
-                } catch (RuntimeException $e) { // Page does not exist
-                    $link->setAttribute('title', Config::existnot());
-                    $classes[] = 'existnot';
-                    // TODO: store internal link that exist not in $this
-                }
-                if (!$link->hasAttribute('target') && $this->internallinkblank) {
-                    $link->setAttribute('target', '_blank');
-                }
-            // Links pointing to medias
-            } elseif (preg_match('~^(?!([\/#]|[a-zA-Z\.\-\+]+:|\.+\/))([^"]+\.[^";]+)$~', $href, $out)) {
-                $classes[] = 'internal';
-                $classes[] = 'media';
-                $link->setAttribute('href', Model::mediapath() . $out[2]);
-            } elseif (preg_match('~^\.\/media~', $href)) {
-                $classes[] = 'internal';
-                $classes[] = 'media';
-            }
-            if (!empty($classes)) {
-                $link->setAttribute('class', implode(' ', array_unique($classes)));
-            }
+            $this->linkparser($link);
         }
 
         // Check presence of comment forms
@@ -1078,6 +1011,80 @@ abstract class Servicerender
 
         // By passing the documentElement to saveHTML, special chars are not converted to entities
         return $dom->saveHTML($dom->documentElement);
+    }
+
+    /**
+     * Parse a link: add metadata, lauch URL checker
+     *
+     * Add `external` or `internal` class attribute in `<a>` anchor HTML link tags.
+     * In case of internal link, add `media` or `page` class depending of the kind of ressource it is pointing to.
+     * For internal link to pages, indicate if page exist or not.
+     * If the link point to the current page, add `current_page` class.
+     * If it exist, add description in title and privacy as class.
+     */
+    protected function linkparser(DOMElement $link): void
+    {
+        $class = $link->getAttribute('class');
+        $classes = explode(' ', $class);
+        $classes = array_filter($classes, function (string $var) {
+            return !empty($var);
+        });
+        $href = $link->getAttribute('href');
+        if (preg_match('~^https?:\/\/~', $href)) {
+            $classes[] = 'external';
+            if (!$link->hasAttribute('target') && $this->externallinkblank) {
+                $link->setAttribute('target', '_blank');
+            }
+            $this->urls[$href] = null;
+            if ($this->urlchecker !== null) {
+                try {
+                    $status = $this->urlchecker->check($href);
+                    $classes[] = $status ? 'ok' : 'dead';
+                    $link->setAttribute('data-urlcheck', '1');
+                    $this->urls[$href] = $status;
+                } catch (RuntimeException $e) {
+                    $link->setAttribute('data-urlcheck', '0');
+                }
+            }
+        } elseif (preg_match('~^([a-z0-9-_]+)((\/?#[a-z0-9-_]+)|(\/([\w\-\%\[\]\=\?\&]*)))?$~', $href, $out)) {
+            $classes[] = 'internal';
+            $classes[] = 'page';
+            $fragment = $out[2] ?? '';
+            $link->setAttribute('href', $this->upage($out[1]) . $fragment);
+            if (isset($out[5]) && in_array($out[5], ['add', 'edit', 'update', 'render', 'download', 'delete'])) {
+                $classes[] = $out[5];
+            }
+            try {
+                $page = $this->pagemanager->get($out[1]);
+                if (!$link->hasAttribute('title')) {
+                    $link->setAttribute('title', $page->description());
+                }
+                $classes[] = 'exist';
+                if ($this->page->id() === $page->id()) {
+                    $classes[] = 'current_page';
+                }
+                $classes[] = $page->secure('string');
+                $this->linkto[] = $page->id();
+            } catch (RuntimeException $e) { // Page does not exist
+                $link->setAttribute('title', Config::existnot());
+                $classes[] = 'existnot';
+                // TODO: store internal link that exist not in $this
+            }
+            if (!$link->hasAttribute('target') && $this->internallinkblank) {
+                $link->setAttribute('target', '_blank');
+            }
+        // Links pointing to medias
+        } elseif (preg_match('~^(?!([\/#]|[a-zA-Z\.\-\+]+:|\.+\/))([^"]+\.[^";]+)$~', $href, $out)) {
+            $classes[] = 'internal';
+            $classes[] = 'media';
+            $link->setAttribute('href', Model::mediapath() . $out[2]);
+        } elseif (preg_match('~^\.\/media~', $href)) {
+            $classes[] = 'internal';
+            $classes[] = 'media';
+        }
+        if (!empty($classes)) {
+            $link->setAttribute('class', implode(' ', array_unique($classes)));
+        }
     }
 
     /**
