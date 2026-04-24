@@ -327,6 +327,7 @@ class Modelpage extends Modeldb
 
     /**
      * Delete a page and it's linked rendered html and css files
+     * Also update the URL cache if URL checker is enabled
      *
      * @param Page $page                    Page to delete
      *
@@ -339,7 +340,14 @@ class Modelpage extends Modeldb
         if (!$this->repo->delete($page->id())) {
             throw new Databaseexception('Impossible to delete document from database');
         }
+
         $this->removecache($page->id());
+
+        if (Config::urlchecker()) {
+            // update URLchecker cache by removing page from URLs
+            $urlchecker = new Serviceurlchecker();
+            $urlchecker->removepage($page->id(), $page->externallinks());
+        }
     }
 
     /**
