@@ -14,7 +14,8 @@ flowchart TD
     2B(W inclusion)  -------->
     2C((Elements inclusion)) -->
     2D(Summary) -->
-    2rss(RSS detection) --> 2I
+    2rss(RSS detection) -->
+    typo(Typography fixer) --> 2I
     subgraph "DOM parser"
         2I(Link and media analysis) -->
         url(URL checker) -->
@@ -40,7 +41,6 @@ flowchart TD
     subgraph "post MD parser"
         1F(header ID) -->
         1G(URL linker) -->
-        typo(Typography fixer) -->
         1H(HTML tag*)
     end
     1H --> 2C

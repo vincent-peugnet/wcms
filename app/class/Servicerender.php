@@ -242,6 +242,8 @@ abstract class Servicerender
 
         $html = $this->rss($html);
 
+        $html = $this->typography($html);
+
         $html = "<body>\n$html\n</body>";
         $html = $this->htmlparser($html);
 
