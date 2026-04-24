@@ -48,24 +48,31 @@ class Servicerenderv2 extends Servicerender
         $body = parent::bodyconstructor($body);
 
         $matches = $this->match($body, 'CONTENT');
+        $replacements = [];
 
         // First, analyse the synthax and call the corresponding methods
-        if (!empty($matches)) {
-            foreach ($matches as $match) {
+        if (empty($matches)) {
+            return $body;
+        }
+
+        foreach ($matches as $match) {
+            try {
                 $element = new Elementv2($this->page->id());
                 $element->hydrate($match->readoptions());
-                $element->setcontent($this->getelementcontent($element->id()));
-                $element->setcontent($this->elementparser($element));
-                $body = str_replace($match->fullmatch(), $element->content(), $body);
+                $replacements[$match->fullmatch()] = $this->elementparser(
+                    $element,
+                    $this->getelementcontent($element)
+                );
+            } catch (RuntimeException $e) {
+                $this->adderror("content inclusion: '%s': %s", $match->fullmatch(), $e->getMessage());
             }
         }
 
-        return $body;
+        return strtr($body, $replacements);
     }
 
-    protected function elementparser(Elementv2 $element): string
+    protected function elementparser(Elementv2 $element, string $content): string
     {
-        $content = $element->content();
         $content = $this->winclusions($content);
         $content = $this->wikiurl($content);
         if ($element->everylink() > 0) {
@@ -96,24 +103,19 @@ class Servicerenderv2 extends Servicerender
      * If ID is not used: return empty string
      * If source page is V1, it will use the MAIN content.
      *
-     * @param string $source                Source Page ID
+     * @param Elementv2 $source             Source Element
      *
      * @return string                       Source Page primary content or empty string
      *
-     * @todo Log errors somewhere
+     * @throws RuntimeException             if getting the source page failed
      */
-    protected function getelementcontent(string $source): string
+    protected function getelementcontent(Elementv2 $source): string
     {
-        if ($source === $this->page->id()) {
+        if ($source->id() === $this->page->id()) {
             return $this->page->content();
         } else {
-            try {
-                $page = $this->pagemanager->get($source);
-                return $page->primary();
-            } catch (RuntimeException $e) {
-                // page ID is not used
-                return '';
-            }
+            $page = $this->pagemanager->get($source->id());
+            return $page->primary();
         }
     }
 }
