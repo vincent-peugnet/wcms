@@ -109,7 +109,7 @@ class Serviceurlchecker
     /**
      * Add a page to a list of URLs
      *
-     * @param array<string, mixed> $urls
+     * @param array<string, mixed> $urls    Url is the key, value is not used
      */
     public function addpage(string $id, array $urls): void
     {
@@ -124,7 +124,7 @@ class Serviceurlchecker
      * Remove a page from a list of URLs
      * If the URL don't have a page anymore, then it's deleted
      *
-     * @param array<string, mixed> $urls
+     * @param array<string, mixed> $urls    Url is the key, value is not used
      */
     public function removepage(string $id, array $urls): void
     {
