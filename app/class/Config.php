@@ -84,6 +84,9 @@ abstract class Config
     /** TimeZone used for database and display of dates */
     protected static string $timezone = self::DEFAULT_TIME_ZONE;
 
+    /** Enable micro typography fixer */
+    protected static bool $typofixer = false;
+
     /** LDAP auth */
     protected static string $ldapserver = '';
     protected static string $ldaptree = '';
@@ -472,6 +475,11 @@ abstract class Config
         return self::$timezone;
     }
 
+    public static function typofixer(): bool
+    {
+        return self::$typofixer;
+    }
+
     public static function ldapserver(): string
     {
         return self::$ldapserver;
@@ -797,6 +805,11 @@ abstract class Config
         } catch (Throwable $th) {
             // keep default time zone
         }
+    }
+
+    public static function settypofixer(bool $typofixer): void
+    {
+        self::$typofixer = $typofixer;
     }
 
     public static function setldapserver(string $ldapserver): void

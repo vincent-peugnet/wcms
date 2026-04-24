@@ -462,6 +462,20 @@
             <input type="checkbox" name="urllinker" id="urllinker" value="1" <?= Wcms\Config::urllinker() ? 'checked' : '' ?> form="admin">
         </p>
 
+        <h3>Micro typography fixer</h3>
+
+        <p class="info">
+            May convert quotes or spaces before punctuation, depending on page language.
+        </p>
+
+        <p class="field">
+            <label for="typofixer">enable micro typography fixer</label>
+            <input type="hidden" name="typofixer" value="0" form="admin">
+            <input type="checkbox" name="typofixer" id="typofixer" value="1" <?= Wcms\Config::typofixer() ? 'checked' : '' ?> form="admin">
+        </p>
+
+
+
         <h3>HTML tags (page V1)</h3>
 
         <p class="info">This can be overide individualy for each element using render options. See <a href="<?= $this->url('info', [], '#html-tags') ?>">📖 manual section</a> for more infos.
