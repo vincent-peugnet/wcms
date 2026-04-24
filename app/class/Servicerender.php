@@ -197,7 +197,8 @@ abstract class Servicerender
         $head = $this->gethead();
 
         $lang = !empty($this->page->lang()) ? $this->page->lang() : Config::lang();
-        $langproperty = 'lang="' . $lang . '"';
+        $bcplang = str_replace('_', '-', $lang); // try to convert lang to BCP 47 standard
+        $langproperty = "lang=\"$bcplang\"";
         $html = "<!DOCTYPE html>\n<html $langproperty >\n<head>\n$head\n</head>";
         $html .= "\n$parsebody\n</html>\n";
 
