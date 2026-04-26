@@ -377,7 +377,7 @@ table a {
     margin: var(--reset-spacing) var(--reset-spacing) 0;
     display: flex;
     justify-content: space-between;
-    color: var(--text2-color);
+    color: var(--outline-color);
 }
 
 .dropdown h4 {

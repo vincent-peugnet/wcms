@@ -54,7 +54,7 @@ table#medialist .thumbnail:hover .lightbox {
     overflow: hidden;
     margin: 0;
     padding: 0;
-    background: white;
+    background: #ddd5;
 }
 
 #gallery .thumbnail {
@@ -90,7 +90,7 @@ table#medialist .thumbnail:hover .lightbox {
     display: block;
     box-shadow: 0px 4px 4px #24242430;
     /* checkerboard pattern */
-    background-image: linear-gradient(45deg, #ddd 25%, transparent 25%), linear-gradient(-45deg, #ddd 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ddd 75%), linear-gradient(-45deg, transparent 75%, #ddd 75%);
+    background-image: linear-gradient(45deg, #bbb 25%, transparent 25%), linear-gradient(-45deg, #bbb 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #bbb 75%), linear-gradient(-45deg, transparent 75%, #bbb 75%);
     background-size: 20px 20px;
     background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 }

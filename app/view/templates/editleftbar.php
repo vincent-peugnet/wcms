@@ -236,7 +236,6 @@
                         <label for="cachettl">
                             <span>
                                 Cache life time
-                                <small>(default: <?= Wcms\Config::cachettl() ?>)</small>
                             </span>
                             <a href="<?= $this->url('info', [], '#rendering-cache') ?>" class="help">?</a>
                         </label>
@@ -245,6 +244,7 @@
                             name="cachettl"
                             id="cachettl"
                             value="<?= $page->cachettl() ?>"
+                            placeholder="(default: <?= Wcms\Config::cachettl() ?>)"
                             min="-1"
                             max="<?= Wcms\Model::MAX_CACHE_TTL ?>"
                             form="update"
