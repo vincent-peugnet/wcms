@@ -85,7 +85,7 @@ abstract class Config
     protected static string $timezone = self::DEFAULT_TIME_ZONE;
 
     /** Enable micro typography fixer */
-    protected static bool $typofixer = false;
+    protected static bool $typofixer = true;
 
     /** LDAP auth */
     protected static string $ldapserver = '';
