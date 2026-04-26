@@ -5,6 +5,7 @@ namespace Wcms;
 use InvalidArgumentException;
 use JamesMoss\Flywheel\Document;
 use RuntimeException;
+use Wcms\Exception\Database\Invalididexception;
 use Wcms\Exception\Databaseexception;
 use Wcms\Exception\Database\Notfoundexception;
 
@@ -89,7 +90,7 @@ class Modelbookmark extends Modeldb
      *
      * @return Bookmark                     Bookmark object or false in case of error
      *
-     * @throws Databaseexception            If ID is not valid
+     * @throws Invalididexception           If ID is not valid
      * @throws Notfoundexception            If Bookmark cant be found
      * @throws RuntimeException             If Bookmark cannot be build beccause of invalid datas
      */
@@ -97,7 +98,7 @@ class Modelbookmark extends Modeldb
     {
         $id = $this->id($id);
         if (!$this->idcheck($id)) {
-            throw new Databaseexception("invalid ID: '$id'");
+            throw new Invalididexception("invalid ID: '$id'");
         }
         $bookmarkdata = $this->repo->findById($id);
         if ($bookmarkdata === false) {

@@ -4,6 +4,7 @@ namespace Wcms;
 
 use InvalidArgumentException;
 use JamesMoss\Flywheel\Document;
+use Wcms\Exception\Database\Invalididexception;
 use Wcms\Exception\Databaseexception;
 use Wcms\Exception\Database\Notfoundexception;
 
@@ -137,9 +138,7 @@ class Modeluser extends Modeldb
      * @return User                         User object
      *
      * @throws Notfoundexception            If User cant be founded
-     * @throws Databaseexception            If ID is invalid
-     *
-     * @todo remplace by a dedicated InvalidIDexception for the case of invalid ID
+     * @throws Invalididexception           If ID is invalid
      */
     public function get($id): User
     {
@@ -150,7 +149,7 @@ class Modeluser extends Modeldb
             throw new InvalidArgumentException('input should be an User object or a string ID');
         }
         if (!$this::idcheck($id)) {
-            throw new Databaseexception("invalid ID: '$id'");
+            throw new Invalididexception("invalid ID: '$id'");
         }
 
         $userdata = $this->repo->findById($id);

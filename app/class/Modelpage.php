@@ -10,6 +10,7 @@ use DomainException;
 use InvalidArgumentException;
 use RangeException;
 use RuntimeException;
+use Wcms\Exception\Database\Invalididexception;
 use Wcms\Exception\Database\Notfoundexception as DatabaseNotfoundexception;
 use Wcms\Exception\Databaseexception;
 use Wcms\Exception\Filesystemexception;
@@ -111,7 +112,7 @@ class Modelpage extends Modeldb
      *
      * @return Page                         The Page object
      *
-     * @throws Databaseexception            If ID is not valid
+     * @throws Invalididexception           If ID is not valid
      * @throws DatabaseNotfoundexception    If page is'nt found
      * @throws RangeException               If page version is specified but invalid
      */
@@ -124,7 +125,7 @@ class Modelpage extends Modeldb
             throw new InvalidArgumentException("argument of Modelpage->get() should be a ID string or Page");
         }
         if (!$this->idcheck($id)) {
-            throw new Databaseexception("invalid ID: '$id'");
+            throw new Invalididexception("invalid ID: '$id'");
         }
 
         $pagedata = $this->repo->findById($id);
