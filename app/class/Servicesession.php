@@ -2,10 +2,17 @@
 
 namespace Wcms;
 
-use RuntimeException;
-
 class Servicesession
 {
+    public function __construct()
+    {
+        // empty session if W has been updated
+        if (!isset($_SESSION['w_version']) || $_SESSION['w_version'] !== getversion()) {
+            $this->empty();
+            $_SESSION['w_version'] = getversion();
+        }
+    }
+
     public function setvisitor(bool $visitor): void
     {
         $_SESSION['visitor'] = $visitor;
