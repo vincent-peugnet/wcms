@@ -58,14 +58,16 @@ class Servicesession
     }
 
     /**
-     * @throws RuntimeException if Workspace is not present in session cookie.
+     * @return Workspace                    That was stored in session, or create a new one
      */
     public function getworkspace(): Workspace
     {
         if (isset($_SESSION['workspace']) && $_SESSION['workspace'] instanceof Workspace) {
             return $_SESSION['workspace'];
         } else {
-            throw new RuntimeException('no available workspace in session');
+            $workspace = new Workspace();
+            $_SESSION['workspace'] = $workspace;
+            return $workspace;
         }
     }
 

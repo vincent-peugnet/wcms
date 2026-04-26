@@ -243,8 +243,8 @@ abstract class Servicerender
 
         $html = $this->rss($html);
 
-        if (Config::typofixer()) {   
-        $html = $this->typography($html);
+        if (Config::typofixer()) {
+            $html = $this->typography($html);
         }
 
         $html = "<body>\n$html\n</body>";

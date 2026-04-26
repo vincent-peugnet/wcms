@@ -2,6 +2,8 @@
 
 namespace Wcms;
 
+use donatj\UserAgent\UserAgentParser;
+
 class Workspace extends Item
 {
     protected bool $showeditorleftpanel = true;
@@ -38,14 +40,24 @@ class Workspace extends Item
     public const THEMES = [self::THEME_DEFAULT, self::THEME_MONOKAI, self::THEME_NONE];
 
     /**
-     * @param mixed[] $datas
+     * If no data is provided (or set to null), Workspace will use the default config
+     * If the UA parser detect a mobile as client, the default mobile setting are used
+     *
+     * @param ?mixed[] $data
      */
-    public function __construct(array $datas = [])
+    public function __construct(?array $data = null)
     {
-        $this->hydrate($datas);
+        if ($data === null) {
+            $ua = new UserAgentParser();
+            if (is_mobile($ua->parse())) {
+                $this->resettomobiledefault();
+            }
+        } else {
+            $this->hydrate($data);
+        }
     }
 
-    public function resettomobiledefault(): void
+    protected function resettomobiledefault(): void
     {
         $this->showeditorleftpanel = false;
         $this->showeditorrightpanel = false;
