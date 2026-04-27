@@ -57,7 +57,7 @@ abstract class Servicerender
      * */
     protected $rsslist = [];
 
-    /** @var array<string, array<string, mixed>> Map inclusions points data */
+    /** @var array<string, array{"pages": array<string, mixed>, "zoom"?: int}> Map inclusions data */
     protected array $maps = [];
 
     /** @var bool Indicate if current page have reached it's comment limit */
@@ -802,7 +802,8 @@ abstract class Servicerender
                 }
                 return $data;
             }, $pages);
-            $geopages = array_values($geopages); // remove keys to have basic list
+
+            $data['pages'] = array_values($geopages); // remove keys to have basic list
 
             $id = 'map-' . md5($match->fullmatch());
 
@@ -810,7 +811,11 @@ abstract class Servicerender
                 $this->adderror("map inclusion: '%s': same inclusion code used more than once", $match->fullmatch());
             }
 
-            $this->maps[$id] = $geopages;
+            if (isset($options['zoom'])) {
+                $data['zoom'] = intval($options['zoom']);
+            }
+
+            $this->maps[$id] = $data;
 
             $this->linkto = array_merge($this->linkto, array_keys($pages));
             return "<div id=\"$id\" class=\"map list\" style=\"min-height: 400px; min-width: 400px;\"></div>\n";
@@ -841,11 +846,14 @@ abstract class Servicerender
             $page = $this->page;
         }
 
-        $data = $page->drylist(['id', 'title', 'latitude', 'longitude']);
+        $data['pages'] = [$page->drylist(['id', 'title', 'latitude', 'longitude'])];
+
+        $data['zoom'] = isset($params['zoom']) ? intval($params['zoom']) : 10;
+
         $id = 'map-' . md5($match->fullmatch());
 
         if ($page->isgeo()) {
-            $this->maps[$id] = [$data];
+            $this->maps[$id] = $data;
         }
 
         if (isset($this->maps[$id])) {

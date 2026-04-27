@@ -204,7 +204,7 @@ CodeMirror.defineSimpleMode('wcms', {
     // 'map' mode, parameters' keywords of the 'map' macro
     map: [
         {
-            regex: /sortby|order|secure|tagcompare|authorcompare|tagfilter|authorfilter|linkto|geo|invert|limit|since|until|bookmark/,
+            regex: /sortby|order|secure|tagcompare|authorcompare|tagfilter|authorfilter|linkto|geo|invert|limit|since|until|bookmark|zoom/,
             token: 'wkeyword',
             push: 'wcms',
         },

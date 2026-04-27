@@ -345,7 +345,11 @@ Insert a world map with a pointer that use the current page map location.
 It can take an `id` parameter to get the location of another page.
 For example, to include the title of the page `granejouls`:
 
-    %TITLE?id=granejouls%
+    %LOCATION?id=granejouls%
+
+Zoom level can be ajusted using the `zoom` parameter. Windest view is `0`, and very close is around `20`. Default zoom is set to `10`.
+
+    %LOCATION?zoom=<0-20>%
 
 The page page [latitude](#latitude) and [longitude](#longitude) have to be set in order to make the map work.
 
@@ -542,6 +546,11 @@ This will include a `div` HTML tag and some javascript.
     <div id="GENERATED_ID" class="map"></div>
 
 When you are in the [home view](#home), ajust the filters using the [options panel](#options) to achieve the page selection you desire. Then select "filters" in the [menu](#home-menu), under the "map" title, you can now copy and paste the code obtainded that way in one of the [elements](#content-elements) of a page.
+
+Zoom level can be ajusted using the `zoom` parameter. Windest view is `0`, and very close is around `20`. Default zoom is automatically ajusted to display all the pages markers.
+
+    %MAP?zoom=<0-20>%
+
 
 > ⚠️ The exact same inclusion code cannot be used more than once in a page.
 

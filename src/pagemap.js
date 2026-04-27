@@ -8,7 +8,7 @@ L.Icon.Default.prototype.options.iconUrl = icon;
 L.Icon.Default.prototype.options.iconRetinaUrl = icon_2x;
 L.Icon.Default.prototype.options.shadowUrl = shadow;
 
-for (let [id, pages] of Object.entries(w_maps_data)) {
+for (let [id, mapdata] of Object.entries(w_maps_data)) {
     var map = L.map(id).setView([0, 0], 1);
 
     var pageGroup = L.featureGroup();
@@ -19,7 +19,7 @@ for (let [id, pages] of Object.entries(w_maps_data)) {
             '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
 
-    for (const page of pages) {
+    for (const page of mapdata.pages) {
         var marker = L.marker([page.latitude, page.longitude]).addTo(pageGroup);
         if (page.read) {
             marker.bindPopup(`<a href="${page.read}">${page.title}</a>`);
@@ -27,6 +27,8 @@ for (let [id, pages] of Object.entries(w_maps_data)) {
             marker.bindPopup(page.title);
         }
     }
-
     map.fitBounds(pageGroup.getBounds());
+    if (mapdata.hasOwnProperty('zoom')) {
+        map.setZoom(mapdata.zoom);
+    }
 }
