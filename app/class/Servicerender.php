@@ -818,7 +818,7 @@ abstract class Servicerender
             $this->maps[$id] = $data;
 
             $this->linkto = array_merge($this->linkto, array_keys($pages));
-            return "<div id=\"$id\" class=\"map list\" style=\"min-height: 400px; min-width: 400px;\"></div>\n";
+            return "<div id=\"$id\" class=\"map\"></div>\n";
         } catch (RuntimeException $e) {
             $this->adderror("map inclusion: '%s': %s", $match->fullmatch(), $e->getMessage());
         }
@@ -861,7 +861,7 @@ abstract class Servicerender
         }
 
 
-        return "<div id=\"$id\" class=\"map location\" style=\"min-height: 400px; min-width: 400px;\"></div>\n";
+        return "<div id=\"$id\" class=\"map\"></div>\n";
     }
 
     /**
