@@ -116,7 +116,7 @@ CodeMirror.defineSimpleMode('wcms', {
     // detect a Wcms markup then pass to 'wcms' mode
     start: [
         {
-            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|CONTENT|SUMMARY|LIST|COMMENTS|COMMENT|MAP|RANDOM|MEDIA|TITLE|DESCRIPTION|DATE|TIME|DATEMODIF|TIMEMODIF|THUMBNAIL|RSS|AUTHORS|ID|PATH|URL|VISITCOUNT|EDITCOUNT|DISPLAYCOUNT|COMMENTCOUNT)(\?[^\s]*)?%)/,
+            regex: /%(?=(HEADER|NAV|ASIDE|MAIN|FOOTER|CONTENT|SUMMARY|LIST|COMMENTS|COMMENT|MAP|RANDOM|MEDIA|TITLE|DESCRIPTION|DATE|TIME|DATEMODIF|TIMEMODIF|THUMBNAIL|LOCATION|RSS|AUTHORS|ID|PATH|URL|VISITCOUNT|EDITCOUNT|DISPLAYCOUNT|COMMENTCOUNT)(\?[^\s]*)?%)/,
             token: 'wcms',
             next: 'wcms',
         },
@@ -139,6 +139,7 @@ CodeMirror.defineSimpleMode('wcms', {
         { regex: /COMMENTS\?/, token: 'wcms', next: 'comments' },
         { regex: /COMMENT\?/, token: 'wcms', next: 'comment' },
         { regex: /MAP\?/, token: 'wcms', next: 'map' },
+        { regex: /LOCATION\?/, token: 'wcms', next: 'location' },
         { regex: /RANDOM\?/, token: 'wcms', next: 'random' },
         { regex: /MEDIA\?/, token: 'wcms', next: 'media' },
         { regex: /TITLE\?/, token: 'wcms', next: 'title' },
@@ -205,6 +206,15 @@ CodeMirror.defineSimpleMode('wcms', {
     map: [
         {
             regex: /sortby|order|secure|tagcompare|authorcompare|tagfilter|authorfilter|linkto|geo|invert|limit|since|until|bookmark|zoom/,
+            token: 'wkeyword',
+            push: 'wcms',
+        },
+        { regex: null, push: 'wcms' },
+    ],
+    // 'location' mode, parameters' keywords of the 'location' macro
+    location: [
+        {
+            regex: /zoom/,
             token: 'wkeyword',
             push: 'wcms',
         },
