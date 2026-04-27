@@ -568,6 +568,22 @@
                 <?php endforeach ?>
             </select>
         </p>
+
+        <h3>Templates</h3>
+
+        <p class="field">
+            <label for="templates">template selection</label>
+            <select name="templates[]" id="templates" form="admin" multiple>
+                <option value="" <?= empty(Wcms\Config::templates()) ? 'selected' : '' ?>>--no selection--</option>
+                <?php foreach ($pagelist as $page) : ?>
+                    <option value="<?= $page ?>" <?= in_array($page , Wcms\Config::templates()) ? 'selected' : '' ?>><?= $page ?></option>
+                <?php endforeach ?>
+            </select>
+        </p>
+
+        <p class="info">
+            Selected pages will be highlighted in the template selector.
+        </p>
     </div>
 
     <div class="grid-item" id="ldap">

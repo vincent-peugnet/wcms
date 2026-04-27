@@ -87,6 +87,9 @@ abstract class Config
     /** Enable micro typography fixer */
     protected static bool $typofixer = true;
 
+    /** @var string[] highlighted selection of pages in template list */
+    protected static array $templates = [];
+
     /** LDAP auth */
     protected static string $ldapserver = '';
     protected static string $ldaptree = '';
@@ -480,6 +483,14 @@ abstract class Config
         return self::$typofixer;
     }
 
+    /**
+     * @return string[]
+     */
+    public static function templates(): array
+    {
+        return self::$templates;
+    }
+
     public static function ldapserver(): string
     {
         return self::$ldapserver;
@@ -810,6 +821,14 @@ abstract class Config
     public static function settypofixer(bool $typofixer): void
     {
         self::$typofixer = $typofixer;
+    }
+
+    /**
+     * @param string[] $templates
+     */
+    public static function settemplates(array $templates): void
+    {
+        self::$templates = array_filter($templates);
     }
 
     public static function setldapserver(string $ldapserver): void
