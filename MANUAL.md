@@ -326,9 +326,16 @@ Print the [thumbnail](#thumbnail) of the page inside an `<img>` HTML tag with th
 
 ##### Location
 
-Insert a world map with a pointer that use the current map location.
+Insert a world map with a pointer that use the current page map location.
 
     %LOCATION%
+
+It can take an `id` parameter to get the location of another page.
+For example, to include the title of the page `granejouls`:
+
+    %TITLE?id=granejouls%
+
+The page page [latitude](#latitude) and [longitude](#longitude) have to be set in order to make the map work.
 
 > ⚠️ The exact same inclusion code cannot be used more than once in a page.
 

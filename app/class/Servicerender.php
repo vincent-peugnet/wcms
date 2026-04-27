@@ -825,16 +825,33 @@ abstract class Servicerender
      */
     protected function location(Inclusion $match): string
     {
-        $data = $this->page->drylist(['id', 'title', 'latitude', 'longitude']);
-        $geopages = [$data]; // remove keys to have basic list
+        $params = $match->readoptions();
+        if (isset($params['id'])) {
+            try {
+                $page = $this->pagemanager->get($params['id']);
+            } catch (RuntimeException $e) {
+                $this->adderror(
+                    "location inclusion: '%s': %s",
+                    $match->fullmatch(),
+                    $e->getMessage()
+                );
+                return $match->fullmatch();
+            }
+        } else {
+            $page = $this->page;
+        }
 
+        $data = $page->drylist(['id', 'title', 'latitude', 'longitude']);
         $id = 'map-' . md5($match->fullmatch());
+
+        if ($page->isgeo()) {
+            $this->maps[$id] = [$data];
+        }
 
         if (isset($this->maps[$id])) {
             $this->adderror("location inclusion: '%s': same inclusion code used more than once", $match->fullmatch());
         }
 
-        $this->maps[$id] = $geopages;
 
         return "<div id=\"$id\" class=\"map location\" style=\"min-height: 400px; min-width: 400px;\"></div>\n";
     }
