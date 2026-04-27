@@ -1,0 +1,17 @@
+/** default global CSS */
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    color-scheme: light dark;
+}
+
+.leaflet-container {
+    min-height: 300px;
+}
+
+a.user:before {
+    content: "👤";
+}

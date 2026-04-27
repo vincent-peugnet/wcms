@@ -8,6 +8,7 @@ use LogicException;
 use ResourceBundle;
 use RuntimeException;
 use Wcms\Exception\Filesystemexception;
+use Wcms\Exception\Filesystemexception\Notfoundexception;
 
 class Controlleradmin extends Controller
 {
@@ -40,12 +41,16 @@ class Controlleradmin extends Controller
         $datas['timezones'] = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
         $datas['locales'] = ResourceBundle::getLocales('');
 
-        $globalcssfile = Model::GLOBAL_CSS_FILE;
-
-        if (is_file($globalcssfile)) {
-            $datas['globalcss'] = file_get_contents($globalcssfile);
-        } else {
-            $datas['globalcss'] = "";
+        try {
+            $datas['globalcss'] = Fs::readfile(Model::GLOBAL_CSS_FILE);
+        } catch (Notfoundexception $e) {
+            try {
+                $datas['globalcss'] = Fs::readfile(Model::DEFAULT_GLOBAL_CSS_FILE);
+            } catch (RuntimeException $e) {
+                throw new LogicException($e, 0, $e);
+            }
+        } catch (RuntimeException $e) {
+            Logger::errorex($e);
         }
 
         try {
