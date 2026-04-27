@@ -74,6 +74,7 @@ abstract class Servicerender
     public const LIST         = 'LIST';
     public const MEDIA        = 'MEDIA';
     public const MAP          = 'MAP';
+    public const LOCATION     = 'LOCATION';
     public const RANDOM       = 'RANDOM';
     public const AUTHORS      = 'AUTHORS';
     public const CONNECT      = 'CONNECT';
@@ -95,6 +96,7 @@ abstract class Servicerender
         self::LIST,
         self::MEDIA,
         self::MAP,
+        self::LOCATION,
         self::RANDOM,
         self::AUTHORS,
         self::CONNECT,
@@ -655,6 +657,9 @@ abstract class Servicerender
                 case self::MAP:
                     $replacement = $this->pageoptmap($inclusion);
                     break;
+                case self::LOCATION:
+                    $replacement = $this->location($inclusion);
+                    break;
                 case self::RANDOM:
                     $replacement = $this->randomopt($inclusion);
                     break;
@@ -808,11 +813,30 @@ abstract class Servicerender
             $this->maps[$id] = $geopages;
 
             $this->linkto = array_merge($this->linkto, array_keys($pages));
-            return "<div id=\"$id\" class=\"map\" style=\"min-height: 400px; min-width: 400px;\"></div>\n";
+            return "<div id=\"$id\" class=\"map list\" style=\"min-height: 400px; min-width: 400px;\"></div>\n";
         } catch (RuntimeException $e) {
             $this->adderror("map inclusion: '%s': %s", $match->fullmatch(), $e->getMessage());
         }
         return $match->fullmatch();
+    }
+
+    /**
+     * Render page location
+     */
+    protected function location(Inclusion $match): string
+    {
+        $data = $this->page->drylist(['id', 'title', 'latitude', 'longitude']);
+        $geopages = [$data]; // remove keys to have basic list
+
+        $id = 'map-' . md5($match->fullmatch());
+
+        if (isset($this->maps[$id])) {
+            $this->adderror("location inclusion: '%s': same inclusion code used more than once", $match->fullmatch());
+        }
+
+        $this->maps[$id] = $geopages;
+
+        return "<div id=\"$id\" class=\"map location\" style=\"min-height: 400px; min-width: 400px;\"></div>\n";
     }
 
     /**

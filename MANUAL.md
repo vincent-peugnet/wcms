@@ -322,6 +322,18 @@ Print the [thumbnail](#thumbnail) of the page inside an `<img>` HTML tag with th
 
     %THUMBNAIL%
 
+
+
+##### Location
+
+Insert a world map with a pointer that use the current map location.
+
+    %LOCATION%
+
+> ⚠️ The exact same inclusion code cannot be used more than once in a page.
+
+
+
 ##### Authors inclusion
 
     %AUTHORS%
@@ -432,6 +444,7 @@ Where `<min>` and `<max>` are integers beetwen `1` to `6`.
 You can set `<min>` and `<max>` values to filters beetwen `<h*>` and `<h*>` headlines to take care of.
 
 You can specify an [element](#content-elements) to target with the `element` parameter. The summary will only refer to this `element` headlines.
+
 
 
 

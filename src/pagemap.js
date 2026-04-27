@@ -20,9 +20,12 @@ for (let [id, pages] of Object.entries(w_maps_data)) {
     }).addTo(map);
 
     for (const page of pages) {
-        L.marker([page.latitude, page.longitude])
-            .addTo(pageGroup)
-            .bindPopup(`<a href="${page.read}">${page.title}</a>`);
+        var marker = L.marker([page.latitude, page.longitude]).addTo(pageGroup);
+        if (page.read) {
+            marker.bindPopup(`<a href="${page.read}">${page.title}</a>`);
+        } else {
+            marker.bindPopup(page.title);
+        }
     }
 
     map.fitBounds(pageGroup.getBounds());
