@@ -8,20 +8,22 @@ L.Icon.Default.prototype.options.iconUrl = icon;
 L.Icon.Default.prototype.options.iconRetinaUrl = icon_2x;
 L.Icon.Default.prototype.options.shadowUrl = shadow;
 
-var map = L.map(mapId).setView([0, 0], 1);
+for (let [id, pages] of Object.entries(w_maps_data)) {
+    var map = L.map(id).setView([0, 0], 1);
 
-var pageGroup = L.featureGroup();
-pageGroup.addTo(map);
+    var pageGroup = L.featureGroup();
+    pageGroup.addTo(map);
 
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-}).addTo(map);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
 
-for (const page of pages) {
-    L.marker([page.latitude, page.longitude])
-        .addTo(pageGroup)
-        .bindPopup(`<a href="${page.read}">${page.title}</a>`);
+    for (const page of pages) {
+        L.marker([page.latitude, page.longitude])
+            .addTo(pageGroup)
+            .bindPopup(`<a href="${page.read}">${page.title}</a>`);
+    }
+
+    map.fitBounds(pageGroup.getBounds());
 }
-
-map.fitBounds(pageGroup.getBounds());

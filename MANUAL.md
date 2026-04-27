@@ -499,7 +499,7 @@ It will be replaced by the [id](#page-id) of the currently displayed page.
 
 #### Map
 
-This feature allow you to integrate a worldmap in your page with markers linking to pages that have coordinates ([latitude](#latitude) and [longitude](#longitude) attributes) set. The syntax is very close to [page lists](#page-list) syntax.
+This feature allow you to integrate a worldmap in your page with markers linking to pages that have coordinates ([latitude](#latitude) and [longitude](#longitude) attributes) set. The parameters syntax is very close to [page lists](#page-list) syntax.
 
     %MAP?tagfilter[]=france%
 
@@ -507,11 +507,11 @@ This feature allow you to integrate a worldmap in your page with markers linking
 
 This will include a `div` HTML tag and some javascript.
 
-    <div id="geomap" class="map"></div>
+    <div id="GENERATED_ID" class="map"></div>
 
 When you are in the [home view](#home), ajust the filters using the [options panel](#options) to achieve the page selection you desire. Then select "filters" in the [menu](#home-menu), under the "map" title, you can now copy and paste the code obtainded that way in one of the [elements](#content-elements) of a page.
 
-**⚠️ this feature is limited to one map per page**
+> ⚠️ The exact same inclusion code cannot be used more than once in a page.
 
 ##### Using bookmarks
 

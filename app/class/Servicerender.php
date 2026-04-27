@@ -57,8 +57,8 @@ abstract class Servicerender
      * */
     protected $rsslist = [];
 
-    /** @var bool Indicate presence of an included MAP, meant to call the script in page's Head */
-    protected bool $map = false;
+    /** @var array<string, array<string, mixed>> Map inclusions points data */
+    protected array $maps = [];
 
     /** @var bool Indicate if current page have reached it's comment limit */
     protected bool $commentlimitreached = false;
@@ -414,9 +414,11 @@ abstract class Servicerender
         if (!empty($this->page->javascript())) {
             $head .= "<script src=\"$renderpath$id.js\" async></script>\n";
         }
-        if ($this->map) {
+        if (!empty($this->maps)) {
+            $mapsjson = json_encode($this->maps);
             $mapcss = Model::jspath() . 'pagemap.bundle.css';
             $mapjs = Model::jspath() . 'pagemap.bundle.js';
+            $head .= "<script>const w_maps_data = $mapsjson;</script>\n";
             $head .= "<link href=\"$mapcss\" rel=\"stylesheet\" />\n"
                 . "<script type=\"module\" src=\"$mapjs\"></script>\n";
         }
@@ -781,12 +783,32 @@ abstract class Servicerender
 
             $optmap->hydrate($options);
 
-            $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optmap);
+            $pages = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optmap);
             $geopt = new Opt(['geo' => true]);
-            $pagetable = $this->pagemanager->pagetable($pagetable, $geopt);
-            $this->linkto = array_merge($this->linkto, array_keys($pagetable));
-            $this->map = true;
-            return $optmap->maphtml($pagetable, $this->router);
+            $pages = $this->pagemanager->pagetable($pages, $geopt); // second pass of filtering to remove non-geo pages
+
+            $router = $this->router;
+            $geopages = array_map(function (Page $page) use ($router) {
+                $data = $page->drylist(['id', 'title', 'latitude', 'longitude']);
+                try {
+                    $data['read'] = $router->generate('pageread', ['page' => $page->id()]);
+                } catch (Exception $e) {
+                    throw new LogicException($e->getMessage());
+                }
+                return $data;
+            }, $pages);
+            $geopages = array_values($geopages); // remove keys to have basic list
+
+            $id = 'map-' . md5($match->fullmatch());
+
+            if (isset($this->maps[$id])) {
+                $this->adderror("map inclusion: '%s': same inclusion code used more than once", $match->fullmatch());
+            }
+
+            $this->maps[$id] = $geopages;
+
+            $this->linkto = array_merge($this->linkto, array_keys($pages));
+            return "<div id=\"$id\" class=\"map\" style=\"min-height: 400px; min-width: 400px;\"></div>\n";
         } catch (RuntimeException $e) {
             $this->adderror("map inclusion: '%s': %s", $match->fullmatch(), $e->getMessage());
         }
