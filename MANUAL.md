@@ -193,7 +193,7 @@ For example, you can create a link to directly edit a page using like this:
 
 #### Wiki links
 
-Wiki links can be used both in [content](#content-elements) and in the [BODY](#body).
+Wiki links can be used in the [content](#content-elements) only (not in the [body](#body)).
 
 Wiki style links are __only for internal links__. Their main interest compared to markdon links is that the clickable part of the link will be replaced by [page's title](#page-title) if it exist.
 
@@ -207,7 +207,12 @@ Where `DESCRIPTION`, `TITLE` and `ID` are the [description](#description) and [t
 
 Note that the `.internal` class have been added to the `a` html link, allowing you to differenciate internal link styling from `.external`.
 
+To achieve the same behaviour in the BODY, one can use the [title inclusion](#title-inclusion) with the ID parameter.
+For example, with a link to a page with ID `my_page`:
 
+```html
+<a href="my_page">%TITLE?id=my_page%</a>
+```
 
 
 
@@ -287,7 +292,14 @@ Those codes are mainly used to print page's [metadatas](#metadatas). They are ve
 
     %TITLE%
 
-This will include the page [title](#page-title).
+This will include the current page [title](#page-title).
+
+It can take an `id` parameter to get the title of another page.
+For example, to include the title of the page `homard`:
+
+    %TITLE?id=homard%
+
+
 
 ##### Description inclusion
 
