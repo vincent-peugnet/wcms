@@ -239,11 +239,22 @@ If this option is activated in admin panel, W can verify if external links are s
 - `ok` if the url is considered as working
 - `dead` if the url seems to be dead
 
-URL check is done every time a page is displayed, if the page has been edited and new urls have been added.
+URLs __response codes that are considered alives__ are:
 
-Status of all checked URLs is stored in cache and stay valid during 90 days.
+- `2**` valid range
+- `401` *Unauthorized*
+- `403` *Forbidden*
+- `405` *Method Not Allowed*
 
-To avoid taking to much time, if a lot of links have been added or need to be re-checked: all links may not be processed at once. The rest will be checked the next time the page is displayed.
+URL checking is done every time a page is displayed by an editor, if rendering needs to be done (because of edits or new comments) and that some URLs has'nt been checked yet or that their cache is expired.
+
+This may cause page loading longer if there's a lot URL to check. The __checking duration is limited to 3 seconds__ (it often allow to check between 10 - 20 URLs). The rest will stay as "un-checked" and will wait for next check.
+
+Depending on the result, URL status is stored in cache for a certain amount of time. Each alive URL cache expire in ~100 days. The errored URL cache expire way sooner (a few minutes). Each times it's checked, the cache duration of errored URLs will increase if the status continue to be the same. This is done in order to reduce the check frenquency of the most "stables" broken URLs.
+
+> 💡 URLs from the __same domain__ are never checked in the same batch to avoid rate limiting.
+
+URL cache can be managed by [super editors](#super-editor) or above. The management interface can be reached from home view, under `file > manage cached URLs`.
 
 
 

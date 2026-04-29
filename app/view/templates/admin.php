@@ -418,16 +418,23 @@
             <input type="checkbox" name="internallinkblank" id="internallinkblank" value="1" <?= Wcms\Config::internallinkblank() ? 'checked' : '' ?> form="admin">
         </p>
 
+
+
+        <h3>URL checker</h3>
+
+
+        <p class="info">
+            URL checker try to reach URLs online to see if they are alives.
+            <br>
+            See <a href="<?= $this->url('info', [], '#url-checker') ?>">📖 manual section</a> for more info.
+        </p>
+
         <p class="field">
             <input type="hidden" name="urlchecker" value="0" form="admin">
             <label for="urlchecker">Enalbe URL checker</label>
             <input type="checkbox" name="urlchecker" id="urlchecker" value="1" <?= Wcms\Config::urlchecker() ? 'checked' : '' ?> form="admin">
         </p>
 
-        <p class="info">
-            URL checker try to reach URLs online to see if they are alives.
-            This may cause longer render time if recently activated.
-        </p>
 
         <h3>Images</h3>
 
