@@ -3,7 +3,7 @@
 <?php $this->start('page') ?>
 
 
-<?php $this->insert('backtopbar', ['user' => $user, 'pagelist' => $pagelist, 'tab' => null]) ?>
+<?php $this->insert('backtopbar', ['user' => $user, 'pagelist' => $pagelist, 'tab' => $tab ?? null]) ?>
 
 <main>
     <div class="modal">

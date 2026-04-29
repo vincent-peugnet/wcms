@@ -1,4 +1,4 @@
-<?php $this->layout('modallayout', ['theme' => $theme, 'title' => 'Forbidden', 'description' => 'forbidden', 'css' => $css, 'user' => $user, 'pagelist' => $pagelist]) ?>
+<?php $this->layout('modallayout', ['theme' => $theme, 'title' => 'Forbidden', 'description' => 'forbidden', 'css' => $css, 'user' => $user, 'pagelist' => $pagelist, 'tab' => $tab ?? null]) ?>
 
 
 <?php $this->start('modal') ?>
