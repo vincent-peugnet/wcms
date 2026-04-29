@@ -168,41 +168,48 @@ class Controllermedia extends Controller
         $this->redirect($this->generate('media') . $_POST['route']);
     }
 
-    /**
-     * @todo use a swith case instead of many if
-     */
     public function edit(): never
     {
         if (!$this->user->issupereditor()) {
             $this->showtemplate('forbidden', [], 403);
         }
-        if (isset($_POST['action'])) {
-            if (!isset($_POST['id']) || empty($_POST['id'])) {
-                $this->sendflashmessage('no media selected', self::FLASH_ERROR);
-                $this->redirect($this->generate('media') . $_POST['route']);
-            }
-            if ($_POST['action'] === 'delete') {
-                if ($counter = $this->mediamanager->multifiledelete($_POST['id'])) {
-                    $this->sendflashmessage("$counter files deletion successfull", self::FLASH_SUCCESS);
-                } else {
-                    $this->sendflashmessage('Error while deleting files', self::FLASH_ERROR);
-                }
-            }
-            if ($_POST['action'] === 'move') {
-                if (!isset($_POST['dir']) || empty($_POST['dir'])) {
-                    $this->sendflashmessage('no direction selected', self::FLASH_ERROR);
-                    $this->redirect($this->generate('media') . $_POST['route']);
-                }
-                $count = $this->mediamanager->multimovefile($_POST['id'], $_POST['dir']);
 
-                $total = count($_POST['id']);
-                if ($count !== $total) {
-                    $this->sendflashmessage($count . ' / ' . $total . ' files have been moved', self::FLASH_ERROR);
-                } else {
-                    $this->sendflashmessage($count . ' / ' . $total . ' files have been moved', self::FLASH_SUCCESS);
-                }
-                $this->refreshfont = $_POST['dir'] === Model::FONT_DIR;
+        if (!isset($_POST['id']) || empty($_POST['id'])) {
+            $this->sendflashmessage('no media selected', self::FLASH_ERROR);
+            $this->redirect($this->generate('media') . $_POST['route']);
+        }
+
+        if (isset($_POST['action'])) {
+            switch ($_POST['action']) {
+                case 'delete':
+                    if ($counter = $this->mediamanager->multifiledelete($_POST['id'])) {
+                        $this->sendflashmessage("$counter files deletion successfull", self::FLASH_SUCCESS);
+                    } else {
+                        $this->sendflashmessage('Error while deleting files', self::FLASH_ERROR);
+                    }
+                    break;
+
+                case 'move':
+                    if (!isset($_POST['dir']) || empty($_POST['dir'])) {
+                        $this->sendflashmessage('no direction selected', self::FLASH_ERROR);
+                        $this->redirect($this->generate('media') . $_POST['route']);
+                    }
+                    $count = $this->mediamanager->multimovefile($_POST['id'], $_POST['dir']);
+
+                    $total = count($_POST['id']);
+                    if ($count !== $total) {
+                        $this->sendflashmessage("$count / $total files have been moved", self::FLASH_ERROR);
+                    } else {
+                        $this->sendflashmessage("$count / $total files have been moved", self::FLASH_SUCCESS);
+                    }
+                    $this->refreshfont = $_POST['dir'] === Model::FONT_DIR;
+                    break;
+
+                default:
+                    $msg = sprintf("unrecognized '%s' action POST value", $_POST['action']);
+                    $this->showtemplate('forbidden', ['message' => $msg], 403);
             }
+
             if ($this->refreshfont || $_POST['path'] === Model::FONT_DIR) {
                 try {
                     $fontfacer = new Servicefont($this->mediamanager);
