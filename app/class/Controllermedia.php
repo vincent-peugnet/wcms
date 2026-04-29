@@ -81,10 +81,8 @@ class Controllermedia extends Controller
 
             $this->showtemplate('media', $vars);
         } catch (RuntimeException $e) {
-            // TODO: instead of redirecting show an error template
-            $this->sendflashmessage($e->getMessage(), self::FLASH_WARNING);
-            $this->mediaopt->setpath(Model::MEDIA_DIR);
-            $this->redirect($this->generate('media', [], $this->mediaopt->getpathaddress()));
+            $msg = sprintf('media path errror: %s', $e->getMessage());
+            $this->showtemplate('forbidden', ['message' => $msg, 'tab' => 'media'], 403);
         }
     }
 

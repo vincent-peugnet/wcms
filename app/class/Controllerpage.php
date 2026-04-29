@@ -320,6 +320,8 @@ class Controllerpage extends Controller
 
     /**
      * Print page's datas. Used for debug. Kind of obscure nowdays.
+     *
+     * @todo delete this route
      */
     public function log(string $page): never
     {
