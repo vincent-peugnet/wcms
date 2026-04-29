@@ -319,24 +319,6 @@ class Controllerpage extends Controller
     }
 
     /**
-     * Print page's datas. Used for debug. Kind of obscure nowdays.
-     *
-     * @todo delete this route
-     */
-    public function log(string $page): never
-    {
-        $this->setpage($page, 'pagelog');
-        if (!$this->user->issupereditor()) {
-            $this->showtemplate('forbidden', ['route' => 'pageread', 'id' => $this->page->id()], 403);
-        }
-        $this->importpage();
-        echo '<pre>';
-        var_dump($this->page);
-        echo '</pre>';
-        exit;
-    }
-
-    /**
      * When a client want to add a page.
      * Match domain.com/PAGE_ID/add
      *

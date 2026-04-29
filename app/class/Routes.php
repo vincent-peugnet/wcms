@@ -50,7 +50,6 @@ class Routes
             ['GET', '/!cleanurlcache', 'Controllerurl#cleanurlcache', 'cleanurlcache'],
             ['POST', '/multi', 'Controllerhome#multi', 'multi'],
             ['POST', '/upload', 'Controllerpage#upload', 'pageupload'],
-            ['POST', '/!co', 'Controllerconnect#log', 'log'],
             ['GET', '/!co', 'Controllerconnect#connect', 'connect'],
             ['POST', '/!search', 'Controllerhome#search', 'search'],
             ['GET', '/!media', 'Controllermedia#desktop', 'media'],
