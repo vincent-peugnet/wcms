@@ -285,7 +285,7 @@ main section table th,
 main section table td {
     text-align: left;
     padding: var(--spacing);
-    /* white-space: nowrap; */
+    white-space: nowrap;
 }
 
 main section table td.nowrap {

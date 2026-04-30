@@ -299,13 +299,16 @@ use Wcms\Config;
                                     <?php if (Config::homepage() === Config::HOMEPAGE_REDIRECT && $item->id() === Config::homeredirect()) : ?>
                                         <i class="fa fa-home" title="this page is set as homepage"></i>
                                     <?php endif ?>
+                                    <?php if (in_array($item->id(), Config::templates())) : ?>
+                                        <i class="fa fa-paint-brush" title="this page is part of suggested templates"></i>
+                                    <?php endif ?>
                                     <?php if (!empty($item->redirection())) : ?>
                                         <a
                                             href="<?= \Wcms\Model::idcheck($item->redirection()) ? $this->upage('pageread', $item->redirection()) : getfirsturl($item->redirection()) ?>"
-                                            title="This page redirect to: <?= $item->redirection() ?>"
+                                            title="This page redirect to '<?= $item->redirection() ?>'<?= $item->refresh() !== 0 ? ' after ' . $item->refresh() . 's' : '' ?>"
                                             class="redirection"
                                         >
-                                            <i class="fa fa-external-link-square"></i>
+                                            <i class="fa fa-share"></i>
                                             <span class="refresh">
                                                 <?= $item->refresh() !== 0 ? $item->refresh() . 's' : '' ?>
                                             </span>

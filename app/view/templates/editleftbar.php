@@ -138,7 +138,7 @@
                         </label>                    
                         <select name="templatebody" id="templatebody" form="update">
                             <option value="" <?= empty($page->templatebody()) ? 'selected' : '' ?>>--no template--</option>
-                            <?= $this->insert('macro_templateopt', array_merge($templates, ['selected' => $page->templatebody()])) ?>
+                            <?= $this->insert('macro_templateopt', array_merge($templates, ['selected' => $page->templatebody(), 'current' => $page->id()])) ?>
                         </select>
                     </p>
                     <p class="field">
@@ -153,7 +153,7 @@
                         <select name="templatecss" id="templatecss" form="update">
                             <option value="%" <?= $page->templatecss() === null ? 'selected' : '' ?>>--same as body template--</option>
                             <option value="" <?= $page->templatecss() === '' ? 'selected' : '' ?>>--no template--</option>
-                            <?= $this->insert('macro_templateopt', array_merge($templates, ['selected' => $page->templatecss()])) ?>
+                            <?= $this->insert('macro_templateopt', array_merge($templates, ['selected' => $page->templatecss(), 'current' => $page->id()])) ?>
                         </select>
                     </p>
                     <p class="field">
@@ -168,7 +168,7 @@
                         <select name="templatejavascript" id="templatejavascript" form="update">
                             <option value="%" <?= $page->templatejavascript() === null ? 'selected' : '' ?>>--same as body template--</option>
                             <option value="" <?= $page->templatejavascript() === '' ? 'selected' : '' ?>>--no template--</option>
-                            <?= $this->insert('macro_templateopt', array_merge($templates, ['selected' => $page->templatejavascript()])) ?>
+                            <?= $this->insert('macro_templateopt', array_merge($templates, ['selected' => $page->templatejavascript(), 'current' => $page->id()])) ?>
                         </select>
                     </p>
 

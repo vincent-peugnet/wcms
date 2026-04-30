@@ -87,13 +87,13 @@ main table td.id label {
     font-size: var(--size-small);
 }
 
-#home2table a.linkto {
+#home2table a.linkto, #home2table a.redirection {
     font-family: monospace;
     font-size: var(--size-small);
     background-color: var(--main-color);
     color: var(--text2-color);
     text-wrap: nowrap;
-    padding: 0 var(--padding);
+    padding: var(--half-padding) var(--padding);
     border-radius: var(--radius);
 }
 
