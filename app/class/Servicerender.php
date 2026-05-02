@@ -426,14 +426,6 @@ abstract class Servicerender
         if (!empty($this->page->javascript())) {
             $head .= "<script src=\"$renderpath$id.js\" async></script>\n";
         }
-        if (!empty($this->maps)) {
-            $mapsjson = json_encode($this->maps);
-            $mapcss = Model::jspath() . 'pagemap.bundle.css';
-            $mapjs = Model::jspath() . 'pagemap.bundle.js';
-            $head .= "<script>const w_maps_data = $mapsjson;</script>\n";
-            $head .= "<link href=\"$mapcss\" rel=\"stylesheet\" />\n"
-                . "<script type=\"module\" src=\"$mapjs\"></script>\n";
-        }
         return $head;
     }
 
