@@ -397,6 +397,16 @@ abstract class Servicerender
 
         $head .= "\n" . $this->page->customhead() . "\n";
 
+
+        if (!empty($this->maps)) {
+            $mapsjson = json_encode($this->maps);
+            $mapcss = Model::jspath() . 'pagemap.bundle.css';
+            $mapjs = Model::jspath() . 'pagemap.bundle.js';
+            $head .= "<script>const w_maps_data = $mapsjson;</script>\n";
+            $head .= "<link href=\"$mapcss\" rel=\"stylesheet\" />\n"
+                . "<script type=\"module\" src=\"$mapjs\"></script>\n";
+        }
+
         foreach ($this->page->externalcss() as $externalcss) {
             $externalcss = htmlspecialchars($externalcss);
             $head .= "<link href=\"$externalcss\" rel=\"stylesheet\" />\n";
