@@ -809,6 +809,7 @@ abstract class Servicerender
 
             if (isset($this->maps[$id])) {
                 $this->adderror("map inclusion: '%s': same inclusion code used more than once", $match->fullmatch());
+                return $match->fullmatch();
             }
 
             if (isset($options['zoom'])) {
@@ -852,13 +853,16 @@ abstract class Servicerender
 
         $id = 'map-' . md5($match->fullmatch());
 
-        if ($page->isgeo()) {
-            $this->maps[$id] = $data;
-        }
-
         if (isset($this->maps[$id])) {
             $this->adderror("location inclusion: '%s': same inclusion code used more than once", $match->fullmatch());
+            return $match->fullmatch();
         }
+
+        if (!$page->isgeo()) {
+            $this->adderror("location inclsuion: '%s': page does'nt have geo data", $match->fullmatch());
+        }
+
+        $this->maps[$id] = $data;
 
 
         return "<div id=\"$id\" class=\"map\"></div>\n";
