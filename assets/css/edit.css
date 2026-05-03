@@ -341,12 +341,10 @@ span.cm-wkeyword {
 .tabs[data-markdownheading="1"] .CodeMirror-line:has(.cm-header-3) { font-size: 130%; }
 .tabs[data-markdownheading="1"] .CodeMirror-line:has(.cm-header-4) { font-size: 115%; }
 
-
-.CodeMirror-selected  {
-	background-color: var(--main-color) !important;
-}
-.CodeMirror-selectedtext {
-	color: var(--text-color) !important;
+/* disable selection styling inside CodeMirror*/
+.CodeMirror *::selection {
+    color: inherit;
+    background: inherit;
 }
 
 

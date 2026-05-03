@@ -12,7 +12,6 @@ import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/mode/overlay';
 import 'codemirror/addon/mode/simple';
-import 'codemirror/addon/selection/mark-selection';
 
 import '@yaireo/tagify/dist/tagify.css';
 
