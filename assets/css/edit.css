@@ -150,7 +150,7 @@ div#geomap {
 	padding: var(--spacing);
     border-radius: 0;
 	font-family: monospace;
-	line-height: 1.2em;
+	line-height: var(--editor-line-height);
 	text-wrap: nowrap;
 }
 
@@ -318,6 +318,7 @@ div#showthumbnail img {
 .CodeMirror {
     height: 100% !important;
     cursor: text;
+    line-height: var(--editor-line-height);
 }
 
 /* CodeMirror Wcms mode */
