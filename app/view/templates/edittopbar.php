@@ -20,15 +20,45 @@
             <i class="fa fa-eye"></i> <span class="text">display</span>
         </a>
 
-        <a href="<?= $this->upage('pagedownload', $page->id()) ?>"  id="download">
-            <i class="fa fa-download"></i> <span class="text">download</span>
-        </a>        
+        <details name="menu" id="json" class="dropdown">
+            <summary><i class="fa fa-bars"></i> <span class="text">actions</span></summary>
+            <div class="dropdown-content">
 
-        <?php if($this->candeletepage($page)) : ?>
-            <a href="<?= $this->upage('pagedelete', $page->id()) ?>" id="delete">
-                <i class="fa fa-trash"></i> <span class="text">delete</span>
-            </a>
-        <?php endif ?>
+                <div class="dropdown-section">
+                    <h3>Page</h3>
+                    <a href="<?= $this->upage('pagedownload', $page->id()) ?>" class="button" id="download">
+                        <i class="fa fa-download"></i> download
+                    </a>
+
+                    <?php if($this->candeletepage($page)) : ?>
+                        <a href="<?= $this->url('pagedelete', ['page' => $page->id()], '?route=pageedit') ?>" class="button" id="delete">
+                            <i class="fa fa-trash"></i> delete...
+                        </a>
+                    <?php endif ?>
+                </div>
+
+                <div class="dropdown-section">
+                    <h3>internal links</h3>
+
+                    <a href="<?= $this->url('home', [], $homebacklink) ?>" class="button">
+                        <i class="fa fa-search"></i>
+                        search for backlinks
+                    </a>
+                </div>
+
+                <?php if(Wcms\Config::urlchecker() && !empty($page->externallinks())) : ?>
+                    <div class="dropdown-section">
+                        <h3>external links</h3>
+                        <a href="<?= $this->url('url', [], '?page=' . $page->id()) ?>" class="button">
+                            <i class="fa fa-link"></i>
+                            manage cached URLs
+                        </a>
+                    </div>
+                <?php endif ?>
+
+            </div>
+
+        </details>
 
     </div>
 

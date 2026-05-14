@@ -20,7 +20,12 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import icon_2x from 'leaflet/dist/images/marker-icon-2x.png';
 import shadow from 'leaflet/dist/images/marker-shadow.png';
 import * as L from 'leaflet';
-import { initWorkspaceForm, submitHandler, initTagify } from './fn/fn';
+import {
+    initWorkspaceForm,
+    submitHandler,
+    initTagify,
+    activateCloseSubmenus,
+} from './fn/fn';
 
 /** @var {Window | null} */
 let preview = null;
@@ -278,6 +283,7 @@ window.addEventListener('load', () => {
         initEditors(theme);
     }
     initEditFeatures();
+    activateCloseSubmenus();
 });
 
 function initForm() {

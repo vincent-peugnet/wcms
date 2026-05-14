@@ -12,13 +12,13 @@
 <style>.tabs textarea{font-size: <?= $workspace->fontsize() ?>px}</style>
 
 <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'edit', 'pagelist' => $pagelist, 'pageid' => $page->id()]) ?>
-<?php $this->insert('edittopbar', ['page' => $page, 'user' => $user, 'workspace' => $workspace, 'target' => $target]) ?>
+<?php $this->insert('edittopbar', ['page' => $page, 'user' => $user, 'workspace' => $workspace, 'target' => $target, 'homebacklink' => $homebacklink]) ?>
 
 <main class="editor">
 
     <?php $this->insert('editleftbar', ['page' => $page, 'pagelist' => $pagelist, 'faviconlist' => $faviconlist, 'thumbnaillist' => $thumbnaillist, 'templates' => $templates, 'editorlist' => $editorlist, 'user' => $user, 'workspace' => $workspace, 'locales' => $locales]) ?>
     <?php $this->insert('edittabs', ['page' => $page, 'workspace' => $workspace]) ?>
-    <?php $this->insert('editrightbar', ['page' => $page, 'workspace' => $workspace, 'homebacklink' => $homebacklink, 'comments' => $comments, 'urls' => $urls, 'now' => $now]) ?>
+    <?php $this->insert('editrightbar', ['page' => $page, 'workspace' => $workspace, 'comments' => $comments, 'urls' => $urls, 'now' => $now]) ?>
 
 </main>
 

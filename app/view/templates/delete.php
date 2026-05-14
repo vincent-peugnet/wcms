@@ -29,8 +29,8 @@
 
 <form action="<?= $this->upage('pagedelete', $page->id()) ?>" method="post">
 
-    <?php if ($cancelroute === 'pageread') : ?>
-        <a href="<?= $this->upage('pageread', $page->id()) ?>" class="button" autofocus>
+    <?php if ($cancelroute === 'pageread' || $cancelroute === 'pageedit') : ?>
+        <a href="<?= $this->upage($cancelroute, $page->id()) ?>" class="button" autofocus>
             <i class="fa fa-times"></i> Cancel
         </a>
     <?php elseif ($cancelroute === 'home') : ?>

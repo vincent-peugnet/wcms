@@ -26,13 +26,6 @@
                         </tr>
                     </tbody>
                 </table>
-
-                <p class="field">
-                    <a href="<?= $this->url('home', [], $homebacklink) ?>" class="button">
-                        <i class="fa fa-list-ul"></i>
-                        list pages that link here
-                    </a>
-                </p>
             </details>
 
 
