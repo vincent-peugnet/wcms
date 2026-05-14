@@ -431,7 +431,7 @@
 
         <p class="field">
             <input type="hidden" name="urlchecker" value="0" form="admin">
-            <label for="urlchecker">Enalbe URL checker</label>
+            <label for="urlchecker">Enable URL checker</label>
             <input type="checkbox" name="urlchecker" id="urlchecker" value="1" <?= Wcms\Config::urlchecker() ? 'checked' : '' ?> form="admin">
         </p>
 
