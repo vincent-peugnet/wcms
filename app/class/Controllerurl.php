@@ -29,15 +29,18 @@ class Controllerurl extends Controller
         $sortby = $_GET['sortby'] ?? 'timestamp';
         $order = intval($_GET['order'] ?? 1);
         $response = !empty($_GET['response']) ? intval($_GET['response']) : null;
-        $urls = $this->urlmanager->list($sortby, $order, $response);
+        $page = !empty($_GET['page']) && Model::idcheck($_GET['page']) ? $_GET['page'] : null;
+        $urls = $this->urlmanager->list($sortby, $order, $response, $page);
         $urls = array_reverse($urls);
         $this->showtemplate('url', [
             'urls' => $urls,
             'sortby' => $sortby,
             'order' => $order,
             'response' => $response,
+            'page' => $page,
             'reverseorder' => $order * -1,
             'total' => count($urls),
+            'pages' => $this->urlmanager->pages(),
         ]);
     }
 

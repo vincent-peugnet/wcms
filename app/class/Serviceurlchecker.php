@@ -142,9 +142,9 @@ class Serviceurlchecker
     /**
      * @return array<string, Url>
      */
-    public function list(string $sortby = "id", int $order = 1, ?int $response = null): array
+    public function list(string $sortby = "id", int $order = 1, ?int $response = null, ?string $page = null): array
     {
-        $urls = $this->urllistfilter($this->urls, $response);
+        $urls = $this->urllistfilter($this->urls, $response, $page);
         $this->urllistsort($urls, $sortby, $order);
         return $urls;
     }
@@ -361,22 +361,42 @@ class Serviceurlchecker
     }
 
     /**
+     * List all pages that have cached external links
+     *
+     * @return string[]                     pages ids
+     */
+    public function pages(): array
+    {
+        $pages = [];
+        foreach ($this->urls as $url) {
+            $pages = $pages + $url->pages;
+        }
+        return array_keys($pages);
+    }
+
+    /**
      * Filter an array of Urls
      *
      * @param Url[] $urls
      *
-     * @param ?int $response                Response code
+     * @param ?int $response                Filter by esponse code
+     *
+     * @param ?string $page                 Filter by containing page
      *
      * @return Url[]
      */
-    protected function urllistfilter(array $urls, ?int $response = null): array
+    protected function urllistfilter(array $urls, ?int $response = null, ?string $page = null): array
     {
-        if ($response === null) {
+        if ($response === null && $page === null) {
             return $urls;
         }
 
-        return array_filter($urls, function (Url $url) use ($response): bool {
-            return $url->response === $response;
+        return array_filter($urls, function (Url $url) use ($response, $page): bool {
+            return (
+                ($response === null || $url->response === $response)
+                &&
+                ($page === null || array_key_exists($page, $url->pages))
+            );
         });
     }
 
