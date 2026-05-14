@@ -28,6 +28,9 @@ class Controllerworkspace extends Controller
             case 'media':
                 $this->routedirect('media');
 
+            case 'url':
+                $this->routedirect('url');
+
             default:
                 $route = $_POST['route'];
                 throw new LogicException(

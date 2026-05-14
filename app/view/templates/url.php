@@ -10,6 +10,45 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
 <?php $this->insert('urlmenu', ['user' => $user]); ?>
 
 <main class="url">
+
+    <aside id="filter" class="toggle-panel-container">
+        <input id="showurlfilterpanel" name="showurlfilterpanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" <?= $workspace->showurlfilterpanel() === true ? 'checked' : '' ?>>
+        <label for="showurlfilterpanel" class="toggle-panel-label"><span><i class="fa fa-filter"></i></span></label>
+        <div class="toggle-panel" id="filterpanel">
+            <h2>Filter</h2>   
+            <div class="toggle-panel-content">
+                <form action="" method="get" class="flexcol">
+                    <fieldset class="flexcol">
+                        <legend>Sort</legend>
+                        <p class="field">
+                            <label for="sortby">Sort by</label>    
+                            <select name="sortby" id="sortby">
+                                <option value="id" <?= $sortby === 'id' ? 'selected' : '' ?>>URL</option>
+                                <option value="accepted" <?= $sortby === 'accepted' ? 'selected' : '' ?>>alive</option>
+                                <option value="response" <?= $sortby === 'response' ? 'selected' : '' ?>>code</option>
+                                <option value="pages" <?= $sortby === 'pages' ? 'selected' : '' ?>>pages</option>
+                                <option value="timestamp" <?= $sortby === 'timestamp' ? 'selected' : '' ?>>last checked</option>
+                                <option value="expire" <?= $sortby === 'expire' ? 'selected' : '' ?>>expire</option>
+                            </select>
+                        </p>
+                        <p class="field">
+                            <label for="asc">ascending</label>
+                            <input type="radio" name="order" id="asc" value="1" <?= $order === 1 ? 'checked' : '' ?>>
+                        </p>
+                        <p class="field">
+                            <label for="desc">descending</label>
+                            <input type="radio" name="order" id="desc" value="-1" <?= $order === -1 ? 'checked' : '' ?>>
+                        </p>
+                    </fieldset>
+                    <p class="field submit-field">
+                        <input type="submit" value="filter">
+                    </p>
+                </form>
+            </div>
+        </div>
+    </aside>
+
+
     <section>
         <h2>Urls (<?= $total ?>)</h2>
         <div class="scroll">

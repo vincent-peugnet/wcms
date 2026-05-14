@@ -12,6 +12,7 @@ class Workspace extends Item
     protected bool $showhomebookmarkspanel = true;
     protected bool $showmediaoptionspanel = false;
     protected bool $showmediatreepanel = true;
+    protected bool $showurlfilterpanel = false;
 
     /**
      * Instead of adaptative menu expansion, collapse them all at page load.
@@ -65,6 +66,7 @@ class Workspace extends Item
         $this->showhomebookmarkspanel = false;
         $this->showmediaoptionspanel = false;
         $this->showmediatreepanel = true;
+        $this->showurlfilterpanel = false;
         $this->collapsemenu = true;
         $this->highlighttheme = self::THEME_NONE;
         $this->markdownheading = true;
@@ -98,6 +100,11 @@ class Workspace extends Item
     public function showmediatreepanel(): bool
     {
         return $this->showmediatreepanel;
+    }
+
+    public function showurlfilterpanel(): bool
+    {
+        return $this->showurlfilterpanel;
     }
 
     public function collapsemenu(): bool
@@ -153,6 +160,11 @@ class Workspace extends Item
     public function setshowmediatreepanel(bool $show): void
     {
         $this->showmediatreepanel = $show;
+    }
+
+    public function setshowurlfilterpanel(bool $show): void
+    {
+        $this->showurlfilterpanel = $show;
     }
 
     public function setcollapsemenu(bool $collapse): void

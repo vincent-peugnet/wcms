@@ -40,5 +40,25 @@
         </details>
 
     </div>
+
+    <div class="hbar-section">
+
+        <div id="save-workspace">
+            <form
+                action="<?= $this->url('workspaceupdate') ?>"
+                method="post"
+                data-api="<?= $this->url('apiworkspaceupdate') ?>"
+                id="workspace-form"
+            >
+                <input type="hidden" name="route" value="url">
+                <input type="hidden" name="showurlfilterpanel" value="0">
+                <button type="submit">
+                    <i class="fa fa-edit"></i>
+                    <span class="text">save workspace</span>
+                </button>
+            </form>
+        </div>
+
+    </div>
     
 </nav>
