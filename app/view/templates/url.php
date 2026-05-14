@@ -41,14 +41,11 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                         </p>
                     </fieldset>
                     <fieldset class="flexcol">
-                        <legend>Response</legend>
+                        <legend>Filter</legend>
                         <p class="field">
                             <label for="response">response code</label>
                             <input type="number" name="response" id="response" min="0" max="600" value="<?= $response ?? '' ?>">
                         </p>
-                    </fieldset>
-                    <fieldset class="flexcol">
-                        <legend>Page</legend>
                         <p class="field">
                             <label for="page">page</label>
                             <select name="page" id="page">
@@ -79,6 +76,7 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                     </a>
                 </span>
             <?php endif ?>
+            <span><!-- quick hack to center filter reset button --></span>
         </h2>
         <div class="scroll">
             <table>
@@ -137,7 +135,7 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                         <td>
                             <input type="checkbox" name="id[]" id="url_<?= $url->id ?>" value="<?= $url->id ?>" form="urledit">
                         </td>
-                        <td class="url" <?=  strlen($url->id) > 30 ? "title=\"$url->id\"" : '' ?>>
+                        <td class="url" <?=  strlen($url->id) > 40 ? "title=\"$url->id\"" : '' ?>>
                             <label for="url_<?= $url->id ?>"><?= $url->id ?></label>
                         </td>
                         <td>
@@ -149,7 +147,7 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                         <td class="response">
                             <?= $url->response ?>
                         </td>
-                        <td class="message nowrap">
+                        <td class="message nowrap" <?= strlen($url->message) > 40 ? "title=\"$url->message\"" : '' ?>>
                             <?= $url->message ?>
                         </td>
                         <td class="pages">

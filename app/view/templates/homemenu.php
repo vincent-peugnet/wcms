@@ -46,15 +46,6 @@
                             </a>
                         </p>
                     </div>
-
-                    <?php if (Wcms\Config::urlchecker()) : ?>
-                        <div class="dropdown-section">
-                            <h3>URL checker</h3>
-                            <a href="<?= $this->url('url') ?>" class="button">
-                                <i class="fa fa-table"></i> Manage cached URLs
-                            </a>
-                        </div>
-                    <?php endif ?>
                 </div>
 
             </details>

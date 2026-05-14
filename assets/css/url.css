@@ -1,12 +1,16 @@
-
-td.url label {
+td.url {
     text-overflow: ellipsis;
     max-width: 500px;
-    display: block;
     overflow: hidden;
     font-family: monospace;
     font-size: var(--size-small);
     white-space: nowrap;
+}
+
+td.message {
+    text-overflow: ellipsis;
+    max-width: 300px;
+    overflow: hidden;
 }
 
 span.ok {
@@ -15,4 +19,8 @@ span.ok {
 
 span.dead {
     color: red;
+}
+
+td.pages .button {
+    font-family: monospace;
 }

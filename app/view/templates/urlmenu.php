@@ -8,12 +8,14 @@
                 <div class="dropdown-section">
                     <h3>Cache</h3>
                     <?php if ($user->isadmin()) : ?>
+                        <i>Delete the cache</i>
                         <p class="field submit-field">
                             <a href="<?= $this->url('flushurlcache') ?>" class="button">
                                 <i class="fa fa-trash"></i> Flush URL cache
                             </a>
                         </p>
                     <?php endif ?>
+                    <i>Remove unused URLs</i>
                     <p class="field submit-field">
                         <a href="<?= $this->url('cleanurlcache') ?>" class="button">
                             <i class="fa fa-recycle"></i> Clean URL cache
@@ -28,12 +30,15 @@
             <summary>Edit</summary>
             <div class="dropdown-content">
                 <div class="dropdown-section">
+                    <h3>Checking</h3>
+                    <i>Re-check selected URLs</i>
                     <form action="<?= $this->url('urledit') ?>" method="post" id="urledit">
-                        <i>Edit selected URLs</i>
-                        <button type="submit" name="action" value="check">
-                            <i class="fa fa-refresh"></i>
-                            <span>re-check</span>
-                        </button>
+                        <p class="field submit-field">
+                            <button type="submit" name="action" value="check">
+                                <i class="fa fa-refresh"></i>
+                                <span>re-check</span>
+                            </button>
+                        </p>
                     </form>
                 </div>
             </div>

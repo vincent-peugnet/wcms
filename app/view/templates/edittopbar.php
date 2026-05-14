@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="dropdown-section">
-                    <h3>internal links</h3>
+                    <h3>Internal links</h3>
 
                     <a href="<?= $this->url('home', [], $homebacklink) ?>" class="button">
                         <i class="fa fa-search"></i>
@@ -48,7 +48,7 @@
 
                 <?php if(Wcms\Config::urlchecker() && !empty($page->externallinks())) : ?>
                     <div class="dropdown-section">
-                        <h3>external links</h3>
+                        <h3>External links</h3>
                         <a href="<?= $this->url('url', [], '?page=' . $page->id()) ?>" class="button">
                             <i class="fa fa-link"></i>
                             manage cached URLs
