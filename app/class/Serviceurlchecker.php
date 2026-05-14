@@ -322,6 +322,7 @@ class Serviceurlchecker
                 'timestamp' => time(),
                 'expire' => $expire,
                 'message' => $message,
+                'pages' => isset($this->urls[$url]) ? $this->urls[$url]->pages : [],
             ];
             $newurls[$url] = new Url($url, $data);
         }
