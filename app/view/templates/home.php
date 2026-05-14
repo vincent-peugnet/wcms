@@ -299,6 +299,9 @@ use Wcms\Config;
                                     <?php if (Config::homepage() === Config::HOMEPAGE_REDIRECT && $item->id() === Config::homeredirect()) : ?>
                                         <i class="fa fa-home" title="this page is set as homepage"></i>
                                     <?php endif ?>
+                                    <?php if (!empty(Config::helpbutton()) && Config::helpbutton() === $item->id()) : ?>
+                                        <i class="fa fa-question-circle" title="connexion help button leads to this page"></i>
+                                    <?php endif ?>
                                     <?php if (in_array($item->id(), Config::templates())) : ?>
                                         <i class="fa fa-paint-brush" title="this page is part of suggested templates"></i>
                                     <?php endif ?>
