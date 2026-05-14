@@ -69,7 +69,17 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
 
 
     <section>
-        <h2>Urls (<?= $total ?>)</h2>
+        <h2>
+            Urls (<?= $total ?>)
+            <?php if($isfiltered) : ?>
+                <span class="badge filter">
+                    <i class="fa fa-filter" title="There are active filters"></i>
+                    <a href="<?= $this->url('url', [], "?sortby=$sortby&order=$order") ?>" class="button" title="remove filters">
+                        <i class="fa fa-times-circle"></i>
+                    </a>
+                </span>
+            <?php endif ?>
+        </h2>
         <div class="scroll">
             <table>
                 <thead class="sticky">

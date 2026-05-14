@@ -40,6 +40,7 @@ class Controllerurl extends Controller
             'page' => $page,
             'reverseorder' => $order * -1,
             'total' => count($urls),
+            'isfiltered' => $response !== null || $page !== null,
             'pages' => $this->urlmanager->pages(),
         ]);
     }
