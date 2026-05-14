@@ -142,10 +142,11 @@ class Serviceurlchecker
     /**
      * @return array<string, Url>
      */
-    public function list(string $sortby = "id", int $order = 1): array
+    public function list(string $sortby = "id", int $order = 1, ?int $response = null): array
     {
-        $this->urllistsort($this->urls, $sortby, $order);
-        return $this->urls;
+        $urls = $this->urllistfilter($this->urls, $response);
+        $this->urllistsort($urls, $sortby, $order);
+        return $urls;
     }
 
     /**
@@ -357,6 +358,26 @@ class Serviceurlchecker
     public function savecache(): void
     {
         Fs::writefile(Model::URLS_FILE, json_encode($this->urls, JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * Filter an array of Urls
+     *
+     * @param Url[] $urls
+     *
+     * @param ?int $response                Response code
+     *
+     * @return Url[]
+     */
+    protected function urllistfilter(array $urls, ?int $response = null): array
+    {
+        if ($response === null) {
+            return $urls;
+        }
+
+        return array_filter($urls, function (Url $url) use ($response): bool {
+            return $url->response === $response;
+        });
     }
 
     /**
