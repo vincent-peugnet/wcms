@@ -215,6 +215,19 @@ For example, with a link to a page with ID `my_page`:
 ```
 
 
+#### User tag
+
+A bit like on social media, one can tag a local W user by using calling it's ID after a `@` sign.
+
+    @USER_ID
+
+Render:
+
+    <a class="user" [href="URL"] data-user="USER_ID">USER_ID|NAME</a>
+
+> users can set their **name** and **url** on their profile.
+
+If no user is found, then nothing happen.
 
 
 
