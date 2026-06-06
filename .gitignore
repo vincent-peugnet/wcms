@@ -18,3 +18,4 @@ config.json
 error_log
 .BUILDDATE
 VERSION
+manual.pdf
