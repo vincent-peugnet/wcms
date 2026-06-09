@@ -120,6 +120,7 @@ dist/w_cms_%.zip: all
 		-x "*/docs/*" \
 		-x "*/example/*" \
 		-x "*/test/*" \
+		-x "vendor/org_heigl/*" \
 		-x "*/tests/*"
 
 .BUILDDATE: $(entrypoints) src/fn/fn.js node_modules
