@@ -16,6 +16,8 @@
     --input-color: #303030;
     color-scheme: light;
 
+    --font-family: serif;
+
     --radius: 4px;
 }
 
@@ -23,9 +25,4 @@
     color: var(--text-color);
     background-color: var(--main-color);
     border-radius: 0;
-}
-
-
-.CodeMirror, .editor #editmain, .editor #editheader, .editor #editnav, .editor #editaside, .editor #editfooter  {
-    font-family: serif;
 }
