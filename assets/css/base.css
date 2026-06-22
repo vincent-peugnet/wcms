@@ -507,15 +507,12 @@ input.toggle-panel-toggle {
 @media (max-width: 1000px) {
     /* anchortext within topbar */
     #topbar a span, 
+    /* other texts following icons  */
+    .text, 
     /* version footer on home */
     footer {
         display: none;
     }
-}
-
-
-@media (max-width: 700px) {
-    .text {display: none;}
 }
 
 @media (max-width: 550px) {
