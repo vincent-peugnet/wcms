@@ -16,6 +16,14 @@
     align-items: center;
 }
 
+.pageid {
+    max-width: 30vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
 /* --------------------------------------------------------- side bar collapsible panels */
 
 /* overwrites global behavior */
