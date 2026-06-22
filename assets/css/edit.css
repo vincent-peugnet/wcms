@@ -78,6 +78,13 @@ div#geomap {
 
 /* --------------------------------------------------------- left bar authors */
 
+#authors label .author {
+  display: block;
+  max-width: 220px; /* quick fix for long IDs */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 #authors .level {
     opacity: 0.5;
     font-size: smaller;
