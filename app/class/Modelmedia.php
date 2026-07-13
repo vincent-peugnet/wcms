@@ -124,7 +124,10 @@ class Modelmedia extends Model
      */
     public function listfavicon(): array
     {
-        $faviconlist = $this->globlist(self::FAVICON_DIR, ['ico', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'avif']);
+        $faviconlist = $this->globlist(
+            self::FAVICON_DIR,
+            ['ico', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'avif', 'apng']
+        );
         return $faviconlist;
     }
 
@@ -133,7 +136,10 @@ class Modelmedia extends Model
      */
     public function listthumbnail(): array
     {
-        $faviconlist = $this->globlist(self::THUMBNAIL_DIR, ['ico', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'avif']);
+        $faviconlist = $this->globlist(
+            self::THUMBNAIL_DIR,
+            ['ico', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'avif', 'apng']
+        );
         return $faviconlist;
     }
 

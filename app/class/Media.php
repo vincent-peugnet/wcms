@@ -54,6 +54,7 @@ class Media extends Item
         'svg'   => self::IMAGE,
         'webp'  => self::IMAGE,
         'avif'  => self::IMAGE,
+        'apng'  => self::IMAGE,
         'mp3'   => self::SOUND,
         'opus'  => self::SOUND,
         'wav'   => self::SOUND,
