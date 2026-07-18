@@ -187,6 +187,27 @@ function array_diff_assoc_recursive(array $array1, array $array2): array
     return $difference;
 }
 
+/**
+ * Shuffle an array and preserve keys
+ *
+ * @param mixed[] $array
+ *
+ * @link https://www.php.net/manual/en/function.shuffle.php#94697
+ */
+function shuffle_assoc(&$array): void
+{
+    $keys = array_keys($array);
+
+    shuffle($keys);
+
+    $new = [];
+    foreach ($keys as $key) {
+        $new[$key] = $array[$key];
+    }
+
+    $array = $new;
+}
+
 
 /**
  * Generate a list of <options> html drop down list

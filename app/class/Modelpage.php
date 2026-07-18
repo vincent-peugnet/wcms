@@ -706,15 +706,15 @@ class Modelpage extends Modeldb
     /**
      * Sort and limit an array of Pages
      *
-     * @param Page[] $pagelist              array of `Page` objects
+     * @param array<string, Page> $pagelist array of `Page` objects
      * @param Opt $opt
      *
-     * @return Page[]                       associative array of `Page` objects
+     * @return array<string, Page>          associative array of `Page` objects
      */
     protected function sort(array $pagelist, Opt $opt): array
     {
         if ($opt->sortby() === Opt::RANDOM) {
-            shuffle($pagelist);
+            shuffle_assoc($pagelist);
         } else {
             $this->pagelistsort($pagelist, $opt->sortby(), $opt->order());
         }
