@@ -28,6 +28,7 @@
 <?php endif ?>
 
 <form action="<?= $this->upage('pagedelete', $page->id()) ?>" method="post">
+    <input type="hidden" name="route" value="<?= $cancelroute ?>">
 
     <?php if ($cancelroute === 'pageread' || $cancelroute === 'pageedit') : ?>
         <a href="<?= $this->upage($cancelroute, $page->id()) ?>" class="button" autofocus>

@@ -522,7 +522,12 @@ class Controllerpage extends Controller
         $backlinks = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $linksto);
         $this->removecaches($backlinks);
 
+        // redirect to the origin of the delete request
+        if (isset($_POST['route']) && $_POST['route'] === 'home') {
+            $this->routedirect('home');
+        } else {
         $this->routedirect('pageread', ['page' => $this->page->id()]);
+        }
     }
 
     /**
