@@ -576,7 +576,18 @@ class Modelpage extends Modeldb
                 throw new DomainException('Page version is out of range');
         }
 
+
+        // Lauch the render !
         $html = $renderengine->render($page);
+
+
+        // append some stats at the end of the HTML
+        $rendertime = $renderengine->duration();
+        $enabledurlchecker = $urlchecker ? 'enabled' : 'disabled';
+        $renderdate = $now->format(DATE_ATOM);
+        $html .= "<!--render time: $rendertime ms-->\n";
+        $html .= "<!--url checker: $enabledurlchecker -->\n";
+        $html .= "<!--render date: $renderdate -->";
 
         Fs::dircheck(Model::ASSETS_RENDER_DIR, true, 0775);
         Fs::dircheck(Model::HTML_RENDER_DIR, true, 0775);

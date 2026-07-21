@@ -100,6 +100,14 @@ Editing pages is the core feature of W. The edition interface is accessible when
 
 The pages are rendered and then cached until some new edit is performed on them or their [templates](#templating). If you want to manually render a page, use the [render](#render) URL command by typing `/render` after the page ID.
 
+Render should be quick (unless the [URL checker](#url-checker) is enabled), but it's not instantaneous. To have a idea of the last render duration of a page, one can check the end of the HTML of any rendered page (<kbd>CTRL</kbd> + <kbd>U</kbd> in most browsers).
+It should look like this:
+```
+<!--render time: 67 ms-->
+<!--url checker: enabled -->
+<!--render date: 2026-07-21T22:33:31+02:00 -->
+```
+
 To have a more precise idea of how the render process work, you can check [RENDER.md](https://github.com/vincent-peugnet/wcms/blob/master/RENDER.md) file.
 
 ### Edition interface
@@ -246,7 +254,7 @@ URLs __response codes that are considered alives__ are:
 - `403` *Forbidden*
 - `405` *Method Not Allowed*
 
-URL checking is done every time a page is displayed by an editor, if rendering needs to be done (because of edits or new comments) and that some URLs has'nt been checked yet or that their cache is expired.
+URL checking is done every time a page is displayed by a logged in editor, if rendering needs to be done (because of edits or new comments) and that some URLs has'nt been checked yet or that their cache is expired.
 
 This may cause page loading longer if there's a lot URL to check. The __checking duration is limited to 3 seconds__ (it often allow to check between 10 - 20 URLs). The rest will stay as "un-checked" and will wait for next check.
 
@@ -254,7 +262,7 @@ Depending on the result, URL status is stored in cache for a certain amount of t
 
 > 💡 URLs from the __same domain__ are never checked in the same batch to avoid rate limiting.
 
-URL cache can be managed by [super editors](#super-editor) or above. The management interface can be reached from home view, under `file > manage cached URLs`.
+URL cache can be managed by [super editors](#super-editor) or above. The management interface can be reached from the main menu.
 
 
 

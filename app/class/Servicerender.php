@@ -69,6 +69,9 @@ abstract class Servicerender
     /** @var string[] Store render error */
     protected array $errors = [];
 
+    /** @var ?int full render duration in ms */
+    protected ?int $duration;
+
     // W INCLUSIONS KEYWORDS
 
     public const LIST         = 'LIST';
@@ -145,6 +148,8 @@ abstract class Servicerender
      */
     public function render(Page $page): string
     {
+        $timestart = hrtime(true); //--------------------- start stopwatch
+
         $this->page = $page;
 
         $html = $this->gethmtl();
@@ -156,6 +161,10 @@ abstract class Servicerender
                 Logger::errorex($e);
             }
         }
+
+        $timeend = hrtime(true); //----------------------- end stopwatch
+
+        $this->duration = intval(($timeend - $timestart) / 1000000); // ns to ms conversion
 
         return $html;
     }
@@ -1498,5 +1507,19 @@ abstract class Servicerender
     public function errors(): array
     {
         return $this->errors;
+    }
+
+    /**
+     * Give the total render duration.
+     * This should only be called after a render has occured.
+     *
+     * @return int                         render duration in ms
+     */
+    public function duration(): int
+    {
+        if ($this->duration === null) {
+            throw new LogicException('duration should only be asked after a render');
+        }
+        return $this->duration;
     }
 }
