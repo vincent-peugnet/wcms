@@ -497,11 +497,16 @@ abstract class Page extends Item
 
     // _____________________________________________________ S E T ____________________________________________________
 
-    public function setid(string $id): void
+    /**
+     * @return bool                         indicate if ID is valid and updated
+     */
+    public function setid(string $id): bool
     {
-        if (is_string($id) && strlen($id) <= Model::MAX_ID_LENGTH) {
-            $this->id = strip_tags(strtolower(str_replace(" ", "", $id)));
+        if (Model::idcheck($id)) {
+            $this->id = $id;
+            return true;
         }
+        return false;
     }
 
     public function settitle(string $title): void
@@ -606,7 +611,7 @@ abstract class Page extends Item
      * string ISO8601 : set date
      * true : reset to now
      *
-     * @param string|DateTimeImmutable|true $datecreation Set or reset date of creation
+     * @param string|DateTimeImmutable|bool $datecreation Set or reset date of creation
      */
     public function setdatecreation($datecreation): void
     {

@@ -46,6 +46,22 @@
                     </a>
                 </div>
 
+                <form action="<?= $this->url('pagepostcopy', ['page' => $page->id()]) ?>" method="post" class="dropdown-section">
+                    <h3>Copy</h3>
+                    <p class="field">
+                        <input type="text" name="id" pattern="<?= Wcms\Model::ID_REGEX ?>" id="id" placeholder="new page id" required>
+                    </p>
+                    <p class="field">
+                        <label for="resetdatecreation">reset creation date</label>
+                        <input type="hidden" name="resetdatecreation" value="0">
+                        <input type="checkbox" name="resetdatecreation" id="resetdatecreation" value="1" checked>
+                    </p>
+                    <button type="submit">
+                        <i class="fa fa-copy"></i>
+                        copy this page
+                    </button>
+                </form>
+
                 <?php if(Wcms\Config::urlchecker() && !empty($page->externallinks())) : ?>
                     <div class="dropdown-section">
                         <h3>External links</h3>

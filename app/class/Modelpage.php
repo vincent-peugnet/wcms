@@ -96,10 +96,15 @@ class Modelpage extends Modeldb
      */
     public function add(Page $page): void
     {
-        if (in_array($page->id(), self::RESERVED_IDS)) {
-            $id = $page->id();
+        $id = $page->id();
+        if ($id === null) {
+            throw new RuntimeException("'$id' is invalid");
+        }
+
+        if (in_array($id, self::RESERVED_IDS)) {
             throw new RuntimeException("'$id' is a reserved page ID");
         }
+
         $pagedata = new Document($page->dry());
         $pagedata->setId($page->id());
         $this->storedoc($pagedata);
@@ -158,19 +163,23 @@ class Modelpage extends Modeldb
      *
      * @param Page $page                    Source page
      * @param string $targetid              Target page ID
+     * @param bool $resetdatecreation       Reset the page creation date or keep the old one
      *
      * @throws RuntimeException if target ID is illegal
      * @throws Databaseexception if adding the page to database failed
      */
-    public function copy(Page $page, string $targetid): void
+    public function copy(Page $page, string $targetid, bool $resetdatecreation = true): void
     {
-        $page->setid($targetid);
-        $page->setdatecreation(true); // Reset date of creation
-        $page->setdatemodif(new DateTimeImmutable());
-        $page->setdaterender(new DateTimeImmutable());
-        $page->setcommentcount(0);
-        $page->setdatecomment(null);
-        $this->add($page);
+        $newpage = clone $page;
+        if (!$newpage->setid($targetid)) {
+            throw new RuntimeException("'$targetid' is not a valid ID");
+        }
+        $newpage->setdatecreation($resetdatecreation); // Reset date of creation
+        $newpage->setdatemodif(new DateTimeImmutable());
+        $newpage->setdaterender(new DateTimeImmutable());
+        $newpage->setcommentcount(0);
+        $newpage->setdatecomment(null);
+        $this->add($newpage);
     }
 
     /**

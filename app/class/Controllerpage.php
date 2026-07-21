@@ -531,6 +531,42 @@ class Controllerpage extends Controller
     }
 
     /**
+     * Copy a page from the editor UI menu
+     */
+    public function postcopy(string $page): never
+    {
+        if ($this->user->isvisitor()) {
+            http_response_code(401);
+            exit;
+        }
+
+        try {
+            $this->page = $this->pagemanager->get($page);
+        } catch (RuntimeException $e) {
+            http_response_code(500);
+            exit;
+        }
+
+        if (!$this->canedit($this->page)) {
+            $this->showtemplate('forbidden', [], 403);
+        }
+
+        $newid = $_POST['id'] ?? null;
+        $resetdatecreation = boolval($_POST['resetdatecreation'] ?? true);
+
+        try {
+            $this->pagemanager->copy($this->page, $newid, $resetdatecreation);
+            $this->sendflashmessage('page successfully copied', self::FLASH_SUCCESS);
+            $this->routedirect('pageedit', ['page' => $newid]);
+        } catch (RuntimeException $e) {
+            $msg = sprintf("page copy '%s': %s", $this->page->id(), $e->getMessage());
+            Logger::error($msg);
+            $this->sendflashmessage($msg, self::FLASH_ERROR);
+            $this->routedirect('pageedit', ['page' => $this->page->id()]);
+        }
+    }
+
+    /**
      * @throws RuntimeException in case of database errors (this should be managed by wiki admin)
      */
     public function duplicate(string $page, string $duplicate): never

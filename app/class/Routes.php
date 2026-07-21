@@ -95,6 +95,7 @@ class Routes
             ['POST', '/[cid:page]/comment-moderation', 'Controllercomment#moderation', 'pagecommentmoderation'],
             ['GET', '/[cid:page]/delete', 'Controllerpage#delete', 'pagedelete'],
             ['POST', '/[cid:page]/delete', 'Controllerpage#confirmdelete', 'pageconfirmdelete'],
+            ['POST', '/[cid:page]/copy', 'Controllerpage#postcopy', 'pagepostcopy'],
             ['GET', '/[cid:page]/duplicate:[noslash:duplicate]', 'Controllerpage#duplicate', 'pageduplicate'],
             ['GET', '/[cid:page]/[*:command]', 'Controllerpage#commandnotfound', 'pageread/etoile'],
             ['POST', '/workspace/update', 'Controllerworkspace#update', 'workspaceupdate'],

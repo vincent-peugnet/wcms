@@ -59,7 +59,7 @@ abstract class Model
     ];
 
     /** Characters that are authorized in item ID */
-    public const ID_AUTHORIZED_CHARS         = 'a-z0-9-_';
+    public const ID_AUTHORIZED_CHARS         = 'a-z0-9\-_';
 
     /** Maximum database item ID length */
     public const MAX_ID_LENGTH               = 64;
