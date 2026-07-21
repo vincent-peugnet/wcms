@@ -94,6 +94,9 @@ abstract class Servicerender
     public const ID           = 'ID';
     public const THUMBNAIL    = 'THUMBNAIL';
     public const COMMENTCOUNT = 'COMMENTCOUNT';
+    public const VISITCOUNT   = 'VISITCOUNT';
+    public const EDITCOUNT    = 'EDITCOUNT';
+    public const DISPLAYCOUNT = 'DISPLAYCOUNT';
 
     public const KEYWORDS = [
         self::LIST,
@@ -116,6 +119,9 @@ abstract class Servicerender
         self::ID,
         self::THUMBNAIL,
         self::COMMENTCOUNT,
+        self::VISITCOUNT,
+        self::EDITCOUNT,
+        self::DISPLAYCOUNT,
     ];
 
     /**
@@ -204,7 +210,6 @@ abstract class Servicerender
 
         $body = $this->bodyconstructor($this->readbody());
         $parsebody = $this->bodyparser($body);
-        $this->checkpostprocessaction($parsebody);
         $head = $this->gethead();
 
         $lang = !empty($this->page->lang()) ? $this->page->lang() : Config::lang();
@@ -710,6 +715,12 @@ abstract class Servicerender
                     break;
                 case self::COMMENTCOUNT:
                     $replacement = $this->commentcount();
+                    break;
+                case self::VISITCOUNT:
+                case self::EDITCOUNT:
+                case self::DISPLAYCOUNT:
+                    $replacement = $inclusion->fullmatch(); // do not replace counters
+                    $this->postprocessaction = true;
                     break;
                 default:
                     throw new LogicException('error during W inclusion processing');
@@ -1388,25 +1399,6 @@ abstract class Servicerender
                 break;
         }
     }
-
-
-
-
-    // _________________________ Final check _______________________________
-
-    /**
-     * Check if the page need post processing by looking for patterns
-     */
-    protected function checkpostprocessaction(string $text): void
-    {
-        $counterpaterns = Servicepostprocess::COUNTERS;
-        $pattern = implode('|', $counterpaterns);
-        if (boolval(preg_match("#($pattern)#", $text))) {
-            $this->postprocessaction = true;
-        }
-    }
-
-
 
 
 

@@ -21,8 +21,7 @@ flowchart TD
         url(URL checker) -->
         2K(comment form parser)
     end
-    2K --> 2pp
-    2pp(check for post render actions) -->
+    2K --> 3B
     3B((Head and Body gathering)) -->
     3C[[Rendered HTML]] --> 4c
     subgraph "post render actions"
@@ -47,7 +46,13 @@ flowchart TD
 
     1E -. "send TOC structure" .-> 2D
     2rss -. "send rss links" .-> 0rss
-    2pp -. trigger post render action .-> 4c
+    2B -.-> counters
+    1B -.-> counters
+    counters -.-> postprocess
+
+    counters(detect counters)
+    postprocess@{ shape: text, label: "trigger post render action" }
+
     2K -. trigger post render action .-> 4e
 
     urlcache@{ shape: lin-cyl, label: "URL cache" }

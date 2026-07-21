@@ -21,16 +21,16 @@ class Servicepostprocess
     /** @var string May store an alert that should be displayed */
     protected ?string $alert;
 
-    public const VISIT_COUNT     = '%VISITCOUNT%';
-    public const EDIT_COUNT      = '%EDITCOUNT%';
-    public const AFF_COUNT       = '%DISPLAYCOUNT%';
+    public const VISIT_COUNT     = '%' . Servicerender::VISITCOUNT . '%';
+    public const EDIT_COUNT      = '%' . Servicerender::EDITCOUNT . '%';
+    public const DISPLAY_COUNT   = '%' . Servicerender::DISPLAYCOUNT . '%';
     public const DISABLED_IF_VISITOR_MARKER = 'wcms-postprocess-disabled_if_visitor';
     public const DISABLED_IF_USER_MARKER = 'wcms-postprocess-disabled_if_user';
 
     public const COUNTERS = [
         self::VISIT_COUNT,
         self::EDIT_COUNT,
-        self::AFF_COUNT,
+        self::DISPLAY_COUNT,
     ];
 
     public function __construct(Page $page, User $user, ?string $alert = null)
@@ -86,7 +86,7 @@ class Servicepostprocess
         $replacements = [
             self::VISIT_COUNT => "<span class=\"counter visitcount\">$visitcount</span>",
             self::EDIT_COUNT => "<span class=\"counter editcount\">$editcount</span>",
-            self::AFF_COUNT => "<span class=\"counter displaycount\">$displaycount</span>",
+            self::DISPLAY_COUNT => "<span class=\"counter displaycount\">$displaycount</span>",
             self::DISABLED_IF_VISITOR_MARKER . '="1"' => $this->user->isvisitor() ? 'disabled' : '',
             self::DISABLED_IF_USER_MARKER . '="1"' => !$this->user->isvisitor() ? 'disabled' : '',
         ];
