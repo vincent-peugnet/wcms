@@ -10,7 +10,7 @@ assets/js/*
 build/
 database/*
 media/*
-render/
+cache/*
 dist/
 vendor/*
 node_modules/
