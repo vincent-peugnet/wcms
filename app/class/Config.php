@@ -4,6 +4,7 @@ namespace Wcms;
 
 use DateTimeZone;
 use DomainException;
+use RuntimeException;
 use Throwable;
 use Wcms\Exception\Filesystemexception;
 
@@ -132,20 +133,64 @@ abstract class Config
         }
     }
 
+    /**
+     * Create the content of a PHP file
+     * that setup all the Config vars using every setter
+     */
+    public static function compile(): string
+    {
+        $content = "<?php\nnamespace Wcms;\n";
+
+        foreach (get_class_vars(get_class()) as $key => $_) {
+            $value = self::$$key;
+            $method = 'set' . $key;
+            if (method_exists(get_called_class(), $method)) {
+                $var = var_export($value, true);
+                $content .= "Config::$method($var);\n";
+            }
+        }
+        return $content;
+    }
+
+    /**
+     * Read config from cache if it exists and is valid,
+     * otherwise, parse the JSON config file
+     *
+     * @return bool                         false if config file does not exists
+     */
     public static function readconfig(): bool
     {
-        if (file_exists(Model::CONFIG_FILE)) {
-            $current = file_get_contents(Model::CONFIG_FILE);
-            $datas = json_decode($current, true);
-            self::hydrate($datas);
-            // Setup old config file to user page version 1
-            if (isset($datas['pageaversion'])) {
-                self::$pageversion = Page::V1;
-            }
-            return true;
-        } else {
+        if (!file_exists(Model::CONFIG_FILE)) {
             return false;
         }
+
+        // try to read config from the cache file
+        if (
+            file_exists(Model::CONFIG_CACHE_FILE) &&
+            filemtime(Model::CONFIG_CACHE_FILE) >= filemtime(Model::CONFIG_FILE)
+        ) {
+            require_once(Model::CONFIG_CACHE_FILE);
+            return true;
+        }
+
+        // read JSON config file
+        $current = file_get_contents(Model::CONFIG_FILE);
+        $datas = json_decode($current, true);
+        self::hydrate($datas);
+        // Setup old config file to user page version 1
+        if (isset($datas['pageaversion'])) {
+            self::$pageversion = Page::V1;
+        }
+
+        // save the compiled cache
+        try {
+            Fs::writefile(Model::CONFIG_CACHE_FILE, self::compile());
+            Logger::info('config successfully compiled to cache');
+        } catch (RuntimeException $e) {
+            Logger::warning('saving config compiled cache file failed: %s', $e->getMessage());
+        }
+
+        return true;
     }
 
     /**
