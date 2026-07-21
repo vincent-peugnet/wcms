@@ -43,7 +43,7 @@
     <input type="hidden" name="deleteconfirm" value="true">
     <button type="submit">
         <i class="fa fa-trash"></i>
-        <span class="text">Confirm delete</span>
+        Confirm delete
     </button>
 </form>
 
