@@ -97,6 +97,7 @@ class Routes
             ['POST', '/[cid:page]/delete', 'Controllerpage#confirmdelete', 'pageconfirmdelete'],
             ['POST', '/[cid:page]/copy', 'Controllerpage#postcopy', 'pagepostcopy'],
             ['GET', '/[cid:page]/duplicate:[noslash:duplicate]', 'Controllerpage#duplicate', 'pageduplicate'],
+            ['GET', '/[cid:page]/copy:[noslash:duplicate]', 'Controllerpage#duplicate', 'pagecopy'],
             ['GET', '/[cid:page]/[*:command]', 'Controllerpage#commandnotfound', 'pageread/etoile'],
             ['POST', '/workspace/update', 'Controllerworkspace#update', 'workspaceupdate'],
         ]);

@@ -347,7 +347,7 @@ Print the [thumbnail](#thumbnail) of the page inside an `<img>` HTML tag with th
 
 
 
-##### Location
+##### Location inclusion
 
 Insert a world map with a pointer that use the current page map location.
 
@@ -358,9 +358,9 @@ For example, to include the title of the page `granejouls`:
 
     %LOCATION?id=granejouls%
 
-Zoom level can be ajusted using the `zoom` parameter. Windest view is `0`, and very close is around `20`. Default zoom is set to `10`.
+Zoom level can be ajusted using the `zoom` parameter. Windest view is `0`, and closest zoom is `19`. Default zoom is set to `10`.
 
-    %LOCATION?zoom=<0-20>%
+    %LOCATION?zoom=<0-19>%
 
 The page page [latitude](#latitude) and [longitude](#longitude) have to be set in order to make the map work.
 
@@ -471,9 +471,9 @@ This will include a connection form, redirecting to a specified page. Where `<pa
 
 This will include a summary based on the page headers titles.
 
-    %SUMMARY?min=<min>&max=<max>&element=<element>%
+    %SUMMARY?min=_min_&max=_max_&element=<element>%
 
-Where `<min>` and `<max>` are integers beetwen `1` to `6`.
+Where `_min_` and `_max_` are integers beetwen `1` to `6`.
 
 You can set `<min>` and `<max>` values to filters beetwen `<h*>` and `<h*>` headlines to take care of.
 
@@ -558,9 +558,9 @@ This will include a `div` HTML tag and some javascript.
 
 When you are in the [home view](#home), ajust the filters using the [options panel](#options) to achieve the page selection you desire. Then select "filters" in the [menu](#home-menu), under the "map" title, you can now copy and paste the code obtainded that way in one of the [elements](#content-elements) of a page.
 
-Zoom level can be ajusted using the `zoom` parameter. Windest view is `0`, and very close is around `20`. Default zoom is automatically ajusted to display all the pages markers.
+Zoom level can be ajusted using the `zoom` parameter. Windest view is `0`, and closest zoom is `19`. Default zoom is automatically ajusted to display all the pages markers.
 
-    %MAP?zoom=<0-20>%
+    %MAP?zoom=<0-19>%
 
 
 > ⚠️ The exact same inclusion code cannot be used more than once in a page.
@@ -572,6 +572,10 @@ You can use an existing [bookmark](#bookmarks) as filter and sorting preset. For
     %LIST?bookmark=my-favorite-places%
 
 It is even possible to combine bookmark and filters! Specific filters and sorting will overide bookmark settings.
+
+##### Map styling
+
+The map layers use images, and it's not possible to change the source of the tiles.
 
 
 #### Random page
@@ -1564,6 +1568,15 @@ Show a `var_dump` of the page object. This could be usefull for debbuging.
     <pageid>/duplicate:<newpageid>
 
 Duplicate current page with under a new ID.
+
+Redirect to the new page read view.
+
+
+##### /copy
+
+    <pageid>/copy:<newpageid>
+
+> Alias of [duplicate](#duplicate).
 
 ##### /login
 
