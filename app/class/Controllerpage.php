@@ -526,7 +526,7 @@ class Controllerpage extends Controller
         if (isset($_POST['route']) && $_POST['route'] === 'home') {
             $this->routedirect('home');
         } else {
-        $this->routedirect('pageread', ['page' => $this->page->id()]);
+            $this->routedirect('pageread', ['page' => $this->page->id()]);
         }
     }
 
