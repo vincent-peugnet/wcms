@@ -136,7 +136,7 @@ function hrdi(DateInterval $diff): string
     if ($diff->i == 1) {
         return $str . ' 1 minute';
     }
-    return $str . ' a few secondes';
+    return $str . ' a few seconds';
 }
 
 /**

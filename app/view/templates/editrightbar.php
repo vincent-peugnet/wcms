@@ -13,6 +13,18 @@
                 <table>
                     <tbody>
                         <tr>
+                            <td>creation date</td>
+                            <td title="<?= $this->datemedium($page->datemodif()) ?>">
+                                <?= $page->datemodif('hrdi') ?> ago
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>last edited</td>
+                            <td title="<?= $this->datemedium($page->datecreation()) ?>">
+                                <?= $page->datecreation('hrdi') ?> ago
+                            </td>
+                        </tr>
+                        <tr>
                             <td>edition</td>
                             <td><?= $page->editcount() ?></td>
                         </tr>

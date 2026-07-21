@@ -185,6 +185,12 @@ textarea#editcontent {
     align-items: baseline;
 }
 
+/* --------------------------------------------------------- right bar stats */
+
+#stats tbody tr td:first-child {
+  width: 43%;
+}
+
 /* --------------------------------------------------------- right bar links */
 
 #rightbar table {
