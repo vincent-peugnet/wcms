@@ -67,6 +67,12 @@ abstract class Servicerender
     /** @var bool Indicate if a comment form is found in the page */
     protected bool $commentform = false;
 
+    /** @var bool Indicate if a filter form is found in the page */
+    protected bool $filterform = false;
+
+    /** @var string[] List of tag inputs found in the page */
+    protected array $tagformlist = [];
+
     /** @var string[] Store render error */
     protected array $errors = [];
 
@@ -438,6 +444,10 @@ abstract class Servicerender
         $head .= "<link href=\"$renderpath$id.css\" rel=\"stylesheet\" />\n";
 
         $head .= $this->recursivejs($this->page);
+        if ($this->filterform) {
+            $checkboxjs = Model::jspath() . 'pagefilter.bundle.js';
+            $head .= "<script type=\"module\" src=\"$checkboxjs\" async/></script>\n";
+        }
         if (!empty($this->page->javascript())) {
             $head .= "<script src=\"$renderpath$id.js\" async></script>\n";
         }
@@ -1058,6 +1068,30 @@ abstract class Servicerender
         $html = '<?xml encoding="utf-8" ?>' . $html;
         $dom->loadHTML($html, LIBXML_NOERROR | LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED);
         $dom->removeChild($dom->firstChild);
+
+        // Check presence of filter forms
+        $forms = $dom->getElementsByTagName('form');
+        foreach ($forms as $form) {
+            if (!$form->hasAttribute('action')) {
+                continue;
+            }
+
+            $matches = $this->match($form->getAttribute('action'), 'FILTER', true);
+            if (empty($matches)) {
+                continue;
+            }
+
+            // Filter forms are limited to one per page
+            if ($this->filterform) {
+                $this->adderror('filter form: multiple forms detected');
+                break;
+            }
+            $this->filterform = true;
+
+            $this->filterform($dom, $form);
+        }
+
+        // Link parsing
         $links = $dom->getElementsByTagName('a');
         foreach ($links as $link) {
             $this->linkparser($link);
@@ -1187,6 +1221,10 @@ abstract class Servicerender
                 }
                 $classes[] = $page->secure('string');
                 $this->linkto[] = $page->id();
+
+                // add needed tag data
+                $tags = array_intersect($this->tagformlist, $page->tag());
+                $link->setAttribute('data-tag', implode(' ', $tags));
             } catch (RuntimeException $e) { // Page does not exist
                 $link->setAttribute('title', Config::existnot());
                 $classes[] = 'existnot';
@@ -1238,6 +1276,70 @@ abstract class Servicerender
             if ($sourcable->tagName === 'img' && Config::lazyloadimg()) {
                 $sourcable->setAttribute('loading', 'lazy');
             }
+        }
+    }
+
+    /**
+     * Read HTML filter form
+     *
+     * @param DOMDocument $dom              the main DOMDocument
+     * @param DOMElement $form              the form HTML element
+     */
+    protected function filterform(DOMDocument $dom, DOMElement $form): void
+    {
+        $form->setAttribute('data-filterform', '');
+        $form->removeAttribute('action');
+
+        foreach ($this->getformrelatedinputs($dom, $form) as $element) {
+            if (!($element instanceof DOMElement)) {
+                continue;
+            }
+            $element->setAttribute('disabled', ''); // disable for non-js browsing
+            if (
+                $element->hasAttribute('name') &&
+                $element->getAttribute('name') === 'tag'
+            ) {
+                $this->filterformtag($element);
+            }
+        }
+    }
+
+    /**
+     * Manage tag filtering elements
+     */
+    protected function filterformtag(DOMElement $element): void
+    {
+        switch ($element->nodeName) {
+            case 'select':
+                if ($element->hasAttribute('multiple')) {
+                    $this->adderror('filter form: multiple select cannot be used');
+                    return;
+                }
+                foreach ($element->getElementsByTagName('option') as $option) {
+                    if ($option->hasAttribute('value')) {
+                        $this->tagformlist[] = $option->getAttribute('value');
+                    }
+                }
+                break;
+            case 'input':
+                if (
+                    !$element->hasAttribute('type') ||
+                    (
+                        $element->getAttribute('type') !== 'checkbox' &&
+                        $element->getAttribute('type') !== 'radio'
+                    )
+                ) {
+                    $type = $element->getAttribute('type');
+                    $this->adderror("filter form: invalid tag input type used: '$type'");
+                    return;
+                }
+                if ($element->hasAttribute('value')) {
+                    $this->tagformlist[] = $element->getAttribute('value');
+                }
+                break;
+            default:
+                $this->adderror("filter form: invalid tag element used: '$element->nodeName'");
+                break;
         }
     }
 
