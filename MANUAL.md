@@ -228,7 +228,7 @@ For example, with a link to a page with ID `my_page`:
 
 
 
-### Styling links
+### Links
 
 During the render process, some semantic datas are added to the __HTML classes of links__. It's intended to help editor style their Webpages.
 
@@ -265,9 +265,77 @@ Depending on the result, URL status is stored in cache for a certain amount of t
 URL cache can be managed by [super editors](#super-editor) or above. The management interface can be reached from the main menu.
 
 
+#### Filtering links
+
+> ⚠ EXPERIMENTAL FEATURE ⚠
+
+Links can be filtered if the page contain a filtering form. This is mostly usefull to filter a [page list inclusion](#page-list), but it works with any internal links !
+
+```html
+<form action="%FILTER%">
+
+    <input type="radio" name="tag" value="note" id="note">
+    <label for="note">Notes</label>
+
+    <input type="checkbox" name="tag" value="sound" id="janvier">
+    <label for="sound">Sound/Music</label>
+    
+    <input type="checkbox" name="tag" value="food" id="food">
+    <label for="food">Food</label>
+    
+</form>
+```
+
+It's possible to add a `<input type="submit">` HTML element to the form, if you prefer __manually triggered__ filtering.
+
+Currently, only [tag filtering](#tag-filtering) is possible.
+
+##### Tag filtering
+
+To use tag filtering, create at least one HTML element related to the form (most basic way to do it is to put it inside the `form` HTML tag).
+
+It should have `name` set to `tag` and a `value` set to the tag you want to use. Most common use case is using a checkbox, like in the following example:
+
+```html
+<input type="checkbox" name="tag" value="TAG">
+```
+
+Three kind of HTML elements can be used and combined:
+
+- `<input type="checkbox">`
+- `<input type="radio">`
+- `<select>` (multiple mode is not supported)
 
 
-#### CSS examples
+##### Filtering using CSS
+
+When an internal link is filtered, you won't see any difference. This is beccause the only action the filtering do is to __add a specific class to filtered links__.
+
+Two possible classes can be added:
+
+- `filtered-tag-or` if the page is filtered using OR condition
+- `filtered-tag-and` if the page is filtered using AND condition
+
+You can then add the style you prefer to filtered links. The most basic one is to hide them:
+
+```css
+a.internal.filtered-tag-or {
+    display: none;
+}
+```
+
+If you want to filter a generated list of pages, it may be usefull to apply the style to the whole `<li>` element instead of just the link:
+
+```css
+ul.pagelist li:has(a.filtered-tag-and) {
+  opacity: 0.3;
+}
+```
+
+
+
+
+#### styling links
 
 To color in red internal links to page that does not exist:
 
