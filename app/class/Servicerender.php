@@ -7,6 +7,7 @@ use AltoRouter;
 use DOMDocument;
 use DOMElement;
 use DOMException;
+use DOMNode;
 use DOMNodeList;
 use DOMXPath;
 use Exception;
@@ -65,6 +66,12 @@ abstract class Servicerender
 
     /** @var bool Indicate if a comment form is found in the page */
     protected bool $commentform = false;
+
+    /** @var bool Indicate if a filter form is found in the page */
+    protected bool $filterform = false;
+
+    /** @var string[] List of tag inputs found in the page */
+    protected array $tagformlist = [];
 
     /** @var string[] Store render error */
     protected array $errors = [];
@@ -437,6 +444,10 @@ abstract class Servicerender
         $head .= "<link href=\"$renderpath$id.css\" rel=\"stylesheet\" />\n";
 
         $head .= $this->recursivejs($this->page);
+        if ($this->filterform) {
+            $checkboxjs = Model::jspath() . 'pagefilter.bundle.js';
+            $head .= "<script type=\"module\" src=\"$checkboxjs\" async/></script>\n";
+        }
         if (!empty($this->page->javascript())) {
             $head .= "<script src=\"$renderpath$id.js\" async></script>\n";
         }
@@ -1057,6 +1068,30 @@ abstract class Servicerender
         $html = '<?xml encoding="utf-8" ?>' . $html;
         $dom->loadHTML($html, LIBXML_NOERROR | LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED);
         $dom->removeChild($dom->firstChild);
+
+        // Check presence of filter forms
+        $forms = $dom->getElementsByTagName('form');
+        foreach ($forms as $form) {
+            if (!$form->hasAttribute('action')) {
+                continue;
+            }
+
+            $matches = $this->match($form->getAttribute('action'), 'FILTER', true);
+            if (empty($matches)) {
+                continue;
+            }
+
+            // Filter forms are limited to one per page
+            if ($this->filterform) {
+                $this->adderror('filter form: multiple forms detected');
+                break;
+            }
+            $this->filterform = true;
+
+            $this->filterform($dom, $form);
+        }
+
+        // Link parsing
         $links = $dom->getElementsByTagName('a');
         foreach ($links as $link) {
             $this->linkparser($link);
@@ -1186,6 +1221,14 @@ abstract class Servicerender
                 }
                 $classes[] = $page->secure('string');
                 $this->linkto[] = $page->id();
+
+                $link->setAttribute('data-id', $page->id());
+
+                // filter form: add needed tag data
+                if ($this->filterform) {
+                    $tags = array_intersect($this->tagformlist, $page->tag());
+                    $link->setAttribute('data-tag', implode(' ', $tags));
+                }
             } catch (RuntimeException $e) { // Page does not exist
                 $link->setAttribute('title', Config::existnot());
                 $classes[] = 'existnot';
@@ -1241,6 +1284,70 @@ abstract class Servicerender
     }
 
     /**
+     * Read HTML filter form
+     *
+     * @param DOMDocument $dom              the main DOMDocument
+     * @param DOMElement $form              the form HTML element
+     */
+    protected function filterform(DOMDocument $dom, DOMElement $form): void
+    {
+        $form->setAttribute('data-filterform', '');
+        $form->removeAttribute('action');
+
+        foreach ($this->getformrelatedinputs($dom, $form) as $element) {
+            if (!($element instanceof DOMElement)) {
+                continue;
+            }
+            $element->setAttribute('disabled', ''); // disable for non-js browsing
+            if (
+                $element->hasAttribute('name') &&
+                $element->getAttribute('name') === 'tag'
+            ) {
+                $this->filterformtag($element);
+            }
+        }
+    }
+
+    /**
+     * Manage tag filtering elements
+     */
+    protected function filterformtag(DOMElement $element): void
+    {
+        switch ($element->nodeName) {
+            case 'select':
+                if ($element->hasAttribute('multiple')) {
+                    $this->adderror('filter form: multiple select cannot be used');
+                    return;
+                }
+                foreach ($element->getElementsByTagName('option') as $option) {
+                    if ($option->hasAttribute('value')) {
+                        $this->tagformlist[] = $option->getAttribute('value');
+                    }
+                }
+                break;
+            case 'input':
+                if (
+                    !$element->hasAttribute('type') ||
+                    (
+                        $element->getAttribute('type') !== 'checkbox' &&
+                        $element->getAttribute('type') !== 'radio'
+                    )
+                ) {
+                    $type = $element->getAttribute('type');
+                    $this->adderror("filter form: invalid tag input type used: '$type'");
+                    return;
+                }
+                if ($element->hasAttribute('value')) {
+                    $this->tagformlist[] = $element->getAttribute('value');
+                }
+                break;
+            default:
+                $this->adderror("filter form: invalid tag element used: '$element->nodeName'");
+                break;
+        }
+    }
+
+    /**
      * Read HTML comment form, manage attributes, insert JWT if necessary
      *
      * @param DOMDocument $dom              the main DOMDocument
@@ -1271,34 +1378,11 @@ abstract class Servicerender
             $commentconf->limit() !== null && $this->page->commentcount() >= $commentconf->limit()
         );
 
-        // Add a replacable disabled marker on inputs (will be replaced as)
-        $disablables = [];
-
-        // select form descendants input/textarea/button/select elements
-        $disablables[] = $form->getElementsByTagName('input');
-        $disablables[] = $form->getElementsByTagName('textarea');
-        $disablables[] = $form->getElementsByTagName('button');
-        $disablables[] = $form->getElementsByTagName('select');
-
-        // select input/textarea/button/select associated elements that use `form=ID`
-        if ($form->hasAttribute('id')) {
-            $i = $form->getAttribute('id');
-            $selector = new DOMXPath($dom);
-            $q = "//input[@form='$i'] | //textarea[@form='$i'] | //button[@form='$i'] | //select[@form='$i']";
-            $nodes = $selector->query($q);
-            if ($nodes === false) {
-                throw new LogicException('malformed DOM XPath expression');
+        foreach ($this->getformrelatedinputs($dom, $form) as $element) {
+            if (!($element instanceof DOMElement)) {
+                continue;
             }
-            $disablables[] = $nodes;
-        }
-
-        foreach ($disablables as $elements) {
-            foreach ($elements as $element) {
-                if (!($element instanceof DOMElement)) {
-                    continue;
-                }
-                $this->formNodes($element, $commentconf);
-            }
+            $this->commentformnodes($element, $commentconf);
         }
 
         if ($this->commentlimitreached) {
@@ -1328,11 +1412,46 @@ abstract class Servicerender
     }
 
     /**
+     * Get all type of given form related inputs (input, textarea, button, select)
+     * They may be inside the form node, or be outside and using a `form` attribute
+     *
+     * @param DOMDocument $dom              The main DOM document
+     *
+     * @param DOMElement $form              The form node
+     *
+     * @return array<int, DOMNode>          All the nodes
+     */
+    protected function getformrelatedinputs(DOMDocument $dom, DOMElement $form): array
+    {
+        // select form descendants input/textarea/button/select elements
+        $inputs = array_merge(
+            iterator_to_array($form->getElementsByTagName('input')),
+            iterator_to_array($form->getElementsByTagName('textarea')),
+            iterator_to_array($form->getElementsByTagName('button')),
+            iterator_to_array($form->getElementsByTagName('select')),
+        );
+
+        // select input/textarea/button/select associated elements that use `form=ID`
+        if ($form->hasAttribute('id')) {
+            $i = $form->getAttribute('id');
+            $selector = new DOMXPath($dom);
+            $q = "//input[@form='$i'] | //textarea[@form='$i'] | //button[@form='$i'] | //select[@form='$i']";
+            $nodes = $selector->query($q);
+            if ($nodes === false) {
+                throw new LogicException('malformed DOM XPath expression');
+            }
+            $inputs = array_merge($inputs, iterator_to_array($nodes));
+        }
+
+        return $inputs;
+    }
+
+    /**
      * For each DOM node, apply rules regarding Comment configuration
      *
      * @param DOMElement $element
      */
-    protected function formNodes(DOMElement $element, Commentconf $commentconf): void
+    protected function commentformnodes(DOMElement $element, Commentconf $commentconf): void
     {
         if (!Config::comments() || $this->commentlimitreached) {
             $element->setAttribute('disabled', '');
