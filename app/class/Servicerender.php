@@ -1222,9 +1222,13 @@ abstract class Servicerender
                 $classes[] = $page->secure('string');
                 $this->linkto[] = $page->id();
 
-                // add needed tag data
-                $tags = array_intersect($this->tagformlist, $page->tag());
-                $link->setAttribute('data-tag', implode(' ', $tags));
+                $link->setAttribute('data-id', $page->id());
+
+                // filter form: add needed tag data
+                if ($this->filterform) {
+                    $tags = array_intersect($this->tagformlist, $page->tag());
+                    $link->setAttribute('data-tag', implode(' ', $tags));
+                }
             } catch (RuntimeException $e) { // Page does not exist
                 $link->setAttribute('title', Config::existnot());
                 $classes[] = 'existnot';
