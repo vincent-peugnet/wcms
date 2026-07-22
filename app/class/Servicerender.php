@@ -7,6 +7,7 @@ use AltoRouter;
 use DOMDocument;
 use DOMElement;
 use DOMException;
+use DOMNode;
 use DOMNodeList;
 use DOMXPath;
 use Exception;
@@ -1271,34 +1272,11 @@ abstract class Servicerender
             $commentconf->limit() !== null && $this->page->commentcount() >= $commentconf->limit()
         );
 
-        // Add a replacable disabled marker on inputs (will be replaced as)
-        $disablables = [];
-
-        // select form descendants input/textarea/button/select elements
-        $disablables[] = $form->getElementsByTagName('input');
-        $disablables[] = $form->getElementsByTagName('textarea');
-        $disablables[] = $form->getElementsByTagName('button');
-        $disablables[] = $form->getElementsByTagName('select');
-
-        // select input/textarea/button/select associated elements that use `form=ID`
-        if ($form->hasAttribute('id')) {
-            $i = $form->getAttribute('id');
-            $selector = new DOMXPath($dom);
-            $q = "//input[@form='$i'] | //textarea[@form='$i'] | //button[@form='$i'] | //select[@form='$i']";
-            $nodes = $selector->query($q);
-            if ($nodes === false) {
-                throw new LogicException('malformed DOM XPath expression');
+        foreach ($this->getformrelatedinputs($dom, $form) as $element) {
+            if (!($element instanceof DOMElement)) {
+                continue;
             }
-            $disablables[] = $nodes;
-        }
-
-        foreach ($disablables as $elements) {
-            foreach ($elements as $element) {
-                if (!($element instanceof DOMElement)) {
-                    continue;
-                }
-                $this->formNodes($element, $commentconf);
-            }
+            $this->commentformnodes($element, $commentconf);
         }
 
         if ($this->commentlimitreached) {
@@ -1328,11 +1306,46 @@ abstract class Servicerender
     }
 
     /**
+     * Get all type of given form related inputs (input, textarea, button, select)
+     * They may be inside the form node, or be outside and using a `form` attribute
+     *
+     * @param DOMDocument $dom              The main DOM document
+     *
+     * @param DOMElement $form              The form node
+     *
+     * @return array<int, DOMNode>          All the nodes
+     */
+    protected function getformrelatedinputs(DOMDocument $dom, DOMElement $form): array
+    {
+        // select form descendants input/textarea/button/select elements
+        $inputs = array_merge(
+            iterator_to_array($form->getElementsByTagName('input')),
+            iterator_to_array($form->getElementsByTagName('textarea')),
+            iterator_to_array($form->getElementsByTagName('button')),
+            iterator_to_array($form->getElementsByTagName('select')),
+        );
+
+        // select input/textarea/button/select associated elements that use `form=ID`
+        if ($form->hasAttribute('id')) {
+            $i = $form->getAttribute('id');
+            $selector = new DOMXPath($dom);
+            $q = "//input[@form='$i'] | //textarea[@form='$i'] | //button[@form='$i'] | //select[@form='$i']";
+            $nodes = $selector->query($q);
+            if ($nodes === false) {
+                throw new LogicException('malformed DOM XPath expression');
+            }
+            $inputs = array_merge($inputs, iterator_to_array($nodes));
+        }
+
+        return $inputs;
+    }
+
+    /**
      * For each DOM node, apply rules regarding Comment configuration
      *
      * @param DOMElement $element
      */
-    protected function formNodes(DOMElement $element, Commentconf $commentconf): void
+    protected function commentformnodes(DOMElement $element, Commentconf $commentconf): void
     {
         if (!Config::comments() || $this->commentlimitreached) {
             $element->setAttribute('disabled', '');
