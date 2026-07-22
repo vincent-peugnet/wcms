@@ -23,7 +23,7 @@ for (var input of form.elements) {
 function filter(event) {
     event.preventDefault();
 
-    var tags = form.elements['tag'];
+    var tags = form.elements['tag'] ?? [];
 
     // fix case where element is alone
     if (!(tags instanceof RadioNodeList)) {
@@ -50,17 +50,31 @@ function filter(event) {
         }
     }
 
+    if (form.elements['search']) {
+        var search = form.elements['search'].value;
+    } else {
+        var search = '';
+    }
+
     for (var page of pages) {
         // remove old classes
         page.classList.remove('filtered-tag-or');
         page.classList.remove('filtered-tag-and');
+        page.classList.remove('filtered-search');
 
-        //
-        if (checkedTags.size === 0) {
-            continue;
+        // filter out non matching search
+        if (search !== '') {
+            if (
+                !page.text.toLowerCase().includes(search.toLowerCase()) &&
+                !page.title.toLowerCase().includes(search.toLowerCase()) &&
+                !page.dataset.id.includes(search.toLowerCase())
+            ) {
+                page.classList.add('filtered-search');
+            }
         }
 
-        if (page.hasAttribute('data-tag')) {
+        // filter out non-matching tags
+        if (checkedTags.size !== 0 && page.hasAttribute('data-tag')) {
             var pageTags = new Set(page.dataset.tag.split(' '));
 
             var intersection = checkedTags.intersection(pageTags);
@@ -78,7 +92,11 @@ function filter(event) {
 if (autoSubmit) {
     filter(new Event('firstLoad'));
     for (var input of form.elements) {
-        input.addEventListener('change', filter);
+        if (input.type === 'search' || input.type === 'text') {
+            input.addEventListener('input', filter);
+        } else {
+            input.addEventListener('change', filter);
+        }
     }
 }
 
