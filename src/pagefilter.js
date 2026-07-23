@@ -1,6 +1,6 @@
 const form = document.querySelector('form[data-filterform]');
 
-var pages = document.querySelectorAll('a.internal');
+var pages = document.querySelectorAll('a.internal.exist');
 
 var autoSubmit = true;
 
