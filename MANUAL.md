@@ -269,47 +269,52 @@ URL cache can be managed by [super editors](#super-editor) or above. The managem
 
 #### Filtering links
 
-> ⚠ EXPERIMENTAL FEATURE ⚠
+> ⚠️ __EXPERIMENTAL FEATURE__ ⚠️
 
-Links can be filtered if the page contain a filtering form. This is mostly usefull to filter a [page list inclusion](#page-list), but it works with any internal links !
+Links can be dynamically filtered if the page contain a filtering form. This is mostly usefull to filter a [page list inclusion](#page-list), but it works with any [internal link](#internal-links) !
+
+To use this feature, you need to insert an HTML form in the page that must have it's `action` attribute set to `%FILTER%`. It may contain one or many inputs that will be used to filter the internal page links. This feature is limited to __one filter form per page__.
 
 ```html
 <form action="%FILTER%">
 
-    <input type="radio" name="tag" value="note" id="note">
-    <label for="note">Notes</label>
+    <input type="checkbox" name="tag" value="TAG_NAME_1" id="ID_1">
+    <label for="ID_1">VISIBLE_NAME_1</label>
 
-    <input type="checkbox" name="tag" value="sound" id="janvier">
-    <label for="sound">Sound/Music</label>
+    <input type="checkbox" name="tag" value="TAG_2_NAME" id="ID_2">
+    <label for="ID_2">VISIBLE_NAME_2</label>
     
     <input type="search" name="search">
 
 </form>
 ```
 
-It's possible to add a `<input type="submit">` HTML element to the form, if you prefer __manually triggered__ filtering.
+It's possible to add a submit HTML element to the form (inside the `<form>` tags), if you prefer to trigger the filtering using a dedicated button.
+
+```html
+<input type="submit">
+```
 
 The filtering can combine [tag filtering](#tag-filtering) and a [text search functionnality](#text-filtering).
 
 ##### Tag filtering
 
-To use tag filtering, create at least one HTML element related to the form (most basic way to do it is to put it inside the `form` HTML tag).
-
-It should have `name` set to `tag` and a `value` set to the tag you want to use. Most common use case is using a checkbox, like in the following example:
-
-```html
-<input type="checkbox" name="tag" value="TAG">
-```
-
-Three kind of HTML elements can be used and combined:
+Tag filtering allow you to use [pages tag metadata](#tag) to filter them. To use it, create at least one of the following HTML element related to the form (most basic way to do it is to put it inside the `form` HTML tag).
 
 - `<input type="checkbox">`
 - `<input type="radio">`
 - `<select>` (multiple mode is not supported)
 
+It should have `name` set to `tag` and a `value` set to the tag you want to use. Most common use case is to use a checkbox input, like in the following example:
+
+```html
+<input type="checkbox" name="tag" value="TAG">
+```
+
+
 ##### Text filtering
 
-A basic text search filtering can be achieved by adding a `search` or `text` input related to the HTML form. It's `name` attribute must be set to `search`.
+Text filtering can be achieved by adding a `search` or `text` input related to the HTML form. It's `name` attribute must be set to `search`.
 
 ```html
 <input type="search" name="search">
@@ -317,40 +322,44 @@ A basic text search filtering can be achieved by adding a `search` or `text` inp
 
 ##### Filtering using CSS
 
-When an internal link is filtered, you won't see any difference. This is beccause the only action the filtering do is to __add a specific class to filtered links__.
+When an internal link is filtered, you won't see any difference yet. This is beccause the only action the filtering is doing, is to __add specific classes to the filtered links__.
 
-Three possible classes can be added:
+Six possible classes can be used:
 
-- `filtered-tag-or` if the page is filtered using tag OR condition
-- `filtered-tag-and` if the page is filtered using tag AND condition
-- `filtered-search` if the page is filtered using text search
+- page is __filtered in__ if it:
+    - `filter_in_tag_or` match any of the requested tags
+    - `filter_in_tag_and` have all the requested tags
+    - `filter_in_search` contain searched text
+- page is __filtered out__ if it:
+    - `filter_out_tag_or` don't match any tag
+    - `filter_out_tag_and` don't have all the requested tags
+    - `filter_out_search` does'nt contain searched text
 
-You can then add the style you prefer to filtered links. The most basic one is to hide them:
+You can then add the style you prefer to filtered links. The most basic strategy is to hide filtered out links:
 
 ```css
-a.internal.filtered-tag-or {
+a.internal.filter_tag_or {
     display: none;
 }
 ```
 
-To combine text search and tag filtering, you must use both classes at the same time:
+They can be combined to achieve more complex results:
 
 ```css
-a.internal.filtered-tag-or,
-a.internal.filtered-search
+a.internal.filter_tag_or,
+a.internal.filter_search
 {
     display: none;
 }
 ```
 
-If you want to filter a generated list of pages, it may be usefull to apply the style to the whole `<li>` element instead of just the link:
+If you want to filter a generated list of pages, it may be usefull to apply the style to the whole `<li>` element instead of just the link. For that purpose, the [`:has()` pseudo class](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:has) is very usefull:
 
 ```css
-ul.pagelist li:has(a.filtered-tag-and) {
+ul.pagelist li:has(a.filter_tag_and) {
   opacity: 0.3;
 }
 ```
-
 
 
 
