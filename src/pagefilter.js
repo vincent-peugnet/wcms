@@ -58,9 +58,12 @@ function filter(event) {
 
     for (var page of pages) {
         // remove old classes
-        page.classList.remove('filtered-tag-or');
-        page.classList.remove('filtered-tag-and');
-        page.classList.remove('filtered-search');
+        page.classList.remove('filter_out_tag_or');
+        page.classList.remove('filter_out_tag_and');
+        page.classList.remove('filter_out_search');
+        page.classList.remove('filter_in_tag_or');
+        page.classList.remove('filter_in_tag_and');
+        page.classList.remove('filter_in_search');
 
         // filter out non matching search
         if (search !== '') {
@@ -69,7 +72,9 @@ function filter(event) {
                 !page.title.toLowerCase().includes(search.toLowerCase()) &&
                 !page.dataset.id.includes(search.toLowerCase())
             ) {
-                page.classList.add('filtered-search');
+                page.classList.add('filter_out_search');
+            } else {
+                page.classList.add('filter_in_search');
             }
         }
 
@@ -79,11 +84,15 @@ function filter(event) {
 
             var intersection = checkedTags.intersection(pageTags);
             if (intersection.size === 0) {
-                page.classList.add('filtered-tag-or');
+                page.classList.add('filter_out_tag_or');
+            } else {
+                page.classList.add('filter_in_tag_or');
             }
 
             if (checkedTags.size !== intersection.size) {
-                page.classList.add('filtered-tag-and');
+                page.classList.add('filter_out_tag_and');
+            } else {
+                page.classList.add('filter_in_tag_and');
             }
         }
     }
