@@ -164,17 +164,29 @@ class Modelpage extends Modeldb
      * @param Page $page                    Source page
      * @param string $targetid              Target page ID
      * @param bool $resetdatecreation       Reset the page creation date or keep the old one
+     * @param bool $resetcounters           Reset edit, visit and display counters
      *
      * @throws RuntimeException if target ID is illegal
      * @throws Databaseexception if adding the page to database failed
      */
-    public function copy(Page $page, string $targetid, bool $resetdatecreation = true): void
-    {
+    public function copy(
+        Page $page,
+        string $targetid,
+        bool $resetdatecreation = true,
+        bool $resetcounters = true
+    ): void {
         $newpage = clone $page;
         if (!$newpage->setid($targetid)) {
             throw new RuntimeException("'$targetid' is not a valid ID");
         }
         $newpage->setdatecreation($resetdatecreation); // Reset date of creation
+
+        if ($resetcounters) {
+            $newpage->setvisitcount(0);
+            $newpage->setdisplaycount(0);
+            $newpage->seteditcount(0);
+        }
+
         $newpage->setdatemodif(new DateTimeImmutable());
         $newpage->setdaterender(new DateTimeImmutable());
         $newpage->setcommentcount(0);
