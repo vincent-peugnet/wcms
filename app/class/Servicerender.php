@@ -50,6 +50,9 @@ abstract class Servicerender
     /** @var bool If true, images with no title can have one based on alt attribute */
     protected bool $titlefromalt = false;
 
+    /** @var int<0, 2> internal src link type 0: relative, 1: absolute, 2: full URL */
+    protected int $internalsrc = 0;
+
     /** @var bool True if the page need post process */
     protected bool $postprocessaction = false;
 
@@ -128,6 +131,7 @@ abstract class Servicerender
     /**
      * @param AltoRouter $router            Router used to generate urls
      * @param Modelpage $pagemanager        [optionnal] can be usefull if a pagemanager already store a page list
+     * @param int<0, 2> $internalsrc        internal src link type 0: relative, 1: absolute, 2: full URL
      */
     public function __construct(
         AltoRouter $router,
@@ -135,6 +139,7 @@ abstract class Servicerender
         bool $externallinkblank = false,
         bool $internallinkblank = false,
         bool $titlefromalt = false,
+        int $internalsrc = 0,
         ?Serviceurlchecker $urlchecker = null
     ) {
         $this->router = $router;
@@ -142,6 +147,7 @@ abstract class Servicerender
         $this->externallinkblank = $externallinkblank;
         $this->internallinkblank = $internallinkblank;
         $this->titlefromalt = $titlefromalt;
+        $this->internalsrc = $internalsrc;
         $this->urlchecker = $urlchecker;
     }
 
@@ -1109,6 +1115,7 @@ abstract class Servicerender
             $this->adderror('URL checker curl: %s', $e->getMessage());
         }
 
+        // parse sourcables elements, manage src attribute and add internal/external class
         $images = $dom->getElementsByTagName('img');
         $this->sourceparser($images);
         $sources = $dom->getElementsByTagName('source');
@@ -1224,12 +1231,30 @@ abstract class Servicerender
             $classes = array_filter($classes, function (string $var) {
                 return !empty($var);
             });
-            if (preg_match('~^https?:\/\/~', $src)) {
+            if (preg_match('~^https?:\/\/~', $src) === 1) {
                 $classes[] = 'external';
-            } elseif (preg_match('~^(?!([\/#]|[a-zA-Z\.\-\+]+:|\.+\/))([^"]+\.[^";]+)$~', $src, $out)) {
-                $sourcable->setAttribute('src', Model::mediapath() . $out[2]);
-                $classes[] = 'internal';
-            } elseif (preg_match('~^\.\/media~', $src)) {
+            } elseif (
+                // recommended media sourcing
+                // match paths that starts with `./media/` or `media/`
+                preg_match('~^(\.\/)?media/(\S+)~', $src, $out) === 1 ||
+                // for backward compatibily,
+                // match relative paths to files that have an extension
+                preg_match('~^(?!([\/#]|[a-zA-Z\.\-\+]+:|\.+\/))([^"]+\.[^";]+)$~', $src, $out) === 1
+            ) {
+                switch ($this->internalsrc) {
+                    case 0:
+                        $prefix = './' . Model::MEDIA_DIR;
+                        break;
+                    case 1:
+                        $prefix = Model::mediapath();
+                        break;
+                    case 2:
+                        $prefix = Config::domain() . Model::mediapath();
+                        break;
+                    default:
+                        throw new InvalidArgumentException('internalsrc parameter should be 0, 1, or 2');
+                }
+                $sourcable->setAttribute('src', $prefix . $out[2]);
                 $classes[] = 'internal';
             }
             if (!empty($classes)) {

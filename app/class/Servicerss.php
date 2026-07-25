@@ -213,12 +213,21 @@ class Servicerss
      */
     protected function primaryhtml(Page $page): string
     {
+        $params = [
+            $this->router,
+            $this->pagemanager,
+            false,
+            false,
+            false,
+            2 // use full URL for sourcable elements (img, video...)
+        ];
+
         switch ($page->version()) {
             case Page::V1:
-                $render = new Servicerenderv1($this->router, $this->pagemanager);
+                $render = new Servicerenderv1(...$params);
                 break;
             case Page::V2:
-                $render = new Servicerenderv2($this->router, $this->pagemanager);
+                $render = new Servicerenderv2(...$params);
                 break;
             default:
                 throw new DomainException('Page version is out of range');

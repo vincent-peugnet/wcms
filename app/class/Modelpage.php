@@ -574,6 +574,7 @@ class Modelpage extends Modeldb
             Config::externallinkblank(),
             Config::internallinkblank(),
             Config::titlefromalt(),
+            0,
             $urlchecker
         ];
 
