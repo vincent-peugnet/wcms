@@ -227,6 +227,8 @@ You can easily run a dev server using the `serve` target:
 
     make serve
 
+This command also run XDebug if installed (`php-xdebug` package).
+
 There is an error reporting debug mode using [Whoops](https://github.com/filp/whoops). It can be enabled by setting the value of `debug` in `config.json` to one of [editors supported by Whoops](https://github.com/filp/whoops/blob/master/docs/Open%20Files%20In%20An%20Editor.md).
 
 ###  extensions
