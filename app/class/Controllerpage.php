@@ -553,9 +553,10 @@ class Controllerpage extends Controller
 
         $newid = $_POST['id'] ?? null;
         $resetdatecreation = boolval($_POST['resetdatecreation'] ?? true);
+        $resetcounters = boolval($_POST['resetcounters'] ?? true);
 
         try {
-            $this->pagemanager->copy($this->page, $newid, $resetdatecreation);
+            $this->pagemanager->copy($this->page, $newid, $resetdatecreation, $resetcounters);
             $this->sendflashmessage('page successfully copied', self::FLASH_SUCCESS);
             $this->routedirect('pageedit', ['page' => $newid]);
         } catch (RuntimeException $e) {

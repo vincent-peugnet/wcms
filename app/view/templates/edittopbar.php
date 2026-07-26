@@ -51,10 +51,15 @@
                     <p class="field">
                         <input type="text" name="id" pattern="<?= Wcms\Model::ID_REGEX ?>" id="id" placeholder="new page id" required>
                     </p>
-                    <p class="field">
+                    <p class="field" title="set the creation date as 'now'">
                         <label for="resetdatecreation">reset creation date</label>
                         <input type="hidden" name="resetdatecreation" value="0">
                         <input type="checkbox" name="resetdatecreation" id="resetdatecreation" value="1" checked>
+                    </p>
+                    <p class="field" title="reset edit, display and visit counters">
+                        <label for="resetcounters">reset counters</label>
+                        <input type="hidden" name="resetcounters" value="0">
+                        <input type="checkbox" name="resetcounters" id="resetcounters" value="1" checked>
                     </p>
                     <button type="submit">
                         <i class="fa fa-copy"></i>
