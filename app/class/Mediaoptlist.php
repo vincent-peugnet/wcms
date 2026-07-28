@@ -40,7 +40,7 @@ class Mediaoptlist extends Mediaopt
             if ($media->type() == 'image') {
                 $div .= '<img alt="' . $media->filename() . '" ' . $id . ' src="' . $path . '" >';
             } elseif ($media->type() == 'sound') {
-                $div .= '<audio ' . $id . ' controls src="' . $path . '" </audio>';
+                $div .= '<audio ' . $id . ' controls src="' . $path . '"></audio>';
             } elseif ($media->type() == 'video') {
                 $source = '<source src="' . $path . '" type="video/' . $ext . '" ' . $id . '>';
                 $div .= '<video controls>' . $source . '</video>';
