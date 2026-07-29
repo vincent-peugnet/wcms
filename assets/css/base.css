@@ -541,7 +541,10 @@ input.toggle-panel-toggle {
     .toggle-panel { grid-row: 1; display: block; }
     :checked ~ .toggle-panel { max-width: none; }
     .toggle-panel-content { display: none; }
-    :checked ~ .toggle-panel .toggle-panel-content { display: block }
+    :checked ~ .toggle-panel .toggle-panel-content {
+        display: flex;
+        flex-direction: column;
+    }
 
     .dropdown-content {
         /* dropdown at left:0 when navbar is scrollable */
