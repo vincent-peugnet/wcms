@@ -3,7 +3,7 @@
     <input id="showhomeoptionspanel" name="showhomeoptionspanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" <?= !$workspace->collapsemenu() && $workspace->showhomeoptionspanel() === true ? 'checked' : '' ?>>
     <label for="showhomeoptionspanel" class="toggle-panel-label"><span><i class="fa fa-filter"></i></span></label>
     
-    <div class="toggle-panel" id="optionspanel">
+    <div class="toggle-panel">
         <h2>Filters</h2>
 
         <form action="<?= $this->url('home') ?>" method="get" class="toggle-panel-content flexcol">

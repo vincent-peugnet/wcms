@@ -2,7 +2,7 @@
     <input id="showhomebookmarkspanel" name="showhomebookmarkspanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form"  <?= !$workspace->collapsemenu() && $workspace->showhomebookmarkspanel() === true ? 'checked' : '' ?>>
     <label for="showhomebookmarkspanel" class="toggle-panel-label"><span><i class="fa fa-bookmark"></i></span></label>
 
-    <div class="toggle-panel" id="optionspanel">
+    <div class="toggle-panel">
         <h2>Bookmarks</h2>
         <div class="toggle-panel-content">
             <div class="flexcol">

@@ -11,7 +11,7 @@
     <aside id="media" class="toggle-panel-container">
         <input id="showmediatreepanel" name="showmediatreepanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" <?= $workspace->showmediatreepanel() === true ? 'checked' : '' ?>>
         <label for="showmediatreepanel" class="toggle-panel-label"><span><i class="fa fa-folder"></i></span></label>
-        <div class="toggle-panel" id="mediapanel">
+        <div class="toggle-panel">
             <h2>Explorer</h2>
             <div class="toggle-panel-content">
                 <table id="dirlist">
