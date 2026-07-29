@@ -88,6 +88,7 @@
 
         <h2>
             /<?= $mediaopt->dir() ?>
+            (<?= count($medialist) ?>)
             <span class="display">
                 <a href="<?= $mediaopt->getpathaddress() ?>&display=list" <?= $workspace->mediadisplay() === Wcms\Workspace::LIST ? 'class="selected"' : '' ?> title="list">
                     <i class="fa fa-th-list"></i>
