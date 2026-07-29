@@ -40,13 +40,12 @@ a.bookmark[data-current="1"] {
 }
 
 .field .label-with-counter .counter {
-    border-radius: 100%;
-    width: 1.2em;
-    height: 1.2em;
+    border-radius: var(--radius);
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: var(--size-small);
+    padding: 0.2rem var(--half-padding);
 }
 
 fieldset.tag input[type="radio"], fieldset.authors input[type="radio"] {
@@ -130,12 +129,12 @@ table .favicon img {
 }
 
 table .deadlinkcount, table .uncheckedlinkcount {
-    border-radius: 15px;
+    border-radius: var(--radius);
     display: inline-block;
-    height: 17px;
-    width: 17px;
     text-align: center;
     color: white;
+    padding: 0.1rem calc(0.1rem + var(--half-padding)) 0.2rem calc(0.1rem + var(--half-padding));
+    font-size: var(--size-small);
 }
 
 table .deadlinkcount {
