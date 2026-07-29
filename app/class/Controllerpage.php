@@ -558,6 +558,12 @@ class Controllerpage extends Controller
         try {
             $this->pagemanager->copy($this->page, $newid, $resetdatecreation, $resetcounters);
             $this->sendflashmessage('page successfully copied', self::FLASH_SUCCESS);
+            Logger::info(
+                "User '%s' successfully copied page '%s' to new ID '%s'",
+                $this->user->id(),
+                $this->page->id(),
+                $newid
+            );
             $this->routedirect('pageedit', ['page' => $newid]);
         } catch (RuntimeException $e) {
             $msg = sprintf("page copy '%s': %s", $this->page->id(), $e->getMessage());
@@ -585,19 +591,28 @@ class Controllerpage extends Controller
         }
 
         if (!$this->canedit($this->page)) {
-            $msg = sprintf("page duplicate '%s': user '%s' not allowed", $this->page->id(), $this->user->id());
+            $msg = sprintf("page copy '%s': user '%s' not allowed", $this->page->id(), $this->user->id());
             Logger::warning($msg);
             $this->showtemplate('forbidden', ['route' => 'pageread', 'id' => $this->page->id()], 403);
         }
 
         try {
-            $duplicate = Model::idclean($duplicate);
             $this->pagemanager->copy($this->page, $duplicate);
+            Logger::info(
+                "User '%s' successfully copied page '%s' to new ID '%s'",
+                $this->user->id(),
+                $this->page->id(),
+                $duplicate
+            );
             $this->routedirect('pageread', ['page' => $duplicate]);
         } catch (RuntimeException $e) {
-            $msg = sprintf("page duplicate '%s': %s", $this->page->id(), $e->getMessage());
+            $msg = sprintf("page copy '%s': %s", $this->page->id(), $e->getMessage());
             Logger::error($msg);
-            throw new RuntimeException($msg);
+            if ($e instanceof Databaseexception) {
+                throw new RuntimeException($msg);
+            } else {
+                $this->showtemplate('forbidden', ['message' => $e->getMessage()], 403);
+            }
         }
     }
 
