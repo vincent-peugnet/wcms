@@ -335,10 +335,10 @@ Six possible classes can be used:
     - `filter_out_tag_and` don't have all the requested tags
     - `filter_out_search` does'nt contain searched text
 
-You can then add the style you prefer to filtered links. The most basic strategy is to hide filtered out links:
+You can then add the style you prefer to filtered links. The most basic strategy is to __hide filtered out links__:
 
 ```css
-a.internal.filter_tag_or {
+a.internal.filter_out_tag_or {
     display: none;
 }
 ```
@@ -346,8 +346,8 @@ a.internal.filter_tag_or {
 They can be combined to achieve more complex results:
 
 ```css
-a.internal.filter_tag_or,
-a.internal.filter_search
+a.internal.filter_out_tag_or,
+a.internal.filter_out_search
 {
     display: none;
 }
@@ -356,7 +356,7 @@ a.internal.filter_search
 If you want to filter a generated list of pages, it may be usefull to apply the style to the whole `<li>` element instead of just the link. For that purpose, the [`:has()` pseudo class](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:has) is very usefull:
 
 ```css
-ul.pagelist li:has(a.filter_tag_and) {
+ul.pagelist li:has(a.filter_out_tag_and) {
   opacity: 0.3;
 }
 ```
