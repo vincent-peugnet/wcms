@@ -91,7 +91,7 @@ class Modelpage extends Modeldb
      *
      * @param Page $page                    Page object
      *
-     * @throws RuntimeException if page ID is illegal
+     * @throws RuntimeException if page ID is illegal, or a page already exist
      * @throws Databaseexception if error occured whiling saving document
      */
     public function add(Page $page): void
@@ -103,6 +103,10 @@ class Modelpage extends Modeldb
 
         if (in_array($id, self::RESERVED_IDS)) {
             throw new RuntimeException("'$id' is a reserved page ID");
+        }
+
+        if ($this->exist($page->id())) {
+            throw new RuntimeException("page with ID '$id' already exist");
         }
 
         $pagedata = new Document($page->dry());
@@ -166,7 +170,7 @@ class Modelpage extends Modeldb
      * @param bool $resetdatecreation       Reset the page creation date or keep the old one
      * @param bool $resetcounters           Reset edit, visit and display counters
      *
-     * @throws RuntimeException if target ID is illegal
+     * @throws RuntimeException if target ID is illegal or if page already exist
      * @throws Databaseexception if adding the page to database failed
      */
     public function copy(
