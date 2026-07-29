@@ -8,18 +8,20 @@
             <div class="flexcol">
                 <h3>Public</h3>
                 <?php foreach ($publicbookmarks as $bookmark) : ?>
-                    <p class="bookmark">
+                    <p
+                        class="bookmark"
+                        data-current="<?= isset($queryaddress) && $bookmark->query() === $queryaddress ? '1' : '0' ?>"
+                        title="<?= strlen($bookmark->name()) > 15 ? $this->e($bookmark->name()) . '&#013;' : '' ?><?= $this->e($bookmark->description()) ?>"
+
+                    >
                         <a
-                            href="<?= $this->url("home", [], $bookmark->query()) ?>&display=<?= $display ?>"
-                            data-current="<?= isset($queryaddress) && $bookmark->query() === $queryaddress ? '1' : '0' ?>"
-                            class="bookmark"
-                            title="<?= $this->e($bookmark->description()) ?>"
+                            href="<?= $this->url("home", [], $bookmark->query()) ?>&display=<?= $display ?>"                            
                         >
                             <span class="icon"><?= $bookmark->icon() ?></span>
                             <span class="name"><?= empty($bookmark->name()) ? $bookmark->id() : $this->e($bookmark->name()) ?></span>
                         </a>                            
                         <?php if($bookmark->ispublished()) : ?>
-                            <a href="<?= Wcms\Servicerss::atomfile($bookmark->id()) ?>" target="_blank" title="show Atom XML file">
+                            <a href="<?= Wcms\Servicerss::atomfile($bookmark->id()) ?>" target="_blank" title="This bookmark is used to create a news feed&#013;click to show Atom XML file">
                                 <i class="fa fa-rss"></i>
                             </a>
                         <?php endif ?>
@@ -28,12 +30,13 @@
         
                 <h3>Personal</h3>
                 <?php foreach ($personalbookmarks as $bookmark) : ?>
-                    <p class="bookmark">
+                    <p
+                        class="bookmark"
+                        data-current="<?= isset($queryaddress) && $bookmark->query() === $queryaddress ? '1' : '0' ?>"
+                        title="<?= strlen($bookmark->name()) > 15 ? $this->e($bookmark->name()) . '&#013;' : '' ?><?= $this->e($bookmark->description()) ?>"
+                    >
                         <a
                             href="<?= $this->url("home", [], $bookmark->query()) ?>&display=<?= $display ?>"
-                            data-current="<?= isset($queryaddress) && $bookmark->query() === $queryaddress ? '1' : '0' ?>"
-                            class="bookmark"
-                            title="<?= $this->e($bookmark->description()) ?>"
                         >
                             <span class="icon"><?= $bookmark->icon() ?></span>
                             <span class="name"><?= empty($bookmark->name()) ? $bookmark->id() : $this->e($bookmark->name()) ?></span>

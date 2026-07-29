@@ -3,26 +3,29 @@
 
 /* --------------------------------------------------------- bookmarks */
 
+#bookmarks .toggle-panel {
+    max-width: 200px;
+}
+
 .bookmark {
     display: flex;
     gap: var(--spacing);
     align-items: center;
+    border-radius: var(--radius);
 }
 
-a.bookmark {
+.bookmark a {
     display: block;
     white-space: nowrap;
-    max-width: 10em;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding: var(--half-spacing) var(--spacing);
 }
 
 /* currently selected bookmark */
-a.bookmark[data-current="1"] {
+.bookmark[data-current="1"] {
     background-color: var(--outline-background-color);
     color: var(--outline-color);
-    padding: var(--half-spacing) var(--spacing);
-    border-radius: var(--radius);
 }
 
 
