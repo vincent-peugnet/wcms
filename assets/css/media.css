@@ -29,13 +29,47 @@ table#medialist .thumbnail:hover .lightbox {
 
 /* --------------------------------------------------------- dir list */
 
-#dirlist a {
-    white-space: nowrap;
+#explorer .toggle-panel {
+    max-width: 300px;
 }
 
-#dirlist tr.selected a, #dirlist tr.selected td {
+table#dirlist {
+    table-layout: fixed;
+    width: 100%;
+}
+
+#dirlist a {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+    padding: var(--half-padding);
+}
+
+#dirlist a .fa {
+    width: 18px; /** fix the icons width */
+}
+
+#dirlist td {
+    border-radius: var(--radius);
+}
+
+#dirlist .filecount {
+    text-align: right;
+    padding-right: var(--half-padding);
+}
+
+#dirlist .filename {
+    width: 88%;
+}
+
+#dirlist tr.selected td {
     background-color: var(--outline-background-color);
     color: var(--outline-color);
+}
+
+#dirlist tr.selected a {
+    color: inherit;
 }
 
 

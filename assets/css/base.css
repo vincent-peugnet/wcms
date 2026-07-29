@@ -539,7 +539,7 @@ input.toggle-panel-toggle {
     .toggle-panel-label:hover { background: none; }
     .toggle-panel-label span { padding: var(--spacing); }
     .toggle-panel { grid-row: 1; display: block; }
-    :checked ~ .toggle-panel { max-width: none; }
+    .toggle-panel { max-width: none !important; }
     .toggle-panel-content { display: none; }
     :checked ~ .toggle-panel .toggle-panel-content {
         display: flex;

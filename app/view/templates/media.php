@@ -8,7 +8,7 @@
 
 <main class="media">
 
-    <aside id="media" class="toggle-panel-container">
+    <aside id="explorer" class="toggle-panel-container">
         <input id="showmediatreepanel" name="showmediatreepanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" <?= $workspace->showmediatreepanel() === true ? 'checked' : '' ?>>
         <label for="showmediatreepanel" class="toggle-panel-label"><span><i class="fa fa-folder"></i></span></label>
         <div class="toggle-panel">
@@ -17,7 +17,7 @@
                 <table id="dirlist">
                     <?php foreach ($foldercrumb as $folder) : ?>
                         <tr class="<?= $folder->selected ? 'selected' : '' ?>">
-                            <td>
+                            <td class="filename">
                                 <a href="<?= $mediaopt->getpathaddress($folder->path) ?>">
                                     <?= str_repeat('&nbsp;&nbsp;&nbsp;', $folder->deepness) ?>
                                     <?php if ($folder->open) : ?>
@@ -28,7 +28,7 @@
                                     <?= $folder->name ?>
                                 </a>
                             </td>
-                            <td><?= $folder->filecount ?></td>
+                            <td class="filecount"><?= $folder->filecount ?></td>
                         </tr>
                     <?php endforeach ?>
                 </table>
@@ -41,7 +41,7 @@
         <input id="showmediaoptionspanel" name="showmediaoptionspanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" <?= !$workspace->collapsemenu() && $workspace->showmediaoptionspanel() === true ? 'checked' : '' ?>>
         <label for="showmediaoptionspanel" class="toggle-panel-label"><span><i class="fa fa-filter"></i></span></label>
         
-        <div class="toggle-panel" id="optionspanel">
+        <div class="toggle-panel">
             <h2>Filters</h2>
             <div class="toggle-panel-content">
                 <form action="" method="get" class="flexcol">
