@@ -16,7 +16,9 @@ class Mediaopt extends Item
     /** @var string[] list of media type to display */
     protected array $type = [];
 
-
+    protected const FILTERLIST = [
+        'type',
+    ];
 
     // ______________________________________________ F U N ________________________________________________________
 
@@ -28,7 +30,6 @@ class Mediaopt extends Item
     public function __construct($datas = [])
     {
         $this->path = "/" . rtrim(Model::MEDIA_DIR, "/");
-        $this->type = Media::mediatypes();
         $this->hydrate($datas);
     }
 
@@ -48,10 +49,7 @@ class Mediaopt extends Item
         } else {
             $order = $this->order;
         }
-        $query = ['path' => $this->path, 'sortby' => $sortby, 'order' => $order];
-        if (array_diff(Media::mediatypes(), $this->type) != []) {
-            $query['type'] = $this->type;
-        }
+        $query = ['path' => $this->path, 'type' => $this->type, 'sortby' => $sortby, 'order' => $order];
         return '?' . urldecode(http_build_query($query));
     }
 
@@ -69,6 +67,36 @@ class Mediaopt extends Item
             $query['type'] = $this->type;
         }
         return '?' . urldecode(http_build_query($query));
+    }
+
+    /**
+     * @return bool indicating if any filters are actives
+     */
+    public function isfiltered(): bool
+    {
+        $defaultvarlist = get_class_vars(self::class);
+        foreach (self::FILTERLIST as $var) {
+            if ($this->$var !== $defaultvarlist[$var]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Params used for reset filtering button
+     * Keep sortby and order settings, just reset the filtering options
+     *
+     * @return string                       URL encoded options without filtering, starting with `?`
+     */
+    public function getresetparams(): string
+    {
+        $defaultvars = get_class_vars(self::class);
+        $params = get_object_vars($this);
+        foreach (self::FILTERLIST as $var) {
+            $params[$var] = $defaultvars[$var];
+        }
+        return '?' . urldecode(http_build_query($params));
     }
 
 
@@ -165,5 +193,8 @@ class Mediaopt extends Item
     public function settype(array $type): void
     {
         $this->type = array_intersect(Media::mediatypes(), array_unique($type));
+        if (array_diff(Media::mediatypes(), $this->type) === []) {
+            $this->type = [];
+        }
     }
 }

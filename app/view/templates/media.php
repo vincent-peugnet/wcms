@@ -89,6 +89,14 @@
         <h2>
             /<?= $mediaopt->dir() ?>
             (<?= count($medialist) ?>)
+            <?php if($mediaopt->isfiltered()) : ?>
+                <span class="badge filter">
+                    <i class="fa fa-filter" title="There are active filters"></i>
+                    <a href="<?= $mediaopt->getresetparams() ?>&<?= $workspace->mediadisplay() ?>" class="button" title="remove filters">
+                        <i class="fa fa-times-circle"></i>
+                    </a>
+                </span>
+            <?php endif ?>
             <span class="display">
                 <a href="<?= $mediaopt->getpathaddress() ?>&display=list" <?= $workspace->mediadisplay() === Wcms\Workspace::LIST ? 'class="selected"' : '' ?> title="list">
                     <i class="fa fa-th-list"></i>

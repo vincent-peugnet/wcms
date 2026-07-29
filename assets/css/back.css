@@ -32,6 +32,10 @@ media queries
     overflow: hidden;
 }
 
+section h2 > * {
+  white-space: nowrap;
+  margin: 0 var(--half-spacing);
+}
 
 /* Display mode links */
 
