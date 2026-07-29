@@ -178,8 +178,10 @@
                             <a href="<?= $mediaopt->getsortbyaddress('date') ?>">date</a>
                             <?= $this->insert('macro_tablesort', ['opt' => $mediaopt, 'th' => 'date']) ?>
                         </th>
-                        <th>user</th>
-                        <th>perms</th>
+                        <?php if ($user->isadmin()) : ?>
+                            <th>user</th>
+                            <th>perms</th>
+                        <?php endif ?>
                         <th>s</th>
                         <th>code</th>
                     </tr>
@@ -228,8 +230,11 @@
                         </td>
                         <td class="nowrap"><?= $media->size('hr') ?></td>
                         <td class="nowrap" title="<?= $media->date('dmy') ?> <?= $media->date('ptime') ?>"><?= $media->date('hrdi') ?></td>
-                        <td><?= $media->uid('name') ?></td>
-                        <td><code><?= $media->permissions() ?></code></td>
+
+                        <?php if ($user->isadmin()) : ?>
+                            <td><?= $media->uid('name') ?></td>
+                            <td><code><?= $media->permissions() ?></code></td>
+                        <?php endif ?>
                         <td>
                             <a
                                 href="<?= $this->url('home', [], '?search=' . $media->getlocalpath() . '&id=1&title=1&description=1&content=1&other=1&case=1&submit=reset') ?>"
