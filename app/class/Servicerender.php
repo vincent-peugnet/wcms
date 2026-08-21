@@ -412,10 +412,9 @@ abstract class Servicerender
 
         $thumbnail = $this->pagemanager->getpagethumbnail($this->page);
         if (!empty($thumbnail)) {
-            if (file_exists(Model::THUMBNAIL_DIR . $thumbnail)) {
-                $thumbnailurl = Config::domain() . Model::thumbnailpath() . $thumbnail;
-                $head .= "<meta property=\"og:image\" content=\"$thumbnailurl\">\n";
-            } else {
+            $thumbnailurl = Config::domain() . Model::thumbnailpath() . $thumbnail;
+            $head .= "<meta property=\"og:image\" content=\"$thumbnailurl\">\n";
+            if (!file_exists(Model::THUMBNAIL_DIR . $thumbnail)) {
                 $this->adderror("thumbnail file: '%s' does not exists", $thumbnail);
             }
         }
