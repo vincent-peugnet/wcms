@@ -401,8 +401,15 @@ abstract class Servicerender
         $head .= "<meta property=\"og:title\" content=\"$title$suffix\">\n";
         $head .= "<meta property=\"og:description\" content=\"$description\">\n";
 
-        $thumbnail = Config::domain() . Model::thumbnailpath() . $this->pagemanager->getpagethumbnail($this->page);
-        $head .= "<meta property=\"og:image\" content=\"$thumbnail\">\n";
+        $thumbnail = $this->pagemanager->getpagethumbnail($this->page);
+        if (!empty($thumbnail)) {
+            if (file_exists(Model::THUMBNAIL_DIR . $thumbnail)) {
+                $thumbnailurl = Config::domain() . Model::thumbnailpath() . $thumbnail;
+                $head .= "<meta property=\"og:image\" content=\"$thumbnailurl\">\n";
+            } else {
+                $this->adderror("thumbnail file: '%s' does not exists", $thumbnail);
+            }
+        }
 
         $head .= "<meta property=\"og:url\" content=\"$url$id\">\n";
 
