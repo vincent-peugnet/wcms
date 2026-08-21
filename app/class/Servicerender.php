@@ -390,8 +390,17 @@ abstract class Servicerender
         $head .= "<meta charset=\"utf-8\" />\n";
         $head .= "<title>$title$suffix</title>\n";
 
-        $favicon = Model::faviconpath() . $this->pagemanager->getpagefavicon($this->page);
-        $head .= "<link rel=\"shortcut icon\" href=\"$favicon\" type=\"image/x-icon\">";
+        $favicon = $this->pagemanager->getpagefavicon($this->page);
+        if (!empty($favicon)) {
+            $faviconpath = Model::faviconpath() . $favicon;
+            $head .= "<link rel=\"shortcut icon\" href=\"$faviconpath\" type=\"image/x-icon\">\n";
+            if (!file_exists(Model::FAVICON_DIR . $favicon)) {
+                $this->adderror("favicon file: '%s' does not exists", $favicon);
+            }
+        } else {
+            // Prevent browser favicon.ico request according to <https://stackoverflow.com/a/13416784>
+            $head .= "<link rel=\"icon\" href=\"data:image/png;base64,iVBORw0KGgo=\"><!-- no favicon -->\n";
+        }
 
         $head .= "<meta name=\"description\" content=\"$description\" />\n";
         $head .= "<meta name=\"viewport\" content=\"width=device-width\" />\n";
