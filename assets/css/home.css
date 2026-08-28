@@ -89,7 +89,7 @@ main table td.id label {
     font-size: var(--size-small);
 }
 
-#home2table a.linkto, #home2table a.redirection {
+a.linkto, a.redirection {
     font-family: monospace;
     font-size: var(--size-small);
     background-color: var(--main-color);
@@ -97,6 +97,22 @@ main table td.id label {
     text-wrap: nowrap;
     padding: var(--half-padding) var(--padding);
     border-radius: var(--radius);
+}
+
+a.redirection {
+    display: inline-flex;
+    padding: 0;
+    align-items: baseline;
+}
+
+a.redirection > * {
+    padding: var(--half-padding);
+}
+  
+.redirection .target {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    max-width: 175px;
 }
 
 table td a.tag, table a.author {

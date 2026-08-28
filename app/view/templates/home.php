@@ -312,9 +312,16 @@ use Wcms\Config;
                                             class="redirection"
                                         >
                                             <i class="fa fa-share"></i>
+<span class="target"><?= \Wcms\Model::idcheck($item->redirection()) ? $item->redirection() : ltrim(substr($item->redirection(), 6), "\/") ?></span>
+                                            <?php if($item->refresh() !== 0) : ?>
                                             <span class="refresh">
-                                                <?= $item->refresh() !== 0 ? $item->refresh() . 's' : '' ?>
+<i class="fa fa-hourglass"></i>
+                                                <?= $item->refresh() ?>s
                                             </span>
+<?php endif ?>
+                                            <?php if(\Wcms\Model::idcheck($item->redirection()) && !key_exists($item->redirection(), $pagelistopt)) : ?>
+                                                <i class="fa fa-warning" title="This page redirect to unexisting page"></i>
+                                            <?php endif ?>
                                         </a>
                                     <?php endif ?>
                                 </td>
