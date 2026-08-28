@@ -1567,9 +1567,6 @@ As a side effect, if [URL checker](#url-checker) is enabled, the maximum time to
 
 Simply download the page as a JSON object file. Reserved to users that can edit the page.
 
-##### /log
-
-Show a `var_dump` of the page object. This could be usefull for debbuging.
 
 ##### /duplicate
 
