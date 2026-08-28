@@ -305,6 +305,9 @@ use Wcms\Config;
                                     <?php if (in_array($item->id(), Config::templates())) : ?>
                                         <i class="fa fa-paint-brush" title="this page is part of suggested templates"></i>
                                     <?php endif ?>
+                                    <?php if(!empty($item->sleep())) : ?>
+                                        <i class="fa fa-hourglass" title="This page have a sleep timer set to <?= $item->sleep() ?>s"></i>
+                                    <?php endif ?>
                                     <?php if (!empty($item->redirection())) : ?>
                                         <a
                                             href="<?= \Wcms\Model::idcheck($item->redirection()) ? $this->upage('pageread', $item->redirection()) : getfirsturl($item->redirection()) ?>"
@@ -312,13 +315,13 @@ use Wcms\Config;
                                             class="redirection"
                                         >
                                             <i class="fa fa-share"></i>
-<span class="target"><?= \Wcms\Model::idcheck($item->redirection()) ? $item->redirection() : ltrim(substr($item->redirection(), 6), "\/") ?></span>
+                                            <span class="target"><?= \Wcms\Model::idcheck($item->redirection()) ? $item->redirection() : ltrim(substr($item->redirection(), 6), "\/") ?></span>
                                             <?php if($item->refresh() !== 0) : ?>
-                                            <span class="refresh">
-<i class="fa fa-hourglass"></i>
-                                                <?= $item->refresh() ?>s
-                                            </span>
-<?php endif ?>
+                                                <span class="refresh">
+                                                    <i class="fa fa-hourglass"></i>
+                                                    <?= $item->refresh() ?>s
+                                                </span>
+                                            <?php endif ?>
                                             <?php if(\Wcms\Model::idcheck($item->redirection()) && !key_exists($item->redirection(), $pagelistopt)) : ?>
                                                 <i class="fa fa-warning" title="This page redirect to unexisting page"></i>
                                             <?php endif ?>
