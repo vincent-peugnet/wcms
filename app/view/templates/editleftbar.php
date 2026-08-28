@@ -216,7 +216,7 @@
                     </p>
                     <p class="field">
                         <label for="redirection" title="page_id or URL like https://domain.org">Redirection</label>
-                        <input type="text" name="redirection" id="redirection" value="<?= $this->e($page->redirection()) ?>" list="searchdatalist" form="update">
+                        <input type="text" name="redirection" id="redirection" value="<?= $this->e($page->redirection()) ?>" maxlength="<?= Wcms\Model::MAX_ID_LENGTH ?>" list="searchdatalist" form="update">
                     </p>
                     <p class="field">
                         <label for="refresh" title="Time before redirection (in seconds)">Refresh time</label>
