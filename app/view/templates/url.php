@@ -47,7 +47,14 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                             <input type="number" name="response" id="response" min="0" max="600" value="<?= $response ?? '' ?>">
                         </p>
                         <p class="field">
-                            <label for="page">page</label>
+                            <label for="page">
+                                page
+                                <?php if(!empty($page)) : ?>
+                                    <a href="<?= $this->url('pageedit', ['page' => $page]) ?>" title="edit the selected page">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                <?php endif ?>
+                            </label>
                             <select name="page" id="page">
                                 <option value="" <?= empty($page) ? 'selected' : '' ?>>--all pages--</option>
                                 <?php foreach ($pages as $id) : ?>
@@ -151,8 +158,8 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                             <?= $url->message ?>
                         </td>
                         <td class="pages">
-                            <?php foreach ($url->pages as $page => $value) : ?>
-                                <a class="button" href="<?= $this->upage('pageedit', $page) ?>"><?= $page ?></a>
+                            <?php foreach ($url->pages as $p => $value) : ?>
+                                <a class="button" href="<?= $this->url('url', [], "?sortby=$sortby&order=$order&response=$response&page=$p") ?>"><?= $p ?></a>
                             <?php endforeach ?>
                         </td>
                         <td class="timestamp nowrap" title="<?= $this->datemedium($url->timestampdate()) ?>">
