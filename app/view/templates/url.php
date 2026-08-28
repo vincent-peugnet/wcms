@@ -152,7 +152,9 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                             <?= $url->accepted ? '<span title="OK" class="ok"><i class="fa fa-check"></i></span>' : '<span title="dead" class="dead"><i class="fa fa-times"></i></span>' ?>
                         </td>
                         <td class="response">
-                            <?= $url->response ?>
+                            <a class="button" href="<?= $this->url('url', [], "?sortby=$sortby&order=$order&response=$url->response&page=$page") ?>">
+                                <?= $url->response ?>
+                            </a>
                         </td>
                         <td class="message nowrap" <?= strlen($url->message) > 40 ? "title=\"$url->message\"" : '' ?>>
                             <?= $url->message ?>
