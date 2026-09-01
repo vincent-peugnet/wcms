@@ -228,9 +228,9 @@ For example, with a link to a page with ID `my_page`:
 
 
 
-### Styling links
+### Links
 
-During the render process, some semantic datas are added to the __HTML classes of links__. It's intended to help editor style their Webpages.
+During the render process, some semantic data are added to the __HTML classes of links__. It's intended to help editor style their Webpages.
 
 
 - `page` link to a page of your W
@@ -238,6 +238,8 @@ During the render process, some semantic datas are added to the __HTML classes o
 - `existnot`, `exist` in case of internal link, indicate if page exist or not
 - `public`, `private`, `not_published` if page exist, indicate it's [privacy](#privacy) level
 - `current_page` the link point to the current page
+
+Additionnaly, a `data-id` attribute is set that contain the [page ID](#page-id).
 
 
 #### URL checker
@@ -265,9 +267,103 @@ Depending on the result, URL status is stored in cache for a certain amount of t
 URL cache can be managed by [super editors](#super-editor) or above. The management interface can be reached from the main menu.
 
 
+#### Filtering links
+
+> ⚠️ __EXPERIMENTAL FEATURE__ ⚠️
+
+Links can be dynamically filtered if the page contain a filtering form. This is mostly usefull to filter a [page list inclusion](#page-list), but it works with any [internal link](#internal-links) !
+
+To use this feature, you need to insert an HTML form in the page that must have it's `action` attribute set to `%FILTER%`. It may contain one or many inputs that will be used to filter the internal page links. This feature is limited to __one filter form per page__.
+
+```html
+<form action="%FILTER%">
+
+    <input type="checkbox" name="tag" value="TAG_NAME_1" id="ID_1">
+    <label for="ID_1">VISIBLE_NAME_1</label>
+
+    <input type="checkbox" name="tag" value="TAG_2_NAME" id="ID_2">
+    <label for="ID_2">VISIBLE_NAME_2</label>
+    
+    <input type="search" name="search">
+
+</form>
+```
+
+It's possible to add a submit HTML element to the form (inside the `<form>` tags), if you prefer to trigger the filtering using a dedicated button.
+
+```html
+<input type="submit">
+```
+
+The filtering can combine [tag filtering](#tag-filtering) and a [text search functionnality](#text-filtering).
+
+##### Tag filtering
+
+Tag filtering allow you to use [pages tag metadata](#tag) to filter them. To use it, create at least one of the following HTML element related to the form (most basic way to do it is to put it inside the `form` HTML tag).
+
+- `<input type="checkbox">`
+- `<input type="radio">`
+- `<select>` (multiple mode is not supported)
+
+It should have `name` set to `tag` and a `value` set to the tag you want to use. Most common use case is to use a checkbox input, like in the following example:
+
+```html
+<input type="checkbox" name="tag" value="TAG">
+```
 
 
-#### CSS examples
+##### Text filtering
+
+Text filtering can be achieved by adding a `search` or `text` input related to the HTML form. It's `name` attribute must be set to `search`.
+
+```html
+<input type="search" name="search">
+```
+
+##### Filtering using CSS
+
+When an internal link is filtered, you won't see any difference yet. This is beccause the only action the filtering is doing, is to __add specific classes to the filtered links__.
+
+Six possible classes can be used:
+
+- page is __filtered in__ if it:
+    - `filter_in_tag_or` match any of the requested tags
+    - `filter_in_tag_and` have all the requested tags
+    - `filter_in_search` contain searched text
+- page is __filtered out__ if it:
+    - `filter_out_tag_or` don't match any tag
+    - `filter_out_tag_and` don't have all the requested tags
+    - `filter_out_search` does'nt contain searched text
+
+You can then add the style you prefer to filtered links. The most basic strategy is to __hide filtered out links__:
+
+```css
+a.internal.filter_out_tag_or {
+    display: none;
+}
+```
+
+They can be combined to achieve more complex results:
+
+```css
+a.internal.filter_out_tag_or,
+a.internal.filter_out_search
+{
+    display: none;
+}
+```
+
+If you want to filter a generated list of pages, it may be usefull to apply the style to the whole `<li>` element instead of just the link. For that purpose, the [`:has()` pseudo class](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:has) is very usefull:
+
+```css
+ul.pagelist li:has(a.filter_out_tag_and) {
+  opacity: 0.3;
+}
+```
+
+
+
+#### styling links
 
 To color in red internal links to page that does not exist:
 
