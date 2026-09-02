@@ -1272,9 +1272,15 @@ abstract class Servicerender
             ) {
                 $sourcable->setAttribute('src', $this->internalmediaprefix . $out[2]);
                 $classes[] = 'internal';
+                $filepath = Model::MEDIA_DIR . $out[2];
+
+                // check if media file exists
+                if (!file_exists($filepath)) {
+                    $this->adderror("missing media: '%s'", $filepath);
+                }
 
                 if ($sourcable->tagName === 'video' && !$sourcable->hasAttribute('poster')) {
-                    $this->videoposter($sourcable, Model::MEDIA_DIR . $out[2]);
+                    $this->videoposter($sourcable, $filepath);
                 }
             }
             if (!empty($classes)) {
