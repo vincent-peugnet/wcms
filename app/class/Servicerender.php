@@ -1272,6 +1272,10 @@ abstract class Servicerender
             ) {
                 $sourcable->setAttribute('src', $this->internalmediaprefix . $out[2]);
                 $classes[] = 'internal';
+
+                if ($sourcable->tagName === 'video' && !$sourcable->hasAttribute('poster')) {
+                    $this->videoposter($sourcable, Model::MEDIA_DIR . $out[2]);
+                }
             }
             if (!empty($classes)) {
                 $sourcable->setAttribute('class', implode(' ', array_unique($classes)));
@@ -1280,6 +1284,38 @@ abstract class Servicerender
                 $sourcable->setAttribute('loading', 'lazy');
             }
         }
+    }
+
+    /**
+     * Check if video HTML element have an associated poster
+     */
+    protected function videoposter(DOMElement $video, string $filepath): void
+    {
+        // path without file extension
+        $path = pathinfo($filepath, PATHINFO_DIRNAME) . '/' . pathinfo($filepath, PATHINFO_FILENAME);
+
+        $posters = glob("$path.poster.*"); // gather files that match the path
+
+        // check if file extension is an image
+        $posters = array_filter($posters, function ($filename): bool {
+            $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+            if (!key_exists($ext, Media::MEDIA_EXT)) { // unknown file extension
+                return false;
+            }
+            return Media::MEDIA_EXT[$ext] === Media::IMAGE;
+        });
+
+        if (count($posters) === 0) {
+            return; // no available poster for this video
+        }
+        if (count($posters) > 1) {
+            $this->adderror("video poster for '%s': too many poster files", $filepath);
+            return;
+        }
+
+        $poster = $posters[0];
+        $poster = preg_replace('~^media/~', $this->internalmediaprefix, $poster);
+        $video->setAttribute('poster', $poster);
     }
 
     /**

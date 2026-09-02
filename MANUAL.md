@@ -1068,7 +1068,32 @@ This folder is supposed to contain thumbnails images. Once images files (that ca
 
 
 
+### Naming convetions
 
+
+#### Video posters
+
+W have a naming convention concerning [video posters](https://developer.mozilla.org/fr/docs/Web/HTML/Reference/Elements/video#poster). For each HTML video tag with a `src` attribute targeting internal media in a page, W will try to find an associated image to use it as a poster.
+
+To associate a poster to a video, it must be in the same folder, have the same name, but with `.poster` at the end, followed by a standard image file extension (like `jpg`, `png`, `webp`...).
+
+    VIDEO_SRC.poster.IMAGE_EXT
+
+##### example
+
+If your video file path is:
+
+    media/article/flower.mp4
+
+The following image will be used as a poster:
+
+    media/article/flower.poster.jpg
+
+##### limitations
+
+- If more than one image file (using different extensions) can be associated as a video poster, no image is used.
+- If a poster is already defined, it won't be overriden.
+- advanced HTML video integrations that use the `source` child elements are not compatible with this feature. 
 
 
 
