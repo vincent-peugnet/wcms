@@ -499,7 +499,7 @@ You can specify an [element](#content-elements) to target with the `element` par
 
     %LIST%
 
-Sometimes, when you want to add links to a lot of pages, it can be way too long. This tool is here to help you generate list of links automatically.
+Sometimes, when you want to add links to a lot of pages, it can be way too long. This tool is here to help you generate list of links automatically. It's also what we often call a "menu".
 
 It use the same logic as the page filters in the [home view](#home).
 
@@ -929,9 +929,7 @@ When you need to use images, sound or videos in your pages, or any other type of
 
 [Invite editors](#invite-editor) don't have access to this place.
 
-The media menu allow you to do more powerfull function like moving medias or delete folders it is only accessible by [super editors](#super-editor) and above.
-
-
+The `file` and `edit` menus allow you to do more powerfull stuffs, like moving medias or deleting a folder. It is only accessible by [super editors](#super-editor) and above.
 
 
 ### Media upload
@@ -976,8 +974,20 @@ Just paste the URL of the file you want to add on your server and W will try to 
 
 Filters and sorting options can be set by choosing wich types of files to show and how to sort them. They can be used to filter and sort a [medialist](#media-list) using the __filter__ tab in the [media menu](#media-menu).
 
-File types are determined by their file extention. The association table is hardcoded in W's code and can be found [here](https://github.com/vincent-peugnet/wcms/blob/master/app/class/Media.php#L48).
+The media files are sorted in different types:
 
+- image
+- sound
+- video
+- archive (zip files)
+- documents (mostly PDF)
+- font
+- code
+- other
+
+The type of a file is __only determined by its filename extention__. The association table is hardcoded in W's code and can be found [here](https://github.com/vincent-peugnet/wcms/blob/master/app/class/Media.php#L48).
+
+> Get in touch if you think an extension is missing !
 
 
 ### Magic folders
