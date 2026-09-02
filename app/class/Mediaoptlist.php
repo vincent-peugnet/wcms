@@ -66,7 +66,7 @@ class Mediaoptlist extends Mediaopt
             'order' => $this->order,
             'filename' => $this->filename
         ];
-        if (array_diff(Media::mediatypes(), $this->type) !== []) {
+        if (array_diff(Media::MEDIA_TYPES, $this->type) !== []) {
             $query['type'] = $this->type;
         }
         return urldecode(http_build_query($query));

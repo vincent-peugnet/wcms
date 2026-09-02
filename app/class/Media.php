@@ -43,6 +43,17 @@ class Media extends Item
     public const CODE       = "code";
     public const OTHER      = "other";
 
+    public const MEDIA_TYPES = [
+        self::IMAGE,
+        self::SOUND,
+        self::VIDEO,
+        self::ARCHIVE,
+        self::DOCUMENT,
+        self::FONT,
+        self::CODE,
+        self::OTHER,
+    ];
+
     public const MEDIA_EXT = [
         'jpg'   => self::IMAGE,
         'jpeg'  => self::IMAGE,
@@ -87,16 +98,6 @@ class Media extends Item
         'php'   => self::CODE,
         ''      => self::OTHER,
     ];
-
-    /**
-     * Retrun a list of Media types
-     *
-     * @return string[]
-     */
-    public static function mediatypes(): array
-    {
-        return array_unique(array_values(self::MEDIA_EXT));
-    }
 
     // _____________________________________________________ F U N ____________________________________________________
 

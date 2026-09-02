@@ -63,7 +63,7 @@ class Mediaopt extends Item
     {
         $path = is_null($path) ? $this->path : "/$path";
         $query = ['path' => $path, 'sortby' => $this->sortby, 'order' => $this->order];
-        if (array_diff(Media::mediatypes(), $this->type) != []) {
+        if (array_diff(Media::MEDIA_TYPES, $this->type) != []) {
             $query['type'] = $this->type;
         }
         return '?' . urldecode(http_build_query($query));
@@ -192,8 +192,8 @@ class Mediaopt extends Item
      */
     public function settype(array $type): void
     {
-        $this->type = array_intersect(Media::mediatypes(), array_unique($type));
-        if (array_diff(Media::mediatypes(), $this->type) === []) {
+        $this->type = array_intersect(Media::MEDIA_TYPES, array_unique($type));
+        if (array_diff(Media::MEDIA_TYPES, $this->type) === []) {
             $this->type = [];
         }
     }

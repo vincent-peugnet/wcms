@@ -48,7 +48,7 @@
                     <fieldset class="flexcol">
                         <legend>Type</legend>
                         <?php 
-                            $optionlist = Wcms\Media::mediatypes(); 
+                            $optionlist = Wcms\Media::MEDIA_TYPES; 
                             $checkedlist = $mediaopt->type();
                             foreach ($optionlist as $option) :
                         ?>
