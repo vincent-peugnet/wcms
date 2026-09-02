@@ -228,7 +228,7 @@
                                 <?php endif ?>
                             </a>
                         </td>
-                        <td class="nowrap"><?= $media->size('hr') ?></td>
+                        <td class="nowrap" title="<?= $media->size('binary') ?> octets"><?= $media->size('hr') ?></td>
                         <td class="nowrap" title="<?= $media->date('dmy') ?> <?= $media->date('ptime') ?>"><?= $media->date('hrdi') ?></td>
 
                         <?php if ($user->isadmin()) : ?>
