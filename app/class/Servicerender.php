@@ -73,6 +73,9 @@ abstract class Servicerender
     /** @var string[] Store render error */
     protected array $errors = [];
 
+    /** @var array<string, true> Media files that exists */
+    protected array $mediafiles = [];
+
     /** @var ?int full render duration in ms */
     protected ?int $duration;
 
@@ -822,7 +825,9 @@ abstract class Servicerender
     {
         $medialist = new Mediaoptlist($match->readoptions());
         try {
-            return $medialist->generatecontent();
+            $html = $medialist->generatecontent();
+            $this->mediafiles += $medialist->mediafiles; // store existing media files
+            return $html;
         } catch (RuntimeException $e) {
             $this->adderror("media list inclusion: '%s': %s", $match->fullmatch(), $e->getMessage());
         }
@@ -1272,10 +1277,13 @@ abstract class Servicerender
             ) {
                 $sourcable->setAttribute('src', $this->internalmediaprefix . $out[2]);
                 $classes[] = 'internal';
-                $filepath = Model::MEDIA_DIR . $out[2];
+                $filepath = './' . Model::MEDIA_DIR . $out[2];
 
                 // check if media file exists
-                if (!file_exists($filepath)) {
+                if (
+                    !key_exists($filepath, $this->mediafiles) && // do not check medialist files
+                    !file_exists($filepath)
+                ) {
                     $this->adderror("missing media: '%s'", $filepath);
                 }
 

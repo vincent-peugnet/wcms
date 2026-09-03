@@ -12,6 +12,9 @@ class Mediaoptlist extends Mediaopt
     /** @var bool display the file name of the file */
     protected bool $filename = false;
 
+    /** @var array<string, true> list of included media files */
+    public array $mediafiles = [];
+
     /**
      * @param object|array<string, mixed> $datas
      */
@@ -37,6 +40,8 @@ class Mediaoptlist extends Mediaopt
             $ul->setAttribute('class', 'medialist');
 
             foreach ($medialist as $media) {
+                $this->mediafiles[$media->getincludepath()] = true; // add to list of existing files
+
                 $li = $dom->createElement('li');
                 $li->setAttribute('data-type', $media->type());
 
