@@ -38,27 +38,29 @@ class Mediaoptlist extends Mediaopt
 
             foreach ($medialist as $media) {
                 $li = $dom->createElement('li');
-                $li->setAttribute('class', $media->type());
+                $li->setAttribute('data-type', $media->type());
+
+                // `internal` or/and `media` classes are added during HTML parsing
 
                 switch ($media->type()) {
                     case Media::IMAGE:
                         $link = false;
                         $m = $dom->createElement('img');
-                        $m->setAttribute('src', $media->getincludepath()); // TODO: used render prefix
+                        $m->setAttribute('src', $media->getincludepath());
                         break;
 
                     case Media::SOUND:
                         $link = false;
                         $m = $dom->createElement('audio');
                         $m->setAttribute('controls', '');
-                        $m->setAttribute('src', $media->getincludepath()); // TODO: used render prefix
+                        $m->setAttribute('src', $media->getincludepath());
                         break;
 
                     case Media::VIDEO:
                         $link = false;
                         $m = $dom->createElement('video');
                         $m->setAttribute('controls', '');
-                        $m->setAttribute('src', $media->getincludepath()); // TODO: used render prefix
+                        $m->setAttribute('src', $media->getincludepath());
                         break;
 
                     default:
