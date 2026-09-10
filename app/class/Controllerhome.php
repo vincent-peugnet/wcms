@@ -103,6 +103,18 @@ class Controllerhome extends Controller
         $vars['urlchecker'] = Config::urlchecker();
         $vars['hiddencolumncount'] = count(User::HOME_COLUMNS) - count($this->user->columns());
 
+        // UI buttons to increase, decrease or cancel limit
+        $vars['optl5'] = clone $this->opt;
+        $vars['optl5']->setlimit($this->opt->limit() + 5);
+        $vars['optlm5'] = clone $this->opt;
+        $vars['optlm5']->setlimit($this->opt->limit() - 5);
+        $vars['optl1'] = clone $this->opt;
+        $vars['optl1']->setlimit($this->opt->limit() + 1);
+        $vars['optlm1'] = clone $this->opt;
+        $vars['optlm1']->setlimit($this->opt->limit() - 1);
+        $vars['optlc'] = clone $this->opt;
+        $vars['optlc']->setlimit(0);
+
         if ($display === 'graph') {
             $graph = $this->servicesession->getgraph();
             $graph->hydrate($_GET);

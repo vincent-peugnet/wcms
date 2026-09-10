@@ -446,6 +446,16 @@ use Wcms\Config;
                         <?php endforeach ?>
                     </tbody>
                 </table>
+                <?php if ($opt->limit() !== 0 && count($pagelistopt) === $opt->limit()) : ?>
+                    <div class="limit">
+                        <a class="button" href="<?= $optl5->getaddress() ?>">+5</a>
+                        <a class="button" href="<?= $optl1->getaddress() ?>">+1</a>
+                        <a class="button" href="<?= $optlc->getaddress() ?>"><i class="fa fa-times-circle"></i></a>
+                        <a class="button" href="<?= $optlm1->getaddress() ?>">-1</a>
+                        <a class="button" href="<?= $optlm5->getaddress() ?>">-5</a>
+                    </div>
+                <?php endif ?>
+
             </div>
 
         <?php endif ?>
