@@ -322,7 +322,7 @@ use Wcms\Config;
                                                     <?= $item->refresh() ?>s
                                                 </span>
                                             <?php endif ?>
-                                            <?php if(\Wcms\Model::idcheck($item->redirection()) && !key_exists($item->redirection(), $pagelistopt)) : ?>
+                                            <?php if(\Wcms\Model::idcheck($item->redirection()) && !in_array($item->redirection(), $pagelist)) : ?>
                                                 <i class="fa fa-warning" title="This page redirect to unexisting page"></i>
                                             <?php endif ?>
                                         </a>
