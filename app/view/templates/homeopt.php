@@ -8,10 +8,12 @@
 
         <form action="<?= $this->url('home') ?>" method="get" class="toggle-panel-content flexcol">
             <p class="submit-field field">
-                <?php if ($opt->isfiltered()) : ?>
-                    <input type="submit" name="submit" value="reset">
-                <?php endif ?>
                 <input type="submit" name="submit" value="filter" class="filter">
+                <?php if ($opt->isfiltered()) : ?>
+                    <button type="submit" name="submit" value="reset">
+                        <i class="fa fa-times-circle"></i>
+                    </button>
+                <?php endif ?>
             </p>
 
             <details <?= $workspace->collapsemenu() || $opt->isdefault('limit') ? '' : 'open' ?>>
@@ -262,10 +264,12 @@
 
             <p class="field submit-field">
                 <input type="hidden" name="display" value="<?= $display ?>">
-                <?php if ($opt->isfiltered()) : ?>
-                    <input type="submit" name="submit" value="reset">
-                <?php endif ?>
                 <input type="submit" name="submit" value="filter" class="filter">
+                <?php if ($opt->isfiltered()) : ?>
+                    <button type="submit" name="submit" value="reset">
+                        <i class="fa fa-times-circle"></i>
+                    </button>
+                <?php endif ?>
             </p>
 
         </form>

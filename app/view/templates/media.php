@@ -77,7 +77,7 @@
                     </fieldset>
                     <p class="field submit-field">
                         <input type="hidden" name="path" value="<?= $mediaopt->path() ?>">
-                        <input type="submit" value="filter">
+                        <input type="submit" value="filter" class="filter">
                     </p>
                 </form>
             </div>

@@ -71,7 +71,7 @@ main section {
     margin: 0;
 }
 
-#filter input[type="submit"] {
+#filter .filter {
     width: 100%;
 }
 
