@@ -619,6 +619,15 @@ abstract class Config
     }
 
     /**
+     * @deprecated
+     */
+    public static function setalertcss(bool $alertcss): void
+    {
+        // quick fix to keep it working after updating
+        // see bug #655: <https://github.com/vincent-peugnet/wcms/issues/655>
+    }
+
+    /**
      * @deprecated Used to convert old Config version. Save
      * `defaultbody` param as `defaultv1body`.
      */
