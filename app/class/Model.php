@@ -28,6 +28,7 @@ abstract class Model
     public const HTML_RENDER_DIR = 'cache/render/';
     public const CONFIG_CACHE_FILE = 'cache/config.php';
     public const GLOBAL_CSS_FILE = self::CSS_DIR . 'global.css';
+    public const ALERT_CSS_FILE = self::CSS_DIR . 'alert.css';
     public const DEFAULT_GLOBAL_CSS_FILE = self::ASSETS_CSS_DIR . 'global.css';
     public const FONTS_CSS_FILE = self::CSS_DIR . 'fonts.css';
     public const DATABASE_DIR = './database/';

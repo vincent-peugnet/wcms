@@ -23,7 +23,6 @@ abstract class Config
     protected static bool $existnotpass = false;
     protected static bool $privatepass = false;
     protected static bool $notpublishedpass = false;
-    protected static bool $alertcss = false;
     protected static string $defaultv1body = "%HEADER%\n\n%NAV%\n\n%ASIDE%\n\n%MAIN%\n\n%FOOTER%";
     protected static string $defaultv2body = "%CONTENT%";
     protected static string $defaultfavicon = '';
@@ -326,11 +325,6 @@ abstract class Config
         return self::$notpublishedpass;
     }
 
-    public static function alertcss(): bool
-    {
-        return self::$alertcss;
-    }
-
     /**
      * @return string Default BODY corrsponding to current Config's page version
      */
@@ -622,11 +616,6 @@ abstract class Config
     public static function setnotpublishedpass(bool $notpublishedpass): void
     {
         self::$notpublishedpass = $notpublishedpass;
-    }
-
-    public static function setalertcss(bool $alertcss): void
-    {
-        self::$alertcss = $alertcss;
     }
 
     /**

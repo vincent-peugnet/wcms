@@ -2,7 +2,8 @@
 
 <?php $this->start('head') ?>
 
-<?= Wcms\Config::alertcss() ? '<link href="' . Wcms\Model::csspath() . 'global.css" rel="stylesheet" />' : '' ?>
+<link rel="stylesheet" href="<?= Wcms\Model::assetscsspath() ?>alert.default.css">
+<link href="<?= Wcms\Model::csspath() ?>alert.css" rel="stylesheet" />
 <meta name="viewport" content="width=device-width">
 <?php if (!empty(Wcms\Config::defaultfavicon())) : ?>
     <link rel="shortcut icon" href="<?= Wcms\Model::faviconpath() . Wcms\Config::defaultfavicon() ?>" type="image/x-icon">
@@ -15,19 +16,6 @@
 
 <?php $this->start('page') ?>
 
-<style>
-code {
-    font-size: 1.1em;
-    border: 1px solid grey;
-    padding: 2px 4px;
-    margin: 0 5px;
-}
-
-li {
-    line-height: 26px;
-    list-style: none;
-}
-</style>
 
 <body class="alert">
     <main class="alert">

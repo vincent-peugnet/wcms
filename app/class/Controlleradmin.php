@@ -50,6 +50,14 @@ class Controlleradmin extends Controller
                 throw new LogicException($e, 0, $e);
             }
         } catch (RuntimeException $e) {
+            $datas['globalcss'] = '';
+            Logger::errorex($e);
+        }
+
+        try {
+            $datas['alertcss'] = Fs::readfile(Model::ALERT_CSS_FILE);
+        } catch (RuntimeException $e) {
+            $datas['alertcss'] = '';
             Logger::errorex($e);
         }
 
@@ -68,6 +76,8 @@ class Controlleradmin extends Controller
         try {
             Fs::accessfile(Model::GLOBAL_CSS_FILE, true);
             Fs::writefile(Model::GLOBAL_CSS_FILE, $_POST['globalcss'], 0664);
+            Fs::accessfile(Model::ALERT_CSS_FILE, true);
+            Fs::writefile(Model::ALERT_CSS_FILE, $_POST['alertcss'], 0664);
             Config::hydrate($_POST);
             Config::savejson();
             $this->sendflashmessage("Configuration succesfully updated", self::FLASH_SUCCESS);

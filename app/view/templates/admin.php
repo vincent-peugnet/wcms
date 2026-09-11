@@ -364,12 +364,8 @@
         <h3>CSS</h3>
 
         <p class="field">
-            <input type="hidden" name="alertcss" value="0" form="admin">
-            <label for="alertcss">Use global.css for those page as well</label>
-            <input type="checkbox" name="alertcss" id="alertcss" value="1" <?= Wcms\Config::alertcss() ? 'checked' : '' ?> form="admin">
-        </p>
-
-        <p class="info"><i>You can use <code>body.alert</code> class to specify style.</i>
+            <label for="alertcss">CSS included in alert pages</label>
+            <textarea name="alertcss" id="alertcss" rows="20" spellcheck="false" form="admin"><?= $this->e($alertcss) ?></textarea>
         </p>
     </div>
 

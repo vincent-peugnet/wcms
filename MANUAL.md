@@ -1062,8 +1062,8 @@ CSS properties for weight only use `normal` and `bold` as absolute values. other
 
 This contain two files:
 
-- the `global.css` file, that admins can edit in the [admin panel](#administration).
-- the `fonts.css` file, that is automatcly generated according to content of [fonts folder](#fonts-folder).
+- `global.css` and `alert.css` files, that admins can edit in the [admin panel](#administration).
+- the `fonts.css` file, that is automaticly generated according to content of [fonts folder](#fonts-folder).
 
 
 
