@@ -5,6 +5,7 @@ namespace Wcms;
 abstract class Model
 {
     public const CONFIG_FILE = 'config.json';
+    public const VERSION_FILE = 'VERSION';
     public const MAN_FILE = 'MANUAL.md';
     public const MAN_API_FILE = 'API.md';
     public const MAN_RENDER_DIR = 'assets/manual/';

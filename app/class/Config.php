@@ -256,8 +256,15 @@ abstract class Config
         if (str_starts_with(self::$basepath, '/') || str_ends_with(self::$basepath, '/')) {
             return false;
         }
-        $path = $_SERVER['DOCUMENT_ROOT'] . '/' . self::$basepath . '/' .  Model::CONFIG_FILE;
-        return (file_exists($path));
+
+        $versionpath = $_SERVER['DOCUMENT_ROOT'] . '/' . self::$basepath . '/' .  Model::VERSION_FILE;
+        $configpath = $_SERVER['DOCUMENT_ROOT'] . '/' . self::$basepath . '/' .  Model::CONFIG_FILE;
+
+        if (file_exists($configpath)) {
+            return true;
+        } else { // use VERSION file as a fallback
+            return file_exists($versionpath);
+        }
     }
 
     /**

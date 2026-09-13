@@ -15,6 +15,7 @@ dist/
 vendor/*
 node_modules/
 config.json
+config.wizard.lock
 error_log
 .BUILDDATE
 VERSION

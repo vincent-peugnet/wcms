@@ -3,6 +3,7 @@
 namespace Wcms;
 
 use RuntimeException;
+use Wcms\Exception\Filesystemexception;
 
 class Wizard
 {
@@ -10,6 +11,8 @@ class Wizard
      * @var Modeluser
      */
     protected $usermanager;
+
+    public const LOCK_FILE = 'config.wizard.lock';
 
     public function __construct()
     {
@@ -21,6 +24,10 @@ class Wizard
      */
     public function launch(): void
     {
+        if ($this->islocked()) {
+            throw new RuntimeException('install wizard is locked');
+        }
+
         try {
             $this->action();
         } catch (RuntimeException $e) {
@@ -52,32 +59,62 @@ class Wizard
      */
     protected function handler(): void
     {
+        $msgs = [];
 
-        if (isset($_POST['configinit'])) {
-            Config::hydrate($_POST['configinit']);
-            Config::getdomain();
-            Config::savejson();
-
-            if (isset($_POST['userinit'])) {
-                $user = new User($_POST['userinit']);
-                $user->setlevel(User::ADMIN);
-                $user->hashpassword();
-                $this->usermanager->add($user);
-            }
-
-            if (boolval($_POST['defaultbookmarks'])) {
-                try {
-                    $bookmarkmanager = new Modelbookmark();
-                    $bookmarkmanager->defaults();
-                } catch (RuntimeException $e) {
-                    // Just log a warning as the wizard will be skipped on reload and it's not a big problem
-                    Logger::warning('install wizard: default bookmarks creation: %s', $e->getMessage());
-                }
-            }
-
-            header('Location: ./');
-            exit;
+        // admin user creation
+        if (isset($_POST['userinit'])) {
+            $user = new User($_POST['userinit']);
+            $user->setlevel(User::ADMIN);
+            $user->hashpassword();
+            $this->usermanager->add($user);
+            $msgs[] = 'user created';
         }
+
+        // default bookmarks
+        if (boolval($_POST['defaultbookmarks'])) {
+            try {
+                $bookmarkmanager = new Modelbookmark();
+                $bookmarkmanager->defaults();
+                $msgs[] = 'default bookmarks created';
+            } catch (RuntimeException $e) {
+                // Just log a warning as the wizard will be skipped on reload and it's not a big problem
+                Logger::warning('install wizard: default bookmarks creation: %s', $e->getMessage());
+            }
+        }
+
+        Config::hydrate($_POST['configinit']);
+        Config::getdomain();
+
+        $errors = Config::check();
+        if (empty($errors)) {
+            $this->lock(); // lock the wizard
+            Config::savejson();
+            header('Location: ./');
+        } else {
+            echo '<a href="">⬅️ back to form</a>';
+            foreach ($msgs as $msg) {
+                echo "<p>✅ $msg</p>";
+            }
+            foreach ($errors as $error) {
+                echo "<p>❌ $error</p>";
+            }
+        }
+    }
+
+    /**
+     * @throws Filesystemexception          if an error occured
+     */
+    protected function lock(): void
+    {
+        Fs::writefile(self::LOCK_FILE, 'delete this file to enable setup wizard');
+    }
+
+    /**
+     * Indicate if the wizard is locked based on the existence of the lock file
+     */
+    public function islocked(): bool
+    {
+        return file_exists(self::LOCK_FILE);
     }
 
     protected function form(bool $adminform): void
@@ -118,6 +155,7 @@ class Wizard
                 name="configinit[pagetable]" 
                 value="<?= empty(Config::pagetable()) ? 'mystore' : Config::pagetable() ?>"
                 id="pagetable"
+                required
             >
             <p><i>Set the name of the folder that is going to store the pages</i></p>
         </div>
