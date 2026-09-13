@@ -7,6 +7,8 @@ use DomainException;
 use RuntimeException;
 use Throwable;
 use Wcms\Exception\Filesystemexception;
+use Wcms\Exception\Filesystemexception\Notfoundexception;
+use Wcms\Exception\Filesystemexception\Fileexception;
 
 abstract class Config
 {
@@ -155,12 +157,14 @@ abstract class Config
      * Read config from cache if it exists and is valid,
      * otherwise, parse the JSON config file
      *
-     * @return bool                         false if config file does not exists
+     * @throws Notfoundexception            if config file does not exists
+     * @throws Fileexception                if config file is not readable
+     * @throws RuntimeException             if check failed (missing or wrong parameters)
      */
-    public static function readconfig(): bool
+    public static function readconfig(): void
     {
         if (!file_exists(Model::CONFIG_FILE)) {
-            return false;
+            throw new Notfoundexception(Model::CONFIG_FILE);
         }
 
         // try to read config from the cache file
@@ -170,16 +174,21 @@ abstract class Config
             filemtime(Model::CONFIG_CACHE_FILE) >= filemtime(__FILE__)
         ) {
             require_once(Model::CONFIG_CACHE_FILE);
-            return true;
+            return;
         }
 
         // read JSON config file
-        $current = file_get_contents(Model::CONFIG_FILE);
+        $current = Fs::readfile(Model::CONFIG_FILE);
         $datas = json_decode($current, true);
         self::hydrate($datas);
         // Setup old config file to user page version 1
         if (!isset($datas['pageversion'])) {
             self::$pageversion = Page::V1;
+        }
+
+        $errors = self::check();
+        if (!empty($errors)) {
+            throw new RuntimeException(implode(', ', $errors));
         }
 
         // save the compiled cache
@@ -189,8 +198,6 @@ abstract class Config
         } catch (RuntimeException $e) {
             Logger::warning('saving config compiled cache file failed: %s', $e->getMessage());
         }
-
-        return true;
     }
 
     /**
@@ -213,6 +220,32 @@ abstract class Config
         }
         $json = json_encode($arr, JSON_PRETTY_PRINT | JSON_UNESCAPED_LINE_TERMINATORS);
         return $json;
+    }
+
+    /**
+     * Check if config is valid
+     *
+     * @return string[]                     List of errors
+     */
+    public static function check(): array
+    {
+        $errors = [];
+        if (!self::checkbasepath()) {
+            $errors[] = 'wrong basepath';
+        }
+
+        if (empty(self::$pagetable)) {
+            $errors[] = 'missing page database name (pagetable)';
+        }
+
+        if (empty(self::$domain)) {
+            $errors[] = 'missing domain name';
+        }
+
+        if (empty(self::$secretkey)) {
+            $errors[] = 'missing secret';
+        }
+        return $errors;
     }
 
     /**

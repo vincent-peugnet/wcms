@@ -4,6 +4,7 @@ namespace Wcms;
 
 use RuntimeException;
 use Throwable;
+use Wcms\Exception\Filesystemexception\Notfoundexception;
 
 require('./vendor/autoload.php');
 mb_internal_encoding('UTF-8');
@@ -16,40 +17,48 @@ try {
     die('Unable to init logs: ' . $e->getMessage());
 }
 
-$app = new Application();
-$app->wakeup();
-
-date_default_timezone_set(Config::timezone());
-
-session_set_cookie_params([
-    'path' => '/' . Config::basepath(),
-    'samesite' => 'Strict',
-    'secure' => Config::issecure()
-]);
-session_start();
-
-if (class_exists('Whoops\Run') && !empty(Config::debug())) {
-    $whoops = new \Whoops\Run();
-    $handler = new \Whoops\Handler\PrettyPageHandler();
-    $handler->setEditor(Config::debug());
-    $whoops->pushHandler($handler);
-    $whoops->register();
-}
-
-if (isreportingerrors()) {
-    \Sentry\init([
-        'dsn' => Config::sentrydsn(),
-        'release' => getversion(),
-    ]);
-    \Sentry\configureScope(function ($scope) {
-        $scope->setUser([
-            'id' => Config::url(),
-            'username' => Config::basepath(),
-        ]);
-    });
-}
 
 try {
+    try {
+        Config::readconfig();
+    } catch (Notfoundexception $e) {
+        $app = new Application();
+        $app->wakeup();
+        exit;
+    } catch (RuntimeException $e) {
+        throw new RuntimeException('config error: ' . $e->getMessage());
+    }
+
+    date_default_timezone_set(Config::timezone());
+
+    session_set_cookie_params([
+        'path' => '/' . Config::basepath(),
+        'samesite' => 'Strict',
+        'secure' => Config::issecure()
+    ]);
+    session_start();
+
+    if (class_exists('Whoops\Run') && !empty(Config::debug())) {
+        $whoops = new \Whoops\Run();
+        $handler = new \Whoops\Handler\PrettyPageHandler();
+        $handler->setEditor(Config::debug());
+        $whoops->pushHandler($handler);
+        $whoops->register();
+    }
+
+    if (isreportingerrors()) {
+        \Sentry\init([
+            'dsn' => Config::sentrydsn(),
+            'release' => getversion(),
+        ]);
+        \Sentry\configureScope(function ($scope) {
+            $scope->setUser([
+                'id' => Config::url(),
+                'username' => Config::basepath(),
+            ]);
+        });
+    }
+
     $matchoper = new Routes();
     $matchoper->match();
 } catch (Throwable $e) {

@@ -23,78 +23,27 @@ class Application
     public function wakeup(): void
     {
         if (isset($_POST['configinit'])) {
-            if (Config::readconfig()) {
                 Config::hydrate($_POST['configinit']);
-            } else {
-                Config::hydrate($_POST['configinit']);
-            }
             Config::getdomain();
             if (boolval($_POST['defaultbookmarks'])) {
                 $this->defaultbookmarks();
             }
-            try {
-                Config::savejson();
-            } catch (RuntimeException $e) {
-                echo 'Cant write config file : ' . $e->getMessage();
-            }
-            header('Location: ./');
-            exit;
-        } elseif (
-            isset($_POST['userinit'])
-            && !empty($_POST['userinit']['id'])
-            && !empty($_POST['userinit']['password'])
-        ) {
-            $userdata = $_POST['userinit'];
-            $userdata['level'] = 10;
-            $user = new User($userdata);
-            $user->hashpassword();
-            try {
+            Config::savejson();
+
+            if (isset($_POST['userinit'])) {
+                $user = new User($_POST['userinit']);
+                $user->setlevel(User::ADMIN);
+                $user->hashpassword();
                 $this->usermanager->add($user);
-            } catch (Databaseexception $e) {
-                Logger::errorex($e);
             }
             header('Location: ./');
             exit;
         } else {
-            if (Config::readconfig()) {
-                if (
-                    !Config::checkbasepath()
-                    || empty(Config::pagetable())
-                    || empty(Config::domain())
-                    || empty(Config::secretkey())
-                ) {
-                    echo '<ul>';
-                    if (!Config::checkbasepath()) {
-                        echo '<li>Wrong path</li>';
-                    }
-                    if (empty(Config::pagetable())) {
-                        echo '<li>Unset table name</li>';
-                    }
-                    if (empty(Config::domain())) {
-                        echo '<li>Need to recheck the domain</li>';
-                    }
-                    if (empty(Config::secretkey())) {
-                        echo '<li>Secret Key not set or not valid</li>';
-                    }
-                    echo '</ul>';
-                    $this->configform();
-                    exit;
-                } else {
-                    if ($this->usermanager->admincount() === 0) {
-                        echo 'missing admin user';
-                        $this->adminform();
-                        exit;
-                    }
-                }
-            } else {
-                echo 'Missing config file';
-                $this->configform();
-                exit;
-            }
+            $this->configform($this->usermanager->admincount() === 0);
         }
     }
 
-    protected function configform(): void
+    protected function configform(bool $adminform): void
     {
         ?>
         <h1>Configuration</h1>
@@ -125,10 +74,10 @@ class Application
         </div>
         <div>
             <h2>
-                <label for="pagetable">Name of your database table</label>
+                <label for="pagetable">Name of your page database</label>
             </h2>
             <input type="text" name="configinit[pagetable]"  value="<?= Config::pagetable() ?>" id="pagetable">
-            <p><i>Set the name of the first folder that is going to store all your work</i></p>
+            <p><i>Set the name of the folder that is going to store the pages</i></p>
         </div>
         <div>
             <h2>
@@ -145,7 +94,7 @@ class Application
             >
             <p><i>
                 The secret key is used to secure cookies. There are no need to remind it.
-                (16 to 128 characters)
+                (<?= Config::SECRET_KEY_MIN ?> to <?= Config::SECRET_KEY_MAX ?> characters)
             </i></p>
         </div>
         <div>
@@ -157,6 +106,9 @@ class Application
                 Gives you a set of default bookmarks. Usefull in most case 😉.
             </p>
         </div>
+        <?php if ($adminform) {
+            $this->adminform();
+        } ?>
         <input type="submit" value="set">
         </form>
 
@@ -166,13 +118,11 @@ class Application
     protected function adminform(): void
     {
         ?>
-
-        <form action="" method="post">
         <div>
         <h2>
-        <label for="id">Your identifiant</label>
+        <label for="id">Your identifier</label>
         </h2>
-        <input type="text" name="userinit[id]" id="admin" maxlength="64" required>
+        <input type="text" name="userinit[id]" id="admin" maxlength="<?= Model::MAX_ID_LENGTH ?>" required>
         <p><i>Your user id as the first administrator.</i></p>
         </div>
         <div>
@@ -189,8 +139,6 @@ class Application
         >
         <p><i>Your user passworder as first administrator.</i></p>
         </div>
-        <input type="submit" value="set">
-        </form>
 
         <?php
     }
