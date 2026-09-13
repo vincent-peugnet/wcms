@@ -70,7 +70,7 @@ abstract class Config
     protected static $lang = self::DEFAULT_LANG;
 
     /** Page version during creation */
-    protected static int $pageversion = Page::V1;
+    protected static int $pageversion = Page::V2;
 
     /** Indicate if img should have loading="lazy" attribute */
     protected static bool $lazyloadimg = true;
