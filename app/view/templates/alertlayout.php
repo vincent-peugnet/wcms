@@ -2,7 +2,6 @@
 
 <?php $this->start('head') ?>
 
-<link rel="stylesheet" href="<?= Wcms\Model::assetscsspath() ?>alert.default.css">
 <link href="<?= Wcms\Model::csspath() ?>alert.css" rel="stylesheet" />
 <meta name="viewport" content="width=device-width">
 <?php if (!empty(Wcms\Config::defaultfavicon())) : ?>

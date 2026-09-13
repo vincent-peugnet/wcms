@@ -30,6 +30,7 @@ abstract class Model
     public const GLOBAL_CSS_FILE = self::CSS_DIR . 'global.css';
     public const ALERT_CSS_FILE = self::CSS_DIR . 'alert.css';
     public const DEFAULT_GLOBAL_CSS_FILE = self::ASSETS_CSS_DIR . 'global.default.css';
+    public const DEFAULT_ALERT_CSS_FILE = self::ASSETS_CSS_DIR . 'alert.default.css';
     public const FONTS_CSS_FILE = self::CSS_DIR . 'fonts.css';
     public const DATABASE_DIR = './database/';
     public const PAGES_DIR = self::DATABASE_DIR . 'pages/';
