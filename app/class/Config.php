@@ -178,7 +178,7 @@ abstract class Config
         $datas = json_decode($current, true);
         self::hydrate($datas);
         // Setup old config file to user page version 1
-        if (isset($datas['pageaversion'])) {
+        if (!isset($datas['pageversion'])) {
             self::$pageversion = Page::V1;
         }
 
