@@ -166,7 +166,8 @@ abstract class Config
         // try to read config from the cache file
         if (
             file_exists(Model::CONFIG_CACHE_FILE) &&
-            filemtime(Model::CONFIG_CACHE_FILE) >= filemtime(Model::CONFIG_FILE)
+            filemtime(Model::CONFIG_CACHE_FILE) >= filemtime(Model::CONFIG_FILE) &&
+            filemtime(Model::CONFIG_CACHE_FILE) >= filemtime(__FILE__)
         ) {
             require_once(Model::CONFIG_CACHE_FILE);
             return true;
@@ -616,15 +617,6 @@ abstract class Config
     public static function setnotpublishedpass(bool $notpublishedpass): void
     {
         self::$notpublishedpass = $notpublishedpass;
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function setalertcss(bool $alertcss): void
-    {
-        // quick fix to keep it working after updating
-        // see bug #655: <https://github.com/vincent-peugnet/wcms/issues/655>
     }
 
     /**
