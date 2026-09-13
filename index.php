@@ -1,58 +1,62 @@
 <?php
 
+namespace Wcms;
+
+use RuntimeException;
+use Throwable;
+
 require('./vendor/autoload.php');
 mb_internal_encoding('UTF-8');
 umask(0);
 
-use Wcms\Model;
 
 try {
-    Wcms\Logger::init(Model::ERROR_LOG, 3);
+    Logger::init(Model::ERROR_LOG, 3);
 } catch (RuntimeException $e) {
     die('Unable to init logs: ' . $e->getMessage());
 }
 
-$app = new Wcms\Application();
+$app = new Application();
 $app->wakeup();
 
-date_default_timezone_set(Wcms\Config::timezone());
+date_default_timezone_set(Config::timezone());
 
 session_set_cookie_params([
-    'path' => '/' . Wcms\Config::basepath(),
+    'path' => '/' . Config::basepath(),
     'samesite' => 'Strict',
-    'secure' => Wcms\Config::issecure()
+    'secure' => Config::issecure()
 ]);
 session_start();
 
-if (class_exists('Whoops\Run') && !empty(Wcms\Config::debug())) {
+if (class_exists('Whoops\Run') && !empty(Config::debug())) {
     $whoops = new \Whoops\Run();
     $handler = new \Whoops\Handler\PrettyPageHandler();
-    $handler->setEditor(\Wcms\Config::debug());
+    $handler->setEditor(Config::debug());
     $whoops->pushHandler($handler);
     $whoops->register();
 }
 
 if (isreportingerrors()) {
-    Sentry\init([
-        'dsn' => Wcms\Config::sentrydsn(),
+    \Sentry\init([
+        'dsn' => Config::sentrydsn(),
         'release' => getversion(),
     ]);
-    Sentry\configureScope(function ($scope) {
+    \Sentry\configureScope(function ($scope) {
         $scope->setUser([
-            'id' => Wcms\Config::url(),
-            'username' => Wcms\Config::basepath(),
+            'id' => Config::url(),
+            'username' => Config::basepath(),
         ]);
     });
 }
 
 try {
-    $matchoper = new Wcms\Routes();
+    $matchoper = new Routes();
     $matchoper->match();
 } catch (Throwable $e) {
     if (isreportingerrors()) {
-        Sentry\captureException($e);
+        \Sentry\captureException($e);
     }
-    Wcms\Logger::errorex($e, true);
+    Logger::errorex($e, true);
     http_response_code(500);
     if (isset($whoops)) {
         $whoops->handleException($e);
@@ -61,4 +65,4 @@ try {
     echo '<p>' . htmlspecialchars($e->getMessage()) . '</p>';
     echo '<p>Please contact yout Wiki admin to solve this.</p>';
 }
-Wcms\Logger::close();
+Logger::close();
