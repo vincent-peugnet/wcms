@@ -98,6 +98,15 @@ class Controlleradmin extends Controller
         } catch (Filesystemexception $e) {
             $this->sendflashmessage("Can't write config file or global css file", self::FLASH_ERROR);
         }
+
+        // Bonus: lock the install wizard
+        // Usefull for W installs before commit 0c7865b37a389a209bf5d79bc90ace850b1ff0ff
+        try {
+            Wizard::lock();
+        } catch (RuntimeException $e) {
+            Logger::warning('wizard lock file creation failed: %s', $e->getMessage());
+        }
+
         $this->routedirect('admin');
     }
 

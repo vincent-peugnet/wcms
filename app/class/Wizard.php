@@ -24,8 +24,10 @@ class Wizard
      */
     public function launch(): void
     {
-        if ($this->islocked()) {
-            throw new RuntimeException('install wizard is locked');
+        if (self::islocked()) {
+            throw new RuntimeException(
+                "missing config file, install wizard locked: delete 'config.wizard.lock' for access"
+            );
         }
 
         try {
@@ -87,7 +89,7 @@ class Wizard
 
         $errors = Config::check();
         if (empty($errors)) {
-            $this->lock(); // lock the wizard
+            self::lock(); // lock the wizard
             Config::savejson();
             header('Location: ./');
         } else {
@@ -104,7 +106,7 @@ class Wizard
     /**
      * @throws Filesystemexception          if an error occured
      */
-    protected function lock(): void
+    public static function lock(): void
     {
         Fs::writefile(self::LOCK_FILE, 'delete this file to enable setup wizard');
     }
@@ -112,7 +114,7 @@ class Wizard
     /**
      * Indicate if the wizard is locked based on the existence of the lock file
      */
-    public function islocked(): bool
+    public static function islocked(): bool
     {
         return file_exists(self::LOCK_FILE);
     }
