@@ -39,7 +39,7 @@ class Application
             header('Location: ./');
             exit;
         } else {
-            $this->configform($this->usermanager->admincount() === 0);
+            $this->configform(!$this->usermanager->adminexist());
         }
     }
 

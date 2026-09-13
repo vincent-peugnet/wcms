@@ -57,13 +57,16 @@ class Modeluser extends Modeldb
         return $userlist;
     }
 
-    public function admincount(): int
+    /**
+     * Return true if at least one admin exist in user database
+     */
+    public function adminexist(): bool
     {
         $userdatalist = $this->repo->query()
             ->where('level', '==', 10)
             ->execute();
 
-        return $userdatalist->total();
+        return $userdatalist->total() >= 1;
     }
 
     /**
