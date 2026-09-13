@@ -32,6 +32,7 @@ class Servicerenderv2Test extends TestCase
         $router = new AltoRouter([
             ['GET', '/[cid:page]', 'Controllerpage#read', 'pageread'],
         ]);
+        Config::setpagetable('test');
         $this->renderengine = new Servicerenderv2($router, new Modelpage(Config::pagetable()), true, false);
     }
 

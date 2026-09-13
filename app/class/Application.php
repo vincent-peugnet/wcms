@@ -76,7 +76,12 @@ class Application
             <h2>
                 <label for="pagetable">Name of your page database</label>
             </h2>
-            <input type="text" name="configinit[pagetable]"  value="<?= Config::pagetable() ?>" id="pagetable">
+            <input
+                type="text"
+                name="configinit[pagetable]" 
+                value="<?= empty(Config::pagetable()) ? 'mystore' : Config::pagetable() ?>"
+                id="pagetable"
+            >
             <p><i>Set the name of the folder that is going to store the pages</i></p>
         </div>
         <div>

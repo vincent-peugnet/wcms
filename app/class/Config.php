@@ -12,7 +12,7 @@ use Wcms\Exception\Filesystemexception\Fileexception;
 
 abstract class Config
 {
-    protected static string $pagetable = 'mystore';
+    protected static string $pagetable = '';
     protected static string $domain = '';
     protected static bool $secure = true;
     protected static string $basepath = '';
