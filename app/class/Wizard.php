@@ -122,36 +122,58 @@ class Wizard
     protected function form(bool $adminform): void
     {
         ?>
-        <h1>Configuration</h1>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta name="color-scheme" content="light dark" />
+            <title>🪄 W install wizard</title>
+        </head>
+        <body>
+            <h1>🪄 W install wizard</h1>
+            <p><code>version: <?= getversion() ?></code></p>
+            <form action="" method="post">
+                <?php if ($adminform) {
+                    $this->adminform();
+                } ?>
+                <?php $this->configform() ?>
+                <p>
+                    <input type="submit" value="submit">
+                </p>
+            </form>
+        </body>
+        </html>
 
-        <h3>Version :</h3>
 
-        <p><?= getversion() ?></p>
-        
-        <form action="" method="post">
-        <div>
-            <h2>
+        <?php
+    }
+
+    protected function configform(): void
+    {
+        ?>
+        <fieldset>
+            <legend>Config file</legend>
+            <h3>
                 Secure connection
-            </h2>
+            </h3>
             <input type="hidden" name="secure" value="0">
             <input type="checkbox" name="secure" id="secure" value="1" <?= Config::issecure() ? "checked" : "" ?>>
             <label for="secure">secure connection</label>
             <p>
-                Should be checked if your web server is using HTTPS
+                <i>Should be checked if your web server is using HTTPS</i>
             </p>
-            <h2>
+            <h3>
                 <label for="basepath">Path to W-CMS</label>
-            </h2>
+            </h3>
             <input type="text" name="configinit[basepath]"  value="<?= Config::basepath() ?>" id="basepath">
             <p><i>
                 Leave it empty if W-CMS is in your root folder, otherwise,
                 indicate the subfolder(s) in witch you installed the CMS
             </i></p>
-        </div>
-        <div>
-            <h2>
-                <label for="pagetable">Name of your page database</label>
-            </h2>
+            <h3>
+                <label for="pagetable">Name of the pages database</label>
+            </h3>
             <input
                 type="text"
                 name="configinit[pagetable]" 
@@ -160,11 +182,9 @@ class Wizard
                 required
             >
             <p><i>Set the name of the folder that is going to store the pages</i></p>
-        </div>
-        <div>
-            <h2>
-                <label for="secretkey">Secret Key</label>
-            </h2>
+            <h3>
+                <label for="secretkey">Secret key</label>
+            </h3>
             <input
                 type="text"
                 name="configinit[secretkey]"
@@ -178,49 +198,41 @@ class Wizard
                 The secret key is used to secure cookies. There are no need to remind it.
                 (<?= Config::SECRET_KEY_MIN ?> to <?= Config::SECRET_KEY_MAX ?> characters)
             </i></p>
-        </div>
-        <div>
-            <h2>default</h2>
+            <h3>Defaults</h3>
             <input type="hidden" name="defaultbookmarks" value="0">
             <input type="checkbox" name="defaultbookmarks" id="defaultbookmarks" value="1" checked>
             <label for="defaultbookmarks">default bookmarks</label>
             <p>
                 Gives you a set of default bookmarks. Usefull in most case 😉.
             </p>
-        </div>
-        <?php if ($adminform) {
-            $this->adminform();
-        } ?>
-        <input type="submit" value="set">
-        </form>
-
+        </fieldset>
         <?php
     }
 
     protected function adminform(): void
     {
         ?>
-        <div>
-        <h2>
-        <label for="id">Your identifier</label>
-        </h2>
-        <input type="text" name="userinit[id]" id="admin" maxlength="<?= Model::MAX_ID_LENGTH ?>" required>
-        <p><i>Your user id as the first administrator.</i></p>
-        </div>
-        <div>
-        <h2>
-        <label for="password">Your password</label>
-        </h2>
-        <input
-            type="password"
-            name="userinit[password]"
-            id="password"
-            minlength="<?= Model::PASSWORD_MIN_LENGTH ?>"
-            maxlength="<?= Model::PASSWORD_MAX_LENGTH ?>"
-            required
-        >
-        <p><i>Your user passworder as first administrator.</i></p>
-        </div>
+        <fieldset>
+            <legend>Admin user</legend>
+            <p><i>Your credentials as the first administrator.</i></p>
+            <h3>
+            <label for="admin">Identifier</label>
+            </h3>
+            <input type="text" name="userinit[id]" id="admin" maxlength="<?= Model::MAX_ID_LENGTH ?>" required>
+            </div>
+            <div>
+            <h3>
+            <label for="password">Password</label>
+            </h3>
+            <input
+                type="password"
+                name="userinit[password]"
+                id="password"
+                minlength="<?= Model::PASSWORD_MIN_LENGTH ?>"
+                maxlength="<?= Model::PASSWORD_MAX_LENGTH ?>"
+                required
+            >
+        </fieldset>
 
         <?php
     }
