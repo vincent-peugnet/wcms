@@ -1,18 +1,52 @@
 /** default global CSS */
 
-* {
-    box-sizing: border-box;
+* {box-sizing: border-box;}
+
+:root {color-scheme: light dark;}
+
+summary, button {cursor: pointer;}
+
+
+/** LINKS */
+
+/** links to non-existing pages */
+a.existnot::after {
+    content: " ✚";
+    color: green;
 }
 
-:root {
-    color-scheme: light dark;
+/** links to 'private' pages */
+a.private::after {
+    content: " ▲";
+    color: orange;
 }
+
+/** links to unpublished pages */
+a.not_published::after {
+    content: " ⬢";
+    color: red;
+}
+
+/** external links */
+a.external::after {
+    content: " ↗";
+  }
+
+/** dead external links
+(need URL checker) */
+a.external.dead {
+    color: red;
+}
+
+/** link to a user page */
+a.user:before {
+    content: "👤 ";
+}
+
+
+/** OTHER */
 
 /** map/location integration */
 .leaflet-container {
     min-height: 300px;
-}
-
-a.user:before {
-    content: "👤";
 }
