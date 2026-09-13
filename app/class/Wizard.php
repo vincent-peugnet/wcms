@@ -3,9 +3,8 @@
 namespace Wcms;
 
 use RuntimeException;
-use Wcms\Exception\Databaseexception;
 
-class Application
+class Wizard
 {
     /**
      * @var Modeluser
@@ -18,16 +17,45 @@ class Application
     }
 
     /**
+     * @throws RuntimeException             in case of error
+     */
+    public function launch(): void
+    {
+        try {
+            $this->action();
+        } catch (RuntimeException $e) {
+            throw new RuntimeException('install wizard error: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * @throws RuntimeException             in case of error
+     */
+    protected function action(): void
+    {
+        switch ($_SERVER['REQUEST_METHOD']) {
+            case 'POST':
+                $this->handler();
+                break;
+
+            case 'GET':
+                $this->form(!$this->usermanager->adminexist());
+                break;
+
+            default:
+                throw new RuntimeException('bad request method');
+        }
+    }
+
+    /**
      * @throws RuntimeException if default bookmark creation failed
      */
-    public function wakeup(): void
+    protected function handler(): void
     {
+
         if (isset($_POST['configinit'])) {
-                Config::hydrate($_POST['configinit']);
+            Config::hydrate($_POST['configinit']);
             Config::getdomain();
-            if (boolval($_POST['defaultbookmarks'])) {
-                $this->defaultbookmarks();
-            }
             Config::savejson();
 
             if (isset($_POST['userinit'])) {
@@ -36,14 +64,23 @@ class Application
                 $user->hashpassword();
                 $this->usermanager->add($user);
             }
+
+            if (boolval($_POST['defaultbookmarks'])) {
+                try {
+                    $bookmarkmanager = new Modelbookmark();
+                    $bookmarkmanager->defaults();
+                } catch (RuntimeException $e) {
+                    // Just log a warning as the wizard will be skipped on reload and it's not a big problem
+                    Logger::warning('install wizard: default bookmarks creation: %s', $e->getMessage());
+                }
+            }
+
             header('Location: ./');
             exit;
-        } else {
-            $this->configform(!$this->usermanager->adminexist());
         }
     }
 
-    protected function configform(bool $adminform): void
+    protected function form(bool $adminform): void
     {
         ?>
         <h1>Configuration</h1>
@@ -146,52 +183,6 @@ class Application
         </div>
 
         <?php
-    }
-
-    /**
-     * Create default bookmarks set during install
-     *
-     * @throws Databaseexception
-     */
-    protected function defaultbookmarks(): void
-    {
-        $bookmarkmanager = new Modelbookmark();
-        if (empty($bookmarkmanager->list())) {
-            $lastedited = new Opt(['sortby' => 'datemodif', 'limit' => 5, 'order' => -1]);
-            $lasteditedbookmark = new Bookmark();
-            $lasteditedbookmark->init(
-                'last5edited',
-                $lastedited->getaddress(),
-                '🕒',
-                'Last 5 edited',
-                'Get the 5 last edited pages of the database'
-            );
-            $lastcreated = new Opt(['sortby' => 'datecreation', 'limit' => 10, 'order' => -1]);
-            $lastcreatedbookmark = new Bookmark();
-            $lastcreatedbookmark->init(
-                'last10created',
-                $lastcreated->getaddress(),
-                '🖍️',
-                'Last 10 created',
-                'Get the 10 last created pages of the database'
-            );
-            $emptytag = new Opt(['tagcompare' => 'EMPTY']);
-            $emptytagbookmark = new Bookmark();
-            $emptytagbookmark->init(
-                'notags',
-                $emptytag->getaddress(),
-                '🏷️',
-                'No tags',
-                'Pages that does\'nt have any tag'
-            );
-            $all = new Opt();
-            $allbookmark = new Bookmark();
-            $allbookmark->init('all', $all->getaddress(), '⚓', 'All', 'Show all pages');
-            $bookmarkmanager->add($lasteditedbookmark);
-            $bookmarkmanager->add($lastcreatedbookmark);
-            $bookmarkmanager->add($emptytagbookmark);
-            $bookmarkmanager->add($allbookmark);
-        }
     }
 }
 

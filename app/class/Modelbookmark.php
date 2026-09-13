@@ -26,6 +26,20 @@ class Modelbookmark extends Modeldb
     }
 
     /**
+     * Try to create the default bookmarks if their IDs are free
+     *
+     * @throws RuntimeException             if an error occured
+     */
+    public function defaults(): void
+    {
+        foreach ($this->defaultbookmarks() as $bookmark) {
+            if (!$this->exist($bookmark->id())) {
+                $this->add($bookmark);
+            }
+        }
+    }
+
+    /**
      * @return Bookmark[]                   associative array of Bookmark objects `id => Bookmark`
      */
     public function getlister(): array
@@ -211,5 +225,55 @@ class Modelbookmark extends Modeldb
         } else {
             throw new InvalidArgumentException("ID input should be a string or an instance of Bookmark");
         }
+    }
+
+
+    /**
+     * A set that can be used as default public bookmarks
+     *
+     * @return Bookmark[]
+     */
+    protected function defaultbookmarks(): array
+    {
+        $lastedited = new Opt(['sortby' => 'datemodif', 'limit' => 5, 'order' => -1]);
+        $lasteditedbookmark = new Bookmark();
+        $lasteditedbookmark->init(
+            'last5edited',
+            $lastedited->getaddress(),
+            '🕒',
+            'Last 5 edited',
+            'Get the 5 last edited pages of the database'
+        );
+
+        $lastcreated = new Opt(['sortby' => 'datecreation', 'limit' => 10, 'order' => -1]);
+        $lastcreatedbookmark = new Bookmark();
+        $lastcreatedbookmark->init(
+            'last10created',
+            $lastcreated->getaddress(),
+            '🖍️',
+            'Last 10 created',
+            'Get the 10 last created pages of the database'
+        );
+
+        $emptytag = new Opt(['tagcompare' => 'EMPTY']);
+        $emptytagbookmark = new Bookmark();
+        $emptytagbookmark->init(
+            'notags',
+            $emptytag->getaddress(),
+            '🏷️',
+            'No tags',
+            'Pages that does\'nt have any tag'
+        );
+
+        $all = new Opt();
+        $allbookmark = new Bookmark();
+        $allbookmark->init('all', $all->getaddress(), '⚓', 'All', 'Show all pages');
+
+        return [
+            $lasteditedbookmark,
+            $lastcreatedbookmark,
+            $emptytagbookmark,
+            $allbookmark,
+        ];
     }
 }

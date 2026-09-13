@@ -22,8 +22,8 @@ try {
     try {
         Config::readconfig();
     } catch (Notfoundexception $e) {
-        $app = new Application();
-        $app->wakeup();
+        $wizard = new Wizard();
+        $wizard->launch();
         exit;
     } catch (RuntimeException $e) {
         throw new RuntimeException('config error: ' . $e->getMessage());
