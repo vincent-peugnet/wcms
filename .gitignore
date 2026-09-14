@@ -19,3 +19,4 @@ config.wizard.lock
 error_log
 .BUILDDATE
 VERSION
+manual.pdf
