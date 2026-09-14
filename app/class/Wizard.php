@@ -143,6 +143,17 @@ class Wizard
                 </p>
             </form>
         </body>
+        <style>
+            body {
+                max-width: 900px;
+                margin: auto;
+                padding: 8px;
+            }
+            input[type="submit"] {padding: 5px 20px;cursor: pointer;}
+            h3 {margin-bottom: 0;font-size: 1em;}
+            legend {font-size: 1.3em;font-weight: bold;}
+            .help {font-size: 0.9em;}
+        </style>
         </html>
 
 
@@ -154,23 +165,17 @@ class Wizard
         ?>
         <fieldset>
             <legend>Config file</legend>
-            <h3>
-                Secure connection
-            </h3>
             <input type="hidden" name="secure" value="0">
             <input type="checkbox" name="secure" id="secure" value="1" <?= Config::issecure() ? "checked" : "" ?>>
-            <label for="secure">secure connection</label>
-            <p>
-                <i>Should be checked if your web server is using HTTPS</i>
-            </p>
+            <label for="secure">secure connection (<code>https</code>)</label>
             <h3>
                 <label for="basepath">Path to W-CMS</label>
             </h3>
             <input type="text" name="configinit[basepath]"  value="<?= Config::basepath() ?>" id="basepath">
-            <p><i>
+            <p class="help">
                 Leave it empty if W-CMS is in your root folder, otherwise,
-                indicate the subfolder(s) in witch you installed the CMS
-            </i></p>
+                indicate the subfolder(s) in witch you installed it
+            </p>
             <h3>
                 <label for="pagetable">Name of the pages database</label>
             </h3>
@@ -181,7 +186,7 @@ class Wizard
                 id="pagetable"
                 required
             >
-            <p><i>Set the name of the folder that is going to store the pages</i></p>
+            <p class="help">Set the name of the folder that is going to store the pages</p>
             <h3>
                 <label for="secretkey">Secret key</label>
             </h3>
@@ -194,16 +199,16 @@ class Wizard
                 maxlength="<?= Config::SECRET_KEY_MAX ?>"
                 required
             >
-            <p><i>
+            <p class="help">
                 The secret key is used to secure cookies. There are no need to remind it.
                 (<?= Config::SECRET_KEY_MIN ?> to <?= Config::SECRET_KEY_MAX ?> characters)
-            </i></p>
+            </p>
             <h3>Defaults</h3>
             <input type="hidden" name="defaultbookmarks" value="0">
             <input type="checkbox" name="defaultbookmarks" id="defaultbookmarks" value="1" checked>
             <label for="defaultbookmarks">default bookmarks</label>
-            <p>
-                Gives you a set of default bookmarks. Usefull in most case 😉.
+            <p class="help">
+                Gives you a set of default bookmarks. Usefull in most case 😉
             </p>
         </fieldset>
         <?php
@@ -214,7 +219,7 @@ class Wizard
         ?>
         <fieldset>
             <legend>Admin user</legend>
-            <p><i>Your credentials as the first administrator.</i></p>
+            <p class="help">Your credentials as the first administrator</p>
             <h3>
             <label for="admin">Identifier</label>
             </h3>
