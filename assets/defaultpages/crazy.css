@@ -1,0 +1,17 @@
+body {
+    background: red;
+    color: yellow;
+    text-align: center;
+    font-size: 8em;
+    animation: rotate 2s linear infinite;
+  }
+  
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  

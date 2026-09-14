@@ -72,6 +72,32 @@ class Wizard
             $msgs[] = 'user created';
         }
 
+        Config::hydrate($_POST['configinit']);
+        Config::getdomain();
+
+        $errors = Config::check();
+        if (!empty($errors)) {
+            echo '<a href="">⬅️ back to form</a>';
+            foreach ($errors as $error) {
+                echo "<p>❌ $error</p>";
+            }
+            exit;
+        }
+
+        Config::savejson();
+        self::lock(); // lock the wizard
+
+        // default pages
+        if (boolval($_POST['defaultpages'])) {
+            try {
+                $pagemanager = new Modelpage(Config::pagetable());
+                $pagemanager->usedefaults();
+            } catch (RuntimeException $e) {
+                // Just log a warning as the wizard will be skipped on reload and it's not a big problem
+                Logger::warning('install wizard: default pages creation: %s', $e->getMessage());
+            }
+        }
+
         // default bookmarks
         if (boolval($_POST['defaultbookmarks'])) {
             try {
@@ -84,23 +110,7 @@ class Wizard
             }
         }
 
-        Config::hydrate($_POST['configinit']);
-        Config::getdomain();
-
-        $errors = Config::check();
-        if (empty($errors)) {
-            self::lock(); // lock the wizard
-            Config::savejson();
-            header('Location: ./');
-        } else {
-            echo '<a href="">⬅️ back to form</a>';
-            foreach ($msgs as $msg) {
-                echo "<p>✅ $msg</p>";
-            }
-            foreach ($errors as $error) {
-                echo "<p>❌ $error</p>";
-            }
-        }
+        header('Location: ./');
     }
 
     /**
@@ -203,12 +213,17 @@ class Wizard
                 The secret key is used to secure cookies. There are no need to remind it.
                 (<?= Config::SECRET_KEY_MIN ?> to <?= Config::SECRET_KEY_MAX ?> characters)
             </p>
-            <h3>Defaults</h3>
             <input type="hidden" name="defaultbookmarks" value="0">
             <input type="checkbox" name="defaultbookmarks" id="defaultbookmarks" value="1" checked>
             <label for="defaultbookmarks">default bookmarks</label>
             <p class="help">
-                Gives you a set of default bookmarks. Usefull in most case 😉
+                Gives you a set of defaults. Usefull in most case 😉
+            </p>
+            <input type="hidden" name="defaultpages" value="0">
+            <input type="checkbox" name="defaultpages" id="defaultpages" value="1" checked>
+            <label for="defaultpages">default pages</label>
+            <p class="help">
+                Usefull if it's your first time using W 🍼
             </p>
         </fieldset>
         <?php

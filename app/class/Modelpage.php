@@ -39,6 +39,20 @@ class Modelpage extends Modeldb
     }
 
     /**
+     * Try to create the default pages if their IDs are free
+     *
+     * @throws RuntimeException             if an error occured
+     */
+    public function usedefaults(): void
+    {
+        foreach ($this->defaultpages() as $page) {
+            if (!$this->exist($page->id())) {
+                $this->add($page);
+            }
+        }
+    }
+
+    /**
      * Scan library for all pages as objects.
      * If a scan has already been perform, it will just
      * read `pagelist` Propriety
@@ -1036,5 +1050,50 @@ class Modelpage extends Modeldb
         } else {
             return new Pagev1($datas);
         }
+    }
+
+    /**
+     * @return Page[]                       set of default pages
+     *
+     * @throws Filesystemexception          if reading sources file failed
+     */
+    public function defaultpages(): array
+    {
+        $pages['welcome'] = new Pagev2([
+            'id' => 'welcome',
+            'title' => 'Welcome to W !',
+            'description' => 'Welcome page',
+            'tag' => ['demo'],
+            'index' => false,
+            'content' => Fs::readfile('assets/defaultpages/welcome.md'),
+            'templatebody' => '_basic',
+        ]);
+        $pages['empty'] = new Pagev2([
+            'id' => 'empty',
+            'title' => 'empty page',
+            'description' => 'Nothing to say about an empty page',
+            'tag' => ['demo'],
+            'content' => '*empty page* (but uses a template)',
+            'templatebody' => '_basic',
+        ]);
+        $pages['crazy'] = new Pagev2([
+            'id' => 'crazy',
+            'title' => 'CRAZZYY !',
+            'description' => 'this page is a bit crazy',
+            'tag' => ['demo'],
+            'content' => 'WWOOOOO',
+            'css' => Fs::readfile('assets/defaultpages/crazy.css'),
+            'secure' => Page::PRIVATE,
+        ]);
+        $pages['_basic'] = new Pagev2([
+            'id' => '_basic',
+            'title' => 'basic template',
+            'description' => 'a template that can be used for your pages',
+            'tag' => ['demo'],
+            'secure' => Page::NOT_PUBLISHED,
+            'css' => Fs::readfile('assets/defaultpages/_basic.css'),
+            'body' => Fs::readfile('assets/defaultpages/_basic.html'),
+        ]);
+        return $pages;
     }
 }
