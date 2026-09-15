@@ -591,6 +591,16 @@ abstract class Servicerender
         // $fortin->header_id_func = function ($header) {
         //  return preg_replace('/[^\w]/', '', strtolower($header));
         // };
+
+        // encode `/` character so that URLlinker won't treat `https://` as an URLs
+        // HTML special chars encoding is also necessary otherwise DOMparser mess up things
+        $fortin->code_block_content_func = function ($code) {
+            return str_replace('/', '&#47;', htmlspecialchars($code));
+        };
+        $fortin->code_span_content_func = function ($code) {
+            return str_replace('/', '&#47;', htmlspecialchars($code));
+        };
+
         $fortin->hard_wrap = Config::markdownhardwrap();
         $text = $fortin->transform($text);
         return $text;
