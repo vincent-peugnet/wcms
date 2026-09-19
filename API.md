@@ -38,14 +38,14 @@ Only the given fields will be updated.
 The `datemodified` field is important as it's used for conflict detection. It has to be the same as stored Page, otherwise, a `409` response is thrown.
 An optional `force=1` [search parameter](https://developer.mozilla.org/en-US/docs/Web/API/URL/search) can be added to bypass conflict detection.
 
-In case of success, you will get a `200` HTTP CODE and recieve the full JSON page object.
+In case of success, you will get a `200` HTTP CODE and receive the full JSON page object.
 The `datemodif` and `editcount` field will be updated.
 
     POST    /api/v0/page/<page_id>/update[?force=1]
 
 possible error codes:
 
-- `400` if the POST datas are not recieved or in case of JSON decoding error
+- `400` if the POST data are not received or in case of a JSON decoding error
 - `401` if user does'nt have the rights to update the page
 - `404` if page is not found
 - `406` in case of invalid ID
@@ -143,7 +143,7 @@ All the keys are optionnal.
 
 possible error codes:
 
-- `400` if the POST datas are not recieved or in case of JSON decoding error
+- `400` if the POST data are not received or in case of a JSON decoding error
 - `401` if user does'nt have the rights to view list of page
 
 
