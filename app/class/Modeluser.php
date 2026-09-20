@@ -66,19 +66,6 @@ class Modeluser extends Modeldb
     }
 
     /**
-     * Return true if at least one admin exist in user database
-     */
-    public function adminexist(): bool
-    {
-        $userdatalist = $this->repo->query()
-            ->where('level', '==', 10)
-            ->execute();
-
-        return $userdatalist->total() >= 1;
-    }
-
-
-    /**
      * Check the clear password of an user
      *
      * @param User $user                    User to check

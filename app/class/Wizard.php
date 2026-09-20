@@ -48,7 +48,9 @@ class Wizard
                 break;
 
             case 'GET':
-                $this->form(!$this->usermanager->adminexist());
+                $this->form(
+                    count($this->usermanager->getlister([User::ADMIN])) === 0
+                );
                 break;
 
             default:
