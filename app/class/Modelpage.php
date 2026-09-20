@@ -75,31 +75,6 @@ class Modelpage extends Modeldb
         return $this->pagelist;
     }
 
-
-    /**
-     * Scan database for specific pages IDs and return array of Pages objects
-     *
-     * @param string[] $idlist                 list of ID strings
-     *
-     * @return Page[]                           array of Page objects
-     */
-    public function pagelistbyid(array $idlist = []): array
-    {
-        $pagedatalist = $this->repo->query()
-            ->where('__id', 'IN', $idlist)
-            ->execute();
-
-        $pagelist = [];
-        foreach ($pagedatalist as $id => $pagedata) {
-            try {
-                $pagelist[$id] = $this->parsepage($pagedata);
-            } catch (RuntimeException $e) {
-                Logger::error("Could not load Page with ID \"$id\" : $e");
-            }
-        }
-        return $pagelist;
-    }
-
     /**
      * Store new page in the database
      *
