@@ -225,13 +225,6 @@
                             <input type="submit" name="action" value="edit">
                         </p>
                     </div>
-                    
-                    <div class="dropdown-section">
-                        <h3>Render</h3>
-                        <p class="field submit-field">
-                            <input type="submit" name="action" value="render">
-                        </p>
-                    </div>
 
                     <div class="dropdown-section">                
                         <h3>Delete</h3>

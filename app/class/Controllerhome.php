@@ -332,10 +332,6 @@ class Controllerhome extends Controller
                     $this->multiedit();
                     break;
 
-                case 'render':
-                    $this->multirender();
-                    break;
-
                 case 'delete':
                     $this->multidelete();
                     break;
@@ -379,29 +375,6 @@ class Controllerhome extends Controller
             }
         }
         $this->sendstatflashmessage($count, $total, 'pages have been edited');
-    }
-
-    protected function multirender(): void
-    {
-        $pagelist = $_POST['pagesid'] ?? [];
-        $total = count($pagelist);
-        $pagelist = $this->pagemanager->pagelistbyid($pagelist);
-        $count = 0;
-        foreach ($pagelist as $page) {
-            try {
-                $page = $this->pagemanager->renderpage(
-                    $page,
-                    $this->router,
-                    Config::urlchecker() ? new Serviceurlchecker(0) : null
-                );
-                $this->pagemanager->update($page);
-                $count++;
-            } catch (RuntimeException $e) {
-                $p = $page->id();
-                Logger::error("Error while trying to render page $p: " . $e->getMessage());
-            }
-        }
-        $this->sendstatflashmessage($count, $total, 'pages have been rendered');
     }
 
     protected function multidelete(): void
