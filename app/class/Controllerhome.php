@@ -95,6 +95,7 @@ class Controllerhome extends Controller
         $vars['faviconlist'] = $this->mediamanager->listfavicon();
         $vars['thumbnaillist'] = $this->mediamanager->listthumbnail();
         $vars['editorlist'] = $this->usermanager->getlisterbylevel(2, '>=');
+        $vars['userurls'] = $this->usermanager->userurls();
         $vars['user'] = $this->user;
         $vars['opt'] = $this->opt;
         $vars['deepsearch'] = $deepsearch['regex'];

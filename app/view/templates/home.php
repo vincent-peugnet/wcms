@@ -299,6 +299,11 @@ use Wcms\Config;
                                     <?php if (Config::homepage() === Config::HOMEPAGE_REDIRECT && $item->id() === Config::homeredirect()) : ?>
                                         <i class="fa fa-home" title="this page is set as homepage"></i>
                                     <?php endif ?>
+                                    <?php if (key_exists($item->id(), $userurls)) : ?>
+                                        <?php foreach ($userurls[$item->id()] as $user) : ?>
+                                            <i class="fa fa-user" title="this page is set as URL for user '<?= $user->id() ?>'"></i>
+                                        <?php endforeach ?>
+                                    <?php endif ?>
                                     <?php if (!empty(Config::helpbutton()) && Config::helpbutton() === $item->id()) : ?>
                                         <i class="fa fa-question-circle" title="connexion help button leads to this page"></i>
                                     <?php endif ?>

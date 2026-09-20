@@ -211,4 +211,21 @@ class Modeluser extends Modeldb
         }
         return $users;
     }
+
+    /**
+     * Get all users that have their URL set, sorted by URL
+     *
+     * @return array<string, User[]>        key is URL, value is array of Users
+     */
+    public function userurls(): array
+    {
+        $sites = [];
+        $users = $this->getlister();
+        foreach ($users as $user) {
+            if (!empty($user->url())) {
+                $sites[$user->url()][] = $user;
+            }
+        }
+        return $sites;
+    }
 }
