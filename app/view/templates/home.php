@@ -300,8 +300,8 @@ use Wcms\Config;
                                         <i class="fa fa-home" title="this page is set as homepage"></i>
                                     <?php endif ?>
                                     <?php if (key_exists($item->id(), $userurls)) : ?>
-                                        <?php foreach ($userurls[$item->id()] as $user) : ?>
-                                            <i class="fa fa-user" title="this page is set as URL for user '<?= $user->id() ?>'"></i>
+                                        <?php foreach ($userurls[$item->id()] as $u) : ?>
+                                            <i class="fa fa-user" title="this page is set as URL for user '<?= $u->id() ?>'"></i>
                                         <?php endforeach ?>
                                     <?php endif ?>
                                     <?php if (!empty(Config::helpbutton()) && Config::helpbutton() === $item->id()) : ?>
