@@ -78,8 +78,7 @@ div#searchbar {
 }
 
 #searchbar details, #searchbar summary {
-    display: inline;
-    cursor: pointer;
+    display: inline-block;
 }
 
 /* --------------------------------------------------------- list view */

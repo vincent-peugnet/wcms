@@ -64,9 +64,6 @@ use Wcms\Config;
                     </a>
                 </span>
             <?php endif ?>
-            <?php if($search->isactive()) : ?>
-                <i class="fa fa-search" title="There is active search"></i>
-            <?php endif ?>
             <span class="display">
                 <?php if(!Wcms\Config::disablejavascript()) : ?>
                     <a href="?display=list" <?= $display === 'list' ? 'class="selected"' : '' ?> title="list"><i class="fa fa-th-list"></i></a>
@@ -133,23 +130,53 @@ use Wcms\Config;
 
             <div id="searchbar">
                 <form action="<?= $this->url('home') ?>" method="get">
-                    <input type="text" name="query" value="<?= $search->query ?>" id="searchquery" placeholder="search">
-                    <input type="submit" value="search">
-                    <details <?= $search->isactive() ? 'open' : '' ?>>
-                        <summary><i class="fa fa-cog"></i></summary>
-                        <input type="checkbox" name="id" id="searchid" value="1" <?= $search->id ? 'checked' : '' ?>>
-                        <label for="searchid">id</label>
-                        <input type="checkbox" name="title" id="searchtitle" value="1" <?= $search->title ? 'checked' : '' ?>>
-                        <label for="searchtitle">title</label>
-                        <input type="checkbox" name="description" id="searchdescription" value="1"  <?= $search->description ? 'checked' : '' ?>>
-                        <label for="searchdescription">description</label>
-                        <input type="checkbox" name="content" id="searchcontent" value="1"  <?= $search->content ? 'checked' : '' ?>>
-                        <label for="searchcontent" title="Markdown content : MAIN, HEADER, NAV, ASIDE, FOOTER">content</label>
-                        <input type="checkbox" name="other" id="searchother" value="1"  <?= $search->other ? 'checked' : '' ?>>
-                        <label for="searchother" title="Structure content : BODY, CSS, Javascript">other</label>
-                        <input type="checkbox" name="casesensitive" id="searchcase" value="1"  <?= $search->casesensitive ? 'checked' : '' ?>>
-                        <label for="searchcase" title="Case sensitive or not">case sensitive</label>
+                    <details  class="dropdown">
+                        <summary>
+                            <i class="fa fa-cog"></i>
+                        </summary>
+                        <div class="dropdown-content">
+                            <div class="dropdown-section">
+                                <h3>fields</h3>
+                                <p class="field">
+                                    <label for="searchid">id</label>
+                                    <input type="checkbox" name="id" id="searchid" value="1" <?= $search->id ? 'checked' : '' ?>>
+                                </p>
+                                <p class="field">
+                                    <label for="searchtitle">title</label>
+                                    <input type="checkbox" name="title" id="searchtitle" value="1" <?= $search->title ? 'checked' : '' ?>>
+                                </p>
+                                <p class="field">
+                                    <label for="searchdescription">description</label>
+                                    <input type="checkbox" name="description" id="searchdescription" value="1"  <?= $search->description ? 'checked' : '' ?>>
+                                </p>
+                                <p class="field">
+                                    <label for="searchcontent">content</label>
+                                    <input type="checkbox" name="content" id="searchcontent" value="1"  <?= $search->content ? 'checked' : '' ?>>
+                                </p>
+                                <p class="field">
+                                    <label for="searchother">BODY / CSS / Javascript</label>
+                                    <input type="checkbox" name="other" id="searchother" value="1"  <?= $search->other ? 'checked' : '' ?>>
+                                </p>
+                            </div>
+                            <div class="dropdown-section">
+                                <h3>search options</h3>
+                                <p class="field">
+                                    <label for="searchcase">case sensitive</label>
+                                    <input type="checkbox" name="casesensitive" id="searchcase" value="1"  <?= $search->casesensitive ? 'checked' : '' ?>>
+                                </p>
+                            </div>
+                        </div>
                     </details>
+                    <input type="search" name="query" value="<?= $search->query ?>" id="searchquery" placeholder="search" <?= $search->isactive() ? 'autofocus' : '' ?>>
+                    <button type="submit" value="search">
+                        <i class="fa fa-search"></i>
+                        <span class="text">search</span>
+                    </button>
+                    <?php if($search->isactive()) : ?>
+                        <a href="?" class="button">
+                            <i class="fa fa-times-circle"></i>
+                        </a>
+                    <?php endif ?>
                 </form>
             </div>
 
