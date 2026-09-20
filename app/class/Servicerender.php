@@ -19,6 +19,7 @@ use RuntimeException;
 use VStelmakh\UrlHighlight\Highlighter\HtmlHighlighter;
 use VStelmakh\UrlHighlight\UrlHighlight;
 use VStelmakh\UrlHighlight\Validator\Validator;
+use Wcms\Exception\Databaseexception;
 
 abstract class Servicerender
 {
@@ -969,7 +970,14 @@ abstract class Servicerender
     protected function authors(): string
     {
         $usermanager = new Modeluser();
-        $users = $usermanager->userlistbyid($this->page->authors());
+        $users = [];
+        foreach ($this->page->authors() as $author) {
+            try {
+                $users[$author] = $usermanager->get($author);
+            } catch (Databaseexception $e) {
+                // not a big deal
+            }
+        }
         return $this->userlist($users);
     }
 

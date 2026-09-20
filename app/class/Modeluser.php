@@ -49,23 +49,6 @@ class Modeluser extends Modeldb
     }
 
     /**
-     * @param string[] $idlist      List of user ID
-     * @return User[]               List of User
-     */
-    public function userlistbyid(array $idlist = []): array
-    {
-        $userdatalist = $this->repo->query()
-            ->where('__id', 'IN', $idlist)
-            ->execute();
-
-        $userlist = [];
-        foreach ($userdatalist as $id => $userdata) {
-            $userlist[$id] = new User($userdata);
-        }
-        return $userlist;
-    }
-
-    /**
      * Check the clear password of an user
      *
      * @param User $user                    User to check
