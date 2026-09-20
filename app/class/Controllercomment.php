@@ -20,6 +20,20 @@ class Controllercomment extends Controller
         $this->commentmanager = new Modelcomment();
     }
 
+    public function desktop(): never
+    {
+        if ($this->user->isvisitor()) {
+            $this->showtemplate('connect', ['route' => 'url']);
+        }
+        if (!$this->user->issupereditor()) {
+            $this->showtemplate('forbidden', [], 403);
+        }
+
+        $this->showtemplate('comment', [
+            'comments' => $this->commentmanager->list(),
+        ]);
+    }
+
     public function comment(string $page): never
     {
         if (!Config::comments()) {

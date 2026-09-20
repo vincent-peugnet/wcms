@@ -1,0 +1,6 @@
+.message {
+    white-space: preserve;
+    max-height: 140px;
+    overflow: scroll;
+    display: block;
+  }

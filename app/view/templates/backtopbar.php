@@ -29,6 +29,12 @@
             </a>
         <?php endif ?>
 
+        <?php if (Wcms\Config::comments() && $user->issupereditor()) : ?>
+            <a href="<?= $this->url('comment') ?>" <?= $tab == 'comment' ? 'class="currentpage"' : '' ?>>
+                <i class="fa fa-comment"></i> <span>comment</span>
+            </a>
+        <?php endif ?>
+
         <?php if (Wcms\Config::homepage() === Wcms\Config::HOMEPAGE_REDIRECT && !empty(Wcms\Config::homeredirect())) : ?>
             <a href="<?= $this->url('pageread', ['page' => Wcms\Config::homeredirect()]) ?>" title="open landing page">
                 <i class="fa fa-external-link-square"></i>

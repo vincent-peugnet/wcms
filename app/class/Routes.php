@@ -64,6 +64,7 @@ class Routes
             ['POST', '/!media/rename', 'Controllermedia#rename', 'mediarename'],
             ['GET', '/!url', 'Controllerurl#desktop', 'url'],
             ['POST', '/!url/edit', 'Controllerurl#edit', 'urledit'],
+            ['GET', '/!comment', 'Controllercomment#desktop', 'comment'],
             ['GET', '/!admin', 'Controlleradmin#desktop', 'admin'],
             ['GET', '/!admin/log', 'Controlleradmin#log', 'adminlog'],
             ['GET', '/!admin/log/download', 'Controlleradmin#logdownload', 'adminlogdownload'],

@@ -20,6 +20,24 @@ class Modelcomment extends Modeldb
     }
 
     /**
+     * @return array<string, Comment>       Comments sorted by 'most recents'
+     */
+    public function list(): array
+    {
+        $comments = [];
+        $pagecommentsdata = $this->repo->findAll();
+        foreach ($pagecommentsdata as $pagecommentdata) {
+            $page = $pagecommentdata->getId();
+            foreach ($pagecommentdata as $id => $data) {
+                $com = Comment::new($data);
+                $comments[implode('#', [$page, $id])] = $com;
+            }
+        }
+        $this->sort($comments, 'date', -1);
+        return $comments;
+    }
+
+    /**
      * Add a new comment to a specified page.
      * If it's the first, it will create a new entry in comment database.
      *
@@ -158,5 +176,33 @@ class Modelcomment extends Modeldb
             }
         }
         $this->update($pageid, $comments);
+    }
+
+    /**
+     * Sort an array of Comments
+     *
+     * @param Comment[] $comments
+     * @param string $sortby
+     * @param int $order                    Can be 1 or -1
+     */
+    protected function sort(array &$comments, string $sortby = 'date', int $order = 1): void
+    {
+        $sortby = (in_array($sortby, ['date'])) ? $sortby : 'date';
+        $order = ($order === 1 || $order === -1) ? $order : 1;
+        uasort($comments, $this->buildsorter($sortby, $order));
+    }
+
+    protected function buildsorter(string $sortby, int $order): callable
+    {
+        return function (Comment $comment1, Comment $comment2) use ($sortby, $order) {
+            $result = $this->compare($comment1, $comment2, $sortby, $order);
+            return $result;
+        };
+    }
+
+    protected function compare(Comment $comment1, Comment $comment2, string $property = 'date', int $order = 1): int
+    {
+        $result = ($comment1->$property() <=> $comment2->$property());
+        return $result * $order;
     }
 }
