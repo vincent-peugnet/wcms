@@ -59,7 +59,7 @@ class Modelpage extends Modeldb
      *
      * @return array<string, Page>          of Pages objects as `id => Page`
      */
-    public function pagelist(): array
+    public function list(): array
     {
         if (empty($this->pagelist)) {
             $list = $this->repo->findAll();

@@ -159,7 +159,7 @@ class Serviceurlchecker
      */
     public function cleancache(Modelpage $pagemanager): int
     {
-        $pages = $pagemanager->pagelist();
+        $pages = $pagemanager->list();
         $externallinks = [];
         foreach ($pages as $page) {
             $externallinks = array_merge($externallinks, $page->externallinks());

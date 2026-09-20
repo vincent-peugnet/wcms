@@ -820,7 +820,7 @@ abstract class Servicerender
 
             $optlist->hydrate($options);
 
-            $pagetable = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optlist);
+            $pagetable = $this->pagemanager->pagetable($this->pagemanager->list(), $optlist);
             return $optlist->listhtml($pagetable, $this->page);
         } catch (RuntimeException $e) {
             $this->adderror("page list inclusion: '%s': %s", $match->fullmatch(), $e->getMessage());
@@ -857,7 +857,7 @@ abstract class Servicerender
 
             $optmap->hydrate($options);
 
-            $pages = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optmap);
+            $pages = $this->pagemanager->pagetable($this->pagemanager->list(), $optmap);
             $geopt = new Opt(['geo' => true]);
             $pages = $this->pagemanager->pagetable($pages, $geopt); // second pass of filtering to remove non-geo pages
 
@@ -954,7 +954,7 @@ abstract class Servicerender
 
             $optrandom->hydrate($options);
 
-            $randompages = $this->pagemanager->pagetable($this->pagemanager->pagelist(), $optrandom);
+            $randompages = $this->pagemanager->pagetable($this->pagemanager->list(), $optrandom);
             $this->linkto = array_merge($this->linkto, array_keys($randompages));
             $optrandom->setorigin($this->page->id());
             return $this->generate('randomdirect', [], $optrandom->getquery());

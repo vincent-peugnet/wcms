@@ -229,7 +229,7 @@ class Controllerapipage extends Controllerapi
 
         $fields = $datas['fields'] ?? null;
 
-        $pages = $this->pagemanager->pagelist();
+        $pages = $this->pagemanager->list();
         $pages = $this->pagemanager->pagetable($pages, $opt);
         $pages = array_map(function (Page $page) use ($fields) {
             if ($fields === null) {

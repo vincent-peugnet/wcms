@@ -41,7 +41,7 @@ class Servicerss
     {
         $opt = $this->parsehydrate($bookmark->query());
 
-        $pagelist = $this->pagemanager->pagelist();
+        $pagelist = $this->pagemanager->list();
         $pagetable = $this->pagemanager->pagetable($pagelist, $opt, '', []);
 
         $xml = $this->render($pagetable, $bookmark);

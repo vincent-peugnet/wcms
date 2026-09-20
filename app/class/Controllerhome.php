@@ -49,7 +49,7 @@ class Controllerhome extends Controller
             $this->showtemplate('forbidden', ['message' => $msg], 403);
         }
 
-        $pagelist = $this->pagemanager->pagelist();
+        $pagelist = $this->pagemanager->list();
 
 
         $this->opt = new Opt();
