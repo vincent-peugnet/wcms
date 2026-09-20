@@ -84,7 +84,7 @@ class Controllerhome extends Controller
         $search = new Search($_GET);
 
         $pagelistopt = $this->pagemanager->filtersort($pagelist, $this->opt);
-        $pagelistopt = $this->pagemanager->search($pagelist, $search);
+        $pagelistopt = $this->pagemanager->search($pagelistopt, $search);
 
         $users = $this->usermanager->list();
         $vars['editorlist'] = $this->usermanager->filtersort($users, User::minlevel(User::INVITE));
