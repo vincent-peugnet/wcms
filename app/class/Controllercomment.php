@@ -31,12 +31,37 @@ class Controllercomment extends Controller
 
         $sortby = $_GET['sortby'] ?? 'date';
         $order = intval($_GET['order'] ?? -1);
+        $pages = $_GET['pages'] ?? [];
+
+        $ids = $this->commentmanager->ids();
+        $compages = [];
+        foreach ($ids as $id) {
+            try {
+                $compages[$id] = $this->pagemanager->get($id);
+            } catch (RuntimeException $e) {
+                // fff
+            }
+        }
+        $compages = $this->pagemanager->filtersort(
+            $compages,
+            new Opt(['sortby' => 'commentcount', 'order' => -1])
+        );
+
+        $isfiltered = true;
+        if (empty($pages)) {
+            $pages = array_keys($compages);
+            $isfiltered = false;
+        } elseif (empty(array_diff(array_keys($compages), $pages))) {
+            $isfiltered = false;
+        }
 
         $this->showtemplate('comment', [
-            'comments' => $this->commentmanager->list($sortby, $order),
-            'pages' => $this->commentmanager->ids(),
+            'comments' => $this->commentmanager->list($pages, $sortby, $order),
+            'compages' => $compages,
             'sortby' => $sortby,
             'order' => $order,
+            'pages' => $pages,
+            'isfiltered' => $isfiltered,
         ]);
     }
 

@@ -36,6 +36,30 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                             <input type="radio" name="order" id="desc" value="-1" <?= $order === -1 ? 'checked' : '' ?>>
                         </p>
                     </fieldset>
+                    <fieldset class="flexcol">
+                        <legend>Filter</legend>
+                        <p class="field">
+                            <label for="page">
+                                pages
+                            </label>
+
+                            <?php foreach ($compages as $page) : ?>
+                                <p class="field">
+                                    <label for="page_<?= $page->id() ?>">
+                                        <?= $page->id() ?>
+                                        <span class="counter"><?= $page->commentcount() ?></span>
+                                    </label>
+                                    <input
+                                        type="checkbox"
+                                        name="pages[]"
+                                        id="page_<?= $page->id() ?>"
+                                        value="<?= $page->id() ?>"
+                                        <?= in_array($page->id(), $pages) ? 'checked' : '' ?>
+                                    >
+                                </p>
+                            <?php endforeach ?>
+                        </p>
+                    </fieldset>
                     <p class="field submit-field">
                         <input type="submit" value="filter">
                     </p>
@@ -48,6 +72,15 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
         <h2>
             Comments
             (<?= count($comments) ?>)
+            <?php if($isfiltered) : ?>
+                <span class="badge filter">
+                    <i class="fa fa-filter" title="There are active filters"></i>
+                    <a href="<?= $this->url('comment', [], "?sortby=$sortby&order=$order") ?>" class="button" title="remove filters">
+                        <i class="fa fa-times-circle"></i>
+                    </a>
+                </span>
+            <?php endif ?>
+            <span><!-- quick hack to center filter reset button --></span>
         </h2>
 
         <div class="scroll">

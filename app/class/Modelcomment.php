@@ -21,18 +21,25 @@ class Modelcomment extends Modeldb
 
     /**
      * @return array<string, Comment>       Comments sorted by 'most recents'
+     *
+     * @param string[] $pages               Selected pages IDs
      */
-    public function list(string $sortby = 'date', int $order = -1): array
+    public function list(array $pages = [], string $sortby = 'date', int $order = -1): array
     {
         $comments = [];
-        $pagecommentsdata = $this->repo->findAll();
-        foreach ($pagecommentsdata as $pagecommentdata) {
-            $page = $pagecommentdata->getId();
-            foreach ($pagecommentdata as $id => $data) {
-                $com = Comment::new($data);
-                $comments[implode('#', [$page, $id])] = $com;
+
+        foreach ($pages as $page) {
+            try {
+                $data = $this->get($page);
+                foreach ($data as $id => $data) {
+                    $com = Comment::new($data);
+                    $comments[implode('#', [$page, $id])] = $com;
+                }
+            } catch (Databaseexception $e) {
+                Logger::error('comment view: page filter: %s', $e->getMessage());
             }
         }
+
         $this->sort($comments, $sortby, $order);
         return $comments;
     }

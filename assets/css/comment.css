@@ -3,4 +3,12 @@
     max-height: 140px;
     overflow: scroll;
     display: block;
-  }
+}
+
+
+.counter::before {
+    content: "(";
+}
+.counter::after {
+    content: ")";
+}
