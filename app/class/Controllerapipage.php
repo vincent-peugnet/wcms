@@ -208,7 +208,7 @@ class Controllerapipage extends Controllerapi
         }
         http_response_code(200);
         header('Content-type: application/json; charset=utf-8');
-        echo json_encode(['pages' => $this->pagemanager->list()]);
+        echo json_encode(['pages' => $this->pagemanager->ids()]);
     }
 
     public function query(): void

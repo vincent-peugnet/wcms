@@ -278,7 +278,7 @@ class Controllerpage extends Controller
             $this->showtemplate('forbidden', ['route' => 'pageedit', 'id' => $this->page->id()], 403);
         }
 
-        $pageids = $this->pagemanager->list();
+        $pageids = $this->pagemanager->ids();
         $datas['templates']['selection'] = array_intersect($pageids, Config::templates());
         $datas['templates']['others'] = array_diff($pageids, Config::templates());
         $datas['faviconlist'] = $this->mediamanager->listfavicon();

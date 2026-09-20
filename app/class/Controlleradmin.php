@@ -33,7 +33,7 @@ class Controlleradmin extends Controller
 
     public function desktop(): never
     {
-        $datas['pagelist'] = $this->pagemanager->list();
+        $datas['pagelist'] = $this->pagemanager->ids();
         $this->mediamanager = new Modelmedia();
         $datas['faviconlist'] = $this->mediamanager->listfavicon();
         $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();

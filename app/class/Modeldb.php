@@ -113,7 +113,7 @@ class Modeldb extends Model
      *
      * @return string[]                     array of ID strings
      */
-    public function list(): array
+    public function ids(): array
     {
         return $this->repo->getAllIds();
     }

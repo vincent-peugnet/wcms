@@ -197,7 +197,7 @@ abstract class Controller
     {
         $commonsparams = [];
         $commonsparams['user'] = $this->user;
-        $commonsparams['pagelist'] = $this->pagemanager->list();
+        $commonsparams['pagelist'] = $this->pagemanager->ids();
         $commonsparams['css'] = Model::assetscsspath();
         $commonsparams['now'] = new DateTimeImmutable();
         $commonsparams['workspace'] = $this->workspace;
