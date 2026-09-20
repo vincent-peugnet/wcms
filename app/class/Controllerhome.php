@@ -105,6 +105,7 @@ class Controllerhome extends Controller
         $vars['hiddencolumncount'] = count(User::HOME_COLUMNS) - count($this->user->columns());
 
         // UI buttons to increase, decrease or cancel limit
+if ($this->opt->limit() !== 0 && $display === 'list') {
         $vars['optl5'] = clone $this->opt;
         $vars['optl5']->setlimit($this->opt->limit() + 5);
         $vars['optlm5'] = clone $this->opt;
@@ -115,6 +116,7 @@ class Controllerhome extends Controller
         $vars['optlm1']->setlimit($this->opt->limit() - 1);
         $vars['optlc'] = clone $this->opt;
         $vars['optlc']->setlimit(0);
+}
 
         if ($display === 'graph') {
             $graph = $this->servicesession->getgraph();
