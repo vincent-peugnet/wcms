@@ -51,6 +51,12 @@ class User extends Item
         self::ADMIN       => 'admin',
     ];
 
+    public const SORT_BY = [
+        'id',
+        'level',
+        'connectcount',
+    ];
+
     public const HOME_COLUMNS = [
         'favicon',
         'download',
@@ -72,6 +78,22 @@ class User extends Item
         'displaycount',
         'version',
     ];
+
+    /**
+     * get all levels above or equal to a given level
+     *
+     * @param int $minlevel                 minimum level
+     *
+     * @return int[]                        list of levels
+     */
+    public static function minlevel(int $minlevel): array
+    {
+        return array_keys(
+            array_filter(self::LEVELS, function ($level) use ($minlevel): bool {
+                return $level >= $minlevel;
+            }, ARRAY_FILTER_USE_KEY)
+        );
+    }
 
     /**
      * @param array<string, mixed>|object $data

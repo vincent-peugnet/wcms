@@ -94,7 +94,7 @@ class Controllerhome extends Controller
         $vars['columns'] = $this->user->checkedcolumns();
         $vars['faviconlist'] = $this->mediamanager->listfavicon();
         $vars['thumbnaillist'] = $this->mediamanager->listthumbnail();
-        $vars['editorlist'] = $this->usermanager->getlisterbylevel(User::INVITE, '>=');
+        $vars['editorlist'] = $this->usermanager->getlister(User::minlevel(User::INVITE));
         $vars['userurls'] = $this->usermanager->userurls();
         $vars['user'] = $this->user;
         $vars['opt'] = $this->opt;

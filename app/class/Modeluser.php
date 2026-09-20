@@ -28,16 +28,24 @@ class Modeluser extends Modeldb
 
 
     /**
-     * @return User[] associative array of User objects `id => User`
+     * @return array<string, User>          associative array of User objects `id => User`
+     *
+     * @param int[] $levels                 allowed user levels
+     *
+     * @param string $sortby
+     *
+     * @param int $order
      */
-    public function getlister(): array
+    public function getlister($levels = [], $sortby = 'id', $order = 1): array
     {
-        $userlist = [];
+        $users = [];
         $list = $this->repo->findAll();
         foreach ($list as $userdata) {
-            $userlist[$userdata->id] = new User($userdata);
+            $users[$userdata->id] = new User($userdata);
         }
-        return $userlist;
+        $users = $this->listfilter($users, $levels);
+        $this->listsort($users, $sortby, $order);
+        return $users;
     }
 
     /**
@@ -69,25 +77,6 @@ class Modeluser extends Modeldb
         return $userdatalist->total() >= 1;
     }
 
-    /**
-     * @param int $level                    Level of user (see consts)
-     * @param string $comp                  Comparaison operator
-     * @return User[]                       List of User object using ID as key
-     */
-    public function getlisterbylevel(int $level, string $comp = '==', bool $orderbylevel = false): array
-    {
-        $userdatalist = $this->repo->query()
-            ->where('level', $comp, $level)
-            ->orderBy($orderbylevel ? 'level ASC' : 'id ASC')
-            ->execute();
-
-        $userlist = [];
-        foreach ($userdatalist as $user) {
-            $userlist[$user->id] = new User($user);
-        }
-
-        return $userlist;
-    }
 
     /**
      * Check the clear password of an user
@@ -211,6 +200,56 @@ class Modeluser extends Modeldb
         }
         return $users;
     }
+
+
+    /**
+     * Filter an array of Urls
+     *
+     * @param User[] $users
+     *
+     * @param int[] $levels
+     *
+     * @return User[]
+     */
+    protected function listfilter(array $users, array $levels = []): array
+    {
+        if ($levels === []) {
+            return $users;
+        }
+
+        return array_filter($users, function (User $user) use ($levels): bool {
+            return in_array($user->level(), $levels);
+        });
+    }
+
+    /**
+     * Sort an array of Users
+     *
+     * @param User[] $users
+     * @param string $sortby
+     * @param int $order                    Can be 1 or -1
+     */
+    protected function listsort(array &$users, string $sortby = 'id', int $order = 1): void
+    {
+        $sortby = (key_exists($sortby, User::SORT_BY)) ? $sortby : 'id';
+        $order = ($order === 1 || $order === -1) ? $order : 1;
+        uasort($users, $this->buildsorter($sortby, $order));
+    }
+
+    protected function buildsorter(string $sortby, int $order): callable
+    {
+        return function (User $user1, User $user2) use ($sortby, $order) {
+            $result = $this->compare($user1, $user2, $sortby, $order);
+            return $result;
+        };
+    }
+
+    protected function compare(User $user1, User $user2, string $property = 'id', int $order = 1): int
+    {
+        $result = ($user1->$property() <=> $user2->$property());
+        return $result * $order;
+    }
+
 
     /**
      * Get all users that have their URL set, sorted by URL
