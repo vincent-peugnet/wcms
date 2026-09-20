@@ -20,6 +20,12 @@ abstract class Comment extends Item
 
     public const MAX_MESSAGE_LENGTH = 2 ** 14;
 
+    public const SORT_BY = [
+        'date',
+        'approved',
+        'visiblename',
+    ];
+
     /**
      * @param array<mixed> $data
      */

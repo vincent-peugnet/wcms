@@ -29,8 +29,14 @@ class Controllercomment extends Controller
             $this->showtemplate('forbidden', [], 403);
         }
 
+        $sortby = $_GET['sortby'] ?? 'date';
+        $order = intval($_GET['order'] ?? -1);
+
         $this->showtemplate('comment', [
-            'comments' => $this->commentmanager->list(),
+            'comments' => $this->commentmanager->list($sortby, $order),
+            'pages' => $this->commentmanager->ids(),
+            'sortby' => $sortby,
+            'order' => $order,
         ]);
     }
 

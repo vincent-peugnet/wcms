@@ -22,7 +22,7 @@ class Modelcomment extends Modeldb
     /**
      * @return array<string, Comment>       Comments sorted by 'most recents'
      */
-    public function list(): array
+    public function list(string $sortby = 'date', int $order = -1): array
     {
         $comments = [];
         $pagecommentsdata = $this->repo->findAll();
@@ -33,7 +33,7 @@ class Modelcomment extends Modeldb
                 $comments[implode('#', [$page, $id])] = $com;
             }
         }
-        $this->sort($comments, 'date', -1);
+        $this->sort($comments, $sortby, $order);
         return $comments;
     }
 
@@ -187,7 +187,7 @@ class Modelcomment extends Modeldb
      */
     protected function sort(array &$comments, string $sortby = 'date', int $order = 1): void
     {
-        $sortby = (in_array($sortby, ['date'])) ? $sortby : 'date';
+        $sortby = (in_array($sortby, Comment::SORT_BY)) ? $sortby : 'date';
         $order = ($order === 1 || $order === -1) ? $order : 1;
         uasort($comments, $this->buildsorter($sortby, $order));
     }
