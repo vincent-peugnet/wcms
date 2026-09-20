@@ -201,7 +201,7 @@ class Modeluser extends Modeldb
      */
     protected function listsort(array &$users, string $sortby = 'id', int $order = 1): void
     {
-        $sortby = (key_exists($sortby, User::SORT_BY)) ? $sortby : 'id';
+        $sortby = (in_array($sortby, User::SORT_BY)) ? $sortby : 'id';
         $order = ($order === 1 || $order === -1) ? $order : 1;
         uasort($users, $this->buildsorter($sortby, $order));
     }
