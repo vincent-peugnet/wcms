@@ -94,7 +94,7 @@ class Controllerhome extends Controller
         $vars['columns'] = $this->user->checkedcolumns();
         $vars['faviconlist'] = $this->mediamanager->listfavicon();
         $vars['thumbnaillist'] = $this->mediamanager->listthumbnail();
-        $vars['editorlist'] = $this->usermanager->getlisterbylevel(2, '>=');
+        $vars['editorlist'] = $this->usermanager->getlisterbylevel(User::INVITE, '>=');
         $vars['userurls'] = $this->usermanager->userurls();
         $vars['user'] = $this->user;
         $vars['opt'] = $this->opt;
@@ -105,18 +105,18 @@ class Controllerhome extends Controller
         $vars['hiddencolumncount'] = count(User::HOME_COLUMNS) - count($this->user->columns());
 
         // UI buttons to increase, decrease or cancel limit
-if ($this->opt->limit() !== 0 && $display === 'list') {
-        $vars['optl5'] = clone $this->opt;
-        $vars['optl5']->setlimit($this->opt->limit() + 5);
-        $vars['optlm5'] = clone $this->opt;
-        $vars['optlm5']->setlimit($this->opt->limit() - 5);
-        $vars['optl1'] = clone $this->opt;
-        $vars['optl1']->setlimit($this->opt->limit() + 1);
-        $vars['optlm1'] = clone $this->opt;
-        $vars['optlm1']->setlimit($this->opt->limit() - 1);
-        $vars['optlc'] = clone $this->opt;
-        $vars['optlc']->setlimit(0);
-}
+        if ($this->opt->limit() !== 0 && $display === 'list') {
+            $vars['optl5'] = clone $this->opt;
+            $vars['optl5']->setlimit($this->opt->limit() + 5);
+            $vars['optlm5'] = clone $this->opt;
+            $vars['optlm5']->setlimit($this->opt->limit() - 5);
+            $vars['optl1'] = clone $this->opt;
+            $vars['optl1']->setlimit($this->opt->limit() + 1);
+            $vars['optlm1'] = clone $this->opt;
+            $vars['optlm1']->setlimit($this->opt->limit() - 1);
+            $vars['optlc'] = clone $this->opt;
+            $vars['optlc']->setlimit(0);
+        }
 
         if ($display === 'graph') {
             $graph = $this->servicesession->getgraph();
