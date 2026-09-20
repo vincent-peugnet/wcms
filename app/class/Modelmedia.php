@@ -48,7 +48,7 @@ class Modelmedia extends Model
      */
     public function medialistopt(Mediaopt $mediaopt): array
     {
-        $medialist = $this->getlistermedia($mediaopt);
+        $medialist = $this->list($mediaopt);
         $this->medialistsort($medialist, $mediaopt->sortby(), $mediaopt->order());
 
         return $medialist;
@@ -63,7 +63,7 @@ class Modelmedia extends Model
      *
      * @throws Folderexception              When the given folder isn't a directory
      */
-    protected function getlistermedia(Mediaopt $mediaopt): array
+    protected function list(Mediaopt $mediaopt): array
     {
         $dir = $mediaopt->dir();
         $types = $mediaopt->type();

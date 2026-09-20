@@ -42,7 +42,7 @@ class Modelbookmark extends Modeldb
     /**
      * @return Bookmark[]                   associative array of Bookmark objects `id => Bookmark`
      */
-    public function getlister(): array
+    public function list(): array
     {
         $bookmarks = [];
         $list = $this->repo->findAll();
@@ -59,7 +59,7 @@ class Modelbookmark extends Modeldb
      * @param string $comp                  comparaison operator
      * @return Bookmark[]                   array of Bookmarks objects with IDs as key
      */
-    public function getlisterbyuserid(string $user, $comp = '==='): array
+    public function listbyuserid(string $user, $comp = '==='): array
     {
         $bookmarkdatas = $this->repo->query()
             ->where('user', $comp, $user)
@@ -79,9 +79,9 @@ class Modelbookmark extends Modeldb
      *
      * @return Bookmark[]                   array of Bookmarks objects with IDs as key
      */
-    public function getlisterpublic(): array
+    public function listpublic(): array
     {
-        return $this->getlisterbyuserid("");
+        return $this->listbyuserid("");
     }
 
 
@@ -92,9 +92,9 @@ class Modelbookmark extends Modeldb
      * @param User $user                    User owning bookmarks
      * @return Bookmark[]                   array of Bookmarks objects with IDs as key
      */
-    public function getlisterbyuser(User $user): array
+    public function listbyuser(User $user): array
     {
-        return $this->getlisterbyuserid($user->id());
+        return $this->listbyuserid($user->id());
     }
 
 

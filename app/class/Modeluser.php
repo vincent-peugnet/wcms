@@ -36,7 +36,7 @@ class Modeluser extends Modeldb
      *
      * @param int $order
      */
-    public function getlister($levels = [], $sortby = 'id', $order = 1): array
+    public function list($levels = [], $sortby = 'id', $order = 1): array
     {
         $users = [];
         $list = $this->repo->findAll();
@@ -229,7 +229,7 @@ class Modeluser extends Modeldb
     public function userurls(): array
     {
         $sites = [];
-        $users = $this->getlister();
+        $users = $this->list();
         foreach ($users as $user) {
             if (!empty($user->url())) {
                 $sites[$user->url()][] = $user;

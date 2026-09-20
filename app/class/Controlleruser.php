@@ -22,7 +22,7 @@ class Controlleruser extends Controller
     public function desktop(): never
     {
         if ($this->user->isadmin()) {
-            $datas['userlist'] = $this->usermanager->getlister();
+            $datas['userlist'] = $this->usermanager->list();
             $this->showtemplate('user', $datas);
         } else {
             $this->showtemplate('forbidden', ['route' => 'home'], 403);

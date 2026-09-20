@@ -66,8 +66,8 @@ class Controllerhome extends Controller
             Logger::errorex($e);
         }
 
-        $publicbookmarks = $this->bookmarkmanager->getlisterpublic();
-        $personalbookmarks = $this->bookmarkmanager->getlisterbyuser($this->user);
+        $publicbookmarks = $this->bookmarkmanager->listpublic();
+        $personalbookmarks = $this->bookmarkmanager->listbyuser($this->user);
         $queryaddress = $this->opt->getaddress();
         $bookmarks = array_merge($publicbookmarks, $personalbookmarks);
 
@@ -94,7 +94,7 @@ class Controllerhome extends Controller
         $vars['columns'] = $this->user->checkedcolumns();
         $vars['faviconlist'] = $this->mediamanager->listfavicon();
         $vars['thumbnaillist'] = $this->mediamanager->listthumbnail();
-        $vars['editorlist'] = $this->usermanager->getlister(User::minlevel(User::INVITE));
+        $vars['editorlist'] = $this->usermanager->list(User::minlevel(User::INVITE));
         $vars['userurls'] = $this->usermanager->userurls();
         $vars['user'] = $this->user;
         $vars['opt'] = $this->opt;

@@ -49,7 +49,7 @@ class Wizard
 
             case 'GET':
                 $this->form(
-                    count($this->usermanager->getlister([User::ADMIN])) === 0
+                    count($this->usermanager->list([User::ADMIN])) === 0
                 );
                 break;
 

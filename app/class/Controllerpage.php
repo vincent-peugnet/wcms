@@ -284,7 +284,7 @@ class Controllerpage extends Controller
         $datas['faviconlist'] = $this->mediamanager->listfavicon();
         $datas['thumbnaillist'] = $this->mediamanager->listthumbnail();
         $datas['target'] = hash('crc32', $this->page->id() . rand(0, 2048));
-        $datas['editorlist'] = $this->usermanager->getlister(User::minlevel(User::INVITE), 'level', 1);
+        $datas['editorlist'] = $this->usermanager->list(User::minlevel(User::INVITE), 'level', 1);
         $datas['page'] = $this->page;
         $datas['locales'] = ResourceBundle::getLocales('');
 
