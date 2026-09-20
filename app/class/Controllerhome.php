@@ -81,14 +81,9 @@ class Controllerhome extends Controller
         $vars['personalbookmarks'] = $personalbookmarks;
         $vars['queryaddress'] = $queryaddress;
 
-        $deepsearch = $this->deepsearch();
+        $search = new Search($_GET);
 
-        $pagelistopt = $this->pagemanager->pagetable(
-            $pagelist,
-            $this->opt,
-            $deepsearch['regex'],
-            $deepsearch['searchopt']
-        );
+        $pagelistopt = $this->pagemanager->pagetable($pagelist, $this->opt, $search);
 
 
         $vars['columns'] = $this->user->checkedcolumns();
@@ -98,8 +93,7 @@ class Controllerhome extends Controller
         $vars['userurls'] = $this->usermanager->userurls();
         $vars['user'] = $this->user;
         $vars['opt'] = $this->opt;
-        $vars['deepsearch'] = $deepsearch['regex'];
-        $vars['searchopt'] = $deepsearch['searchopt'];
+        $vars['search'] = $search;
         $vars['display'] = $display;
         $vars['urlchecker'] = Config::urlchecker();
         $vars['hiddencolumncount'] = count(User::HOME_COLUMNS) - count($this->user->columns());
@@ -166,34 +160,6 @@ class Controllerhome extends Controller
         $vars['optlist'] = $this->optlist;
 
         $this->showtemplate('home', $vars);
-    }
-
-    /**
-     * Look for GET deepsearch datas and transform it an array
-     *
-     * @return array{'regex': string, 'searchopt': array<string, bool>}
-     */
-    protected function deepsearch(): array
-    {
-        if (!isset($_GET['search'])) {
-            $searchopt = [
-                'id' => 1,
-                'title' => 1,
-                'description' => 1,
-                'content' => 1,
-                'other' => 0,
-                'casesensitive' => 0
-            ];
-        } else {
-            $searchopt['id'] = $_GET['id'] ?? 0;
-            $searchopt['title'] = $_GET['title'] ?? 0;
-            $searchopt['description'] = $_GET['description'] ?? 0;
-            $searchopt['content'] = $_GET['content'] ?? 0;
-            $searchopt['other'] = $_GET['other'] ?? 0;
-            $searchopt['casesensitive'] = $_GET['case'] ?? 0;
-        }
-        $regex = $_GET['search'] ?? '';
-        return ['regex' => $regex, 'searchopt' => $searchopt];
     }
 
     protected function listquery(): void

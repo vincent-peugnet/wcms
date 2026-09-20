@@ -673,17 +673,13 @@ class Modelpage extends Modeldb
      * @param Page[] $pagelist             of Pages objects as `id => Page`
      * @param Opt $opt
      *
-     * @param string $regex                 Regex to match.
-     * @param array<string, bool> $searchopt
-     * Option search, could be `content` `title` `description`
-     *
      * @return Page[]                       associative array of `Page` objects
      */
-    public function pagetable(array $pagelist, Opt $opt, $regex = '', $searchopt = []): array
+    public function pagetable(array $pagelist, Opt $opt, ?Search $search = null): array
     {
         $pagelist = $this->filter($pagelist, $opt);
-        if (!empty($regex)) {
-            $pagelist = $this->deepsearch($pagelist, $regex, $searchopt);
+        if ($search !== null && $search->isactive()) {
+            $pagelist = $this->search($pagelist, $search);
         }
         $pagelist = $this->sort($pagelist, $opt);
 
@@ -938,39 +934,37 @@ class Modelpage extends Modeldb
      * Search for regex and count occurences
      *
      * @param Page[] $pagelist              list Array of Pages.
-     * @param string $regex                 Regex to match.
-     * @param array<string, bool> $options             Option search, could be `content` `title` `description`.
      *
      * @return Page[] associative array of `Page` objects
      */
-    protected function deepsearch(array $pagelist, string $regex, array $options): array
+    protected function search(array $pagelist, Search $search): array
     {
-        if ($options['casesensitive']) {
+        if ($search->casesensitive) {
             $case = '';
         } else {
             $case = 'i';
         }
-        $regex = '/' . preg_quote($regex, '/') . '/';
+        $regex = '/' . preg_quote($search->query, '/') . '/' . $case;
         $pageselected = [];
         foreach ($pagelist as $page) {
             $count = 0;
-            if ($options['content']) {
+            if ($search->content) {
                 foreach ($page->contents() as $content) {
                     $count += preg_match($regex, $page->$content());
                 }
             }
-            if ($options['other']) {
+            if ($search->other) {
                 $count += preg_match($regex, $page->body());
                 $count += preg_match($regex, $page->css());
                 $count += preg_match($regex, $page->javascript());
             }
-            if ($options['id']) {
+            if ($search->id) {
                 $count += preg_match($regex, $page->id());
             }
-            if ($options['title']) {
+            if ($search->title) {
                 $count += preg_match($regex, $page->title());
             }
-            if ($options['description']) {
+            if ($search->description) {
                 $count += preg_match($regex, $page->description());
             }
             if ($count !== 0) {

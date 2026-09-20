@@ -66,18 +66,18 @@ details#display input[type="color"] {
 }
 
 
-/* --------------------------------------------------------- deep search */
+/* --------------------------------------------------------- search */
 
-div#deepsearchbar {
+div#searchbar {
     background-color: var(--secondary-background-color);
     padding: var(--spacing);
 }
 
-#deepsearchbar input[type=text] {
+#searchbar input[type=text] {
     width: 150px;
 }
 
-#deepsearchbar details, #deepsearchbar summary {
+#searchbar details, #searchbar summary {
     display: inline;
     cursor: pointer;
 }
@@ -220,7 +220,7 @@ main div#graph {
     td.edit a, td.read a, td.delete a, td.download a {
         margin: 0 5px;
     }
-    #deepsearchbar summary {
+    #searchbar summary {
         font-size: 22px;
         padding: 0 10px;
     }

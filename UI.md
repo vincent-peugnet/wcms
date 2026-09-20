@@ -186,7 +186,7 @@ HEADER.hbar#topbar
 NAV.hbar#navbar
 --------------------------------------------------
 Aside ×| Aside ×| Section                
-       |        |   > Deep search
+       |        |   > Search
        |        |   > Table | Graph | Map         
        |        |                        
        |        |                        
