@@ -43,8 +43,20 @@ class Modeluser extends Modeldb
         foreach ($list as $userdata) {
             $users[$userdata->id] = new User($userdata);
         }
-        $users = $this->listfilter($users, $levels);
-        $this->listsort($users, $sortby, $order);
+        return $this->filtersort($users, $levels, $sortby, $order);
+    }
+
+    /**
+     * @param array<string, User> $users
+     *
+     * @param int[] $levels
+     *
+     * @return array<string, User>
+     */
+    public function filtersort(array $users, array $levels = [], string $sortby = 'id', int $order = 1): array
+    {
+        $users = $this->filter($users, $levels);
+        $this->sort($users, $sortby, $order);
         return $users;
     }
 
@@ -173,7 +185,7 @@ class Modeluser extends Modeldb
 
 
     /**
-     * Filter an array of Urls
+     * Filter an array of Users
      *
      * @param User[] $users
      *
@@ -181,7 +193,7 @@ class Modeluser extends Modeldb
      *
      * @return User[]
      */
-    protected function listfilter(array $users, array $levels = []): array
+    protected function filter(array $users, array $levels = []): array
     {
         if ($levels === []) {
             return $users;
@@ -199,7 +211,7 @@ class Modeluser extends Modeldb
      * @param string $sortby
      * @param int $order                    Can be 1 or -1
      */
-    protected function listsort(array &$users, string $sortby = 'id', int $order = 1): void
+    protected function sort(array &$users, string $sortby = 'id', int $order = 1): void
     {
         $sortby = (in_array($sortby, User::SORT_BY)) ? $sortby : 'id';
         $order = ($order === 1 || $order === -1) ? $order : 1;
@@ -224,17 +236,18 @@ class Modeluser extends Modeldb
     /**
      * Get all users that have their URL set, sorted by URL
      *
+     * @param array<string, User> $users
+     *
      * @return array<string, User[]>        key is URL, value is array of Users
      */
-    public function userurls(): array
+    public function urls(array $users): array
     {
-        $sites = [];
-        $users = $this->list();
+        $urls = [];
         foreach ($users as $user) {
             if (!empty($user->url())) {
-                $sites[$user->url()][] = $user;
+                $urls[$user->url()][] = $user;
             }
         }
-        return $sites;
+        return $urls;
     }
 }

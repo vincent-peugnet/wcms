@@ -86,13 +86,13 @@ class Controllerhome extends Controller
         $pagelistopt = $this->pagemanager->filtersort($pagelist, $this->opt);
         $pagelistopt = $this->pagemanager->search($pagelist, $search);
 
+        $users = $this->usermanager->list();
+        $vars['editorlist'] = $this->usermanager->filtersort($users, User::minlevel(User::INVITE));
+        $vars['userurls'] = $this->usermanager->urls($users);
 
         $vars['columns'] = $this->user->checkedcolumns();
         $vars['faviconlist'] = $this->mediamanager->listfavicon();
         $vars['thumbnaillist'] = $this->mediamanager->listthumbnail();
-        $vars['editorlist'] = $this->usermanager->list(User::minlevel(User::INVITE));
-        $vars['userurls'] = $this->usermanager->userurls();
-        $vars['user'] = $this->user;
         $vars['opt'] = $this->opt;
         $vars['search'] = $search;
         $vars['display'] = $display;
