@@ -474,7 +474,7 @@ class Controllerpage extends Controller
         if ($this->importpage() && $this->candelete($this->page)) {
             $linksto = new Opt();
             $linksto->setlinkto($this->page->id());
-            $pageslinkingto = $this->pagemanager->pagetable($this->pagemanager->list(), $linksto);
+            $pageslinkingto = $this->pagemanager->list($linksto);
             $cancelroute = isset($_GET['route']) ? $_GET['route'] : 'pageread';
             $this->showtemplate('delete', [
                 'page' => $this->page,
@@ -519,7 +519,7 @@ class Controllerpage extends Controller
         /** Invalidate backlinks cache by deleting rendered files */
         $linksto = new Opt();
         $linksto->setlinkto($this->page->id());
-        $backlinks = $this->pagemanager->pagetable($this->pagemanager->list(), $linksto);
+        $backlinks = $this->pagemanager->list($linksto);
         $this->removecaches($backlinks);
 
         // redirect to the origin of the delete request

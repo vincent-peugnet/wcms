@@ -29,9 +29,6 @@ class Modelpage extends Modeldb
         2 => 'not_published'
     ];
 
-    /** @var Page[] $pagelist */
-    protected array $pagelist = [];
-
     public function __construct(string $pagetable, string $pagedir = self::PAGES_DIR)
     {
         $this->dbinit($pagedir);
@@ -59,20 +56,42 @@ class Modelpage extends Modeldb
      *
      * @return array<string, Page>          of Pages objects as `id => Page`
      */
-    public function list(): array
+    public function list(?Opt $opt = null, ?Search $search = null): array
     {
-        if (empty($this->pagelist)) {
-            $list = $this->repo->findAll();
-            foreach ($list as $pagedata) {
-                $id = $pagedata->id;
-                try {
-                    $this->pagelist[$id] = $this->parsepage($pagedata);
-                } catch (RuntimeException $e) {
-                    Logger::error("Could not load Page with ID \"$id\" : $e");
-                }
+        $pages = [];
+        $list = $this->repo->findAll();
+        foreach ($list as $pagedata) {
+            $id = $pagedata->id;
+            try {
+                $pages[$id] = $this->parsepage($pagedata);
+            } catch (RuntimeException $e) {
+                Logger::error("Could not get Page with ID \"$id\" : $e");
             }
         }
-        return $this->pagelist;
+
+        if ($opt !== null) {
+            $pages = $this->filtersort($pages, $opt);
+        }
+
+        if ($search !== null && $search->isactive()) {
+            $pages = $this->search($pages, $search);
+        }
+
+        return $pages;
+    }
+
+    /**
+     * Filter and sort an array of pages using options
+     *
+     * @param array<string, Page> $pages
+     *
+     * @return array<string, Page>
+     */
+    public function filtersort(array $pages, Opt $opt): array
+    {
+        $pages = $this->filter($pages, $opt);
+        $pages = $this->sort($pages, $opt);
+        return $pages;
     }
 
     /**
@@ -666,28 +685,6 @@ class Modelpage extends Modeldb
 
     // _____________________________ FILTERING & SORTING _____________________________
 
-
-    /**
-     * Main page list filtering and sorting tool
-     *
-     * @param Page[] $pagelist             of Pages objects as `id => Page`
-     * @param Opt $opt
-     *
-     * @return Page[]                       associative array of `Page` objects
-     */
-    public function pagetable(array $pagelist, Opt $opt, ?Search $search = null): array
-    {
-        $pagelist = $this->filter($pagelist, $opt);
-        if ($search !== null && $search->isactive()) {
-            $pagelist = $this->search($pagelist, $search);
-        }
-        $pagelist = $this->sort($pagelist, $opt);
-
-        return $pagelist;
-    }
-
-
-
     /**
      * Filter the pages list acording to the options and invert
      *
@@ -937,7 +934,7 @@ class Modelpage extends Modeldb
      *
      * @return Page[] associative array of `Page` objects
      */
-    protected function search(array $pagelist, Search $search): array
+    public function search(array $pagelist, Search $search): array
     {
         if ($search->casesensitive) {
             $case = '';

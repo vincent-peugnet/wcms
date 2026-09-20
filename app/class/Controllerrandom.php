@@ -15,8 +15,7 @@ class Controllerrandom extends Controller
         try {
             $origin = $this->pagemanager->get($this->optrandom->origin());
 
-            $pages = $this->pagemanager->list();
-            $pages = $this->pagemanager->pagetable($pages, $this->optrandom);
+            $pages = $this->pagemanager->list($this->optrandom);
             unset($pages[$origin->id()]);
             $keys = array_intersect_key($pages, array_flip($origin->linkto()));
             if (!empty($keys)) {

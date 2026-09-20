@@ -83,7 +83,8 @@ class Controllerhome extends Controller
 
         $search = new Search($_GET);
 
-        $pagelistopt = $this->pagemanager->pagetable($pagelist, $this->opt, $search);
+        $pagelistopt = $this->pagemanager->filtersort($pagelist, $this->opt);
+        $pagelistopt = $this->pagemanager->search($pagelist, $search);
 
 
         $vars['columns'] = $this->user->checkedcolumns();
@@ -124,7 +125,7 @@ class Controllerhome extends Controller
         if ($display === 'map') {
             if (!$this->opt->geo()) {
                 $geopt = new Opt(['geo' => true]);
-                $geopages = $this->pagemanager->pagetable($pagelistopt, $geopt);
+                $geopages = $this->pagemanager->filtersort($pagelistopt, $geopt);
             } else {
                 $geopages = $pagelistopt;
             }
