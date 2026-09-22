@@ -24,6 +24,7 @@ class Workspace extends Item
 
     protected int $fontsize = 15;
     protected string $mediadisplay = self::LIST;
+    protected string $commentdisplay = self::TIMELINE;
     protected string $highlighttheme = self::THEME_DEFAULT;
 
     /** Proportionnal Markdown headings */
@@ -34,7 +35,9 @@ class Workspace extends Item
 
     public const LIST = 'list';
     public const GALLERY = 'gallery';
+    public const TIMELINE = 'timeline';
     public const MEDIA_DISPLAY = [self::LIST, self:: GALLERY];
+    public const COMMENT_DISPLAY = [self::LIST, self:: TIMELINE];
 
     public const THEME_DEFAULT = 'default';
     public const THEME_MONOKAI = 'monokai';
@@ -129,6 +132,11 @@ class Workspace extends Item
         return $this->mediadisplay;
     }
 
+    public function commentdisplay(): string
+    {
+        return $this->commentdisplay;
+    }
+
     public function highlighttheme(): string
     {
         return $this->highlighttheme;
@@ -195,6 +203,13 @@ class Workspace extends Item
     {
         if (in_array($mediadisplay, self::MEDIA_DISPLAY)) {
             $this->mediadisplay = $mediadisplay;
+        }
+    }
+
+    public function setcommentdisplay(string $commentdisplay): void
+    {
+        if (in_array($commentdisplay, self::COMMENT_DISPLAY)) {
+            $this->commentdisplay = $commentdisplay;
         }
     }
 

@@ -1,14 +1,38 @@
 .message {
     white-space: preserve;
-    max-height: 140px;
     overflow: scroll;
     display: block;
+    padding: var(--spacing);
+    background: var(--input-background-color);
+    color: var(--input-color);
+}
+
+
+section .comment {
+    display: flex;
+    flex-direction: column;
+    margin: var(--spacing);
+    border-radius: var(--radius);
+}
+
+main[data-display="timeline"] section {
+    max-width: 800px;
+}
+
+section .comment header,
+section .comment footer
+{
+    display: flex;
+    justify-content: space-between;
+    background: var(--secondary-background-color);
+    padding: var(--spacing);
 }
 
 
 .counter::before {
     content: "(";
 }
+
 .counter::after {
     content: ")";
 }

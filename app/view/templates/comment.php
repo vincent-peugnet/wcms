@@ -9,7 +9,7 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
 
 <?php $this->insert('commentmenu'); ?>
 
-<main class="comment">
+<main class="comment" data-display="<?= $workspace->commentdisplay() ?>">
 <aside id="filter" class="toggle-panel-container">
         <input id="showcommentfilterpanel" name="showcommentfilterpanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" <?= $workspace->showcommentfilterpanel() === true ? 'checked' : '' ?>>
         <label for="showcommentfilterpanel" class="toggle-panel-label"><span><i class="fa fa-filter"></i></span></label>
@@ -80,68 +80,112 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                     </a>
                 </span>
             <?php endif ?>
-            <span><!-- quick hack to center filter reset button --></span>
+            
+            <span class="display">
+                <a href="?display=timeline"  <?= $workspace->commentdisplay() === Wcms\Workspace::TIMELINE ? 'class="selected"' : '' ?> title="timeline">
+                    <i class="fa fa-email-bulk"></i>
+                </a>
+                <a href="?display=list" <?= $workspace->commentdisplay() === Wcms\Workspace::LIST ? 'class="selected"' : '' ?> title="list">
+                    <i class="fa fa-th-list"></i>
+                </a>
+            </span>
         </h2>
 
         <div class="scroll">
-            <table>
-                <thead class="sticky">
-                    <th>
-                        id
-                    </th>
-                    <th>
-                        message
-                    </th>
-                    <th>
-                        author
-                    </th>
-                    <th>
-                        website
-                    </th>
-                    <th>
-                        <i class="fa fa-gavel"></i>
-                    </th>
-                    <th>
-                        page
-                    </th>
-                    <th>
-                        date
-                    </th>
-                </thead>
-                <tbody>
-                    <?php foreach ($comments as $id => $comment) : ?>
-                        <tr>
-                            <td>
-                                <?= $id ?>
-                            </td>
-                            <td class="message"><?= $this->e($comment->message()) ?></td>
-                            <td>
+
+            <?php if($workspace->commentdisplay() === Wcms\Workspace::LIST) : ?>
+                <table>
+                    <thead class="sticky">
+                        <th>
+                            id
+                        </th>
+                        <th>
+                            message
+                        </th>
+                        <th>
+                            author
+                        </th>
+                        <th>
+                            website
+                        </th>
+                        <th>
+                            <i class="fa fa-gavel"></i>
+                        </th>
+                        <th>
+                            page
+                        </th>
+                        <th>
+                            date
+                        </th>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($comments as $id => $comment) : ?>
+                            <tr>
+                                <td>
+                                    <?= $id ?>
+                                </td>
+                                <td class="message"><?= $this->e($comment->message()) ?></td>
+                                <td>
+                                    <?= $comment instanceof Wcms\Commentuser ? '<i class="fa fa-user"></i>' : '' ?>
+                                    <?= $this->e($comment->visiblename()) ?>
+                                </td>
+                                <td>
+                                    <?php if ($comment instanceof Wcms\Commentvisitor) : ?>
+                                        <a target="_blank" href="<?= $comment->website() ?>"><?= ltrim(substr($comment->website(), 6), "\/") ?></a>
+                                    <?php endif ?>
+                                </td>
+                                <td>
+                                    <?php if ($comment->approved()) : ?>
+                                        <i class="fa fa-check"></i>
+                                    <?php endif ?>
+                                </td>
+                                <td>
+                                    <?php $page = explode('#', $id)[0] ?>
+                                    <a href="<?= $this->upage('pageedit', $page) ?>" class="button">
+                                        <?= $page ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <?= $comment->date('hrdi') ?> ago
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
+            <?php elseif ($workspace->commentdisplay() === Wcms\Workspace::TIMELINE) : ?>
+                <?php foreach ($comments as $id => $comment) : ?>
+                    <?php $page = explode('#', $id)[0] ?>
+                    <div class="comment">
+                        <header>
+                            <span>
                                 <?= $comment instanceof Wcms\Commentuser ? '<i class="fa fa-user"></i>' : '' ?>
                                 <?= $this->e($comment->visiblename()) ?>
-                            </td>
-                            <td>
                                 <?php if ($comment instanceof Wcms\Commentvisitor) : ?>
                                     <a target="_blank" href="<?= $comment->website() ?>"><?= ltrim(substr($comment->website(), 6), "\/") ?></a>
                                 <?php endif ?>
-                            </td>
-                            <td>
+                            </span>
+                            <span>
+                            <?= $comment->date('hrdi') ?> ago
+                            </span>
+                        </header>
+                        <p class="message"><?= $this->e($comment->message()) ?></p>
+                        <footer>
+                            <span>
+                                moderation
                                 <?php if ($comment->approved()) : ?>
                                     <i class="fa fa-check"></i>
                                 <?php endif ?>
-                            </td>
-                            <td>
-                                <?php $page = explode('#', $id)[0] ?>
-                                <a href="<?= $this->upage('pageedit', $page) ?>" class="button">
-                                    <?= $page ?>
-                                </a>
-                            </td>
-                            <td>
-                                <?= $comment->date('hrdi') ?> ago
-                            </td>
-                        </tr>
-                    <?php endforeach ?>
-                </tbody>
-            </table>
+                            </span>
+
+                            <a href="<?= $this->upage('pageedit', $page) ?>" class="button">
+                                <?= $page ?>
+                            </a>
+                        </footer>
+                    </div>
+
+                <?php endforeach ?>
+                
+            <?php endif ?>
         </div>
     </section>
 

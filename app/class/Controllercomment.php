@@ -55,6 +55,11 @@ class Controllercomment extends Controller
             $isfiltered = false;
         }
 
+        if (isset($_GET['display'])) {
+            $this->workspace->setcommentdisplay($_GET['display']);
+            $this->servicesession->setworkspace($this->workspace);
+        }
+
         $this->showtemplate('comment', [
             'comments' => $this->commentmanager->list($pages, $sortby, $order),
             'compages' => $compages,

@@ -77,14 +77,14 @@ main section {
 
 /* --------------------------------------------------------- footer */
 
-footer {
+body > footer {
     background-color: black;
     color: white;
     opacity: 0.4;
 }
 
 @media (max-height: 500px) {
-    footer {
+    body > footer {
         display: none;
     }
 }
