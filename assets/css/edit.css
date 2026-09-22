@@ -263,18 +263,6 @@ textarea#editcontent {
     float: right;
 }
 
-.comment .delete {
-    accent-color: red;
-}
-
-.comment .approve {
-    accent-color: green;
-}
-
-.comment .neutral {
-    accent-color: #e87f00;
-}
-
 .moderation, .comment .date, .comment .id {
     opacity: 0.5;
 }

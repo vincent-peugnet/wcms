@@ -585,6 +585,23 @@ input.toggle-panel-toggle {
 }
 
 
+/* --------------------------------------------------------- comment moderation */
+
+/* used both in comment UI and edit panel */
+
+.moderation .delete {
+    accent-color: red;
+}
+
+.moderation .approve {
+    accent-color: green;
+}
+
+.moderation .neutral {
+    accent-color: #e87f00;
+}
+
+
 /* --------------------------------------------------------- flash messages */
 
 #flashmessage {

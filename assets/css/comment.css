@@ -5,10 +5,12 @@
     padding: var(--spacing);
     background: var(--input-background-color);
     color: var(--input-color);
+    font-family: monospace;
+    user-select: text;
 }
 
 
-section .comment {
+main[data-display="timeline"] .comment {
     display: flex;
     flex-direction: column;
     margin: var(--spacing);
@@ -19,15 +21,44 @@ main[data-display="timeline"] section {
     max-width: 800px;
 }
 
-section .comment header,
-section .comment footer
-{
+main[data-display="timeline"] .comment header,
+main[data-display="timeline"] .comment footer {
     display: flex;
     justify-content: space-between;
-    background: var(--secondary-background-color);
     padding: var(--spacing);
 }
 
+main[data-display="timeline"] .comment header {
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: var(--secondary-background-color);
+}
+
+@media (hover: hover) {
+    main[data-display="timeline"] .comment footer {
+        opacity: 0.7;
+    }
+
+    main[data-display="timeline"] .comment:hover footer {
+        opacity: 1;
+    }
+}
+
+main[data-display="timeline"] .comment .message {
+    border-radius: 0 0 var(--radius) var(--radius);
+}
+
+
+.visiblename {
+    font-weight: bold;
+}
+
+.website {
+    font-size: var(--size-small);
+}
+
+.page {
+    font-family: monospace;
+}
 
 .counter::before {
     content: "(";

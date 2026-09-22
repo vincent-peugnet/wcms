@@ -9,7 +9,7 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
 
 <?php $this->insert('commentmenu'); ?>
 
-<main class="comment" data-display="<?= $workspace->commentdisplay() ?>">
+<main data-display="<?= $workspace->commentdisplay() ?>">
 <aside id="filter" class="toggle-panel-container">
         <input id="showcommentfilterpanel" name="showcommentfilterpanel" value="1" class="toggle-panel-toggle" type="checkbox" form="workspace-form" <?= $workspace->showcommentfilterpanel() === true ? 'checked' : '' ?>>
         <label for="showcommentfilterpanel" class="toggle-panel-label"><span><i class="fa fa-filter"></i></span></label>
@@ -120,7 +120,7 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                     </thead>
                     <tbody>
                         <?php foreach ($comments as $id => $comment) : ?>
-                            <tr>
+                            <tr class="comment">
                                 <td>
                                     <?= $id ?>
                                 </td>
@@ -155,13 +155,16 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
             <?php elseif ($workspace->commentdisplay() === Wcms\Workspace::TIMELINE) : ?>
                 <?php foreach ($comments as $id => $comment) : ?>
                     <?php $page = explode('#', $id)[0] ?>
+                    <?php $nb = explode('#', $id)[1] ?>
                     <div class="comment">
                         <header>
                             <span>
                                 <?= $comment instanceof Wcms\Commentuser ? '<i class="fa fa-user"></i>' : '' ?>
-                                <?= $this->e($comment->visiblename()) ?>
+                                <span class="visiblename">
+                                    <?= $this->e($comment->visiblename()) ?>
+                                </span>
                                 <?php if ($comment instanceof Wcms\Commentvisitor) : ?>
-                                    <a target="_blank" href="<?= $comment->website() ?>"><?= ltrim(substr($comment->website(), 6), "\/") ?></a>
+                                    <a target="_blank" href="<?= $comment->website() ?>" class="website"><?= ltrim(substr($comment->website(), 6), "\/") ?></a>
                                 <?php endif ?>
                             </span>
                             <span>
@@ -170,16 +173,28 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                         </header>
                         <p class="message"><?= $this->e($comment->message()) ?></p>
                         <footer>
-                            <span>
-                                moderation
-                                <?php if ($comment->approved()) : ?>
-                                    <i class="fa fa-check"></i>
-                                <?php endif ?>
-                            </span>
 
-                            <a href="<?= $this->upage('pageedit', $page) ?>" class="button">
-                                <?= $page ?>
-                            </a>
+                            <div class="moderation">
+                                <label for="comment-delete-<?= $id ?>" title="delete comment" class="delete">
+                                    <i class="fa fa-trash-o"></i>
+                                </label>
+                                <input type="radio" name="<?= $id ?>" value="-1" id="comment-delete-<?= $id ?>" class="delete">
+                                <input type="radio" name="<?= $id ?>" value="0" <?= $comment->approved() ? '' : 'checked' ?> class="neutral">
+                                <input type="radio" name="<?= $id ?>" value="1" <?= $comment->approved() ? 'checked' : '' ?> id="comment-approve-<?= $id ?>" class="approve">
+                                <label for="comment-approve-<?= $id ?>" title="approve comment" class="approve">
+                                    <i class="fa fa-thumbs-o-up"></i>
+                                </label>
+                            </div>
+
+                            <span>
+                                #<?= $nb ?>
+                                on
+                                <span class="page">
+                                    <?= $page ?>
+                                </span>
+                                <a href="<?= $this->upage('pageedit', $page) ?>" class="button"><i class="fa fa-pencil"></i></a>
+                                <a href="<?= $this->upage('pageread', $page) ?>" class="button"><i class="fa fa-eye"></i></a>
+                            </span>
                         </footer>
                     </div>
 
