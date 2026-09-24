@@ -352,6 +352,7 @@ class Modelmedia extends Model
                 }
             }
         }
+        Fs::folderflush($tmpdir); // TODO add new Fs func that delete folder and content
         rmdir($tmpdir);
 
         if ($successcount < $count || $failedconversion > 0) {
@@ -556,13 +557,18 @@ class Modelmedia extends Model
                 return $media; // image is already well compressed
             }
         } catch (RuntimeException $e) {
-            Logger::errorex($e);
+            Logger::error(
+                "image optimizer: read dimensions of '%s': %s",
+                $media->filename(),
+                $e->getMessage()
+            );
             return $media; // PHP could not get image dimensions. It may be beccause of unsupported format.
         }
 
         $convertmediapath = $media->dir() . '/' . $media->getbasefilename() . '.webp';
 
         if (extension_loaded('imagick')) {
+            $library = 'IMagick';
             $image = new Imagick($media->getlocalpath());
 
             image_fix_orientation_imagick($image);
@@ -575,15 +581,18 @@ class Modelmedia extends Model
             $image->setImageFormat('webp');
             $image->setImageCompressionQuality($this::OPTIMIZE_IMG_QUALITY);
 
-            $convertmediapath = $media->dir() . '/' . $media->getbasefilename() . '.webp';
             $conversionsuccess = $image->writeImage($convertmediapath);
-            Logger::info("optimized image using IMagick");
         } elseif (extension_loaded('gd')) {
+            $library = 'GD';
             $gdfunction = $this::OPTIMIZE_IMG_ALLOWED_EXT[$media->extension()];
-            $image = $gdfunction($media->getlocalpath());
+            $image = @$gdfunction($media->getlocalpath());
 
             if ($image === false) {
-                throw new RuntimeException("could not decode image using GD");
+                throw new RuntimeException(sprintf(
+                    "image decoding using GD for '%s': %s",
+                    $media->filename(),
+                    error_get_last()['message'] // get PHP E_WARNING message
+                ));
             }
 
             image_fix_orientation_gd($image, $media->getabsolutepath());
@@ -603,7 +612,6 @@ class Modelmedia extends Model
                 $image = imagescale($image, $width, $height);
             }
             $conversionsuccess = imagewebp($image, $convertmediapath, $this::OPTIMIZE_IMG_QUALITY);
-            Logger::info("optimized image using GD");
         } else {
             throw new Missingextensionexception('Nor imagick or gd PHP extension is installed');
         }
@@ -611,9 +619,14 @@ class Modelmedia extends Model
             throw new RuntimeException("edit file permission failed: '$convertmediapath'");
         }
 
-        if ($conversionsuccess && $deleteoriginal && $convertmediapath !== $media->getlocalpath()) {
-            Fs::deletefile($media->getlocalpath());
+        if (!$conversionsuccess || !$deleteoriginal || $convertmediapath === $media->getlocalpath()) {
+            throw new RuntimeException(sprintf("encode failed using %s: '%s'", $library, $media->filename()));
         }
-        return new Media($convertmediapath);
+
+        Fs::deletefile($media->getlocalpath());
+        $encoded = new Media($convertmediapath);
+        Logger::info("optimized image using %s: '%s'", $library, $encoded->filename());
+
+        return $encoded;
     }
 }
