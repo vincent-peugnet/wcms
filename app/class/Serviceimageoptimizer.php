@@ -44,6 +44,14 @@ class Serviceimageoptimizer
     }
 
     /**
+     * @return bool                         Indicate if at least one needed PHP extension is loaded
+     */
+    public static function extensionloaded(): bool
+    {
+        return (extension_loaded(self::EXT_IMAGICK) || extension_loaded(self::EXT_GD));
+    }
+
+    /**
      * Try to convert the image to an highly compressed WebP
      *
      * The file is untouched if the image is too small and compression already high

@@ -70,6 +70,7 @@ class Controllermedia extends Controller
             $vars['medialist'] = $medialist;
             $vars['dirlist'] = $dirlist;
             $vars['pathlist'] = $pathlist;
+            $vars['optimizeimage'] = Serviceimageoptimizer::extensionloaded();
             $vars['mediaopt'] = $mediaopt;
             $vars['foldercrumb'] = $this->mediamanager->crumb(
                 $this->mediamanager->foldercrumb(
@@ -78,12 +79,6 @@ class Controllermedia extends Controller
                 )
             );
 
-            try {
-                new Serviceimageoptimizer();
-                $vars['optimizeimage'] = true;
-            } catch (RuntimeException $e) {
-                $vars['optimizeimage'] = false;
-            }
 
             $this->showtemplate('media', $vars);
         } catch (RuntimeException $e) {
