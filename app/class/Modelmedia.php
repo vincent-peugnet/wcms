@@ -584,8 +584,7 @@ class Modelmedia extends Model
             $conversionsuccess = $image->writeImage($convertmediapath);
         } elseif (extension_loaded('gd')) {
             $library = 'GD';
-            $gdfunction = $this::OPTIMIZE_IMG_ALLOWED_EXT[$media->extension()];
-            $image = @$gdfunction($media->getlocalpath());
+            $image = imagecreatefromstring(Fs::readfile($media->getlocalpath()));
 
             if ($image === false) {
                 throw new RuntimeException(sprintf(
