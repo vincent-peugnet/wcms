@@ -2,19 +2,17 @@
 
 namespace Wcms;
 
-use DomainException;
 use InvalidArgumentException;
 use RuntimeException;
-use Imagick;
-use ImagickException;
 use Wcms\Exception\Filesystemexception;
 use Wcms\Exception\Filesystemexception\Fileexception;
 use Wcms\Exception\Filesystemexception\Folderexception;
 use Wcms\Exception\Forbiddenexception;
-use Wcms\Exception\Missingextensionexception;
 
 class Modelmedia extends Model
 {
+    protected ?Serviceimageoptimizer $optimizer = null;
+
     public const MEDIA_SORTBY = [
         'filename' => 'filename',
         'size' => 'size',
@@ -28,18 +26,6 @@ class Modelmedia extends Model
 
     /** Characters that are authorized for cleaned media filename */
     public const ID_AUTHORIZED_CHARS                   = 'a-z0-9-_.';
-
-    public const OPTIMIZE_IMG_MAX_WIDTH     = 1920;
-    public const OPTIMIZE_IMG_MAX_HEIGHT    = 1920;
-    public const OPTIMIZE_IMG_QUALITY       = 60;
-    public const OPTIMIZE_IMG_MAX_BPP       = 0.5;
-    public const OPTIMIZE_IMG_ALLOWED_EXT   = [
-        'jpg' => 'imagecreatefromjpeg',
-        'jpeg' => 'imagecreatefromjpeg',
-        'png' => 'imagecreatefrompng',
-        'webp' => 'imagecreatefromwebp',
-        'bmp' => 'imagecreatefrombmp',
-    ];
 
     /**
      * @return Media[]                      sorted array of Media
@@ -334,7 +320,10 @@ class Modelmedia extends Model
                 try {
                     $media = new Media($to);
                     if ($convertimages && $media->type() === Media::IMAGE) {
-                        $media = $this->optimizeimage($media);
+                        if ($this->optimizer === null) {
+                            $this->optimizer = new Serviceimageoptimizer();
+                        }
+                        $media = $this->optimizer->optimize($media, true);
                     }
                     if (
                         rename($media->getlocalpath(), $target . $media->filename()) &&
@@ -346,7 +335,7 @@ class Modelmedia extends Model
                     }
                 } catch (Fileexception $e) {
                     Logger::errorex($e);
-                } catch (RuntimeException | ImagickException $e) {
+                } catch (RuntimeException $e) {
                     Logger::errorex($e);
                     $failedconversion++;
                 }
@@ -522,110 +511,5 @@ class Modelmedia extends Model
             throw new Fileexception("File : $oldname does not exist");
         }
         return rename($oldname, $newname);
-    }
-
-    /**
-     * Optimize an image to Webp format and limit width and height.
-     * But only if image is not already compressed and normal sized.
-     *
-     * @param Media $media                  Media to convert. It have to be an image.
-     *                                      Otherwise will thow a DomainException
-     * @param bool $deleteoriginal          Choose if original media file should be deleted. Default is true.
-     *
-     * @return Media                        Converted Media object
-     *
-     * @throws Missingextensionexception    If nor imagick or is installed
-     * @throws ImagickException             If an error occured during IM process
-     * @throws Filesystemexception          If deleting the original media failed, or if file creation failed.
-     * @throws RuntimeException             In case of other failures
-     */
-    private function optimizeimage(Media $media, bool $deleteoriginal = true): Media
-    {
-        if ($media->type() !== Media::IMAGE) {
-            throw new DomainException('Given Media should be an image');
-        }
-
-        try {
-            if (
-                !key_exists($media->extension(), $this::OPTIMIZE_IMG_ALLOWED_EXT) ||
-                (
-                    $media->bitperpixel() < $this::OPTIMIZE_IMG_MAX_BPP &&
-                    $media->width() <= $this::OPTIMIZE_IMG_MAX_WIDTH &&
-                    $media->height() <= $this::OPTIMIZE_IMG_MAX_HEIGHT
-                )
-            ) {
-                return $media; // image is already well compressed
-            }
-        } catch (RuntimeException $e) {
-            Logger::error(
-                "image optimizer: read dimensions of '%s': %s",
-                $media->filename(),
-                $e->getMessage()
-            );
-            return $media; // PHP could not get image dimensions. It may be beccause of unsupported format.
-        }
-
-        $convertmediapath = $media->dir() . '/' . $media->getbasefilename() . '.webp';
-
-        if (extension_loaded('imagick')) {
-            $library = 'IMagick';
-            $image = new Imagick($media->getlocalpath());
-
-            image_fix_orientation_imagick($image);
-
-            $image->adaptiveResizeImage(
-                min($image->getImageWidth(), $this::OPTIMIZE_IMG_MAX_WIDTH),
-                min($image->getImageHeight(), $this::OPTIMIZE_IMG_MAX_HEIGHT),
-                true
-            );
-            $image->setImageFormat('webp');
-            $image->setImageCompressionQuality($this::OPTIMIZE_IMG_QUALITY);
-
-            $conversionsuccess = $image->writeImage($convertmediapath);
-        } elseif (extension_loaded('gd')) {
-            $library = 'GD';
-            $image = imagecreatefromstring(Fs::readfile($media->getlocalpath()));
-
-            if ($image === false) {
-                throw new RuntimeException(sprintf(
-                    "image decoding using GD for '%s': %s",
-                    $media->filename(),
-                    error_get_last()['message'] // get PHP E_WARNING message
-                ));
-            }
-
-            image_fix_orientation_gd($image, $media->getabsolutepath());
-
-            $heightdiff = $media->height() - $this::OPTIMIZE_IMG_MAX_HEIGHT;
-            $widthdiff = $media->width() - $this::OPTIMIZE_IMG_MAX_WIDTH;
-
-            if ($heightdiff > 0 || $widthdiff > 0) {
-                if ($heightdiff > $widthdiff) {
-                    $height = $this::OPTIMIZE_IMG_MAX_HEIGHT;
-                    $width = intval($media->width() * ($this::OPTIMIZE_IMG_MAX_HEIGHT / $media->height()));
-                } else {
-                    $height = intval($media->height() * ($this::OPTIMIZE_IMG_MAX_WIDTH / $media->width()));
-                    $width = $this::OPTIMIZE_IMG_MAX_WIDTH;
-                }
-
-                $image = imagescale($image, $width, $height);
-            }
-            $conversionsuccess = imagewebp($image, $convertmediapath, $this::OPTIMIZE_IMG_QUALITY);
-        } else {
-            throw new Missingextensionexception('Nor imagick or gd PHP extension is installed');
-        }
-        if (!chmod($convertmediapath, self::MEDIA_PERMISSION)) {
-            throw new RuntimeException("edit file permission failed: '$convertmediapath'");
-        }
-
-        if (!$conversionsuccess || !$deleteoriginal || $convertmediapath === $media->getlocalpath()) {
-            throw new RuntimeException(sprintf("encode failed using %s: '%s'", $library, $media->filename()));
-        }
-
-        Fs::deletefile($media->getlocalpath());
-        $encoded = new Media($convertmediapath);
-        Logger::info("optimized image using %s: '%s'", $library, $encoded->filename());
-
-        return $encoded;
     }
 }
