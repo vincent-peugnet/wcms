@@ -524,11 +524,29 @@ function image_fix_orientation_gd(&$image, string $filename): void
 
     if (!empty($exif['Orientation'])) {
         switch ($exif['Orientation']) {
+            case 2:
+                imageflip($image, IMG_FLIP_HORIZONTAL);
+                break;
+
             case 3:
                 $image = imagerotate($image, 180, 0);
                 break;
 
+            case 4:
+                imageflip($image, IMG_FLIP_VERTICAL);
+                break;
+
+            case 5:
+                imageflip($image, IMG_FLIP_HORIZONTAL);
+                $image = imagerotate($image, 90, 0);
+                break;
+
             case 6:
+                $image = imagerotate($image, -90, 0);
+                break;
+
+            case 7:
+                imageflip($image, IMG_FLIP_HORIZONTAL);
                 $image = imagerotate($image, -90, 0);
                 break;
 
@@ -561,11 +579,29 @@ function image_fix_orientation_imagick(Imagick $image): void
 
     if (!empty($orientation)) {
         switch ($orientation) {
+            case 2:
+                $image->flopImage();
+                break;
+
             case 3:
                 $image->rotateImage('#000000', 180);
                 break;
 
+            case 4:
+                $image->flipImage();
+                break;
+
+            case 5:
+                $image->flopImage();
+                $image->rotateImage('#000000', -90);
+                break;
+
             case 6:
+                $image->rotateImage('#000000', 90);
+                break;
+
+            case 7:
+                $image->flopImage();
                 $image->rotateImage('#000000', 90);
                 break;
 
