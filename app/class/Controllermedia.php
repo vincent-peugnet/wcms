@@ -71,13 +71,19 @@ class Controllermedia extends Controller
             $vars['dirlist'] = $dirlist;
             $vars['pathlist'] = $pathlist;
             $vars['mediaopt'] = $mediaopt;
-            $vars['optimizeimage'] = (extension_loaded('imagick') || extension_loaded('gd'));
             $vars['foldercrumb'] = $this->mediamanager->crumb(
                 $this->mediamanager->foldercrumb(
                     $this->mediaopt->dir(),
                     [basename(Model::MEDIA_DIR) => $dirlist] // add media folder as parent node
                 )
             );
+
+            try {
+                new Serviceimageoptimizer();
+                $vars['optimizeimage'] = true;
+            } catch (RuntimeException $e) {
+                $vars['optimizeimage'] = false;
+            }
 
             $this->showtemplate('media', $vars);
         } catch (RuntimeException $e) {
