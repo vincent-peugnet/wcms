@@ -22,6 +22,7 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                         <p class="field">
                             <label for="sortby">Sort by</label>    
                             <select name="sortby" id="sortby">
+                                <option value="id" <?= $sortby === 'id' ? 'selected' : '' ?>>id</option>
                                 <option value="date" <?= $sortby === 'date' ? 'selected' : '' ?>>date</option>
                                 <option value="approved" <?= $sortby === 'approved' ? 'selected' : '' ?>>approved</option>
                                 <option value="visiblename" <?= $sortby === 'visiblename' ? 'selected' : '' ?>>author</option>
@@ -82,10 +83,10 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
             <?php endif ?>
             
             <span class="display">
-                <a href="?display=timeline"  <?= $workspace->commentdisplay() === Wcms\Workspace::TIMELINE ? 'class="selected"' : '' ?> title="timeline">
+                <a href="?display=timeline&sortby=<?= $sortby ?>&order=<?= $order ?>"  <?= $workspace->commentdisplay() === Wcms\Workspace::TIMELINE ? 'class="selected"' : '' ?> title="timeline">
                     <i class="fa fa-email-bulk"></i>
                 </a>
-                <a href="?display=list" <?= $workspace->commentdisplay() === Wcms\Workspace::LIST ? 'class="selected"' : '' ?> title="list">
+                <a href="?display=list&sortby=<?= $sortby ?>&order=<?= $order ?>" <?= $workspace->commentdisplay() === Wcms\Workspace::LIST ? 'class="selected"' : '' ?> title="list">
                     <i class="fa fa-th-list"></i>
                 </a>
             </span>
@@ -97,25 +98,45 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                 <table>
                     <thead class="sticky">
                         <th>
-                            id
+                            <a href="?sortby=id&order=<?= $rorder ?>">
+                                id
+                            <?php if($sortby === 'id') : ?>
+                                <i class="fa fa-sort-<?= $order > 0 ? 'asc' : 'desc' ?>"></i>
+                            <?php endif ?>
+                            </a>
                         </th>
                         <th>
                             message
                         </th>
                         <th>
-                            author
+                            <a href="?sortby=visiblename&order=<?= $rorder ?>">
+                                author
+                            <?php if($sortby === 'visiblename') : ?>
+                                <i class="fa fa-sort-<?= $order > 0 ? 'asc' : 'desc' ?>"></i>
+                            <?php endif ?>
+                            </a>
                         </th>
                         <th>
                             website
                         </th>
                         <th>
-                            <i class="fa fa-gavel"></i>
+                            <a href="?sortby=approved&order=<?= $rorder ?>">
+                                <i class="fa fa-gavel"></i>
+                            <?php if($sortby === 'approved') : ?>
+                                <i class="fa fa-sort-<?= $order > 0 ? 'asc' : 'desc' ?>"></i>
+                            <?php endif ?>
+                            </a>
                         </th>
                         <th>
                             page
                         </th>
                         <th>
-                            date
+                            <a href="?sortby=date&order=<?= $rorder ?>">
+                                date
+                            <?php if($sortby === 'date') : ?>
+                                <i class="fa fa-sort-<?= $order > 0 ? 'asc' : 'desc' ?>"></i>
+                            <?php endif ?>
+                            </a>
                         </th>
                     </thead>
                     <tbody>
@@ -167,7 +188,7 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                                     <a target="_blank" href="<?= $comment->website() ?>" class="website"><?= ltrim(substr($comment->website(), 6), "\/") ?></a>
                                 <?php endif ?>
                             </span>
-                            <span>
+                            <span class="date" title="<?= $this->datemedium($comment->date()) ?>">
                             <?= $comment->date('hrdi') ?> ago
                             </span>
                         </header>

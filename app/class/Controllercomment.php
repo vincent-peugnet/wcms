@@ -65,6 +65,7 @@ class Controllercomment extends Controller
             'compages' => $compages,
             'sortby' => $sortby,
             'order' => $order,
+            'rorder' => $order * -1,
             'pages' => $pages,
             'isfiltered' => $isfiltered,
         ]);
