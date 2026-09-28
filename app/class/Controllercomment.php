@@ -55,6 +55,11 @@ class Controllercomment extends Controller
             $isfiltered = false;
         }
 
+        $filters = '';
+        if ($isfiltered) {
+            $filters = '&' . urldecode(http_build_query(['pages' => $pages]));
+        }
+
         if (isset($_GET['display'])) {
             $this->workspace->setcommentdisplay($_GET['display']);
             $this->servicesession->setworkspace($this->workspace);
@@ -68,6 +73,7 @@ class Controllercomment extends Controller
             'rorder' => $order * -1,
             'pages' => $pages,
             'isfiltered' => $isfiltered,
+            'filters' => $filters,
         ]);
     }
 

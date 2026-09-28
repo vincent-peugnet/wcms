@@ -83,10 +83,10 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
             <?php endif ?>
             
             <span class="display">
-                <a href="?display=timeline&sortby=<?= $sortby ?>&order=<?= $order ?>"  <?= $workspace->commentdisplay() === Wcms\Workspace::TIMELINE ? 'class="selected"' : '' ?> title="timeline">
+                <a href="?display=timeline&sortby=<?= $sortby ?>&order=<?= $order ?><?= $filters ?>"  <?= $workspace->commentdisplay() === Wcms\Workspace::TIMELINE ? 'class="selected"' : '' ?> title="timeline">
                     <i class="fa fa-email-bulk"></i>
                 </a>
-                <a href="?display=list&sortby=<?= $sortby ?>&order=<?= $order ?>" <?= $workspace->commentdisplay() === Wcms\Workspace::LIST ? 'class="selected"' : '' ?> title="list">
+                <a href="?display=list&sortby=<?= $sortby ?>&order=<?= $order ?><?= $filters ?>" <?= $workspace->commentdisplay() === Wcms\Workspace::LIST ? 'class="selected"' : '' ?> title="list">
                     <i class="fa fa-th-list"></i>
                 </a>
             </span>
@@ -98,7 +98,7 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                 <table>
                     <thead class="sticky">
                         <th>
-                            <a href="?sortby=id&order=<?= $rorder ?>">
+                            <a href="?sortby=id&order=<?= $rorder ?><?= $filters ?>">
                                 id
                             <?php if($sortby === 'id') : ?>
                                 <i class="fa fa-sort-<?= $order > 0 ? 'asc' : 'desc' ?>"></i>
@@ -109,7 +109,7 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                             message
                         </th>
                         <th>
-                            <a href="?sortby=visiblename&order=<?= $rorder ?>">
+                            <a href="?sortby=visiblename&order=<?= $rorder ?><?= $filters ?>">
                                 author
                             <?php if($sortby === 'visiblename') : ?>
                                 <i class="fa fa-sort-<?= $order > 0 ? 'asc' : 'desc' ?>"></i>
@@ -120,7 +120,7 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                             website
                         </th>
                         <th>
-                            <a href="?sortby=approved&order=<?= $rorder ?>">
+                            <a href="?sortby=approved&order=<?= $rorder ?><?= $filters ?>">
                                 <i class="fa fa-gavel"></i>
                             <?php if($sortby === 'approved') : ?>
                                 <i class="fa fa-sort-<?= $order > 0 ? 'asc' : 'desc' ?>"></i>
@@ -131,7 +131,7 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                             page
                         </th>
                         <th>
-                            <a href="?sortby=date&order=<?= $rorder ?>">
+                            <a href="?sortby=date&order=<?= $rorder ?><?= $filters ?>">
                                 date
                             <?php if($sortby === 'date') : ?>
                                 <i class="fa fa-sort-<?= $order > 0 ? 'asc' : 'desc' ?>"></i>
