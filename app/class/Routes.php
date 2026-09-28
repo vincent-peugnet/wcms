@@ -93,7 +93,7 @@ class Routes
             ['GET', '/[cid:page]/login', 'Controllerpage#login', 'pagelogin'],
             ['POST', '/[cid:page]/edit', 'Controllerpage#update', 'pageupdate'],
             ['POST', '/[cid:page]/comment', 'Controllercomment#comment', 'pagecomment'],
-            ['POST', '/[cid:page]/comment-moderation', 'Controllercomment#moderation', 'pagecommentmoderation'],
+            ['POST', '/[cid:page]/comment-moderation', 'Controllercomment#pagemoderation', 'pagecommentmoderation'],
             ['GET', '/[cid:page]/delete', 'Controllerpage#delete', 'pagedelete'],
             ['POST', '/[cid:page]/delete', 'Controllerpage#confirmdelete', 'pageconfirmdelete'],
             ['POST', '/[cid:page]/copy', 'Controllerpage#postcopy', 'pagepostcopy'],

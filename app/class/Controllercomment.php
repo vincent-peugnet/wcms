@@ -193,7 +193,7 @@ class Controllercomment extends Controller
         $this->routedirect('pageread', ['page' => $page->id()]);
     }
 
-    public function moderation(string $page): never
+    public function pagemoderation(string $page): never
     {
         $pageid = $page;
         try {
