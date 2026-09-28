@@ -23,8 +23,9 @@ class Modelcomment extends Modeldb
      * @return array<string, Comment>       Comments sorted by 'most recents'
      *
      * @param string[] $pages               Selected pages IDs
+     * @param string $type                  One of the two possible comment types, or empty for all
      */
-    public function list(array $pages = [], string $sortby = 'date', int $order = -1): array
+    public function list(array $pages = [], string $type = '', string $sortby = 'date', int $order = -1): array
     {
         $comments = [];
 
@@ -33,6 +34,9 @@ class Modelcomment extends Modeldb
                 $data = $this->get($page);
                 foreach ($data as $id => $data) {
                     $com = Comment::new($data);
+                    if (!empty($type) && $com::TYPE !== $type) {
+                        continue;
+                    }
                     $comments[implode('#', [$page, $id])] = $com;
                 }
             } catch (Databaseexception $e) {

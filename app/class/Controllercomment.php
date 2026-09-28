@@ -29,10 +29,6 @@ class Controllercomment extends Controller
             $this->showtemplate('forbidden', [], 403);
         }
 
-        $sortby = $_GET['sortby'] ?? 'date';
-        $order = intval($_GET['order'] ?? -1);
-        $pages = $_GET['pages'] ?? [];
-
         $ids = $this->commentmanager->ids();
         $compages = [];
         foreach ($ids as $id) {
@@ -47,17 +43,22 @@ class Controllercomment extends Controller
             new Opt(['sortby' => 'commentcount', 'order' => -1])
         );
 
-        $isfiltered = true;
-        if (empty($pages)) {
-            $pages = array_keys($compages);
-            $isfiltered = false;
-        } elseif (empty(array_diff(array_keys($compages), $pages))) {
-            $isfiltered = false;
+        $sortby = $_GET['sortby'] ?? 'date';
+        $order = intval($_GET['order'] ?? -1);
+        $pages = $_GET['pages'] ?? $pages = array_keys($compages);
+        $type = $_GET['type'] ?? '';
+
+        $isfiltered = false;
+        if (
+            !empty($type) ||
+            !empty(array_diff(array_keys($compages), $pages))
+        ) {
+            $isfiltered = true;
         }
 
         $filters = '';
         if ($isfiltered) {
-            $filters = '&' . urldecode(http_build_query(['pages' => $pages]));
+            $filters = '&' . urldecode(http_build_query(['pages' => $pages, 'type' => $type]));
         }
 
         if (isset($_GET['display'])) {
@@ -66,12 +67,13 @@ class Controllercomment extends Controller
         }
 
         $this->showtemplate('comment', [
-            'comments' => $this->commentmanager->list($pages, $sortby, $order),
+            'comments' => $this->commentmanager->list($pages, $type, $sortby, $order),
             'compages' => $compages,
             'sortby' => $sortby,
             'order' => $order,
             'rorder' => $order * -1,
             'pages' => $pages,
+            'type' => $type,
             'isfiltered' => $isfiltered,
             'filters' => $filters,
         ]);

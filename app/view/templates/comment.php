@@ -40,6 +40,18 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                     <fieldset class="flexcol">
                         <legend>Filter</legend>
                         <p class="field">
+                            <label for="type-all">all</label>
+                            <input type="radio" name="type" value="" id="type-all" <?= $type === '' ? 'checked' : '' ?>>
+                        </p>
+                        <p class="field">
+                            <label for="type-user">user</label>
+                            <input type="radio" name="type" value="user" id="type-user" <?= $type === 'user' ? 'checked' : '' ?>>
+                        </p>
+                        <p class="field">
+                            <label for="type-visitor">visitor</label>
+                            <input type="radio" name="type" value="visitor" id="type-visitor" <?= $type === 'visitor' ? 'checked' : '' ?>>
+                        </p>
+                        <p class="field">
                             <label for="page">
                                 pages
                             </label>
