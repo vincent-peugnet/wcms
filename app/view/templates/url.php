@@ -94,7 +94,7 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                     <th>
                         <a href="<?= $this->url('url', [], "?sortby=id&order=$reverseorder&response=$response&page=$page") ?>">URL</a>
                         <?php if($sortby === 'id') : ?>
-                            <i class="fa fa-sort-<?= $reverseorder > 0 ? 'asc' : 'desc' ?>"></i>
+                            <i class="fa fa-sort-<?= $reverseorder < 0 ? 'asc' : 'desc' ?>"></i>
                         <?php endif ?>
                     </th>
                     <th>
@@ -105,13 +105,13 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                             <i class="fa fa-heartbeat"></i>
                         </a>
                         <?php if($sortby === 'accepted') : ?>
-                            <i class="fa fa-sort-<?= $reverseorder > 0 ? 'asc' : 'desc' ?>"></i>
+                            <i class="fa fa-sort-<?= $reverseorder < 0 ? 'asc' : 'desc' ?>"></i>
                         <?php endif ?>
                     </th>
                     <th>
                         <a href="<?= $this->url('url', [], "?sortby=response&order=$reverseorder&response=$response&page=$page") ?>">code</a>
                         <?php if($sortby === 'response') : ?>
-                            <i class="fa fa-sort-<?= $reverseorder > 0 ? 'asc' : 'desc' ?>"></i>
+                            <i class="fa fa-sort-<?= $reverseorder < 0 ? 'asc' : 'desc' ?>"></i>
                         <?php endif ?>
                     </th>
                     <th>
@@ -120,19 +120,19 @@ $this->layout('backlayout', ['title' => 'URL management', 'stylesheets' => [$css
                     <th>
                         <a href="<?= $this->url('url', [], "?sortby=pages&order=$reverseorder&response=$response&page=$page") ?>">pages</a>
                         <?php if($sortby === 'pages') : ?>
-                            <i class="fa fa-sort-<?= $reverseorder > 0 ? 'asc' : 'desc' ?>"></i>
+                            <i class="fa fa-sort-<?= $reverseorder < 0 ? 'asc' : 'desc' ?>"></i>
                         <?php endif ?>
                     </th>
                     <th>
                         <a href="<?= $this->url('url', [], "?sortby=timestamp&order=$reverseorder&response=$response&page=$page") ?>">last checked</a>
                         <?php if($sortby === 'timestamp') : ?>
-                            <i class="fa fa-sort-<?= $reverseorder > 0 ? 'asc' : 'desc' ?>"></i>
+                            <i class="fa fa-sort-<?= $reverseorder < 0 ? 'asc' : 'desc' ?>"></i>
                         <?php endif ?>
                     </th>
                     <th>
                         <a href="<?= $this->url('url', [], "?sortby=expire&order=$reverseorder&response=$response&page=$page") ?>">expire</a>
                         <?php if($sortby === 'expire') : ?>
-                            <i class="fa fa-sort-<?= $reverseorder > 0 ? 'asc' : 'desc' ?>"></i>
+                            <i class="fa fa-sort-<?= $reverseorder < 0 ? 'asc' : 'desc' ?>"></i>
                         <?php endif ?>
                     </th>
                 </thead>
