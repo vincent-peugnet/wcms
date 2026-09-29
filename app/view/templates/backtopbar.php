@@ -29,7 +29,7 @@
             </a>
         <?php endif ?>
 
-        <?php if (Wcms\Config::comments() && $user->issupereditor()) : ?>
+        <?php if (Wcms\Config::comments() && $user->iseditor()) : ?>
             <a href="<?= $this->url('comment') ?>" <?= $tab == 'comment' ? 'class="currentpage"' : '' ?>>
                 <i class="fa fa-comment"></i> <span>comment</span>
             </a>

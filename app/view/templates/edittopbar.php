@@ -77,7 +77,7 @@
                     </div>
                 <?php endif ?>
 
-                <?php if(Wcms\Config::comments() && $page->commentcount() > 0) : ?>
+                <?php if(Wcms\Config::comments() && $page->commentcount() > 0 && $user->iseditor()) : ?>
                     <div class="dropdown-section">
                         <h3>Comments</h3>
                         <a href="<?= $this->url('comment', [], '?pages[]=' . $page->id()) ?>&limit=0" class="button">

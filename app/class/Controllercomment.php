@@ -25,7 +25,7 @@ class Controllercomment extends Controller
         if ($this->user->isvisitor()) {
             $this->showtemplate('connect', ['route' => 'url']);
         }
-        if (!$this->user->issupereditor()) {
+        if (!$this->user->iseditor()) {
             $this->showtemplate('forbidden', [], 403);
         }
 
@@ -219,7 +219,7 @@ class Controllercomment extends Controller
 
     public function moderation(): never
     {
-        if (!$this->user->issupereditor()) {
+        if (!$this->user->iseditor()) {
             $this->showtemplate('forbidden', [], 403);
         }
 
@@ -227,7 +227,7 @@ class Controllercomment extends Controller
 
         $total = 0;
         $success = 0;
-        foreach ($approvals as $page => $statuses) {
+        foreach ($approvals as $pageid => $statuses) {
             // remove unchanged balues
             $statuses = array_filter($statuses, function (string $v): bool {
                 return $v !== '';
@@ -237,10 +237,17 @@ class Controllercomment extends Controller
             }
             $total = $total + count($statuses);
             try {
-                $this->commentmanager->pagemoderation($page, $statuses);
+                $page = $this->pagemanager->get($pageid);
+
+                // user is not allowed to moderate comment on this page
+                if (!$this->canedit($page)) {
+                    continue;
+                }
+
+                $this->commentmanager->pagemoderation($pageid, $statuses);
                 $success = $success + count($statuses);
             } catch (Databaseexception $e) {
-                Logger::error("'moderation of page '%s': %s", $page, $e->getMessage());
+                Logger::error("'moderation of page '%s': %s", $pageid, $e->getMessage());
             }
         }
 

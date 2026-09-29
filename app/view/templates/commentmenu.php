@@ -17,7 +17,7 @@
             </form>
         <?php endif ?>
 
-        <?php if ($workspace->commentdisplay() === Wcms\Workspace::LIST) : ?>
+        <?php if ($workspace->commentdisplay() === Wcms\Workspace::LIST && $user->issupereditor()) : ?>
             <details name="menu" id="edit" class="dropdown">
                 <summary>Edit</summary>
                 <div class="dropdown-content">

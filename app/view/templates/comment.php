@@ -8,6 +8,7 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
 <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'comment', 'pagelist' => $pagelist]) ?>
 
 <?php $this->insert('commentmenu', [
+    'user' => $user,
     'workspace' => $workspace,
     'sortby' => $sortby,
     'order' => $order,
@@ -121,9 +122,11 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
             <?php if($workspace->commentdisplay() === Wcms\Workspace::LIST) : ?>
                 <table>
                     <thead class="sticky">
-                        <th id="checkall">
-                            x
-                        </th>
+                        <?php if($user->issupereditor()) : ?>
+                            <th id="checkall">
+                                x
+                            </th>
+                        <?php endif ?>
                         <th>
                             <a href="?sortby=id&order=<?= $rorder ?>&limit=<?= $limit ?><?= $filters ?>">
                                 id
@@ -168,12 +171,14 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                     </thead>
                     <tbody>
                         <?php foreach ($comments as $id => $comment) : ?>
-                            <?php $page = explode('#', $id)[0] ?>
+                            <?php $pageid = explode('#', $id)[0] ?>
                             <?php $nb = explode('#', $id)[1] ?>
                             <tr class="comment">
-                                <td>
-                                    <input type="checkbox" name="id[]" id="comment_<?= $id ?>" value="<?= $id ?>" form="multiedit">
-                                </td>
+                                <?php if($user->issupereditor()) : ?>
+                                    <td>
+                                        <input type="checkbox" name="id[]" id="comment_<?= $id ?>" value="<?= $id ?>" form="multiedit">
+                                    </td>
+                                <?php endif ?>
                                 <td>
                                     <label for="comment_<?= $id ?>">
                                         <?= $id ?>
@@ -195,9 +200,9 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                                     <?php endif ?>
                                 </td>
                                 <td>
-                                    <?php $page = explode('#', $id)[0] ?>
-                                    <a href="<?= $this->upage('pageedit', $page) ?>" class="button">
-                                        <?= $page ?>
+                                    <?php $pageid = explode('#', $id)[0] ?>
+                                    <a href="<?= $this->upage('pageedit', $pageid) ?>" class="button">
+                                        <?= $pageid ?>
                                     </a>
                                 </td>
                                 <td>
@@ -209,7 +214,7 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                 </table>
             <?php elseif ($workspace->commentdisplay() === Wcms\Workspace::TIMELINE) : ?>
                 <?php foreach ($comments as $id => $comment) : ?>
-                    <?php $page = explode('#', $id)[0] ?>
+                    <?php $pageid = explode('#', $id)[0] ?>
                     <?php $nb = explode('#', $id)[1] ?>
                     <div class="comment">
                         <header>
@@ -230,47 +235,51 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                         <footer>
 
                             <div class="moderation">
-                                <label for="comment-delete-<?= $id ?>" title="delete comment" class="delete">
-                                    <i class="fa fa-trash-o"></i>
-                                </label>
-                                <input
-                                    type="radio"
-                                    form="moderation"
-                                    class="delete"
-                                    name="approval[<?= $page ?>][<?= $nb ?>]"
-                                    value="-1"
-                                    id="comment-delete-<?= $id ?>"
-                                >
-                                <input
-                                    type="radio"
-                                    form="moderation"
-                                    class="neutral"
-                                    name="approval[<?= $page ?>][<?= $nb ?>]"
-                                    value="<?=  $comment->approved() ? '0' : '' ?>"
-                                    <?=  !$comment->approved() ? 'checked' : '' ?>
-                                >
-                                <input
-                                    type="radio"
-                                    form="moderation"
-                                    class="approve"
-                                    id="comment-approve-<?= $id ?>" 
-                                    name="approval[<?= $page ?>][<?= $nb ?>]"
-                                    value="<?=  !$comment->approved() ? '1' : '' ?>"
-                                    <?=  $comment->approved() ? 'checked' : '' ?>
-                                >
-                                <label for="comment-approve-<?= $id ?>" title="approve comment" class="approve">
-                                    <i class="fa fa-thumbs-o-up"></i>
-                                </label>
+                                <?php if($this->caneditpage($compages[$pageid])) : ?>
+                                    <label for="comment-delete-<?= $id ?>" title="delete comment" class="delete">
+                                        <i class="fa fa-trash-o"></i>
+                                    </label>
+                                    <input
+                                        type="radio"
+                                        form="moderation"
+                                        class="delete"
+                                        name="approval[<?= $pageid ?>][<?= $nb ?>]"
+                                        value="-1"
+                                        id="comment-delete-<?= $id ?>"
+                                    >
+                                    <input
+                                        type="radio"
+                                        form="moderation"
+                                        class="neutral"
+                                        name="approval[<?= $pageid ?>][<?= $nb ?>]"
+                                        value="<?=  $comment->approved() ? '0' : '' ?>"
+                                        <?=  !$comment->approved() ? 'checked' : '' ?>
+                                    >
+                                    <input
+                                        type="radio"
+                                        form="moderation"
+                                        class="approve"
+                                        id="comment-approve-<?= $id ?>" 
+                                        name="approval[<?= $pageid ?>][<?= $nb ?>]"
+                                        value="<?=  !$comment->approved() ? '1' : '' ?>"
+                                        <?=  $comment->approved() ? 'checked' : '' ?>
+                                    >
+                                    <label for="comment-approve-<?= $id ?>" title="approve comment" class="approve">
+                                        <i class="fa fa-thumbs-o-up"></i>
+                                    </label>
+                                <?php endif ?>
                             </div>
 
                             <span>
                                 #<?= $nb ?>
                                 on
                                 <span class="page">
-                                    <?= $page ?>
+                                    <?= $pageid ?>
                                 </span>
-                                <a href="<?= $this->upage('pageedit', $page) ?>" class="button"><i class="fa fa-pencil"></i></a>
-                                <a href="<?= $this->upage('pageread', $page) ?>" class="button"><i class="fa fa-eye"></i></a>
+                                <?php if($this->caneditpage($compages[$pageid])) : ?>
+                                    <a href="<?= $this->upage('pageedit', $pageid) ?>" class="button"><i class="fa fa-pencil"></i></a>
+                                <?php endif ?>
+                                <a href="<?= $this->upage('pageread', $pageid) ?>" class="button"><i class="fa fa-eye"></i></a>
                             </span>
                         </footer>
                     </div>

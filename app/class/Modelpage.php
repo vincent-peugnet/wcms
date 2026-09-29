@@ -131,7 +131,7 @@ class Modelpage extends Modeldb
      *
      * @throws Invalididexception           If ID is not valid
      * @throws DatabaseNotfoundexception    If page is'nt found
-     * @throws RangeException               If page version is specified but invalid
+     * @throws Databaseexception            If page version is specified but invalid
      */
     public function get($id): Page
     {
@@ -997,7 +997,7 @@ class Modelpage extends Modeldb
      *
      * @param mixed[]|object $datas         Page's datas
      * @return Page                         V1 or V2
-     * @throws RangeException               If page version is defined but out of range
+     * @throws Databaseexception            If page version is defined but out of range
      */
     public function parsepage($datas = []): Page
     {
@@ -1010,7 +1010,7 @@ class Modelpage extends Modeldb
                 case Page::V2:
                     return new Pagev2($datas);
             }
-            throw new RangeException('Version is specified but out of range');
+            throw new Databaseexception('page version is specified but out of range');
         } elseif (isset($metadatas['content'])) {
             return new Pagev2($datas);
         } else {
