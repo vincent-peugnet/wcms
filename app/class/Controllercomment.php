@@ -259,40 +259,4 @@ class Controllercomment extends Controller
 
         $this->routedirect('comment', [], $_GET);
     }
-
-    public function pagemoderation(string $page): never
-    {
-        $pageid = $page;
-        try {
-            $page = $this->pagemanager->get($pageid);
-        } catch (RuntimeException $e) {
-            $this->showtemplate(
-                'alertexistnot',
-                ['page' => new Pagev2(['id' => $pageid]), 'subtitle' => Config::existnot()],
-                404
-            );
-        }
-
-        if (!$this->canedit($page)) {
-            $this->showtemplate('forbidden', [], 401);
-        }
-
-        try {
-            $this->commentmanager->pagemoderation($pageid, $_POST);
-
-            // invalidate cache of the page that store the comments
-            // we assume here that there's a lot of chance the page display it's own comments
-            // but nothing is done for other pages that would print the comments
-            // by not updating page->datecomment here, it can still be used as last comment date
-            $this->pagemanager->removecache($pageid);
-
-            $this->pagemanager->update($page);
-        } catch (RuntimeException $e) {
-            http_response_code(500);
-            Logger::error('comment moderation: %s', $e->getMessage());
-            exit;
-        }
-
-        $this->routedirect('pageedit', ['page' => $pageid]);
-    }
 }
