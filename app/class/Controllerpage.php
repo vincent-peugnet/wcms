@@ -291,16 +291,6 @@ class Controllerpage extends Controller
         $backlinkopt = new Opt(['linkto' => $this->page->id()]);
         $datas['homebacklink'] = $backlinkopt->getaddress();
 
-        $datas['comments'] = [];
-        if ($this->page->commentcount() > 0) {
-            try {
-                $commentmanager = new Modelcomment();
-                $datas['comments'] = array_reverse($commentmanager->getcomments($page), true);
-            } catch (RuntimeException $e) {
-                Logger::errorex($e);
-            }
-        }
-
         $datas['urls'] = [];
         if (Config::urlchecker() && count($this->page->externallinks()) > 0) {
             $urlchecker = new Serviceurlchecker();
