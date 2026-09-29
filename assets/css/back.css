@@ -75,6 +75,27 @@ main section {
     width: 100%;
 }
 
+/* for fields with counters, manage space between label and counter  */
+.field .label-with-counter {
+    display: flex;
+    max-width: 180px;
+}
+
+.field .label-with-counter .label {
+    flex:1;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.field .label-with-counter .counter {
+    border-radius: var(--radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--size-small);
+    padding: 0.2rem var(--half-padding);
+}
+
 /* --------------------------------------------------------- footer */
 
 body > footer {

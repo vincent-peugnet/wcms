@@ -456,6 +456,7 @@ table a {
 .toggle-panel-content {
     padding: var(--spacing);
     overflow-y: auto;
+    scrollbar-width: none;
 }
 
 .toggle-panel-label {
@@ -480,7 +481,7 @@ table a {
 :checked ~ .toggle-panel {
     display: flex;
     flex-direction: column;
-    max-width: min-content;
+    /* max-width: min-content; */
 }
 
 input.toggle-panel-toggle {

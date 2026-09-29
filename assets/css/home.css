@@ -31,33 +31,9 @@
 
 /* --------------------------------------------------------- filters */
 
-/* for tags and authors, manage space between label and counter  */
-.field .label-with-counter {
-    display: flex;
-}
-
-.field .label-with-counter .label {
-    flex:1;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-
-.field .label-with-counter .counter {
-    border-radius: var(--radius);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: var(--size-small);
-    padding: 0.2rem var(--half-padding);
-}
-
 fieldset.tag input[type="radio"], fieldset.authors input[type="radio"] {
     /* make input/label closer on authors and tags radios */
     margin-right: -2px;
-}
-
-td label, td time, td.tag, td.description, td.secure, td.authors {
-    white-space: nowrap;
 }
 
 details#display input[type="color"] {
@@ -112,6 +88,10 @@ a.redirection > * {
     overflow-x: hidden;
     text-overflow: ellipsis;
     max-width: 175px;
+}
+
+td label, td time, td.tag, td.description, td.secure, td.authors {
+    white-space: nowrap;
 }
 
 table td a.tag, table a.author {

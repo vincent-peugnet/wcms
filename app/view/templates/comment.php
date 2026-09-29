@@ -62,8 +62,10 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
 
                             <?php foreach ($compages as $page) : ?>
                                 <p class="field">
-                                    <label for="page_<?= $page->id() ?>">
-                                        <?= $page->id() ?>
+                                    <label class="label-with-counter" for="page_<?= $page->id() ?>">
+                                        <span class="label">
+                                            <?= $page->id() ?>
+                                        </span>
                                         <span class="counter"><?= $page->commentcount() ?></span>
                                     </label>
                                     <input

@@ -34,11 +34,15 @@ main[data-display="timeline"] .comment header {
 }
 
 @media (hover: hover) {
-    main[data-display="timeline"] .comment footer {
+    main[data-display="timeline"] .comment footer,
+    main[data-display="timeline"] .comment .date
+    {
         opacity: 0.7;
     }
 
-    main[data-display="timeline"] .comment:hover footer {
+    main[data-display="timeline"] .comment:hover footer,
+    main[data-display="timeline"] .comment:hover .date
+    {
         opacity: 1;
     }
 }
@@ -58,12 +62,4 @@ main[data-display="timeline"] .comment .message {
 
 .page {
     font-family: monospace;
-}
-
-.counter::before {
-    content: "(";
-}
-
-.counter::after {
-    content: ")";
 }
