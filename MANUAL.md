@@ -1263,7 +1263,9 @@ Here is an example message that confirm the reception of the comment:
 
 ### Moderation
 
-Moderation of comments can be done in [page edit view](#edition-interface) right panel. This means that it's reserved to page's [authors](#authors) or [super editors](#super-editor) and above.
+Moderation of comments can be done in the dedicated comment interface. It can be accessed from the main menu to browse every comments, or from the __action menu__ in the page edit view to filter them by the current page.
+
+Comment moderation is available to page [authors](#authors). And multi-edit is restricted to [super-editors](#super-editor). 
 
 Each comment have a status determined by one of the 3 colors: 🔴🟠🟢
 
@@ -1510,7 +1512,8 @@ Not all users are equal. Users have rights according to their level (from 0 to 1
 |edit page if author                |   |   |✔️  |✔️  |✔️  |✔️  |
 |read not_published page            |   |   |   |✔️  |✔️  |✔️  |
 |delete page if only author         |   |   |   |✔️  |✔️  |✔️  |
-|manage page's authors              |   |   |   |✔️  |✔️  |✔️  |
+|manage others page's authors       |   |   |   |✔️  |✔️  |✔️  |
+|manage page's comment (if author)  |   |   |   |✔️  |✔️  |✔️  |
 |create page                        |   |   |   |✔️  |✔️  |✔️  |
 |upload media                       |   |   |   |✔️  |✔️  |✔️  |
 |edit any page                      |   |   |   |   |✔️  |✔️  |
