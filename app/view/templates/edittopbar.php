@@ -77,6 +77,16 @@
                     </div>
                 <?php endif ?>
 
+                <?php if(Wcms\Config::comments() && $page->commentcount() > 0) : ?>
+                    <div class="dropdown-section">
+                        <h3>Comments</h3>
+                        <a href="<?= $this->url('comment', [], '?pages[]=' . $page->id()) ?>&limit=0" class="button">
+                            <i class="fa fa-comment"></i>
+                            manage comments
+                        </a>
+                    </div>
+                <?php endif ?>
+
             </div>
 
         </details>
