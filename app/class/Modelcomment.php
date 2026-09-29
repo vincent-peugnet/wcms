@@ -20,6 +20,21 @@ class Modelcomment extends Modeldb
     }
 
     /**
+     * @param string[] $commentids          List of comments IDs using # delimiter
+     *
+     * @return array<string, string[]>      comments IDs in pages containers
+     */
+    public static function explode(array $commentids): array
+    {
+        $pages = [];
+        foreach ($commentids as $id) {
+            $arr = explode('#', $id);
+            $pages[$arr[0]][] = $arr[1];
+        }
+        return $pages;
+    }
+
+    /**
      * @return array<string, Comment>       Comments sorted by 'most recents'
      *
      * @param string[] $pages               Selected pages IDs
@@ -167,11 +182,38 @@ class Modelcomment extends Modeldb
     }
 
     /**
+     * @param string[] $commentids          list of IDs using # delimiter
+     *
+     * @return int                          number of updated pages.
+     */
+    public function multiedit(array $commentids, ?bool $approved = null): int
+    {
+        $pages = self::explode($commentids);
+
+        $success = 0;
+        foreach ($pages as $page => $comids) {
+            try {
+                $comments = $this->getcomments($page);
+                foreach ($comids as $id) {
+                    $comment = $comments[$id];
+                    $comment->setapproved(boolval($_POST['approved']));
+                }
+                $this->update($page, $comments);
+                $success = $success + count($comids);
+            } catch (Databaseexception $e) {
+                Logger::error("edit comment on page '%s': %s", $page, $e->getMessage());
+            }
+        }
+
+        return $success;
+    }
+
+    /**
      * @param array<int, string> $statuses     key is comment ID, value is `-1`, `0` or `1`
      *
      * @throws Databaseexception if no comment are found for given page ID or update failed
      */
-    public function applymoderation(string $pageid, array $statuses): void
+    public function pagemoderation(string $pageid, array $statuses): void
     {
         $comments = $this->getcomments($pageid);
 

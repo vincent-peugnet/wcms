@@ -2,22 +2,46 @@
 
     <div class="hbar-section">
 
-        <details name="menu" id="json" class="dropdown">
-            <summary>File</summary>
-            <div class="dropdown-content">
+        <?php if ($workspace->commentdisplay() === Wcms\Workspace::TIMELINE) : ?>
+            <form action="<?= $this->url('commentmoderation') ?>" method="post" id="moderation">
                 <div class="dropdown-section">
+                    <button type="submit">
+                        <i class="fa fa-gavel"></i>
+                        apply moderation
+                    </button>
                 </div>
-            </div>
-        </details>
+            </form>
+        <?php endif ?>
 
-
-        <details name="menu" id="edit" class="dropdown">
-            <summary>Edit</summary>
-            <div class="dropdown-content">
-                <div class="dropdown-section">
+        <?php if ($workspace->commentdisplay() === Wcms\Workspace::LIST) : ?>
+            <details name="menu" id="edit" class="dropdown">
+                <summary>Edit</summary>
+                <div class="dropdown-content">
+                    <form action="<?= $this->url('commentmultiedit') ?>" method="post" id="multiedit">
+                        <div class="dropdown-section">
+                            <h3>edit</h3>
+                            <h4>approval</h4>
+                            <p class="field">
+                                <label for="approved_keep">keep existing</label>
+                                <input type="radio" name="approved" id="approved_keep" checked>
+                            </p>
+                            <p class="field">
+                                <label for="approved_false">unapproved</label>
+                                <input type="radio" name="approved" id="approved_false" value="0">
+                            </p>
+                            <p class="field">
+                                <label for="approved_true">approved</label>
+                                <input type="radio" name="approved" id="approved_true" value="1">
+                            </p>
+                            
+                            <button type="submit">
+                                edit
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </div>
-        </details>
+            </details>
+        <?php endif ?>
 
     </div>
 

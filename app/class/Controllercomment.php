@@ -193,6 +193,52 @@ class Controllercomment extends Controller
         $this->routedirect('pageread', ['page' => $page->id()]);
     }
 
+    public function multiedit(): never
+    {
+        if (!$this->user->issupereditor()) {
+            $this->showtemplate('forbidden', [], 403);
+        }
+
+        $commentids = $_POST['id'] ?? [];
+        $approvals = $_POST['approved'] ?? null;
+
+        $success = $this->commentmanager->multiedit($commentids, $approvals);
+
+        $this->sendstatflashmessage($success, count($commentids), 'comments edited');
+
+        $this->routedirect('comment');
+    }
+
+    public function moderation(): never
+    {
+        if (!$this->user->issupereditor()) {
+            $this->showtemplate('forbidden', [], 403);
+        }
+
+        $approvals = $_POST['approval'] ?? [];
+
+        $total = 0;
+        $success = 0;
+        foreach ($approvals as $page => $statuses) {
+            // remove unchanged balues
+            $statuses = array_filter($statuses, function (string $v): bool {
+                return $v !== '';
+            });
+            if (empty($statuses)) {
+                continue;
+            }
+            $total = $total + count($statuses);
+            try {
+                $this->commentmanager->pagemoderation($page, $statuses);
+                $success = $success + count($statuses);
+            } catch (Databaseexception $e) {
+                Logger::error("'moderation of page '%s': %s", $page, $e->getMessage());
+            }
+        }
+        $this->sendstatflashmessage($success, $total, 'comments where successfully moderated');
+        $this->routedirect('comment');
+    }
+
     public function pagemoderation(string $page): never
     {
         $pageid = $page;
@@ -211,7 +257,7 @@ class Controllercomment extends Controller
         }
 
         try {
-            $this->commentmanager->applymoderation($pageid, $_POST);
+            $this->commentmanager->pagemoderation($pageid, $_POST);
 
             // invalidate cache of the page that store the comments
             // we assume here that there's a lot of chance the page display it's own comments

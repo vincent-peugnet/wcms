@@ -7,7 +7,7 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
 
 <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'comment', 'pagelist' => $pagelist]) ?>
 
-<?php $this->insert('commentmenu'); ?>
+<?php $this->insert('commentmenu', ['workspace' => $workspace]); ?>
 
 <main data-display="<?= $workspace->commentdisplay() ?>">
 <aside id="filter" class="toggle-panel-container">
@@ -109,6 +109,9 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
             <?php if($workspace->commentdisplay() === Wcms\Workspace::LIST) : ?>
                 <table>
                     <thead class="sticky">
+                        <th id="checkall">
+                            x
+                        </th>
                         <th>
                             <a href="?sortby=id&order=<?= $rorder ?><?= $filters ?>">
                                 id
@@ -153,9 +156,16 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                     </thead>
                     <tbody>
                         <?php foreach ($comments as $id => $comment) : ?>
+                            <?php $page = explode('#', $id)[0] ?>
+                            <?php $nb = explode('#', $id)[1] ?>
                             <tr class="comment">
                                 <td>
-                                    <?= $id ?>
+                                    <input type="checkbox" name="id[]" id="comment_<?= $id ?>" value="<?= $id ?>" form="multiedit">
+                                </td>
+                                <td>
+                                    <label for="comment_<?= $id ?>">
+                                        <?= $id ?>
+                                    </label>                                        
                                 </td>
                                 <td class="message"><?= $this->e($comment->message()) ?></td>
                                 <td>
@@ -211,9 +221,31 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                                 <label for="comment-delete-<?= $id ?>" title="delete comment" class="delete">
                                     <i class="fa fa-trash-o"></i>
                                 </label>
-                                <input type="radio" name="<?= $id ?>" value="-1" id="comment-delete-<?= $id ?>" class="delete">
-                                <input type="radio" name="<?= $id ?>" value="0" <?= $comment->approved() ? '' : 'checked' ?> class="neutral">
-                                <input type="radio" name="<?= $id ?>" value="1" <?= $comment->approved() ? 'checked' : '' ?> id="comment-approve-<?= $id ?>" class="approve">
+                                <input
+                                    type="radio"
+                                    form="moderation"
+                                    class="delete"
+                                    name="approval[<?= $page ?>][<?= $nb ?>]"
+                                    value="-1"
+                                    id="comment-delete-<?= $id ?>"
+                                >
+                                <input
+                                    type="radio"
+                                    form="moderation"
+                                    class="neutral"
+                                    name="approval[<?= $page ?>][<?= $nb ?>]"
+                                    value="<?=  $comment->approved() ? '0' : '' ?>"
+                                    <?=  !$comment->approved() ? 'checked' : '' ?>
+                                >
+                                <input
+                                    type="radio"
+                                    form="moderation"
+                                    class="approve"
+                                    id="comment-approve-<?= $id ?>" 
+                                    name="approval[<?= $page ?>][<?= $nb ?>]"
+                                    value="<?=  !$comment->approved() ? '1' : '' ?>"
+                                    <?=  $comment->approved() ? 'checked' : '' ?>
+                                >
                                 <label for="comment-approve-<?= $id ?>" title="approve comment" class="approve">
                                     <i class="fa fa-thumbs-o-up"></i>
                                 </label>
