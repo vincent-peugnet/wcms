@@ -7,7 +7,13 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
 
 <?php $this->insert('backtopbar', ['user' => $user, 'tab' => 'comment', 'pagelist' => $pagelist]) ?>
 
-<?php $this->insert('commentmenu', ['workspace' => $workspace]); ?>
+<?php $this->insert('commentmenu', [
+    'workspace' => $workspace,
+    'sortby' => $sortby,
+    'order' => $order,
+    'limit' => $limit,
+    'filters' => $filters
+]); ?>
 
 <main data-display="<?= $workspace->commentdisplay() ?>">
 <aside id="filter" class="toggle-panel-container">

@@ -3,7 +3,11 @@
     <div class="hbar-section">
 
         <?php if ($workspace->commentdisplay() === Wcms\Workspace::TIMELINE) : ?>
-            <form action="<?= $this->url('commentmoderation') ?>" method="post" id="moderation">
+            <form
+                action="<?= $this->url('commentmoderation', [], "?sortby=$sortby&order=$order&limit=$limit$filters") ?>"
+                method="post"
+                id="moderation"
+            >
                 <div class="dropdown-section">
                     <button type="submit">
                         <i class="fa fa-gavel"></i>
@@ -17,7 +21,7 @@
             <details name="menu" id="edit" class="dropdown">
                 <summary>Edit</summary>
                 <div class="dropdown-content">
-                    <form action="<?= $this->url('commentmultiedit') ?>" method="post" id="multiedit">
+                    <form action="<?= $this->url('commentmultiedit', [], "?sortby=$sortby&order=$order&limit=$limit$filters") ?>" method="post" id="multiedit">
                         <div class="dropdown-section">
                             <h3>edit</h3>
                             <h4>approval</h4>

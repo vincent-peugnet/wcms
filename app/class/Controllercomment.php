@@ -206,10 +206,15 @@ class Controllercomment extends Controller
         $approvals = $_POST['approved'] ?? null;
 
         $success = $this->commentmanager->multiedit($commentids, $approvals);
+        $total = count($commentids);
 
-        $this->sendstatflashmessage($success, count($commentids), 'comments edited');
+        if ($total === 0) {
+            $this->sendflashmessage('no comment selected', self::FLASH_WARNING);
+        } else {
+            $this->sendstatflashmessage($success, $total, 'comments edited');
+        }
 
-        $this->routedirect('comment');
+        $this->routedirect('comment', [], $_GET);
     }
 
     public function moderation(): never
@@ -238,8 +243,14 @@ class Controllercomment extends Controller
                 Logger::error("'moderation of page '%s': %s", $page, $e->getMessage());
             }
         }
-        $this->sendstatflashmessage($success, $total, 'comments where successfully moderated');
-        $this->routedirect('comment');
+
+        if ($total === 0) {
+            $this->sendflashmessage('no moderation to apply', self::FLASH_WARNING);
+        } else {
+            $this->sendstatflashmessage($success, $total, 'comments where successfully moderated');
+        }
+
+        $this->routedirect('comment', [], $_GET);
     }
 
     public function pagemoderation(string $page): never
