@@ -47,11 +47,13 @@ class Controllercomment extends Controller
         $order = intval($_GET['order'] ?? -1);
         $pages = $_GET['pages'] ?? $pages = array_keys($compages);
         $type = $_GET['type'] ?? '';
+        $limit = intval($_GET['limit'] ?? 100);
 
         $isfiltered = false;
         if (
             !empty($type) ||
-            !empty(array_diff(array_keys($compages), $pages))
+            !empty(array_diff(array_keys($compages), $pages)) ||
+            $limit > 0
         ) {
             $isfiltered = true;
         }
@@ -67,13 +69,14 @@ class Controllercomment extends Controller
         }
 
         $this->showtemplate('comment', [
-            'comments' => $this->commentmanager->list($pages, $type, $sortby, $order),
+            'comments' => $this->commentmanager->list($pages, $type, $sortby, $order, $limit),
             'compages' => $compages,
             'sortby' => $sortby,
             'order' => $order,
             'rorder' => $order * -1,
             'pages' => $pages,
             'type' => $type,
+            'limit' => $limit,
             'isfiltered' => $isfiltered,
             'filters' => $filters,
         ]);

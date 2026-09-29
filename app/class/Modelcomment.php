@@ -40,8 +40,13 @@ class Modelcomment extends Modeldb
      * @param string[] $pages               Selected pages IDs
      * @param string $type                  One of the two possible comment types, or empty for all
      */
-    public function list(array $pages = [], string $type = '', string $sortby = 'date', int $order = -1): array
-    {
+    public function list(
+        array $pages = [],
+        string $type = '',
+        string $sortby = 'date',
+        int $order = -1,
+        int $limit = 0
+    ): array {
         $comments = [];
 
         foreach ($pages as $page) {
@@ -60,6 +65,11 @@ class Modelcomment extends Modeldb
         }
 
         $this->sort($comments, $sortby, $order);
+
+        if ($limit > 0) {
+            $comments = array_slice($comments, 0, $limit, true);
+        }
+
         return $comments;
     }
 

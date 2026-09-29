@@ -36,6 +36,10 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                             <label for="desc">descending</label>
                             <input type="radio" name="order" id="desc" value="-1" <?= $order === -1 ? 'checked' : '' ?>>
                         </p>
+                        <p class="field">
+                            <label for="limit">limit</label>
+                            <input type="number" name="limit" id="limit" value="<?= $limit ?>" min="0">
+                        </p>
                     </fieldset>
                     <fieldset class="flexcol">
                         <legend>Filter</legend>
@@ -88,17 +92,17 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
             <?php if($isfiltered) : ?>
                 <span class="badge filter">
                     <i class="fa fa-filter" title="There are active filters"></i>
-                    <a href="<?= $this->url('comment', [], "?sortby=$sortby&order=$order") ?>" class="button" title="remove filters">
+                    <a href="?sortby=<?= $sortby ?>&order=<?= $order ?>&limit=0" class="button" title="remove filters">
                         <i class="fa fa-times-circle"></i>
                     </a>
                 </span>
             <?php endif ?>
             
             <span class="display">
-                <a href="?display=timeline&sortby=<?= $sortby ?>&order=<?= $order ?><?= $filters ?>"  <?= $workspace->commentdisplay() === Wcms\Workspace::TIMELINE ? 'class="selected"' : '' ?> title="timeline">
+                <a href="?display=timeline&sortby=<?= $sortby ?>&order=<?= $order ?>&limit=<?= $limit ?><?= $filters ?>"  <?= $workspace->commentdisplay() === Wcms\Workspace::TIMELINE ? 'class="selected"' : '' ?> title="timeline">
                     <i class="fa fa-email-bulk"></i>
                 </a>
-                <a href="?display=list&sortby=<?= $sortby ?>&order=<?= $order ?><?= $filters ?>" <?= $workspace->commentdisplay() === Wcms\Workspace::LIST ? 'class="selected"' : '' ?> title="list">
+                <a href="?display=list&sortby=<?= $sortby ?>&order=<?= $order ?>&limit=<?= $limit ?><?= $filters ?>" <?= $workspace->commentdisplay() === Wcms\Workspace::LIST ? 'class="selected"' : '' ?> title="list">
                     <i class="fa fa-th-list"></i>
                 </a>
             </span>
@@ -113,7 +117,7 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                             x
                         </th>
                         <th>
-                            <a href="?sortby=id&order=<?= $rorder ?><?= $filters ?>">
+                            <a href="?sortby=id&order=<?= $rorder ?>&limit=<?= $limit ?><?= $filters ?>">
                                 id
                             <?php if($sortby === 'id') : ?>
                                 <i class="fa fa-sort-<?= $order > 0 ? 'asc' : 'desc' ?>"></i>
@@ -124,7 +128,7 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                             message
                         </th>
                         <th>
-                            <a href="?sortby=visiblename&order=<?= $rorder ?><?= $filters ?>">
+                            <a href="?sortby=visiblename&order=<?= $rorder ?>&limit=<?= $limit ?><?= $filters ?>">
                                 author
                             <?php if($sortby === 'visiblename') : ?>
                                 <i class="fa fa-sort-<?= $order > 0 ? 'asc' : 'desc' ?>"></i>
@@ -135,7 +139,7 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                             website
                         </th>
                         <th>
-                            <a href="?sortby=approved&order=<?= $rorder ?><?= $filters ?>">
+                            <a href="?sortby=approved&order=<?= $rorder ?>&limit=<?= $limit ?><?= $filters ?>">
                                 <i class="fa fa-gavel"></i>
                             <?php if($sortby === 'approved') : ?>
                                 <i class="fa fa-sort-<?= $order > 0 ? 'asc' : 'desc' ?>"></i>
@@ -146,7 +150,7 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                             page
                         </th>
                         <th>
-                            <a href="?sortby=date&order=<?= $rorder ?><?= $filters ?>">
+                            <a href="?sortby=date&order=<?= $rorder ?>&limit=<?= $limit ?><?= $filters ?>">
                                 date
                             <?php if($sortby === 'date') : ?>
                                 <i class="fa fa-sort-<?= $order > 0 ? 'asc' : 'desc' ?>"></i>
