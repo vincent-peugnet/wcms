@@ -1133,7 +1133,18 @@ abstract class Servicerender
         // store all IDs
         $ids = $xp->query("//@id");
         foreach ($ids as $id) {
+            if (key_exists($id->nodeValue, $this->ids)) {
+                $this->ids[$id->nodeValue] ++;
+                continue;
+            }
             $this->ids[$id->nodeValue] = 1;
+        }
+
+        // check for duplicated IDs
+        foreach ($this->ids as $id => $count) {
+            if ($count > 1) {
+                $this->adderror("ID '%s' used multiple times (%s)", $id, $count);
+            }
         }
 
         // analyse all links
