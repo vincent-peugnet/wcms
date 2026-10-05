@@ -42,6 +42,9 @@ abstract class Servicerender
     /** @var array<string, Header[]> */
     protected $sum = [];
 
+    /** @var array<string, bool> */
+    protected array $ids = [];
+
     /** @var bool If true, internal links target a new tab */
     protected bool $internallinkblank;
 
@@ -1125,6 +1128,15 @@ abstract class Servicerender
         $html = '<?xml encoding="utf-8" ?>' . $html;
         $dom->loadHTML($html, LIBXML_NOERROR | LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED);
         $dom->removeChild($dom->firstChild);
+        $xp = new DOMXPath($dom);
+
+        // store all IDs
+        $ids = $xp->query("//@id");
+        foreach ($ids as $id) {
+            $this->ids[$id->nodeValue] = 1;
+        }
+
+        // analyse all links
         $links = $dom->getElementsByTagName('a');
         foreach ($links as $link) {
             $this->linkparser($link);
@@ -1148,15 +1160,14 @@ abstract class Servicerender
                 break;
             }
             $this->commentform = true;
-            $this->commentform($dom, $form, $matches[0]);
+            $this->commentform($dom, $xp, $form, $matches[0]);
         }
 
 
         // check for URLs that where not cached
         try {
             if ($this->urlchecker !== null && $this->urlchecker->processqueue()) {
-                $selector = new DOMXPath($dom);
-                $links = $selector->query('//a[ @data-urlcheck = 0 ]');
+                $links = $xp->query('//a[ @data-urlcheck = 0 ]');
                 foreach ($links as $link) {
                     assert($link instanceof DOMElement);
                     $href = $link->getAttribute('href');
@@ -1236,6 +1247,9 @@ abstract class Servicerender
                     $link->setAttribute('data-urlcheck', '0');
                 }
             }
+        } elseif (preg_match('~^#(\S+)$~', $href, $out)) {
+            $fragment = $out[1];
+            $this->checkfragment($fragment);
         } elseif (preg_match(self::INTERNAL_LINK_REGEX, $href, $out)) {
             $classes[] = 'internal';
             $classes[] = 'page';
@@ -1251,6 +1265,7 @@ abstract class Servicerender
                 $classes[] = 'exist';
                 if ($this->page->id() === $page->id()) {
                     $classes[] = 'current_page';
+                    $this->checkfragment($fragment);
                 }
                 $classes[] = $page->secure('string');
                 $this->linkto[] = $page->id();
@@ -1362,7 +1377,7 @@ abstract class Servicerender
      * @param DOMElement $form              the form HTML element
      * @param Inclusion $inclusion          W inclusion, that contain parsed %COMMENT% params
      */
-    protected function commentform(DOMDocument $dom, DOMElement $form, Inclusion $inclusion): void
+    protected function commentform(DOMDocument $dom, DOMXPath $xp, DOMElement $form, Inclusion $inclusion): void
     {
         // generate action route
         try {
@@ -1386,7 +1401,7 @@ abstract class Servicerender
             $commentconf->limit() !== null && $this->page->commentcount() >= $commentconf->limit()
         );
 
-        foreach ($this->getformrelatedinputs($dom, $form) as $element) {
+        foreach ($this->getformrelatedinputs($xp, $form) as $element) {
             if (!($element instanceof DOMElement)) {
                 continue;
             }
@@ -1423,13 +1438,11 @@ abstract class Servicerender
      * Get all type of given form related inputs (input, textarea, button, select)
      * They may be inside the form node, or be outside and using a `form` attribute
      *
-     * @param DOMDocument $dom              The main DOM document
-     *
      * @param DOMElement $form              The form node
      *
      * @return array<int, DOMNode>          All the nodes
      */
-    protected function getformrelatedinputs(DOMDocument $dom, DOMElement $form): array
+    protected function getformrelatedinputs(DOMXPath $xp, DOMElement $form): array
     {
         // select form descendants input/textarea/button/select elements
         $inputs = array_merge(
@@ -1442,9 +1455,8 @@ abstract class Servicerender
         // select input/textarea/button/select associated elements that use `form=ID`
         if ($form->hasAttribute('id')) {
             $i = $form->getAttribute('id');
-            $selector = new DOMXPath($dom);
             $q = "//input[@form='$i'] | //textarea[@form='$i'] | //button[@form='$i'] | //select[@form='$i']";
-            $nodes = $selector->query($q);
+            $nodes = $xp->query($q);
             if ($nodes === false) {
                 throw new LogicException('malformed DOM XPath expression');
             }
@@ -1601,6 +1613,17 @@ abstract class Servicerender
             return $html;
         }
         return $this->typofixer->fix($html);
+    }
+
+    /**
+     * If the given fragment is not empty, check if it match an ID in the current page.
+     * If not, add a render error.
+     */
+    protected function checkfragment(string $fragment): void
+    {
+        if (!empty($fragment) && !key_exists($fragment, $this->ids)) {
+            $this->adderror("fragment link to unexisting ID: '#%s'", $fragment);
+        }
     }
 
 
