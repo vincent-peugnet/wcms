@@ -230,7 +230,9 @@ For example, with a link to a page with ID `my_page`:
 
 ### Styling links
 
-During the render process, some semantic datas are added to the __HTML classes of links__. It's intended to help editor style their Webpages.
+During the render process, some __semantic data are added to the HTML links__. It's intended to help editor style their Webpages.
+
+__classes__:
 
 
 - `page` link to a page of your W
@@ -239,6 +241,29 @@ During the render process, some semantic datas are added to the __HTML classes o
 - `public`, `private`, `not_published` if page exist, indicate it's [privacy](#privacy) level
 - `current_page` the link point to the current page
 
+__data-action__:
+
+More detailed info are added to internal links, such as the "action" related to the page. It uses the `data-action` attribute and can be set to:
+
+- `read` simple link to display the page.
+- `edit` a link to page edit interface (see [edit command](#edit))
+- `render` a link that force the render of a page (see [render command](#render))
+- `download` a link to download a page (see [download command](#download))
+- `delete` a link that delete a page (see [delete command](#delete))
+
+__Example__:
+
+Render of a link to edit an existing public page:
+
+```html
+<a href="PAGE_ID/edit" data-action="edit" class="internal exist public">
+```
+
+Editors can style the above HTML using this kind of CSS selector:
+
+```css
+a.internal[data-action="edit"] {...}
+```
 
 #### URL checker
 

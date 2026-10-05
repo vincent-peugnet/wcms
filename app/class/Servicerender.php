@@ -132,6 +132,9 @@ abstract class Servicerender
         self::DISPLAYCOUNT,
     ];
 
+    public const INTERNAL_LINK_REGEX =
+        '~^(' . Model::ID_REGEX . ')((#(\S+))|(\/(edit|render|download|delete)))?$~';
+
     /**
      * @param AltoRouter $router            Router used to generate urls
      * @param Modelpage $pagemanager        [optionnal] can be usefull if a pagemanager already store a page list
@@ -643,6 +646,7 @@ abstract class Servicerender
                     $matchpage = $rend->pagemanager->get($matches[1]);
                     $fragment = $matches[2] ?? '';
                     $href = $matches[1] . $fragment;
+                    // No need to use typo fixer as wikilinks can only be used in content elements
                     $a = htmlspecialchars($matchpage->title());
                 } catch (RuntimeException $e) {
                     $href = $matches[1];
@@ -1232,18 +1236,17 @@ abstract class Servicerender
                     $link->setAttribute('data-urlcheck', '0');
                 }
             }
-        } elseif (preg_match('~^([a-z0-9-_]+)((\/?#[a-z0-9-_]+)|(\/([\w\-\%\[\]\=\?\&]*)))?$~', $href, $out)) {
+        } elseif (preg_match(self::INTERNAL_LINK_REGEX, $href, $out)) {
             $classes[] = 'internal';
             $classes[] = 'page';
-            $fragment = $out[2] ?? '';
-            $link->setAttribute('href', $this->upage($out[1]) . $fragment);
-            if (isset($out[5]) && in_array($out[5], ['add', 'edit', 'update', 'render', 'download', 'delete'])) {
-                $classes[] = $out[5];
-            }
+            $fragment = $out[4] ?? '';
+            $action = $out[6] ?? 'read';
+            $pageid = $out[1];
+            $link->setAttribute('data-action', $action);
             try {
-                $page = $this->pagemanager->get($out[1]);
+                $page = $this->pagemanager->get($pageid);
                 if (!$link->hasAttribute('title')) {
-                    $link->setAttribute('title', $page->description());
+                    $link->setAttribute('title', $this->fixtypo($page->description()));
                 }
                 $classes[] = 'exist';
                 if ($this->page->id() === $page->id()) {
