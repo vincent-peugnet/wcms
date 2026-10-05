@@ -99,6 +99,7 @@ class Servicerenderv1 extends Servicerender
             $type = $element->type();
             $content = "\n<{$type}>\n{$content}\n</{$type}>\n";
         }
+        $content = $this->fixtypohtml($content);
 
         return $content;
     }

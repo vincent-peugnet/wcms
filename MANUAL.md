@@ -850,6 +850,15 @@ Everylink will transform each word containing a minimum of `<level>` letter(s), 
 
 
 
+### Global Rendering options
+
+Some render options can only be set globally by [admin](#administrator) users.
+
+#### Micro Typography fixer
+
+Micro Typography fixer will replace some characters (like quotes, or spaces before ponctuations) depending on page language, or if not set, on global language setting.
+
+If won't touch the page [BODY](#body), but will be applied on [content elements](#content-elements) and W inclusions like [page list](#page-list), [authors](#authors-inclusion) and [comments](#comment-list) (even if included in the BODY).
 
 
 ### Javascript

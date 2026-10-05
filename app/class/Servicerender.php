@@ -48,6 +48,9 @@ abstract class Servicerender
     /** @var bool If true, external links target a new tab */
     protected bool $externallinkblank;
 
+    /** @var ?Fixer Micro fypography fixer, null if not enabled */
+    protected ?Fixer $typofixer = null;
+
     /** @var bool If true, images with no title can have one based on alt attribute */
     protected bool $titlefromalt = false;
 
@@ -180,6 +183,11 @@ abstract class Servicerender
 
         $this->page = $page;
 
+        if (Config::typofixer()) {
+            // typo fixer need to access page language
+            $this->typofixer = $this->typofixerinit();
+        }
+
         $html = $this->gethmtl();
 
         if (!is_null($this->urlchecker)) {
@@ -281,10 +289,6 @@ abstract class Servicerender
 
         $html = $this->rss($html);
 
-        if (Config::typofixer()) {
-            $html = $this->typography($html);
-        }
-
         $html = "<body>\n$html\n</body>";
         $html = $this->htmlparser($html);
 
@@ -380,8 +384,8 @@ abstract class Servicerender
         $globalpath = Model::dirtopath(Model::GLOBAL_CSS_FILE);
         $fontcsspath = Model::dirtopath(Model::FONTS_CSS_FILE);
         $renderpath = Model::renderpath();
-        $description = htmlspecialchars($this->page->description());
-        $title = htmlspecialchars($this->page->title());
+        $description = $this->fixtypo($this->page->description());
+        $title = $this->fixtypo($this->page->title());
         $suffix = htmlspecialchars(Config::suffix());
         $url = Config::url();
         $generator = 'W ' . getversion();
@@ -608,11 +612,12 @@ abstract class Servicerender
     }
 
     /**
-     * Ajust typography elements like quotes and space before ponctuation.
+     * Initialize micro typography fixer
+     * If fixes typography elements like quotes and space before ponctuation.
      *
      * @todo When upgrading JoliTypo, use the new `SpaceBeforePunctuation` option instead of detecting french lang
      */
-    protected function typography(string $text): string
+    protected function typofixerinit(): Fixer
     {
         $options = ['SmartQuotes'];
         $lang = !empty($this->page->lang()) ? $this->page->lang() : Config::lang();
@@ -622,7 +627,7 @@ abstract class Servicerender
         $fixer = new Fixer($options);
         $fixer->setLocale($lang);
         $fixer->setProtectedTags(['pre', 'code', 'script', 'style', 'link']);
-        return $fixer->fix($text);
+        return $fixer;
     }
 
     /**
@@ -745,7 +750,7 @@ abstract class Servicerender
                     $replacement = $this->title($inclusion);
                     break;
                 case self::DESCRIPTION:
-                    $replacement = $this->page->description();
+                    $replacement = $this->fixtypo($this->page->description());
                     break;
                 case self::PATH:
                     $replacement = $this->upage($this->page->id());
@@ -821,7 +826,7 @@ abstract class Servicerender
             $optlist->hydrate($options);
 
             $pagetable = $this->pagemanager->list($optlist);
-            return $optlist->listhtml($pagetable, $this->page);
+            return $this->fixtypohtml($optlist->listhtml($pagetable, $this->page));
         } catch (RuntimeException $e) {
             $this->adderror("page list inclusion: '%s': %s", $match->fullmatch(), $e->getMessage());
         }
@@ -1002,7 +1007,7 @@ abstract class Servicerender
     {
         try {
             $commentlist = new Comments($this->page, $match->readoptions());
-            return $commentlist->listhtml();
+            return $this->fixtypohtml($commentlist->listhtml());
         } catch (RuntimeException $e) {
             $this->adderror("comments inclusion: '%s': %s", $match->fullmatch(), $e->getMessage());
         }
@@ -1030,12 +1035,12 @@ abstract class Servicerender
         if (isset($options['id'])) {
             try {
                 $page = $this->pagemanager->get($options['id']);
-                return $page->title();
+                return $this->fixtypo($page->title());
             } catch (RuntimeException $e) {
                 $this->adderror("title inclusion: '%s': %s", $match->fullmatch(), $e->getMessage());
             }
         } else {
-            return $this->page->title();
+            return $this->fixtypo($this->page->title());
         }
         return $match->fullmatch();
     }
@@ -1071,9 +1076,14 @@ abstract class Servicerender
      */
     public function user(User $user): string
     {
-        $name   = !empty($user->name()) ? htmlspecialchars($user->name()) : $user->id();
-        $id     = $user->id();
-        $href   = empty($user->url()) ? '' : sprintf('href="%s"', $user->url());
+        if (empty($user->name())) {
+            $name = $user->id();
+        } else {
+            $name = $this->fixtypo($user->name());
+        }
+
+        $id   = $user->id();
+        $href = empty($user->url()) ? '' : sprintf('href="%s"', $user->url());
 
         return "<a class=\"user\" data-user=\"$id\"$href>$name</a>";
     }
@@ -1566,6 +1576,28 @@ abstract class Servicerender
     protected function adderror(string $error, ...$args): void
     {
         $this->errors[] = sprintf($error, ...$args);
+    }
+
+    /**
+     * Fix typo on non-HTML strings if fixer is enabled.
+     *     */
+    protected function fixtypo(string $text): string
+    {
+        if ($this->typofixer === null) {
+            return $text;
+        }
+        return $this->typofixer->fixString($text);
+    }
+
+    /**
+     * Fix typo on HTML strings if fixer is enabled.
+     */
+    protected function fixtypohtml(string $html): string
+    {
+        if ($this->typofixer === null) {
+            return $html;
+        }
+        return $this->typofixer->fix($html);
     }
 
 

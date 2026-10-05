@@ -92,7 +92,7 @@ class Servicerenderv2 extends Servicerender
         if ($element->urllinker()) {
             $content = $this->autourl($content);
         }
-
+        $content = $this->fixtypohtml($content);
 
         return $content;
     }
