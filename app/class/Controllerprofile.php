@@ -35,7 +35,21 @@ class Controllerprofile extends Controller
     {
         try {
             $user = $this->usermanager->get($this->user);
-            $user->hydrateexception($_POST);
+
+            // don't use hydrate() to prevent sensible data changes
+            if (isset($_POST['name'])) {
+                $user->setname($_POST['name']);
+            }
+            if (isset($_POST['url'])) {
+                $user->seturl($_POST['url']);
+            }
+            if (isset($_POST['cookie'])) {
+                $user->setcookie($_POST['cookie']);
+            }
+            if (isset($_POST['theme'])) {
+                $user->settheme($_POST['theme']);
+            }
+
             $this->usermanager->update($user);
             $this->sendflashmessage('Successfully updated', self::FLASH_SUCCESS);
         } catch (Notfoundexception $e) {
