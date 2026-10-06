@@ -91,7 +91,7 @@ class Servicerenderv1Test extends TestCase
      */
     public function renderTestDate(): void
     {
-        if (floatval(INTL_ICU_VERSION) >= 72) {
+        if (floatval(INTL_ICU_VERSION) < 72) {
             $this->markTestSkipped();
         }
         $this->renderTest('date-time-test');
