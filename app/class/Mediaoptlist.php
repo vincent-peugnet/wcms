@@ -2,12 +2,18 @@
 
 namespace Wcms;
 
+use DOMDocument;
+use DOMException;
+use LogicException;
 use RuntimeException;
 
 class Mediaoptlist extends Mediaopt
 {
     /** @var bool display the file name of the file */
     protected bool $filename = false;
+
+    /** @var array<string, true> list of included media files */
+    public array $mediafiles = [];
 
     /**
      * @param object|array<string, mixed> $datas
@@ -27,35 +33,65 @@ class Mediaoptlist extends Mediaopt
         $mediamanager = new Modelmedia();
         $medialist = $mediamanager->medialistopt($this);
 
-        $dirid = str_replace('/', '-', $this->path);
+        try {
+            $dom = new DOMDocument('1.0', 'UTF-8');
 
-        $div = "<div class=\"medialist\" id=\"$dirid\">\n";
+            $ul = $dom->createElement('ul');
+            $ul->setAttribute('class', 'medialist');
 
-        foreach ($medialist as $media) {
-            $div .= '<div class="content ' . $media->type() . '">';
-            $id = 'id="media_' . $media->filename() . '"';
-            $path = $media->getincludepath();
-            $ext = $media->extension();
-            $filename = $media->filename();
-            if ($media->type() == 'image') {
-                $div .= '<img alt="' . $media->filename() . '" ' . $id . ' src="' . $path . '" >';
-            } elseif ($media->type() == 'sound') {
-                $div .= '<audio ' . $id . ' controls src="' . $path . '"></audio>';
-            } elseif ($media->type() == 'video') {
-                $source = '<source src="' . $path . '" type="video/' . $ext . '" ' . $id . '>';
-                $div .= '<video controls>' . $source . '</video>';
-            } else {
-                $div .= '<a href="' . $path . '" target="_blank" class="media" ' . $id . '>' . $filename . '</a>';
+            foreach ($medialist as $media) {
+                $this->mediafiles[$media->getincludepath()] = true; // add to list of existing files
+
+                $li = $dom->createElement('li');
+                $li->setAttribute('data-type', $media->type());
+
+                // `internal` or/and `media` classes are added during HTML parsing
+
+                switch ($media->type()) {
+                    case Media::IMAGE:
+                        $link = false;
+                        $m = $dom->createElement('img');
+                        $m->setAttribute('src', $media->getincludepath());
+                        break;
+
+                    case Media::SOUND:
+                        $link = false;
+                        $m = $dom->createElement('audio');
+                        $m->setAttribute('controls', '');
+                        $m->setAttribute('src', $media->getincludepath());
+                        break;
+
+                    case Media::VIDEO:
+                        $link = false;
+                        $m = $dom->createElement('video');
+                        $m->setAttribute('controls', '');
+                        $m->setAttribute('src', $media->getincludepath());
+                        break;
+
+                    default:
+                        $link = true;
+                        $m = $dom->createElement('a', $media->filename());
+                        $m->setAttribute('href', $media->getincludepath());
+                        $m->setAttribute('target', '_blank');
+                        break;
+                }
+
+                $li->appendChild($m);
+
+                if ($this->filename && !$link) {
+                    $p = $dom->createElement('p', $media->filename());
+                    $li->appendChild($p);
+                }
+
+                $ul->appendChild($li);
             }
-            if ($this->filename && in_array($media->type(), ['image', 'sound', 'video'])) {
-                $div .= "<div class=\"filename\">$filename</div>";
-            }
-            $div .= "</div>\n";
+
+            $dom->appendChild($ul);
+
+            return $dom->saveHTML($dom->documentElement);
+        } catch (DOMException $e) {
+            throw new LogicException('bad DOM node used', 0, $e);
         }
-
-        $div .= "</div>\n";
-
-        return $div;
     }
 
     public function getquery(): string
