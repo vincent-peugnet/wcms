@@ -297,6 +297,25 @@ class Media extends Item
         return $bits / $this->pixelcount();
     }
 
+    /**
+     * Indicate if media filename looks like a movie poster
+     */
+    public function isposter(): bool
+    {
+        if ($this->type !== self::IMAGE) {
+            return false;
+        }
+        $parts = explode('.', $this->filename);
+        $size = count($parts);
+        if ($size < 3) {
+            return false;
+        }
+        if ($parts[$size - 2] === 'poster') {
+            return true;
+        }
+        return false;
+    }
+
 
 
     // _________________________________________________ G E T ____________________________________________________

@@ -193,21 +193,24 @@
                         <td><input type="checkbox" name="id[]" value="<?= $media->getlocalpath() ?>" form="mediaedit" id="media_<?= $media->filename() ?>"></td>
                         <td class="filename">
                             <?php if ($user->issupereditor()) : ?>
-                            <details>
-                                <summary>
-                                    <i class="fa fa-pencil"></i>
-                                </summary>
-                                <form action="<?= $this->url('mediarename') ?>" method="post">
-                                    <input type="hidden" name="route" value="<?= $mediaopt->getpathaddress() ?>">
-                                    <input type="hidden" name="dir" value="<?= $media->dir() ?>">
-                                    <input type="hidden" name="oldfilename" value="<?= $media->filename() ?>">
-                                    <input type="text" name="newfilename" value="<?= $media->filename() ?>" id="newid-<?= $media->filename() ?>" maxlength="<?= Wcms\Model::MAX_ID_LENGTH ?>" minlength="1" required>
-                                    <input type="submit" value="rename">
-                                </form>
-                            </details>
-                            <label for="media_<?= $media->filename() ?>"><?= $media->filename() ?></label>
+                                <details>
+                                    <summary>
+                                        <i class="fa fa-pencil"></i>
+                                    </summary>
+                                    <form action="<?= $this->url('mediarename') ?>" method="post">
+                                        <input type="hidden" name="route" value="<?= $mediaopt->getpathaddress() ?>">
+                                        <input type="hidden" name="dir" value="<?= $media->dir() ?>">
+                                        <input type="hidden" name="oldfilename" value="<?= $media->filename() ?>">
+                                        <input type="text" name="newfilename" value="<?= $media->filename() ?>" id="newid-<?= $media->filename() ?>" maxlength="<?= Wcms\Model::MAX_ID_LENGTH ?>" minlength="1" required>
+                                        <input type="submit" value="rename">
+                                    </form>
+                                </details>
+                                <label for="media_<?= $media->filename() ?>"><?= $media->filename() ?><?= $media->isposter() ? ' <i class="fa fa-film" title="filename format is a valid movie poster syntax"></i>' : '' ?></label>
                             <?php else : ?>
-                                <span><?= $media->filename() ?></span>
+                                <span>
+                                    <?= $media->filename() ?>
+                                    <?= $media->isposter() ? ' <i class="fa fa-film" title="filename format is a valid movie poster syntax"></i>' : '' ?>
+                                </span>
                             <?php endif ?>
                         </td>    
                         <td><?= $media->extension() ?></td>
