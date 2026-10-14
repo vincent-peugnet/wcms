@@ -51,8 +51,6 @@ class Modelpage extends Modeldb
 
     /**
      * Scan library for all pages as objects.
-     * If a scan has already been perform, it will just
-     * read `pagelist` Propriety
      *
      * @return array<string, Page>          of Pages objects as `id => Page`
      */

@@ -68,6 +68,7 @@ class Controllermedia extends Controller
 
             $vars['filtercode'] = !empty($_POST); // indicate that filter code has been generated
             $vars['medialist'] = $medialist;
+            $vars['posterlist'] = Modelmedia::findposters($medialist);
             $vars['dirlist'] = $dirlist;
             $vars['pathlist'] = $pathlist;
             $vars['optimizeimage'] = Serviceimageoptimizer::extensionloaded();

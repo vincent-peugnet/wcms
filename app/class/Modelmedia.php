@@ -102,6 +102,40 @@ class Modelmedia extends Model
         return $result * $order;
     }
 
+    /**
+     * @param array<string, Media> $medialist
+     *
+     * @return array<string, Media> Media that are poster with a video or video that have a poster
+     */
+    public static function findposters(array $medialist): array
+    {
+        $couples = [];
+        foreach ($medialist as $filename => $media) {
+            if ($media->type() === Media::VIDEO) {
+                $couples[$media->getbasefilename()]['videos'][$filename] = $media;
+                continue;
+            }
+            if ($media->type() === Media::IMAGE) {
+                $parts = explode('.', $media->filename());
+                $size = count($parts);
+                if ($size < 3) {
+                    continue;
+                }
+                if ($parts[$size - 2] === 'poster') {
+                    $couples[substr($media->getbasefilename(), 0, -7)]['posters'][$filename] = $media;
+                }
+            }
+        }
+
+        $posterlist = [];
+        foreach ($couples as $couple) {
+            if (!empty($couple['posters']) && !empty($couple['videos'])) {
+                $posterlist = array_merge($posterlist, $couple['posters'], $couple['videos']);
+            }
+        }
+        return $posterlist;
+    }
+
 
 
 

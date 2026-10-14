@@ -205,11 +205,14 @@
                                         <input type="submit" value="rename">
                                     </form>
                                 </details>
-                                <label for="media_<?= $media->filename() ?>"><?= $media->filename() ?><?= $media->isposter() ? ' <i class="fa fa-film" title="filename format is a valid movie poster syntax"></i>' : '' ?></label>
+                                <label for="media_<?= $media->filename() ?>">
+                                    <?= $media->filename() ?>
+                                    <?= key_exists($media->filename(), $posterlist) ? ' <i class="fa fa-film" title="valid movie poster syntax used"></i>' : '' ?>
+                                </label>
                             <?php else : ?>
                                 <span>
                                     <?= $media->filename() ?>
-                                    <?= $media->isposter() ? ' <i class="fa fa-film" title="filename format is a valid movie poster syntax"></i>' : '' ?>
+                                    <?= key_exists($media->filename(), $posterlist) ? ' <i class="fa fa-film" title="valid movie poster syntax used"></i>' : '' ?>
                                 </span>
                             <?php endif ?>
                         </td>    
