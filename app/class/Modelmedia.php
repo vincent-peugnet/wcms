@@ -28,7 +28,7 @@ class Modelmedia extends Model
     public const ID_AUTHORIZED_CHARS                   = 'a-z0-9-_.';
 
     /**
-     * @return Media[]                      sorted array of Media
+     * @return array<string, Media>         sorted array of Media
      *
      * @throws Folderexception              If dir is not a valid folder
      */
@@ -45,7 +45,7 @@ class Modelmedia extends Model
      *
      * @param Mediaopt $mediaopt            Media option filter Object
      *
-     * @return Media[]                      array of Media objects
+     * @return array<string, Media>         array of Media objects
      *
      * @throws Folderexception              When the given folder isn't a directory
      */
@@ -63,7 +63,7 @@ class Modelmedia extends Model
                 try {
                     $media = new Media($dir . $file);
                     if (empty($types) || in_array($media->type(), $types)) {
-                        $list[] = $media;
+                        $list[$media->filename()] = $media;
                     }
                 } catch (RuntimeException $e) {
                     Logger::errorex($e);
@@ -77,7 +77,7 @@ class Modelmedia extends Model
     /**
      * Sort an array of media
      *
-     * @param Media[] $medialist
+     * @param array<string, Media> $medialist
      * @param string $sortby
      * @param int $order                    Can be 1 or -1
      */
@@ -85,7 +85,7 @@ class Modelmedia extends Model
     {
         $sortby = (in_array($sortby, self::MEDIA_SORTBY)) ? $sortby : 'id';
         $order = ($order === 1 || $order === -1) ? $order : 1;
-        return usort($medialist, $this->buildsorter($sortby, $order));
+        return uasort($medialist, $this->buildsorter($sortby, $order));
     }
 
     protected function buildsorter(string $sortby, int $order): callable
