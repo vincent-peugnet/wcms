@@ -34,19 +34,9 @@ class Modelmedia extends Model
      */
     public function list(Mediaopt $mediaopt): array
     {
-        $medialist = $this->files($mediaopt->dir());
+        $medialist = $this->dirscan($mediaopt->dir());
 
-        // filter by type
-        if (!empty($mediaopt->type())) {
-            $medialist = array_filter($medialist, function (Media $media) use ($mediaopt): bool {
-                return in_array($media->type(), $mediaopt->type());
-            });
-        }
-
-        // sort
-        $this->sort($medialist, $mediaopt->sortby(), $mediaopt->order());
-
-        return $medialist;
+        return $this->filtersort($medialist, $mediaopt);
     }
 
     /**
@@ -58,7 +48,7 @@ class Modelmedia extends Model
      *
      * @throws Folderexception              When the given folder isn't a directory
      */
-    public function files(string $dir): array
+    public function dirscan(string $dir): array
     {
         $files = scandir($dir);
         if ($files === false) { // indicate that path is not a dir
@@ -79,6 +69,42 @@ class Modelmedia extends Model
         return $list;
     }
 
+    /**
+     * Filter and sort a media list
+     *
+     * @param array<string, Media> $medialist
+     *
+     * @return array<string, Media>
+     */
+    public function filtersort(array $medialist, Mediaopt $mediaopt)
+    {
+        $medialist = $this->filter($medialist, $mediaopt->type());
+
+        $this->sort($medialist, $mediaopt->sortby(), $mediaopt->order());
+
+        return $medialist;
+    }
+
+    /**
+     * Filter a list of media
+     *
+     * @param array<string, Media> $medialist
+     *
+     * @param string[] $types
+     *
+     * @return array<string, Media>
+     */
+    public function filter(array $medialist, array $types = []): array
+    {
+        // filter by type
+        if (!empty($types)) {
+            $medialist = array_filter($medialist, function (Media $media) use ($types): bool {
+                return in_array($media->type(), $types);
+            });
+        }
+        return $medialist;
+    }
+
 
     /**
      * Sort an array of media
@@ -87,7 +113,7 @@ class Modelmedia extends Model
      * @param string $sortby
      * @param int $order                    Can be 1 or -1
      */
-    protected function sort(array &$medialist, string $sortby = 'id', int $order = 1): bool
+    public function sort(array &$medialist, string $sortby = 'id', int $order = 1): bool
     {
         $sortby = (in_array($sortby, self::MEDIA_SORTBY)) ? $sortby : 'id';
         $order = ($order === 1 || $order === -1) ? $order : 1;
@@ -111,7 +137,7 @@ class Modelmedia extends Model
     /**
      * @param array<string, Media> $medialist
      *
-     * @return array<string, Media> Media that are poster with a video or video that have a poster
+     * @return array<string, array<"valid", bool>> filenames as key, value is array with metadata: valid(bool)
      */
     public static function findposters(array $medialist): array
     {
@@ -133,13 +159,25 @@ class Modelmedia extends Model
             }
         }
 
-        $posterlist = [];
+        $posters = [];
         foreach ($couples as $couple) {
-            if (!empty($couple['posters']) && !empty($couple['videos'])) {
-                $posterlist = array_merge($posterlist, $couple['posters'], $couple['videos']);
+            if (isset($couple['posters']) && isset($couple['videos'])) {
+                if (count($couple['posters']) > 1) {
+                    $multipleposters = true;
+                    foreach ($couple['posters'] as $filename => $media) {
+                        $posters[$filename] = ['valid' => false];
+                    }
+                } else {
+                    $multipleposters = false;
+                    $posters[array_key_first($couple['posters'])] = ['valid' => true];
+                }
+
+                foreach ($couple['videos'] as $filename => $media) {
+                    $posters[$filename] = ['valid' => !$multipleposters];
+                }
             }
         }
-        return $posterlist;
+        return $posters;
     }
 
 

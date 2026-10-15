@@ -51,8 +51,10 @@ class Controllermedia extends Controller
         $mediaopt = new Mediaoptlist($datas);
 
         try {
-            Fs::dircheck($this->mediaopt->dir());
-            $medialist = $this->mediamanager->list($mediaopt);
+            // decompose media listing in order to get posterlist
+            $medialist = $this->mediamanager->dirscan($mediaopt->dir());
+            $vars['posterlist'] = Modelmedia::findposters($medialist);
+            $vars['medialist'] = $this->mediamanager->filtersort($medialist, $mediaopt);
 
             $dirlist = $this->mediamanager->listdir(Model::MEDIA_DIR);
 
@@ -67,8 +69,6 @@ class Controllermedia extends Controller
             }
 
             $vars['filtercode'] = !empty($_POST); // indicate that filter code has been generated
-            $vars['medialist'] = $medialist;
-            $vars['posterlist'] = Modelmedia::findposters($medialist);
             $vars['dirlist'] = $dirlist;
             $vars['pathlist'] = $pathlist;
             $vars['optimizeimage'] = Serviceimageoptimizer::extensionloaded();

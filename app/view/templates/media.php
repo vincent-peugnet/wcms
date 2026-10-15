@@ -207,12 +207,16 @@
                                 </details>
                                 <label for="media_<?= $media->filename() ?>">
                                     <?= $media->filename() ?>
-                                    <?= key_exists($media->filename(), $posterlist) ? ' <i class="fa fa-film" title="valid movie poster syntax used"></i>' : '' ?>
+                                    <?php if (key_exists($media->filename(), $posterlist)) : ?>
+                                        <?= $this->insert('macro_poster', ['media' => $media, 'posterlist' => $posterlist]) ?>
+                                    <?php endif ?>
                                 </label>
                             <?php else : ?>
                                 <span>
                                     <?= $media->filename() ?>
-                                    <?= key_exists($media->filename(), $posterlist) ? ' <i class="fa fa-film" title="valid movie poster syntax used"></i>' : '' ?>
+                                    <?php if (key_exists($media->filename(), $posterlist)) : ?>
+                                        <?= $this->insert('macro_poster', ['media' => $media, 'posterlist' => $posterlist]) ?>
+                                    <?php endif ?>
                                 </span>
                             <?php endif ?>
                         </td>    

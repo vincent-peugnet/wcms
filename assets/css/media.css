@@ -209,6 +209,13 @@ table#medialist td.filename details[open] summary {
     visibility: visible;
 }
 
+table#medialist  .poster {
+    background: var(--outline-background-color);
+    color: var(--outline-color);
+    padding: var(--half-padding) var(--padding);
+    border-radius: var(--radius);
+  }
+
 
 /* --------------------------------------------------------- media queries */
 
