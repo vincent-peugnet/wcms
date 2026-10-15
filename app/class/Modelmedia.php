@@ -32,42 +32,48 @@ class Modelmedia extends Model
      *
      * @throws Folderexception              If dir is not a valid folder
      */
-    public function medialistopt(Mediaopt $mediaopt): array
+    public function list(Mediaopt $mediaopt): array
     {
-        $medialist = $this->list($mediaopt);
-        $this->medialistsort($medialist, $mediaopt->sortby(), $mediaopt->order());
+        $medialist = $this->files($mediaopt->dir());
+
+        // filter by type
+        if (!empty($mediaopt->type())) {
+            $medialist = array_filter($medialist, function (Media $media) use ($mediaopt): bool {
+                return in_array($media->type(), $mediaopt->type());
+            });
+        }
+
+        // sort
+        $this->sort($medialist, $mediaopt->sortby(), $mediaopt->order());
 
         return $medialist;
     }
 
     /**
-     * get a list of media of selected types
+     * get a list of media in given directory
      *
-     * @param Mediaopt $mediaopt            Media option filter Object
+     * @param string $dir                   directory
      *
      * @return array<string, Media>         array of Media objects
      *
      * @throws Folderexception              When the given folder isn't a directory
      */
-    protected function list(Mediaopt $mediaopt): array
+    public function files(string $dir): array
     {
-        $dir = $mediaopt->dir();
-        $types = $mediaopt->type();
-        if (!is_dir($dir)) {
+        $files = scandir($dir);
+        if ($files === false) { // indicate that path is not a dir
             throw new Folderexception("$dir is not a directory");
         }
+
         $list = [];
-        $files = scandir($dir);
         foreach ($files as $file) {
-            if (is_file($dir . $file)) {
-                try {
-                    $media = new Media($dir . $file);
-                    if (empty($types) || in_array($media->type(), $types)) {
-                        $list[$media->filename()] = $media;
-                    }
-                } catch (RuntimeException $e) {
-                    Logger::errorex($e);
-                }
+            if (!is_file($dir . $file)) {
+                continue;
+            }
+            try {
+                $list[$file] = new Media($dir . $file);
+            } catch (RuntimeException $e) {
+                Logger::errorex($e);
             }
         }
         return $list;
@@ -81,7 +87,7 @@ class Modelmedia extends Model
      * @param string $sortby
      * @param int $order                    Can be 1 or -1
      */
-    protected function medialistsort(array &$medialist, string $sortby = 'id', int $order = 1): bool
+    protected function sort(array &$medialist, string $sortby = 'id', int $order = 1): bool
     {
         $sortby = (in_array($sortby, self::MEDIA_SORTBY)) ? $sortby : 'id';
         $order = ($order === 1 || $order === -1) ? $order : 1;

@@ -21,7 +21,7 @@ class Servicefont
     {
         $this->mediamanager = $mediamanager;
         $mediaopt = new Mediaopt(['path' =>  Model::FONT_DIR, 'type' => [Media::FONT]]);
-        $medias = $this->mediamanager->medialistopt($mediaopt);
+        $medias = $this->mediamanager->list($mediaopt);
         $this->fonts = $this->groupfonts($medias);
     }
 

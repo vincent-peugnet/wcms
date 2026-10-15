@@ -52,7 +52,7 @@ class Controllermedia extends Controller
 
         try {
             Fs::dircheck($this->mediaopt->dir());
-            $medialist = $this->mediamanager->medialistopt($mediaopt);
+            $medialist = $this->mediamanager->list($mediaopt);
 
             $dirlist = $this->mediamanager->listdir(Model::MEDIA_DIR);
 

@@ -25,7 +25,7 @@ class Mediaoptlist extends Mediaopt
     public function generatecontent(): string
     {
         $mediamanager = new Modelmedia();
-        $medialist = $mediamanager->medialistopt($this);
+        $medialist = $mediamanager->list($this);
 
         $dirid = str_replace('/', '-', $this->path);
 
