@@ -161,7 +161,7 @@ abstract class Comment extends Item
         $this->approved = $approved;
     }
 
-    public function setcolor(string $color): void
+    public function setcolor(?string $color): void
     {
         if (preg_match('~^#[0-9a-f]{6}$~', $color)) {
             $this->color = $color;

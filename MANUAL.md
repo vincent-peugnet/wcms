@@ -1303,7 +1303,7 @@ It is very recommended to use a HTML `type="color"` input tag.
 
 > 💡 idea: use this line of Javascript to randomize default color:
 > ```js
-> document.querySelector('input[type="color"]').value = "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0");
+> document.querySelector('input[name="color"]').value = "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0");
 > ```
 
 ##### Success message
