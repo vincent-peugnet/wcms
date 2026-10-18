@@ -33,6 +33,13 @@ main[data-display="timeline"] .comment header {
     background: var(--secondary-background-color);
 }
 
+main[data-display="timeline"] .comment  .color {
+    width: var(--double-spacing);
+    height: var(--double-spacing);
+    display: inline-block;
+    border-radius: var(--radius);
+}
+
 @media (hover: hover) {
     main[data-display="timeline"] .comment footer,
     main[data-display="timeline"] .comment .date

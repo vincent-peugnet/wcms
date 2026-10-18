@@ -150,6 +150,9 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                             website
                         </th>
                         <th>
+                            color
+                        </th>
+                        <th>
                             <a href="?sortby=approved&order=<?= $rorder ?>&limit=<?= $limit ?><?= $filters ?>">
                                 <i class="fa fa-gavel"></i>
                             <?php if($sortby === 'approved') : ?>
@@ -194,6 +197,9 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                                         <a target="_blank" href="<?= $comment->website() ?>"><?= ltrim(substr($comment->website(), 6), "\/") ?></a>
                                     <?php endif ?>
                                 </td>
+                                <td style="<?= $comment->color() === null ? '' : 'background: ' . $comment->color() ?>">
+
+                                </td>
                                 <td>
                                     <?php if ($comment->approved()) : ?>
                                         <i class="fa fa-check"></i>
@@ -223,6 +229,9 @@ $this->layout('backlayout', ['title' => 'Comments management', 'stylesheets' => 
                                 <span class="visiblename">
                                     <?= $this->e($comment->visiblename()) ?>
                                 </span>
+                                <?php if ($comment->color() !== null) : ?>
+                                    <span class="color" style="background: <?= $comment->color() ?>"></span>
+                                <?php endif ?>
                                 <?php if ($comment instanceof Wcms\Commentvisitor) : ?>
                                     <a target="_blank" href="<?= $comment->website() ?>" class="website"><?= ltrim(substr($comment->website(), 6), "\/") ?></a>
                                 <?php endif ?>
