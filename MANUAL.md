@@ -708,7 +708,7 @@ URLs in the message bloc will be transformed to links.
 __HTML structure of a comment:__
 
 ```html
-<li id="comment-ID" class="comment approved|unapproved visitor|user" data-approved="0|1">
+<li id="comment-ID" class="comment approved|unapproved visitor|user" data-approved="0|1" [style="--color-comment: COLOR"]>
     <a class="id">ID</a>
     <a class="name [user]" [href="WEBSITE"] [data-user="USERID"]>NAME|WEBSITE</a>
     <time>TIMESTAMP</time>
@@ -729,6 +729,18 @@ li.comment .message {
     white-space: preserve-spaces;
 }
 ```
+
+If you used [color input](#color-input), you can use it to style your comment. For example:
+
+```css
+li.comment {
+    background: var(--color-comment, white);
+    color: contrast-color(var(--color-comment, white));
+}
+```
+
+- It's a good practice to set a fallback color for comment that don't have a color defined (beccause the form changed at some point).
+- CSS [`contrast-color`](https://developer.mozilla.org/fr/docs/Web/CSS/Reference/Values/color_value/contrast-color) feature can be usefull to manage a wide range of color inputs.
 
 
 In case of visitor comments, if no pseudonym or website is set, then the name `<a>` still be printed, but will be empty. If you want to get rid of it, you can do it in CSS using the pseudo selector `:empty`.
@@ -1276,6 +1288,19 @@ The following example set the limit to 44 comments:
     %COMMENT?limit=44%
 
 This should not be confused with [comment list inclusion](#comment-list) limit, which only limits the displayed comments.
+
+##### Color input
+
+It uses the `color` name attribute and is supposed to store a color associated with the comment. It will be included in [comment list inlcusion](#comment-list) as a CSS variable called `--comment-color`.
+
+It is very recommended to use a HTML `type="color"` input tag. 
+
+```html
+<input type="color" name="color" value="DEFAULT_COLOR">
+```
+
+- `DEFAULT_COLOR` is the default color. If input type is set to `color`, it can be defined as hexadecimal (ex: `#00ff00`).
+
 
 ##### Success message
 

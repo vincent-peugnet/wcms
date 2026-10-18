@@ -123,6 +123,10 @@ class Comments extends Item
         $classes[] = $comment->type();
         $li->setAttribute('class', implode(' ', $classes));
 
+        if ($comment->color() !== null) {
+            $li->setAttribute('style', sprintf('--comment-color: %s;', $comment->color()));
+        }
+
         $li->setAttribute('data-approved', strval(intval($comment->approved())));
         $fragmentlink = $dom->createElement('a', "#$id");
         $fragmentlink->setAttribute('href', "#$fragment");

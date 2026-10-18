@@ -9,7 +9,10 @@ use DateTimeInterface;
 abstract class Comment extends Item
 {
     protected DateTimeImmutable $date;
+
     protected string $message = '';
+
+    protected ?string $color;
 
     public const TYPE = '';
 
@@ -52,6 +55,15 @@ abstract class Comment extends Item
                 return false;
             }
         }
+
+        if (!$conf->allowcolor() && $this->color !== null) {
+            return false;
+        }
+
+        if ($conf->requirecolor() && $this->color === null) {
+            return false;
+        }
+
         return true;
     }
 
@@ -108,6 +120,14 @@ abstract class Comment extends Item
         return $this->approved;
     }
 
+    /**
+     * Exadecimal color code
+     */
+    public function color(): ?string
+    {
+        return $this->color;
+    }
+
 
     // SET
 
@@ -139,5 +159,12 @@ abstract class Comment extends Item
     public function setapproved(bool $approved): void
     {
         $this->approved = $approved;
+    }
+
+    public function setcolor(string $color): void
+    {
+        if (preg_match('~^#[0-9a-f]{6}$~', $color)) {
+            $this->color = $color;
+        }
     }
 }
