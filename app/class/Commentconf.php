@@ -43,6 +43,10 @@ class Commentconf extends Item
      */
     protected bool $requirewebsite = false;
 
+    protected bool $allowcolor = false;
+
+    protected bool $requirecolor = false;
+
     /**
      * @var string $success message that should be displayed to page viewer in case of success
      */
@@ -134,6 +138,16 @@ class Commentconf extends Item
         return $this->allowwebsite;
     }
 
+    public function allowcolor(): bool
+    {
+        return $this->allowcolor;
+    }
+
+    public function requirecolor(): bool
+    {
+        return $this->requirecolor;
+    }
+
     public function success(): string
     {
         return $this->success;
@@ -210,6 +224,16 @@ class Commentconf extends Item
     public function setallowwebsite(bool $allow): void
     {
         $this->allowwebsite = $allow;
+    }
+
+    public function setallowcolor(bool $allow): void
+    {
+        $this->allowcolor = $allow;
+    }
+
+    public function setrequirecolor(bool $require): void
+    {
+        $this->requirecolor = $require;
     }
 
     public function setsuccess(string $success): void

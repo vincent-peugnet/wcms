@@ -1542,6 +1542,12 @@ abstract class Servicerender
                 }
                 break;
 
+
+            case 'color':
+                $commentconf->setallowcolor(true);
+                $commentconf->setrequirecolor($element->hasAttribute('required'));
+                break;
+
             case 'success':
                 if ($element->hasAttribute('value')) {
                     $commentconf->setsuccess($element->getAttribute('value'));
