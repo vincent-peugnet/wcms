@@ -1301,6 +1301,10 @@ It is very recommended to use a HTML `type="color"` input tag.
 
 - `DEFAULT_COLOR` is the default color. If input type is set to `color`, it can be defined as hexadecimal (ex: `#00ff00`).
 
+> 💡 idea: use this line of Javascript to randomize default color:
+> ```js
+> document.querySelector('input[type="color"]').value = "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0");
+> ```
 
 ##### Success message
 
