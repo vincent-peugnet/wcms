@@ -12,7 +12,7 @@ abstract class Comment extends Item
 
     protected string $message = '';
 
-    protected ?string $color;
+    protected ?string $color = null;
 
     public const TYPE = '';
 
