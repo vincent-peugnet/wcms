@@ -47,7 +47,7 @@ class Controlleradmin extends Controller
         } catch (Notfoundexception $e) {
             try {
                 $datas['globalcss'] = Fs::readfile(Model::DEFAULT_GLOBAL_CSS_FILE);
-                Fs::dircheck(Model::CSS_DIR, true, 0775);
+                Fs::dircheck(Model::CSS_DIR, true, Modelmedia::MEDIA_FOLDER_PERMISSION);
                 Fs::accessfile(Model::GLOBAL_CSS_FILE, true);
                 Fs::writefile(Model::GLOBAL_CSS_FILE, $datas['globalcss'], 0664);
                 Logger::info("not found: '%s', new file created using defaults", Model::GLOBAL_CSS_FILE);
@@ -65,7 +65,7 @@ class Controlleradmin extends Controller
         } catch (Notfoundexception $e) {
             try {
                 $datas['alertcss'] = Fs::readfile(Model::DEFAULT_ALERT_CSS_FILE);
-                Fs::dircheck(Model::CSS_DIR, true, 0775);
+                Fs::dircheck(Model::CSS_DIR, true, Modelmedia::MEDIA_FOLDER_PERMISSION);
                 Fs::accessfile(Model::ALERT_CSS_FILE, true);
                 Fs::writefile(Model::ALERT_CSS_FILE, $datas['alertcss'], 0664);
                 Logger::info("not found: '%s', new file created using defaults", Model::ALERT_CSS_FILE);
@@ -90,7 +90,7 @@ class Controlleradmin extends Controller
     public function update(): never
     {
         try {
-            Fs::dircheck(Model::CSS_DIR, true, 0775);
+            Fs::dircheck(Model::CSS_DIR, true, Modelmedia::MEDIA_FOLDER_PERMISSION);
             Fs::accessfile(Model::GLOBAL_CSS_FILE, true);
             Fs::writefile(Model::GLOBAL_CSS_FILE, $_POST['globalcss'], 0664);
             Fs::accessfile(Model::ALERT_CSS_FILE, true);

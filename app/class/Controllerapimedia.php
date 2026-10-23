@@ -35,7 +35,7 @@ class Controllerapimedia extends Controllerapi
         $pathinfo = pathinfo($path);
         $dirname = Model::MEDIA_DIR . $pathinfo['dirname']; //without trailing slash
         try {
-            Fs::dircheck($dirname, true, 0775);
+            Fs::dircheck($dirname, true, Modelmedia::MEDIA_FOLDER_PERMISSION);
             Fs::writefile(Model::MEDIA_DIR . $path, $file, 0664);
             $this->shortresponse(200, 'File successfully uploaded');
         } catch (Filesystemexception $e) {

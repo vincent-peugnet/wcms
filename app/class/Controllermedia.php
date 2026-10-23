@@ -34,10 +34,10 @@ class Controllermedia extends Controller
             $this->showtemplate('forbidden', [], 403);
         }
         try {
-            Fs::dircheck(Model::FONT_DIR, true, 0775);
-            Fs::dircheck(Model::THUMBNAIL_DIR, true, 0775);
-            Fs::dircheck(Model::FAVICON_DIR, true, 0775);
-            Fs::dircheck(Model::CSS_DIR, true, 0775);
+            Fs::dircheck(Model::FONT_DIR, true, Modelmedia::MEDIA_FOLDER_PERMISSION);
+            Fs::dircheck(Model::THUMBNAIL_DIR, true, Modelmedia::MEDIA_FOLDER_PERMISSION);
+            Fs::dircheck(Model::FAVICON_DIR, true, Modelmedia::MEDIA_FOLDER_PERMISSION);
+            Fs::dircheck(Model::CSS_DIR, true, Modelmedia::MEDIA_FOLDER_PERMISSION);
         } catch (RuntimeException $e) {
             $this->sendflashmessage($e->getMessage(), self::FLASH_ERROR);
             Logger::errorex($e);
