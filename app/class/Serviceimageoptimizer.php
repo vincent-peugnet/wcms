@@ -14,8 +14,8 @@ class Serviceimageoptimizer
 {
     public const IMG_MAX_WIDTH     = 1920;
     public const IMG_MAX_HEIGHT    = 1920;
-    public const IMG_QUALITY       = 60;
-    public const IMG_MAX_BPP       = 0.5;
+    public const IMG_QUALITY       = 75;
+    public const IMG_MAX_BPP       = 1;
     public const IMG_ALLOWED_EXT   = [
         'jpg',
         'jpeg',
