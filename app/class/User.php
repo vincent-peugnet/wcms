@@ -23,7 +23,7 @@ class User extends Item
     protected int $cookie = 30;
 
     /** @var string[] $columns List of displayed columns */
-    protected array $columns = ['title', 'datemodif', 'datecreation', 'secure', 'visitcount'];
+    protected array $columns = ['title', 'tag', 'datemodif', 'datecreation', 'secure', 'visitcount'];
 
     /** @var int $connectcount Connections counter */
     protected int $connectcount = 0;
