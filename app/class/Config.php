@@ -193,6 +193,7 @@ abstract class Config
 
         // save the compiled cache
         try {
+            Fs::dircheck(Model::CACHE_DIR, true);
             Fs::writefile(Model::CONFIG_CACHE_FILE, self::compile());
             Logger::info('config successfully compiled to cache');
         } catch (RuntimeException $e) {

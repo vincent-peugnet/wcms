@@ -613,7 +613,7 @@ class Modelpage extends Modeldb
         $html .= "<!--render date: $renderdate -->";
 
         Fs::dircheck(Model::ASSETS_RENDER_DIR, true, 0775);
-        Fs::dircheck(Model::HTML_RENDER_DIR, true, 0775);
+        Fs::dircheck(Model::HTML_RENDER_DIR, true);
         Fs::writefile(Model::HTML_RENDER_DIR . $page->id() . '.html', $html);
         Fs::writefile(Model::ASSETS_RENDER_DIR . $page->id() . '.css', $page->css(), 0664);
         Fs::writefile(Model::ASSETS_RENDER_DIR . $page->id() . '.js', $page->javascript(), 0664);

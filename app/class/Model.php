@@ -26,8 +26,9 @@ abstract class Model
     public const CSS_DIR = self::MEDIA_DIR . 'css/';
     public const TEMPLATES_DIR = './app/view/templates/';
     public const ASSETS_RENDER_DIR = 'assets/render/';
-    public const HTML_RENDER_DIR = 'cache/render/';
-    public const CONFIG_CACHE_FILE = 'cache/config.php';
+    public const CACHE_DIR = 'cache/';
+    public const HTML_RENDER_DIR = self::CACHE_DIR . 'render/';
+    public const CONFIG_CACHE_FILE = self::CACHE_DIR . 'config.php';
     public const GLOBAL_CSS_FILE = self::CSS_DIR . 'global.css';
     public const ALERT_CSS_FILE = self::CSS_DIR . 'alert.css';
     public const DEFAULT_GLOBAL_CSS_FILE = self::ASSETS_CSS_DIR . 'global.default.css';
