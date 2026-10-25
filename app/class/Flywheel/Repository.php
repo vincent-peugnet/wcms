@@ -4,6 +4,7 @@ namespace Wcms\Flywheel;
 
 use JamesMoss\Flywheel\Config;
 use RuntimeException;
+use Wcms\Config as WcmsConfig;
 use Wcms\Fs;
 
 class Repository extends \JamesMoss\Flywheel\Repository
@@ -31,7 +32,7 @@ class Repository extends \JamesMoss\Flywheel\Repository
 
         // Ensure directory exists and we can write there
         if (!is_dir($this->path)) {
-            if (!@mkdir($this->path, Fs::FOLDER_PERMISSION, true)) {
+            if (!@mkdir($this->path, WcmsConfig::dbperms(), true)) {
                 throw new RuntimeException(sprintf('`%s` doesn\'t exist and can\'t be created.', $this->path));
             }
         } elseif (!is_writable($this->path)) {
@@ -71,7 +72,7 @@ class Repository extends \JamesMoss\Flywheel\Repository
     protected function write($path, $contents): bool
     {
         $ret = parent::write($path, $contents);
-        chmod($path, Fs::FILE_PERMISSION);
+        chmod($path, WcmsConfig::dbperms() & 0666);
         return $ret;
     }
 }

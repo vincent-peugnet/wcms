@@ -13,6 +13,7 @@ use Wcms\Exception\Filesystemexception\Fileexception;
 abstract class Config
 {
     protected static string $pagetable = '';
+    protected static int $dbperms = Fs::FOLDER_PERMISSION;
     protected static string $domain = '';
     protected static bool $secure = true;
     protected static string $basepath = '';
@@ -97,6 +98,16 @@ abstract class Config
     protected static string $ldaptree = '';
     protected static string $ldapu = '';
     protected static int $ldapuserlevel = 0;
+
+    /** Allowed permissions for database folders */
+    public const DB_PERMS = [
+        0700,
+        0750,
+        0755,
+        0770,
+        0775,
+        0777,
+    ];
 
     public const LANG_MIN = 2;
     public const LANG_MAX = 16;
@@ -302,6 +313,11 @@ abstract class Config
     public static function pagetable(): string
     {
         return self::$pagetable;
+    }
+
+    public static function dbperms(): int
+    {
+        return self::$dbperms;
     }
 
     public static function domain(): string
@@ -598,6 +614,13 @@ abstract class Config
     public static function setpagetable(string $pagetable): void
     {
         self::$pagetable = strip_tags($pagetable);
+    }
+
+    public static function setdbperms(int $dbperms): void
+    {
+        if (in_array($dbperms, self::DB_PERMS)) {
+            self::$dbperms = $dbperms;
+        }
     }
 
     public static function setdomain(string $domain): void

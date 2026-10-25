@@ -157,7 +157,7 @@ class Wizard
         </body>
         <style>
             body {
-                max-width: 900px;
+                max-width: 800px;
                 margin: auto;
                 padding: 8px;
             }
@@ -181,11 +181,12 @@ class Wizard
             <input type="checkbox" name="secure" id="secure" value="1" <?= Config::issecure() ? "checked" : "" ?>>
             <label for="secure">secure connection (<code>https</code>)</label>
             <h3>
-                <label for="basepath">Path to W-CMS</label>
+                <label for="basepath">Path to W</label>
             </h3>
             <input type="text" name="configinit[basepath]"  value="<?= Config::basepath() ?>" id="basepath">
             <p class="help">
-                Leave it empty if W-CMS is in your root folder, otherwise,
+                Leave it empty if W is at root level of served directory,
+                otherwise,
                 indicate the subfolder(s) in witch you installed it
             </p>
             <h3>
@@ -199,6 +200,17 @@ class Wizard
                 required
             >
             <p class="help">Set the name of the folder that is going to store the pages</p>
+            <h3>
+                <label for="dbperms">Database permissions</label>
+            </h3>
+            <select name="dbperms" id="dbperms">
+                <?php foreach (Config::DB_PERMS as $perm) : ?>
+                    <option value="<?= $perm ?>" <?= $perm === Fs::FOLDER_PERMISSION ? 'selected' : '' ?>>
+                        <?= decoct($perm) ?>
+                    </option>
+                <?php endforeach ?>
+            </select>
+            <p class="help">The folders and JSON files permissions of the database</p>
             <h3>
                 <label for="secretkey">Secret key</label>
             </h3>
