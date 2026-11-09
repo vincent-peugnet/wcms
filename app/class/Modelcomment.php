@@ -265,6 +265,7 @@ class Modelcomment extends Modeldb
     public function pagemoderation(string $pageid, array $statuses): void
     {
         $comments = $this->getcomments($pageid);
+        $deletecount = 0;
 
         foreach ($comments as $id => $comment) {
             if (!isset($statuses[$id])) {
@@ -273,11 +274,32 @@ class Modelcomment extends Modeldb
             $status = intval($statuses[$id]);
             if ($status === -1) {
                 unset($comments[$id]);
+                $deletecount++;
             } else {
                 $comments[$id]->setapproved(boolval($status));
             }
         }
         $this->update($pageid, $comments);
+
+        if ($deletecount === 0) {
+            return; // no need to update page if no comments are deleted
+        }
+
+        try {
+            $pagemanager = new Modelpage(Config::pagetable());
+
+            //update page comment count
+            $page = $pagemanager->get($pageid);
+            $page->setcommentcount(count($comments));
+            $pagemanager->update($page);
+
+            // delete page cache
+            $pagemanager->removecache($pageid);
+        } catch (Filesystemexception $e) {
+            Logger::error("deleting cache of page '%s': %s", $pageid, $e->getMessage());
+        } catch (Databaseexception $e) {
+            Logger::error("updating page '%s': %s", $pageid, $e->getMessage());
+        }
     }
 
     /**
