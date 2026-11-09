@@ -26,7 +26,7 @@
                             <h3>edit</h3>
                             <h4>approval</h4>
                             <p class="field">
-                                <label for="approved_keep">keep existing</label>
+                                <label for="approved_keep">keep current status</label>
                                 <input type="radio" name="approved" id="approved_keep" checked>
                             </p>
                             <p class="field">
@@ -38,8 +38,19 @@
                                 <input type="radio" name="approved" id="approved_true" value="1">
                             </p>
                             
-                            <button type="submit">
+                            <button type="submit" value="edit" name="action">
                                 edit
+                            </button>
+                        </div>
+                        <div class="dropdown-section">
+                            <h3>Delete</h3>
+                            <p class="field">
+                                <label for="confirmdelete">confirm delete</label>
+                                <input type="hidden" name="confirmdelete" value="0">
+                                <input type="checkbox" name="confirmdelete" id="confirmdelete" value="1">
+                            </p>
+                            <button type="submit" value="delete" name="action">
+                                delete
                             </button>
                         </div>
                     </form>

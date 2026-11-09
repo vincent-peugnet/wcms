@@ -203,15 +203,25 @@ class Controllercomment extends Controller
         }
 
         $commentids = $_POST['id'] ?? [];
-        $approvals = $_POST['approved'] ?? null;
 
-        $success = $this->commentmanager->multiedit($commentids, $approvals);
-        $total = count($commentids);
-
-        if ($total === 0) {
+        if (empty($commentids)) {
             $this->sendflashmessage('no comment selected', self::FLASH_WARNING);
-        } else {
-            $this->sendstatflashmessage($success, $total, 'comments edited');
+            $this->routedirect('comment', [], $_GET);
+        }
+
+        switch ($_POST['action']) {
+            case 'delete':
+                if (isset($_POST['confirmdelete']) && $_POST['confirmdelete']) {
+                    $success = $this->commentmanager->multidelete($commentids);
+                    $this->sendstatflashmessage($success, count($commentids), 'comments deleted');
+                } else {
+                    $this->sendflashmessage('Confirm delete has not been cheked', self::FLASH_WARNING);
+                }
+                break;
+            case 'edit':
+                $success = $this->commentmanager->multiedit($commentids, $_POST['approved'] ?? null);
+                $this->sendstatflashmessage($success, count($commentids), 'comments edited');
+                break;
         }
 
         $this->routedirect('comment', [], $_GET);

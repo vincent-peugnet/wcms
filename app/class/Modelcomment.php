@@ -5,6 +5,7 @@ namespace Wcms;
 use JamesMoss\Flywheel\Document;
 use Wcms\Exception\Database\Notfoundexception;
 use Wcms\Exception\Databaseexception;
+use Wcms\Exception\Filesystemexception;
 
 class Modelcomment extends Modeldb
 {
@@ -194,7 +195,7 @@ class Modelcomment extends Modeldb
     /**
      * @param string[] $commentids          list of IDs using # delimiter
      *
-     * @return int                          number of updated pages.
+     * @return int                          number of updated comments
      */
     public function multiedit(array $commentids, ?bool $approved = null): int
     {
@@ -212,6 +213,44 @@ class Modelcomment extends Modeldb
                 $success = $success + count($comids);
             } catch (Databaseexception $e) {
                 Logger::error("edit comment on page '%s': %s", $page, $e->getMessage());
+            }
+        }
+
+        return $success;
+    }
+
+    /**
+     * @param string[] $commentids          list of IDs using # delimiter
+     *
+     * @return int                          number of deleted comments
+     */
+    public function multidelete(array $commentids): int
+    {
+        $pages = self::explode($commentids);
+
+        $pagemanager = new Modelpage(Config::pagetable());
+
+        $success = 0;
+        foreach ($pages as $pageid => $comids) {
+            try {
+                $comments = $this->getcomments($pageid);
+                foreach ($comids as $id) {
+                    unset($comments[$id]);
+                }
+                $this->update($pageid, $comments);
+                $success = $success + count($comids);
+
+                // update page
+                $page = $pagemanager->get($pageid);
+                $page->setcommentcount(count($comments)); // update count
+                $pagemanager->update($page);
+
+                // delete page cache
+                $pagemanager->removecache($pageid);
+            } catch (Filesystemexception $e) {
+                Logger::error("deleting cache of page '%s': %s", $pageid, $e->getMessage());
+            } catch (Databaseexception $e) {
+                Logger::error("edit comment on page '%s': %s", $pageid, $e->getMessage());
             }
         }
 
