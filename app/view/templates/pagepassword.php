@@ -7,8 +7,7 @@ $this->layout('readerlayout') ?>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>🔑</title>
-
-    <?= Wcms\Config::alertcss() ? '<link href="' . Wcms\Model::dirtopath(Wcms\Model::ASSETS_CSS_DIR) . 'global.css" rel="stylesheet" />' : '' ?>
+    <link href="<?= Wcms\Model::csspath() ?>alert.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width">
 
 <?php $this->stop(); ?>
