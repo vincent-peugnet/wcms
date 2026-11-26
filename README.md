@@ -63,6 +63,17 @@ You can even view a graph of links.
 ![graph](https://w.club1.fr/images/graph.png)
 
 
+Documentation
+-------------
+
+Doc is stored in one file: [`MANUAL.md`](MANUAL.md). It's also available in W's interface for connected users.
+
+### PDF
+
+The manual can be transformed to a printable PDF thanks to `pandoc` and `weasyprint`.
+Launching the script `man2pdf.sh` generate a `manual.pdf` file.
+
+
 Rendering diagram
 -----------------
 

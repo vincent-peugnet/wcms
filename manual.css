@@ -1,0 +1,124 @@
+@page {
+    size: A4;
+    @bottom-center { content: counter(page) }
+}
+
+html {
+    font-family: 'IBM Plex Sans';
+    font-size: 10pt;
+}
+
+p, ul {
+    line-height: 1.6em;
+}
+
+code {
+    font-family: 'IBM Plex Mono';
+}
+
+pre, p code, ul code, ol code {
+    background-color: #eee;
+    padding: 3px;
+}
+
+table {
+    break-inside: avoid;
+}
+
+
+/* ------------------ Headings ------------------ */
+
+h1, h2 {
+    break-before: page;
+}
+
+h1 {
+    text-align: center;
+}
+
+h1 {
+    font-size: 5em;
+}
+
+h2 {
+    font-size: 3.5em;
+}
+
+h3 {
+    font-size: 2.5em;
+}
+
+h4 {
+    font-size: 1.7em;
+}
+
+h5 {
+    font-size: 1.4em;
+}
+
+
+/* ------------------ Links ------------------ */
+
+a {
+    color: inherit;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* External links */
+a[href^="https://"]::after {
+    content: " ("attr(href) ")";
+    opacity: 0.5;
+    font-size: 0.8em;
+    text-decoration: underline;
+    font-family: 'IBM Plex Mono';
+}
+
+/* Anchor links */
+a[href^="#"]::after {
+    content: " (page " target-counter(attr(href), page) ") ";
+    opacity: 0.5;
+    font-size: 0.8em;
+}
+
+/* hide links added in code blocks */
+code a {
+    display: none;
+}
+
+/* ------------------ First page ------------------ */
+
+header {
+    break-after: page;
+}
+
+header h1 {
+    word-spacing: 100cm;
+}
+
+/* Make W big */
+header h1::first-letter {
+    font-size: 3em;
+    display: block;
+}
+
+/* add an extra page after front page */
+/* header:after {
+  display: block;
+  content: "\A0";
+  page-break-before: always;
+} */
+
+
+/* ------------------ TOC ------------------ */
+
+nav a[href^="#"]::after {
+    content: leader('.') target-counter(attr(href), page);
+    /* float: right; */
+    font-weight: 400;
+    opacity: 0.75;
+}
+
+nav > ul {
+    padding: 1em;
+}
