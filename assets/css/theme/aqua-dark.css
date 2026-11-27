@@ -1,0 +1,39 @@
+:root {
+    --text-color: #ffffff;
+    --text2-color: #ffffff;
+    --text3-color: #9dd2ff;
+    --main-color: #000000;
+    --secondary-background-color: #121212;
+    --code-background-color: rgb(75 75 75);
+    --code-color: #ffffff;
+    --primary-background-color: #38343a;
+    --tertiary-background-color: #222;
+    --outline-background-color: #80c8ff;
+    --outline-color: #000000;
+    --button-background-color: #07a3ff;
+    --button-color: #000000;
+    --input-background-color: #ffffff;
+    --input-color: #000000;
+    color-scheme: dark;
+    --font-family: sans-serif;
+    --radius: 4px;
+}
+
+
+.dropdown-content  {
+    border: solid 0px;
+    padding:2px;
+    background: #4f4f4f;
+}
+.dropdown h3 {
+    background: #4f4f4f;
+    color: white
+    
+}
+
+aside {
+    border-bottom: solid 1px;
+}
+.bookmark[data-current="1"] {
+    text-shadow: #ffffff 1px 1px 1px;
+}

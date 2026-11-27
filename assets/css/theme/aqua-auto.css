@@ -1,0 +1,2 @@
+@import "aqua-light.css";
+@import "aqua-dark.css" screen and (prefers-color-scheme: dark);
