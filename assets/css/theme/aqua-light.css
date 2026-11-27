@@ -1,0 +1,36 @@
+:root {
+    --text-color: #000000;
+    --text2-color: #000000;
+    --text3-color: #00325c;
+    --main-color: #9dd2ff;
+    --secondary-background-color: #e4f2ff;
+    --code-background-color: rgb(75 75 75);
+    --code-color: #ffffff;
+    --primary-background-color: #ffffff;
+    --tertiary-background-color: #003a66;
+    --outline-background-color: #80c8ff;
+    --outline-color: #000000;
+    --button-background-color: #07a3ff;
+    --button-color: #000000;
+    --input-background-color: #ffffff;
+    --input-color: #000000;
+    color-scheme: dark;
+    --font-family: sans-serif;
+    --radius: 4px;
+}
+
+
+.dropdown-content  {
+    border: solid 0px;
+    padding:2px;
+    background: #9dd2ff;
+}
+.dropdown h3 {
+    background: #9dd2ff;
+    color: #000000
+    
+}
+
+aside {
+    border-bottom: solid 1px;
+}
